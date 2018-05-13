@@ -15,6 +15,7 @@ import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
+import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerMessage;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -42,6 +43,7 @@ public class Reasoner implements IReasoner {
         Descriptor.BUNDLE_NAME);
 
     private static final Descriptor DESCRIPTOR = new Descriptor();
+    private IReasonerInterceptor interceptor;
 
     /**
      * A reusable reasoner instance.
@@ -54,21 +56,22 @@ public class Reasoner implements IReasoner {
         private Project project;
         private Configuration cfg;
         private ReasonerConfiguration reasonerConfiguration;
+        private IReasonerInterceptor interceptor;
 
         /**
          * Creates a reusable reasoner instance.
          * 
-         * @param project
-         *            The project which serves as basis for the related configuration.
-         * @param cfg
-         *            the configuration as a basis for the evaluation
+         * @param project the project which serves as basis for the related configuration.
+         * @param cfg the configuration as a basis for the evaluation
          * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
          *        may be <b>null</b>)
+         * @param interceptor the optional reasoner interceptor (may be <b>null</b>)
          */
         private ReasonerInstance(Project project, Configuration cfg,
-            ReasonerConfiguration reasonerConfiguration) {
+            ReasonerConfiguration reasonerConfiguration, IReasonerInterceptor interceptor) {
             this.project = project;
             this.cfg = cfg;
+            this.interceptor = interceptor;
             this.reasonerConfiguration = null == reasonerConfiguration 
                 ? new ReasonerConfiguration() : reasonerConfiguration;
         }
@@ -92,7 +95,7 @@ public class Reasoner implements IReasoner {
         public ReasoningResult propagate(ProgressObserver observer) {
             if (null == engine) {
                 engine = new Engine(project, createConfiguration(project, cfg, reasonerConfiguration, false), 
-                    reasonerConfiguration, observer);
+                    reasonerConfiguration, observer, interceptor);
                 engine.markForReuse();
             } else {
                 engine.reInit();
@@ -139,7 +142,7 @@ public class Reasoner implements IReasoner {
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig, true), 
-            reasonerConfig, observer);           
+            reasonerConfig, observer, interceptor);           
         return engine.reason();
     }
 
@@ -148,7 +151,7 @@ public class Reasoner implements IReasoner {
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, true), 
-            reasonerConfig, observer);
+            reasonerConfig, observer, interceptor);
         return engine.reason();
     }
 
@@ -157,7 +160,7 @@ public class Reasoner implements IReasoner {
         ProgressObserver observer) { // implemented also (for instance reuse) in reasoner instance
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
-            reasonerConfig, observer);
+            reasonerConfig, observer, interceptor);
         return engine.reason();
     }
 
@@ -166,7 +169,7 @@ public class Reasoner implements IReasoner {
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
         Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
-            reasonerConfig, observer);
+            reasonerConfig, observer, interceptor);
         //engine.setAssignmentState(cfg.getResolutionState()); // too specific, remove resolution state at all??
         ReasoningResult res =  engine.reason();
         return res;
@@ -275,7 +278,12 @@ public class Reasoner implements IReasoner {
     @Override
     public IReasonerInstance createInstance(Project project, Configuration cfg,
             ReasonerConfiguration reasonerConfiguration) {
-        return new ReasonerInstance(project, cfg, reasonerConfiguration);
+        return new ReasonerInstance(project, cfg, reasonerConfiguration, interceptor);
+    }
+
+    @Override
+    public void setInterceptor(IReasonerInterceptor interceptor) {
+        this.interceptor = interceptor;
     }
 
 }

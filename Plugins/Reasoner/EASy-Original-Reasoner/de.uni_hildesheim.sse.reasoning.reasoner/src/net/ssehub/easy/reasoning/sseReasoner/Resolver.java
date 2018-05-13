@@ -17,6 +17,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ConstraintBase;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintVariableConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.DefaultConstraint;
+import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
@@ -103,6 +104,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     private boolean incremental = false;
     private boolean reuseInstance = false;
     private IAssignmentState assignmentState = AssignmentState.DERIVED;
+    private IReasonerInterceptor interceptor;
 
     private EvalVisitor evaluator = new EvalVisitor();
     private FailedElements failedElements = new FailedElements();
@@ -202,7 +204,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
 
     @Override
     public void localVariableDisposed(LocalDecisionVariable var) {
-        contexts.unregisterMapping(var.getDeclaration());
+        contexts.unregisterMapping(var.getDeclaration()); // TODO (1) test new context, add context vars by self instead
     }
 
     // >>> from here the names follows the reasoner.tex documentation
@@ -592,6 +594,9 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 evaluator.visit(cst);
                 //printConstraintEvaluationResult(cst, evaluator); // just for debugging
                 analyzeEvaluationResult(constraint);
+                if (null != interceptor) {
+                    interceptor.notifyEvaluation(constraint, evaluator);
+                }
                 if (Descriptor.LOGGING) {
                     LOGGER.debug("Result: " + evaluator.getResult());
                     LOGGER.debug("------");                     
@@ -700,10 +705,11 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 substVisitor.addVariableMapping(dVar, declaration, refCounter);
                 //Copy and replace each instance of the internal declaration with the given instance
                 for (int i = 0; i < count; i++) {
-                    ConstraintSyntaxTree cst = substVisitor.accept(dType.getConstraint(i).getConsSyntax());
+                    ConstraintSyntaxTree cst = dType.getConstraint(i).getConsSyntax();
                     if (null != localDecl) {
                         cst = createContainerCall(new Variable(decl), Container.FORALL, cst, localDecl);
                     }
+                    cst = substVisitor.accept(cst);
                     try {
                         cst.inferDatatype();
                         addConstraint(topLevelConstraints, new Constraint(cst, parent), true, null);
@@ -917,7 +923,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             }
             
             contexts.pushContext(null, containerOp, localDecl, true);
-            registerCompoundMapping(type, localVar, declVar, type);
+            registerCompoundMapping(type, localVar, null, declVar, type);
             // cAcc: if qualified, replace with localVar, if not, leave as it is as localVar is anyway on context
             translateCompoundContent(localDecl, null, type, null == cAcc ? null : localVar);
             contexts.popContext();
@@ -946,7 +952,8 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             contexts.transferTypeExcludes(type);
             // resolve compound access first for all slots
             Variable declVar = new Variable(decl);
-            registerCompoundMapping(type, cAcc, declVar, null == variable ? type : variable.getValue().getType());
+            registerCompoundMapping(type, cAcc, variable, declVar, 
+                null == variable ? type : variable.getValue().getType());
             translateCompoundContent(decl, variable, type, cAcc);
             if (null != deflt) {
                 result = substituteVariables(deflt, null, decl);
@@ -961,31 +968,46 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      * 
      * @param type the compound type
      * @param cAcc the accessor expression (may be <b>null</b>)
+     * @param var the variable we are processing for (may be <b>null</b> for type translations)
      * @param declVar the compound variable as expression
      * @param target the specific target type to cast to (may be <b>null</b> or <code>type</code> for no cast)
      */
     private void registerCompoundMapping(Compound type, ConstraintSyntaxTree cAcc, 
-        Variable declVar, IDatatype target) {
+        IDecisionVariable var, Variable declVar, IDatatype target) {
         for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = type.getInheritedElement(i);
             ConstraintSyntaxTree acc;
             if (null == cAcc) {
                 acc = new CompoundAccess(declVar, nestedDecl.getName());
             } else {
-                acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), 
-                    nestedDecl.getName());
+                acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), nestedDecl.getName());
             }
             contexts.registerMapping(nestedDecl, acc);
             for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
                 Attribute attr = nestedDecl.getAttribute(a);
+                ConstraintSyntaxTree aAcc = new AttributeVariable(acc, attr);
+                contexts.registerMapping(attr, aAcc);
+            }
+        }
+        if (null != var) {
+            // register the direct compound attributes
+            for (int a = 0; a < var.getAttributesCount(); a++) {
+                Attribute attr = (Attribute) var.getAttribute(a).getDeclaration();
+                ConstraintSyntaxTree acc;
                 if (null == cAcc) {
                     acc = new AttributeVariable(declVar, attr);
                 } else {                        
                     acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
                 }
-                contexts.registerMapping(attr, acc);
-            }            
-        }
+                Attribute iter = attr;
+                while (null != iter) {
+                    contexts.registerMapping(iter, acc);
+                    iter = iter.getOrigin();
+                }
+            }
+        } //else {
+            // TODO else collect over type
+        //}
     }
 
     /**
@@ -1016,7 +1038,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         }
         if (!incremental) {
             for (int a = 0; a < type.getAssignmentCount(); a++) {
-                translateAnnotationAssignments(type.getAssignment(a), null, null, cAcc);
+                translateAnnotationAssignments(type.getAssignment(a), variable, null, cAcc);
             }
         }
         final AbstractVariable self = null == cAcc ? decl : null;
@@ -1174,15 +1196,24 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         for (int d = 0; d < assignment.getAssignmentDataCount(); d++) { 
             assng.add(assignment.getAssignmentData(d));
         }
-        for (int d = 0; d < assng.size(); d++) { 
+        for (int d = 0; d < assng.size(); d++) { // TODO (2) process backwards, only one var with same name for nestings
             Assignment effectiveAssignment = assng.get(d);
             for (int e = 0; e < assignment.getElementCount(); e++) {
                 DecisionVariableDeclaration aElt = assignment.getElement(e);
+                String aEltName = aElt.getName();
                 contexts.activate(aElt);
+                ConstraintSyntaxTree acc;
+                if (null != compound) { // already nested
+                    acc = new CompoundAccess(compound, aEltName); // may still be null
+                } else if (null != var) {
+                    acc = new CompoundAccess(new Variable(var.getDeclaration()), aEltName);
+                } else { // top-level
+                    acc = new Variable(aElt);
+                }
                 translateAnnotationAssignment(effectiveAssignment, aElt, compound);
                 IDatatype aEltType = aElt.getType();
                 if (null != var) {
-                    IDecisionVariable v = var.getNestedElement(aElt.getName());
+                    IDecisionVariable v = var.getNestedElement(aEltName);
                     if (null != v && null != v.getValue()) {
                         aEltType = v.getValue().getType();
                     }
@@ -1191,7 +1222,8 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                     Compound cmp = (Compound) aEltType;
                     for (int s = 0; s < cmp.getDeclarationCount(); s++) {
                         DecisionVariableDeclaration slot = cmp.getDeclaration(s);
-                        translateAnnotationAssignment(effectiveAssignment, slot, contexts.getMapping(slot));
+                        translateAnnotationAssignment(effectiveAssignment, slot, 
+                            new CompoundAccess(acc, slot.getName()));
                     }
                 }
                 contexts.deactivate(aElt);
@@ -1222,8 +1254,8 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             } else {
                 cst = new AttributeVariable(compound, attrib);
             }
-            cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, 
-                substituteVariables(assignment.getExpression(), compound, null));
+            cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, assignment.getExpression());
+            cst = substituteVariables(cst, compound, null);
             inferTypeSafe(cst, null);
             try {
                 addConstraint(otherConstraints, new AnnotationAssignmentConstraint(cst, project), false, null); 
@@ -1837,6 +1869,15 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         if (null != state) {
             this.assignmentState = state;
         }
+    }
+
+    /**
+     * Defines the optional interceptor instance.
+     * 
+     * @param interceptor the interceptor
+     */
+    void setInterceptor(IReasonerInterceptor interceptor) {
+        this.interceptor = interceptor;
     }
 
 }

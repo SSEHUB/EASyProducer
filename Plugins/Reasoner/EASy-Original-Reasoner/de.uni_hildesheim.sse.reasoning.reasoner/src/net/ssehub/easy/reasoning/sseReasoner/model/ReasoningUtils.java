@@ -35,6 +35,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
@@ -529,7 +530,8 @@ public class ReasoningUtils {
             System.out.println("EVAL " + StringProvider.toIvmlString(cst) + " " + System.identityHashCode(cst)
                 + " fulfilled " + evaluator.constraintFulfilled() + " failed " + evaluator.constraintFailed());
             for (int m = 0; m < evaluator.getMessageCount(); m++) {
-                System.out.println("  MSG: " + evaluator.getMessage(m).getDescription());
+                Message msg = evaluator.getMessage(m);
+                System.out.println("  MSG: " + msg.getDescription() + " " + msg.getStatus());
             }
         }
     }

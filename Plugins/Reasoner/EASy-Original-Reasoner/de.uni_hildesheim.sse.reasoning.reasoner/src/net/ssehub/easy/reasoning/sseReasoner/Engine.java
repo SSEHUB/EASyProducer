@@ -9,6 +9,7 @@ import java.util.Set;
 
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
@@ -68,12 +69,14 @@ public class Engine {
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      * @param observer An optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @param interceptor an optional interceptor instance
      */
     public Engine(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
-        ProgressObserver observer) {
+        ProgressObserver observer, IReasonerInterceptor interceptor) {
         this.project = project;
 //        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.resolver = new Resolver(project, cfg, reasonerConfig);
+        this.resolver.setInterceptor(interceptor);
         boolean isRuntimeMode = reasonerConfig.isRuntimeMode();
         this.resolver.setIncremental(isRuntimeMode);
         this.result = new ReasoningResult();
@@ -274,6 +277,7 @@ public class Engine {
      * @see #reInit()
      */
     void clear() {
+        // keep the interceptor!
         this.result = new ReasoningResult();
         clearFailedInfo();
         constraintVariableMap = null;

@@ -18,6 +18,7 @@ package net.ssehub.easy.reasoning.sseReasoner.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BasicCopyVisitor;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -25,6 +26,9 @@ import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
 
 /**
@@ -120,7 +124,17 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
             }
         }
         if (null == destEx) {
-            destEx = new Variable(dest);
+            if (dest instanceof Attribute) {
+                Attribute att = (Attribute) dest;
+                IAttributableElement elt = att.getElement();
+                ConstraintSyntaxTree qualifier = null;
+                if (elt instanceof DecisionVariableDeclaration) {
+                    qualifier = new Variable((DecisionVariableDeclaration) elt);
+                }
+                destEx = new AttributeVariable(qualifier, (Attribute) dest);
+            } else {
+                destEx = new Variable(dest);
+            }
         }
         if (null != orig) {
             if (null == mapping) {
@@ -205,9 +219,24 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
         clear();
         return result;
     }
+    
+    @Override
+    public void visitAnnotationVariable(AttributeVariable variable) {
+        setResult(map(variable));
+    }
 
     @Override
     public void visitVariable(Variable variable) {
+        setResult(map(variable));
+    }
+
+    /**
+     * Maps a variable to its accessor expression.
+     * 
+     * @param variable the variable to map
+     * @return the accessor expression, may be <b>null</b>
+     */
+    private ConstraintSyntaxTree map(Variable variable) {
         ConstraintSyntaxTree res = null;
         if (null != mapping) {
             res = mapping.get(variable.getVariable());
@@ -221,8 +250,9 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
         if (null == res) {
             res = variable;
         }
-        setResult(res);
+        return res;
     }
+
 
     @Override
     public void visitComment(Comment comment) {

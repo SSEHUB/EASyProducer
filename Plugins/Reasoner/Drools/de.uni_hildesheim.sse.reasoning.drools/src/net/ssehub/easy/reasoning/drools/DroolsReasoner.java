@@ -10,6 +10,7 @@ import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
+import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerMessage;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
@@ -136,6 +137,10 @@ public class DroolsReasoner implements IReasoner, IRules {
     public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
             ProgressObserver observer) {
         return propagate(project, cfg, reasonerConfiguration, observer);
+    }
+
+    @Override
+    public void setInterceptor(IReasonerInterceptor interceptor) {
     }
 
 }
