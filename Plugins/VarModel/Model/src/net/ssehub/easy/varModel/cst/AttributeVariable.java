@@ -60,14 +60,17 @@ public class AttributeVariable extends Variable {
     public boolean equals(Object obj) {
         boolean equals = false;
         if (obj instanceof AttributeVariable) {
-            equals = super.equals(obj) && qualifier.equals(((AttributeVariable) obj).qualifier);
+            equals = super.equals(obj);
+            if (null != qualifier) {
+                equals &= qualifier.equals(((AttributeVariable) obj).qualifier);
+            }
         }
         return equals;        
     }
     
     @Override
     public int hashCode() {
-        return super.hashCode() + qualifier.hashCode();
+        return super.hashCode() + (null != qualifier ? qualifier.hashCode() : 0);
     }
     
     @Override
@@ -82,7 +85,9 @@ public class AttributeVariable extends Variable {
     
     @Override
     public IDatatype inferDatatype() throws CSTSemanticException {
-        qualifier.inferDatatype();
+        if (null != qualifier) {
+            qualifier.inferDatatype();
+        }
         return super.inferDatatype();
     }
 }

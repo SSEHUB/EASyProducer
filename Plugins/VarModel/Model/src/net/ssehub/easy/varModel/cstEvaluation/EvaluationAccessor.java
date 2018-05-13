@@ -21,6 +21,7 @@ import java.util.List;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -107,7 +108,7 @@ public abstract class EvaluationAccessor {
      * @return the nested value
      */
     public EvaluationAccessor getValue(EvaluationAccessor accessor) {
-        getContext().addErrorMessage("left side of accessor must be a compound value");
+        getContext().addErrorMessage("left side of accessor must be a compound value", Message.CODE_RESOLUTION);
         return null;
     }
 
@@ -118,7 +119,7 @@ public abstract class EvaluationAccessor {
      * @param value the new nested value
      */
     public void setValue(EvaluationAccessor accessor, Value value) {
-        getContext().addErrorMessage("left side of accessor must be a compound value");
+        getContext().addErrorMessage("left side of accessor must be a compound value", Message.CODE_RESOLUTION);
     }
     
     /**

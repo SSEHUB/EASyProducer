@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
 
 /**
  * Utility class for caching / pooling variables in order to save memory.
@@ -36,7 +37,11 @@ public class VariablePool {
             variable = null;
         }
         if (null == variable) {
-            variable = new Variable(decl);
+            if (decl instanceof Attribute) {
+                variable = new AttributeVariable(null, (Attribute) decl);
+            } else {
+                variable = new Variable(decl);
+            }
             variablesCache.put(keyObject(decl), variable);
             //variablesCache.put(decl, variable);
         }

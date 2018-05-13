@@ -103,7 +103,7 @@ import static net.ssehub.easy.varModel.cstEvaluation.EvaluationUtils.*;
  * 
  * @author Holger Eichelberger
  */
-public class EvaluationVisitor implements IConstraintTreeVisitor {
+public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEvaluator {
     
     protected IAssignmentState assignmentState;
     // TRANSITION hack
@@ -275,17 +275,27 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      */
     public static class Message extends net.ssehub.easy.basics.messages.Message {
 
-        private IDecisionVariable  var;
+        public static final int CODE_UNSUPPORTED = 100;
+        public static final int CODE_ASSIGNMENT_STATE = 101;
+        public static final int CODE_RESOLUTION = 102;
+        public static final int CODE_INDEX = 103;
+        public static final int CODE_THROWABLE = 110;
+
+        private IDecisionVariable var;
+        private int code;
         
         /**
-         * Main contractor.
+         * Main constructor.
+         * 
          * @param description Description of why variable is saved.
          * @param status {@link Status} of the message.
          * @param var causing {@link IDecisionVariable} to be saved.
+         * @param code the message code for detailing the problem
          */
-        public Message(String description, Status status, IDecisionVariable var) {
+        public Message(String description, Status status, IDecisionVariable var, int code) {
             super(description, status);
             this.var = var;
+            this.code = code;
         }
         
         /**
@@ -306,6 +316,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
          */
         public IDecisionVariable getDecision() {
             return var;
+        }
+        
+        /**
+         * Returns the error/message code.
+         * 
+         * @return the code
+         */
+        public int getCode() {
+            return code;
         }
         
     }
@@ -459,11 +478,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
     
     // ------------------------------- result handling -------------------------------
 
-    /**
-     * Returns the evaluation result.
-     * 
-     * @return may be <b>null</b> in case of an expression that cannot be evaluated (shall lead to an exception)
-     */
+    @Override
     public Value getResult() {
         Value result = null;
         if (null != this.result) {
@@ -545,49 +560,22 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
         return result == null;
     }
 
-    /**
-     * Returns whether the constraint evaluation
-     * indicates that the evaluated constraint was fulfilled.
-     * 
-     * @return <code>true</code> if the constraint is fulfilled, <code>false</code> else
-     */
+    @Override
     public boolean constraintFulfilled() {
         return constraintFulfilled(result != null ? result.getValue() : null);
     }
 
-    /**
-     * Returns whether the constraint evaluation
-     * indicates that the evaluated constraint failed.
-     * For instance, the following should fail:
-     * <pre><code>
-     * a = true;
-     * b = false;
-     * 
-     * !a or b
-     * </code></pre>
-     * 
-     * @return <code>true</code> if the constraint failed, <code>false</code> else
-     */
+    @Override
     public boolean constraintFailed() {
         return constraintFailed(result != null ? result.getValue() : null);
     }
 
-    /**
-     * Returns whether the constraint evaluation
-     * indicates that (at least one part of) the constraint was undefined.
-     * 
-     * @return <code>true</code> if (at least one part of) the constraint was undefined, <code>false</code> else
-     */
+    @Override
     public boolean constraintUndefined() {
         return constraintUndefined(result != null ? result.getValue() : null);
     }
     
-    /**
-     * Returns whether the constraint was internally evaluated to false but finally
-     * leads to a successful execution and shall lead to a warning to the user.
-     * 
-     * @return <code>true</code> if the constraint shall be issued as a warning, <code>false</code> else.
-     */
+    @Override
     public boolean constraintIsAWarning() {
         return issueWarning;
     }
@@ -624,9 +612,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * Adds an error message.
      * 
      * @param text the text of the error message
+     * @param code the message code
      */
-    private void error(String text) {
-        addMessage(new Message(text, Status.ERROR, null));
+    private void error(String text, int code) {
+        addMessage(new Message(text, Status.ERROR, null, code));
     }
     
     /**
@@ -636,7 +625,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      */
     private void notImplementedError(String subject) {
         addMessage(new Message("cannot evaluate " + subject + " as it is currently not implemented", 
-            Status.UNSUPPORTED, null));
+            Status.UNSUPPORTED, null, Message.CODE_UNSUPPORTED));
     }
     
     /**
@@ -645,25 +634,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
      * @param th the throwable
      */
     private void exception(Throwable th) {
-        error(th.getMessage());
+        error(th.getMessage(), Message.CODE_THROWABLE);
     }
-    
-    /**
-     * Returns the number of messages.
-     * 
-     * @return the number of messages
-     */
+
+    @Override
     public int getMessageCount() {
         return messages.size();
     }
     
-    /**
-     * Returns the specified evaluation message.
-     * 
-     * @param index the message to return
-     * @return the specified message
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;= {@link getMessageCount()}</code>
-     */
+    @Override
     public Message getMessage(int index) {
         return messages.get(index);
     }
@@ -707,7 +686,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     tmp = null;
                 }
             } else {
-                error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type));
+                error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type), 
+                    Message.CODE_RESOLUTION);
             }
         }
         finder.clear();
@@ -755,7 +735,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     cst = null;
                 }
             } else {
-                error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type));
+                error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type), 
+                    Message.CODE_RESOLUTION);
             }
         }
         return cst;
@@ -869,7 +850,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             }
             context.popLevel();
         } else {
-            error("argument and operation count do not match");
+            error("argument and operation count do not match", Message.CODE_RESOLUTION);
         }
     }
     
@@ -1422,7 +1403,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     ok = containers[c] != null;
                 } else {
                     error("declarator " + declarators[c].getDeclaration().getName() 
-                        + " does not provide a container value");
+                        + " does not provide a container value", Message.CODE_RESOLUTION);
                     ok = false;
                 }
             }
@@ -1670,7 +1651,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
             } else {
                 if (null == result) {
                     if (null == variable) {
-                        error("cannot evaluate compound/slot in " + StringProvider.toIvmlString(access));
+                        error("cannot evaluate compound/slot in " + StringProvider.toIvmlString(access), 
+                            Message.CODE_RESOLUTION);
                     } // else variable not defined, stop lazy evaluation
                 }
             }
@@ -1707,12 +1689,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     // see StaticAccessFinder
                     values[pos++] = ValueFactory.createValue(ConstraintType.TYPE, initializer.getExpression(s));
                 } catch (ValueDoesNotMatchTypeException e) {
-                    error(e.getMessage());
+                    exception(e);
                 }
             } else {
                 initializer.getExpression(s).accept(this);
                 if (null == result) {
-                    error("cannot evaluate compound slot '" + slotName + "' in type '" + type.getName() + "'");
+                    error("cannot evaluate compound slot '" + slotName + "' in type '" + type.getName() + "'", 
+                        Message.CODE_RESOLUTION);
                     ok = false;
                 } else {
                     if (Reference.TYPE.isAssignableFrom(decl.getType())) {
@@ -1754,12 +1737,12 @@ public class EvaluationVisitor implements IConstraintTreeVisitor {
                     // See static access finder
                     values[s] = ValueFactory.createValue(ConstraintType.TYPE, initializer.getExpression(s));
                 } catch (ValueDoesNotMatchTypeException e) {
-                    error(e.getMessage());
+                    exception(e);
                 }
             } else {
                 initializer.getExpression(s).accept(this);
                 if (null == result) {
-                    error("cannot evaluate container initializer expression '" + s + "'");
+                    error("cannot evaluate container initializer expression '" + s + "'", Message.CODE_RESOLUTION);
                     ok = false;
                 } else {
                     if (references) {

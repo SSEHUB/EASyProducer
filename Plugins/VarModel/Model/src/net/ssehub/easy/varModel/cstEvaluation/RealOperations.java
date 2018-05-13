@@ -17,6 +17,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.varModel.Bundle;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
@@ -63,7 +64,7 @@ public class RealOperations {
                     Value iValue = ValueFactory.createValue(IntegerType.TYPE, (int) rValue);
                     ConstantAccessor.POOL.getInstance().bind(iValue, true, operand.getContext());
                 } catch (ValueDoesNotMatchTypeException e) {
-                    operand.getContext().addErrorMessage("toInt: " + e.getMessage());
+                    operand.getContext().addErrorMessage("toInt: " + e.getMessage(), Message.CODE_RESOLUTION);
                 }
             }
             return result;

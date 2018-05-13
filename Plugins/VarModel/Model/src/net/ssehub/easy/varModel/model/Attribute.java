@@ -30,7 +30,8 @@ public class Attribute extends AbstractVariable {
 
     private IAttributableElement element;
     private List<Attribute> series;
-    
+    private Attribute origin;
+
     /**
      * Constructor for an attribute.
      * @param name Name of the attribute
@@ -39,8 +40,23 @@ public class Attribute extends AbstractVariable {
      * @param element the element being attributed
      */
     public Attribute(String name, IDatatype type, IModelElement parent, IAttributableElement element) {
+        this(name, type, parent, element, null);
+    }
+    
+    /**
+     * Constructor for an attribute.
+     * @param name Name of the attribute
+     * @param type the type of the attribute
+     * @param parent the object, in which this specific one is embedded
+     * @param element the element being attributed
+     * @param origin in case that this attribute just represents another one (declared on a containing scope, may 
+     *      be <b>null</b> for none)
+     */
+    public Attribute(String name, IDatatype type, IModelElement parent, IAttributableElement element, 
+        Attribute origin) {
         super(name, type, parent);
         this.element = element;
+        this.origin = origin;
     }
     
     @Override
@@ -140,6 +156,9 @@ public class Attribute extends AbstractVariable {
     public int hashCode() {
         //Following the overridden hashcode in AbstractVariable
         int hashCode = super.hashCode() * getElement().hashCode();
+        if (null != origin) {
+            hashCode += origin.hashCode();
+        }
         /*
         if (null != getDefaultValue()) {
             hashCode *= getDefaultValue().hashCode();
@@ -151,7 +170,11 @@ public class Attribute extends AbstractVariable {
     public boolean equals(Object obj) {
         boolean result;
         if (obj instanceof Attribute) {
-            result = super.equals(obj) && getElement().equals(((Attribute) obj).getElement());
+            Attribute other = (Attribute) obj;
+            result = super.equals(obj) && getElement().equals(other.getElement());
+            if (null != origin) {
+                result &= origin.equals(other.origin);
+            }
         } else {
             result = false;
         }
@@ -171,6 +194,15 @@ public class Attribute extends AbstractVariable {
     @Override
     public boolean isConstant() {
         return false;
+    }
+
+    /**
+     * Returns the origin.
+     * 
+     * @return the origin (may be <b>null</b>)
+     */
+    public Attribute getOrigin() {
+        return origin;
     }
     
 }

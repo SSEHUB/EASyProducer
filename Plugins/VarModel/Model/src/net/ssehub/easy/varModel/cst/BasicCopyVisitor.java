@@ -381,8 +381,13 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
         ConstraintSyntaxTree qu = variable.getQualifier();
-        qu.accept(this);
-        ConstraintSyntaxTree qualifier = result;
+        ConstraintSyntaxTree qualifier;
+        if (null != qu) {
+            qu.accept(this);
+            qualifier = result;
+        } else {
+            qualifier = null;
+        }
         AbstractVariable var = variable.getVariable();
         Attribute mVar = (Attribute) mapVariable(var);
         if (copyExpressions || qu != qualifier || var != mVar) {

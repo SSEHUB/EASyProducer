@@ -24,6 +24,7 @@ import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -34,7 +35,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  * @author Holger Eichelberger
  */
 public abstract class EvaluationContext implements IConfiguration {
-    
+        
     private Locale locale = DefaultLocale.getDefaultLocale();
     
     /**
@@ -101,9 +102,10 @@ public abstract class EvaluationContext implements IConfiguration {
      * Adds an evaluation error message.
      * 
      * @param message the message to be added
+     * @param code the error code
      */
-    public void addErrorMessage(String message) {
-        addErrorMessage(message, null);
+    public void addErrorMessage(String message, int code) {
+        addErrorMessage(message, null, code);
     }
     
     /**
@@ -111,9 +113,10 @@ public abstract class EvaluationContext implements IConfiguration {
      * 
      * @param message the message to be added
      * @param variable Optional {@link IDecisionVariable} which caused the error
+     * @param code the error code
      */
-    public void addErrorMessage(String message, IDecisionVariable variable) {
-        addMessage(new EvaluationVisitor.Message(message, Status.ERROR, variable));
+    public void addErrorMessage(String message, IDecisionVariable variable, int code) {
+        addMessage(new EvaluationVisitor.Message(message, Status.ERROR, variable, code));
     }
 
     /**
@@ -122,7 +125,7 @@ public abstract class EvaluationContext implements IConfiguration {
      * @param throwable the throwable carrying the message
      */
     public void addErrorMessage(Throwable throwable) {
-        addErrorMessage(throwable.getMessage());
+        addErrorMessage(throwable.getMessage(), Message.CODE_THROWABLE);
     }
     
     /**

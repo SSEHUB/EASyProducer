@@ -126,12 +126,10 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
      */
     private boolean setValue(EvaluationContext context, Value value, boolean asAssignment) {
         boolean successful = false;
-        if (null == value) {
-            context.addErrorMessage("assignable value is not defined");
-        } else {
+        if (value != null) { // value may still be undefined at a certain point, do not issue an error
             IDecisionVariable variable = getVariable();
             if (null == variable) {
-                context.addErrorMessage("variable does not exist (attribute access failure)?");
+                context.addErrorMessage("variable does not exist (attribute access failure)?", Message.CODE_RESOLUTION);
             } else {
                 Value oldValue = variable.getValue();
                 if (!Value.equalsPartially(oldValue, value)
@@ -147,7 +145,8 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                             context.addErrorMessage(e);
                         }
                     } else {
-                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, variable));
+                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, variable, 
+                            Message.CODE_ASSIGNMENT_STATE));
                     }
                 } else {
                     successful = true;
@@ -176,7 +175,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                         result = IndexAccessor.POOL.getInstance().bind(variable, getContext(), index);
                     }                    
                 } else {
-                    getContext().addErrorMessage("index based access an null value", variable);
+                    getContext().addErrorMessage("index based access an null value", variable, Message.CODE_RESOLUTION);
                 }
             }
         }
@@ -197,14 +196,14 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         if (iValue instanceof IntValue) {
             int index = OclKeyWords.toJavaIndex(((IntValue) iValue).getValue());
             if (index < 0) {
-                context.addErrorMessage("index < 0");
+                context.addErrorMessage("index < 0", Message.CODE_INDEX);
             } else if (index >= value.getElementSize()) {
-                context.addErrorMessage("index >= " + value.getElementSize());
+                context.addErrorMessage("index >= " + value.getElementSize(), Message.CODE_INDEX);
             } else {
                 result = index;
             }
-        } else {
-            context.addErrorMessage("index must happen trough an integer");
+        } else if (null != iValue) {
+            context.addErrorMessage("index access must happen trough an integer", Message.CODE_RESOLUTION);
         }
         return result;
     }

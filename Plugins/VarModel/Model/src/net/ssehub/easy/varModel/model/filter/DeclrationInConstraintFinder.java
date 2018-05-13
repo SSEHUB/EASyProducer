@@ -66,7 +66,10 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        variable.getQualifier().accept(this);
+        ConstraintSyntaxTree qu = variable.getQualifier();
+        if (null != qu) {
+            qu.accept(this);
+        }
         visitVariable(variable);
     }
 

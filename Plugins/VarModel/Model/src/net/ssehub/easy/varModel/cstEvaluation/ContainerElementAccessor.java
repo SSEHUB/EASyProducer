@@ -89,7 +89,7 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != elementVariable) {
             if (null == value) {
-                context.addErrorMessage("assignable value is not defined");
+                context.addErrorMessage("assignable value is not defined", Message.CODE_RESOLUTION);
             } else {
                 Value oldValue = elementVariable.getValue();
                 if (!Value.equalsPartially(oldValue, value)
@@ -104,7 +104,8 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
                             context.addErrorMessage(e);
                         }
                     } else {
-                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, elementVariable));
+                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, elementVariable, 
+                            Message.CODE_ASSIGNMENT_STATE));
                     }
                 } else {
                     successful = true;

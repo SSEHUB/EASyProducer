@@ -26,6 +26,7 @@ import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.ContainerIterators.CollectIteratorEvaluator;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -139,7 +140,7 @@ public class ContainerOperations {
             } else {
                 if (null != opValue && NullValue.INSTANCE != opValue) { // undefined, null is ok
                     operand.getContext().addErrorMessage("operand is no Container: " 
-                        + IvmlDatatypeVisitor.getQualifiedType(opValue.getType()));
+                        + IvmlDatatypeVisitor.getQualifiedType(opValue.getType()), Message.CODE_RESOLUTION);
                 }
                 result = null;
             }
@@ -246,7 +247,7 @@ public class ContainerOperations {
             if (1 == arguments.length) {
                 Value opValue = operand.getValue();
                 Value argValue = arguments[0].getValue();
-                IDecisionVariable argVar = arguments[0].getVariable();
+                IDecisionVariable opVar = operand.getVariable();
                 if (opValue instanceof ContainerValue && argValue instanceof MetaTypeValue) {
                     ContainerValue cont = (ContainerValue) opValue;
                     IDatatype type = ((MetaTypeValue) argValue).getValue();
@@ -266,8 +267,8 @@ public class ContainerOperations {
                         }
                         if (condition) {
                             tmp.add(elt);
-                            if (null != argVar) {
-                                result.addBoundContainerElement(argVar.getNestedElement(i));
+                            if (null != opVar) {
+                                result.addBoundContainerElement(opVar.getNestedElement(i));
                             }
                         }
                     }

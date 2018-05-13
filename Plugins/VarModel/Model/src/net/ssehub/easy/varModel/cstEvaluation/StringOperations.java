@@ -18,6 +18,7 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import java.util.Locale;
 import java.util.regex.PatternSyntaxException;
 
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
@@ -75,7 +76,8 @@ public class StringOperations {
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 } catch (NumberFormatException e) {
-                    operand.getContext().addErrorMessage("'" + str + "' does not denote an Integer");
+                    operand.getContext().addErrorMessage("'" + str + "' does not denote an Integer", 
+                        Message.CODE_RESOLUTION);
                 }
             }
             return result;
@@ -99,7 +101,8 @@ public class StringOperations {
                 } catch (ValueDoesNotMatchTypeException e) {
                     // result -> null
                 } catch (NumberFormatException e) {
-                    operand.getContext().addErrorMessage("'" + str + "' does not denote a Real");
+                    operand.getContext().addErrorMessage("'" + str + "' does not denote a Real", 
+                        Message.CODE_RESOLUTION);
                 }
             }
             return result;

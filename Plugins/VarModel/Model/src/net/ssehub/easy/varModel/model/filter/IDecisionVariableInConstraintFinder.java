@@ -25,6 +25,7 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.Let;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -75,7 +76,10 @@ public class IDecisionVariableInConstraintFinder extends AbstractVariableInConst
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        variable.getQualifier().accept(this);
+        ConstraintSyntaxTree qu = variable.getQualifier();
+        if (null != qu) {
+            qu.accept(this);
+        }
         
         parents.addFirst(lastVariable);
         visitVariable(variable);

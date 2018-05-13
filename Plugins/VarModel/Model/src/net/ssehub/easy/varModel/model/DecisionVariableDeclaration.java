@@ -163,7 +163,7 @@ public class DecisionVariableDeclaration extends AbstractVariable
 
     @Override
     public boolean propagateAttribute(Attribute attribute) {
-        Attribute att = new Attribute(attribute.getName(), attribute.getType(), getParent(), this);
+        Attribute att = new Attribute(attribute.getName(), attribute.getType(), getParent(), this, attribute);
         ConstraintSyntaxTree deflt = attribute.getDefaultValue();
         if (null != deflt) {
             try {
