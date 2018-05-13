@@ -54,6 +54,7 @@ import net.ssehub.easy.varModel.cstEvaluation.IResolutionListener;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 import net.ssehub.easy.varModel.cstEvaluation.LocalDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.AnnotationVisitor;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
@@ -145,6 +146,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
+    private transient CompoundAnnotationMapper annotationMapper = new CompoundAnnotationMapper();
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
 
@@ -897,9 +899,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         ConstraintSyntaxTree cAcc) {
         if (!contexts.alreadyProcessed(type)) {
             contexts.recordProcessed(type);
-        
-// TODO  + contexts.size()            
-            final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp", 
+            final DecisionVariableDeclaration localDecl = new DecisionVariableDeclaration("cmp" + contexts.size(), 
                 type, null);
             Variable localVar = new Variable(localDecl);
             Variable declVar = new Variable(decl);
@@ -989,25 +989,72 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 contexts.registerMapping(attr, aAcc);
             }
         }
-        if (null != var) {
-            // register the direct compound attributes
-            for (int a = 0; a < var.getAttributesCount(); a++) {
-                Attribute attr = (Attribute) var.getAttribute(a).getDeclaration();
-                ConstraintSyntaxTree acc;
-                if (null == cAcc) {
-                    acc = new AttributeVariable(declVar, attr);
-                } else {                        
-                    acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
-                }
-                Attribute iter = attr;
-                while (null != iter) {
-                    contexts.registerMapping(iter, acc);
-                    iter = iter.getOrigin();
-                }
+        annotationMapper.initialize(type, cAcc, declVar, target);
+        try {
+            annotationMapper.visitAnnotations(declVar.getVariable());
+        } catch (IvmlException e) {
+        }
+        annotationMapper.clear();
+    }
+
+    /**
+     * Implements a compound annotation mapper. Call 
+     * {@link #initialize(Compound, ConstraintSyntaxTree, Variable, IDatatype)} first, then 
+     * {@link #visitAnnotations(net.ssehub.easy.varModel.model.IAttributeAccess)} and finally {@link #clear()}.
+     * 
+     * @author Holger Eichelberger
+     */
+    private class CompoundAnnotationMapper extends AnnotationVisitor {
+
+        private ConstraintSyntaxTree cAcc;
+        private Compound type;
+        private Variable declVar;
+        private IDatatype target;
+
+        /**
+         * Initializes the mapper.
+         * 
+         * @param type the compound type
+         * @param cAcc the accessor expression (may be <b>null</b>)
+         * @param declVar the compound variable as expression
+         * @param target the specific target type to cast to (may be <b>null</b> or <code>type</code> for no cast)
+         */
+        protected void initialize(Compound type, ConstraintSyntaxTree cAcc, Variable declVar, IDatatype target) {
+            this.type = type;
+            this.cAcc = cAcc;
+            this.declVar = declVar;
+            this.target = target;
+        }
+
+        /**
+         * Clears the mapper.
+         */
+        protected void clear() {
+            this.type = null;
+            this.cAcc = null;
+            this.declVar = null;
+            this.target = null;
+        }
+        
+        @Override
+        protected void processAttributeAssignment(AttributeAssignment assng) throws IvmlException {
+        }
+
+        @Override
+        protected void processAttribute(Attribute attr) throws IvmlException {
+            ConstraintSyntaxTree acc;
+            if (null == cAcc) {
+                acc = new AttributeVariable(declVar, attr);
+            } else {                        
+                acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
             }
-        } //else {
-            // TODO else collect over type
-        //}
+            Attribute iter = attr;
+            while (null != iter) {
+                contexts.registerMapping(iter, acc);
+                iter = iter.getOrigin();
+            }
+        }
+        
     }
 
     /**
@@ -1196,37 +1243,42 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         for (int d = 0; d < assignment.getAssignmentDataCount(); d++) { 
             assng.add(assignment.getAssignmentData(d));
         }
-        for (int d = 0; d < assng.size(); d++) { // TODO (2) process backwards, only one var with same name for nestings
+        Set<String> done = new HashSet<String>();
+        for (int d = assng.size() - 1; d >= 0; d--) { // process latest first
             Assignment effectiveAssignment = assng.get(d);
-            for (int e = 0; e < assignment.getElementCount(); e++) {
-                DecisionVariableDeclaration aElt = assignment.getElement(e);
-                String aEltName = aElt.getName();
-                contexts.activate(aElt);
-                ConstraintSyntaxTree acc;
-                if (null != compound) { // already nested
-                    acc = new CompoundAccess(compound, aEltName); // may still be null
-                } else if (null != var) {
-                    acc = new CompoundAccess(new Variable(var.getDeclaration()), aEltName);
-                } else { // top-level
-                    acc = new Variable(aElt);
-                }
-                translateAnnotationAssignment(effectiveAssignment, aElt, compound);
-                IDatatype aEltType = aElt.getType();
-                if (null != var) {
-                    IDecisionVariable v = var.getNestedElement(aEltName);
-                    if (null != v && null != v.getValue()) {
-                        aEltType = v.getValue().getType();
+            String name = effectiveAssignment.getName();
+            if (!done.contains(name)) {
+                done.add(name);
+                for (int e = 0; e < assignment.getElementCount(); e++) {
+                    DecisionVariableDeclaration aElt = assignment.getElement(e);
+                    String aEltName = aElt.getName();
+                    contexts.activate(aElt);
+                    ConstraintSyntaxTree acc;
+                    if (null != compound) { // already nested
+                        acc = new CompoundAccess(compound, aEltName); // may still be null
+                    } else if (null != var) {
+                        acc = new CompoundAccess(new Variable(var.getDeclaration()), aEltName);
+                    } else { // top-level
+                        acc = new Variable(aElt);
                     }
-                }
-                if (TypeQueries.isCompound(aEltType)) {
-                    Compound cmp = (Compound) aEltType;
-                    for (int s = 0; s < cmp.getDeclarationCount(); s++) {
-                        DecisionVariableDeclaration slot = cmp.getDeclaration(s);
-                        translateAnnotationAssignment(effectiveAssignment, slot, 
-                            new CompoundAccess(acc, slot.getName()));
+                    translateAnnotationAssignment(effectiveAssignment, aElt, compound);
+                    IDatatype aEltType = aElt.getType();
+                    if (null != var) {
+                        IDecisionVariable v = var.getNestedElement(aEltName);
+                        if (null != v && null != v.getValue()) {
+                            aEltType = v.getValue().getType();
+                        }
                     }
+                    if (TypeQueries.isCompound(aEltType)) {
+                        Compound cmp = (Compound) aEltType;
+                        for (int s = 0; s < cmp.getDeclarationCount(); s++) {
+                            DecisionVariableDeclaration slot = cmp.getDeclaration(s);
+                            translateAnnotationAssignment(effectiveAssignment, slot, 
+                                new CompoundAccess(acc, slot.getName()));
+                        }
+                    }
+                    contexts.deactivate(aElt);
                 }
-                contexts.deactivate(aElt);
             }
         }        
         for (int a = 0; a < assignment.getAssignmentCount(); a++) {
