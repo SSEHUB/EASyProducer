@@ -1,0 +1,9 @@
+project refinedConstraints {
+
+    version v0;
+    
+    import refinedConstraintsInter;
+
+    CP2 cmp = {no = 0};
+
+}

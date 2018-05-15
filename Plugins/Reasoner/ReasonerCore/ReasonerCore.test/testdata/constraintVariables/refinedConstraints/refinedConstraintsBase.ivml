@@ -1,0 +1,10 @@
+project refinedConstraintsBase {
+
+    version v0;
+
+    compound CP1 {
+        Integer no;
+        Constraint cons = no > 0;
+    }
+
+}

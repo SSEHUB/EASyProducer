@@ -215,5 +215,16 @@ public class ConstraintVariableTests extends AbstractTest {
         Project prj = loadCompleteProject("changingConstraints", "changingConstraints");
         resultHandler(0, 0, prj);
     }
+    
+    /**
+     * Test for refined constraint variable slots (#68).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void refinedConstraintsTest() throws IOException {
+        Project prj = loadCompleteProject("refinedConstraints", "refinedConstraints");
+        resultHandler(0, 0, prj);
+    }
 
 }

@@ -1,0 +1,10 @@
+project refinedConstraintsInter {
+
+    version v0;
+    import refinedConstraintsBase;
+
+    compound CP2 refines CP1 {
+        cons = null;
+    }
+
+}
