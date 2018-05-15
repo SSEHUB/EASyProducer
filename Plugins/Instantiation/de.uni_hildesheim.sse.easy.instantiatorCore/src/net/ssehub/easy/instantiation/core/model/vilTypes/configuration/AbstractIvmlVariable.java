@@ -344,6 +344,15 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
             return false;
         }
 
+        @Override
+        public boolean wasCreated() {
+            return true;
+        }
+        
+        @Override
+        public void notifyCreated() {
+        }
+
     }
     
     /**
