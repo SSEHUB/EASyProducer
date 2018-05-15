@@ -206,7 +206,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
 
     @Override
     public void localVariableDisposed(LocalDecisionVariable var) {
-        contexts.unregisterMapping(var.getDeclaration()); // TODO (1) test new context, add context vars by self instead
+        contexts.unregisterMapping(var.getDeclaration());
     }
 
     // >>> from here the names follows the reasoner.tex documentation
@@ -412,7 +412,11 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 IModelElement parent = null == constraints || constraints.isEmpty() 
                     ? variable.getDeclaration().getParent() 
                     : constraints.get(0).getParent();
-                createConstraintVariableConstraint(cst, createParentExpression(variable), null, parent, holder);
+                //Constraint c = 
+                createConstraintVariableConstraint(cst, createParentExpression(variable), 
+                    null, parent, holder);
+                // TODO (1) side effects unclear
+                //setValue(variable, c); // fix value after substitution, does not cause change veent
                 constraintBase.addAll(otherConstraints);
                 constraintMap.addAll(variable, otherConstraints);
                 otherConstraints.clear();
@@ -511,7 +515,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      * 
      * @see Utils#discoverImports(net.ssehub.easy.basics.modelManagement.IModel)
      * @see #translateConstraints(Project)
-     * @see #evaluateConstraints()
+     * @see #evaluateConstraintBase(long, Project)
      * @see Configuration#freeze(net.ssehub.easy.varModel.confModel.IFreezeSelector)
      */
     public void resolve() {
@@ -558,6 +562,8 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      * 
      * @param start the start point in time for reasoning statistics
      * @param project the project to evaluate
+     * 
+     * @see #evaluateConstraints(Project)
      */
     private void evaluateConstraintBase(long start, Project project) {
         long mid = System.currentTimeMillis();
@@ -594,7 +600,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                         + " : " + constraint.getTopLevelParent());                    
                 }
                 evaluator.visit(cst);
-                //printConstraintEvaluationResult(cst, evaluator); // just for debugging
+                //printConstraintEvaluationResult(constraint, evaluator); // debugging only
                 analyzeEvaluationResult(constraint);
                 if (null != interceptor) {
                     interceptor.notifyEvaluation(constraint, evaluator);
@@ -794,16 +800,15 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         if (null != var && null != var.getValue()) {
             type = var.getValue().getType();
         }
-        if (TypeQueries.isCompound(type)) { // this is a compound value -> default constraints, do not defer
+        boolean isCompound = TypeQueries.isCompound(type);
+        boolean isContainer = TypeQueries.isContainer(type);
+        if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
-            defaultValue = translateCompoundDeclaration(decl, var, cAcc, (Compound) type, defaultValue); 
-        } else if (TypeQueries.isContainer(type)) { // this is a container value -> default constraints, do not defer
-            translateContainerDeclaration(decl, var, type, cAcc);
         } else if (null != defaultValue && !incremental) {
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
             }
-        } else if (incremental) { // remaining defaults
+        } else if (incremental && !isContainer) { // remaining defaults
             defaultValue = null;
         }
         // implicit overriding of default values through AttributeAssignment - leave out her
@@ -838,6 +843,11 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
             }            
+        }
+        if (isCompound) { // this is a compound value -> default constraints, do not defer
+            translateCompoundDeclaration(decl, var, cAcc, (Compound) type, defaultValue); 
+        } else if (isContainer) { // this is a container value -> default constraints, do not defer
+            translateContainerDeclaration(decl, var, type, cAcc);
         }
     }
 
@@ -1668,6 +1678,9 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                     }
                 }
             } 
+        }
+        if (evaluator.constraintFulfilled() && Constraint.Type.DEFAULT == constraint.getType()) {
+            simpleAssignmentFinder.acceptAndClear(constraint, config, false);
         }
     }
     

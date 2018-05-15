@@ -80,7 +80,6 @@ public class EvalVisitor extends EvaluationVisitor {
         boolean isAssignable = false;
         IAssignmentState state = var.getState();
         if ((state == AssignmentState.UNDEFINED
-            || state == AssignmentState.DEFAULT
             || !wasAssignedInThisScope(var, compound))
             && state != AssignmentState.FROZEN) {
             isAssignable = true;

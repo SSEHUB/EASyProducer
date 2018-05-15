@@ -3,7 +3,6 @@ package net.ssehub.easy.reasoning.sseReasoner.functions;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
@@ -25,9 +24,7 @@ public class ScopeAssignments {
      * @param variable Assigned variable.
      */
     public void addAssignedVariable(IDecisionVariable variable) {
-        if (variable.getState() == AssignmentState.DERIVED) {
-            scopeAssignments.add(variable);            
-        }
+        scopeAssignments.add(variable);            
     }
     
     /**

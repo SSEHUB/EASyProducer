@@ -28,6 +28,7 @@ import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -42,6 +43,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -124,6 +126,22 @@ public class ReasoningUtils {
      */
     public static ConstraintSyntaxTree createTypeValueConstant(IDatatype type) throws ValueDoesNotMatchTypeException {
         return new ConstantValue(createTypeValue(type));
+    }
+
+    /**
+     * Sets a constraint value.
+     * 
+     * @param var the variable to set the value on.
+     * @param value the value to set
+     */
+    public static void setValue(IDecisionVariable var, Constraint value) {
+        try {
+            var.setValue(ValueFactory.createValue(ConstraintType.TYPE, value), var.getState());
+        } catch (ConfigurationException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        } catch (ValueDoesNotMatchTypeException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        }
     }
 
     /**
@@ -522,16 +540,18 @@ public class ReasoningUtils {
     /**
      * Prints a constraint evaluation result (for debugging).
      * 
-     * @param cst the constraint
+     * @param constraint the constraint
      * @param evaluator the evaluator
      */
-    public static void printConstraintEvaluationResult(ConstraintSyntaxTree cst, EvaluationVisitor evaluator) {
+    public static void printConstraintEvaluationResult(Constraint constraint, EvaluationVisitor evaluator) {
         if (DEBUG) {
+            ConstraintSyntaxTree cst = constraint.getConsSyntax();
             System.out.println("EVAL " + StringProvider.toIvmlString(cst) + " " + System.identityHashCode(cst)
-                + " fulfilled " + evaluator.constraintFulfilled() + " failed " + evaluator.constraintFailed());
+                + " " + constraint.getType() + " fulfilled " + evaluator.constraintFulfilled() 
+                + " failed " + evaluator.constraintFailed());
             for (int m = 0; m < evaluator.getMessageCount(); m++) {
                 Message msg = evaluator.getMessage(m);
-                System.out.println("  MSG: " + msg.getDescription() + " " + msg.getStatus());
+                System.out.println("  MSG: " + msg.getDescription() + " " + msg.getStatus() + " " + msg.getVariable());
             }
         }
     }
