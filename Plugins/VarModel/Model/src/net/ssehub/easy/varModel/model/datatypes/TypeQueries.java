@@ -127,7 +127,12 @@ public class TypeQueries {
      * @return <code>true</code> if <code>type</code> is a constraint, <code>false</code> else
      */
     public static boolean isConstraint(IDatatype type) {
-        return ConstraintType.TYPE.isAssignableFrom(type) && !(type.getType() == BooleanType.TYPE.getType());
+        boolean isConstraint = ConstraintType.TYPE.isAssignableFrom(type);
+        if (isConstraint) { // comes from an old hack making ConstraintType and Boolean assignable :(
+            IDatatype res = resolveFully(type.getType());
+            isConstraint = !(res == BooleanType.TYPE || res == BooleanType.TYPE.getType());
+        }
+        return isConstraint;
     }
     
     /**
