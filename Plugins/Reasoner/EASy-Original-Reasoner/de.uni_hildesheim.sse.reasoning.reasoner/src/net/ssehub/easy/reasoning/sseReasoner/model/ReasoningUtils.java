@@ -136,7 +136,8 @@ public class ReasoningUtils {
      */
     public static void setValue(IDecisionVariable var, Constraint value) {
         try {
-            var.setValue(ValueFactory.createValue(ConstraintType.TYPE, value), var.getState());
+            Value cstVal = ValueFactory.createValue(ConstraintType.TYPE, value.getConsSyntax());
+            var.setValue(cstVal, var.getState());
         } catch (ConfigurationException e) {
             LOGGER.exception(e); // should not occur, ok to log
         } catch (ValueDoesNotMatchTypeException e) {

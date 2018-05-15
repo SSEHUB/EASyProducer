@@ -24,7 +24,8 @@ import org.junit.runners.Suite.SuiteClasses;
     IntegerTests.class,
     EnumTests.class, 
     CompoundTests.class,
-    InterfaceTests.class
+    InterfaceTests.class,
+    ApplicationsTests.class,
     })
 public class AllTests {
 

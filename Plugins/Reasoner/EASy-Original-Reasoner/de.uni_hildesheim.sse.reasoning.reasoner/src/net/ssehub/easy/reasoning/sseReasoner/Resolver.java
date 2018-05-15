@@ -412,11 +412,10 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 IModelElement parent = null == constraints || constraints.isEmpty() 
                     ? variable.getDeclaration().getParent() 
                     : constraints.get(0).getParent();
-                //Constraint c = 
-                createConstraintVariableConstraint(cst, createParentExpression(variable), 
+                Constraint c = 
+                    createConstraintVariableConstraint(cst, createParentExpression(variable), 
                     null, parent, holder);
-                // TODO (1) side effects unclear
-                //setValue(variable, c); // fix value after substitution, does not cause change veent
+                setValue(variable, c); // fixes value after substitution, does not cause change event
                 constraintBase.addAll(otherConstraints);
                 constraintMap.addAll(variable, otherConstraints);
                 otherConstraints.clear();
@@ -590,6 +589,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             usedVariables.clear();
             Constraint constraint = constraintBase.pop();
+            scopeAssignments.setCurrentScope(constraint.getTopLevelParent());
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
                 ? AssignmentState.DEFAULT : assignmentState);

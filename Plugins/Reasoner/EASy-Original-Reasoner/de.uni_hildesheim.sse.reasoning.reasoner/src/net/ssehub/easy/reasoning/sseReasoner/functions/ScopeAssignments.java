@@ -1,9 +1,12 @@
 package net.ssehub.easy.reasoning.sseReasoner.functions;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.IModelElement;
 
 /**
  * Class contains variables that were assigned in a specific scope..
@@ -11,36 +14,57 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
  */
 public class ScopeAssignments {
     
-    private Set<IDecisionVariable> scopeAssignments; 
+    private Map<IModelElement, Set<IDecisionVariable>> scopeAssignments;
+    private transient Set<IDecisionVariable> currentScopeSet;
     
     /**
      * Sole constructor.
      */
     public ScopeAssignments() {
-        scopeAssignments = new HashSet<IDecisionVariable>();
+        scopeAssignments = new HashMap<IModelElement, Set<IDecisionVariable>>();
     }
+    
     /**
      * Method for registering a variable that was assigned.
+     * Call {@link #setCurrentScope(IModelElement)} before.
+     *
      * @param variable Assigned variable.
      */
     public void addAssignedVariable(IDecisionVariable variable) {
-        scopeAssignments.add(variable);            
+        currentScopeSet.add(variable);            
     }
     
     /**
      * Method for determining if variable was assigned in the specific scope.
+     * Call {@link #setCurrentScope(IModelElement)} before.
+     * 
      * @param variable Variable under question.
      * @return True if variable already was assigned in this scope.
      */
     public boolean wasAssignedInThisScope(IDecisionVariable variable) {
-        return scopeAssignments.contains(variable);
+        return currentScopeSet.contains(variable);
     }
     
     /**
      * Method for clearing all scope assignments.
      */
     public void clearScopeAssignments() {
-        scopeAssignments.clear();
+        for (Set<IDecisionVariable> set : scopeAssignments.values()) {
+            set.clear();
+        }
+    }
+
+    /**
+     * Defines the current scope.
+     * 
+     * @param currentScope the current scope
+     */
+    public void setCurrentScope(IModelElement currentScope) {
+        currentScopeSet = scopeAssignments.get(currentScope);
+        if (null == currentScopeSet) {
+            currentScopeSet = new HashSet<IDecisionVariable>();
+            scopeAssignments.put(currentScope, currentScopeSet);
+        }
     }
 
 }
