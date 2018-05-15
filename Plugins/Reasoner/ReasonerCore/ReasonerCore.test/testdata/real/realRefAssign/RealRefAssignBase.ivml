@@ -1,0 +1,13 @@
+project RealRefAssignBase {
+
+    version v0;
+
+    Real t;
+    Real f;
+
+    refTo(Real) tr = refBy(t);
+    refTo(Real) fr = refBy(f);
+    
+    t < 2.0;
+    f > 3.0;
+}

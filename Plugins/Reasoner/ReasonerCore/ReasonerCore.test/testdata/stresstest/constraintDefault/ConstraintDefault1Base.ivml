@@ -1,0 +1,4 @@
+project ConstraintDefault1Base {
+    version v0;
+    Constraint C = false;
+}

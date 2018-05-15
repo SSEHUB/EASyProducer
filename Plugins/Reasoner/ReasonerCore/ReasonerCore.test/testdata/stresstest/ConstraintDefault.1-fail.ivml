@@ -1,0 +1,4 @@
+project ConstraintDefault1Fail {
+    Constraint C = false;
+    C = true;
+}
