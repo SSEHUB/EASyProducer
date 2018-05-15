@@ -7,7 +7,7 @@ project CompoundRefAssignTest1 {
         refTo(Integer) fr = refBy(f);
     }
 
-    MyComp c;
+    MyComp c = {};
     c.tr = 1;
     c.fr = 2;
 

@@ -25,7 +25,7 @@ public class BooleanTests extends AbstractTest {
      */
     @Test
     public void carExampleTest() {
-        reasoningTest("CarExample.ivml", 1);
+        reasoningTest("CarExample.ivml", 2);
     }
     
     /**

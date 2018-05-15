@@ -1,6 +1,5 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -94,7 +93,6 @@ public class IntegerTests extends AbstractTest {
     /**
      * Reassignment failure (#46).
      */
-    @Ignore
     @Test
     public void variableFailTest() {
         reasoningTest("VariableFailTest.ivml", 1);

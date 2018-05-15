@@ -1,6 +1,10 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Stresstests.
@@ -49,11 +53,24 @@ public class StressTest extends AbstractTest {
      * Tests whether overridden default values for constraint variables are evaluated correctly.
      */
     @Test
-    public void testConstraintDefaults() {
-        reasoningTest("ConstraintDefault.1.ivml", 0); 
-        reasoningTest("ConstraintDefault.2.ivml", 1);
+    public void testConstraintDefaultsFail() {
+        reasoningTest("ConstraintDefault.1-fail.ivml", 2); // false constraint and re-assign
+        reasoningTest("ConstraintDefault.2-fail.ivml", 1);
     }
-    
+
+    /**
+     * Tests whether overridden default values for constraint variables are evaluated correctly.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testConstraintDefaults() throws IOException {
+        Project p = loadCompleteProject("constraintDefault", "ConstraintDefault1");
+        resultHandler(0, 0, p);
+        p = loadCompleteProject("constraintDefault", "ConstraintDefault2");
+        resultHandler(1, 0, p); // false constraint
+    }
+
     /**
      * Tests whether automatic assignment of undefined variables in constraints
      * via == results in failing constraints.

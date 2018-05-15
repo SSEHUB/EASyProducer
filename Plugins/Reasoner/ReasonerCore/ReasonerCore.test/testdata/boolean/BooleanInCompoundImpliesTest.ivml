@@ -8,7 +8,6 @@ project BooleanInCompoundImpliesTest {
         t implies f == true;    
     }
     
-    C cmp;
-   
+    C cmp = {};
     
 }

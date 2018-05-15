@@ -112,7 +112,7 @@ public class ReasoningScenarioTests extends AbstractTest {
      */ 
     @Test    
     public void variableAssignmentFailTest() {
-        reasoningTest("VariableAssignmentFailTest.ivml", 1);
+        reasoningTest("VariableAssignmentFailTest.ivml", 2);
     }
     
     /**

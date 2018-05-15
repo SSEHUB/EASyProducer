@@ -9,7 +9,7 @@ project ConstraintVariableTest {
 	   cB = cA + 1;
 	}
 	
-	C cmp;
+	C cmp = {};
 	
 	Integer a = 1;
 	Integer b;

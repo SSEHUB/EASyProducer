@@ -7,5 +7,5 @@ project internalConstraintInheritedInCompoundTest {
         SpringInteger springIntFalse = -1; 
     }
     
-    C cmp;    
+    C cmp = {};    
 }

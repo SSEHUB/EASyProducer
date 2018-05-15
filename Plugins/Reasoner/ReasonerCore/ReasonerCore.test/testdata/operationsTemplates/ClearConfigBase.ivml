@@ -6,8 +6,8 @@ project ClearConfigBase {
         Integer i = 5;
     }
     Integer y = -5;
-    i = 6;      
-    y = -6; 
+    //i = 6;      
+    //y = -6; 
    
     
 }

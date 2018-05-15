@@ -7,5 +7,5 @@ project constraintSetDefaultInCompound {
         setOf(Constraint) constraints = {i > 0, i < 1};
     }
 
-    Pipeline pipeline;
+    Pipeline pipeline = {};
 }

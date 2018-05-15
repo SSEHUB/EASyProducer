@@ -8,6 +8,6 @@ project InitialTest {
 	Integer intB;
 	intB = 3;
 	intA > intB;	
-	intA = 3;
+	//intA = 3;
 	a == true implies b == true;
 }

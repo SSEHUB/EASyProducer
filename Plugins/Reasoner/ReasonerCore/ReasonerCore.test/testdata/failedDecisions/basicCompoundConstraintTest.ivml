@@ -10,6 +10,6 @@ project basicCompoundConstraintTest {
 	   a > b and c == 5;	
 	}
 	
-	C cmp;
+	C cmp = {};
 	
 }

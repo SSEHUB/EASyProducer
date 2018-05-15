@@ -1,6 +1,10 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Configures the real tests for SSE reasoner.
@@ -71,8 +75,19 @@ public class RealTests extends AbstractTest {
      */
     @Test
     public void realReferenceAssignTest() {
-        reasoningTest("RealRefAssignTest.ivml", 0);
+        reasoningTest("RealRefAssignTestFail.ivml", 2); // re-assinment
     } 
+    
+    /**
+     * Tests whether overridden default values for constraint variables are evaluated correctly.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testConstraintDefaults() throws IOException {
+        Project p = loadCompleteProject("realRefAssign", "RealRefAssignTest");
+        resultHandler(0, 0, p);
+    }
 
     /**
      * Real annotation test.

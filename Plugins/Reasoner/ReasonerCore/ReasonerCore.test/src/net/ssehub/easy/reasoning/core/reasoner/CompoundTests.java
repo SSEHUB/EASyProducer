@@ -34,8 +34,8 @@ public class CompoundTests extends AbstractTest {
      * Compound reference assign test for a compound type.
      */
     @Test
-    public void compoundReferenceAssignTest2() {
-        reasoningTest("CompoundRefAssignTest2.ivml", 2);
+    public void compoundReferenceAssignTest2Fail() {
+        reasoningTest("CompoundRefAssignTest2.ivml", 2); // re-assign
     } 
 
     /**
@@ -139,5 +139,16 @@ public class CompoundTests extends AbstractTest {
     public void compoundAnnotationTest2() {
         reasoningTest("CompoundAnnotationTest2.ivml", 0);
     } 
+
+    /**
+     * Tests a slot reassignment.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void slotReassignmentTest() throws IOException {
+        Project prj = loadCompleteProject("slotReassignment", "Cfg");
+        resultHandler(0, 0, prj);
+    }
 
 }

@@ -14,7 +14,7 @@ project TraceTest {
         B nestB;
     }
     
-    C cmp;
+    C cmp = { nestB={ nestA = {} } };
     cmp.nestB.nestA.number < 1;
     
     

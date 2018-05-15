@@ -11,7 +11,7 @@ project CompoundRefAssignTest2 {
     }
 
     MyComp c;
-    c.rcr = {a = 1, b = 2};
+    c.rc = {a = 1, b = 2};
 
     c.rc.a == c.rcr.b;
     c.rc.b == c.rcr.a;

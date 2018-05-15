@@ -11,6 +11,6 @@ project BooleanInCompoundDefaultsTest {
         f == false implies check == false;
     }
     
-    C cmp; 
+    C cmp = {}; 
     
 }

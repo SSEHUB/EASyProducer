@@ -1,4 +1,0 @@
-project ConstraintDefault {
-    Constraint C = true;
-    C = false;
-}
