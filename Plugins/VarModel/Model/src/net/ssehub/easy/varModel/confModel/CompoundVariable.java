@@ -53,6 +53,7 @@ public class CompoundVariable extends StructuredVariable {
     
     private Map<String, IDecisionVariable> nestedElements;
     private Compound instantiatableType;
+    private boolean created;
     
     /**
      * Sole constructor for creating {@link ContainerVariable}'s.
@@ -335,6 +336,9 @@ public class CompoundVariable extends StructuredVariable {
                     }
                 }
             }
+            created = true;
+        } else if (value == NullValue.INSTANCE) {
+            created = false;
         }
     }
     
@@ -428,6 +432,16 @@ public class CompoundVariable extends StructuredVariable {
      */
     protected EASyLogger getLogger() {
         return EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID);
+    }
+    
+    @Override
+    public void notifyCreated() {
+        created = true;
+    }
+    
+    @Override
+    public boolean wasCreated() {
+        return created;
     }
     
 }

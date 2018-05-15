@@ -117,26 +117,54 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
         EvaluationContext context = getContext();
         if (context.allowAssignValues() && null != slotVariable) {
             if (null != value) {
-                Value oldValue = slotVariable.getValue();
-                if (!Value.equalsPartially(oldValue, value) 
-                        && slotVariable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
-                    IAssignmentState targetState = context.getTargetState(slotVariable);
-                    if (null != targetState) {
-                        try {
-                            dereferenceIfNeeded(slotVariable, value).setValue(value, targetState, asAssignment);
-                            successful = true;
-                            notifyVariableChange(oldValue);
-                        } catch (ConfigurationException e) {
-                            context.addErrorMessage(e);
-                        }
-                    } else {
-                        context.addMessage(new Message("Assignment state conflict", Status.ERROR, slotVariable, 
-                            Message.CODE_ASSIGNMENT_STATE));
+                boolean assign = true;
+                IAssignmentState slotState = slotVariable.getState();
+                if (AssignmentState.DEFAULT == context.getAssignmentState()) {
+                    if (!slotVariable.getParent().wasCreated()) {
+                        // no parent value, defer until initialized
+                        successful = false; // defer
+                        assign = false;
+                    } else if (slotState != AssignmentState.UNDEFINED && slotState != AssignmentState.FROZEN) {
+                        // there is a value and it is not frozen, ignore and pretend that successful
+                        assign = false;
                     }
-                } else {
-                    successful = true;
+                }
+                if (assign) {
+                    successful = assignValue(value, asAssignment);
                 }
             }
+        }
+        return successful;
+    }
+    
+    /**
+     * Assigns the value.
+     * 
+     * @param value the value
+     * @param asAssignment does this happen through an IVML assignment operation
+     * @return whether the assignment was successful or not
+     */
+    private final boolean assignValue(Value value, boolean asAssignment) {
+        boolean successful = false;
+        Value oldValue = slotVariable.getValue();
+        if (!Value.equalsPartially(oldValue, value) 
+            && slotVariable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
+            EvaluationContext context = getContext();
+            IAssignmentState targetState = context.getTargetState(slotVariable);
+            if (null != targetState) {
+                try {
+                    dereferenceIfNeeded(slotVariable, value).setValue(value, targetState, asAssignment);
+                    successful = true;
+                    notifyVariableChange(oldValue);
+                } catch (ConfigurationException e) {
+                    context.addErrorMessage(e);
+                }
+            } else {
+                context.addMessage(new Message("Assignment state conflict", Status.ERROR, slotVariable, 
+                    Message.CODE_ASSIGNMENT_STATE));
+            }
+        } else {
+            successful = true;
         }
         return successful;
     }

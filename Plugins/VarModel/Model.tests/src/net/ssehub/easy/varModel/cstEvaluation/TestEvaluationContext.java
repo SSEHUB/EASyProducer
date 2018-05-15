@@ -93,4 +93,9 @@ public class TestEvaluationContext extends EvaluationContext {
         return true; // default before adding this method
     }
 
+    @Override
+    public IAssignmentState getAssignmentState() {
+        return targetState;
+    }
+
 }

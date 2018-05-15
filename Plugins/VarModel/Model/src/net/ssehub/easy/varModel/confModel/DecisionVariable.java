@@ -405,4 +405,13 @@ abstract class DecisionVariable implements IDecisionVariable {
         return false;
     }
     
+    @Override
+    public boolean wasCreated() {
+        return true; // ok for all except for compound
+    }
+
+    @Override
+    public void notifyCreated() {
+    }
+    
 }

@@ -265,6 +265,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
             }
             return oldState;
         }
+        
+        @Override
+        public IAssignmentState getAssignmentState() {
+            return assignmentState;
+        }
 
     }
     

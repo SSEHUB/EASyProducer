@@ -172,4 +172,10 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      * @return the resolution path
      */
     public IResolutionPathElement getResolutionPath();
+
+    /**
+     * Notifies this variable that it was created.
+     */
+    public void notifyCreated();
+
 }

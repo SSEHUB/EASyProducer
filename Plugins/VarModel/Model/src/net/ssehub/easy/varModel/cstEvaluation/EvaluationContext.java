@@ -166,5 +166,13 @@ public abstract class EvaluationContext implements IConfiguration {
         }
         return dereferencedValue;
     }
+    
+    /**
+     * Returns the global (target) assignment state for the actual evaluation. This may differ from 
+     * {@link #getTargetState(IDecisionVariable)}.
+     * 
+     * @return the assignment state
+     */
+    public abstract IAssignmentState getAssignmentState();
 
 }

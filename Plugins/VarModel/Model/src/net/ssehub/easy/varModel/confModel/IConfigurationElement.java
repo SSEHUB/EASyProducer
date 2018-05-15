@@ -94,5 +94,12 @@ public interface IConfigurationElement {
      * @return the declaration of the decision variable
      */
     public AbstractVariable getDeclaration();
+    
+    /**
+     * Returns whether the variable value was explicitly created.
+     * 
+     * @return <code>true</code> for created, <code>false</code> else
+     */
+    public boolean wasCreated();
 
 }

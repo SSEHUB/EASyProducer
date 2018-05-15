@@ -382,4 +382,13 @@ public class LocalDecisionVariable implements IDecisionVariable {
         this.listener = listener;
     }
 
+    @Override
+    public boolean wasCreated() {
+        return true;
+    }
+
+    @Override
+    public void notifyCreated() {
+    }
+
 }

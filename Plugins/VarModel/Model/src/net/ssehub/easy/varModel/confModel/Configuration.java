@@ -200,7 +200,12 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         listeners = new ArrayList<IConfigurationChangeListener>();
         init();
     }
-    
+
+    @Override
+    public boolean wasCreated() {
+        return true;
+    }
+
     /**
      * Returns the assignment state to be used when assigning values in the configuration.
      * 

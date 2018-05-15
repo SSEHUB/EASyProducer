@@ -150,6 +150,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                     }
                 } else {
                     successful = true;
+                    variable.notifyCreated();
                 }
             }
         }

@@ -69,6 +69,7 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
         try {
             cmpValue.configureValue(slotName, value);
             setState(state);
+            getParent().notifyCreated();
         } catch (ValueDoesNotMatchTypeException e) {
             throw new ConfigurationException(getConfiguration(), e.getMessage(),
                 ConfigurationException.TYPE_MISMATCH);
