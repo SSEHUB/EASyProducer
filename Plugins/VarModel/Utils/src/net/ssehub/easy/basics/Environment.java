@@ -44,17 +44,13 @@ public class Environment {
             String eclipseVersion = System.getProperty("eclipse.buildId", "");
             int major = parseVersionPart(eclipseVersion, 0);
             int minor = parseVersionPart(eclipseVersion, 1);
-            
+
+            result = (null != System.getProperty("eclipse.product", null)
+                || null != System.getProperty("eclipse.home.location", null)) 
+                && null != System.getProperty("eclipse.pde.launch");
             if (major >= 4 && minor >= 7) {
                 // however, the rule seems to be different here and PDE does not seem to work with EclipseResources
-                result = (null != System.getProperty("eclipse.product", null)
-                    || null != System.getProperty("eclipse.home.location", null)) 
-                    && !System.getProperty("eclipse.pde.launch", "").toLowerCase().equals("true");
-            } else {
-                // this is just a heuristic, pde.launch is required to state that RCP apps are no eclipse
-                result = (null != System.getProperty("eclipse.product", null)
-                    || null != System.getProperty("eclipse.home.location", null)) 
-                    && null != System.getProperty("eclipse.pde.launch");
+                result &= System.getProperty("eclipse.product", "").indexOf("junit") < 0;
             }
         }
         return result;
