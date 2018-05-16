@@ -2,8 +2,17 @@ package net.ssehub.easy.reasoning.core.capabilities;
 
 import org.junit.Test;
 
+import org.junit.Assert;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Collection constraints tests.
@@ -124,6 +133,62 @@ public class CollectionConstraintsTests extends AbstractTest {
     @Test
     public void referenceDerivedCollectionTest() {
         reasoningTest("ReferenceDerivedCollectionTest.ivml", 5);
+    }
+    
+    /**
+     * String collections test (#72).
+     */
+    @Test
+    public void stringCollection1Test() {
+        reasoningTest("StringTest1.ivml", 1);
+    }
+
+    /**
+     * String collections test (#72).
+     */
+    @Test
+    public void stringCollection2Test() {
+        reasoningTest("StringTest2.ivml", 0);
+    }
+
+    /**
+     * String collections test (#72).
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void stringCollection3Test() throws ModelQueryException {
+        Configuration cfg = reasoningTest("StringTest3.ivml", 0);
+
+        AbstractVariable orgVarsDecl = ModelQuery.findVariable(cfg.getProject(), "orgVars", null);
+        Assert.assertNotNull(orgVarsDecl);
+        IDecisionVariable orgVars = cfg.getDecision(orgVarsDecl);
+        Assert.assertNotNull(orgVars);
+        assertContained(orgVars.getState(), AssignmentState.ASSIGNED, AssignmentState.DERIVED);
+        Value val = orgVars.getValue();
+        Assert.assertTrue(val instanceof ContainerValue);
+        ContainerValue cVal = (ContainerValue) val;
+        Assert.assertTrue(cVal.getElementSize() > 0);
+    }
+
+    /**
+     * String collections test (#74).
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void stringCollection4Test() throws ModelQueryException {
+        Configuration cfg = reasoningTest("StringTest4.ivml", 0);
+
+        AbstractVariable orgVarsDecl = ModelQuery.findVariable(cfg.getProject(), "set2", null);
+        Assert.assertNotNull(orgVarsDecl);
+        IDecisionVariable orgVars = cfg.getDecision(orgVarsDecl);
+        Assert.assertNotNull(orgVars);
+        assertContained(orgVars.getState(), AssignmentState.DEFAULT);
+        Value val = orgVars.getValue();
+        Assert.assertTrue(val instanceof ContainerValue);
+        ContainerValue cVal = (ContainerValue) val;
+        Assert.assertTrue(cVal.getElementSize() > 0);
     }
     
 }

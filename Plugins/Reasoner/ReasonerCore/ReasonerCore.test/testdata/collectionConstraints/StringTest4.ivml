@@ -1,0 +1,9 @@
+project IVML {
+
+    version v0;
+    sequenceOf(String) strs1 = {"a", "b", "c"};
+    setOf(refTo(String)) strs2 = {refBy(strs1[0]), refBy(strs1[1]), refBy(strs1[2])};
+
+    setOf(String) set1 = strs1.asSet()->collect(s | s);
+    setOf(String) set2 = strs2->collect(refTo(String) s | refBy(s));
+}
