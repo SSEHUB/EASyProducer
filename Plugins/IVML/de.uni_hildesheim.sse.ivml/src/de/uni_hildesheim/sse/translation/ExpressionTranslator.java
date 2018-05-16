@@ -369,6 +369,33 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         return result;
     }
+    
+    /**
+     * Checks whether the operation {@code op} may return wrong results if types on both sides are not somehow 
+     * assignable.
+     * 
+     * @param lhs the left hand side expression
+     * @param op the operator
+     * @param rhs the right hand side expression
+     * @param cause the causing grammar object
+     * @param feature the causing grammar feature
+     */
+    private void checkForSameTypeWarning(ConstraintSyntaxTree lhs, String op, ConstraintSyntaxTree rhs, EObject cause, 
+        EStructuralFeature feature) {
+        if (IvmlKeyWords.UNEQUALS.equals(op) || IvmlKeyWords.UNEQUALS_ALIAS.equals(op)) { 
+            // == is handled by OCLFeatureCall
+            try {
+                IDatatype lhsType = lhs.inferDatatype();
+                IDatatype rhsType = rhs.inferDatatype();
+                if (!(lhsType.isAssignableFrom(rhsType) || rhsType.isAssignableFrom(lhsType))) {
+                    warning("Evaluation may not be as expected, because types on both sides are different.", cause, 
+                        feature, ErrorCodes.WARNING_DIFFERENT_TYPES);
+                }
+            } catch (CSTSemanticException e) {
+                // as we head only for a warning, an exception is not a problem here and shall be reported by the caller
+            }
+        }
+    }
 
     /**
      * Infers the datatype of <code>cst</code>.
@@ -517,13 +544,14 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             } else if (null != right.getContainer()) {
                 try {
                     rhs = processContainerInitializer(result.inferDatatype(),
-                            expr, right.getContainer(), context, parent);
+                        expr, right.getContainer(), context, parent);
                 } catch (IvmlException e) {
-                    throw new TranslatorException(e, expr,
-                            IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__CONTAINER);
+                    throw new TranslatorException(e, right,
+                        IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__CONTAINER);
                 }
             }
             if (null != rhs) {
+                checkForSameTypeWarning(result, op, rhs, right, IvmlPackage.Literals.EQUALITY_EXPRESSION_PART__OP);
                 result = new OCLFeatureCall(result, op, context.getProject(), rhs);
             }
             level--;

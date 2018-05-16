@@ -61,7 +61,12 @@ public class ErrorCodes extends net.ssehub.easy.dslCore.translation.ErrorCodes {
      * In case of undesired explicit type qualifications.
      */
     public static final int TYPE_QUALIFICATION = 20215;
-    
+
+    /**
+     * Usage of using different types where same types would be expected (comparison).
+     */
+    public static final int WARNING_DIFFERENT_TYPES = 20216;
+
     /**
      * Prevents creating instances of this class.
      */
