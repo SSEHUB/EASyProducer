@@ -10,7 +10,7 @@ package de.uni_hildesheim.sse;
  */
 public class BuildLangConfig {
 
-    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("vil.core.log", "false"));
+    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("easy.vil.core.log", "false"));
 
     /**
      * Returns whether debugging is enabled.

@@ -3,14 +3,14 @@ package de.uni_hildesheim.sse.vil.templatelang;
 /**
  * Stores some global configuration values.
  * <ul>
- *  <li>Debug messages are enabled using <code>-Dvtl.core.debug=true</code> as JVM parameter</li>
+ *  <li>Debug messages are enabled using <code>-Deasy.vtl.core.debug=true</code> as JVM parameter</li>
  * </ul>
  * 
  * @author Holger Eichelberger
  */
 public class TemplateLangConfig {
 
-    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("vtl.core.log", "false"));
+    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("easy.vtl.core.log", "false"));
 
     /**
      * Returns whether debugging is enabled.
