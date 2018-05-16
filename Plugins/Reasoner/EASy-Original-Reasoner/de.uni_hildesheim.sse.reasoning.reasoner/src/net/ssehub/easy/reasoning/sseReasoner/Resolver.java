@@ -97,6 +97,10 @@ class Resolver implements IValueChangeListener, IResolutionListener {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
+    private static final int MODE_COMPOUND_ANYWAY = 0; 
+    private static final int MODE_COMPOUND_REGISTER = 1; 
+    private static final int MODE_COMPOUND_TRANSLATE = 2; 
+    private static final int MODE_COMPOUND_NONE = -1; 
     @SuppressWarnings("unused")
     private IAdditionalInformationLogger infoLogger;
     private ReasonerConfiguration reasonerConfig;
@@ -589,7 +593,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             usedVariables.clear();
             Constraint constraint = constraintBase.pop();
-            scopeAssignments.setCurrentScope(constraint.getTopLevelParent());
+            scopeAssignments.setCurrentScope(constraint);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
                 ? AssignmentState.DEFAULT : assignmentState);
@@ -802,16 +806,17 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         }
         boolean isCompound = TypeQueries.isCompound(type);
         boolean isContainer = TypeQueries.isContainer(type);
+        int compoundMode = MODE_COMPOUND_NONE;
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
+            compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) type, MODE_COMPOUND_REGISTER); 
         } else if (null != defaultValue && !incremental) {
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
             }
         } else if (incremental && !isContainer) { // remaining defaults
             defaultValue = null;
-        }
-        // implicit overriding of default values through AttributeAssignment - leave out her
+        } // next if: implicit overriding of default values through AttributeAssignment - leave out her
         if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             try {
                 if (isConstraintType) { // handle and register constraint variables
@@ -845,7 +850,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
             }            
         }
         if (isCompound) { // this is a compound value -> default constraints, do not defer
-            translateCompoundDeclaration(decl, var, cAcc, (Compound) type, defaultValue); 
+            translateCompoundDeclaration(decl, var, cAcc, (Compound) type, compoundMode); 
         } else if (isContainer) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, type, cAcc);
         }
@@ -941,36 +946,45 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     }
 
     /**
-     * Method for translating compound default value declarations. Requires 
-     * {@link #buildVariableMapping(AbstractVariable, IDecisionVariable, CompoundAccess, IDatatype)} before.
+     * Translates translating compound type declarations, but only if not 
+     * {@link ContextStack#alreadyProcessed(IDatatype)} in nested collection/compound types.
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt> (may be <b>null</b> for based-type translation).
      * @param cAcc if variable is a nested compound, the access expression to 
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
-     * @param deflt the default value expression for <code>decl</code> to be translated/substituted in the 
-     *     context of <code>decl</code>
-     * @return <code>deflt</code> or <code>deflt</code> with substituted variables
+     * @param mode the processing mode, either {@link #MODE_COMPOUND_ANYWAY} for processing the full compound, 
+     *     {@link #MODE_COMPOUND_REGISTER} for just registering the compound slot accessor expressions, which
+     *     must either be followed with {@link #MODE_COMPOUND_TRANSLATE} or {@link ContextStack#popContext()} on
+     *     the same nesting level. Not processing a complete compound allows keeping the registered scope open
+     *     for processing related (default) value expressions that may refer to compound slots. May also 
+     *     be {@link #MODE_COMPOUND_NONE} for not processing anything.
+     * @return the next mode for calling this method again with the same parameters, typically 
+     *     {@link #MODE_COMPOUND_NONE} or {@link #MODE_COMPOUND_TRANSLATE} if {@code mode} was 
+     *     {@link #MODE_COMPOUND_REGISTER}
      */
-    private ConstraintSyntaxTree translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
-        ConstraintSyntaxTree cAcc, Compound type, ConstraintSyntaxTree deflt) {
-        ConstraintSyntaxTree result = deflt;
+    private int translateCompoundDeclaration(AbstractVariable decl, IDecisionVariable variable,
+        ConstraintSyntaxTree cAcc, Compound type, int mode) {
+        int nextMode = MODE_COMPOUND_NONE;
         if (!contexts.alreadyProcessed(type)) {
-            contexts.recordProcessed(type);
-            contexts.pushContext(decl, null == variable);
-            contexts.transferTypeExcludes(type);
-            // resolve compound access first for all slots
-            Variable declVar = new Variable(decl);
-            registerCompoundMapping(type, cAcc, variable, declVar, 
-                null == variable ? type : variable.getValue().getType());
-            translateCompoundContent(decl, variable, type, cAcc);
-            if (null != deflt) {
-                result = substituteVariables(deflt, null, decl);
+            if (MODE_COMPOUND_ANYWAY == mode || MODE_COMPOUND_REGISTER == mode) {
+                contexts.recordProcessed(type);
+                contexts.pushContext(decl, null == variable);
+                contexts.transferTypeExcludes(type);
+                // resolve compound access first for all slots
+                Variable declVar = new Variable(decl);
+                registerCompoundMapping(type, cAcc, variable, declVar, 
+                    null == variable ? type : variable.getValue().getType());
+                nextMode = MODE_COMPOUND_TRANSLATE;
             }
-            contexts.popContext();
+            if (MODE_COMPOUND_ANYWAY == mode || MODE_COMPOUND_TRANSLATE == mode) {
+                translateCompoundContent(decl, variable, type, cAcc);
+                contexts.popContext();
+                nextMode = MODE_COMPOUND_NONE; // fix nextMode from REGISTER if ANYWAY
+            }
         }
-        return result;
+        return nextMode;
     }
 
     /**

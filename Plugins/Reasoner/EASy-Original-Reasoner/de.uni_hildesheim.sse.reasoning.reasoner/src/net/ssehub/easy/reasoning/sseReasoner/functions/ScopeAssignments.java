@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.IModelElement;
 
 /**
@@ -52,6 +53,16 @@ public class ScopeAssignments {
         for (Set<IDecisionVariable> set : scopeAssignments.values()) {
             set.clear();
         }
+    }
+
+    /**
+     * Defines the current scope due to the parents of the given {@code constraint}.
+     * 
+     * @param constraint defining the current scope
+     */
+    public void setCurrentScope(Constraint constraint) {
+        // if we need to switch to narrower scopes, e.g., compounds, do it transparently here
+        setCurrentScope(constraint.getTopLevelParent()); 
     }
 
     /**
