@@ -36,12 +36,12 @@ public class EASyLoggerFactory {
      */
     public static final boolean DEBUG = false;
 
-    private static final String LOGGING_LEVEL_PROPERTY = "de.uni_hildesheim.sse.easy.logging.level";
+    private static final String LOGGING_LEVEL_PROPERTY = "easy.logging.level";
     
     /**
      * Specification to log into a specified file instead of logging into the console.
      */
-    private static final String LOG_FILE_PATH = "de.uni_hildesheim.sse.easy.logging.file";
+    private static final String LOG_FILE_PATH = "easy.logging.file";
     
     private ILogger logger;
     
