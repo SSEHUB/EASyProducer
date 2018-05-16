@@ -10,7 +10,7 @@ package de.uni_hildesheim.sse;
  */
 public class Config {
     
-    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("ivml.core.log", "false"));
+    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("easy.ivml.core.log", "false"));
 
     /**
      * Returns whether debugging is enabled.
