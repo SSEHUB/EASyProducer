@@ -47,7 +47,7 @@ public class SimpleLoggerFactory implements ILoggerFactory {
      * Creates the factory.
      */
     public SimpleLoggerFactory() {
-        loggerMap = new HashMap<>();
+        loggerMap = new HashMap<String, Logger>();
     }
 
     /**

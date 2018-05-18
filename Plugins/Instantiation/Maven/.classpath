@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry exported="true" kind="lib" path="aether-api-0.9.0.M2.jar"/>
 	<classpathentry exported="true" kind="lib" path="aether-connector-wagon-0.9.0.M2.jar"/>

@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Maven
 Bundle-SymbolicName: net.ssehub.easy.libs.maven
 Bundle-Version: 3.2.3.2
+Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: aether-api-0.9.0.M2.jar,
   aether-connector-wagon-0.9.0.M2.jar,
   aether-impl-0.9.0.M2.jar,
@@ -213,4 +214,5 @@ Export-Package: org.apache.maven,
  org.sonatype.plexus.components.sec.dispatcher,
  org.sonatype.plexus.components.sec.dispatcher.model,
  org.sonatype.plexus.components.sec.dispatcher.model.io.xpp3
+Require-Bundle: net.ssehub.easy.instantiation.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

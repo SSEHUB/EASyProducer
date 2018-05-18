@@ -26,18 +26,19 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.apache.maven.cli.MavenCli;
-
 import net.ssehub.easy.basics.Environment;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils.ScanResult;
+import net.ssehub.easy.instantiation.core.model.common.ICommandLineProgram;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler.IMsgManipulator;
+import net.ssehub.easy.instantiation.core.model.common.Utils;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
@@ -208,25 +209,33 @@ public class Maven extends AbstractFileInstantiator {
             buildFilePath = targetPath.toString();
         }
         long timestamp = PathUtils.normalizedTime();
-        int cliResult;
-        if (AS_PROCESS) {
+        int cliResult = -1;
+        boolean asProcess = AS_PROCESS;
+        if (!AS_PROCESS) {
+            ICommandLineProgram prg = Utils.obainCommandLineProgram("net.ssehub.easy.libs.maven.MavenPrg");
+            if (null != prg) {
+                List<String> arguments = new ArrayList<String>();
+                if (updateSnapshots) {
+                    arguments.add("-U");
+                }
+                for (String t: targets) {
+                    arguments.add(t);
+                }
+                String[] args = new String[arguments.size()];
+                cliResult = prg.execute(arguments.toArray(args), buildFilePath, System.out, System.out);
+            } else {
+                EASyLoggerFactory.INSTANCE.getLogger(Maven.class, Activator.BUNDLE_ID).warn(
+                    "Cannot obtain Maven command line instance. Trying to run Maven as process (fallback).");
+                asProcess = true;
+            }
+        }
+        if (asProcess) {
             try {
                 cliResult = runAsProcess(buildFilePath, updateSnapshots, targets);
             } catch (IOException | InterruptedException e) {
                 throw new VilException("maven build failed: " + e.getMessage(), 
                     VilException.ID_RUNTIME_EXECUTION);
             }
-        } else {
-            MavenCli cli = new MavenCli();
-            List<String> arguments = new ArrayList<String>();
-            if (updateSnapshots) {
-                arguments.add("-U");
-            }
-            for (String t: targets) {
-                arguments.add(t);
-            }
-            String[] args = new String[arguments.size()];
-            cliResult = cli.doMain(arguments.toArray(args), buildFilePath, System.out, System.out);
         }
         if (0 != cliResult) {
             throw new VilException("maven build failed", VilException.ID_RUNTIME_EXECUTION);
