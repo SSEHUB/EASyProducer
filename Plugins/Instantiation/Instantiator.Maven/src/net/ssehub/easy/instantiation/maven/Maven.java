@@ -34,11 +34,11 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils.ScanResult;
+import net.ssehub.easy.instantiation.core.model.common.CommandLineProgramRegistry;
 import net.ssehub.easy.instantiation.core.model.common.ICommandLineProgram;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler.IMsgManipulator;
-import net.ssehub.easy.instantiation.core.model.common.Utils;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
@@ -212,7 +212,7 @@ public class Maven extends AbstractFileInstantiator {
         int cliResult = -1;
         boolean asProcess = AS_PROCESS;
         if (!AS_PROCESS) {
-            ICommandLineProgram prg = Utils.obainCommandLineProgram("net.ssehub.easy.libs.maven.MavenPrg");
+            ICommandLineProgram prg = CommandLineProgramRegistry.getRegisteredProgram("mvn");
             if (null != prg) {
                 List<String> arguments = new ArrayList<String>();
                 if (updateSnapshots) {
@@ -222,7 +222,7 @@ public class Maven extends AbstractFileInstantiator {
                     arguments.add(t);
                 }
                 String[] args = new String[arguments.size()];
-                cliResult = prg.execute(arguments.toArray(args), buildFilePath, System.out, System.out);
+                cliResult = prg.prepare().execute(arguments.toArray(args), buildFilePath, System.out, System.out);
             } else {
                 EASyLoggerFactory.INSTANCE.getLogger(Maven.class, Activator.BUNDLE_ID).warn(
                     "Cannot obtain Maven command line instance. Trying to run Maven as process (fallback).");

@@ -19,8 +19,12 @@ import java.io.PrintStream;
 
 /**
  * Interface for separating a command line program with own libraries from instantiator code
- * to enable optional loading of heavy-weight libraries. Implementations are expected to have a public
- * constructor without arguments. 
+ * to enable optional loading of heavy-weight libraries. Instances registered with {@link CommandLineProgramRegistry}
+ * just need to implement the interface and register themselves with a common name. Instances to be created by 
+ * dynamic classloading via {@link CommandLineProgramRegistry#obainCommandLineProgram(String)} are expected to declare 
+ * a public constructor without arguments. Please call always {@link #prepare()} before 
+ * {@link #execute(String[], String, PrintStream, PrintStream)} to obtain a fresh instance if needed, e.g.,
+ * in case that the command line program maintains a certain state.
  * 
  * @author Holger Eichelberger
  */
@@ -37,4 +41,11 @@ public interface ICommandLineProgram {
      */
     public int execute(String[] args, String workingDirectory, PrintStream stdout, PrintStream stderr); 
 
+    /**
+     * Prepares for execution. 
+     * 
+     * @return the instance to be executed, may be <b>this</b> or a differnt instance
+     */
+    public ICommandLineProgram prepare();
+    
 }

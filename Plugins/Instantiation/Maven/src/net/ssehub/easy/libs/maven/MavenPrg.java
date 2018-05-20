@@ -26,15 +26,20 @@ import net.ssehub.easy.instantiation.core.model.common.ICommandLineProgram;
  * 
  * @author Holger Eichelberger
  */
-public class MavenPrg implements ICommandLineProgram { // Don't change package or class name -> Maven instantiator
+class MavenPrg implements ICommandLineProgram {
 
-    public MavenPrg() {
+    MavenPrg() {
     }
     
     @Override
     public int execute(String[] args, String workingDirectory, PrintStream stdout, PrintStream stderr) {
         MavenCli cli = new MavenCli();
         return cli.doMain(args, workingDirectory, System.out, System.out);
+    }
+
+    @Override
+    public ICommandLineProgram prepare() {
+        return this; // no state
     }
 
 }

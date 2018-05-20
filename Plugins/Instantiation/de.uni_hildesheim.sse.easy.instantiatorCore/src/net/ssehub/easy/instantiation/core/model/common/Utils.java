@@ -15,12 +15,6 @@
  */
 package net.ssehub.easy.instantiation.core.model.common;
 
-import java.lang.reflect.InvocationTargetException;
-
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.instantiation.core.Bundle;
-
 /**
  * Some utility functions.
  * 
@@ -48,52 +42,6 @@ public class Utils {
             }
         }
         return parentProject;
-    }
-
-    /**
-     * Obtains a command line program instance through dynamic class loading.
-     * 
-     * @param className the class name
-     * @return the instance or <b>null</b> if no instance can be created, reason will occur in log
-     */
-    public static ICommandLineProgram obainCommandLineProgram(String className) {
-        ICommandLineProgram result = null;
-        try {
-            Class<?> cls = Class.forName(className);
-            if (cls.isAssignableFrom(ICommandLineProgram.class)) {
-                Object inst = cls.getDeclaredConstructor().newInstance();
-                if (inst instanceof ICommandLineProgram) {
-                    result = (ICommandLineProgram) inst;
-                }
-            } else {
-                getLogger().error(className + " is not instance of " + ICommandLineProgram.class.getName()
-                    + ". Cannot create command line program instance.");
-            }
-        } catch (ClassNotFoundException e) {
-            getLogger().warn(className + " cannot be found on classpath.");
-        } catch (InstantiationException e) {
-            getLogger().exception(e);
-        } catch (IllegalAccessException e) {
-            getLogger().exception(e);
-        } catch (IllegalArgumentException e) {
-            getLogger().exception(e);
-        } catch (InvocationTargetException e) {
-            getLogger().exception(e);
-        } catch (NoSuchMethodException e) {
-            getLogger().warn(className + " does not have a public non-arg constructor.");
-        } catch (SecurityException e) {
-            getLogger().exception(e);
-        }
-        return result;
-    }
-    
-    /**
-     * Returns the logger for this class.
-     *  
-     * @return the logger
-     */
-    private static EASyLogger getLogger() {
-        return EASyLoggerFactory.INSTANCE.getLogger(Utils.class, Bundle.ID);
     }
 
 }
