@@ -226,13 +226,6 @@
          unpack="false"/>
 
    <plugin
-         id="net.ssehub.easy.libs.maven"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="net.ssehub.easy.libs.velocity"
          download-size="0"
          install-size="0"
