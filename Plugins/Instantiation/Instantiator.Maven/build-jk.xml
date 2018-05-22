@@ -51,7 +51,7 @@
 				<include name="OSGI-INF/**/*" />
 				<include name="lib/**/*" />
 				<exclude name="lib/**/*.zip" />
-				<exclude name="defaultLib/**/*" />
+				<include name="defaultLib/**/*" />
 			</fileset>
 		</copy>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>

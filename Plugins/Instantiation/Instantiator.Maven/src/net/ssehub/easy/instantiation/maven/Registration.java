@@ -42,7 +42,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(Maven.class);
             try {
                 DefaultLib.appendURLQuietly(DefaultLib.findDefaultLibURL(Registration.class.getClassLoader(), 
-                     "Instantiator.Maven"));
+                    DefaultLib.composePluginPattern(Activator.BUNDLE_ID), "Instantiator.Maven"));
             } catch (IOException e) {
                 EASyLoggerFactory.INSTANCE.getLogger(Registration.class, Activator.BUNDLE_ID).error(e.getMessage());
             }

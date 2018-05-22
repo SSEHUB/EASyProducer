@@ -35,7 +35,8 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 public class Activator implements BundleActivator {
 
     public static final String PROTOCOL_FILE = "file";
-    public static final String BUNDLE_ID = "net.ssehub.easy.instantiation.maven";
+    // must be the same as in Manifest, as used for the plugin jar/folder name prefix
+    public static final String BUNDLE_ID = "net.ssehub.easy.instantiation.maven"; 
     private static Bundle bundle;
 
     //checkstyle: stop exception type check
