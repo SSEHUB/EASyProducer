@@ -1,8 +1,10 @@
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +22,9 @@ import net.ssehub.easy.varModel.model.Constraint;
 public class VariablesMap {
     
     private Map<AbstractVariable, Set<Constraint>> declConstraintMapping;
+    private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
+    private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
+        = new HashMap<IDecisionVariable, List<Constraint>>();
 
     /**
      * Sole constructor initializing the map.
@@ -87,9 +92,13 @@ public class VariablesMap {
     
     /**
      * Clears this instance for reuse.
+     * 
+     * @see #clearConstraintVariables()
      */
     public void clear() {
         declConstraintMapping.clear();
+        variableConstraintsMap.clear();
+        constraintVariableMap.clear();
     }
 
     /**
@@ -135,6 +144,12 @@ public class VariablesMap {
             }
             iter = iter.getParent();
         }
+        for (Constraint cst : constraints) {
+            IDecisionVariable var = constraintVariableMap.remove(cst);
+            if (null != var) {
+                variableConstraintsMap.remove(var);
+            }
+        }
     }
 
     /**
@@ -147,6 +162,59 @@ public class VariablesMap {
         Set<Constraint> relevantConstraints = declConstraintMapping.get(declaration);
         if (null != relevantConstraints) {
             relevantConstraints.removeAll(constraints);
+        }
+    }
+    
+    /**
+     * Registers <code>constraint</code> with constraint variable <code>variable</code>.
+     * 
+     * @param variable the variable
+     * @param constraint the constraint
+     */
+    public void registerConstraint(IDecisionVariable variable, Constraint constraint) {
+        constraintVariableMap.put(constraint, variable);
+        List<Constraint> constraints = variableConstraintsMap.get(variable);
+        if (null == constraints) {
+            constraints = new ArrayList<Constraint>();
+            variableConstraintsMap.put(variable, constraints);
+        }
+        constraints.add(constraint);
+    }
+    
+    /**
+     * Returns the constraints registered for <code>variable</code>.
+     * 
+     * @param variable the variable
+     * @return the constraints (may be <b>null</b>)
+     */
+    public List<Constraint> getConstraintsForVariable(IConfigurationElement variable) {
+        return variableConstraintsMap.get(variable);
+    }
+    
+    /**
+     * Returns the decision variable for <code>constraint</code>.
+     * 
+     * @param constraint the constraint to return the assigned decision variable for
+     * @return the decision variable or <b>null</b> for none
+     */
+    public IDecisionVariable getDecisionVariableForConstraint(Constraint constraint) {
+        return constraintVariableMap.get(constraint);
+    }
+    
+    /**
+     * Copies all registrations from <code>map</code>.
+     * 
+     * @param map the map to copy from
+     */
+    public void copyFrom(VariablesMap map) {
+        constraintVariableMap.putAll(map.constraintVariableMap);
+        for (Map.Entry<IDecisionVariable, List<Constraint>> ent : map.variableConstraintsMap.entrySet()) {
+            List<Constraint> tmp = new ArrayList<Constraint>(ent.getValue());
+            variableConstraintsMap.put(ent.getKey(), tmp);
+        }
+        for (Map.Entry<AbstractVariable, Set<Constraint>> ent : map.declConstraintMapping.entrySet()) {
+            Set<Constraint> tmp = new HashSet<Constraint>(ent.getValue());
+            map.declConstraintMapping.put(ent.getKey(), tmp);
         }
     }
 

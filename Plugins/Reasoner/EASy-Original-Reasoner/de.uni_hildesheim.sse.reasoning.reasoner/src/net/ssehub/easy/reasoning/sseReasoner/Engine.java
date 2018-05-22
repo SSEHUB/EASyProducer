@@ -52,8 +52,6 @@ public class Engine {
     private List<IDecisionVariable> constraintVariables = new ArrayList<IDecisionVariable>();  
     private List<Integer> errorClassification = new ArrayList<Integer>();  
     
-    private Map<Constraint, IDecisionVariable> constraintVariableMap;
-
     private IAdditionalInformationLogger infoLogger;
     
     private long evaluationTime;
@@ -100,7 +98,6 @@ public class Engine {
         result.setStopped(resolver.wasStopped());
         FailedElements failedElements = resolver.getFailedElements();
         if (failedElements.hasProblems()) {
-            constraintVariableMap = resolver.getConstraintVariableMap();
             analyzeProblemConstraints(failedElements);
             analyzeProblemVariables(failedElements);
         }
@@ -139,8 +136,8 @@ public class Engine {
                 FailedElementDetails failedElementDetails = problemConstraintMap.get(constraint);                
                 if (constraint.getTopLevelParent() instanceof Project) {
                     failedElementProjects.add((Project) constraint.getTopLevelParent());                    
-                }                
-                constraintVariables.add(constraintVariableMap.get(constraint)); // ok if get-result is null
+                }
+                constraintVariables.add(resolver.getConstraintVariable(constraint)); // ok if get-result is null
                 java.util.Set<IDecisionVariable> problemVars = failedElementDetails.getProblemPoints(); 
                 java.util.Set<AbstractVariable> vars = new HashSet<AbstractVariable>();
                 for (IDecisionVariable problemVar : problemVars) {
@@ -280,7 +277,6 @@ public class Engine {
         // keep the interceptor!
         this.result = new ReasoningResult();
         clearFailedInfo();
-        constraintVariableMap = null;
         evaluationTime = 0;
         reevaluationCount = 0;
         failedConstraints = 0;

@@ -1,7 +1,6 @@
 package net.ssehub.easy.reasoning.sseReasoner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,10 +114,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     private FailedElements failedElements = new FailedElements();
     private ScopeAssignments scopeAssignments = new ScopeAssignments();
 
-    private VariablesMap constraintMap = new VariablesMap();
-    private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
-    private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
-        = new HashMap<IDecisionVariable, List<Constraint>>();
+    private VariablesMap variablesMap = new VariablesMap();
     private ReasonerState copiedState;
     private ConstraintBase constraintBase = new ConstraintBase();
     private ConstraintList defaultConstraints = new ConstraintList();
@@ -146,7 +142,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     private transient ContextStack contexts = new ContextStack();
     private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
-        = new VariablesInNotSimpleAssignmentConstraintsFinder(constraintMap);
+        = new VariablesInNotSimpleAssignmentConstraintsFinder(variablesMap);
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
     private transient VariablesInConstraintFinder variablesFinder = new VariablesInConstraintFinder();
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
@@ -161,9 +157,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      */
     private static class ReasonerState {
         private List<ConstraintList> constraintBase = new LinkedList<ConstraintList>();
-        private Map<Constraint, IDecisionVariable> constraintVariableMap = new HashMap<Constraint, IDecisionVariable>();
-        private Map<IDecisionVariable, List<Constraint>> variableConstraintsMap 
-            = new HashMap<IDecisionVariable, List<Constraint>>();
+        private VariablesMap variablesMap = new VariablesMap();
     }
 
     /**
@@ -370,8 +364,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         IConfigurationElement iter = variable;
         List<Constraint> constraints;
         do { // use holder or iterate in case of container element variable
-            constraints = iter instanceof IDecisionVariable 
-                ? variableConstraintsMap.get((IDecisionVariable) iter) : null;                        
+            constraints = iter instanceof IDecisionVariable ? variablesMap.getConstraintsForVariable(iter) : null;
             iter = iter.getParent();
         } while (null == constraints && null != iter);
         if (clear && null != constraints) {
@@ -389,12 +382,11 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 constraints = toRemove;
             }
             constraintBase.removeAll(constraints);
-            removeAll(constraintVariableMap, constraints);
             failedElements.removeProblemConstraints(constraints);
             // clear dependent
             simpleAssignmentFinder.acceptAndClear(constraints, config, false);
             // clear this variable (if not already cleared)
-            constraintMap.removeAll(variable, constraints);
+            variablesMap.removeAll(variable, constraints);
             constraints.clear();
         }
         return constraints;
@@ -421,7 +413,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                     null, parent, holder);
                 setValue(variable, c); // fixes value after substitution, does not cause change event
                 constraintBase.addAll(otherConstraints);
-                constraintMap.addAll(variable, otherConstraints);
+                variablesMap.addAll(variable, otherConstraints);
                 otherConstraints.clear();
             }
         }
@@ -456,7 +448,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      * @param declaration the variable declaration to reschedule
      */
     private void reschedule(AbstractVariable declaration) {
-        Set<Constraint> constraints = constraintMap.getRelevantConstraints(declaration);
+        Set<Constraint> constraints = variablesMap.getRelevantConstraints(declaration);
         if (null != constraints) {
             for (Constraint varConstraint : constraints) {
                 if (!constraintBase.contains(varConstraint)) {
@@ -544,10 +536,8 @@ class Resolver implements IValueChangeListener, IResolutionListener {
                 evaluateConstraintBase(start, project);
             }
         } else {
-            constraintVariableMap.clear();
-            constraintVariableMap.putAll(copiedState.constraintVariableMap);
-            variableConstraintsMap.clear();
-            variableConstraintsMap.putAll(copiedState.variableConstraintsMap);
+            variablesMap.clear();
+            variablesMap.copyFrom(copiedState.variablesMap);
             // size corresponds to #projects
             for (int p = 0; !hasTimeout && !wasStopped && p < copiedState.constraintBase.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
@@ -1355,7 +1345,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         constraintBase.addAll(topLevelConstraints, true);
         constraintBase.addAll(otherConstraints, true);
         constraintCounter = constraintBase.size();
-        variablesInConstraintsCounter = constraintMap.getDeclarationSize();
+        variablesInConstraintsCounter = variablesMap.getDeclarationSize();
         // if marked for re-use, copy constraint base
         if (null != copiedState) {
             ConstraintList copy = new ConstraintList();
@@ -1561,32 +1551,11 @@ class Resolver implements IValueChangeListener, IResolutionListener {
      */
     private void registerConstraint(IDecisionVariable variable, Constraint constraint) {
         if (null != variable) {
-            register(variable, constraint, constraintVariableMap, variableConstraintsMap);
+            variablesMap.registerConstraint(variable, constraint);
             if (null != copiedState) {
-                register(variable, constraint, copiedState.constraintVariableMap, 
-                    copiedState.variableConstraintsMap);
+                copiedState.variablesMap.registerConstraint(variable, constraint);
             }
         }
-    }
-
-    /**
-     * Registers a <code>variable</code> and associated <code>constraint</code>.
-     * 
-     * @param variable the variable
-     * @param constraint the constraint
-     * @param constraintVariableMap the constraint-to-variable mapping
-     * @param variableConstraintsMap the variable-to-constraints mapping
-     */
-    private void register(IDecisionVariable variable, Constraint constraint, 
-        Map<Constraint, IDecisionVariable> constraintVariableMap, 
-        Map<IDecisionVariable, List<Constraint>> variableConstraintsMap) {
-        constraintVariableMap.put(constraint, variable);
-        List<Constraint> constraints = variableConstraintsMap.get(variable);
-        if (null == constraints) {
-            constraints = new ArrayList<Constraint>();
-            variableConstraintsMap.put(variable, constraints);
-        }
-        constraints.add(constraint);
     }
     
     /**
@@ -1756,12 +1725,13 @@ class Resolver implements IValueChangeListener, IResolutionListener {
     }
     
     /**
-     * Getter for the map of all ConstraintVariables.
-     * and their {@link Constraint}s.
-     * @return Map of constraint variables and their constraints.
+     * Returns the variable currently assigned to <code>constraint</code>.
+     * 
+     * @param constraint the constraint to look for
+     * @return the variable, may be <b>null</b> for none.
      */
-    Map<Constraint, IDecisionVariable> getConstraintVariableMap() {
-        return constraintVariableMap;
+    IDecisionVariable getConstraintVariable(Constraint constraint) {
+        return variablesMap.getDecisionVariableForConstraint(constraint);
     }
     
     /**
@@ -1886,8 +1856,7 @@ class Resolver implements IValueChangeListener, IResolutionListener {
         otherConstraints.clear();
         failedElements.clear();
         scopeAssignments.clearScopeAssignments();
-        // keep the constraintMap
-        // keep the constraintVariableMap
+        // keep variablesMap for now
         constraintBase.clear();        
         // keep constraintCounter - is set during translation
         // keep variablesInConstraintsCounter - is set during translation
