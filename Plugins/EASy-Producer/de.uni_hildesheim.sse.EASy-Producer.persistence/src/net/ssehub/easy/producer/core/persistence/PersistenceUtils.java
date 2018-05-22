@@ -761,7 +761,8 @@ public class PersistenceUtils {
             List<URL> libs = new ArrayList<URL>();
             URL dfltUrl = null;
             try { // constant is bad, currently no better way
-                dfltUrl = DefaultLib.findDefaultLibURL(loader, "de.uni_hildesheim.sse.EASy-Producer.persistence");
+                dfltUrl = DefaultLib.findDefaultLibURL(loader, DefaultLib.composePluginPattern(Activator.PLUGIN_ID), 
+                    "de.uni_hildesheim.sse.EASy-Producer.persistence");
             } catch (IOException e) {
                 EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
                     "While retrieving fallback libary URL: " + e.getMessage());
