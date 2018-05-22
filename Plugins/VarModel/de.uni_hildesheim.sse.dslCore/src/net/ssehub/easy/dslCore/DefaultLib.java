@@ -39,6 +39,11 @@ public class DefaultLib {
      * The usual name of the default lib folder.
      */
     public static final String DEFAULT_LIB_FOLDER_NAME = "defaultLib";
+    
+    /**
+     * Maximum nesting to search for fallback locations.
+     */
+    public static final int DEFAULT_MAX_NESTING = 3;
 
     private static List<URL> urls = new ArrayList<URL>();
 
@@ -194,7 +199,8 @@ public class DefaultLib {
      * Tries to find the default lib URL. The first pass uses the class loader. If this fails, we use 
      * {@link #findFallbackLibFolder(String, String)}, which searches for <code>parentFolder</code> 
      * containing {@link #DEFAULT_LIB_FOLDER_NAME} starting at the current folder walking up to the root
-     * folder. This complicated approach may be needed in standalon/CI testing.
+     * folder. This method limits the path to a nesting level of {@value #DEFAULT_MAX_NESTING}. This complicated 
+     * approach may be needed in standalone/CI testing.
      * 
      * @param loader the class loader for holding the default lib
      * @param parentFolderName name of the parent folder,
@@ -202,8 +208,9 @@ public class DefaultLib {
      * @throws IOException in case of I/O problems or problems constructing the result URL
      * @see #findDefaultLibURL(ClassLoader, String, String)
      */
-    public static URL findDefaultLibURL(ClassLoader loader, String parentFolderName) throws IOException {
-        return findDefaultLibURL(loader, parentFolderName, DEFAULT_LIB_FOLDER_NAME);
+    public static URL findDefaultLibURL(ClassLoader loader, String... parentFolderName) throws IOException {
+        return findDefaultLibURL(loader, DefaultLib.DEFAULT_MAX_NESTING, DefaultLib.DEFAULT_LIB_FOLDER_NAME, 
+            parentFolderName);
     }
 
     /**
@@ -213,16 +220,18 @@ public class DefaultLib {
      * folder. This complicated approach may be needed in standalon/CI testing.
      * 
      * @param loader the class loader for holding the default lib
-     * @param parentFolderName name of the parent folder,
+     * @param maxNesting the maximum file path nesting to search for, <code>0</code> is none, negative is unlimited
      * @param defaultLibFolderName name of the contained default lib folder
+     * @param parentFolderName name(s) of the parent folder(s), may be full names, paths or prefix search patterns 
+     *     (ending with a star), see e.g., {@link #composePluginPattern(String)}.
      * @return the default lib URL or <b>null</b>
      * @throws IOException in case of I/O problems or problems constructing the result URL
      */
-    public static URL findDefaultLibURL(ClassLoader loader, String parentFolderName, 
-        String defaultLibFolderName) throws IOException {
+    public static URL findDefaultLibURL(ClassLoader loader, int maxNesting, String defaultLibFolderName, 
+        String... parentFolderName) throws IOException {
         URL dfltUrl = loader.getResource(defaultLibFolderName);
         if (null == dfltUrl) { // fallback if unpacked / in standalone jUnit testing
-            File f = findFallbackLibFolder(parentFolderName, defaultLibFolderName);
+            File f = findFallbackLibFolder(maxNesting, defaultLibFolderName, parentFolderName);
             if (null != f) {
                 dfltUrl = f.getAbsoluteFile().toURI().toURL();
             }
@@ -233,21 +242,40 @@ public class DefaultLib {
     /**
      * Tries to Find a fallback in the actual folder or its recursive (for Jenkins) parent folders.
      * 
-     * @param parentFolderName name of the parent folder,
+     * @param maxNesting the maximum file path nesting to search for, <code>0</code> is none, negative is unlimited
      * @param defaultLibFolderName name of the contained default lib folder
+     * @param parentFolderName name(s) of the parent folder(s), may be full names, paths or prefix search patterns 
+     *     (ending with a star), see e.g., {@link #composePluginPattern(String)}.
      * @return the fallback folder or <b>null</b> if there is none
      */
-    public static File findFallbackLibFolder(String parentFolderName, String defaultLibFolderName) {
+    public static File findFallbackLibFolder(int maxNesting, String defaultLibFolderName, String... parentFolderName) {
         File result = new File(defaultLibFolderName).getAbsoluteFile();
         if (!result.exists()) {
             result = null;
-            File f = new File(".").getAbsoluteFile();
-            do {
-                if (null != f) {
-                    f = f.getParentFile();
-                    result = findFallbackLibFolder(f, parentFolderName, defaultLibFolderName);
+            File startFolder = new File(".").getAbsoluteFile();
+            if (null != startFolder) {
+                startFolder = startFolder.getParentFile();
+                for (int i = 0; null != startFolder && null == result && i < parentFolderName.length; i++) {
+                    String par = parentFolderName[i];
+                    File f = startFolder;
+                    boolean prefix = false;
+                    int sepPos = par.lastIndexOf('/');
+                    if (sepPos > 0) {
+                        f = new File(startFolder, par.substring(0, sepPos));
+                        if (!f.exists()) {
+                            f = null;
+                        }
+                        par = sepPos + 1 < par.length() ? par.substring(sepPos + 1) : null;
+                    }
+                    if (null != par && par.endsWith("*")) {
+                        prefix = true;
+                        par = par.substring(0, par.length() - 1);
+                    }
+                    if (null != f && par != null) {
+                        result = findFallbackLibFolder(f, maxNesting, par, prefix, defaultLibFolderName);
+                    }
                 }
-            } while (null != f && null == result);
+            }
         }
         return result;
     }
@@ -255,13 +283,16 @@ public class DefaultLib {
     /**
      * Finds a fallback in <code>file</code> or its recursive (for Jenkins) parent folders.
      * 
+     * @param maxNesting the maximum file path nesting to search for, <code>0</code> is none, negative is unlimited
      * @param file the file/folder to search
      * @param folderName the folder name to search for, <b>null</b> to search for <code>defaultLibFolderName</code> 
      *     (second pass)
+     * @param prefix whether <code>folderName</code> shall be considered as a file name prefix or a full file name
      * @param defaultLibFolderName the default lib folder name
      * @return the fallback folder or <b>null</b> if the is none
      */
-    private static File findFallbackLibFolder(File file, String folderName, String defaultLibFolderName) {
+    private static File findFallbackLibFolder(File file, int maxNesting, String folderName, boolean prefix, 
+        String defaultLibFolderName) {
         File result = null;
         File[] files = null == file ? null : file.listFiles();
         if (null != files) {
@@ -272,17 +303,35 @@ public class DefaultLib {
                         if (defaultLibFolderName.equals(fName)) {
                             result = files[i];
                         }
-                    } else {
-                        if (folderName.equals(files[i].getName())) {
-                            result = findFallbackLibFolder(files[i], null, defaultLibFolderName);
+                    } else if (maxNesting != 0) {
+                        boolean matches;
+                        if (prefix) {
+                            matches = files[i].getName().startsWith(folderName);
                         } else {
-                            result = findFallbackLibFolder(files[i], folderName, defaultLibFolderName);
+                            matches = folderName.equals(files[i].getName());
+                        }
+                        if (matches) {
+                            result = findFallbackLibFolder(files[i], maxNesting - 1, null, prefix, 
+                                 defaultLibFolderName);
+                        } else {
+                            result = findFallbackLibFolder(files[i], maxNesting - 1, folderName, prefix, 
+                                defaultLibFolderName);
                         }                            
                     }
                 }
             }
         }
         return result;
+    }
+    
+    /**
+     * Returns a plugin pattern for searching for the default library.
+     * 
+     * @param pluginId the plugin id
+     * @return the plugin pattern
+     */
+    public static String composePluginPattern(String pluginId) {
+        return "plugins/" + pluginId + "*";
     }
 
 }
