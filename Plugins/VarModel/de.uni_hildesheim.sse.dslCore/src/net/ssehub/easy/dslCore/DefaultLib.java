@@ -24,6 +24,7 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 
 /**
  * Collects URLs representing the IVML/VIL/VTL default library. Sequence of registered URLs
@@ -70,7 +71,7 @@ public class DefaultLib {
         try {
             appendURL(url);
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID).exception(e);
+            getLogger().exception(e);
         }
     }
 
@@ -96,7 +97,7 @@ public class DefaultLib {
         try {
             prependURL(url);
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID).exception(e);
+            getLogger().exception(e);
         }
     }
     
@@ -123,7 +124,7 @@ public class DefaultLib {
         try {
             removeURL(url);
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID).exception(e);
+            getLogger().exception(e);
         }
     }
 
@@ -156,8 +157,7 @@ public class DefaultLib {
         url = prepare(url);
         if (null != url) {
             target.add(url);
-            EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID).info(
-                "Added defalut library URL: " + url);
+            getLogger().info("Added defalut library URL: " + url);
         }
     }
     
@@ -171,7 +171,7 @@ public class DefaultLib {
         try {
             append(target, url);
         } catch (IOException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID).exception(e);
+            getLogger().exception(e);
         }
     }
 
@@ -334,6 +334,15 @@ public class DefaultLib {
      */
     public static String composePluginPattern(String pluginId) {
         return "plugins/" + pluginId + "*";
+    }
+    
+    /**
+     * Returns the logger for this class.
+     * 
+     * @return the logger
+     */
+    private static EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID);
     }
 
 }
