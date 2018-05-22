@@ -156,6 +156,8 @@ public class DefaultLib {
         url = prepare(url);
         if (null != url) {
             target.add(url);
+            EASyLoggerFactory.INSTANCE.getLogger(DefaultLib.class, BundleId.ID).info(
+                "Added defalut library URL: " + url);
         }
     }
     
