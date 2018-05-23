@@ -15,11 +15,8 @@
  */
 package net.ssehub.easy.instantiation.maven;
 
-import java.io.IOException;
-
 import org.osgi.service.component.ComponentContext;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -32,20 +29,25 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 public class Registration implements IRegistration {
 
     private static boolean registered = false;
-    
+
     /**
      * Registers the Java artifacts and instantiators.
      */
     public static final void register() {
+        register(null);
+    }
+    
+    /**
+     * Registers the Java artifacts and instantiators.
+     * 
+     * @param context the component context, may be <b>null</b>
+     */
+    private static final void register(ComponentContext context) {
         if (!registered) {
             registered = true;
             TypeRegistry.DEFAULT.register(Maven.class);
-            try {
-                DefaultLib.appendURLQuietly(DefaultLib.findDefaultLibURL(Registration.class.getClassLoader(), 
-                    DefaultLib.composePluginPattern(Activator.BUNDLE_ID), "Instantiator.Maven"));
-            } catch (IOException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(Registration.class, Activator.BUNDLE_ID).error(e.getMessage());
-            }
+            DefaultLib.appendDefaultLibURLQuietly(Registration.class.getClassLoader(), 
+                Activator.BUNDLE_ID, context, "Instantiator.Maven");
         }
     }
     
@@ -55,7 +57,7 @@ public class Registration implements IRegistration {
      */
     protected void activate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
-        register();
+        register(context);
     }
 
     /**
