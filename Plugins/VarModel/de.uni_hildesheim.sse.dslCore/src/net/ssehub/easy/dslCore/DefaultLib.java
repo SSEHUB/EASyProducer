@@ -45,7 +45,7 @@ public class DefaultLib {
     /**
      * Maximum nesting to search for fallback locations.
      */
-    public static final int DEFAULT_MAX_NESTING = 3;
+    public static final int DEFAULT_MAX_NESTING = 3; // compromise for Jenkins, git-local-testing
 
     private static List<URL> urls = new ArrayList<URL>();
 
@@ -372,27 +372,32 @@ public class DefaultLib {
             result = null;
             File startFolder = new File(".").getAbsoluteFile();
             if (null != startFolder) {
-                startFolder = startFolder.getParentFile();
-                for (int i = 0; null != startFolder && null == result && i < parentFolderName.length; i++) {
-                    String par = parentFolderName[i];
-                    File f = startFolder;
-                    boolean prefix = false;
-                    int sepPos = par.lastIndexOf('/');
-                    if (sepPos > 0) {
-                        f = new File(startFolder, par.substring(0, sepPos));
-                        if (!f.exists()) {
-                            f = null;
+                int startParentCount = 0;
+                do {
+                    startFolder = startFolder.getParentFile();
+                    for (int i = 0; null != startFolder && null == result && i < parentFolderName.length; i++) {
+                        String par = parentFolderName[i];
+                        File f = startFolder;
+                        boolean prefix = false;
+                        int sepPos = par.lastIndexOf('/');
+                        if (sepPos > 0) {
+                            f = new File(startFolder, par.substring(0, sepPos));
+                            if (!f.exists()) {
+                                f = null;
+                            }
+                            par = sepPos + 1 < par.length() ? par.substring(sepPos + 1) : null;
                         }
-                        par = sepPos + 1 < par.length() ? par.substring(sepPos + 1) : null;
+                        if (null != par && par.endsWith("*")) {
+                            prefix = true;
+                            par = par.substring(0, par.length() - 1);
+                        }
+                        if (null != f && par != null) {
+                            result = findFallbackLibFolder(f, maxNesting, par, prefix, defaultLibFolderName);
+                        }
                     }
-                    if (null != par && par.endsWith("*")) {
-                        prefix = true;
-                        par = par.substring(0, par.length() - 1);
-                    }
-                    if (null != f && par != null) {
-                        result = findFallbackLibFolder(f, maxNesting, par, prefix, defaultLibFolderName);
-                    }
-                }
+                    startParentCount++;
+                    // loop via parent, limit also this loop by maxNesting
+                } while (null != startFolder && null == result && (maxNesting < 0 || startParentCount < maxNesting));
             }
         }
         return result;
