@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.osgi.service.component.ComponentContext;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -157,7 +158,7 @@ public class DefaultLib {
         url = prepare(url);
         if (null != url) {
             target.add(url);
-            getLogger().info("Added defalut library URL: " + url);
+            getLogger().info("Added default library URL: " + url);
         }
     }
     
@@ -198,6 +199,120 @@ public class DefaultLib {
     }
 
     /**
+     * Tries to find the default lib URL based on information provided by the component <code>context</code>. This
+     * includes the symbolic bundle name (as pattern via {@link #composePluginPattern(String)} or, with precedence,
+     * the actual installation location of the bundle. 
+     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String, String...)}.
+     * 
+     * @param loader the class loader for holding the default lib
+     * @param bundleId the explicit bundle id to search for if we cannot identify the installation location from 
+     *   <code>context</code> (may be <b>null</b> for none)
+     * @param context the component context (may be <b>null</b> for none)
+     * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
+     *   using / or a prefix name ending with * (path possible)
+     * @return the default lib URL or <b>null</b>
+     * @throws IOException in case of I/O problems or problems constructing the result URL
+     */
+    public static URL appendDefaultLibURLQuietly(ClassLoader loader, String bundleId, ComponentContext context, 
+        String... parentFolderName) {
+        URL result = null;
+        try {
+            result = findDefaultLibURL(loader, bundleId, context, parentFolderName);
+            appendURL(result);
+        } catch (IOException e) {
+            getLogger().exception(e);
+        }
+        return result;
+    }
+
+    /**
+     * Tries to find the default lib URL based on information provided by the component <code>context</code>. This
+     * includes the symbolic bundle name (as pattern via {@link #composePluginPattern(String)} or, with precedence,
+     * the actual installation location of the bundle. 
+     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String, String...)}.
+     * 
+     * @param loader the class loader for holding the default lib
+     * @param context the component context (may be <b>null</b> for none)
+     * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
+     *   using / or a prefix name ending with * (path possible)
+     * @return the default lib URL or <b>null</b>
+     * @throws IOException in case of I/O problems or problems constructing the result URL
+     */
+    public static URL appendDefaultLibURLQuietly(ClassLoader loader, ComponentContext context, 
+        String... parentFolderName) {
+        URL result = null;
+        try {
+            result = findDefaultLibURL(loader, context, parentFolderName);
+            appendURL(result);
+        } catch (IOException e) {
+            getLogger().exception(e);
+        }
+        return result;
+    }
+
+    /**
+     * Tries to find the default lib URL based on information provided by the component <code>context</code>. This
+     * includes the symbolic bundle name (as pattern via {@link #composePluginPattern(String)} or, with precedence,
+     * the actual installation location of the bundle. 
+     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String, String...)}.
+     * 
+     * @param loader the class loader for holding the default lib
+     * @param context the component context (may be <b>null</b> for none)
+     * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
+     *   using / or a prefix name ending with * (path possible)
+     * @return the default lib URL or <b>null</b>
+     * @throws IOException in case of I/O problems or problems constructing the result URL
+     */
+    public static URL findDefaultLibURL(ClassLoader loader, ComponentContext context, String... parentFolderName) 
+        throws IOException {
+        return findDefaultLibURL(loader, null != context ? context.getUsingBundle().getSymbolicName() : null, context, 
+            parentFolderName);
+    }
+
+    /**
+     * Tries to find the default lib URL based on information provided by the component <code>context</code> (with 
+     * precedence using the actual installation location of the bundle), but explicit fallback bundle id to be used 
+     * with {@link #composePluginPattern(String)}. Uses {@link #findDefaultLibURL(ClassLoader, String...)}.
+     * 
+     * @param loader the class loader for holding the default lib
+     * @param bundleId the explicit bundle id to search for if we cannot identify the installation location from 
+     *   <code>context</code> (may be <b>null</b> for none)
+     * @param context the component context (may be <b>null</b> for none)
+     * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
+     *   using / or a prefix name ending with * (path possible)
+     * @return the default lib URL or <b>null</b>
+     * @throws IOException in case of I/O problems or problems constructing the result URL
+     */
+    public static URL findDefaultLibURL(ClassLoader loader, String bundleId, ComponentContext context, 
+        String... parentFolderName) throws IOException {
+        String bundleName = null;
+        // identify bundle installation location if possible
+        if (null != context) { // preliminary, not clean
+            String location = context.getUsingBundle().getLocation();
+            if (location.startsWith("reference:file:")) {
+                int pos = location.indexOf("/");
+                if (pos > 0 && pos < location.length()) {
+                    bundleName = location.substring(pos + 1);
+                    if (bundleName.endsWith("/")) {
+                        bundleName = bundleName.substring(0, bundleName.length() - 1);
+                    }
+                }
+            }
+            if (null == bundleName && null != bundleId) {
+                bundleName = DefaultLib.composePluginPattern(bundleId); // fallback
+            }
+        }
+        String[] pfn = parentFolderName;
+        if (null != bundleName) {
+            String[] tmp = new String[pfn.length + 1];
+            tmp[0] = bundleName;
+            System.arraycopy(pfn, 0, tmp, 1, pfn.length);
+            pfn = tmp;
+        }
+        return findDefaultLibURL(loader, pfn);
+    }
+
+    /**
      * Tries to find the default lib URL. The first pass uses the class loader. If this fails, we use 
      * {@link #findFallbackLibFolder(String, String)}, which searches for <code>parentFolder</code> 
      * containing {@link #DEFAULT_LIB_FOLDER_NAME} starting at the current folder walking up to the root
@@ -205,7 +320,8 @@ public class DefaultLib {
      * approach may be needed in standalone/CI testing.
      * 
      * @param loader the class loader for holding the default lib
-     * @param parentFolderName name of the parent folder,
+     * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
+     *   using / or a prefix name ending with * (path possible)
      * @return the default lib URL or <b>null</b>
      * @throws IOException in case of I/O problems or problems constructing the result URL
      * @see #findDefaultLibURL(ClassLoader, String, String)
