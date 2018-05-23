@@ -222,7 +222,6 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
             Value nestedValue = newValue.getNestedValue(slotName);
             IDecisionVariable var = cmpVar.getNestedVariable(slotName);
             if (null != var) { // in case of nested recursive types
-                LOGGER.info("VAR: " + var + " STATE: " + var.getState());
                 IAssignmentState nestedState = var.getState();
                 // Use new state only iff old state is not USER_ASSIGNED
                 if (nestedState != AssignmentState.USER_ASSIGNED) {
