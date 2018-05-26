@@ -29,15 +29,20 @@ import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -641,5 +646,27 @@ public class ReasoningUtils {
             collectRefines(cmp.getRefines(r), exclude, add, result);
         }
     }
-    
+
+    /**
+     * Creates an expression representing the parent of {@code variable}.
+     * 
+     * @param variable the variable
+     * @return the expression, <b>null</b> if no expression can be constructed
+     */
+    public static ConstraintSyntaxTree createParentExpression(IDecisionVariable variable) {
+        ConstraintSyntaxTree result = null;
+        IConfigurationElement parent = variable.getParent();
+        if (parent instanceof IDecisionVariable) { // we are nested
+            ConstraintSyntaxTree parentAcc = createParentExpression((IDecisionVariable) parent);
+            if (variable.getDeclaration() instanceof Attribute) {
+                result = new AttributeVariable(parentAcc, (Attribute) variable.getDeclaration());
+            } else {
+                result = new CompoundAccess(parentAcc, variable.getDeclaration().getName());
+            }
+        } else { // we are top-level
+            result = new Variable(variable.getDeclaration());
+        }
+        return result;
+    }
+
 }
