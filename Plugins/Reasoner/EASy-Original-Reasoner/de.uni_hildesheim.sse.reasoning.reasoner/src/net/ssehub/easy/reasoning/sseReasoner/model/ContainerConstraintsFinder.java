@@ -19,8 +19,6 @@ import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
-import net.ssehub.easy.varModel.model.values.CompoundValue;
-import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -31,8 +29,7 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
     private boolean isConstraintContainer;
     private boolean isCompoundInitializer;
     private ConstraintSyntaxTree cst;
-    private CompoundValue compoundValue;
-    private ContainerValue containerValue;
+    private Value value;
     
     /**
      * Constructor of the visitor. Visits the given constraint using {@link #accept(ConstraintSyntaxTree)}.
@@ -69,12 +66,12 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
         isConstraintContainer = false;
         isCompoundInitializer = false;
         cst = null;
-        containerValue = null;
-        compoundValue = null;
+        value = null;
     }
 
     /**
-     * Method for determine if expression holds a container of constraints.
+     * Method for determine if {@link #getExpression()} holds a container of constraints.
+     * 
      * @return true if holds container of constraints.
      */
     public boolean isConstraintContainer() {
@@ -82,7 +79,8 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
     }
     
     /**
-     * Method for determine if expression holds a compound initializer.
+     * Method for determine if {@link #getExpression()} holds a compound initializer.
+     * 
      * @return true if holds compound initializer.
      */
     public boolean isCompoundInitializer() {
@@ -90,21 +88,12 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
     }
 
     /**
-     * Returns the container value if a constant value was identified as right side.
+     * Returns the (compound/container) constant value if a constant value was identified as right side.
      * 
-     * @return the container value (may be <b>null</b> if there is none)
+     * @return the value (may be <b>null</b> if there is none)
      */
-    public ContainerValue getContainerValue() {
-        return containerValue;
-    }
-
-    /**
-     * Returns the compound value if a constant value was identified as right side.
-     * 
-     * @return the compound value (may be <b>null</b> if there is none)
-     */
-    public CompoundValue getCompoundValue() {
-        return compoundValue;
+    public Value getConstantValue() {
+        return value;
     }
     
     /**
@@ -127,7 +116,6 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
     
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        // TODO check whether a specific method is needed
         visitVariable(variable);
     }
 
@@ -158,12 +146,7 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
                     isCompoundInitializer = true;
                     cst = call.getParameter(0);                     
                 } else if (param0 instanceof ConstantValue) {
-                    Value value = ((ConstantValue) param0).getConstantValue();
-                    if (value instanceof ContainerValue) {
-                        containerValue = (ContainerValue) value;
-                    } else if (value instanceof CompoundValue) {
-                        compoundValue = (CompoundValue) value;
-                    }
+                    value = ((ConstantValue) param0).getConstantValue();
                 }
             }
             call.getOperand().accept(this);
@@ -227,7 +210,6 @@ public class ContainerConstraintsFinder implements IConstraintTreeVisitor {
 
     @Override
     public void visitSelf(Self self) {
-        // TODO Auto-generated method stub
     }
 
     @Override

@@ -40,10 +40,8 @@ import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CSTUtils;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
-import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
@@ -72,7 +70,6 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.FilterType;
-import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -146,6 +143,7 @@ class Resolver implements IResolutionListener {
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
     private transient CompoundAnnotationMapper annotationMapper = new CompoundAnnotationMapper();
     private transient RescheduleValueChangeVisitor rescheduler = new RescheduleValueChangeVisitor(this);
+    private transient CheckInitializerVisitor checkInitializer = new CheckInitializerVisitor(this);            
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
 
@@ -1179,7 +1177,7 @@ class Resolver implements IResolutionListener {
         }
         contexts.clear();
     }
-
+    
     /**
      * Adding a constraint to a constraint set, checking for contained container/compound initializers if
      * requested. 
@@ -1212,15 +1210,7 @@ class Resolver implements IResolutionListener {
         // check whether the constraint is a value assignment // TODO unify with CSTUtils above?
         if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
             containerFinder.accept(cst);
-            if (containerFinder.isConstraintContainer()) {
-                checkContainerInitializer(containerFinder.getExpression(), false, constraint.getParent(), variable);
-            } else if (containerFinder.isCompoundInitializer()) {
-                checkCompoundInitializer(containerFinder.getExpression(), true, constraint.getParent(), variable);
-            } else if (null != containerFinder.getContainerValue()) {
-                checkContainerValue(containerFinder.getContainerValue(), constraint.getParent());
-            } else if (null != containerFinder.getCompoundValue()) {
-                checkCompoundValue(containerFinder.getCompoundValue(), constraint.getParent());
-            }
+            checkInitializer.accept(containerFinder, constraint.getParent(), variable);
             containerFinder.clear();
         }
         if (add) {
@@ -1231,79 +1221,6 @@ class Resolver implements IResolutionListener {
             }
             simpleAssignmentFinder.acceptAndClear(constraint, config);
         }
-    }
-
-    /**
-     * Checks whether an expression is a {@link CompoundInitializer}. Compound initializers are created by the parser
-     * if at least one entry cannot be evaluated as a constant. Compounds must be scanned for constraint 
-     * variable values.
-     * 
-     * @param exp expression to check.
-     * @param substituteVars <code>true</code> if {@link #varMap} shall be applied to substitute variables in 
-     *   <code>exp</code> (if variable is nested), <code>false</code> if <code>exp</code> shall be taken over as it is.
-     * @param parent parent for temporary constraints
-     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
-     */
-    private void checkCompoundInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent, 
-        IDecisionVariable variable) {
-        CompoundInitializer compoundInit = (CompoundInitializer) exp;
-        for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
-            ConstraintSyntaxTree initEx = compoundInit.getExpression(i);
-            if (initEx instanceof ContainerInitializer) {
-                checkContainerInitializer(initEx, substituteVars, parent, variable);
-            }
-            if (initEx instanceof CompoundInitializer) {
-                checkCompoundInitializer(initEx, substituteVars, parent, variable);
-            }
-            if (TypeQueries.isConstraint(compoundInit.getSlotDeclaration(i).getType())) {
-                createConstraintForInitializer(initEx, substituteVars, parent, variable);
-            }
-        }
-    }
-
-    /**
-     * Checks whether an expression is a {@link ContainerInitializer}. Compound initializers are created by the parser
-     * if at least one entry cannot be evaluated as a constant. Containers must be scanned for constraint 
-     * variable values.
-     * 
-     * @param exp expression to be checked.
-     * @param substituteVars <code>true</code> if {@link #varMap} shall be applied to substitute variables in 
-     *   <code>exp</code> (if variable is nested), <code>false</code> if <code>exp</code> shall be taken over as it is.
-     * @param parent parent for temporary constraints
-     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
-     */
-    private void checkContainerInitializer(ConstraintSyntaxTree exp, boolean substituteVars, IModelElement parent, 
-        IDecisionVariable variable) {
-        ContainerInitializer containerInit = (ContainerInitializer) exp;
-        for (int i = 0; i < containerInit.getExpressionCount(); i++) {
-            ConstraintSyntaxTree cst = containerInit.getExpression(i);
-            if (cst instanceof ContainerInitializer) {
-                checkContainerInitializer((ContainerInitializer) cst, substituteVars, parent, variable);
-            } else {
-                if (TypeQueries.isConstraint(containerInit.getType().getContainedType())) {
-                    createConstraintForInitializer(cst, substituteVars, parent, variable);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Creates constraints for initializers. Performs variable substitution without self/selfEx if requested by 
-     * {@code substituteVars}. Does not perform initializer check on adding the constraint.
-     * 
-     * @param cst the expression to create the constraint for
-     * @param substituteVars whether variables shall be substituted from the variable mapping
-     * @param parent the parent for the new constraint
-     * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
-     * @see #createConstraintVariableConstraint(ConstraintSyntaxTree, AbstractVariable, boolean, IModelElement, 
-     *     IDecisionVariable)
-     */
-    private void createConstraintForInitializer(ConstraintSyntaxTree cst, boolean substituteVars, 
-        IModelElement parent, IDecisionVariable variable) {
-        if (substituteVars) {
-            cst = substituteVariables(cst, null, null);
-        }
-        createConstraintVariableConstraint(cst, null, false, parent, variable);
     }
 
     /**
@@ -1324,13 +1241,9 @@ class Resolver implements IResolutionListener {
      */
     Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
-        Constraint constraint = null;
-        if (cst != null) {
-            cst = substituteVariables(cst, selfEx, self);
-            constraint = createConstraintVariableConstraint(cst, self, 
-                !(cst instanceof ConstantValue), parent, variable);
-        }
-        return constraint;
+        cst = substituteVariables(cst, selfEx, self);
+        return createConstraintVariableConstraint(cst, self, 
+            !(cst instanceof ConstantValue), parent, variable);
     }
 
     /**
@@ -1347,7 +1260,7 @@ class Resolver implements IResolutionListener {
      * @see #addConstraint(ConstraintList, Constraint, boolean, IDecisionVariable)
      * @see #registerConstraint(IDecisionVariable, Constraint)
      */
-    private Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, AbstractVariable self, 
+    Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, AbstractVariable self, 
         boolean checkForInitializers, IModelElement parent, IDecisionVariable variable) {
         Constraint constraint = null;
         try {
@@ -1379,59 +1292,6 @@ class Resolver implements IResolutionListener {
             variablesMap.registerConstraint(variable, constraint);
             if (null != copiedState) {
                 copiedState.variablesMap.registerConstraint(variable, constraint);
-            }
-        }
-    }
-    
-    /**
-     * Checks whether an expression is a {@link CompoundValue}. Compound values are created by the parser if all
-     * contained values are constant. Compound values must be scanned for constraint variable values. Variable / self 
-     * substitution is not needed here, as the expressions are all constant.
-     * 
-     * @param value the value to check.
-     * @param parent parent for temporary constraints
-     */
-    private void checkCompoundValue(CompoundValue value, IModelElement parent) {
-        Compound cmp = (Compound) value.getType();
-        for (String slot : value.getSlotNames()) {
-            Value slotValue = value.getNestedValue(slot);
-            if (null != slotValue) {
-                DecisionVariableDeclaration slotDecl = cmp.getElement(slot);
-                IDatatype slotType = slotDecl.getType();
-                if (TypeQueries.isContainer(slotType)) {
-                    checkContainerValue((ContainerValue) slotValue, parent);
-                } else if (TypeQueries.isConstraint(slotType)) {
-                    ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(slotValue);
-                    // no substitution/self as all entries are constant
-                    createConstraintVariableConstraint(cst, null, null, parent, null);
-                }
-            }
-        }
-    }
-
-    /**
-     * Checks whether an expression is a {@link ContainerValue}. Container values are created by the parser if all
-     * contained values are constant. Container values must be scanned for constraint variable values. Variable / self 
-     * substitution is not needed here, as the expressions are all constant.
-     * 
-     * @param value the value to check.
-     * @param parent parent for temporary constraints
-     */
-    private void checkContainerValue(ContainerValue value, IModelElement parent) {
-        if (TypeQueries.isConstraint(value.getContainedType())) {
-            for (int s = 0; s < value.getElementSize(); s++) {
-                ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(value.getElement(s));
-                // no substitution/self as all entries are constant
-                createConstraintVariableConstraint(cst, null, null, parent, null);
-            }
-        } else {
-            for (int s = 0; s < value.getElementSize(); s++) {
-                Value val = value.getElement(s);
-                if (val instanceof ContainerValue) {
-                    checkContainerValue((ContainerValue) val, parent);
-                } else if (val instanceof CompoundValue) {
-                    checkCompoundValue((CompoundValue) val, parent); 
-                }
             }
         }
     }
@@ -1504,7 +1364,7 @@ class Resolver implements IResolutionListener {
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
      * @return Transformed constraint.
      */
-    private ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
+    ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self) {
         substVisitor.setMappings(contexts);
         if (selfEx != null) {
