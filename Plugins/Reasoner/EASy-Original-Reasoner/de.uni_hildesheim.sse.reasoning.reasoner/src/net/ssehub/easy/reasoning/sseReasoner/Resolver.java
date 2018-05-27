@@ -24,7 +24,6 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
-import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
@@ -135,7 +134,6 @@ class Resolver implements IResolutionListener {
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient SubstitutionVisitor substVisitor = new SubstitutionVisitor();
     private transient ContextStack contexts = new ContextStack();
-    private transient ContainerConstraintsFinder containerFinder = new ContainerConstraintsFinder();
     private transient VariablesInNotSimpleAssignmentConstraintsFinder simpleAssignmentFinder 
         = new VariablesInNotSimpleAssignmentConstraintsFinder(variablesMap);
     private transient ConstraintTranslationVisitor projectVisitor = new ConstraintTranslationVisitor();
@@ -143,7 +141,7 @@ class Resolver implements IResolutionListener {
     private transient OtherConstraintsProcessor otherConstraintsProc = new OtherConstraintsProcessor();
     private transient CompoundAnnotationMapper annotationMapper = new CompoundAnnotationMapper();
     private transient RescheduleValueChangeVisitor rescheduler = new RescheduleValueChangeVisitor(this);
-    private transient CheckInitializerVisitor checkInitializer = new CheckInitializerVisitor(this);            
+    private transient CheckInitializerVisitor initChecker = new CheckInitializerVisitor(this);            
     private transient long endTimestamp;
     private transient boolean inTopLevelEvals = false;
 
@@ -1209,9 +1207,7 @@ class Resolver implements IResolutionListener {
         }
         // check whether the constraint is a value assignment // TODO unify with CSTUtils above?
         if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
-            containerFinder.accept(cst);
-            checkInitializer.accept(containerFinder, constraint.getParent(), variable);
-            containerFinder.clear();
+            initChecker.accept(cst, constraint.getParent(), variable);
         }
         if (add) {
             if (inTopLevelEvals && (target == otherConstraints || target == topLevelConstraints)) {
@@ -1553,7 +1549,6 @@ class Resolver implements IResolutionListener {
         usedVariables.clear();
         substVisitor.clear();
         contexts.clear();
-        containerFinder.clear();
         simpleAssignmentFinder.clear();
     }
     

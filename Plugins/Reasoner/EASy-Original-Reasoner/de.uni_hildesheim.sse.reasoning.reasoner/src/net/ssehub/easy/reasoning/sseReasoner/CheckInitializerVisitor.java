@@ -17,7 +17,6 @@ package net.ssehub.easy.reasoning.sseReasoner;
 
 import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.getConstraintValueConstraintExpression;
 
-import net.ssehub.easy.reasoning.sseReasoner.model.ContainerConstraintsFinder;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
@@ -41,6 +40,7 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
@@ -50,7 +50,7 @@ import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueVisitorAdapter;
 
 /**
- * Visits initializers and checks for contained constraints for constraint variables. Call 
+ * Visits constraints and checks for contained constraints for constraint variables. Call 
  * {@link #accept(ContainerConstraintsFinder, IModelElement, IDecisionVariable)} to use.
  * This visitor is inherently reusable as instance.
  * 
@@ -59,6 +59,15 @@ import net.ssehub.easy.varModel.model.values.ValueVisitorAdapter;
 class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraintTreeVisitor {
 
     private Resolver resolver;
+    
+    // analyze/scan variables (process = false), do not access during processing due to potential recursion
+    private boolean isCompoundInitializer;
+    private ConstraintSyntaxTree expression;
+    private Value value;
+
+    private boolean process;
+
+    // process variables, set/valid only when processing (process = true)
     private IDecisionVariable variable;
     private IModelElement parent;
     private boolean substituteVars;
@@ -76,32 +85,41 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
      * Accepts the results of a container constraints finder and derives constraints from the 
      * contained constraints / constraint values.
      * 
-     * @param finder the finder instance
+     * @param cst the constraint to accept / visit
      * @param parent parent for temporary constraints
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
      */
-    public void accept(ContainerConstraintsFinder finder, IModelElement parent, IDecisionVariable variable) {
-
+    public void accept(ConstraintSyntaxTree cst, IModelElement parent, IDecisionVariable variable) {
+        process = false;
+        cst.accept(this);           
+        
         // save state for recurrence
         IDecisionVariable sVariable = this.variable;
         IModelElement sParent = this.parent;
         boolean sSubstituteVars = this.substituteVars;
         
+        
         // set state and visit
+        process = true;
         this.parent = parent;
         this.variable = variable;
-        if (null != finder.getExpression()) {
-            substituteVars = finder.isCompoundInitializer();
-            finder.getExpression().accept(this);
-        } else if (null != finder.getConstantValue()) {
+        if (null != expression) {
+            substituteVars = isCompoundInitializer;
+            expression.accept(this);
+        } else if (null != value) {
             substituteVars = false;
-            finder.getConstantValue().accept(this);
+            value.accept(this);
         }
         
         // reset state for recurrence
         variable = sVariable;
         parent = sParent;
         substituteVars = sSubstituteVars;
+
+        // clear
+        isCompoundInitializer = false;
+        expression = null;
+        value = null;
     }
     
     @Override
@@ -161,7 +179,9 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
         for (int i = 0; i < compoundInit.getExpressionCount(); i++) {
             ConstraintSyntaxTree initEx = compoundInit.getExpression(i);
             initEx.accept(this);
-            checkForConstraint(compoundInit.getSlotDeclaration(i).getType(), initEx);
+            if (process) {
+                checkForConstraint(compoundInit.getSlotDeclaration(i).getType(), initEx);
+            }
         }
     }
 
@@ -170,7 +190,9 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
         for (int i = 0; i < containerInit.getExpressionCount(); i++) {
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             cst.accept(this);
-            checkForConstraint(containerInit.getType().getContainedType(), cst);
+            if (process) {
+                checkForConstraint(containerInit.getType().getContainedType(), cst);
+            }
         }
     }
 
@@ -201,10 +223,12 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
+        visitVariable(variable);
     }
 
     @Override
     public void visitParenthesis(Parenthesis parenthesis) {
+        parenthesis.getExpr().accept(this);        
     }
 
     @Override
@@ -213,22 +237,49 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
+        if (null != call.getOperand()) { 
+            if ((call.getOperand() instanceof Variable
+                || call.getOperand() instanceof CompoundAccess)
+                && call.getParameterCount() == 1
+                && call.getOperation().equals(OclKeyWords.ASSIGNMENT)) {
+                ConstraintSyntaxTree param0 = call.getParameter(0);
+                if (param0 instanceof ContainerInitializer) {
+                    expression = call.getParameter(0);                    
+                } else if (param0 instanceof CompoundInitializer) {
+                    isCompoundInitializer = true;
+                    expression = call.getParameter(0);                     
+                } else if (param0 instanceof ConstantValue) {
+                    value = ((ConstantValue) param0).getConstantValue();
+                }
+            }
+            call.getOperand().accept(this);
+            for (int i = 0; i < call.getParameterCount(); i++) {
+                call.getParameter(i).accept(this);
+            }
+        }
     }
 
     @Override
     public void visitLet(Let let) {
+        let.getInExpression().accept(this);
     }
 
     @Override
     public void visitIfThen(IfThen ifThen) {
+        ifThen.getIfExpr().accept(this);
+        ifThen.getThenExpr().accept(this);
+        ifThen.getElseExpr().accept(this);
     }
 
     @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
+        call.getContainer().accept(this);
+        call.getExpression().accept(this);
     }
 
     @Override
     public void visitCompoundAccess(CompoundAccess access) {
+        access.getCompoundExpression().accept(this);  
     }
 
     @Override
@@ -241,10 +292,16 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
 
     @Override
     public void visitBlockExpression(BlockExpression block) {
+        for (int e = 0, n = block.getExpressionCount(); e < n; e++) {
+            block.getExpression(e).accept(this);
+        }
     }
 
     @Override
     public void visitMultiAndExpression(MultiAndExpression expression) {
+        for (int e = 0; e < expression.getExpressionCount(); e++) {
+            expression.getExpression(e).accept(this);
+        }
     }
     
 }
