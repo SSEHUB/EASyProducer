@@ -36,7 +36,7 @@ public class CollectionConstraintsTests extends AbstractTest {
      */
     @Test
     public void constraintSetDefaultTest() {
-        reasoningTest("constraintSetDefault.ivml", 2);
+        reasoningTest("constraintSetDefault.ivml", 1);
     }
 
     /**
@@ -44,7 +44,7 @@ public class CollectionConstraintsTests extends AbstractTest {
      */
     @Test
     public void constraintSetSetDefaultTest() {
-        reasoningTest("constraintSetSetDefault.ivml", 2);
+        reasoningTest("constraintSetSetDefault.ivml", 1);
     }
 
     /**
@@ -76,7 +76,7 @@ public class CollectionConstraintsTests extends AbstractTest {
      */
     @Test
     public void constraintSetDefaultInCompoundTest() {
-        reasoningTest("constraintSetDefaultInCompound.ivml", 2);
+        reasoningTest("constraintSetDefaultInCompound.ivml", 1);
     }
     
     /**
