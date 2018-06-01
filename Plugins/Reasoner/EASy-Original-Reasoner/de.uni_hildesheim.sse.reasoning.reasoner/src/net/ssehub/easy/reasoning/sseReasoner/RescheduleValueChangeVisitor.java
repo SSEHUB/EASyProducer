@@ -144,10 +144,6 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
             Value newValue = variable.getValue();
             if (!Value.equals(newValue, oldValue)) {
                 rescheduleValueChange(variable, variable, oldValue, true);
-                if (newValue instanceof ContainerValue) {
-                    resolver.createContainerConstraintValueConstraints((ContainerValue) newValue, 
-                        createParentExpression(variable), null, decl.getParent(), variable);
-                }
                 if (isValueTypeChange(variable, newValue, oldValue)) {
                     resolver.translateValueTypeChange(variable, newValue, oldValue);
                 }

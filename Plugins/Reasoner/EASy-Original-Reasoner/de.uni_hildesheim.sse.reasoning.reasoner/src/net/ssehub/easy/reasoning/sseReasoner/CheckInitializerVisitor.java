@@ -145,7 +145,6 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
             for (int s = 0; s < value.getElementSize(); s++) {
                 createConstraintFromValue(value.getElement(s));
             }
-            
         } else {
             for (int s = 0; s < value.getElementSize(); s++) {
                 value.getElement(s).accept(this);

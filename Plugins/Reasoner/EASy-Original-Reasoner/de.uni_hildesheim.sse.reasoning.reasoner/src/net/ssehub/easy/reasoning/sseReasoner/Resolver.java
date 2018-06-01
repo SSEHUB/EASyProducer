@@ -1189,7 +1189,7 @@ class Resolver implements IResolutionListener {
     private void addConstraint(ConstraintList target, Constraint constraint, boolean checkForInitializers, 
         IDecisionVariable variable) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
-        try { // TODO move down??
+        try {
             cst = contexts.composeExpression(cst); // pass on possibly changed cst
             constraint.setConsSyntax(cst);
         } catch (CSTSemanticException e) {
@@ -1198,14 +1198,14 @@ class Resolver implements IResolutionListener {
         boolean add = true;
         if (incremental) {
             add = !CSTUtils.isAssignment(cst);
+            if (add) {
+                variablesFinder.setConfiguration(config);
+                cst.accept(variablesFinder);
+                add = !variablesFinder.isConstraintFrozen();
+                variablesFinder.clear();
+            }
         }
-        if (add && incremental) {
-            variablesFinder.setConfiguration(config);
-            cst.accept(variablesFinder);
-            add = !variablesFinder.isConstraintFrozen();
-            variablesFinder.clear();
-        }
-        // check whether the constraint is a value assignment // TODO unify with CSTUtils above?
+        // check whether the constraint is a value assignment
         if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
             initChecker.accept(cst, constraint.getParent(), variable);
         }
