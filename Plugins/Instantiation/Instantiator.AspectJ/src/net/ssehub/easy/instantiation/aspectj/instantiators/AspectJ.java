@@ -16,7 +16,7 @@ import org.aspectj.bridge.context.CompilationAndWeavingContext;
 import org.aspectj.tools.ajc.Main;
 import org.aspectj.weaver.Dump;
 
-import net.ssehub.easy.instantiation.core.JavaUtilities;
+import net.ssehub.easy.instantiation.aspectj.Registration;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
@@ -120,8 +120,9 @@ public class AspectJ extends AbstractFileInstantiator {
     private static Set<FileArtifact> aspectJ(Collection<FileArtifact> source, File sourceRoot, Path target, 
         Map<String, Object> other) throws VilException {
         
-        if (JavaUtilities.isJava9()) {
-            throw new VilException("Sorry, but aspectj currently does not work with Java 9", VilException.ID_RUNTIME);
+        String envErr = Registration.checkEnvironment();
+        if (null != envErr) {
+            throw new VilException("Sorry, but... " + envErr, VilException.ID_RUNTIME);
         }
         
         long timestamp = PathUtils.normalizedTime();

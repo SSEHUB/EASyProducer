@@ -50,7 +50,8 @@ public class Registration implements IRegistration {
      * @return a message if the instantiator will not work, <b>null</b> else
      */
     public static String checkEnvironment() {
-        return JavaUtilities.isJava9() ? "AspectJ is not available for JDK 9" : null;
+        //  return JavaUtilities.isJava9() ? "AspectJ is not available for JDK 9" : null;
+        return null; // ok, since AspectJ 1.9.1
     }
 
 }
