@@ -287,7 +287,7 @@ public class DefaultLib {
         String... parentFolderName) throws IOException {
         String bundleName = null;
         // identify bundle installation location if possible
-        if (null != context) { // preliminary, not clean
+        if (null != context && null != context.getUsingBundle()) { // preliminary, not clean
             String location = context.getUsingBundle().getLocation();
             if (location.startsWith("reference:file:")) {
                 int pos = location.indexOf("/");
