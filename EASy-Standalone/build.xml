@@ -38,6 +38,11 @@
 		<mkdir dir="build/zip/Features"/>
 		<mkdir dir="build/generatedLibs"/>
         <mkdir dir="logs"/>
+		
+        <artifact:dependencies pathId="maven.compile.classpath">
+            <pom file="pom.xml" id="pom"/>
+            <remoteRepository refid="easy.repository" />
+        </artifact:dependencies>
 	</target>
 	
 	<target name="gather.easy.plugins">
@@ -178,12 +183,7 @@
     </target>
     	
 	<target name="compile">	
-        <artifact:dependencies pathId="maven.compile.classpath">
-            <pom file="pom.xml" id="pom"/>
-            <remoteRepository refid="easy.repository" />
-        </artifact:dependencies>
-
-		<echo>#######################################</echo>
+        <echo>#######################################</echo>
         <echo>###  CommandLine Tool (@Standalone) ###</echo>
         <echo>#######################################</echo>
         <ant dir="EASyCommandLine" antfile="${build.script.name}" />
