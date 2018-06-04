@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.vil.ui_feature"
       label="VIL UI"
-      version="1.1.0"
+      version="1.2.0"
       provider-name="University of Hildesheim - SSE">
 
    <description>
@@ -40,28 +40,28 @@ limitations under the License.
          id="de.uni_hildesheim.sse.vil.buildlang.ui"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.vil.expressions.ui"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.vil.templatelang.ui"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.dslCore.ui"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
 </feature>

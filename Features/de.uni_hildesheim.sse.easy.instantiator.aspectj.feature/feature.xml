@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy.instantiator.aspectj.feature"
       label="AspectJ Instantiator Feature"
-      version="1.8.6.1">
+      version="1.8.6.2">
 
    <description url="https://eclipse.org/aspectj/">
       AspectJ extension for VIL
@@ -30,8 +30,9 @@ limitations under the License.
          id="net.ssehub.easy.instantiation.aspectj"
          download-size="0"
          install-size="0"
-         version="1.8.6.1"
+         version="1.8.6.2"
          unpack="false"/>
+
    <plugin
          id="net.ssehub.easy.libs.aspectj.tools"
          download-size="0"

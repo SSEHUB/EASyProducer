@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/de.uni_hildesheim.sse.easy.instantiation.xvcl_feature.jar" id="de.uni_hildesheim.sse.easy.instantiation.xvcl_feature" version="3.3.0.3">
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiation.xvcl_feature.jar" id="de.uni_hildesheim.sse.easy.instantiation.xvcl_feature" version="3.3.0.4">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiators"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="1.8.3">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature.jar" id="de.uni_hildesheim.sse.easy_producer.instantiation.velocity_feature" version="1.8.4">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiators"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.java.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.java.feature" version="1.1.0">
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.java.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.java.feature" version="1.2.0">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiators"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.maven.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.maven.feature" version="3.2.3.2">
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.maven.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.maven.feature" version="3.2.3.3">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiators"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.experimental_feature.jar" id="de.uni_hildesheim.sse.experimental_feature" version="1.1.0">
+   <feature url="features/de.uni_hildesheim.sse.experimental_feature.jar" id="de.uni_hildesheim.sse.experimental_feature" version="1.2.0">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy_producer.main_feature.jar" id="de.uni_hildesheim.sse.easy_producer.main_feature" version="1.1.0">
+   <feature url="features/de.uni_hildesheim.sse.easy_producer.main_feature.jar" id="de.uni_hildesheim.sse.easy_producer.main_feature" version="1.2.0">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.ant.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.ant.feature" version="1.9.4.0">
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.ant.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.ant.feature" version="1.9.4.1">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiators"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy.examples.jar" id="de.uni_hildesheim.sse.easy.examples" version="1.1.0">
+   <feature url="features/de.uni_hildesheim.sse.easy.examples.jar" id="de.uni_hildesheim.sse.easy.examples" version="1.2.0">
       <category name="de.uni_hildesheim.sse.easy_producer.core_category"/>
    </feature>
-   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.aspectj.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.aspectj.feature" version="1.8.6.1">
+   <feature url="features/de.uni_hildesheim.sse.easy.instantiator.aspectj.feature.jar" id="de.uni_hildesheim.sse.easy.instantiator.aspectj.feature" version="1.8.6.2">
       <category name="de.uni_hildesheim.sse.easy_producer.instantiators"/>
    </feature>
    <feature url="features/de.uni_hildesheim.sse.easy.obsolete.jar" id="de.uni_hildesheim.sse.easy.obsolete" version="1.1.0">

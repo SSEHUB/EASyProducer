@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.ui_feature"
       label="EASy Producer UI"
-      version="1.1.0"
+      version="1.2.0"
       provider-name="University of Hildesheim - SSE">
 
    <description url="http://www.uni-hildesheim.de/index.php?id=8035">
@@ -33,20 +33,20 @@ limitations under the License.
 
    <includes
          id="de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"
-         version="0.0.0"/>
+         version="1.2.0"/>
 
    <plugin
          id="net.ssehub.easy.producer.ui"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.producer.help"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
 </feature>

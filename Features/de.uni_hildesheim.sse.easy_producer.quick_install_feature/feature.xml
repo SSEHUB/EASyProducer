@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy_producer.main_feature"
       label="EASy-Producer"
-      version="1.1.0"
+      version="1.2.0"
       provider-name="University of Hildesheim, SSE"
       plugin="net.ssehub.easy.producer.ui">
 
@@ -35,85 +35,91 @@ limitations under the License.
 
    <includes
          id="de.uni_hildesheim.sse.easy_producer.core_feature"
-         version="1.1.0"/>
+         version="1.2.0"/>
 
    <includes
          id="de.uni_hildesheim.sse.easy_producer.ui_feature"
-         version="1.1.0"/>
+         version="1.2.0"/>
 
    <includes
          id="de.uni_hildesheim.sse.ivml.ui_feature"
-         version="1.1.0"/>
+         version="1.2.0"/>
 
    <includes
          id="de.uni_hildesheim.sse.vil.ui_feature"
-         version="1.1.0"/>
+         version="1.2.0"/>
 
    <includes
          id="de.uni_hildesheim.sse.reasoning.reasoner_feature"
-         version="1.1.0"/>
+         version="1.2.0"/>
 
    <plugin
          id="net.ssehub.easy.integration.common"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.integration.common.eclipse"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.integration.common.impl"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="de.uni_hildesheim.sse.ivml"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.varModel"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.dslCore"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.basics"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.instantiation.core"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
 
    <plugin
          id="net.ssehub.easy.reasoning.core"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.2.0"
          unpack="false"/>
+
+   <plugin
+         id="net.ssehub.easy.libs.commons.io"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

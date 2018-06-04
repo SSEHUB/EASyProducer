@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy.instantiator.maven.feature"
       label="Instantiator Maven"
-      version="3.2.3.2"
+      version="3.2.3.3"
       provider-name="University of Hildesheim - SSE">
 
    <description url="https://maven.apache.org/">
@@ -31,13 +31,7 @@ limitations under the License.
          id="net.ssehub.easy.instantiation.maven"
          download-size="0"
          install-size="0"
-         version="3.2.3.2"
-         unpack="false"/>
-   <plugin
-         id="net.ssehub.easy.libs.maven"
-         download-size="0"
-         install-size="0"
-         version="3.2.3.2"
+         version="3.2.3.3"
          unpack="false"/>
 
 </feature>

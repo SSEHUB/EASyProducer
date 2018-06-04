@@ -2,15 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer - Eclipse
 Bundle-SymbolicName: net.ssehub.easy.producer.eclipse;singleton:=true
-Bundle-Version: 1.1.0
+Bundle-Version: 1.2.0
 Bundle-Activator: net.ssehub.easy.producer.eclipse.Activator
 Require-Bundle: 
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- de.uni_hildesheim.sse.ivml;bundle-version="0.0.5",
- net.ssehub.easy.producer.core;bundle-version="0.7.2";visibility:=reexport,
- net.ssehub.easy.reasoning.core;bundle-version="0.0.1",
- net.ssehub.easy.instantiation.core;bundle-version="0.0.1";visibility:=reexport,
+ de.uni_hildesheim.sse.ivml;bundle-version="1.2.0",
+ net.ssehub.easy.producer.core;bundle-version="1.2.0";visibility:=reexport,
+ net.ssehub.easy.reasoning.core;bundle-version="1.2.0",
+ net.ssehub.easy.instantiation.core;bundle-version="1.2.0";visibility:=reexport,
  org.eclipse.jdt.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

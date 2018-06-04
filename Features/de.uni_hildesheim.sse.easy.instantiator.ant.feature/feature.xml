@@ -2,7 +2,7 @@
 <feature
       id="de.uni_hildesheim.sse.easy.instantiator.ant.feature"
       label="Instantiator ANT / Make"
-      version="1.9.4.0">
+      version="1.9.4.1">
 
    <description url="http://ant.apache.org/">
       ANT and MAKE extension for VIL
@@ -30,8 +30,9 @@ limitations under the License.
          id="net.ssehub.easy.instantiation.ant"
          download-size="0"
          install-size="0"
-         version="1.9.4.0"
+         version="1.9.4.1"
          unpack="false"/>
+
    <plugin
          id="net.ssehub.easy.libs.ant"
          download-size="0"
