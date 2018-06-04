@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.ssehub.easy</groupId>
   <artifactId>ivml</artifactId>
-  <version>1.2.0-SNAPSHOT</version>
+  <version>1.2.0</version>
   <packaging>jar</packaging>
 
   <name>EASy-Producer IVML parser</name>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>net.ssehub.easy</groupId>
             <artifactId>dependencies</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
+            <version>1.2.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>          
@@ -83,7 +83,7 @@
      <dependency>
         <groupId>net.ssehub.easy</groupId>
         <artifactId>varModel</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.0</version>
      </dependency>
      <!-- optional -->
      <!-- <dependency>
@@ -143,7 +143,7 @@
      <dependency>
         <groupId>net.ssehub.easy</groupId>
         <artifactId>dslCore</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.2.0</version>
      </dependency>
   </dependencies>  
  </project>
