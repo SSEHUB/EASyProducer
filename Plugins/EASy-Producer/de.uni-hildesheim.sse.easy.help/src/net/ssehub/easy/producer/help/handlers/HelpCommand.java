@@ -19,7 +19,7 @@ public class HelpCommand  extends AbstractHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
         if (PlatformUI.getWorkbench().getHelpSystem().hasHelpUI()) {
             PlatformUI.getWorkbench().getHelpSystem()
-                .displayHelpResource("/de.uni-hildesheim.sse.easy.help/html/main_page.html");
+                .displayHelpResource("/net.ssehub.easy.producer.help/html/main_page.html");
         }
         return null;
     }
