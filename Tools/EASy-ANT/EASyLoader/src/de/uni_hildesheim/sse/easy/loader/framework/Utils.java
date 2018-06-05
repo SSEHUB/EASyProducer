@@ -277,7 +277,7 @@ public class Utils {
         try {
             Class<?> cls = loader.loadClass(className);
             Method method = findMethod(cls, methodName, param);
-            Object instance = cls.newInstance();
+            Object instance = cls.getConstructor().newInstance();
             if (null != method) { // DS method calls are optional, don't care for activators
                 method.setAccessible(true);
                 method.invoke(instance, param);
@@ -285,6 +285,8 @@ public class Utils {
             successful = true;
         } catch (ClassNotFoundException e) {
             Log.warn(TEXT_CANNOT_INITIALIZE + " " + className + ": not found");
+        } catch (NoSuchMethodException e) {
+            Log.warn(TEXT_CANNOT_INITIALIZE + " " + className + ": non-arg constructor not found");
         } catch (IllegalAccessException e) {
             Log.warn(TEXT_CANNOT_INITIALIZE + " " + className + ": " + callType 
                 + " method " + methodName + " cannot be accessed");
