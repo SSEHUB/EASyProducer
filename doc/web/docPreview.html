@@ -6,3 +6,26 @@
   <li><a href="http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/developers_guide.pdf">Developers guide</a></li>
   <li><a href="http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/rt-VIL Language Spec.pdf">rt-VIL Language Specification (experimental)</a></li>
 </ol>
+
+<h2>Headless components</h2>
+Headless components of EASy-Producer releases starting with version 1.2.0 are available from the SSE Maven repository. 
+For using the repository:
+<code>
+  &lt;repositories&gt;    
+    &lt;repository&gt;
+      &lt;id&gt;sse&lt;/id&gt;
+      &lt;name&gt;sse&lt;/name&gt;
+      &lt;url&gt;https://projects.sse.uni-hildesheim.de/qm/maven/&lt;/url&gt;
+      &lt;layout&gt;default&lt;/layout&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt; 
+&lt;/code&gt;
+Example dependency:
+<code>
+&lt;dependency&gt;
+   &lt;groupId&gt; net.ssehub.easy.runtime&lt;/groupId&gt;
+   &lt;artifactId&gt;EASy&lt;/artifactId&gt;
+   &lt;version&gt;1.2.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency>
+</code>
+For more details please refer to the developers documentation.
