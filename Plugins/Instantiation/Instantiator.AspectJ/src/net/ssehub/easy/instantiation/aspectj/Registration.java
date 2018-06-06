@@ -3,7 +3,6 @@ package net.ssehub.easy.instantiation.aspectj;
 import org.osgi.service.component.ComponentContext;
 
 import net.ssehub.easy.instantiation.aspectj.instantiators.AspectJ;
-import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
