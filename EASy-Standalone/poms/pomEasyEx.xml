@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.ssehub.easy.runtime</groupId>
   <artifactId>EASy-experimental</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   
   <dependencyManagement>
@@ -10,7 +10,7 @@
         <dependency>
             <groupId>net.ssehub.easy</groupId>
             <artifactId>dependencies</artifactId>
-            <version>1.2.0</version>
+            <version>${project.version}</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>          
@@ -37,7 +37,7 @@
        <dependency>
          <groupId>net.ssehub.easy.runtime</groupId>
          <artifactId>Eclipse-experimental</artifactId>
-         <version>1.2.0</version>
+         <version>${project.version}</version>
        </dependency>
   </dependencies>  
  </project>

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.ssehub.easy</groupId>
   <artifactId>core</artifactId>
-  <version>1.2.0</version>
+  <version>1.3.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>EASy-Producer core library</name>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>net.ssehub.easy</groupId>
             <artifactId>dependencies</artifactId>
-            <version>1.2.0</version>
+            <version>${project.version}</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>          
@@ -53,32 +53,32 @@
 	  <dependency>
 		  <groupId>net.ssehub.easy</groupId>
 		  <artifactId>varModel</artifactId>
-		  <version>1.2.0</version>
+		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>net.ssehub.easy</groupId>
 		  <artifactId>instantiatorCore</artifactId>
-		  <version>1.2.0</version>
+		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>net.ssehub.easy.reasoning</groupId>
 		  <artifactId>core</artifactId>
-		  <version>1.2.0</version>
+		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>net.ssehub.easy</groupId>
 		  <artifactId>ivml</artifactId>
-		  <version>1.2.0</version>
+		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>net.ssehub.easy</groupId>
 		  <artifactId>vil.buildlang</artifactId>
-		  <version>1.2.0</version>
+		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
 		  <groupId>net.ssehub.easy</groupId>
 		  <artifactId>vil.templateLang</artifactId>
-		  <version>1.2.0</version>
+		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
           <groupId>commons-io</groupId>
