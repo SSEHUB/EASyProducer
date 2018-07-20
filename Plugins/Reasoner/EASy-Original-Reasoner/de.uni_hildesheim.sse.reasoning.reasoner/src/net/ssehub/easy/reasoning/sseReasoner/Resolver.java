@@ -598,29 +598,27 @@ class Resolver implements IResolutionListener {
      */
     private void translateDeclaration(AbstractVariable decl, IDecisionVariable var, ConstraintSyntaxTree cAcc) {
         variablesCounter++;
-        IDatatype type = decl.getType();
-        ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-        boolean isConstraintType = TypeQueries.isConstraint(type);
+        IDatatype declType = decl.getType();
+        IDatatype actType = declType;
+        ConstraintSyntaxTree defaultValue = incremental ? null : decl.getDefaultValue();
         AbstractVariable self = null;
         ConstraintSyntaxTree selfEx = null;
-        translateDerivedDatatypeConstraints(decl, type, null, decl.getTopLevelParent(), 0);
-        if (incremental) {
-            defaultValue = isConstraintType ? defaultValue : null; // others, assume already set
-        } else {
-            translateAnnotationDeclarations(decl, var, cAcc);
-        }
-        if (null != defaultValue) { // considering the actual type rather than base, after derived (!)
-            type = inferTypeSafe(defaultValue, type);
+        if (null != defaultValue) { // considering the actual type rather than base
+            actType = inferTypeSafe(defaultValue, actType);
         }
         if (null != var && null != var.getValue()) {
-            type = var.getValue().getType();
+            actType = var.getValue().getType();
         }
-        boolean isCompound = TypeQueries.isCompound(type);
-        boolean isContainer = TypeQueries.isContainer(type);
+        boolean isCompound = TypeQueries.isCompound(actType);
+        boolean isContainer = TypeQueries.isContainer(actType);
         int compoundMode = MODE_COMPOUND_NONE;
+        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
+        if (!incremental) {
+            translateAnnotationDeclarations(decl, var, cAcc);
+        }
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
-            compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) type, MODE_COMPOUND_REGISTER); 
+            compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, MODE_COMPOUND_REGISTER); 
         } else if (null != defaultValue && !incremental) {
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
@@ -630,7 +628,7 @@ class Resolver implements IResolutionListener {
         } // next if: implicit overriding of default values through AttributeAssignment - leave out her
         if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             try {
-                if (isConstraintType) { // handle and register constraint variables
+                if (TypeQueries.isConstraint(declType)) { // handle and register constraint variables
                     variablesCounter--;
                     // use closest parent instead of project -> runtime analysis
                     createConstraintVariableConstraint(defaultValue, selfEx, self, decl, var);
@@ -661,9 +659,9 @@ class Resolver implements IResolutionListener {
             }            
         }
         if (isCompound) { // this is a compound value -> default constraints, do not defer
-            translateCompoundDeclaration(decl, var, cAcc, (Compound) type, compoundMode); 
+            translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, compoundMode); 
         } else if (isContainer) { // this is a container value -> default constraints, do not defer
-            translateContainerDeclaration(decl, var, type, cAcc);
+            translateContainerDeclaration(decl, var, actType, cAcc);
         }
     }
 

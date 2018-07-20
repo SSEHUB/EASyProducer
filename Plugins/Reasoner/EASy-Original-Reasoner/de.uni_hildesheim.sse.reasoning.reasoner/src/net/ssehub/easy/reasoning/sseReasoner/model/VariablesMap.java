@@ -15,9 +15,24 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 
 /**
- * A holder for a map reflecting all variable and constraint relationship.
+ * Represents all variable and constraint relationships. This class consists of two three mappings:
+ * 
+ * <ol>
+ *   <li>All variable declarations used in constraints ({@link #declConstraintMapping}).
+ *   <li>Constraint - decision variable relations</li>
+ *       <ol>
+ *           <li>Constraint assigned to a constraint decision variable {{@link constraintVariableMap}}</li>
+ *           <li>decision variables assigned to constraints, multiple in case of collections 
+ *               ({@link #variableConstraintsMap}}</li>
+ *       </ol>
+ *   </li>
+ * </ol>
+ * 
+ * Both kinds of relationships are maintained independently, whereby both constraint-decision variable relations 
+ * are managed together to ensure consistency.
+ * 
  * @author sizonenko
- *
+ * @author Holger Eichelberger 
  */
 public class VariablesMap {
     
