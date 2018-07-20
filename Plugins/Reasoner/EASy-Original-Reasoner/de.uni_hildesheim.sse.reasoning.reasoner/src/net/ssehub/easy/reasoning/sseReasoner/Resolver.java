@@ -623,8 +623,6 @@ class Resolver implements IResolutionListener {
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
             }
-        } else if (incremental && !isContainer) { // remaining defaults
-            defaultValue = null;
         } // next if: implicit overriding of default values through AttributeAssignment - leave out her
         if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             try {
