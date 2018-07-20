@@ -609,22 +609,21 @@ class Resolver implements IResolutionListener {
         if (null != var && null != var.getValue()) {
             actType = var.getValue().getType();
         }
-        boolean isCompound = TypeQueries.isCompound(actType);
-        boolean isContainer = TypeQueries.isContainer(actType);
         int compoundMode = MODE_COMPOUND_NONE;
         translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
         if (!incremental) {
             translateAnnotationDeclarations(decl, var, cAcc);
         }
+        boolean isCompound = TypeQueries.isCompound(actType);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
             compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, MODE_COMPOUND_REGISTER); 
-        } else if (null != defaultValue && !incremental) {
+        }
+        // next if: implicit overriding of default values through AttributeAssignment - leave out her
+        if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
             }
-        } // next if: implicit overriding of default values through AttributeAssignment - leave out her
-        if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             try {
                 if (TypeQueries.isConstraint(declType)) { // handle and register constraint variables
                     variablesCounter--;
@@ -658,7 +657,7 @@ class Resolver implements IResolutionListener {
         }
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, compoundMode); 
-        } else if (isContainer) { // this is a container value -> default constraints, do not defer
+        } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, actType, cAcc);
         }
     }
