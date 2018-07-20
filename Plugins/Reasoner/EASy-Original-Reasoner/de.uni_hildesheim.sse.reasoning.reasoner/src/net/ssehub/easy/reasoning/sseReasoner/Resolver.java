@@ -651,10 +651,10 @@ class Resolver implements IResolutionListener {
                 LOGGER.exception(e); // should not occur, ok to log
             }            
         }
-        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
         if (!incremental) {
             translateAnnotationDeclarations(decl, var, cAcc);
         }
+        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, compoundMode); 
         } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
