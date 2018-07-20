@@ -610,10 +610,6 @@ class Resolver implements IResolutionListener {
             actType = var.getValue().getType();
         }
         int compoundMode = MODE_COMPOUND_NONE;
-        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
-        if (!incremental) {
-            translateAnnotationDeclarations(decl, var, cAcc);
-        }
         boolean isCompound = TypeQueries.isCompound(actType);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
@@ -654,6 +650,10 @@ class Resolver implements IResolutionListener {
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
             }            
+        }
+        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
+        if (!incremental) {
+            translateAnnotationDeclarations(decl, var, cAcc);
         }
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, compoundMode); 
