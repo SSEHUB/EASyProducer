@@ -18,7 +18,6 @@ import net.ssehub.easy.reasoning.core.reasoner.ConstraintVariableConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.DefaultConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
-import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
@@ -90,12 +89,9 @@ class Resolver implements IResolutionListener {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
-    private static final int MODE_COMPOUND_ANYWAY = 0; 
     private static final int MODE_COMPOUND_REGISTER = 1; 
     private static final int MODE_COMPOUND_TRANSLATE = 2; 
     private static final int MODE_COMPOUND_NONE = -1; 
-    @SuppressWarnings("unused")
-    private IAdditionalInformationLogger infoLogger;
     private ReasonerConfiguration reasonerConfig;
     
     private Configuration config;
@@ -164,7 +160,6 @@ class Resolver implements IResolutionListener {
      */
     public Resolver(Project project, Configuration config, ReasonerConfiguration reasonerConfig) {
         this.reasonerConfig = reasonerConfig;
-        this.infoLogger = reasonerConfig.getLogger();
         this.config = config;
     } 
     
@@ -744,7 +739,7 @@ class Resolver implements IResolutionListener {
             }
             
             contexts.pushContext(null, containerOp, localDecl, true);
-            registerCompoundMapping(type, localVar, null, declVar, type);
+            registerCompoundMapping(type, localVar, null, declVar);
             // cAcc: if qualified, replace with localVar, if not, leave as it is as localVar is anyway on context
             translateCompoundContent(localDecl, null, type, null == cAcc ? null : localVar);
             contexts.popContext();
@@ -760,7 +755,7 @@ class Resolver implements IResolutionListener {
      * @param cAcc if variable is a nested compound, the access expression to 
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
-     * @param mode the processing mode, either {@link #MODE_COMPOUND_ANYWAY} for processing the full compound, 
+     * @param mode the processing mode, either {@link #MODE_COMPOUND_BOTH} for processing the full compound, 
      *     {@link #MODE_COMPOUND_REGISTER} for just registering the compound slot accessor expressions, which
      *     must either be followed with {@link #MODE_COMPOUND_TRANSLATE} or {@link ContextStack#popContext()} on
      *     the same nesting level. Not processing a complete compound allows keeping the registered scope open
@@ -774,17 +769,16 @@ class Resolver implements IResolutionListener {
         ConstraintSyntaxTree cAcc, Compound type, int mode) {
         int nextMode = MODE_COMPOUND_NONE;
         if (!contexts.alreadyProcessed(type)) {
-            if (MODE_COMPOUND_ANYWAY == mode || MODE_COMPOUND_REGISTER == mode) {
+            if (MODE_COMPOUND_REGISTER == mode) {
                 contexts.recordProcessed(type);
                 contexts.pushContext(decl, null == variable);
                 contexts.transferTypeExcludes(type);
                 // resolve compound access first for all slots
                 Variable declVar = new Variable(decl);
-                registerCompoundMapping(type, cAcc, variable, declVar, 
-                    null == variable ? type : variable.getValue().getType());
+                registerCompoundMapping(type, cAcc, variable, declVar);
                 nextMode = MODE_COMPOUND_TRANSLATE;
             }
-            if (MODE_COMPOUND_ANYWAY == mode || MODE_COMPOUND_TRANSLATE == mode) {
+            if (MODE_COMPOUND_TRANSLATE == mode) {
                 translateCompoundContent(decl, variable, type, cAcc);
                 contexts.popContext();
                 nextMode = MODE_COMPOUND_NONE; // fix nextMode from REGISTER if ANYWAY
@@ -800,17 +794,16 @@ class Resolver implements IResolutionListener {
      * @param cAcc the accessor expression (may be <b>null</b>)
      * @param var the variable we are processing for (may be <b>null</b> for type translations)
      * @param declVar the compound variable as expression
-     * @param target the specific target type to cast to (may be <b>null</b> or <code>type</code> for no cast)
      */
     private void registerCompoundMapping(Compound type, ConstraintSyntaxTree cAcc, 
-        IDecisionVariable var, Variable declVar, IDatatype target) {
+        IDecisionVariable var, Variable declVar) {
         for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = type.getInheritedElement(i);
             ConstraintSyntaxTree acc;
             if (null == cAcc) {
                 acc = new CompoundAccess(declVar, nestedDecl.getName());
             } else {
-                acc = new CompoundAccess(createAsTypeCast(cAcc, type, target), nestedDecl.getName());
+                acc = new CompoundAccess(cAcc, nestedDecl.getName());
             }
             contexts.registerMapping(nestedDecl, acc);
             for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
@@ -819,7 +812,7 @@ class Resolver implements IResolutionListener {
                 contexts.registerMapping(attr, aAcc);
             }
         }
-        annotationMapper.initialize(type, cAcc, declVar, target);
+        annotationMapper.initialize(cAcc, declVar);
         try {
             annotationMapper.visitAnnotations(declVar.getVariable());
         } catch (IvmlException e) {
@@ -829,7 +822,7 @@ class Resolver implements IResolutionListener {
 
     /**
      * Implements a compound annotation mapper. Call 
-     * {@link #initialize(Compound, ConstraintSyntaxTree, Variable, IDatatype)} first, then 
+     * {@link #initialize(ConstraintSyntaxTree, Variable)} first, then 
      * {@link #visitAnnotations(net.ssehub.easy.varModel.model.IAttributeAccess)} and finally {@link #clear()}.
      * 
      * @author Holger Eichelberger
@@ -837,33 +830,25 @@ class Resolver implements IResolutionListener {
     private class CompoundAnnotationMapper extends AnnotationVisitor {
 
         private ConstraintSyntaxTree cAcc;
-        private Compound type;
         private Variable declVar;
-        private IDatatype target;
 
         /**
          * Initializes the mapper.
          * 
-         * @param type the compound type
          * @param cAcc the accessor expression (may be <b>null</b>)
          * @param declVar the compound variable as expression
-         * @param target the specific target type to cast to (may be <b>null</b> or <code>type</code> for no cast)
          */
-        protected void initialize(Compound type, ConstraintSyntaxTree cAcc, Variable declVar, IDatatype target) {
-            this.type = type;
+        protected void initialize(ConstraintSyntaxTree cAcc, Variable declVar) {
             this.cAcc = cAcc;
             this.declVar = declVar;
-            this.target = target;
         }
 
         /**
          * Clears the mapper.
          */
         protected void clear() {
-            this.type = null;
             this.cAcc = null;
             this.declVar = null;
-            this.target = null;
         }
         
         @Override
@@ -876,7 +861,7 @@ class Resolver implements IResolutionListener {
             if (null == cAcc) {
                 acc = new AttributeVariable(declVar, attr);
             } else {                        
-                acc = new AttributeVariable(createAsTypeCast(cAcc, type, target), attr);
+                acc = new AttributeVariable(cAcc, attr);
             }
             Attribute iter = attr;
             while (null != iter) {
