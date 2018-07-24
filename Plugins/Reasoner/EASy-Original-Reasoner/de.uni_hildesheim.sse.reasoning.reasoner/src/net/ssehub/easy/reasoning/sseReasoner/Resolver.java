@@ -739,7 +739,7 @@ class Resolver implements IResolutionListener {
             }
             
             contexts.pushContext(null, containerOp, localDecl, true);
-            registerCompoundMapping(type, localVar, null, declVar);
+            registerCompoundMapping(type, localVar, declVar);
             // cAcc: if qualified, replace with localVar, if not, leave as it is as localVar is anyway on context
             translateCompoundContent(localDecl, null, type, null == cAcc ? null : localVar);
             contexts.popContext();
@@ -755,9 +755,9 @@ class Resolver implements IResolutionListener {
      * @param cAcc if variable is a nested compound, the access expression to 
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
-     * @param mode the processing mode, either {@link #MODE_COMPOUND_BOTH} for processing the full compound, 
-     *     {@link #MODE_COMPOUND_REGISTER} for just registering the compound slot accessor expressions, which
-     *     must either be followed with {@link #MODE_COMPOUND_TRANSLATE} or {@link ContextStack#popContext()} on
+     * @param mode the processing mode, either {@link #MODE_COMPOUND_REGISTER} for just registering the compound slot 
+     *     accessor expressions, which must either be followed with {@link #MODE_COMPOUND_TRANSLATE} or 
+     *     {@link ContextStack#popContext()} on
      *     the same nesting level. Not processing a complete compound allows keeping the registered scope open
      *     for processing related (default) value expressions that may refer to compound slots. May also 
      *     be {@link #MODE_COMPOUND_NONE} for not processing anything.
@@ -770,18 +770,16 @@ class Resolver implements IResolutionListener {
         int nextMode = MODE_COMPOUND_NONE;
         if (!contexts.alreadyProcessed(type)) {
             if (MODE_COMPOUND_REGISTER == mode) {
-                contexts.recordProcessed(type);
                 contexts.pushContext(decl, null == variable);
                 contexts.transferTypeExcludes(type);
-                // resolve compound access first for all slots
-                Variable declVar = new Variable(decl);
-                registerCompoundMapping(type, cAcc, variable, declVar);
+                registerCompoundMapping(type, cAcc, new Variable(decl));
                 nextMode = MODE_COMPOUND_TRANSLATE;
             }
             if (MODE_COMPOUND_TRANSLATE == mode) {
                 translateCompoundContent(decl, variable, type, cAcc);
                 contexts.popContext();
-                nextMode = MODE_COMPOUND_NONE; // fix nextMode from REGISTER if ANYWAY
+                contexts.recordProcessed(type);
+                nextMode = MODE_COMPOUND_NONE;
             }
         }
         return nextMode;
@@ -792,11 +790,9 @@ class Resolver implements IResolutionListener {
      * 
      * @param type the compound type
      * @param cAcc the accessor expression (may be <b>null</b>)
-     * @param var the variable we are processing for (may be <b>null</b> for type translations)
      * @param declVar the compound variable as expression
      */
-    private void registerCompoundMapping(Compound type, ConstraintSyntaxTree cAcc, 
-        IDecisionVariable var, Variable declVar) {
+    private void registerCompoundMapping(Compound type, ConstraintSyntaxTree cAcc, Variable declVar) {
         for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
             AbstractVariable nestedDecl = type.getInheritedElement(i);
             ConstraintSyntaxTree acc;
