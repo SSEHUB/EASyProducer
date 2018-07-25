@@ -900,7 +900,7 @@ class Resolver implements IResolutionListener {
             }
         }
         final AbstractVariable self = null == cAcc ? decl : null;
-        processCompoundEvals(type, cAcc, self);
+        processCompoundEvals(type, cAcc, self, variable);
         otherConstraintsProc.setParameter(cAcc, self, variable);
         allCompoundConstraints(type, otherConstraintsProc, false, false, decl);
         otherConstraintsProc.clear();
@@ -951,7 +951,7 @@ class Resolver implements IResolutionListener {
             try { // compoundConstraints
                 Constraint constraint = new AttachedConstraint(cst, contexts.getCurrentType(), parent);
                 addConstraint(otherConstraints, constraint, true, variable);
-                if (ExpressionType.CONSTRAINT == type) {
+                if (ExpressionType.CONSTRAINT == type || ExpressionType.ASSIGNMENT_CONSTRAINT == type) {
                     registerConstraint(variable, constraint);
                 }
             } catch (CSTSemanticException e) {
@@ -973,16 +973,18 @@ class Resolver implements IResolutionListener {
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
      *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
+     * @param variable optional variable for registering constraints
      */
-    private void processCompoundEvals(Compound cmpType, ConstraintSyntaxTree selfEx, AbstractVariable self) {
+    private void processCompoundEvals(Compound cmpType, ConstraintSyntaxTree selfEx, AbstractVariable self, 
+        IDecisionVariable variable) {
         if (!contexts.isTypeExcluded(cmpType)) {
             for (int r = 0; r < cmpType.getRefinesCount(); r++) {
-                processCompoundEvals(cmpType.getRefines(r), selfEx, self);
+                processCompoundEvals(cmpType.getRefines(r), selfEx, self, variable);
             }
             for (int i = 0; i < cmpType.getModelElementCount(); i++) {            
                 if (cmpType.getModelElement(i) instanceof PartialEvaluationBlock) {
                     PartialEvaluationBlock evalBlock = (PartialEvaluationBlock) cmpType.getModelElement(i);
-                    processEvalConstraints(evalBlock, selfEx, self);
+                    processEvalConstraints(evalBlock, selfEx, self, variable);
                 }
             }
         }
@@ -995,11 +997,13 @@ class Resolver implements IResolutionListener {
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
      *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
+     * @param variable optional variable for registering constraints
+     * @see #registerConstraint(IDecisionVariable, Constraint)
      */
     private void processEvalConstraints(PartialEvaluationBlock evalBlock, ConstraintSyntaxTree selfEx, 
-        AbstractVariable self) {
+        AbstractVariable self, IDecisionVariable variable) {
         for (int i = 0; i < evalBlock.getNestedCount(); i++) {
-            processEvalConstraints(evalBlock.getNested(i), selfEx, self);
+            processEvalConstraints(evalBlock.getNested(i), selfEx, self, variable);
         }
         for (int i = 0; i < evalBlock.getEvaluableCount(); i++) {
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
@@ -1007,7 +1011,9 @@ class Resolver implements IResolutionListener {
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
                 ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self);
                 try {
-                    addConstraint(otherConstraints, new Constraint(cst, project), true, null);
+                    Constraint constraint = new Constraint(cst, project);
+                    addConstraint(otherConstraints, constraint, true, null);
+                    registerConstraint(variable, constraint);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
@@ -1157,7 +1163,7 @@ class Resolver implements IResolutionListener {
      * requested. 
      * 
      * @param target the target container for assignment constraints (higher priority)
-     * @param constraint the constraint
+     * @param constraint the constraint (may be modified as a side effect)
      * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>. 
      *     This information is particularly relevant for constraints arising from constraint variables.
