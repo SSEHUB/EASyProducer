@@ -740,8 +740,7 @@ class Resolver implements IResolutionListener {
             
             contexts.pushContext(null, containerOp, localDecl, true);
             registerCompoundMapping(type, localVar, declVar);
-            // cAcc: if qualified, replace with localVar, if not, leave as it is as localVar is anyway on context
-            translateCompoundContent(localDecl, null, type, null == cAcc ? null : localVar);
+            translateCompoundContent(localDecl, null, type, localVar);
             contexts.popContext();
         }
     }
