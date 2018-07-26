@@ -1073,15 +1073,15 @@ class Resolver implements IResolutionListener {
                     String aEltName = aElt.getName();
                     translateAnnotationAssignment(effectiveAssignment, aElt, compound);
                     IDatatype aEltType = aElt.getType();
-                    if (null != var) {
-                        IDecisionVariable v = var.getNestedElement(aEltName);
-                        if (null != v && null != v.getValue()) {
-                            aEltType = v.getValue().getType();
-                        }
-                    }
                     if (TypeQueries.isCompound(aEltType)) {
                         Compound cmp = (Compound) aEltType;
                         ConstraintSyntaxTree acc;
+                        if (null != var) {
+                            IDecisionVariable v = var.getNestedElement(aEltName);
+                            if (null != v && null != v.getValue()) {
+                                aEltType = v.getValue().getType();
+                            }
+                        }
                         if (null != compound) { // already nested
                             acc = new CompoundAccess(compound, aEltName); // may still be null
                         } else if (null != var) {
