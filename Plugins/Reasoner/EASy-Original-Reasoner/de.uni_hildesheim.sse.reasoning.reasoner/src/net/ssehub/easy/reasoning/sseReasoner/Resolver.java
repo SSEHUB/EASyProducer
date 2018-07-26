@@ -554,14 +554,17 @@ class Resolver implements IResolutionListener {
     private void translateAnnotationDeclarations(AbstractVariable decl, IDecisionVariable variable, 
         ConstraintSyntaxTree cAcc) {
         ConstraintSyntaxTree acc = null == cAcc ? new Variable(decl) : cAcc;
+        // not in nested assignment or compound attributes
+        boolean isNested = (contexts.size() > 1 
+            || TypeQueries.isCompound(DerivedDatatype.resolveToBasis(variable.getDeclaration().getType())));
         if (null != variable) {
             for (int i = 0; i < variable.getAttributesCount(); i++) {
                 IDecisionVariable att = variable.getAttribute(i);
-                translateAnnotationDeclaration((Attribute) att.getDeclaration(), att, acc);
+                translateAnnotationDeclaration((Attribute) att.getDeclaration(), att, acc, isNested);
             }
         } else {
             for (int i = 0; i < decl.getAttributesCount(); i++) {
-                translateAnnotationDeclaration(decl.getAttribute(i), null, acc);
+                translateAnnotationDeclaration(decl.getAttribute(i), null, acc, isNested);
             }
         }
     }
@@ -573,12 +576,12 @@ class Resolver implements IResolutionListener {
      * @param variable {@link IDecisionVariable} with annotations.
      * @param cAcc {@link CompoundAccess} <b>null</b> if variable is not nested, else accessor expression to 
      *     <code>variable</code>.
+     * @param qualifyAttribute whether the attribute must be explicitly qualified via <code>cAcc</code>
      */
-    private void translateAnnotationDeclaration(Attribute decl, IDecisionVariable variable, ConstraintSyntaxTree cAcc) {
+    private void translateAnnotationDeclaration(Attribute decl, IDecisionVariable variable, ConstraintSyntaxTree cAcc, 
+        boolean qualifyAttribute) {
         ConstraintSyntaxTree attAcc = cAcc;
-        if (null != cAcc && !contexts.isContextsRegistering() && (contexts.size() > 1 
-            || TypeQueries.isCompound(DerivedDatatype.resolveToBasis(variable.getDeclaration().getType())))) {
-            // not in top-level assignment, but in compound attributes
+        if (null != cAcc && qualifyAttribute) {
             attAcc = new AttributeVariable(cAcc, decl);
         }
         translateDeclaration(decl, variable, attAcc);
@@ -1068,15 +1071,6 @@ class Resolver implements IResolutionListener {
                 for (int e = 0; e < assignment.getElementCount(); e++) {
                     DecisionVariableDeclaration aElt = assignment.getElement(e);
                     String aEltName = aElt.getName();
-                    contexts.activate(aElt);
-                    ConstraintSyntaxTree acc;
-                    if (null != compound) { // already nested
-                        acc = new CompoundAccess(compound, aEltName); // may still be null
-                    } else if (null != var) {
-                        acc = new CompoundAccess(new Variable(var.getDeclaration()), aEltName);
-                    } else { // top-level
-                        acc = new Variable(aElt);
-                    }
                     translateAnnotationAssignment(effectiveAssignment, aElt, compound);
                     IDatatype aEltType = aElt.getType();
                     if (null != var) {
@@ -1087,13 +1081,20 @@ class Resolver implements IResolutionListener {
                     }
                     if (TypeQueries.isCompound(aEltType)) {
                         Compound cmp = (Compound) aEltType;
+                        ConstraintSyntaxTree acc;
+                        if (null != compound) { // already nested
+                            acc = new CompoundAccess(compound, aEltName); // may still be null
+                        } else if (null != var) {
+                            acc = new CompoundAccess(new Variable(var.getDeclaration()), aEltName);
+                        } else { // top-level
+                            acc = new Variable(aElt);
+                        }
                         for (int s = 0; s < cmp.getDeclarationCount(); s++) {
                             DecisionVariableDeclaration slot = cmp.getDeclaration(s);
                             translateAnnotationAssignment(effectiveAssignment, slot, 
                                 new CompoundAccess(acc, slot.getName()));
                         }
                     }
-                    contexts.deactivate(aElt);
                 }
             }
         }        

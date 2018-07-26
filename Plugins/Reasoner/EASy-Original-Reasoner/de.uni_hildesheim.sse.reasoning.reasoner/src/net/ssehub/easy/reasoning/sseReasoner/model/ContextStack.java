@@ -66,8 +66,6 @@ public class ContextStack {
         private DecisionVariableDeclaration iterator;
         private ConstraintSyntaxTree container;
         private Context predecessor;
-        private Map<AbstractVariable, Context> registeredContexts = new HashMap<AbstractVariable, Context>();
-        private boolean isRegistered;
         private boolean recordProcessedTypes;
         private Set<IDatatype> processedTypes = new HashSet<IDatatype>();
         private Set<? extends IDatatype> typeExcludes;
@@ -78,14 +76,9 @@ public class ContextStack {
          */
         private void clear() {
             varMap.clear();
-            for (Map.Entry<AbstractVariable, Context> ent : registeredContexts.entrySet()) {
-                POOL.releaseInstance(ent.getValue());
-            }
-            registeredContexts.clear();
             iterator = null;
             container = null;
             predecessor = null;
-            isRegistered = false;
             recordProcessedTypes = false;
             processedTypes.clear();
             typeExcludes = null;
@@ -182,10 +175,6 @@ public class ContextStack {
         context.iterator = iterator;
         context.recordProcessedTypes = recordProcessedTypes;
         
-        if (registerContexts && null != decl) {
-            currentContext.registeredContexts.put(decl, context);
-            context.isRegistered = true;
-        }
         pushContextImpl(context);
     }
     
@@ -206,10 +195,7 @@ public class ContextStack {
      * a parent context.
      */
     public void popContext() {
-        Context context = popContextImpl();
-        if (null != context && !context.isRegistered) {
-            POOL.releaseInstance(context);
-        }
+        popContextImpl();
     }
     
     /**
@@ -311,46 +297,6 @@ public class ContextStack {
             iter = iter.predecessor;
         } while (null != iter);
         return cst;
-    }
-
-    /**
-     * Looks up the actual contexts whether <code>decl</code> was registered previously with a context.
-     * 
-     * @param decl the declaration to search for
-     * @return the registered context or <b>null</b> if none was registered
-     */
-    private Context findRegisteredContext(AbstractVariable decl) {
-        Context result = null;
-        Context iter = currentContext;
-        do {
-            result = iter.registeredContexts.get(decl);
-            iter = iter.predecessor;
-        } while (null == result && null != iter);
-        return result;
-    }
-
-    /**
-     * Re-activates the context registered for <code>decl</code> and re-pushes it onto the stack. Nothing happens if 
-     * no context was registered.
-     * 
-     * @param decl the declaration
-     */
-    public void activate(AbstractVariable decl) {
-        Context registered = findRegisteredContext(decl);
-        if (null != registered) {
-            pushContextImpl(registered);
-        }
-    }
-    
-    /**
-     * Deactivates the context registered for <code>decl</code>. Nothing happens if no context was registered.
-     * 
-     * @param decl the declaration
-     */
-    public void deactivate(AbstractVariable decl) {
-        if (null != findRegisteredContext(decl)) {
-            popContextImpl(); // don't clear, keep it
-        }
     }
 
     /**
