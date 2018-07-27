@@ -251,9 +251,8 @@ class Resolver implements IResolutionListener {
             iter = iter.getParent();
         } while (null == constraints && null != iter);
         if (clear && null != constraints) {
-            List<Constraint> toRemove = constraints;
             if (null != deleteFilter) {
-                toRemove = new ArrayList<Constraint>();
+                List<Constraint> toRemove = new ArrayList<Constraint>();
                 for (int i = constraints.size() - 1; i >= 0; i--) {
                     Constraint cst = constraints.get(i);
                     Object attachedTo = cst.getAttachedTo();
@@ -481,7 +480,6 @@ class Resolver implements IResolutionListener {
 
         @Override // iterate over nested blocks/contained, translate the individual blocks if not incremental
         public void visitAttributeAssignment(AttributeAssignment assignment) {
-            boolean oldReg = contexts.setRegisterContexts(true);
             for (int v = 0; v < assignment.getElementCount(); v++) {
                 assignment.getElement(v).accept(this);
             }
@@ -494,7 +492,6 @@ class Resolver implements IResolutionListener {
             if (!incremental) {
                 translateAnnotationAssignments(assignment, null, null, null);
             }
-            contexts.setRegisterContexts(oldReg);
         }
         
     }
@@ -1037,7 +1034,7 @@ class Resolver implements IResolutionListener {
         AbstractVariable self, IModelElement parent, IDecisionVariable nestedVariable) {
         for (int n = 0; n < val.getElementSize(); n++) {
             Value cVal = val.getElement(n);
-            ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(cVal);
+            ConstraintSyntaxTree cst = getConstraintValueExpression(cVal);
             if (null != cst) {
                 createConstraintVariableConstraint(cst, selfEx, self, parent, nestedVariable);
             } else if (cVal instanceof ContainerValue) {
@@ -1177,6 +1174,10 @@ class Resolver implements IResolutionListener {
         } catch (CSTSemanticException e) {
             LOGGER.exception(e); // shall not occur if constraints are created correctly, ok to log
         }
+        // check whether the constraint is a value assignment
+        if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
+            initChecker.accept(cst, constraint.getParent(), variable);
+        }
         boolean add = true;
         if (incremental) {
             add = !CSTUtils.isAssignment(cst);
@@ -1186,10 +1187,6 @@ class Resolver implements IResolutionListener {
                 add = !variablesFinder.isConstraintFrozen();
                 variablesFinder.clear();
             }
-        }
-        // check whether the constraint is a value assignment
-        if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
-            initChecker.accept(cst, constraint.getParent(), variable);
         }
         if (add) {
             if (inTopLevelEvals && (target == otherConstraints || target == topLevelConstraints)) {

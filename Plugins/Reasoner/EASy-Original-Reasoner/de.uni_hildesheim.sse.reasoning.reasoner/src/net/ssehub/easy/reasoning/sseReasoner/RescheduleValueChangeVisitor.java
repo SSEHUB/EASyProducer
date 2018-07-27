@@ -66,7 +66,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
     public void visitConstraintValue(ConstraintValue value) {
         List<Constraint> constraints = resolver.obtainConstraints(varParent, clear, null);
         Value newValue = variable.getValue();
-        ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(newValue);
+        ConstraintSyntaxTree cst = getConstraintValueExpression(newValue);
         if (null != cst) {
             IModelElement parent = null == constraints || constraints.isEmpty() 
                 ? variable.getDeclaration().getParent() 
@@ -84,7 +84,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
             Value nValue = newValue.getNestedValue(name);
             if (null != nValue) {
                 IDecisionVariable nVar = variable.getNestedElement(name);
-                rescheduleValueChange(nVar, nVar, nValue, true);
+                rescheduleValueChange(variable, nVar, nValue, true);
             }
         }
     }

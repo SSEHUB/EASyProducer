@@ -568,7 +568,7 @@ public class ReasoningUtils {
      * @param value the value to create the constraint for
      * @return the constraint expression, may be <b>null</b>
      */
-    public static ConstraintSyntaxTree getConstraintValueConstraintExpression(Value value) {
+    public static ConstraintSyntaxTree getConstraintValueExpression(Value value) {
         ConstraintSyntaxTree cst = null;
         if (value instanceof ConstraintValue) {
             cst = ((ConstraintValue) value).getValue();

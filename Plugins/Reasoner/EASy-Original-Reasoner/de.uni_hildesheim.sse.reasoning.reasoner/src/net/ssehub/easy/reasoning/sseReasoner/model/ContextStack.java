@@ -102,7 +102,6 @@ public class ContextStack {
     });
     
     private Context currentContext;
-    private boolean registerContexts = false;
     private Set<? extends IDatatype> globalExcludes;
 
     /**
@@ -110,27 +109,6 @@ public class ContextStack {
      */
     public ContextStack() {
         currentContext = new Context();
-    }
-
-    /**
-     * Enables or disables registering contexts.
-     * 
-     * @param registerContexts whether newly pushed contexts shall be registered from now on 
-     * @return the old state, to be used in a local variable to call this method with the previous state correctly
-     */
-    public boolean setRegisterContexts(boolean registerContexts) {
-        boolean res = this.registerContexts;
-        this.registerContexts = registerContexts;
-        return res;
-    }
-    
-    /**
-     * Returns whether context registering is actually enabled.
-     * 
-     * @return <code>true</code> if context registering is enabled, <code>false</code> else
-     */
-    public boolean isContextsRegistering() {
-        return this.registerContexts;
     }
 
     /**

@@ -15,7 +15,7 @@
  */
 package net.ssehub.easy.reasoning.sseReasoner;
 
-import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.getConstraintValueConstraintExpression;
+import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.getConstraintValueExpression;
 
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
@@ -166,7 +166,7 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
      * @param value the value
      */
     private void createConstraintFromValue(Value value) {
-        ConstraintSyntaxTree cst = getConstraintValueConstraintExpression(value);
+        ConstraintSyntaxTree cst = getConstraintValueExpression(value);
         // no substitution/self as all entries are constant
         if (null != cst) {
             resolver.createConstraintVariableConstraint(cst, null, null, parent, null);
