@@ -46,7 +46,8 @@ import org.junit.runners.Suite.SuiteClasses;
     EnumOperationsTest.class,
     ReasonerCaseTests.class,
     VersionOperationsTest.class,
-    CustomOpOnCustomDataTypesTest.class
+    CustomOpOnCustomDataTypesTest.class,
+    SelfTests.class
     })
 public class CstEvaluationTests {
 

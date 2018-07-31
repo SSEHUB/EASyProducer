@@ -447,16 +447,53 @@ public class AssignmentResolver {
             remainingSteps--;
         }
     }
+
+    /**
+     * Resolves default values of a particular variable. No conflict handler is used.
+     * 
+     * @param variable the instance to resolve the default values for.
+     * @param evaluator the (re-usable) expression evaluator to utilize, may be <b>null</b> then a temporary one is 
+     *     created
+     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     *     otherwise.
+     *     
+     * @see #resolveDefaultValueForDeclaration(AbstractVariable, IDecisionVariable)
+     */
+    public static boolean resolveDefaultValue(IDecisionVariable variable, EvaluationVisitor evaluator) {
+        return resolveDefaultValueForDeclaration(variable.getDeclaration(), variable, 
+            null != evaluator ? evaluator : new EvaluationVisitor(), variable.getConfiguration(), null);
+    }
+
+    /**
+     * Resolves default values of a particular variable. The evaluator is created on demand, no conflict handler is 
+     * used.
+     * 
+     * @param variable the instance to resolve the default values for.
+     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     *     otherwise.
+     *     
+     * @see #resolveDefaultValue(IDecisionVariable, EvaluationVisitor)
+     */
+    public static boolean resolveDefaultValue(IDecisionVariable variable) {
+        return resolveDefaultValue(variable, null);
+    }
     
     /**
-     * Part of the {@link #resolveDefaultValues(Project)} method.
      * Resolves default values of a particular declaration.
+     * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
      * @param variable the instance of <tt>decl</tt>.
-     * @return <tt>true</tt> if a default value could be resovled and assigned to <tt>variable</tt>, <tt>false</tt>
+     * @param evaluator the (re-usable) expression evaluator to utilize
+     * @param config the configuration to rely on (shall be consistent with <code>variable</code>)
+     * @param conflictHandler optional instance to call {@link #conflictingDefault(AbstractVariable)} on, may be 
+     *     <b>null</b> 
+     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
      *     otherwise.
+     *
+     * @see #resolveDefaultValues(Project)
      */
-    protected boolean resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable) {
+    protected static boolean resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable, 
+        EvaluationVisitor evaluator, IConfiguration config, AssignmentResolver conflictHandler) {
         boolean valueResolved = false;
         
         IDatatype type = decl.getType();
@@ -465,7 +502,8 @@ public class AssignmentResolver {
             CompoundVariable cmpVar = (CompoundVariable) variable;
             for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
                 AbstractVariable nestedDecl = cmpType.getInheritedElement(i);
-                resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()));
+                resolveDefaultValueForDeclaration(nestedDecl, cmpVar.getNestedVariable(nestedDecl.getName()), 
+                    evaluator, config, conflictHandler);
             }
         }
         
@@ -484,7 +522,9 @@ public class AssignmentResolver {
                 evaluator.init(config, AssignmentState.DEFAULT, false, null);
                 evaluator.visit(defaultValue);
                 if (evaluator.constraintFailed() && !(BooleanType.TYPE.isAssignableFrom(type))) {
-                    conflictingDefault(decl);
+                    if (null != conflictHandler) {
+                        conflictHandler.conflictingDefault(decl);
+                    }
                 } else {
                     Value value = evaluator.getResult();
                     if (null != value) {
@@ -504,6 +544,20 @@ public class AssignmentResolver {
         }
         
         return valueResolved;
+    }
+    
+    /**
+     * Resolves default values of a particular declaration.
+     * 
+     * @param decl The {@link AbstractVariable} for which the default value should be resolved.
+     * @param variable the instance of <tt>decl</tt>.
+     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     *     otherwise.
+     *     
+     * @see #resolveDefaultValues(Project)
+     */
+    protected boolean resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable) {
+        return resolveDefaultValueForDeclaration(decl, variable, evaluator, config, this);
     }
     
     /**
@@ -549,7 +603,7 @@ public class AssignmentResolver {
             }
         }
     }
-    
+        
     /**
      * Will be called after a failure was detected in a {@link Constraint}.
      * @param constraint The violated {@link Constraint}.

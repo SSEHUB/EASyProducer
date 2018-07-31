@@ -56,6 +56,7 @@ import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
+import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
@@ -123,6 +124,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     private ConstraintSyntaxTree innermostFailed;
     private Map<AbstractVariable, IDecisionVariable> varMapping = new HashMap<AbstractVariable, IDecisionVariable>();
     private ConstantValueResolver constantResolver = new ConstantValueResolver(this);
+    private ContextStack contextStack = new ContextStack();
 
     /**
      * Implements the evaluation context. The context may contain nested local 
@@ -469,10 +471,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         selfValue = null;
         issueWarning = false;
         innermostFailed = null;
+        contextStack.clear();
     }
     
     /**
-     * Clears the result.
+     * Clears the result. Does not clear the context stack, which may contain frames in case of evaluation problems.
      */
     public void clearResult() {
         if (null != result) {
@@ -996,6 +999,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         if (evaluateOclFeatureCall(call)) {
             opNesting++;
             EvaluationAccessor operand;
+            boolean pop = false;
             Operation op = call.getResolvedOperation();
             if (null != call.getOperand()) {               
                 boolean oldState = setAllowPropagation(op, false);
@@ -1003,6 +1007,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 operand = result;
                 result = null; // clear result - kept in operand and released below
                 setAllowPropagation(op, oldState); 
+                if (IvmlKeyWords.ASSIGNMENT.equals(op.getName())) {
+                    contextStack.push(operand);
+                    pop = true;
+                }
             } else {
                 operand = null; // custom operation
             }
@@ -1022,6 +1030,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 if (null == operand && null != result) { // special isDefined situation
                     result.validateContext(context);
                 }
+            }
+            if (pop) {
+                contextStack.pop();
             }
             if (null != operand) {
                 operand.release();
@@ -1056,7 +1067,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
             allOk = false; // constraints need the constraint assigned rather than its evaluation (propagate)
         }
         Map<String, EvaluationAccessor> namedArgs = null;
+        contextStack.push();
         for (int a = 0; allOk && a < op.getParameterCount(); a++) {
+            contextStack.setVariable(op.getParameterDeclaration(a));
             if (op == BooleanType.IMPLIES && (null == operand || BooleanValue.FALSE.equals(operand.getValue())) ) {
                 result = null == operand ? null 
                     : ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, context);
@@ -1091,6 +1104,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 result = null; // clear result - kept in args and released below
             }
         }
+        contextStack.pop();
         if (allOk && null != namedArgs) {
             for (int a = 0; a < args.length; a++) {
                 DecisionVariableDeclaration param = op.getParameterDeclaration(a);
@@ -1684,8 +1698,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         values[pos++] = CompoundValue.SPECIAL_SLOT_NAME_TYPE;
         values[pos++] = type;
         boolean ok = true;
+        contextStack.push();
         for (int s = 0; ok && s < initializer.getSlotCount(); s++) {
             String slotName = initializer.getSlot(s);
+            contextStack.setCompoundSlot(slotName);
             values[pos++] = slotName;
             DecisionVariableDeclaration decl = type.getElement(slotName);
             if (ConstraintType.isConstraint(decl.getType())) {
@@ -1699,7 +1715,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
             } else {
                 initializer.getExpression(s).accept(this);
                 if (null == result) {
-                    error("cannot evaluate compound slot '" + slotName + "' in type '" + type.getName() + "'", 
+                    error("cannot evaluate expression for compound slot '" + slotName + "' in type '" 
+                        + type.getName() + "': " + StringProvider.toIvmlString(initializer.getExpression(s)), 
                         Message.CODE_RESOLUTION);
                     ok = false;
                 } else {
@@ -1718,6 +1735,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 clearResult();
             }
         }
+        contextStack.pop();
         if (ok) {
             try {
                 Value value = ValueFactory.createValue(initializer.getType(), values);
@@ -1735,7 +1753,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         boolean isConstraintCollection = Container.isContainer(initializer.getType(), ConstraintType.TYPE);
         boolean ok = true;
         boolean references = Reference.TYPE.isAssignableFrom(initializer.getType().getContainedType());
+        contextStack.push(initializer);
         for (int s = 0; ok && s < values.length; s++) {
+            contextStack.setContainerIndex(s);
             if (isConstraintCollection) {
                 try {
                     // do not evaluate a constraint value here - this is just a value as it is / deferred
@@ -1765,6 +1785,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 clearResult();
             }
         }
+        contextStack.pop();
         if (ok) {
             try {
                 Value value = ValueFactory.createValue(initializer.getType(), values); 
@@ -1778,8 +1799,12 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     
     @Override
     public void visitSelf(Self self) {
-        if (null != selfValue) {
-            result = ConstantAccessor.POOL.getInstance().bind(selfValue, false, context);
+        Value val = selfValue;
+        if (null == val) {
+            val = contextStack.getSelfValue();
+        }
+        if (null != val) {
+            result = ConstantAccessor.POOL.getInstance().bind(val, false, context);
         } else {
             result = null;
         }

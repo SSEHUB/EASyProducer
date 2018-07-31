@@ -97,6 +97,18 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             return false;
         }
         
+        /**
+         * Resolves default values of a particular variable. 
+         * 
+         * @param variable the instance to resolve the default values for.
+         * @return <tt>true</tt> of a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+         *     otherwise.
+         */
+        @Override
+        public boolean resolveDefaultValue(IDecisionVariable variable) {
+            return AssignmentResolver.resolveDefaultValue(variable);
+        }
+        
     };
 
     /**
