@@ -21,8 +21,10 @@ import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
 import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess;
 import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
 import net.ssehub.easy.varModel.capabilities.DefaultReasonerAccess.IDefaultReasonerProvider;
+import net.ssehub.easy.varModel.confModel.AssignmentResolver;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
@@ -121,6 +123,12 @@ public class ReasonerFrontend {
             public boolean supportsElementCopy() {
                 // something else then the default mechanism available that takes over this task?
                 return getPreferredReasoner().hasCapability(GeneralReasonerCapabilities.CONFIGURATION_INITIALIZATION);
+            }
+            
+            @Override
+            public boolean resolveDefaultValue(IDecisionVariable variable) {
+                // currently fallback only, may not resolve complex dependent default values
+                return AssignmentResolver.resolveDefaultValue(variable); 
             }
             
         });
