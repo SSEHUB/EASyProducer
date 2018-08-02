@@ -18,6 +18,7 @@ package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 /**
  * Provides a neutral reasoning hook implementation, i.e., a hook that does not influencing the 
@@ -38,7 +39,8 @@ public class ReasoningHookAdapter implements IReasoningHook {
     }
 
     @Override
-    public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, Configuration config) {
+    public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, Configuration config, 
+        ReasoningResult result) {
         // do nothing
     }
     

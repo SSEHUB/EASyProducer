@@ -106,9 +106,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             if (null != cfg) {
                 Script currentScript = evaluator.currentScript;
                 IRtValueAccess valueAccess = evaluator.valueAccess;
-                evaluator.reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
                 net.ssehub.easy.varModel.confModel.Configuration easyConfig = cfg.getConfiguration();
                 EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
+                evaluator.reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
                 ReasoningResult rResult = null;
                 try {
                     rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
@@ -117,7 +117,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
                     // pretend it is ok
                     logger.error("Reasoning exception: " + t.getMessage() + " - going on");
                 }
-                evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg);
+                evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg, rResult);
                 int errorCount = 0;
                 for (int m = 0; m < rResult.getMessageCount(); m++) {
                     Message msg = rResult.getMessage(m);

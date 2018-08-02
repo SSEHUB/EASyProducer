@@ -28,6 +28,8 @@
         <!-- reasonerCore -->
         <pathelement path="${libs.reasonerCore}"/>
         <pathelement path="${libs.sseReasoner}"/>
+        <pathelement path="${libs.reasonerCore.test}"/>
+        <pathelement path="${libs.sseReasoner.test}"/>
         <!-- VIL -->
 		<pathelement path="${libs.vil.core}"/>
 		<pathelement path="${libs.vil.ui}"/>

@@ -18,6 +18,7 @@ package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 /**
  * A reasoning hook allowing the system using the rt-VIL environment to influence the validity
@@ -59,8 +60,10 @@ public interface IReasoningHook {
      * @param concept the specific concept on which the call is being executed
      * @param values reading access to the actual rt-VIL variable values
      * @param config the actual configuration
+     * @param result the reasoning result
      */
-    public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, Configuration config);
+    public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, Configuration config, 
+        ReasoningResult result);
     
     /**
      * Is called if reasoning is considered to fail, e.g., to inform the user.

@@ -17,6 +17,7 @@ package de.uni_hildesheim.sse.vil.rt.tests;
 
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 import java.util.List;
 
@@ -28,6 +29,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IVariableFilter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
+import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
+import net.ssehub.easy.reasoning.sseReasoner.Measures;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
@@ -38,6 +43,9 @@ import net.ssehub.easy.varModel.model.Project;
  * @author Holger Eichelberger
  */
 public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
+
+    protected static final IMeasurementKey[] MEASUREMENTS = AbstractTestDescriptor.concat(
+        Measures.values(), GeneralMeasures.values()); 
 
     private static boolean reasonerRegistered = false;
     
@@ -52,6 +60,11 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
             // set the preferred reasoner, in particular for plugin-based tests as then also older reasoners
             // may be available
             fe.setReasonerHint(reasoner.getDescriptor());
+            // common measurements
+            AbstractTestDescriptor.registerMeasurementMappings();
+            // SSE reasoner measurements
+            TestDescriptor.registerMeasurementMappings();
+            // see also MEASUREMENTS!
             reasonerRegistered = true;
         }
     }

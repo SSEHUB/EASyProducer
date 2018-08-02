@@ -37,11 +37,20 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecutio
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.BuiltIn;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.IRtValueAccess;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.IRtVilConcept;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.ReasoningHookAdapter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilExecution;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.varModel.testSupport.IColumnProvider;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
+import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;
 
@@ -50,7 +59,7 @@ import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;
  * 
  * @author Holger Eichelberger
  */
-public class RtVilTestConfigurer implements ITestConfigurer<Script> {
+public class RtVilTestConfigurer implements ITestConfigurer<Script>, IColumnProvider {
 
     @Override
     public String getSystemPropertyName() {
@@ -110,15 +119,42 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script> {
     @Override
     public BuildlangExecution createExecutionEnvironment(ITracer tracer, File base, String startRuleName,
         Map<String, Object> parameter) {
-        RtVilExecution result = new RtVilExecution(tracer, base, parameter); // TODO adjust tracer
+        RtVilExecution result = new RtVilExecution(tracer, base, parameter);
         result.setStopAfterBindValues(false); // although default, fits to initial code
         result.setUseReasoner(true);
+        result.setReasoningHook(new ReasoningHookAdapter() {
+
+            private String id;
+            
+            @Override
+            public void preReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, 
+                Configuration config) {
+                File base = AbstractRtTest.determineTestDataDir(getSystemPropertyName());
+                TSVMeasurementCollector.ensureCollector(new File(base, 
+                    "temp/measurements-rtvil.tsv"), RtVilTestConfigurer.this);
+                id = MeasurementCollector.start(config.getConfiguration(), "RT-VIL");
+            }
+            
+            @Override
+            public void postReasoning(Script script, IRtVilConcept concept, IRtValueAccess values, 
+                Configuration config, ReasoningResult result) {
+                MeasurementCollector.endAuto(id);
+                AbstractTest.transferReasoningMeasures(MeasurementCollector.getInstance(), id, 
+                    AbstractRtTest.MEASUREMENTS, result);
+                MeasurementCollector.end(id);
+            }
+        });
         return result;
     }
 
     @Override
     public TracerFactory createTestTracerFactory(Writer trace, String[] baseFolders) {
-        return new TestTracerFactory(trace, baseFolders); // TODO adjust
+        return new TestTracerFactory(trace, baseFolders);
+    }
+
+    @Override
+    public Object[] measurementColumns() {
+        return AbstractRtTest.MEASUREMENTS;
     }
 
 }

@@ -492,7 +492,16 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
         try {
             File tmp = getTempDir();
             if (tmp.exists()) {
-                FileUtils.cleanDirectory(tmp);
+                File[] files = tmp.listFiles();
+                for (File f : files) {
+                    if (f.isDirectory()) {
+                        FileUtils.cleanDirectory(f);
+                    } else {
+                        if (!f.getName().endsWith(".tsv")) { // avoid cleaning up files from TSVMeasurementCollector
+                            f.delete();
+                        }
+                    }
+                }
             }
         } catch (IOException e) {
             // don't care
