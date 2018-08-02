@@ -136,7 +136,9 @@
             <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
 			<!-- Reasoner -->
             <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}" includes="**/*.jar" />
+	        <fileset dir="${home.reasonerCore.test.dir/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.sseReasoner.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <fileset dir="${home.sseReasoner.test.dir/${build.jar.dir}" includes="**/*.jar" />
             <!-- Instantiation -->
             <fileset dir="${home.instantiatorCore.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.libs.velocity.dir}/${build.jar.dir}" includes="**/*.jar" />
