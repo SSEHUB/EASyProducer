@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.varModel.testSupport;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -332,6 +333,15 @@ public class MeasurementCollector {
             if (null != id) {
                 measurements.put(id, value);
             }
+        }
+        
+        /**
+         * Returns the used measurement identifiers.
+         * 
+         * @return the used identifiers
+         */
+        protected Collection<IMeasurementIdentifier> getMeasurementIdentifiers() {
+            return measurements.keySet();
         }
         
         /**

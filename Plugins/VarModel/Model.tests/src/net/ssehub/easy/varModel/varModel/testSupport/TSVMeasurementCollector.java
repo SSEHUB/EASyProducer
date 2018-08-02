@@ -20,6 +20,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import net.ssehub.easy.basics.io.FileUtils;
@@ -44,7 +47,9 @@ public class TSVMeasurementCollector extends MeasurementCollector {
      * Creates a new measurement collector using <code>file</code> as id.
      * 
      * @param file the output file
-     * @param columns the output columns - will be written in the given sequence, even duplicates
+     * @param columns the output columns - will be written in the given sequence, even duplicates; if not given, the 
+     *     measurement identifiers of the first record will be taken and sorted alpha-numerically. However, if 
+     *     <code>file</code> does already exist, the column sequence is not guaranteed to match.
      */
     public TSVMeasurementCollector(File file, Object... columns) {
         this(file, file, columns);
@@ -55,7 +60,9 @@ public class TSVMeasurementCollector extends MeasurementCollector {
      * 
      * @param id the id of the collector for checking whether an appropriate one is installed
      * @param file the output file
-     * @param columns the output columns - will be written in the given sequence, even duplicates
+     * @param columns the output columns - will be written in the given sequence, even duplicates; if not given, the 
+     *     measurement identifiers of the first record will be taken and sorted alpha-numerically. However, if 
+     *     <code>file</code> does already exist, the column sequence is not guaranteed to match.
      */
     public TSVMeasurementCollector(Object id, File file, Object... columns) {
         super(id);
@@ -73,20 +80,34 @@ public class TSVMeasurementCollector extends MeasurementCollector {
     }
     
     /**
-     * Ensures the installation of an appropriate measurement collector.
+     * Ensures the installation of an appropriate measurement collector. If no collector exists, a new one is created
+     * and a potentially existing file is deleted before.
      * 
      * @param out the file where to write the measurement data to - also used as identification of the collector
-     * @param columns the output columns - deferred evaluation only if needed
+     * @param columns the output columns; if not given, the  measurement identifiers of the first record will be taken 
+     * and sorted alpha-numerically. 
      */
-    public static void ensureCollector(File out, IColumnProvider columns) {
+    public static void ensureCollector(File out, Object... columns) {
         if (!out.equals(MeasurementCollector.getInstance().getId())) {
             out.delete();
-            MeasurementCollector.setInstance(new TSVMeasurementCollector(out, columns.measurementColumns()));
+            MeasurementCollector.setInstance(new TSVMeasurementCollector(out, columns));
         }
     }
 
     @Override
     protected void endMeasurement(MeasurementRecord record) {
+        if (null == columns || 0 == columns.length) {
+            Collection<IMeasurementIdentifier> ids = record.getMeasurementIdentifiers();
+            columns = new IMeasurementIdentifier[ids.size()];
+            ids.toArray(columns);
+            Arrays.sort(columns, new Comparator<IMeasurementIdentifier>() {
+
+                @Override
+                public int compare(IMeasurementIdentifier o1, IMeasurementIdentifier o2) {
+                    return o1.name().compareTo(o2.name());
+                }
+            });
+        }
         boolean writeHeader = !file.exists() || 0 == file.length();
         PrintStream out = null;
         try {
