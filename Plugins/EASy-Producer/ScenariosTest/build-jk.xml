@@ -19,6 +19,8 @@
 		<!-- Reasoner -->
         <pathelement path="${libs.reasonerCore}"/>
         <pathelement path="${libs.sseReasoner}"/>
+        <pathelement path="${libs.reasonerCore.test}"/>
+        <pathelement path="${libs.sseReasoner.test}"/>
     
 		<!-- Parsers -->
         <pathelement path="${libs.ivml}"/>

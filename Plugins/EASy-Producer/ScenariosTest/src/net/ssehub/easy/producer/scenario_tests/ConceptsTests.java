@@ -48,7 +48,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  * 
  * @author Holger Eichelberger
  */
-public class ConceptsTests extends AbstractScenarioTest {
+public class ConceptsTests extends AbstractEasyScenarioTest {
 
     @Override
     protected File getTestFolder() {

@@ -69,7 +69,7 @@ import net.ssehub.easy.varModel.persistency.IVMLWriter;
  * @author El-Sharkawy
  *
  */
-public class DynamicFreezeTest extends AbstractScenarioTest {
+public class DynamicFreezeTest extends AbstractEasyScenarioTest {
 
     /**
      * This modifier is used to freeze all relevant declarations inside the CFG projects of Qualimaster.

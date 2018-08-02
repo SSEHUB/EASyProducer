@@ -21,6 +21,8 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1"
  net.ssehub.easy.reasoning.sseReasoner,
  net.ssehub.easy.producer.core,
  de.uni_hildesheim.sse.ivml.tests,
- net.ssehub.easy.instantiation.velocity
+ net.ssehub.easy.instantiation.velocity,
+ net.ssehub.easy.reasoning.sseReasoner.tests,
+ net.ssehub.easy.reasoning.core.tests
 Bundle-ClassPath: .
 Export-Package: net.ssehub.easy.producer.scenario_tests

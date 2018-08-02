@@ -49,7 +49,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  * @author Holger Eichelberger
  * @author El-Sharkawy
  */
-public class RealTests extends AbstractScenarioTest {
+public class RealTests extends AbstractEasyScenarioTest {
 
     protected static final String[] RELATIVE_CURL_EXECUTABLES = {"curl/curl.bat", "curl/curl.sh"};
     

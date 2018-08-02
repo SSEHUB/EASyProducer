@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.maven.Registration;
  * 
  * @author Holger Eichelberger
  */
-public class ExperimentsTests extends AbstractScenarioTest {
+public class ExperimentsTests extends AbstractEasyScenarioTest {
 
     private static ExperimentsTests tests;
     

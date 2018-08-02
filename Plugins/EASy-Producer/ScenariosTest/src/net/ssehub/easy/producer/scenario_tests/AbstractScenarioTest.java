@@ -28,13 +28,21 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.java.Registration;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
+import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.sseReasoner.Measures;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
+import net.ssehub.easy.varModel.varModel.testSupport.IColumnProvider;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
+import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
+import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
  * Abstract functionality for scenario tests.
@@ -54,6 +62,17 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * Defines the current model paths.
      */
     protected static String[] modelPaths = DEFAULT_MODEL_PATHS;
+    
+    protected static final IMeasurementKey[] MEASUREMENTS = AbstractTestDescriptor.concat(
+        Measures.values(), GeneralMeasures.values()); 
+
+    protected final IColumnProvider columnProvider = new IColumnProvider() {
+        
+        @Override
+        public Object[] measurementColumns() {
+            return AbstractScenarioTest.this.getMeasurements();
+        }
+    };
 
     /**
      * Initializes the reasoner.
@@ -62,6 +81,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         Reasoner reasoner = new Reasoner();
         ReasonerFrontend.getInstance().getRegistry().register(reasoner);
         ReasonerFrontend.getInstance().setReasonerHint(reasoner.getDescriptor());
+        // common measurements
+        AbstractTestDescriptor.registerMeasurementMappings();
+        // SSE reasoner measurements
+        TestDescriptor.registerMeasurementMappings();
+        // see also MEASUREMENTS!
     }
     
     @Override
@@ -226,12 +250,36 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             System.out.println("Performing reasoning/propagation...");
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
             rCfg.setTimeout(5000); // to be on the safe side
+            TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), 
+                "temp/" + getMeasurementFileName()), columnProvider);
+            String id = MeasurementCollector.start(config.getConfiguration(), "SCENARIO");
             ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                 config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
+            MeasurementCollector.endAuto(id);
+            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                MeasurementCollector.getInstance(), id, getMeasurements(), res);
+            MeasurementCollector.end(id);
             Assert.assertFalse("Reasoning must not have a conflict", res.hasConflict());
             Assert.assertFalse("Reasoning must not have a timeout", res.hasTimeout());
         }
         return config;
+    }
+    
+    /**
+     * Returns the name of the measurement file.
+     * 
+     * @return the name of the measurement file
+     */
+    protected abstract String getMeasurementFileName();
+
+    /**
+     * Returns the measurements to be collected for the measurement collector.
+     * Requires registration of measurement keys!
+     * 
+     * @return the measurements
+     */
+    protected IMeasurementKey[] getMeasurements() {
+        return MEASUREMENTS;
     }
 
     /**
