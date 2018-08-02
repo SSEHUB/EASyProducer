@@ -17,6 +17,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
+    test.net.ssehub.easy.reasoning.sseReasoner.reasoner.RampUpTest.class, // must be first
     test.net.ssehub.easy.reasoning.sseReasoner.adaptation.AllTests.class,
     test.net.ssehub.easy.reasoning.sseReasoner.capabilities.AllTests.class,
     // Skip: performance in automatic testing 

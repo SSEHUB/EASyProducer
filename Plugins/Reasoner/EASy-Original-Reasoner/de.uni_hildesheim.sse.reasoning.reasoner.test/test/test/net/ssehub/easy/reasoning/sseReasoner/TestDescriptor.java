@@ -35,7 +35,7 @@ import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector.IMeasu
 public class TestDescriptor extends AbstractTestDescriptor {
 
     public static final ITestDescriptor INSTANCE = new TestDescriptor();
-    private static final IMeasurementKey[] KEYS = concat(Measures.values(), GeneralMeasures.values());
+    private static final IMeasurementKey[] MEASUREMENTS = concat(Measures.values(), GeneralMeasures.values());
     private Reasoner reasoner = new Reasoner();
 
     /**
@@ -123,7 +123,7 @@ public class TestDescriptor extends AbstractTestDescriptor {
 
     @Override
     public IMeasurementKey[] measurements() {
-        return KEYS;    
+        return MEASUREMENTS;    
     }
 
     @Override
