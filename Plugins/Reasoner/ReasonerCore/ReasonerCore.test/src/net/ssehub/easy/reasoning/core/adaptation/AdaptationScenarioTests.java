@@ -63,8 +63,7 @@ public class AdaptationScenarioTests extends AbstractTest {
      * @return the reasoning result
      */
     private ReasoningResult runReasoning() {
-        IReasoner reasoner = createReasoner();
-        return reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+        return performReasoning(project, config, rConfig);
     }
 
     /**
@@ -313,8 +312,9 @@ public class AdaptationScenarioTests extends AbstractTest {
         rConfig.setRuntimeMode(true);
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
         IReasoner reasoner = createReasoner();
+        long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        ReasoningResult rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = performInstanceReasoning(inst, config, 1, System.currentTimeMillis() - start);
         Assert.assertFalse(rResult.hasConflict());
         
         AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
@@ -325,7 +325,7 @@ public class AdaptationScenarioTests extends AbstractTest {
 
         
         bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 4), AssignmentState.ASSIGNED);
-        rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        rResult = performInstanceReasoning(inst, config, 2, -1);
         Assert.assertTrue(rResult.hasConflict());
     }
 
@@ -344,8 +344,9 @@ public class AdaptationScenarioTests extends AbstractTest {
         rConfig.setRuntimeMode(true);
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
         IReasoner reasoner = createReasoner();
+        long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        ReasoningResult rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = performInstanceReasoning(inst, config, 1, System.currentTimeMillis() - start);
         Assert.assertFalse(rResult.hasConflict());
         
         AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
@@ -355,7 +356,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         Assert.assertFalse(rResult.hasConflict());
 
         bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 4), AssignmentState.ASSIGNED);
-        rResult = inst.propagate(ProgressObserver.NO_OBSERVER);
+        rResult = performInstanceReasoning(inst, config, 2, -1);
         Assert.assertTrue(rResult.hasConflict());
     }
 

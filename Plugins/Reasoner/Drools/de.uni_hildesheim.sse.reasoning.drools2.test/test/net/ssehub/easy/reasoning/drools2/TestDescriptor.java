@@ -65,4 +65,9 @@ public class TestDescriptor extends AbstractTestDescriptor {
         return DroolsReasonerDescriptor.VERSION;
     }
 
+    @Override
+    public String getMeasurementFileName() {
+        return "measurements-drools2.tsv";
+    }
+
 }

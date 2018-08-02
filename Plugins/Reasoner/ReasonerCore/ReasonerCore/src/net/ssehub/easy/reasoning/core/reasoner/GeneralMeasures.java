@@ -22,6 +22,34 @@ package net.ssehub.easy.reasoning.core.reasoner;
  */
 public enum GeneralMeasures implements IMeasurementKey {
     
-    REEVALUATION_COUNT;
+    /**
+     * Total number of re-evaluations.
+     */
+    REEVALUATION_COUNT,
+    
+    /**
+     * Total number of constraints.
+     */
+    CONSTRAINT_COUNT,
+    
+    /**
+     * Total number of evaluation problems.
+     */
+    PROBLEMS,
+    
+    /**
+     * Total time (in ms) spent for reasoning.
+     */
+    REASONING_TIME,
+
+    /**
+     * Time (in ms) spent for translating the model - collected only if the approach performs translation.
+     */
+    TRANSLATION_TIME,
+
+    /**
+     * Time (in ms) spent for constraint translation.
+     */
+    EVALUATION_TIME;
 
 }

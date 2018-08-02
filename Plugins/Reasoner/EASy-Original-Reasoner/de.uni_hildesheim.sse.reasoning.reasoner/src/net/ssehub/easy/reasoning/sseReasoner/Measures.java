@@ -18,12 +18,25 @@ package net.ssehub.easy.reasoning.sseReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
 
 /**
- * The measures provided/supported by the reasoner.
+ * The measures provided/supported by the SSE reasoner.
  * 
  * @author Holger Eichelberger
  */
 public enum Measures implements IMeasurementKey {
     
-    REEVALUATION_COUNT;
+    /**
+     * Number of variables in constraints.
+     */
+    VARIABLES_IN_CONSTRAINTS,
+
+    /**
+     * Number of constraints with evaluation problems.
+     */
+    PROBLEM_CONSTRAINTS,
+
+    /**
+     * Number of constraints with assignment problems.
+     */
+    PROBLEM_ASSIGNMENTS;
 
 }

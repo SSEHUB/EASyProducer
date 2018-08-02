@@ -34,6 +34,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.StandaloneInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
@@ -49,6 +50,8 @@ import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
+import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 
 /**
  * General abstract test class for reusable reasoning tests.
@@ -59,6 +62,8 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
  */
 public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.AbstractTest<Project> {
 
+    public static final String DEFAULT_TAG = "REASONING";
+    
     private ITestDescriptor descriptor;
     private String testPath;
     
@@ -66,7 +71,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Creating a test instance.
      * 
      * @param descriptor the test descriptor
-     * @param testPath the test path (empty or null means do not try to load models)
+     * @param testPath the test path (empty or <b>null</b> means do not try to load models)
      */
     protected AbstractTest(ITestDescriptor descriptor, String testPath) {
         this.descriptor = descriptor;
@@ -164,7 +169,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         configureReasoner(rConfig);
         // Perform reasoning
-        IReasoner reasoner = descriptor.createReasoner();
+        IReasoner reasoner = createReasoner();
         reasoner.setInterceptor(new ReasonerInterceptorAdaptor() {
             
             @Override
@@ -210,7 +215,36 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     }
 
     /**
-     * Performs the reasoning.
+     * Performs reasoning using {@link ITestDescriptor#createReasoner() the reasoner provided by 
+     * the test descriptor} and collects the result in {@link MeasurementCollector}.
+     * 
+     * @param project the project
+     * @param config the configuration
+     * @param rConfig the reasoner configuration
+     * @return the reasoning result
+     */
+    protected ReasoningResult performReasoning(Project project, Configuration config, 
+        ReasonerConfiguration rConfig) {
+        return performReasoning(descriptor.createReasoner(), project, config, rConfig);
+    }
+
+    /**
+     * Performs reasoning using {@link ITestDescriptor#createReasoner() the reasoner provided by 
+     * the test descriptor} and collects the result in {@link MeasurementCollector}.
+     * 
+     * @param project the project
+     * @param config the configuration
+     * @param rConfig the reasoner configuration
+     * @param tag explicit tag for measurement recording (may be <b>null</b>)
+     * @return the reasoning result
+     */
+    protected ReasoningResult performReasoning(Project project, Configuration config, 
+        ReasonerConfiguration rConfig, String tag) {
+        return performReasoning(descriptor.createReasoner(), project, config, rConfig, tag);
+    }
+
+    /**
+     * Performs reasoning and collects the result in {@link MeasurementCollector} using {@link #DEFAULT_TAG}.
      * 
      * @param reasoner the reasoner to use
      * @param project the project
@@ -220,9 +254,132 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      */
     protected ReasoningResult performReasoning(IReasoner reasoner, Project project, Configuration config, 
         ReasonerConfiguration rConfig) {
-        return reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+        return performReasoning(reasoner, project, config, rConfig, DEFAULT_TAG);
     }
 
+    /**
+     * Performs reasoning and collects the result in {@link MeasurementCollector}.
+     * 
+     * @param reasoner the reasoner to use
+     * @param project the project
+     * @param config the configuration
+     * @param rConfig the reasoner configuration
+     * @param tag explicit tag for measurement recording (may be <b>null</b>)
+     * @return the reasoning result
+     */
+    protected ReasoningResult performReasoning(IReasoner reasoner, Project project, Configuration config, 
+        ReasonerConfiguration rConfig, String tag) {
+        ensureCollector();
+        String id = MeasurementCollector.start(config, tag);
+        ReasoningResult res =  reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+        MeasurementCollector.endAuto(id);
+        transferReasoningMeasures(id, res);
+        MeasurementCollector.end(id);
+        return res;
+    }
+
+    /**
+     * Performs reasoning on a reasoner instance of {@link ITestDescriptor#createReasoner() the reasoner provided by 
+     * the test descriptor} and collects the result in {@link MeasurementCollector}.
+     * 
+     * @param project the project
+     * @param config the configuration
+     * @param rConfig the reasoner configuration
+     * @return the reasoning result
+     */
+    protected ReasoningResult performInstanceReasoning(Project project, Configuration config, 
+        ReasonerConfiguration rConfig) {
+        return performInstanceReasoning(descriptor.createReasoner(), project, config, rConfig);
+    }
+
+    /**
+     * Performs reasoning on a reasoner instance of the given <code>reasoner</code> and collects the result 
+     * in {@link MeasurementCollector}.
+     * 
+     * @param reasoner the reasoner to create the instance for
+     * @param project the project
+     * @param config the configuration
+     * @param rConfig the reasoner configuration
+     * @return the reasoning result
+     */
+    protected ReasoningResult performInstanceReasoning(IReasoner reasoner, Project project, Configuration config, 
+        ReasonerConfiguration rConfig) {
+        long start = System.currentTimeMillis();
+        IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
+        return performInstanceReasoning(inst, config, 1, System.currentTimeMillis() - start);
+    }
+
+    /**
+     * Performs reasoning on a reasoner instance and collects the result in {@link MeasurementCollector}.
+     * 
+     * @param inst the reasoner instance to use
+     * @param config the configuration
+     * @param nr the number of the reasoning call on the same instance (just for measurement collection)
+     * @param instanceCreationTime time taken for creating the reasoning instance (in ms, may be negative for none)
+     * @return the reasoning result
+     */
+    protected ReasoningResult performInstanceReasoning(IReasonerInstance inst, Configuration config, int nr, 
+        long instanceCreationTime) {
+        ensureCollector();
+        String id = MeasurementCollector.start(config, "IREASONING " + nr);
+        ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
+        MeasurementCollector.endAuto(id);
+        transferReasoningMeasures(id, res);
+        if (instanceCreationTime >= 0) {
+            MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
+                instanceCreationTime);
+        }
+        MeasurementCollector.end(id);
+        return res;
+    }
+
+    /**
+     * Ensures the measurement collector.
+     */
+    protected void ensureCollector() {
+        TSVMeasurementCollector.ensureCollector(new File(getTestdataBase(), 
+            "temp/" + descriptor.getMeasurementFileName()), descriptor);
+    }
+
+    /**
+     * Transfers the reasoning measures from the given reasoning <code>result</code> to the collector <code>coll</code>.
+     * 
+     * @param id the measurement identifier
+     * @param result the reasoning result to take the values from
+     */
+    protected void transferReasoningMeasures(String id, ReasoningResult result) {
+        transferReasoningMeasures(MeasurementCollector.getInstance(), id, result);
+    }
+
+    /**
+     * Transfers the reasoning measures from the given reasoning <code>result</code> to the collector <code>coll</code>.
+     * 
+     * @param coll the collector to receive the measurements
+     * @param id the measurement identifier
+     * @param result the reasoning result to take the values from
+     */
+    protected void transferReasoningMeasures(MeasurementCollector coll, String id, ReasoningResult result) {
+        transferReasoningMeasures(coll, id, descriptor.measurements(), result);
+    }
+    
+    /**
+     * Transfers the reasoning measures from the given reasoning <code>result</code> to the collector <code>coll</code>.
+     * 
+     * @param coll the collector to receive the measurements
+     * @param id the measurement identifier
+     * @param keys the measurement keys to collect
+     * @param result the reasoning result to take the values from
+     */
+    public static void transferReasoningMeasures(MeasurementCollector coll, String id, IMeasurementKey[] keys, 
+        ReasoningResult result) {
+        for (int k = 0; k < keys.length; k++) {
+            Number measure = result.getMeasure(keys[k]);
+            if (null != measure) {
+                coll.setMeasurement(id, keys[k], measure.doubleValue());
+            }
+        }
+    }
+    
     /**
      * Allows to configure the reasoner configuration.
      * 

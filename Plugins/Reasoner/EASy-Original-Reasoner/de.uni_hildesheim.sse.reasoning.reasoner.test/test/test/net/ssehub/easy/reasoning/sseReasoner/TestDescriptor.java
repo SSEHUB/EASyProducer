@@ -17,21 +17,56 @@ package test.net.ssehub.easy.reasoning.sseReasoner;
 
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
+import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
+import net.ssehub.easy.reasoning.sseReasoner.Measures;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector.IMeasurementIdentifier;
 
 /**
- * The test descriptor for this reasoner.
+ * The test descriptor for the SSE reasoner.
  * 
  * @author Holger Eichelberger
  */
 public class TestDescriptor extends AbstractTestDescriptor {
 
     public static final ITestDescriptor INSTANCE = new TestDescriptor();
+    private static final IMeasurementKey[] KEYS = concat(Measures.values(), GeneralMeasures.values());
     private Reasoner reasoner = new Reasoner();
 
+    /**
+     * The specific measurement identifiers for the SSE reasoner.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum MeasurementIdentifier implements IMeasurementIdentifier {
+
+        /**
+         * Number of variables in constraints.
+         */
+        REASONER_VARIABLES_IN_CONSTRAINTS,
+
+        /**
+         * Number of constraints with evaluation problems.
+         */
+        REASONER_PROBLEM_CONSTRAINTS,
+
+        /**
+         * Number of constraints with assignment problems.
+         */
+        REASONER_PROBLEM_ASSIGNMENTS;
+
+        @Override
+        public boolean isAutomatic() {
+            return false;
+        }
+
+    }
+    
     /**
      * Creates a test descriptor.
      */
@@ -65,6 +100,35 @@ public class TestDescriptor extends AbstractTestDescriptor {
     @Override
     public String getVersion() {
         return Descriptor.VERSION;
+    }
+
+    /**
+     * Registers the measurement mappings for the SSE reasoner.
+     */
+    public static void registerMeasurementMappings() {
+        MeasurementCollector.registerMapping(Measures.VARIABLES_IN_CONSTRAINTS, 
+            MeasurementIdentifier.REASONER_VARIABLES_IN_CONSTRAINTS);
+        MeasurementCollector.registerMapping(Measures.PROBLEM_CONSTRAINTS, 
+            MeasurementIdentifier.REASONER_PROBLEM_CONSTRAINTS);
+        MeasurementCollector.registerMapping(Measures.PROBLEM_ASSIGNMENTS, 
+            MeasurementIdentifier.REASONER_PROBLEM_ASSIGNMENTS);
+    }
+    
+    /**
+     * Automatically registers the measurement mappings.
+     */
+    static {
+        registerMeasurementMappings();
+    }
+
+    @Override
+    public IMeasurementKey[] measurements() {
+        return KEYS;    
+    }
+
+    @Override
+    public String getMeasurementFileName() {
+        return "measurements-sse.tsv";
     }
 
 }

@@ -19,7 +19,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
@@ -84,9 +83,7 @@ public class EvaluationIntegrityTest extends AbstractTest {
         
         Configuration config = new Configuration(projectP2, false);
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-     
-        IReasoner reasoner = createReasoner();
-        reasoner.propagate(projectP2, config, rConfig, ProgressObserver.NO_OBSERVER);
+        performReasoning(projectP2, config, rConfig);
         
         assertVariable(config, declA, 2, AssignmentState.DERIVED);
         assertVariable(config, declB, 2, AssignmentState.DERIVED);

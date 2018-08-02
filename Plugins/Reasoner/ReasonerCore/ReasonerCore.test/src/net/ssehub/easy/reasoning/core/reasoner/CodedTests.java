@@ -18,7 +18,6 @@ package net.ssehub.easy.reasoning.core.reasoner;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
@@ -115,9 +114,8 @@ public class CodedTests extends AbstractTest {
             BooleanValue.TRUE, config.getDecision(hasColorVar).getValue());
         
         // Test: Perform reasoning (and propagation)
-        IReasoner sseReasoner = createReasoner();
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        sseReasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+        performReasoning(project, config, rConfig);
         
         // Test precondition
         Assert.assertTrue(enumVar.getDeclaration().getName() + " has wrong value: " + enumVar.getValue(), 
@@ -202,8 +200,7 @@ public class CodedTests extends AbstractTest {
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setRuntimeMode(runtimeMode);
         // Perform reasoning
-        IReasoner reasoner = createReasoner();
-        reasoner.propagate(prj, cfg, rConfig, ProgressObserver.NO_OBSERVER);
+        performReasoning(prj, cfg, rConfig);
         
         Assert.assertEquals(myParamVarDeflt.getQualifiedName() + " " + myParamVarDeflt.getState(), 
             AssignmentState.FROZEN, myParamVarDeflt.getState());

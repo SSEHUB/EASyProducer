@@ -15,8 +15,11 @@
  */
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector.IMeasurementIdentifier;
+
 /**
- * A test descriptor pre-configured for the resoner core test cases.
+ * A test descriptor pre-configured for the reasoner core test cases.
  * 
  * @author Holger Eichelberger
  */
@@ -24,12 +27,63 @@ public abstract class AbstractTestDescriptor implements ITestDescriptor {
     
     public static final String PLUGIN_ID = "net.ssehub.easy.reasoning.core.tests";
     public static final String SYSTEM_PROPERTY = "reasonerCore.testdata.home";
+    protected static final IMeasurementKey[] KEYS = GeneralMeasures.values();
     static final String PROJECT_NAME = "../ReasonerCore.test/";
     
     private String pluginId;
     private String systemProperty;
     private boolean[] capabilities;
 
+    /**
+     * The abstract measurement identifiers for mapping {@link net.ssehub.easy.reasoning.sseReasoner.Measures}.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum MeasurementIdentifier implements IMeasurementIdentifier {
+
+        /**
+         * Time taken for creating a re-usable reasoner instance (in ms).
+         */
+        REASONER_INSTANCE_CREATION_TIME,
+        
+        /**
+         * Total number of re-evaluations.
+         */
+        REASONER_REEVALUATION_COUNT,
+        
+        /**
+         * Total number of constraints.
+         */
+        REASONER_CONSTRAINT_COUNT,
+        
+        /**
+         * Total number of evaluation problems.
+         */
+        REASONER_PROBLEMS,
+        
+        /**
+         * Total time (in ms) spent for reasoning.
+         */
+        REASONER_REASONING_TIME,
+
+        /**
+         * Time (in ms) spent for translating the model - collected only if the approach performs translation.
+         */
+        REASONER_TRANSLATION_TIME,
+
+        /**
+         * Time (in ms) spent for constraint translation.
+         */
+        REASONER_EVALUATION_TIME;
+
+        @Override
+        public boolean isAutomatic() {
+            return false;
+        }
+
+    }
+
+    
     /**
      * Creates a new default instance.
      */
@@ -83,6 +137,55 @@ public abstract class AbstractTestDescriptor implements ITestDescriptor {
             }
         }
         return result;
+    }
+    
+    /**
+     * Registers the measurement mappings for the SSE reasoner.
+     */
+    public static void registerMeasurementMappings() {
+        MeasurementCollector.registerMapping(GeneralMeasures.REEVALUATION_COUNT, 
+            MeasurementIdentifier.REASONER_REEVALUATION_COUNT);
+        MeasurementCollector.registerMapping(GeneralMeasures.CONSTRAINT_COUNT, 
+            MeasurementIdentifier.REASONER_CONSTRAINT_COUNT);
+        MeasurementCollector.registerMapping(GeneralMeasures.PROBLEMS, 
+            MeasurementIdentifier.REASONER_PROBLEMS);
+        MeasurementCollector.registerMapping(GeneralMeasures.REASONING_TIME, 
+            MeasurementIdentifier.REASONER_REASONING_TIME);
+        MeasurementCollector.registerMapping(GeneralMeasures.TRANSLATION_TIME, 
+            MeasurementIdentifier.REASONER_TRANSLATION_TIME);
+        MeasurementCollector.registerMapping(GeneralMeasures.EVALUATION_TIME, 
+            MeasurementIdentifier.REASONER_EVALUATION_TIME);
+    }
+    
+    /**
+     * Automatically registers the measurement mappings.
+     */
+    static {
+        registerMeasurementMappings();
+    }
+
+    @Override
+    public IMeasurementKey[] measurements() {
+        return KEYS;
+    }
+
+    /**
+     * Concats two arrays of measurement keys.
+     * 
+     * @param a1 the first array
+     * @param a2 the second array
+     * @return the concatenated array
+     */
+    public static IMeasurementKey[] concat(IMeasurementKey[] a1, IMeasurementKey[] a2) {
+        IMeasurementKey[] result = new IMeasurementKey[a1.length + a2.length];
+        System.arraycopy(a1, 0, result, 0, a1.length);
+        System.arraycopy(a2, 0, result, a1.length, a2.length);
+        return result;
+    }
+    
+    @Override
+    public Object[] measurementColumns() {
+        return measurements();
     }
 
 }

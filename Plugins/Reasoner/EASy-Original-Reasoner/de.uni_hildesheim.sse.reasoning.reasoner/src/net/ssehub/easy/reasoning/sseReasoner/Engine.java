@@ -9,6 +9,7 @@ import java.util.Set;
 
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -110,14 +111,22 @@ public class Engine {
         infoLogger.info("Model: " + project.getName());
 //        infoLogger.info("Number of variables: " + resolver.variableCount());
         infoLogger.info("Number of variables involved in constraints: " + resolver.variableInConstraintCount());
+        result.setMeasure(Measures.VARIABLES_IN_CONSTRAINTS, resolver.variableInConstraintCount());
         infoLogger.info("Number of constraints: " + resolver.constraintCount());
+        result.setMeasure(GeneralMeasures.CONSTRAINT_COUNT, resolver.constraintCount());
         infoLogger.info("Number of reevaluations: " + reevaluationCount);
-        result.setMeasure(Measures.REEVALUATION_COUNT, reevaluationCount);
+        result.setMeasure(GeneralMeasures.REEVALUATION_COUNT, reevaluationCount);
         infoLogger.info("Number of problem constraints: " + failedConstraints);
+        result.setMeasure(Measures.PROBLEM_CONSTRAINTS, failedConstraints);
         infoLogger.info("Number of problem assignments: " + failedAssignments);
+        result.setMeasure(Measures.PROBLEM_ASSIGNMENTS, failedAssignments);
+        result.setMeasure(GeneralMeasures.PROBLEMS, failedConstraints + failedAssignments);
         infoLogger.info("Total time: " + evaluationTime);
+        result.setMeasure(GeneralMeasures.REASONING_TIME, evaluationTime);
         infoLogger.info("Translation time: " + resolver.getTranslationTime());
+        result.setMeasure(GeneralMeasures.TRANSLATION_TIME, resolver.getTranslationTime());
         infoLogger.info("Evaluation time: " + resolver.getEvaluationTime());
+        result.setMeasure(GeneralMeasures.EVALUATION_TIME, resolver.getEvaluationTime());
         return result;
     } 
     

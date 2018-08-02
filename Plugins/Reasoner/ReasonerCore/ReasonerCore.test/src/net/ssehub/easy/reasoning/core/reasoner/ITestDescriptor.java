@@ -15,12 +15,14 @@
  */
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import net.ssehub.easy.varModel.varModel.testSupport.IColumnProvider;
+
 /**
  * Contains common code to perform direct reasoner testing.
  * 
  * @author Holger Eichelberger
  */
-public interface ITestDescriptor {
+public interface ITestDescriptor extends IColumnProvider {
 
     /**
      * Defines reasoner capabilities which may not be supported and, thus, shall not be tested.
@@ -84,5 +86,19 @@ public interface ITestDescriptor {
      * @return the version of the reasoner
      */
     public String getVersion();
+    
+    /**
+     * Returns the measurements relevant for the tests denoted by this descriptor.
+     * 
+     * @return the measurements
+     */
+    public IMeasurementKey[] measurements();
+    
+    /**
+     * Returns the name of the measurement file.
+     * 
+     * @return the name of the measurement file
+     */
+    public String getMeasurementFileName();
 
 }

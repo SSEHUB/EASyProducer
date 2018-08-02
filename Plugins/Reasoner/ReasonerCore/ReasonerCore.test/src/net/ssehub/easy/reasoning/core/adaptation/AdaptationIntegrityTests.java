@@ -3,9 +3,7 @@ package net.ssehub.easy.reasoning.core.adaptation;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
-import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
@@ -101,8 +99,7 @@ public class AdaptationIntegrityTests extends AbstractTest {
         // Create Configuration (will also start AssignmentResolver)
         config = new Configuration(project, true);        
         rConfig = new ReasonerConfiguration();
-        IReasoner reasoner = createReasoner();
-        reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+        performReasoning(project, config, rConfig);
     } 
     
     /**
@@ -159,8 +156,7 @@ public class AdaptationIntegrityTests extends AbstractTest {
         // Create Configuration (will also start AssignmentResolver)
         config = new Configuration(project, true);        
         rConfig = new ReasonerConfiguration();
-        IReasoner reasoner = createReasoner();
-        reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+        performReasoning(project, config, rConfig, "CompoundInit");
     }  
     
     /**
@@ -210,9 +206,8 @@ public class AdaptationIntegrityTests extends AbstractTest {
             } catch (ConfigurationException e) {
                 e.printStackTrace();
             }
-            IReasoner reasoner = createReasoner();
-            reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
-            
+            performReasoning(project, config, rConfig);
+
             IDecisionVariable iVarA = config.getDecision(declA);
             IDecisionVariable iVarB = config.getDecision(declB);
             IDecisionVariable iVarC = config.getDecision(declC);
@@ -288,8 +283,7 @@ public class AdaptationIntegrityTests extends AbstractTest {
             } catch (ConfigurationException e) {
                 e.printStackTrace();
             }
-            IReasoner reasoner = createReasoner();
-            reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+            performReasoning(project, config, rConfig);
             
             IDecisionVariable iMyParam = config.getDecision(myParam);
             IDecisionVariable iVarA = iMyParam.getNestedElement(0);
