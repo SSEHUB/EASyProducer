@@ -48,7 +48,6 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.management.VarModel;
-import net.ssehub.easy.varModel.varModel.testSupport.IColumnProvider;
 import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
 import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
@@ -59,7 +58,7 @@ import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;
  * 
  * @author Holger Eichelberger
  */
-public class RtVilTestConfigurer implements ITestConfigurer<Script>, IColumnProvider {
+public class RtVilTestConfigurer implements ITestConfigurer<Script> {
 
     @Override
     public String getSystemPropertyName() {
@@ -131,7 +130,7 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script>, IColumnProv
                 Configuration config) {
                 File base = AbstractRtTest.determineTestDataDir(getSystemPropertyName());
                 TSVMeasurementCollector.ensureCollector(new File(base, 
-                    "temp/measurements-rtvil.tsv"), RtVilTestConfigurer.this);
+                    "temp/measurements-rtvil.tsv"));
                 id = MeasurementCollector.start(config.getConfiguration(), "RT-VIL");
             }
             
@@ -150,11 +149,6 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script>, IColumnProv
     @Override
     public TracerFactory createTestTracerFactory(Writer trace, String[] baseFolders) {
         return new TestTracerFactory(trace, baseFolders);
-    }
-
-    @Override
-    public Object[] measurementColumns() {
-        return AbstractRtTest.MEASUREMENTS;
     }
 
 }

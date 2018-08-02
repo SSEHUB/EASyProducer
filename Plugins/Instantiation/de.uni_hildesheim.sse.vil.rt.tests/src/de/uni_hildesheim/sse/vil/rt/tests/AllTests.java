@@ -27,6 +27,7 @@ import net.ssehub.easy.instantiation.rt.tests.confModel.AllConfigurationTests;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+    RampUpTest.class, // must be first
     BasicRtTests.class,
     ExecutionRtTests.class,
     AnalyzerTest.class,

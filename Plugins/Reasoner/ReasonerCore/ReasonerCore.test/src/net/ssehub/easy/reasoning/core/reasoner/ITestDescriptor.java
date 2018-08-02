@@ -15,14 +15,12 @@
  */
 package net.ssehub.easy.reasoning.core.reasoner;
 
-import net.ssehub.easy.varModel.varModel.testSupport.IColumnProvider;
-
 /**
  * Contains common code to perform direct reasoner testing.
  * 
  * @author Holger Eichelberger
  */
-public interface ITestDescriptor extends IColumnProvider {
+public interface ITestDescriptor {
 
     /**
      * Defines reasoner capabilities which may not be supported and, thus, shall not be tested.

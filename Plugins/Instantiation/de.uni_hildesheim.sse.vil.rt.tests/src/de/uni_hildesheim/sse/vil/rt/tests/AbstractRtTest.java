@@ -32,6 +32,7 @@ import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
+import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.sseReasoner.Measures;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -67,6 +68,15 @@ public abstract class AbstractRtTest extends AbstractExecutionTest<Script> {
             // see also MEASUREMENTS!
             reasonerRegistered = true;
         }
+    }
+    
+    /**
+     * Returns a reasoner instance.
+     * 
+     * @return the instance
+     */
+    protected IReasoner createReasoner() {
+        return new Reasoner();
     }
     
     @Override

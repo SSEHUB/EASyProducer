@@ -338,7 +338,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      */
     protected void ensureCollector() {
         TSVMeasurementCollector.ensureCollector(new File(getTestdataBase(), 
-            "temp/" + descriptor.getMeasurementFileName()), descriptor);
+            "temp/" + descriptor.getMeasurementFileName()));
     }
 
     /**

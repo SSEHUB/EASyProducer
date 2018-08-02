@@ -27,7 +27,7 @@ public abstract class AbstractTestDescriptor implements ITestDescriptor {
     
     public static final String PLUGIN_ID = "net.ssehub.easy.reasoning.core.tests";
     public static final String SYSTEM_PROPERTY = "reasonerCore.testdata.home";
-    protected static final IMeasurementKey[] KEYS = GeneralMeasures.values();
+    protected static final IMeasurementKey[] MEASUREMENTS = GeneralMeasures.values();
     static final String PROJECT_NAME = "../ReasonerCore.test/";
     
     private String pluginId;
@@ -166,26 +166,44 @@ public abstract class AbstractTestDescriptor implements ITestDescriptor {
 
     @Override
     public IMeasurementKey[] measurements() {
-        return KEYS;
+        return MEASUREMENTS;
     }
 
     /**
-     * Concats two arrays of measurement keys.
+     * Concatenates two arrays of measurement keys.
      * 
      * @param a1 the first array
      * @param a2 the second array
      * @return the concatenated array
      */
     public static IMeasurementKey[] concat(IMeasurementKey[] a1, IMeasurementKey[] a2) {
-        IMeasurementKey[] result = new IMeasurementKey[a1.length + a2.length];
-        System.arraycopy(a1, 0, result, 0, a1.length);
-        System.arraycopy(a2, 0, result, a1.length, a2.length);
-        return result;
+        return concat(new IMeasurementKey[a1.length + a2.length], a1, a2);
     }
-    
-    @Override
-    public Object[] measurementColumns() {
-        return measurements();
+
+    /**
+     * Concatenates two arrays of objects.
+     * 
+     * @param a1 the first array
+     * @param a2 the second array
+     * @return the concatenated array
+     */
+    public static Object[] concat(Object[] a1, Object[] a2) {
+        return concat(new Object[a1.length + a2.length], a1, a2);
+    }
+
+    /**
+     * Concatenates two arrays of objects.
+     * 
+     * @param <T> the array type
+     * @param target the target array of size of (at last) the sum of the size of <code>a1</code> and <code>a2</code>
+     * @param a1 the first array
+     * @param a2 the second array
+     * @return <code>target</code>
+     */
+    private static <T> T[] concat(T[] target, T[] a1, T[] a2) {
+        System.arraycopy(a1, 0, target, 0, a1.length);
+        System.arraycopy(a2, 0, target, a1.length, a2.length);
+        return target;
     }
 
 }
