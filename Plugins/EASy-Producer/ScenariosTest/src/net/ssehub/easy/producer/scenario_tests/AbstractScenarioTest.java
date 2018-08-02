@@ -31,12 +31,12 @@ import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
+import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.Measures;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.management.VarModel;
-import net.ssehub.easy.varModel.varModel.testSupport.IColumnProvider;
 import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
 import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractTest;
@@ -66,14 +66,6 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
     protected static final IMeasurementKey[] MEASUREMENTS = AbstractTestDescriptor.concat(
         Measures.values(), GeneralMeasures.values()); 
 
-    protected final IColumnProvider columnProvider = new IColumnProvider() {
-        
-        @Override
-        public Object[] measurementColumns() {
-            return AbstractScenarioTest.this.getMeasurements();
-        }
-    };
-
     /**
      * Initializes the reasoner.
      */
@@ -86,6 +78,15 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         // SSE reasoner measurements
         TestDescriptor.registerMeasurementMappings();
         // see also MEASUREMENTS!
+    }
+    
+    /**
+     * Returns a reasoner instance.
+     * 
+     * @return the instance
+     */
+    protected IReasoner createReasoner() {
+        return new Reasoner();
     }
     
     @Override
@@ -250,8 +251,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             System.out.println("Performing reasoning/propagation...");
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
             rCfg.setTimeout(5000); // to be on the safe side
-            TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), 
-                "temp/" + getMeasurementFileName()), columnProvider);
+            TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
             String id = MeasurementCollector.start(config.getConfiguration(), "SCENARIO");
             ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                 config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
