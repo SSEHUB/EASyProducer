@@ -432,6 +432,11 @@
 				<include name="**/*.xml" />
 			</fileset>
 		</copy>
+        <copy todir="${benchmarks.home}" failonerror="false" overwrite="true">
+            <fileset dir="${home.vil.rt.tests.dir}/testdata/temp/">
+                <include name="*.tsv" />
+            </fileset>
+        </copy>
 	</target>	
 
 	<target name="storeJars">
