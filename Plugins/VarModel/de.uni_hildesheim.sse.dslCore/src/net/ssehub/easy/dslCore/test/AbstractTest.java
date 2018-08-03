@@ -160,6 +160,7 @@ public abstract class AbstractTest<R extends IModel> {
                     fc.size());
             /* Instead of using default, pass in a decoder. */
             fileAsString = Charset.defaultCharset().decode(bb).toString();
+            fc.close();
         } finally {
             stream.close();
         }
