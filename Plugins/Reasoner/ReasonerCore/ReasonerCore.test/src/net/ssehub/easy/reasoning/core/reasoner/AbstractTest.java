@@ -325,10 +325,8 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
         MeasurementCollector.endAuto(id);
         transferReasoningMeasures(id, res);
-        if (instanceCreationTime >= 0) {
-            MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
-                instanceCreationTime);
-        }
+        MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
+            instanceCreationTime);
         MeasurementCollector.end(id);
         return res;
     }
@@ -378,6 +376,8 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                 coll.setMeasurement(id, keys[k], measure.doubleValue());
             }
         }
+        // auto columns in TSV
+        MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 0);
     }
     
     /**
