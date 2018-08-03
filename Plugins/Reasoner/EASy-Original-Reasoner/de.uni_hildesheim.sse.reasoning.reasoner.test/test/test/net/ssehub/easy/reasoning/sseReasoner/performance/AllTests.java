@@ -9,7 +9,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * @author Sizonenko
  */
 @RunWith(Suite.class)
-@SuiteClasses({    
+@SuiteClasses({
+    CaseStudyStats.class,
     GeneratedStats.class,
     HistoryStats.class
     })

@@ -1,6 +1,5 @@
 package test.net.ssehub.easy.reasoning.sseReasoner.performance;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
@@ -23,7 +22,6 @@ public class GeneratedStats extends net.ssehub.easy.reasoning.core.performance.G
     /**
      * Tests Boolean 1 to 3 ration.
      */
-    @Ignore("reason unclear")
     @Test    
     public void gr11() {
         super.gr11();
@@ -32,7 +30,6 @@ public class GeneratedStats extends net.ssehub.easy.reasoning.core.performance.G
     /**
      * Tests Boolean 1 to 1 ration.
      */
-    @Ignore("reason unclear")
     @Test    
     public void gr12() {
         super.gr12();

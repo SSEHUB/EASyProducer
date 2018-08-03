@@ -20,10 +20,10 @@ import org.junit.runners.Suite.SuiteClasses;
     test.net.ssehub.easy.reasoning.sseReasoner.reasoner.RampUpTest.class, // must be first
     test.net.ssehub.easy.reasoning.sseReasoner.adaptation.AllTests.class,
     test.net.ssehub.easy.reasoning.sseReasoner.capabilities.AllTests.class,
-    // Skip: performance in automatic testing 
     test.net.ssehub.easy.reasoning.sseReasoner.qm.AllTests.class,
-    test.net.ssehub.easy.reasoning.sseReasoner.reasoner.AllTests.class
-    })
+    test.net.ssehub.easy.reasoning.sseReasoner.reasoner.AllTests.class,
+    test.net.ssehub.easy.reasoning.sseReasoner.performance.AllTests.class,
+})
 public class AllTests {
     
 }

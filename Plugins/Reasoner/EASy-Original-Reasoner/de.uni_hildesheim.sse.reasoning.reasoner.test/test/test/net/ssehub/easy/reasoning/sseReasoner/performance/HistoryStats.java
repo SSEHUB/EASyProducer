@@ -1,6 +1,5 @@
 package test.net.ssehub.easy.reasoning.sseReasoner.performance;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
@@ -23,7 +22,6 @@ public class HistoryStats extends net.ssehub.easy.reasoning.core.performance.His
     /**
      * Tests history models.
      */
-    @Ignore("unclear why")
     @Test    
     public void historyStatsTest() {
         super.historyStatsTest();

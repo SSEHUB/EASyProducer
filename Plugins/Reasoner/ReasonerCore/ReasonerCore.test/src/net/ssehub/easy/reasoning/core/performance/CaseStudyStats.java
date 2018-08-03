@@ -35,7 +35,7 @@ public class CaseStudyStats extends AbstractTest {
      */
     @Test    
     public void simpleAssignmentsWithConstraintVar() {
-        reasoningTest("SimpleAssignmentsWithConstraintVars.ivml", 1, 6);       
+        reasoningTest("SimpleAssignmentsWithConstraintVars.ivml", 1, 9);       
     }     
     
     /**
@@ -51,7 +51,7 @@ public class CaseStudyStats extends AbstractTest {
      */
     @Test    
     public void compoundSimpleAssignmentsWithConstraintVar() {
-        reasoningTest("CompoundSimpleAssignmentsWithConstraintVars.ivml", 1, 6);       
+        reasoningTest("CompoundSimpleAssignmentsWithConstraintVars.ivml", 1, 10);       
     }  
     
     /**
@@ -67,7 +67,7 @@ public class CaseStudyStats extends AbstractTest {
      */
     @Test    
     public void compoundConstraintsInCollectionWithConstraintVars() {
-        reasoningTest("CompoundConstraintsInCollectionWithConstraintVars.ivml", 1, 3);       
+        reasoningTest("CompoundConstraintsInCollectionWithConstraintVars.ivml", 2, 15);       
     }  
     
     /**
@@ -83,7 +83,7 @@ public class CaseStudyStats extends AbstractTest {
      */
     @Test    
     public void typedefCollectionsInCompound() {
-        reasoningTest("TypedefCollectionsInCompound.ivml", 1, 5);       
+        reasoningTest("TypedefCollectionsInCompound.ivml", 1, 3);       
     }     
 
 }
