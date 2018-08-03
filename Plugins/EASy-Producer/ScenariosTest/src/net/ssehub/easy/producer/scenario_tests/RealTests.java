@@ -30,6 +30,7 @@ import net.ssehub.easy.instantiation.maven.Registration;
 import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
@@ -41,6 +42,7 @@ import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
 
 /**
  * Real use case tests. Although Maven is available, we run the tests without Maven in order to
@@ -451,17 +453,32 @@ public class RealTests extends AbstractEasyScenarioTest {
                     ReasonerConfiguration rCfg = new ReasonerConfiguration();
                     rCfg.setRuntimeMode(true);
                     for (int r = 1; r <= MAX_REASONING; r++) {
+                        String id = MeasurementCollector.start(cfg, "SCENARIO-INC " + r);
                         ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                             cfg, rCfg, ProgressObserver.NO_OBSERVER);
+                        MeasurementCollector.endAuto(id);
+                        net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                            MeasurementCollector.getInstance(), id, getMeasurements(), res);
+                        MeasurementCollector.end(id);
                         Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                         assertFailureMessage(res, ppfe2);
                     }
 
                     if (MAX_INSTANCE_REASONING > 0) {
                         System.out.println("Performing runtime reasoning/propagation with instance ...");
+                        long instanceCreation = System.currentTimeMillis();
                         IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
+                        instanceCreation = System.currentTimeMillis() - instanceCreation;
                         for (int r = 1; r <= MAX_INSTANCE_REASONING; r++) {
+                            String id = MeasurementCollector.start(cfg, "SCENARIO-INST " + r);
                             ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
+                            MeasurementCollector.endAuto(id);
+                            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                                MeasurementCollector.getInstance(), id, getMeasurements(), res);
+                            MeasurementCollector.set(id, 
+                                AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
+                                instanceCreation);
+                            MeasurementCollector.end(id);
                             Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                             assertFailureMessage(res, ppfe2);
                         }
