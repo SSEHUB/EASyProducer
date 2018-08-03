@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -117,17 +118,12 @@ public class TSVMeasurementCollector extends MeasurementCollector {
             }
             out = new PrintStream(new FileOutputStream(file, true));
             if (writeHeader) {
-                out.print("model name");
-                printSeparator(out);
-                out.print("URI");
-                printSeparator(out);
-                out.print("tag");
-                printSeparator(out);
-                out.print("caller");
-                printSeparator(out);
+                printSep(out, "model name");
+                printSep(out, "URI");
+                printSep(out, "tag");
+                printSep(out, "caller");
                 for (IMeasurementIdentifier identifier : columns) {
-                    out.print(identifier.name());
-                    printSeparator(out);
+                    printSep(out, identifier.name());
                 }
                 printEOL(out);
             }
@@ -139,16 +135,13 @@ public class TSVMeasurementCollector extends MeasurementCollector {
                 out.print(info.getLocation());
             }
             printSeparator(out);
-            out.print(record.getTag());
-            printSeparator(out);
-            out.print(record.getCaller());
-            printSeparator(out);
+            printSep(out, record.getTag());
+            printSep(out, record.getCaller());
             for (IMeasurementIdentifier identifier : columns) {
                 Double measurement = record.getMeasurement(identifier);
                 if (null != measurement) {
-                    out.print(measurement);
+                    printSep(out, measurement);
                 }
-                printSeparator(out);
             }
             printEOL(out);
         } catch (IOException e) {
@@ -175,5 +168,52 @@ public class TSVMeasurementCollector extends MeasurementCollector {
     private static void printEOL(PrintStream out) {
         out.println();
     }
+
+    /**
+     * Prints a string value.
+     * 
+     * @param out the output stream
+     * @param value the string value
+     */
+    private static void print(PrintStream out, String value) {
+        out.print(value);
+    }
+
+    /**
+     * Prints a string value and a separator.
+     * 
+     * @param out the output stream
+     * @param value the string value
+     * 
+     * @see #printSeparator(PrintStream)
+     */
+    private static void printSep(PrintStream out, String value) {
+        print(out, value);
+        printSeparator(out);
+    }
     
+    /**
+     * Prints a double value.
+     * 
+     * @param out the output stream
+     * @param value the double value
+     */
+    private static void print(PrintStream out, Double value) {
+        String tmp = String.format(Locale.ROOT, "%.2f", value).replace('.', ','); // for Excel
+        out.print(tmp);
+    }
+
+    /**
+     * Prints a double value and a separator.
+     * 
+     * @param out the output stream
+     * @param value the double value
+     * 
+     * @see #printSeparator(PrintStream)
+     */
+    private static void printSep(PrintStream out, Double value) {
+        print(out, value);
+        printSeparator(out);
+    }
+
 }

@@ -26,7 +26,7 @@ import java.util.Set;
 import net.ssehub.easy.varModel.confModel.AbstractConfigurationStatisticsVisitor;
 import net.ssehub.easy.varModel.confModel.AbstractConfigurationStatisticsVisitor.ConfigStatistics;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.confModel.DefaultConfigurationStatisticsVisitor;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementStatisticsVistor.MeasurementStatistics;
 
 /**
  * Extensible measurements collection mechanism to be applied while running a test suite. Aims at collecting 
@@ -193,7 +193,12 @@ public class MeasurementCollector {
          * 
          * @see ConfigStatistics#noOfAnnotations()
          */
-        MODEL_ANNOTATIONS(false);
+        MODEL_ANNOTATIONS(false),
+        
+        /**
+         * Average constraint complexity as calculated by {@link MeasurementStatisticsVistor}.
+         */
+        MODEL_CONSTRAINT_COMPLEXITY(false);
         
         private boolean isAutomatic;
 
@@ -661,7 +666,7 @@ public class MeasurementCollector {
      * @return the statistics visitor instance
      */
     protected AbstractConfigurationStatisticsVisitor createStatisticsVisitor() {
-        return new DefaultConfigurationStatisticsVisitor();
+        return new MeasurementStatisticsVistor();
     }
     
     /**
@@ -689,6 +694,12 @@ public class MeasurementCollector {
             statistics.noOfConstraintInstances());
         record.setMeasurement(DefaultMeasurementIdentifier.MODEL_ANNOTATIONS, 
             statistics.noOfAnnotations());
+        // parameterization would be nice, requires parameterization of visitor
+        if (statistics instanceof MeasurementStatistics) {
+            MeasurementStatistics mStatistics = (MeasurementStatistics) statistics;
+            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_CONSTRAINT_COMPLEXITY, 
+                mStatistics.getAverageConstraintComplexity());
+        }
     }
 
     /**

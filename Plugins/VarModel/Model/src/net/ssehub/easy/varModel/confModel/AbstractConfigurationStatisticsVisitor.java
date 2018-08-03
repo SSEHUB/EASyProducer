@@ -15,12 +15,34 @@
  */
 package net.ssehub.easy.varModel.confModel;
 
+import java.util.HashSet;
+
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.AbstractVisitor;
+import net.ssehub.easy.varModel.model.Attribute;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Comment;
+import net.ssehub.easy.varModel.model.CompoundAccessStatement;
+import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.FreezeBlock;
+import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
+import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.ProjectInterface;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.Set;
 
 /**
  * Visitor for a {@link Configuration} to generate statistics of the configuration.
@@ -155,6 +177,117 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
     }
     
     private ConfigStatistics statistics;
+    private AbstractVisitor projectVisitor = new AbstractVisitor() {
+
+        private java.util.Set<Project> done = new HashSet<Project>();
+        
+        @Override
+        public void visitProject(Project project) {
+            if (!done.contains(project)) {
+                done.add(project);
+                super.visitProject(project);
+            }
+        }
+        
+        @Override
+        public void visitEnum(Enum eenum) {
+            // not needed
+        }
+
+        @Override
+        public void visitOrderedEnum(OrderedEnum eenum) {
+            // not needed
+        }
+        
+        @Override
+        public void visitCompound(Compound compound) {
+            // done via instances
+        }
+        
+        @Override
+        public void visitProjectImport(ProjectImport pImport) {
+            Project res = pImport.getResolved();
+            if (null != res) {
+                res.accept(this);
+            }
+        }
+
+        @Override
+        public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
+            // not needed
+        }
+
+        @Override
+        public void visitAttribute(Attribute attribute) {
+            // not needed
+        }
+
+        @Override
+        public void visitConstraint(Constraint constraint) {
+            AbstractConfigurationStatisticsVisitor.this.visitConstraint(constraint);
+        }
+
+        @Override
+        public void visitFreezeBlock(FreezeBlock freeze) {
+            // not needed
+        }
+
+        @Override
+        public void visitOperationDefinition(OperationDefinition opdef) {
+            AbstractConfigurationStatisticsVisitor.this.visitOperationDefinition(opdef);
+        }
+
+        @Override
+        public void visitPartialEvaluationBlock(PartialEvaluationBlock block) {
+            AbstractConfigurationStatisticsVisitor.this.processEvalConstraints(block);
+        }
+
+        @Override
+        public void visitProjectInterface(ProjectInterface iface) {
+            // not needed
+        }
+
+        @Override
+        public void visitComment(Comment comment) {
+            // not needed
+        }
+
+        @Override
+        public void visitAttributeAssignment(AttributeAssignment assignment) {
+            AbstractConfigurationStatisticsVisitor.this.visitAssignment(assignment);
+        }
+
+        @Override
+        public void visitCompoundAccessStatement(CompoundAccessStatement access) {
+            // not needed
+        }
+
+        @Override
+        public void visitDerivedDatatype(DerivedDatatype datatype) {
+            // not needed
+        }
+
+        @Override
+        public void visitEnumLiteral(EnumLiteral literal) {
+            // not needed
+        }
+
+        @Override
+        public void visitReference(Reference reference) {
+            // not needed
+        }
+
+        @Override
+        public void visitSequence(Sequence sequence) {
+            // not needed
+        }
+
+        @Override
+        public void visitSet(Set set) {
+            // not needed
+        }
+        
+    };
     
     /**
      * Sole constructor of this class.
@@ -166,7 +299,9 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
     
     @Override
     public void visitConfiguration(Configuration configuration) {
-        specialTreatment(configuration.getProject());
+        Project prj = configuration.getProject();
+        prj.accept(projectVisitor);
+        specialTreatment(prj);
         super.visitConfiguration(configuration);
     }
     
@@ -179,7 +314,7 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
     /**
      * Recursive part to visit all (nested) variables.
      * @param variable The visited decision variable instance.
-     * @param nestedInContainer <tt>true</tt> if the parent is a container, <tt>false</tt> otherwiese.
+     * @param nestedInContainer <tt>true</tt> if the parent is a container, <tt>false</tt> otherwise.
      */
     public void visitVariable(IDecisionVariable variable, boolean nestedInContainer) {
         statistics.nVariables++;
@@ -208,6 +343,7 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
                 visitRefines((Compound) dereferedType);
             }
         }
+        visitDefaultValue(variable.getDeclaration().getDefaultValue());
         
         nestedInContainer |= Container.TYPE.isAssignableFrom(type);
         
@@ -226,9 +362,58 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
     private void visitRefines(Compound cmp) {
         for (int r = 0; r < cmp.getRefinesCount(); r++) {
             Compound cType = cmp.getRefines(r);
-            statistics.nConstraintInstances += cType.getConstraintsCount();
+            visitVariableContainer(cmp);
+            for (int i = 0; i < cmp.getModelElementCount(); i++) {            
+                if (cmp.getModelElement(i) instanceof PartialEvaluationBlock) {
+                    processEvalConstraints((PartialEvaluationBlock) cmp.getModelElement(i));
+                }
+            }
             visitRefines(cType);
         }
+    }
+    
+    /**
+     * Processes constraints within an eval-block.
+     * 
+     * @param evalBlock the block to process
+     */
+    protected void processEvalConstraints(PartialEvaluationBlock evalBlock) {
+        for (int i = 0; i < evalBlock.getNestedCount(); i++) {
+            processEvalConstraints(evalBlock.getNested(i));
+        }
+        for (int i = 0; i < evalBlock.getEvaluableCount(); i++) {
+            if (evalBlock.getEvaluable(i) instanceof Constraint) {
+                statistics.nConstraintInstances += 1;
+                visitConstraint((Constraint) evalBlock.getEvaluable(i));
+            }
+        }
+    }
+    
+    /**
+     * Processes elements within a variable container.
+     * 
+     * @param cnt the container
+     */
+    protected void visitVariableContainer(IDecisionVariableContainer cnt) {
+        for (int d = 0; d < cnt.getDeclarationCount(); d++) {
+            visitDefaultValue(cnt.getDeclaration(d).getDefaultValue());
+        }
+        statistics.nConstraintInstances += cnt.getConstraintsCount();
+        for (int c = 0; c < cnt.getConstraintsCount(); c++) {
+            visitConstraint(cnt.getConstraint(c));
+        }
+        for (int a = 0; a < cnt.getAssignmentCount(); a++) {
+            visitAssignment(cnt.getAssignment(a));
+        }
+    }
+    
+    /**
+     * Processes attribute assignments.
+     * 
+     * @param assng the assignment
+     */
+    protected void visitAssignment(AttributeAssignment assng) {
+        visitVariableContainer(assng); // recursion included
     }
     
     /**
@@ -251,5 +436,29 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
      * @param mainProject {@link Configuration#getProject()}.
      */
     protected abstract void specialTreatment(Project mainProject);
+    
+    /**
+     * Processes a constraint. Added later, so default implementation is empty.
+     * 
+     * @param constraint the constraint to process (contained constraint may be <b>null</b>)
+     */
+    protected void visitConstraint(Constraint constraint) {
+    }
+
+    /**
+     * Processes a default value. Added later, so default implementation is empty.
+     * 
+     * @param constraint the constraint to process (may be <b>null</b>)
+     */
+    protected void visitDefaultValue(ConstraintSyntaxTree constraint) {
+    }
+
+    /**
+     * Processes an operation definition. Added later, so default implementation is empty.
+     * 
+     * @param opdef the operation definition
+     */
+    protected void visitOperationDefinition(OperationDefinition opdef) {
+    }
 
 }

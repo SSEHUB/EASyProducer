@@ -28,7 +28,7 @@ public class MultiAndExpression extends ConstraintSyntaxTree {
     private OCLFeatureCall[] expressions;
     
     /**
-     * Creates a multi-and expression.
+     * Creates a chained (multi-and) expression.
      * 
      * @param expressions the individual expressions
      * @throws CSTSemanticException if <code>expressions</code> or an expression within is <b>null</b>
