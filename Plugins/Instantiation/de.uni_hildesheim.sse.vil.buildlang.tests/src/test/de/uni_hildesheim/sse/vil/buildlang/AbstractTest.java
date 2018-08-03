@@ -496,6 +496,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
                 for (File f : files) {
                     if (f.isDirectory()) {
                         FileUtils.cleanDirectory(f);
+                        FileUtils.deleteDirectory(f);
                     } else {
                         if (!f.getName().endsWith(".tsv")) { // avoid cleaning up files from TSVMeasurementCollector
                             f.delete();
