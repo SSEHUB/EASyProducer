@@ -46,6 +46,7 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilExecution;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
@@ -141,6 +142,8 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script> {
                 AbstractTest.transferReasoningMeasures(MeasurementCollector.getInstance(), id, 
                     AbstractRtTest.MEASUREMENTS, result);
                 MeasurementCollector.end(id);
+                result.logInformation(config.getConfiguration().getProject(), 
+                    ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
             }
         });
         return result;
