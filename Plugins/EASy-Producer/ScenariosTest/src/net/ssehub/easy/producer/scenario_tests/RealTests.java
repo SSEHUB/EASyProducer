@@ -460,6 +460,7 @@ public class RealTests extends AbstractEasyScenarioTest {
                         net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
                             MeasurementCollector.getInstance(), id, getMeasurements(), res);
                         MeasurementCollector.end(id);
+                        res.logInformation(prj, rCfg);
                         Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                         assertFailureMessage(res, ppfe2);
                     }
@@ -479,6 +480,7 @@ public class RealTests extends AbstractEasyScenarioTest {
                                 AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
                                 instanceCreation);
                             MeasurementCollector.end(id);
+                            res.logInformation(prj, rCfg);
                             Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                             assertFailureMessage(res, ppfe2);
                         }

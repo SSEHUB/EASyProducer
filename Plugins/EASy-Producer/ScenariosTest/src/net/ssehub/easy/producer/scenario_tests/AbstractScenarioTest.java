@@ -259,6 +259,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
                 MeasurementCollector.getInstance(), id, getMeasurements(), res);
             MeasurementCollector.end(id);
+            res.logInformation(prj, rCfg);
             Assert.assertFalse("Reasoning must not have a conflict", res.hasConflict());
             Assert.assertFalse("Reasoning must not have a timeout", res.hasTimeout());
         }

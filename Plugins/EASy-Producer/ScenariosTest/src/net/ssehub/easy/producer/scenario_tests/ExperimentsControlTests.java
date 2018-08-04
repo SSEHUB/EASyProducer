@@ -169,8 +169,7 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual(name);
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
         //Configuration.printConfig(System.out, config);
 
@@ -274,8 +273,7 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual("configSub");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
     }
     
@@ -291,8 +289,7 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual("simple/Einfache_Steuerdatei_0");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
     }
 
@@ -309,8 +306,7 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual("exists/BaseSD_0");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
     }
 
@@ -326,8 +322,7 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual("assymetric/ActivityGraph2Configuration_0");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         // dependenciesAntisymmetry does not fit configuration!
         Assert.assertTrue("there should be reasoning conflicts", res.hasConflict());
         Assert.assertEquals(1, res.getMessageCount());
@@ -351,8 +346,7 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual("activity/ActivityGraphConfiguration_0");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         // checkSheetAfterReadSheets does not fit configuration!
         for (int m = 0; m < res.getMessageCount(); m++) {
             System.out.println(res.getMessage(m));
@@ -372,13 +366,26 @@ public class ExperimentsControlTests extends AbstractTest {
         Configuration config = createAndAssertEqual("activity/ActivityGraphConfiguration_1");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_NONE);
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         // dependenciesAntisymmetry does not fit configuration!
         for (int m = 0; m < res.getMessageCount(); m++) {
             System.out.println(res.getMessage(m));
         }
         Assert.assertFalse("there should not be reasoning conflicts", res.hasConflict());
+    }
+    
+    /**
+     * Performs the reasoning.
+     * 
+     * @param cfg the configuration
+     * @param rConfig the reasoner configuration
+     * @return the reasoning result
+     */
+    private ReasoningResult doReasoning(Configuration cfg, ReasonerConfiguration rConfig) {
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(cfg.getProject(), cfg, rConfig, 
+            ProgressObserver.NO_OBSERVER);
+        res.logInformation(cfg.getProject(), rConfig);
+        return res;
     }
 
     @Override
@@ -395,8 +402,7 @@ public class ExperimentsControlTests extends AbstractTest {
     public void typeTest() throws IOException {
         Configuration config = createAndAssertEqual("types/Testprodukt_0");
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(config.getProject(), config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = doReasoning(config, rConfig);
         Assert.assertTrue("there should be reasoning conflicts", res.hasConflict());
     }
     
