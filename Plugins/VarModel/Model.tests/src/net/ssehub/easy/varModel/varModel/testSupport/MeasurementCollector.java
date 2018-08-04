@@ -194,9 +194,14 @@ public class MeasurementCollector {
          * @see ConfigStatistics#noOfAnnotations()
          */
         MODEL_ANNOTATIONS(false),
-        
+
         /**
          * Average constraint complexity as calculated by {@link MeasurementStatisticsVistor}.
+         */
+        MODEL_CONSTRAINT_AVG_COMPLEXITY(false),
+
+        /**
+         * Total constraint complexity as calculated by {@link MeasurementStatisticsVistor}.
          */
         MODEL_CONSTRAINT_COMPLEXITY(false);
         
@@ -697,8 +702,10 @@ public class MeasurementCollector {
         // parameterization would be nice, requires parameterization of visitor
         if (statistics instanceof MeasurementStatistics) {
             MeasurementStatistics mStatistics = (MeasurementStatistics) statistics;
-            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_CONSTRAINT_COMPLEXITY, 
+            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_CONSTRAINT_AVG_COMPLEXITY, 
                 mStatistics.getAverageConstraintComplexity());
+            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_CONSTRAINT_COMPLEXITY, 
+                mStatistics.getConstraintComplexity());
         }
     }
 

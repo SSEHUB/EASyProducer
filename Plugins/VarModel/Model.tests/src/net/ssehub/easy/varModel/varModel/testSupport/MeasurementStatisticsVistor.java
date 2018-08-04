@@ -64,6 +64,15 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
             return 0 == constraintComplexityCount ? 0 : (constraintComplexitySum / constraintComplexityCount);
         }
 
+        /**
+         * Returns the model constraint complexity (sum of all constraints).
+         * 
+         * @return the model constraint complexity  (sum of all constraints)
+         */
+        public double getConstraintComplexity() {
+            return constraintComplexitySum;
+        }
+
     }
 
     /**
