@@ -1,13 +1,17 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Result of (one) reasoning step.
@@ -226,6 +230,51 @@ public class ReasoningResult {
      */
     public Set<IMeasurementKey> measurementKeys() {
         return null == measures ? null : measures.keySet();
+    }
+
+    /**
+     * Logs reasoning summary based on <code>prj</code>, the measures and the messages. Reasoners shall not produce
+     * output except for debugging stuff. If explicit output is required, call this method after reasoning.
+     * 
+     * @param prj the project representing the model
+     * @param rConfig the configuration containing the information logger
+     */
+    public void logInformation(Project prj, ReasonerConfiguration rConfig) {
+        logInformation(prj, rConfig.getLogger());
+    }
+ 
+    /**
+     * Logs reasoning summary based on <code>prj</code>, the measures and the messages. Reasoners shall not produce
+     * output except for debugging stuff. If explicit output is required, call this method after reasoning.
+     * 
+     * @param prj the project representing the model
+     * @param infoLogger the information logger
+     */
+    public void logInformation(Project prj, IAdditionalInformationLogger infoLogger) {
+        infoLogger.info("Model: " + prj.getName());
+        if (null != measures) {
+            Set<IMeasurementKey> keys = measures.keySet();
+            IMeasurementKey[] sortedKeys = new IMeasurementKey[keys.size()];
+            keys.toArray(sortedKeys);
+            Arrays.sort(sortedKeys, new Comparator<IMeasurementKey>() {
+
+                @Override
+                public int compare(IMeasurementKey o1, IMeasurementKey o2) {
+                    return -Integer.compare(o1.outputPos(), o2.outputPos());
+                }
+            });
+            for (int k = 0; k < sortedKeys.length; k++) {
+                IMeasurementKey key = sortedKeys[k];
+                infoLogger.info(key.getExplanation() + ": " + getMeasure(key));
+            }
+        }
+        if (!messages.isEmpty()) {
+            infoLogger.info("");
+            for (int m = 0; m < messages.size(); m++) {
+                infoLogger.info(messages.get(m));
+            }
+        }
+        infoLogger.info("");
     }
     
 }

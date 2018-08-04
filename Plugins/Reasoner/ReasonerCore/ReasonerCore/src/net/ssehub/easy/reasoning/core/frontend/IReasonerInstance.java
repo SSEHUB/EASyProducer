@@ -20,9 +20,11 @@ import java.util.List;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerMessage;
+import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * A reuseable reasoner instance. Project, configuration and reasoner configuration are
@@ -109,4 +111,19 @@ public interface IReasonerInstance {
      * @see ReasoningResult#setStopped(boolean)
      */
     public boolean stop();
+    
+    /**
+     * Returns the project this instance is attached to.
+     * 
+     * @return the project
+     */
+    public Project getProject();
+    
+    /**
+     * Returns the reasoner configuration this project is running with.
+     * 
+     * @return the reasoner configuration
+     */
+    public ReasonerConfiguration getReasonerConfiguration();
+    
 }

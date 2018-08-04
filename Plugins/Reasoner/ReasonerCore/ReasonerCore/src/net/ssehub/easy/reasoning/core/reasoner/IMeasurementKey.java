@@ -21,4 +21,26 @@ package net.ssehub.easy.reasoning.core.reasoner;
  * @author Holger Eichelberger
  */
 public interface IMeasurementKey {
+    
+    /**
+     * An explanation/headline for this key.
+     * 
+     * @return the explanation
+     */
+    public String getExplanation();
+    
+    /**
+     * Returns the name of the key.
+     * 
+     * @return the name
+     */
+    public String name();
+    
+    /**
+     * Intended output position for printing.
+     * 
+     * @return an integer number; the higher the earlier the output
+     */
+    public int outputPos();
+    
 }

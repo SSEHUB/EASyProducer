@@ -13,7 +13,6 @@ import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
-import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
@@ -29,8 +28,9 @@ import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Class for executing reasoner and returning the result.
+ * 
  * @author Sizonenko
- *
+ * @author Holger Eichelberger
  */
 public class Engine {
     
@@ -40,8 +40,6 @@ public class Engine {
     private Resolver resolver;
     
     private ReasoningResult result;
-    
-    private Project project;
     
     private List<ModelElement> failedModelElements = new ArrayList<ModelElement>();
     private List<Set<AbstractVariable>> variablesInConstraints = new ArrayList<Set<AbstractVariable>>();
@@ -53,7 +51,6 @@ public class Engine {
     private List<IDecisionVariable> constraintVariables = new ArrayList<IDecisionVariable>();  
     private List<Integer> errorClassification = new ArrayList<Integer>();  
     
-    private IAdditionalInformationLogger infoLogger;
     
     private long evaluationTime;
     private int reevaluationCount;
@@ -72,14 +69,11 @@ public class Engine {
      */
     public Engine(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer, IReasonerInterceptor interceptor) {
-        this.project = project;
-//        this.reasoningID = PerformanceStatistics.createReasoningID(project.getName(), "Model validation");
         this.resolver = new Resolver(project, cfg, reasonerConfig);
         this.resolver.setInterceptor(interceptor);
         boolean isRuntimeMode = reasonerConfig.isRuntimeMode();
         this.resolver.setIncremental(isRuntimeMode);
         this.result = new ReasoningResult();
-        this.infoLogger = reasonerConfig.getLogger();
         if (!isRuntimeMode) {
             cfg.unfreeze(AssignmentState.DERIVED); // TODO: is this really needed? unclear why?
         }
@@ -90,11 +84,8 @@ public class Engine {
      * @return {@link ReasoningResult} failed constraints and assignments, if exist.
      */
     public ReasoningResult reason() {
-//        PerformanceStatistics.createPerformanceMeasurement(reasoningID);
-//        PerformanceStatistics.addTimestamp(reasoningID);
         long startTime = System.currentTimeMillis();
         resolver.resolve();
-//        PerformanceStatistics.addTimestamp(reasoningID);
         result.setTimeout(resolver.hasTimeout());
         result.setStopped(resolver.wasStopped());
         FailedElements failedElements = resolver.getFailedElements();
@@ -104,28 +95,14 @@ public class Engine {
         }
         evaluationTime = System.currentTimeMillis() - startTime;
         reevaluationCount = resolver.reevaluationCount();
-//        PerformanceStatistics.addTimestamp(reasoningID);
-//        PerformanceStatistics.getStats(reasoningID);   
-//        PerformanceStatistics.clearReasoningID(reasoningID);
-        infoLogger.info("");
-        infoLogger.info("Model: " + project.getName());
-//        infoLogger.info("Number of variables: " + resolver.variableCount());
-        infoLogger.info("Number of variables involved in constraints: " + resolver.variableInConstraintCount());
         result.setMeasure(Measures.VARIABLES_IN_CONSTRAINTS, resolver.variableInConstraintCount());
-        infoLogger.info("Number of constraints: " + resolver.constraintCount());
         result.setMeasure(GeneralMeasures.CONSTRAINT_COUNT, resolver.constraintCount());
-        infoLogger.info("Number of reevaluations: " + reevaluationCount);
         result.setMeasure(GeneralMeasures.REEVALUATION_COUNT, reevaluationCount);
-        infoLogger.info("Number of problem constraints: " + failedConstraints);
         result.setMeasure(Measures.PROBLEM_CONSTRAINTS, failedConstraints);
-        infoLogger.info("Number of problem assignments: " + failedAssignments);
         result.setMeasure(Measures.PROBLEM_ASSIGNMENTS, failedAssignments);
         result.setMeasure(GeneralMeasures.PROBLEMS, failedConstraints + failedAssignments);
-        infoLogger.info("Total time: " + evaluationTime);
         result.setMeasure(GeneralMeasures.REASONING_TIME, evaluationTime);
-        infoLogger.info("Translation time: " + resolver.getTranslationTime());
         result.setMeasure(GeneralMeasures.TRANSLATION_TIME, resolver.getTranslationTime());
-        infoLogger.info("Evaluation time: " + resolver.getEvaluationTime());
         result.setMeasure(GeneralMeasures.EVALUATION_TIME, resolver.getEvaluationTime());
         return result;
     } 
@@ -161,7 +138,6 @@ public class Engine {
             }
             Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS);
             result.addMessage(problemConstraintMsg);
-            printMessage(problemConstraintMsg);                
             clearFailedInfo();
         }
     }
@@ -194,7 +170,6 @@ public class Engine {
             } 
             Message problemVarialbeMsg = createMessage(VIOLATED_VARIABLES);
             result.addMessage(problemVarialbeMsg);
-            printMessage(problemVarialbeMsg);                
             clearFailedInfo();
         } 
     } 
@@ -231,14 +206,6 @@ public class Engine {
         msg.addErrorClassification(errorClassification);
         return msg;
     }
-    
-    /**
-     * Method for printing out Message.
-     * @param msg Message to be printed out.
-     */
-    private void printMessage(Message msg) {
-        infoLogger.info(msg.toString());
-    }      
     
     /**
      * Method for getting evaluation time of the model.

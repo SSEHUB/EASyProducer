@@ -112,4 +112,14 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
         return false; // indicate that we cannot react on this
     }
 
+    @Override
+    public Project getProject() {
+        return project;
+    }
+
+    @Override
+    public ReasonerConfiguration getReasonerConfiguration() {
+        return rConfig;
+    }
+
 }

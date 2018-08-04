@@ -17,6 +17,11 @@ public class ReasonerConfiguration {
         public void info(String text) {
             System.out.println(text);
         }
+
+        @Override
+        public void info(Message msg) {
+            System.out.println(msg);
+        }
         
     };
 
@@ -24,6 +29,10 @@ public class ReasonerConfiguration {
 
         @Override
         public void info(String text) {
+        }
+
+        @Override
+        public void info(Message msg) {
         }
         
     };
@@ -48,6 +57,13 @@ public class ReasonerConfiguration {
          * @param text the text to be printed
          */
         public void info(String text);
+
+        /**
+         * Emits information about <code>msg</code>.
+         * 
+         * @param msg the message to be printed
+         */
+        public void info(Message msg);
         
     }
     

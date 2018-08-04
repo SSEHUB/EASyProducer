@@ -27,16 +27,37 @@ public enum Measures implements IMeasurementKey {
     /**
      * Number of variables in constraints.
      */
-    VARIABLES_IN_CONSTRAINTS,
+    VARIABLES_IN_CONSTRAINTS("Number of variables involved in constraints"),
 
     /**
      * Number of constraints with evaluation problems.
      */
-    PROBLEM_CONSTRAINTS,
+    PROBLEM_CONSTRAINTS("Number of problem constraints"),
 
     /**
      * Number of constraints with assignment problems.
      */
-    PROBLEM_ASSIGNMENTS;
+    PROBLEM_ASSIGNMENTS("Number of problem assignments");
+    
+    private String explanation;
+    
+    /**
+     * Creates a measures constant.
+     * 
+     * @param explanation the headline/explanation
+     */
+    private Measures(String explanation) {
+        this.explanation = explanation;
+    }
+
+    @Override
+    public String getExplanation() {
+        return explanation;
+    }
+
+    @Override
+    public int outputPos() {
+        return 100 + ordinal();
+    }
 
 }

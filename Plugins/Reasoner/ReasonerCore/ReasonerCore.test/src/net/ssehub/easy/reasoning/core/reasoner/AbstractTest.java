@@ -275,6 +275,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         MeasurementCollector.endAuto(id);
         transferReasoningMeasures(id, res);
         MeasurementCollector.end(id);
+        res.logInformation(project, rConfig);
         return res;
     }
 
@@ -328,6 +329,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
             instanceCreationTime);
         MeasurementCollector.end(id);
+        res.logInformation(inst.getProject(), inst.getReasonerConfiguration());
         return res;
     }
 

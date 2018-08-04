@@ -16,6 +16,8 @@ import net.ssehub.easy.varModel.model.Project;
  */
 public class ReasoningProcess implements Runnable {
 
+    private static final boolean LOG_RESULT = false;
+    
     private ReasoningOperation desiredOperation;
     private ReasoningResult result;
     private Project project;
@@ -82,18 +84,21 @@ public class ReasoningProcess implements Runnable {
                 switch(desiredOperation) {
                 case CONSITENCY_CHECK:
                     result = reasoner.isConsistent(project, reasonerConfig, observer);
+                    logResult();
                     break;
                 case VALIDATION:
                     if (null == config) {
                         setErrorResult("No configuration specified for reasoning");
                     }
                     result = reasoner.check(project, config, reasonerConfig, observer);
+                    logResult();
                     break;
                 case PROPAGATION:
                     if (null == config) {
                         setErrorResult("No configuration specified for reasoning");
                     }
                     result = reasoner.propagate(project, config, reasonerConfig, observer);
+                    logResult();
                     break;
                 default:
                     result = new ReasoningResult();
@@ -114,6 +119,16 @@ public class ReasoningProcess implements Runnable {
         
         if (null != listener) {
             listener.reasoningFinished(result);
+        }
+    }
+
+    /**
+     * Performs the result logging as it was previously integrated into the reasoner but removed for performance 
+     * reasons.
+     */
+    private void logResult() {
+        if (LOG_RESULT) {
+            result.logInformation(project, reasonerConfig);
         }
     }
 

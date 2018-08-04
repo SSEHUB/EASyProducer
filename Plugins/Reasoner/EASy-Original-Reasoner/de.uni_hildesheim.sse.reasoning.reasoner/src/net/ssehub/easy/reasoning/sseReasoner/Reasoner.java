@@ -124,6 +124,16 @@ public class Reasoner implements IReasoner {
         public boolean stop() {
             return engine.stop();
         }
+
+        @Override
+        public Project getProject() {
+            return project;
+        }
+
+        @Override
+        public ReasonerConfiguration getReasonerConfiguration() {
+            return reasonerConfiguration;
+        }
         
     }
     

@@ -23,33 +23,54 @@ package net.ssehub.easy.reasoning.core.reasoner;
 public enum GeneralMeasures implements IMeasurementKey {
     
     /**
-     * Total number of re-evaluations.
+     * Time (in ms) spent for constraint translation.
      */
-    REEVALUATION_COUNT,
-    
-    /**
-     * Total number of constraints.
-     */
-    CONSTRAINT_COUNT,
-    
-    /**
-     * Total number of evaluation problems.
-     */
-    PROBLEMS,
-    
-    /**
-     * Total time (in ms) spent for reasoning.
-     */
-    REASONING_TIME,
+    EVALUATION_TIME("Evaluation time"),
 
     /**
      * Time (in ms) spent for translating the model - collected only if the approach performs translation.
      */
-    TRANSLATION_TIME,
+    TRANSLATION_TIME("Translation time"),
 
     /**
-     * Time (in ms) spent for constraint translation.
+     * Total time (in ms) spent for reasoning.
      */
-    EVALUATION_TIME;
+    REASONING_TIME("Total time"),
+    
+    /**
+     * Total number of re-evaluations.
+     */
+    REEVALUATION_COUNT("Number of reevaluations"),
+    
+    /**
+     * Total number of constraints.
+     */
+    CONSTRAINT_COUNT("Number of constraints"),
+    
+    /**
+     * Total number of evaluation problems.
+     */
+    PROBLEMS("Number of problems");
+    
+    private String explanation;
+    
+    /**
+     * Creates a measures constant.
+     * 
+     * @param explanation the headline/explanation
+     */
+    private GeneralMeasures(String explanation) {
+        this.explanation = explanation;
+    }
+
+    @Override
+    public String getExplanation() {
+        return explanation;
+    }
+
+    @Override
+    public int outputPos() {
+        return ordinal();
+    }
 
 }
