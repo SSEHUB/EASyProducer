@@ -16,6 +16,7 @@
 package net.ssehub.easy.varModel.varModel.testSupport;
 
 import net.ssehub.easy.varModel.confModel.DefaultConfigurationStatisticsVisitor;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AbstractConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BlockExpression;
@@ -34,13 +35,28 @@ import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.OperationDefinition;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Extended measurement statistics visitor calculating the average complexity of constraint expressions.
  * 
  * @author Holger Eichelberger
  */
-class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor {
+class MeasurementStatisticsVisitor extends DefaultConfigurationStatisticsVisitor {
+
+    private static final double EXPR_CONSTANT_COMPLEXITY = 0;
+    private static final double EXPR_ACCESSOR_COMPLEXITY = 0;
+    private static final double EXPR_OP_COMPLEXITY = 0;
+    private static final double EXPR_CONTAINER_COMPLEXITY = 4;
+    private static final double EXPR_VAR_COMPLEXITY = 1;
+    private static final double EXPR_OP_OPERAND_COMPLEXITY_FACTOR = 0; // factor
+    private static final double EXPR_OP_PARAM_COMPLEXITY_FACTOR = 1; // factor
+
+    private static final double TYPE_VARIABLE_COMPLEXITY = 1;
+    private static final double TYPE_COMPOUND_COMPLEXITY = 2;
+    private static final double TYPE_CONTAINER_COMPLEXITY = 2;
 
     /**
      * Extended measurement statistics.
@@ -54,6 +70,8 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
          */
         private double constraintComplexitySum = 0;
         private int constraintComplexityCount = 0;
+        private double variableComplexitySum = 0;
+        private int variableComplexityCount = 0;
         
         /**
          * Returns the average constraint complexity.
@@ -73,6 +91,33 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
             return constraintComplexitySum;
         }
 
+        /**
+         * Returns the average model variable complexity (sum of all variables).
+         * 
+         * @return the average model variable complexity  (sum of all variables)
+         */
+        public double getAverageVariableComplexity() {
+            return 0 == variableComplexityCount ? 0 : variableComplexitySum / variableComplexityCount;
+        }
+
+        /**
+         * Returns the model variable complexity (sum of all variables).
+         * 
+         * @return the model variable complexity  (sum of all variables)
+         */
+        public double getVariableComplexity() {
+            return variableComplexitySum;
+        }
+        
+        /**
+         * Returns the model complexity as sum of {@link #getVariableComplexity()} and {@link #getModelComplexity()}.
+         * 
+         * @return the model complexity
+         */
+        public double getModelComplexity() {
+            return variableComplexitySum + constraintComplexitySum;
+        }
+
     }
 
     /**
@@ -83,13 +128,6 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
      */
     private static class ComplexityVisitor extends AbstractConstraintTreeVisitor {
 
-        private static final double CONSTANT_COMPLEXITY = 0;
-        private static final double ACCESSOR_COMPLEXITY = 0;
-        private static final double OP_COMPLEXITY = 0;
-        private static final double CONTAINER_COMPLEXITY = 4;
-        private static final double VAR_COMPLEXITY = 1;
-        private static final double OP_OPERAND_COMPLEXITY = 0; // factor
-        private static final double OP_PARAM_COMPLEXITY = 1; // factor
         private double complexity = 0;
         
         /**
@@ -105,13 +143,13 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
         
         @Override
         public void visitVariable(Variable variable) {
-            complexity += VAR_COMPLEXITY;
+            complexity += EXPR_VAR_COMPLEXITY;
             super.visitVariable(variable);
         }
 
         @Override
         public void visitConstantValue(ConstantValue value) {
-            complexity += CONSTANT_COMPLEXITY;
+            complexity += EXPR_CONSTANT_COMPLEXITY;
             super.visitConstantValue(value);
         }
 
@@ -123,21 +161,21 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
         
         @Override
         public void visitOclFeatureCall(OCLFeatureCall call) {
-            complexity += OP_COMPLEXITY;
-            complexity += (null != call.getOperand()) ? OP_OPERAND_COMPLEXITY : 0;
-            complexity += OP_PARAM_COMPLEXITY * call.getParameterCount();
+            complexity += EXPR_OP_COMPLEXITY;
+            complexity += (null != call.getOperand()) ? EXPR_OP_OPERAND_COMPLEXITY_FACTOR : 0;
+            complexity += EXPR_OP_PARAM_COMPLEXITY_FACTOR * call.getParameterCount();
             super.visitOclFeatureCall(call);
         }
         
         @Override
         public void visitMultiAndExpression(MultiAndExpression expression) {
-            complexity += OP_PARAM_COMPLEXITY * expression.getExpressionCount();
+            complexity += EXPR_OP_PARAM_COMPLEXITY_FACTOR * expression.getExpressionCount();
             super.visitMultiAndExpression(expression);
         }
         
         @Override
         public void visitContainerOperationCall(ContainerOperationCall call) {
-            complexity += CONTAINER_COMPLEXITY;
+            complexity += EXPR_CONTAINER_COMPLEXITY;
             super.visitContainerOperationCall(call);
         }
 
@@ -155,7 +193,7 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
 
         @Override
         public void visitCompoundAccess(CompoundAccess access) {
-            complexity += ACCESSOR_COMPLEXITY;
+            complexity += EXPR_ACCESSOR_COMPLEXITY;
             super.visitCompoundAccess(access);
         }
 
@@ -183,14 +221,14 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
         
         @Override
         public void visitSelf(Self self) {
-            complexity += CONSTANT_COMPLEXITY;
+            complexity += EXPR_CONSTANT_COMPLEXITY;
             // currently nothing specific
             super.visitSelf(self);
         }
 
         @Override
         public void visitAnnotationVariable(AttributeVariable variable) {
-            complexity += ACCESSOR_COMPLEXITY;
+            complexity += EXPR_ACCESSOR_COMPLEXITY;
             super.visitAnnotationVariable(variable);
         }
 
@@ -208,7 +246,7 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
     /**
      * Creates an instance with a statistics object of type {@link MeasurementStatistics}.
      */
-    public MeasurementStatisticsVistor() {
+    public MeasurementStatisticsVisitor() {
         this(new MeasurementStatistics());
     }
     
@@ -217,7 +255,7 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
      * 
      * @param statistics A data object to store the statistical information.
      */
-    protected MeasurementStatisticsVistor(MeasurementStatistics statistics) {
+    protected MeasurementStatisticsVisitor(MeasurementStatistics statistics) {
         super(statistics);
         this.statistics = statistics;
     }
@@ -254,6 +292,20 @@ class MeasurementStatisticsVistor extends DefaultConfigurationStatisticsVisitor 
             statistics.constraintComplexitySum += tmp;
             statistics.constraintComplexityCount++;
         }
+    }
+    
+    @Override
+    public void visitVariable(IDecisionVariable variable, boolean nestedInContainer) {
+        super.visitVariable(variable, nestedInContainer);
+        IDatatype type = variable.getDeclaration().getType();
+        if (Compound.TYPE.isAssignableFrom(type)) {
+            statistics.variableComplexitySum += TYPE_COMPOUND_COMPLEXITY; 
+        } else if (Container.TYPE.isAssignableFrom(type)) {
+            statistics.variableComplexitySum += TYPE_CONTAINER_COMPLEXITY; 
+        } else {
+            statistics.variableComplexitySum += TYPE_VARIABLE_COMPLEXITY; 
+        }
+        statistics.variableComplexityCount++;
     }
     
 }

@@ -26,7 +26,7 @@ import java.util.Set;
 import net.ssehub.easy.varModel.confModel.AbstractConfigurationStatisticsVisitor;
 import net.ssehub.easy.varModel.confModel.AbstractConfigurationStatisticsVisitor.ConfigStatistics;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.varModel.testSupport.MeasurementStatisticsVistor.MeasurementStatistics;
+import net.ssehub.easy.varModel.varModel.testSupport.MeasurementStatisticsVisitor.MeasurementStatistics;
 
 /**
  * Extensible measurements collection mechanism to be applied while running a test suite. Aims at collecting 
@@ -203,7 +203,22 @@ public class MeasurementCollector {
         /**
          * Total constraint complexity as calculated by {@link MeasurementStatisticsVistor}.
          */
-        MODEL_CONSTRAINT_COMPLEXITY(false);
+        MODEL_CONSTRAINT_COMPLEXITY(false),
+
+        /**
+         * Average variable complexity as calculated by {@link MeasurementStatisticsVistor}.
+         */
+        MODEL_VARIABLE_AVG_COMPLEXITY(false),
+        
+        /**
+         * Total variable complexity as calculated by {@link MeasurementStatisticsVistor}.
+         */
+        MODEL_VARIABLE_COMPLEXITY(false),
+
+        /**
+         * Total model complexity as calculated by {@link MeasurementStatisticsVistor}.
+         */
+        MODEL_COMPLEXITY(false);
         
         private boolean isAutomatic;
 
@@ -671,7 +686,7 @@ public class MeasurementCollector {
      * @return the statistics visitor instance
      */
     protected AbstractConfigurationStatisticsVisitor createStatisticsVisitor() {
-        return new MeasurementStatisticsVistor();
+        return new MeasurementStatisticsVisitor();
     }
     
     /**
@@ -706,6 +721,12 @@ public class MeasurementCollector {
                 mStatistics.getAverageConstraintComplexity());
             record.setMeasurement(DefaultMeasurementIdentifier.MODEL_CONSTRAINT_COMPLEXITY, 
                 mStatistics.getConstraintComplexity());
+            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_VARIABLE_AVG_COMPLEXITY, 
+                mStatistics.getAverageVariableComplexity());
+            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_VARIABLE_COMPLEXITY, 
+                mStatistics.getVariableComplexity());
+            record.setMeasurement(DefaultMeasurementIdentifier.MODEL_COMPLEXITY, 
+                mStatistics.getModelComplexity());
         }
     }
 
