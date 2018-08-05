@@ -46,13 +46,13 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  */
 class MeasurementStatisticsVisitor extends DefaultConfigurationStatisticsVisitor {
 
-    private static final double EXPR_CONSTANT_COMPLEXITY = 0;
-    private static final double EXPR_ACCESSOR_COMPLEXITY = 0;
+    private static final double EXPR_CONSTANT_COMPLEXITY = 0.25;
+    private static final double EXPR_ACCESSOR_COMPLEXITY = 1;
     private static final double EXPR_OP_COMPLEXITY = 0;
-    private static final double EXPR_CONTAINER_COMPLEXITY = 4;
-    private static final double EXPR_VAR_COMPLEXITY = 1;
-    private static final double EXPR_OP_OPERAND_COMPLEXITY_FACTOR = 0; // factor
-    private static final double EXPR_OP_PARAM_COMPLEXITY_FACTOR = 1; // factor
+    private static final double EXPR_CONTAINER_COMPLEXITY = 5;
+    private static final double EXPR_VAR_COMPLEXITY = 0.25;
+    //private static final double EXPR_OP_OPERAND_COMPLEXITY_FACTOR = 0; // factor
+    //private static final double EXPR_OP_PARAM_COMPLEXITY_FACTOR = 0; // factor
 
     private static final double TYPE_VARIABLE_COMPLEXITY = 1;
     private static final double TYPE_COMPOUND_COMPLEXITY = 2;
@@ -136,7 +136,7 @@ class MeasurementStatisticsVisitor extends DefaultConfigurationStatisticsVisitor
          * @return the complexity
          */
         private double getComplexityAndClear() {
-            double result = Math.max(1, complexity); // 1 as constants do not count
+            double result = complexity;
             complexity = 0;
             return result;
         }
@@ -162,14 +162,12 @@ class MeasurementStatisticsVisitor extends DefaultConfigurationStatisticsVisitor
         @Override
         public void visitOclFeatureCall(OCLFeatureCall call) {
             complexity += EXPR_OP_COMPLEXITY;
-            complexity += (null != call.getOperand()) ? EXPR_OP_OPERAND_COMPLEXITY_FACTOR : 0;
-            complexity += EXPR_OP_PARAM_COMPLEXITY_FACTOR * call.getParameterCount();
             super.visitOclFeatureCall(call);
         }
         
         @Override
         public void visitMultiAndExpression(MultiAndExpression expression) {
-            complexity += EXPR_OP_PARAM_COMPLEXITY_FACTOR * expression.getExpressionCount();
+            // currently just sum of contained expressions
             super.visitMultiAndExpression(expression);
         }
         
@@ -199,24 +197,14 @@ class MeasurementStatisticsVisitor extends DefaultConfigurationStatisticsVisitor
 
         @Override
         public void visitCompoundInitializer(CompoundInitializer initializer) {
-            double max = 0;
-            for (int e = 0; e < initializer.getExpressionCount(); e++) {
-                initializer.getExpression(e).accept(this);
-                max = Math.max(max, complexity);
-                complexity = 0;
-            }
-            complexity = max;
+            // currently just sum of contained expressions
+            super.visitCompoundInitializer(initializer);
         }
 
         @Override
         public void visitContainerInitializer(ContainerInitializer initializer) {
-            double max = 0;
-            for (int e = 0; e < initializer.getExpressionCount(); e++) {
-                initializer.getExpression(e).accept(this);
-                max = Math.max(max, complexity);
-                complexity = 0;
-            }
-            complexity = max;
+            // currently just sum of contained expressions
+            super.visitContainerInitializer(initializer);
         }
         
         @Override
