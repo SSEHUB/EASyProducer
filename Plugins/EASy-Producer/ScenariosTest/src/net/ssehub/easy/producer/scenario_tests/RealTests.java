@@ -192,13 +192,13 @@ public class RealTests extends AbstractEasyScenarioTest {
      * @param vilVersion the version of the VIL build file (may be <b>null</b>)
      * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
      *   made executable
-     * @return the base directory of the instantiated project
+     * @return the base directory of the instantiated project (<b>null</b> for no assert)
      * @throws IOException in case of I/O problems
      */
     protected File executeIndenicaCase(String projectName, String ivmlVersion, String vilVersion, 
         String... makeExecutable) throws IOException {
         String[] versions = {ivmlVersion, vilVersion};
-        return executeCase(projectName, versions, "INDENICA/", null, true, makeExecutable);
+        return executeCase(projectName, versions, "INDENICA/", null, Mode.REASON_INSTANTIATE, makeExecutable);
     }
     
     /**
@@ -209,11 +209,15 @@ public class RealTests extends AbstractEasyScenarioTest {
     @Test
     public void testIndenicaPlRmsPlatform2() throws IOException {
         File base = executeIndenicaCase("PL_RMS_Platform2", "0", "0", RELATIVE_CURL_EXECUTABLES);
-        assertCurlOut(base);
-        FileUtils.deleteQuietly(base);
+        if (null != base) {
+            assertCurlOut(base);
+            FileUtils.deleteQuietly(base);
+        }
         base = executeIndenicaCase("PL_RMS_Platform2", "0", "1", RELATIVE_CURL_EXECUTABLES);
-        assertCurlOut(base);
-        cleanTempFolder(base);
+        if (null != base) {
+            assertCurlOut(base);
+            cleanTempFolder(base);
+        }
     }
     
     /**
@@ -227,16 +231,17 @@ public class RealTests extends AbstractEasyScenarioTest {
 
         // Original files
         File base = executeIndenicaCase(projectName, "0", "0", RELATIVE_CURL_EXECUTABLES);
-        
-        // Generated files
-        File resources = new File(base, "src/main/resources/");
-
-        assertCurlOut(base);
-        String fileName = projectName + ".var";
-        assertFileEquality(new File(base, "curl/" + fileName), new File(resources, fileName));
-        fileName = "resolution.res";
-        assertFileEquality(new File(base, "curl/" + fileName), new File(resources, fileName));
-        cleanTempFolder(base);
+        if (null != base) {
+            // Generated files
+            File resources = new File(base, "src/main/resources/");
+    
+            assertCurlOut(base);
+            String fileName = projectName + ".var";
+            assertFileEquality(new File(base, "curl/" + fileName), new File(resources, fileName));
+            fileName = "resolution.res";
+            assertFileEquality(new File(base, "curl/" + fileName), new File(resources, fileName));
+            cleanTempFolder(base);
+        }
     }
 
     /**
@@ -268,27 +273,28 @@ public class RealTests extends AbstractEasyScenarioTest {
     @Test
     public void testElevator() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("New_Product", versions, "elevator/", "PL_SimElevator", true);
-        
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        Assert.assertNotNull("No JDK compiler, are you running JRE?", compiler);
-        StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-        List<File> files = new ArrayList<File>();
-        enumerateJavaFiles(new File(base, "src"), files);
-        List<String> options = new ArrayList<String>();
-        options.add("-d");
-        options.add(new File(base, "bin").getAbsolutePath());
-        Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(files);
-        StringWriter writer = new StringWriter();
-        boolean success = compiler.getTask(writer, fileManager, null, options, null, compilationUnits).call();
-        try {
-            fileManager.close(); 
-        } catch (IOException e) {
-            Assert.fail("unexpected exception: " + e.getMessage());
+        File base = executeCase("New_Product", versions, "elevator/", "PL_SimElevator", Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+            Assert.assertNotNull("No JDK compiler, are you running JRE?", compiler);
+            StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+            List<File> files = new ArrayList<File>();
+            enumerateJavaFiles(new File(base, "src"), files);
+            List<String> options = new ArrayList<String>();
+            options.add("-d");
+            options.add(new File(base, "bin").getAbsolutePath());
+            Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(files);
+            StringWriter writer = new StringWriter();
+            boolean success = compiler.getTask(writer, fileManager, null, options, null, compilationUnits).call();
+            try {
+                fileManager.close(); 
+            } catch (IOException e) {
+                Assert.fail("unexpected exception: " + e.getMessage());
+            }
+            Assert.assertTrue("compile problems: " + writer.toString(), success);
+    
+            cleanTempFolder(base);
         }
-        Assert.assertTrue("compile problems: " + writer.toString(), success);
-
-        cleanTempFolder(base);
     }
 
     /**
@@ -318,14 +324,17 @@ public class RealTests extends AbstractEasyScenarioTest {
      */
     @Test
     public void testInstantiateNumericCSVInstantiation() throws IOException {
-        File base = executeCase("NumericCSVInstantiationTest", new String[] {"0", "0"}, "", null, true);
-        File expectedFile = new File(base, "NumericCSVInstantiationTest.csv");
-        File producedFile = new File(base, "expected/NumericCSVInstantiationTest.csv");
-        assertExists(expectedFile);
-        assertExists(producedFile);
-        String expectedContent = file2String(expectedFile).replace("\r", "");
-        String actualContent = file2String(producedFile).replace("\r", "");
-        Assert.assertEquals(expectedContent, actualContent);
+        File base = executeCase("NumericCSVInstantiationTest", new String[] {"0", "0"}, "", null, 
+            Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            File expectedFile = new File(base, "NumericCSVInstantiationTest.csv");
+            File producedFile = new File(base, "expected/NumericCSVInstantiationTest.csv");
+            assertExists(expectedFile);
+            assertExists(producedFile);
+            String expectedContent = file2String(expectedFile).replace("\r", "");
+            String actualContent = file2String(producedFile).replace("\r", "");
+            Assert.assertEquals(expectedContent, actualContent);
+        }
     }
     
     /**
@@ -353,13 +362,15 @@ public class RealTests extends AbstractEasyScenarioTest {
      * @throws IOException shall not occur
      */
     private void testSvncontrol(String[] versions) throws IOException {
-        File base = executeCase("svncontrol", versions, "", null, true);
-        assertExists(base, "variability/StaticConfiguration", ".java");
-        assertExists(base, "variability/StartupConfiguration", ".java");
-        assertExists(base, "variability/RuntimeConfiguration", ".java");
-        assertExists(base, "gui/HooksTabAspect", ".aj");
-        assertExists(base, "gui/ScheduleTabAspect", ".aj");
-        assertExists(new File(base, "bin/client.jar"));
+        File base = executeCase("svncontrol", versions, "", null, Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            assertExists(base, "variability/StaticConfiguration", ".java");
+            assertExists(base, "variability/StartupConfiguration", ".java");
+            assertExists(base, "variability/RuntimeConfiguration", ".java");
+            assertExists(base, "gui/HooksTabAspect", ".aj");
+            assertExists(base, "gui/ScheduleTabAspect", ".aj");
+            assertExists(new File(base, "bin/client.jar"));
+        }
     }
     
     /**
@@ -391,8 +402,10 @@ public class RealTests extends AbstractEasyScenarioTest {
     @Test
     public void testQualiMasterApril14() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("april14", versions, "QualiMaster/", null, true);
-        assertFileEqualityRec(new File(base, "expected"), base);
+        File base = executeCase("april14", versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
 
     /**
@@ -403,8 +416,10 @@ public class RealTests extends AbstractEasyScenarioTest {
     @Test
     public void testQualiMasterMay14() throws IOException {
         String[] versions = {"0", "0"};
-        File base = executeCase("may14", versions, "QualiMaster/", null, true);
-        assertFileEqualityRec(new File(base, "expected"), base);
+        File base = executeCase("may14", versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
 
     /**
@@ -416,8 +431,10 @@ public class RealTests extends AbstractEasyScenarioTest {
     public void testQualiMasterFeb15() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"feb15", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null, true);
-        assertFileEqualityRec(new File(base, "expected"), base);
+        File base = executeCase(names, versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
 
     /**
@@ -430,15 +447,17 @@ public class RealTests extends AbstractEasyScenarioTest {
         String[] versions = {"0", "0"};
         String[] names = {"feb16", "QM"};
         enableRealTimeAsserts = true;
-        File base = executeCase(names, versions, "QualiMaster/", null, true);
+        File base = executeCase(names, versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
         enableRealTimeAsserts = false;
-        assertFileEqualityRec(new File(base, "expected"), base);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
 
     // a simple runtime variability test, at least that runtime reasoning seems to be working
     @Override
-    protected Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, boolean doReasoning) {
-        Configuration result = super.assertConfiguration(prj, doReasoning);
+    protected Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, Mode mode) {
+        Configuration result = super.assertConfiguration(prj, mode);
         if (enableRealTimeAsserts && "QM".equals(prj.getName())) {
             net.ssehub.easy.varModel.confModel.Configuration cfg = result.getConfiguration();
             try {
@@ -453,13 +472,15 @@ public class RealTests extends AbstractEasyScenarioTest {
                     ReasonerConfiguration rCfg = new ReasonerConfiguration();
                     rCfg.setRuntimeMode(true);
                     for (int r = 1; r <= MAX_REASONING; r++) {
-                        String id = MeasurementCollector.start(cfg, "SCENARIO-INC " + r);
+                        String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INC " + r) : null;
                         ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                             cfg, rCfg, ProgressObserver.NO_OBSERVER);
-                        MeasurementCollector.endAuto(id);
-                        net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
-                            MeasurementCollector.getInstance(), id, getMeasurements(), res);
-                        MeasurementCollector.end(id);
+                        if (null != id) {
+                            MeasurementCollector.endAuto(id);
+                            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                                MeasurementCollector.getInstance(), id, getMeasurements(), res);
+                            MeasurementCollector.end(id);
+                        }
                         res.logInformation(prj, rCfg);
                         Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                         assertFailureMessage(res, ppfe2);
@@ -471,15 +492,17 @@ public class RealTests extends AbstractEasyScenarioTest {
                         IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
                         instanceCreation = System.currentTimeMillis() - instanceCreation;
                         for (int r = 1; r <= MAX_INSTANCE_REASONING; r++) {
-                            String id = MeasurementCollector.start(cfg, "SCENARIO-INST " + r);
+                            String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INST " + r) : null;
                             ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
-                            MeasurementCollector.endAuto(id);
-                            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
-                                MeasurementCollector.getInstance(), id, getMeasurements(), res);
-                            MeasurementCollector.set(id, 
-                                AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
-                                instanceCreation);
-                            MeasurementCollector.end(id);
+                            if (null != id) {
+                                MeasurementCollector.endAuto(id);
+                                net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                                    MeasurementCollector.getInstance(), id, getMeasurements(), res);
+                                MeasurementCollector.set(id, 
+                                    AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
+                                    instanceCreation);
+                                MeasurementCollector.end(id);
+                            }
                             res.logInformation(prj, rCfg);
                             Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                             assertFailureMessage(res, ppfe2);
@@ -528,8 +551,10 @@ public class RealTests extends AbstractEasyScenarioTest {
     public void testQualiMasterMar15() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"mar15", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null, true);
-        assertFileEqualityRec(new File(base, "expected"), base);
+        File base = executeCase(names, versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
 
     /**
@@ -541,23 +566,28 @@ public class RealTests extends AbstractEasyScenarioTest {
     public void testQualiMasterJun15() throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"jun15", "QM"};
-        File base = executeCase(names, versions, "QualiMaster/", null, true);
-        assertFileEqualityRec(new File(base, "expected"), base);
+        File base = executeCase(names, versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
 
     /**
      * Tests the QualiMaster model / derivation (February 2017, without rt-VIL). Seems to fail on Jenkins.
      * This is a slightly modified version to ensure creation of artifacts in repeatable sequence.
      * 
+     * @param mode the test execution mode
      * @throws IOException shall not occur
      */
-    protected void testQualiMasterFeb17Impl() throws IOException {
+    protected void testQualiMasterFeb17Impl(Mode mode) throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"feb17", "QM"};
         enableRealTimeAsserts = true;
-        File base = executeCase(names, versions, "QualiMaster/", null, true);
+        File base = executeCase(names, versions, "QualiMaster/", null, mode);
         enableRealTimeAsserts = false;
-        assertFileEqualityRec(new File(base, "expected"), base);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
     
     /**
@@ -569,22 +599,25 @@ public class RealTests extends AbstractEasyScenarioTest {
     @Ignore
     @Test
     public void testQualiMasterFeb17() throws IOException {
-        testQualiMasterFeb17Impl();
+        testQualiMasterFeb17Impl(Mode.REASON_INSTANTIATE);
     }
     
     /**
      * Tests the QualiMaster model / derivation (February 2017, experimentally modified, without rt-VIL). Seems to 
      * fail on Jenkins. This is a modified version for evaluating VIL/VTL.
      * 
+     * @param mode the test execution mode
      * @throws IOException shall not occur
      */
-    protected void testQualiMasterSep17Impl() throws IOException {
+    protected void testQualiMasterSep17Impl(Mode mode) throws IOException {
         String[] versions = {"0", "0"};
         String[] names = {"sep17", "QM"};
         enableRealTimeAsserts = true;
-        File base = executeCase(names, versions, "QualiMaster/", null, true);
+        File base = executeCase(names, versions, "QualiMaster/", null, mode);
         enableRealTimeAsserts = false;
-        assertFileEqualityRec(new File(base, "expected"), base);
+        if (null != base) {
+            assertFileEqualityRec(new File(base, "expected"), base);
+        }
     }
     
     /**
@@ -596,7 +629,7 @@ public class RealTests extends AbstractEasyScenarioTest {
     @Ignore
     @Test
     public void testQualiMasterSep17() throws IOException {
-        testQualiMasterFeb17Impl();
+        testQualiMasterFeb17Impl(Mode.REASON_INSTANTIATE);
     }
     
 }

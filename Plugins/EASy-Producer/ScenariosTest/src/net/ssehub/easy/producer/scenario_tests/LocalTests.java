@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    RampUpTest.class, // must be first
+    ScenarioRampUpTest.class, // must be first
     LocalRealTests.class, 
     DynamicFreezeTest.class, 
     LocalConceptsTests.class, 

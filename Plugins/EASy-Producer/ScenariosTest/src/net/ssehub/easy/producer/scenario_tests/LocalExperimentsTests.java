@@ -350,44 +350,46 @@ public class LocalExperimentsTests extends ExperimentsTests {
         TracerFactory.setInstance(factory);
         //TracerFactory.setInstance(new ConsoleTracerFactory(true));
         // no reasoning: we just need specific structures/values
-        File tmp = executeCase("xmlExperiments", null, "", null, false);
-        File expected = new File(tmp, "GenTopoHardwareCorrelationFinancialPom.xml");
-        TextTestUtils.assertFileEquality(new File(tmp, "hwAlg.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "hwAlg1.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "hwAlg2.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "hwAlg3.xml"), expected);
+        File tmp = executeCase("xmlExperiments", null, "", null, Mode.INSTANTIATE);
+        if (null != tmp) {
+            File expected = new File(tmp, "GenTopoHardwareCorrelationFinancialPom.xml");
+            TextTestUtils.assertFileEquality(new File(tmp, "hwAlg.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "hwAlg1.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "hwAlg2.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "hwAlg3.xml"), expected);
+    
+            expected = new File(tmp, "InterfacesPom.xml");
+            TextTestUtils.assertFileEquality(new File(tmp, "ifPom.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "ifPom1.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "ifPom2.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "ifPom3.xml"), expected);
+    
+            expected = new File(tmp, "pipelinePom.xml");
+            TextTestUtils.assertFileEquality(new File(tmp, "pip.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "pip1.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "pip2.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "pip3.xml"), expected);
+            
+            expected = new File(tmp, "pipelines.xml");
+            TextTestUtils.assertFileEquality(new File(tmp, "pips.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "pips1.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "pips2.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "pips3.xml"), expected);
+            
+            expected = new File(tmp, "ModelGenPom.xml");
+            TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom1.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom2.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom3.xml"), expected);
+    
+            expected = new File(tmp, "pipSettings.xml");
+            TextTestUtils.assertFileEquality(new File(tmp, "set.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "set1.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "set2.xml"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "set3.xml"), expected);
 
-        expected = new File(tmp, "InterfacesPom.xml");
-        TextTestUtils.assertFileEquality(new File(tmp, "ifPom.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "ifPom1.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "ifPom2.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "ifPom3.xml"), expected);
-
-        expected = new File(tmp, "pipelinePom.xml");
-        TextTestUtils.assertFileEquality(new File(tmp, "pip.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "pip1.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "pip2.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "pip3.xml"), expected);
-        
-        expected = new File(tmp, "pipelines.xml");
-        TextTestUtils.assertFileEquality(new File(tmp, "pips.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "pips1.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "pips2.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "pips3.xml"), expected);
-        
-        expected = new File(tmp, "ModelGenPom.xml");
-        TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom1.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom2.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "modelGenPom3.xml"), expected);
-
-        expected = new File(tmp, "pipSettings.xml");
-        TextTestUtils.assertFileEquality(new File(tmp, "set.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "set1.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "set2.xml"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "set3.xml"), expected);
-        
-        factory.printResults();
+            factory.printResults();
+        }
     }
 
     /**
@@ -398,72 +400,73 @@ public class LocalExperimentsTests extends ExperimentsTests {
     @Test
     public void testJava() throws IOException {
         // no reasoning: we just need specific structures/values
-        File tmp = executeCase("javaExperiments", null, "", null, false); 
-
-        File expected = new File(tmp, "FCorrelationFinancial.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "fcFam.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "fcFam0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "fcFam1.java"), expected);
-
-        expected = new File(tmp, "IFCorrelationFinancial.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "fcFamI.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "fcFamI0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "fcFamI1.java"), expected);
-
-        expected = new File(tmp, "IPriorityDataSink.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnk.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnk0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnk1.java"), expected);
-
-        expected = new File(tmp, "PriorityDataSink.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnkI.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnkI0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnkI1.java"), expected);
-
-        expected = new File(tmp, "PriorityDataSinkProfiling.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnkIP.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnkIP0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "psSnkIP1.java"), expected);
-        
-        expected = new File(tmp, "ISpringFinancialData.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrc.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrc0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrc1.java"), expected);
-        
-        expected = new File(tmp, "SpringFinancialData.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrcI.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrcI0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrcI1.java"), expected);
-        
-        expected = new File(tmp, "SpringFinancialDataProfiling.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrcIP.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrcIP0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spSrcIP1.java"), expected);
-
-        expected = new File(tmp, "SpringFinancialDataProfilingImpl.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "spProfSrcI.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spProfSrcI0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "spProfSrcI1.java"), expected);
-
-        expected = new File(tmp, "SerializationRegistry.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "serReg.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "serReg0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "serReg1.java"), expected);
-
-        expected = new File(tmp, "FCorrelationFinancialSerializers.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "tSerFCor.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "tSerFCor0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "tSerFCor1.java"), expected);
-        
-        expected = new File(tmp, "GenTopoHardwareFinancialCorrReceiver.cpp");
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver0.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver1.cpp"), expected);
-
-        expected = new File(tmp, "GenTopoHardwareFinancialCorrSender.cpp");
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorSender.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorSender0.cpp"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "FCorSender1.cpp"), expected);
+        File tmp = executeCase("javaExperiments", null, "", null, Mode.INSTANTIATE); 
+        if (null != tmp) {
+            File expected = new File(tmp, "FCorrelationFinancial.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "fcFam.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "fcFam0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "fcFam1.java"), expected);
+    
+            expected = new File(tmp, "IFCorrelationFinancial.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "fcFamI.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "fcFamI0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "fcFamI1.java"), expected);
+    
+            expected = new File(tmp, "IPriorityDataSink.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnk.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnk0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnk1.java"), expected);
+    
+            expected = new File(tmp, "PriorityDataSink.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnkI.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnkI0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnkI1.java"), expected);
+    
+            expected = new File(tmp, "PriorityDataSinkProfiling.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnkIP.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnkIP0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "psSnkIP1.java"), expected);
+            
+            expected = new File(tmp, "ISpringFinancialData.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrc.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrc0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrc1.java"), expected);
+            
+            expected = new File(tmp, "SpringFinancialData.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrcI.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrcI0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrcI1.java"), expected);
+            
+            expected = new File(tmp, "SpringFinancialDataProfiling.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrcIP.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrcIP0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spSrcIP1.java"), expected);
+    
+            expected = new File(tmp, "SpringFinancialDataProfilingImpl.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "spProfSrcI.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spProfSrcI0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "spProfSrcI1.java"), expected);
+    
+            expected = new File(tmp, "SerializationRegistry.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "serReg.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "serReg0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "serReg1.java"), expected);
+    
+            expected = new File(tmp, "FCorrelationFinancialSerializers.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "tSerFCor.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "tSerFCor0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "tSerFCor1.java"), expected);
+            
+            expected = new File(tmp, "GenTopoHardwareFinancialCorrReceiver.cpp");
+            TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver.cpp"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver0.cpp"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "FCorReceiver1.cpp"), expected);
+    
+            expected = new File(tmp, "GenTopoHardwareFinancialCorrSender.cpp");
+            TextTestUtils.assertFileEquality(new File(tmp, "FCorSender.cpp"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "FCorSender0.cpp"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "FCorSender1.cpp"), expected);
+        }
     }
 
     /**
@@ -482,11 +485,13 @@ public class LocalExperimentsTests extends ExperimentsTests {
         names[2] = "javaExperimentsDebug";
 
         // no reasoning: we just need specific structures/values
-        File tmp = executeCase(names, null, "", null, false); 
-        File expected = new File(tmp, "PriorityPip_DataManagementElement0DataManagementElement.java");
-        TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME0.java"), expected);
-        TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME1.java"), expected);
+        File tmp = executeCase(names, null, "", null, Mode.INSTANTIATE); 
+        if (null != tmp) {
+            File expected = new File(tmp, "PriorityPip_DataManagementElement0DataManagementElement.java");
+            TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME0.java"), expected);
+            TextTestUtils.assertFileEquality(new File(tmp, "PrioPip_DME1.java"), expected);
+        }
     }
 
 }

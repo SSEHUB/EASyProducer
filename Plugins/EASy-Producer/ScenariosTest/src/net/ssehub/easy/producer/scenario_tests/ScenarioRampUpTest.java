@@ -15,32 +15,20 @@
  */
 package net.ssehub.easy.producer.scenario_tests;
 
-import java.io.File;
 import java.io.IOException;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
-import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
-import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
-import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
- * A Scenario ramp-up test.
+ * A Scenario ramp-up test including a QualiMaster model.
  * 
  * @author Holger Eichelberger
  */
-public class RampUpTest extends AbstractEasyScenarioTest {
-
-    @Override
-    protected File getTestFolder() {
-        return null;
-    }
+public class ScenarioRampUpTest extends RampUpTest {
 
     /**
      * Performs the ram-up test.
@@ -53,13 +41,9 @@ public class RampUpTest extends AbstractEasyScenarioTest {
     @Test
     public void rampUpTest() throws ConfigurationException, ValueDoesNotMatchTypeException, 
         CSTSemanticException, IOException {
-        ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        Configuration cfg = net.ssehub.easy.reasoning.core.reasoner.RampUpTest.createRampUpTest();
-        IReasoner reasoner = createReasoner();
-        // NO MEASUREMENT!!!
-        ReasoningResult rResult = reasoner.propagate(cfg.getProject(), cfg, rConfig, ProgressObserver.NO_OBSERVER);
-        rResult.logInformation(cfg.getProject(), rConfig);
-        Assert.assertFalse(rResult.hasConflict());
+        super.rampUpTest();
+        RealTests t = new RealTests();
+        t.testQualiMasterFeb17Impl(Mode.REASON_NO_MEASURE);
     }
 
 }

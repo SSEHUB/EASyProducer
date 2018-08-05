@@ -52,7 +52,68 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 public abstract class AbstractScenarioTest extends AbstractTest<Script> {
 
     protected static boolean debug = false;
+    // enable/switch of instantiation by default, helpful for reasoning performance experiments
+    protected static final boolean INSTANTIATE = true;
 
+    /**
+     * Test execution modes.
+     * 
+     * @author Holger Eichelberger
+     */
+    protected enum Mode {
+        
+        LOAD(false, false, true),
+        REASON(true, false, true),
+        REASON_NO_MEASURE(true, false, false),
+        INSTANTIATE(false, true, true),
+        REASON_INSTANTIATE(true, true, true);
+        
+        private boolean doReason;
+        private boolean doInstantiate;
+        private boolean doMeasure;
+        
+        /**
+         * Creates a mode.
+         * 
+         * @param doReason do reasoning
+         * @param doInstantiate do instantiation
+         * @param doMeasure do measure
+         */
+        private Mode(boolean doReason, boolean doInstantiate, boolean doMeasure) {
+            this.doReason = doReason;
+            this.doInstantiate = doInstantiate;
+            this.doMeasure = doMeasure;
+        }
+        
+        /**
+         * Returns whether reasoning shall be done.
+         * 
+         * @return <code>true</code> for reasoning, <code>false</code> else
+         */
+        protected boolean doReason() {
+            return doReason;
+        }
+        
+        /**
+         * Returns whether instantiation shall be done.
+         * 
+         * @return <code>true</code> for instantiation, <code>false</code> else
+         */
+        protected boolean doInstantiate() {
+            return doInstantiate;
+        }
+
+        /**
+         * Returns whether measurements shall be done and collected.
+         * 
+         * @return <code>true</code> for measurements, <code>false</code> else
+         */
+        protected boolean doMeasure() {
+            return doMeasure;
+        }
+
+    }
+    
     /**
      * Defines the default model paths (IVML, VIL, VTL).
      */
@@ -136,15 +197,15 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
      *   made executable
      * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
-     * @param doReasoning whether reasoning shall be performed and no conflicts asserted
+     * @param mode the testing mode
      * @return the base directory of the instantiated project
      * @throws IOException in case of I/O problems
      */
     protected File executeCase(String projectName, String[] versions, String caseFolder, 
-        String sourceProjectName, boolean doReasoning, String... makeExecutable) throws IOException {
+        String sourceProjectName, Mode mode, String... makeExecutable) throws IOException {
         String[] names = new String[1];
         names[0] = projectName;
-        return executeCase(names, versions, caseFolder, sourceProjectName, doReasoning, makeExecutable);
+        return executeCase(names, versions, caseFolder, sourceProjectName, mode, makeExecutable);
     }
 
     /**
@@ -158,12 +219,12 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
      *   made executable
      * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
-     * @param doReasoning whether reasoning shall be performed and no conflicts asserted
-     * @return the base directory of the instantiated project
+     * @param mode the testing mode
+     * @return the base directory of the instantiated project (<b>null</b> for no instantiation, i.e., do not assert)
      * @throws IOException in case of I/O problems
      */
     protected File executeCase(String[] names, String[] versions, String caseFolder, 
-        String sourceProjectName, boolean doReasoning, String... makeExecutable) throws IOException {
+        String sourceProjectName, Mode mode, String... makeExecutable) throws IOException {
         ArtifactFactory.clear();
         String projectName = names[0];
         String iModelName = names.length > 1 ? names[1] : projectName;
@@ -183,55 +244,72 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         File vtlFolder = getVtlFolderIn(temp);
         activateBuildProperties(vilFolder);
         System.out.println("Registering model location...");
+        doLocations(ivmlFolder, vilFolder, vtlFolder, true);
+        System.out.println("Loading IVML...");
+        net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), ivmlFolder);
+        Configuration config = assertConfiguration(iModel, mode);
+        File targetFile = null;
+        if (INSTANTIATE) {
+            if (mode.doInstantiate()) {
+                File sourceFile = temp.getAbsoluteFile();
+                Project source = createProjectInstance(sourceFile);
+                targetFile = sourceFile;
+                Project target = source; // adjust base below if changed
+                if (null != sourceProjectFolder) {
+                    source = createProjectInstance(sourceProjectFolder.getAbsoluteFile());
+                }
+                Map<String, Object> param = new HashMap<String, Object>();
+                Project[] tmp = new Project[1]; // the EASy way to call it
+                tmp[0] = source;
+                param.put(Executor.PARAM_SOURCE, tmp);
+                param.put(Executor.PARAM_TARGET, target);
+                param.put(Executor.PARAM_CONFIG, config);
+                configureExecution(projectName, param);
+                System.out.println("Executing VIL...");
+                TracerFactory current = TracerFactory.getInstance();
+                TracerFactory tFactory = getTracerFactory();
+                TracerFactory.setDefaultInstance(tFactory);
+                Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
+                Executor executor = new Executor(script, param);
+                executor.addBase(targetFile);
+                try {
+                    executor.execute();
+                } catch (VilException e) {
+                    System.out.println(tFactory);
+                    e.printStackTrace(System.out);
+                    Assert.fail("VIL execution issue " + e);
+                }
+                println(tFactory, debug);
+                TracerFactory.setDefaultInstance(current);
+            }
+        }
+        doLocations(ivmlFolder, vilFolder, vtlFolder, false);
+        return targetFile;
+    }
+    
+    /**
+     * Operate on the locations.
+     * 
+     * @param ivmlFolder the IVML folder
+     * @param vilFolder the VIL folder
+     * @param vtlFolder the VTL folder
+     * @param add <code>true</code> for adding as locations, <code>false</code> for removing
+     */
+    private void doLocations(File ivmlFolder, File vilFolder, File vtlFolder, boolean add) {
         try {
-            VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
             // those loaders shall already be registered through subclassing AbstractTest
-            BuildModel.INSTANCE.locations().addLocation(vilFolder, ProgressObserver.NO_OBSERVER);
-            TemplateModel.INSTANCE.locations().addLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
+            if (add) {
+                VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                BuildModel.INSTANCE.locations().addLocation(vilFolder, ProgressObserver.NO_OBSERVER);
+                TemplateModel.INSTANCE.locations().addLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
+            } else {
+                VarModel.INSTANCE.locations().removeLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                BuildModel.INSTANCE.locations().removeLocation(vilFolder, ProgressObserver.NO_OBSERVER);
+                TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
+            }
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception (VIL/VTL): " + e.getMessage());
         }
-        System.out.println("Loading IVML...");
-        net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), ivmlFolder);
-        Configuration config = assertConfiguration(iModel, doReasoning);
-        File sourceFile = temp.getAbsoluteFile();
-        Project source = createProjectInstance(sourceFile);
-        File targetFile = sourceFile;
-        Project target = source; // adjust base below if changed
-        if (null != sourceProjectFolder) {
-            source = createProjectInstance(sourceProjectFolder.getAbsoluteFile());
-        }
-        Map<String, Object> param = new HashMap<String, Object>();
-        Project[] tmp = new Project[1]; // the EASy way to call it
-        tmp[0] = source;
-        param.put(Executor.PARAM_SOURCE, tmp);
-        param.put(Executor.PARAM_TARGET, target);
-        param.put(Executor.PARAM_CONFIG, config);
-        configureExecution(projectName, param);
-        System.out.println("Executing VIL...");
-        TracerFactory current = TracerFactory.getInstance();
-        TracerFactory tFactory = getTracerFactory();
-        TracerFactory.setDefaultInstance(tFactory);
-        Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
-        Executor executor = new Executor(script, param);
-        executor.addBase(targetFile);
-        try {
-            executor.execute();
-        } catch (VilException e) {
-            System.out.println(tFactory);
-            e.printStackTrace(System.out);
-            Assert.fail("VIL execution issue " + e);
-        }
-        println(tFactory, debug);
-        TracerFactory.setDefaultInstance(current);
-        try {
-            VarModel.INSTANCE.locations().removeLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
-            BuildModel.INSTANCE.locations().removeLocation(vilFolder, ProgressObserver.NO_OBSERVER);
-            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException e) {
-            Assert.fail("unexpected exception: " + e.getMessage());
-        }
-        return targetFile;
     }
 
     // checkstyle: resume parameter number check
@@ -240,25 +318,27 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * Creates and asserts a VIL configuration and checks the reasoning/propagation result for no conflicts.
      * 
      * @param prj the project to create the configuration for
-     * @param doReasoning whether reasoning shall be performed and no conflicts asserted
+     * @param mode the testing mode
      * @return the VIL configuration
      */
-    protected Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, boolean doReasoning) {
+    protected Configuration assertConfiguration(net.ssehub.easy.varModel.model.Project prj, Mode mode) {
         System.out.println("Creating VIL configuration...");
         Configuration config = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(prj));
         Assert.assertNotNull("VIL configuration must not be null", config);
-        if (doReasoning) {
+        if (mode.doReason()) {
             System.out.println("Performing reasoning/propagation...");
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
             rCfg.setTimeout(5000); // to be on the safe side
             TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
-            String id = MeasurementCollector.start(config.getConfiguration(), "SCENARIO");
+            String id = mode.doMeasure() ? MeasurementCollector.start(config.getConfiguration(), "SCENARIO") : null;
             ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                 config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
-            MeasurementCollector.endAuto(id);
-            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
-                MeasurementCollector.getInstance(), id, getMeasurements(), res);
-            MeasurementCollector.end(id);
+            if (null != id) {
+                MeasurementCollector.endAuto(id);
+                net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                    MeasurementCollector.getInstance(), id, getMeasurements(), res);
+                MeasurementCollector.end(id);
+            }
             res.logInformation(prj, rCfg);
             Assert.assertFalse("Reasoning must not have a conflict", res.hasConflict());
             Assert.assertFalse("Reasoning must not have a timeout", res.hasTimeout());
