@@ -51,8 +51,6 @@ class MeasurementStatisticsVisitor extends DefaultConfigurationStatisticsVisitor
     private static final double EXPR_OP_COMPLEXITY = 0;
     private static final double EXPR_CONTAINER_COMPLEXITY = 5;
     private static final double EXPR_VAR_COMPLEXITY = 0.25;
-    //private static final double EXPR_OP_OPERAND_COMPLEXITY_FACTOR = 0; // factor
-    //private static final double EXPR_OP_PARAM_COMPLEXITY_FACTOR = 0; // factor
 
     private static final double TYPE_VARIABLE_COMPLEXITY = 1;
     private static final double TYPE_COMPOUND_COMPLEXITY = 2;

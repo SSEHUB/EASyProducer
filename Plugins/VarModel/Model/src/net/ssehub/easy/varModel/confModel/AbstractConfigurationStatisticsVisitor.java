@@ -395,9 +395,7 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
      * @param cnt the container
      */
     protected void visitVariableContainer(IDecisionVariableContainer cnt) {
-        for (int d = 0; d < cnt.getDeclarationCount(); d++) {
-            visitDefaultValue(cnt.getDeclaration(d).getDefaultValue());
-        }
+        // do not count declarations - counted twice w.r.t. nested configuration variables
         statistics.nConstraintInstances += cnt.getConstraintsCount();
         for (int c = 0; c < cnt.getConstraintsCount(); c++) {
             visitConstraint(cnt.getConstraint(c));
