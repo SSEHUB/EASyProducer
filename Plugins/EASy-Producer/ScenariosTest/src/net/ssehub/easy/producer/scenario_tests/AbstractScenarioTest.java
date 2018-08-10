@@ -53,7 +53,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
 
     protected static boolean debug = false;
     // enable/switch of instantiation by default, helpful for reasoning performance experiments
-    protected static final boolean INSTANTIATE = true;
+    protected static boolean instantiate = Boolean.valueOf(System.getProperty("easy.scenario.instantiate", "true"));
 
     /**
      * Test execution modes.
@@ -249,39 +249,37 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), ivmlFolder);
         Configuration config = assertConfiguration(iModel, mode);
         File targetFile = null;
-        if (INSTANTIATE) {
-            if (mode.doInstantiate()) {
-                File sourceFile = temp.getAbsoluteFile();
-                Project source = createProjectInstance(sourceFile);
-                targetFile = sourceFile;
-                Project target = source; // adjust base below if changed
-                if (null != sourceProjectFolder) {
-                    source = createProjectInstance(sourceProjectFolder.getAbsoluteFile());
-                }
-                Map<String, Object> param = new HashMap<String, Object>();
-                Project[] tmp = new Project[1]; // the EASy way to call it
-                tmp[0] = source;
-                param.put(Executor.PARAM_SOURCE, tmp);
-                param.put(Executor.PARAM_TARGET, target);
-                param.put(Executor.PARAM_CONFIG, config);
-                configureExecution(projectName, param);
-                System.out.println("Executing VIL...");
-                TracerFactory current = TracerFactory.getInstance();
-                TracerFactory tFactory = getTracerFactory();
-                TracerFactory.setDefaultInstance(tFactory);
-                Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
-                Executor executor = new Executor(script, param);
-                executor.addBase(targetFile);
-                try {
-                    executor.execute();
-                } catch (VilException e) {
-                    System.out.println(tFactory);
-                    e.printStackTrace(System.out);
-                    Assert.fail("VIL execution issue " + e);
-                }
-                println(tFactory, debug);
-                TracerFactory.setDefaultInstance(current);
+        if (instantiate && mode.doInstantiate()) {
+            File sourceFile = temp.getAbsoluteFile();
+            Project source = createProjectInstance(sourceFile);
+            targetFile = sourceFile;
+            Project target = source; // adjust base below if changed
+            if (null != sourceProjectFolder) {
+                source = createProjectInstance(sourceProjectFolder.getAbsoluteFile());
             }
+            Map<String, Object> param = new HashMap<String, Object>();
+            Project[] tmp = new Project[1]; // the EASy way to call it
+            tmp[0] = source;
+            param.put(Executor.PARAM_SOURCE, tmp);
+            param.put(Executor.PARAM_TARGET, target);
+            param.put(Executor.PARAM_CONFIG, config);
+            configureExecution(projectName, param);
+            System.out.println("Executing VIL...");
+            TracerFactory current = TracerFactory.getInstance();
+            TracerFactory tFactory = getTracerFactory();
+            TracerFactory.setDefaultInstance(tFactory);
+            Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
+            Executor executor = new Executor(script, param);
+            executor.addBase(targetFile);
+            try {
+                executor.execute();
+            } catch (VilException e) {
+                System.out.println(tFactory);
+                e.printStackTrace(System.out);
+                Assert.fail("VIL execution issue " + e);
+            }
+            println(tFactory, debug);
+            TracerFactory.setDefaultInstance(current);
         }
         doLocations(ivmlFolder, vilFolder, vtlFolder, false);
         return targetFile;
