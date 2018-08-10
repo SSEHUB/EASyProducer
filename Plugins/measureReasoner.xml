@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="measureReasoner" default="measureAll" basedir=".">
+
+  <!-- execute within EASy Plugins only -->
+  <property file="${user.home}/global-build.properties"/>
+  <!-- for local execution: override several path settings -->
+  <property name="ant.lib.dir" value="W:/apache-ant-1.10.3/lib"/>
+  <property name="eclipse.plugins.dir" value="W:/eclipse/eclipse473/plugins"/>
+  <property name="home.scalelog" value="W:/IndenicaWorkspace"/>
+  <property name="libs.utils" value="VarModel/Utils/bin"/>
+  <property name="libs.libs.common.io" value="VarModel/libs.commons.io/org.apache.commons.io_2.4.0.jar"/>
+  <property name="libs.model" value="VarModel/Model/bin"/>
+  <property name="libs.model.tests" value="VarModel/Model.tests/bin"/>
+  <property name="libs.dslCore" value="VarModel/de.uni_hildesheim.sse.dslCore/bin"/>
+  <property name="libs.reasonerCore" value="Reasoner/ReasonerCore/ReasonerCore/bin"/>
+  <property name="libs.sseReasoner" value="Reasoner/EASy-Original-Reasoner/de.uni_hildesheim.sse.reasoning.reasoner/bin"/>
+  <property name="home.reasonerCore.test.dir" location="Reasoner/ReasonerCore/ReasonerCore.test"/>
+  <property name="libs.reasonerCore.test" value="Reasoner/ReasonerCore/ReasonerCore.test/bin"/>
+  <property name="libs.sseReasoner.test" value="Reasoner/EASy-Original-Reasoner/de.uni_hildesheim.sse.reasoning.reasoner.test/bin"/>
+  <property name="libs.ivml" value="IVML/de.uni_hildesheim.sse.ivml/bin"/>
+  <property name="libs.ivml.tests" value="IVML/de.uni_hildesheim.sse.ivml.tests/bin"/>
+  <property name="libs.template.core" value="Instantiation/de.uni_hildesheim.sse.vil.templatelang/bin"/>
+  <property name="libs.vil.core" value="Instantiation/de.uni_hildesheim.sse.vil.buildlang/bin"/>
+  <property name="libs.vil.tests" value="Instantiation/de.uni_hildesheim.sse.vil.buildlang.tests/bin"/>
+  <property name="home.vil.rt.tests.dir" location="Instantiation/de.uni_hildesheim.sse.vil.rt.tests"/>
+  <property name="libs.instantiator.core" value="Instantiation/de.uni_hildesheim.sse.easy.instantiatorCore/bin"/>
+  <property name="libs.instantiator.java" value="Instantiation/Instantiator.Java/bin"/>
+  <property name="home.vil.expressions.core.dir" value="Instantiation/de.uni_hildesheim.sse.vil.expressions"/>
+  <property name="home.instantiatorCore.rt.dir" value="Instantiation/de.uni-hildesheim.sse.easy.instantiatorCore.rt"/>
+  <property name="home.vil.rt.core.dir" value="Instantiation/de.uni_hildesheim.sse.vil.rt"/>
+  <property name="home.libs.ant.dir" value="Instantiation/Ant"/>
+  <property name="libs.instantiator.ant" value="Instantiation/Instantiator.Ant/bin"/>
+  <property name="home.libs.aspectj.dir" value="Instantiation/AspectJ"/>
+  <property name="libs.instantiator.aspectj" value="Instantiation/Instantiator.AspectJ/bin"/>
+  <property name="home.libs.maven.dir" value="Instantiation/Maven"/>
+  <property name="libs.instantiator.maven" value="Instantiation/Instantiator.Maven/bin"/>
+  <property name="home.libs.velocity.dir" value="Instantiation/Velocity"/>
+  <property name="libs.instantiator.velocity" value="Instantiation/de.uni_hildeshem.sse.easy.instantiator.velocity/bin"/>
+  <property name="libs.easy.persistence" value="EASy-Producer/de.uni_hildesheim.sse.EASy-Producer.persistence/bin"/>
+  <property name="home.instantiator.serializer.dir" value="Instantiation/Model.persistency"/>
+  <property name="home.scenario.tests.dir" location="EASy-Producer/ScenariosTest"/>
+  <property name="home.template.tests.dir" value="Instantiation/de.uni_hildesheim.sse.vil.templatelang.tests"/>
+
+  <!-- taken from scenario tests -->	   
+  	<path id ="includes">
+        <!-- Model -->
+        <pathelement path="${libs.utils}"/>
+        <pathelement path="${libs.libs.common.io}"/>
+		<pathelement path="${libs.model}"/>
+        <pathelement path="${libs.model.tests}"/>
+        <pathelement path="${libs.dslCore}"/>
+		
+		<!-- Reasoner -->
+        <pathelement path="${libs.reasonerCore}"/>
+        <pathelement path="${libs.sseReasoner}"/>
+        <pathelement path="${libs.reasonerCore.test}"/>
+        <pathelement path="${libs.sseReasoner.test}"/>
+    
+		<!-- Parsers -->
+        <pathelement path="${libs.ivml}"/>
+        <pathelement path="${libs.ivml.tests}"/>
+        <pathelement path="${libs.template.core}"/>
+        <pathelement path="${libs.vil.core}"/>
+		<pathelement path="${libs.vil.tests}"/>
+		
+		<!-- Instantiators -->
+		<pathelement path="${libs.instantiator.core}"/>
+        <pathelement path="${libs.instantiator.java}"/>
+        <fileset dir="${home.libs.ant.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+        <pathelement path="${libs.instantiator.ant}"/>
+        <fileset dir="${home.libs.aspectj.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+        <pathelement path="${libs.instantiator.aspectj}"/>
+        <fileset dir="${home.libs.maven.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+	    <pathelement path="${libs.instantiator.maven}"/>
+        <fileset dir="${home.libs.velocity.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+		<pathelement path="${libs.instantiator.velocity}"/>
+		
+        <!-- EASy-Producer -->
+        <pathelement path="${libs.easy.persistence}"/>
+    
+		<!-- Eclipse-Plugins -->
+		<fileset dir="${eclipse.plugins.dir}">
+			<include name="org.eclipse.xtext_2.9.2*.jar" />
+			<include name="org.eclipse.emf.ecore.xmi_2.13*.jar" />
+			<include name="org.eclipse.emf.ecore_2.13*.jar" />
+			<include name="org.eclipse.emf.common_2.13*.jar" />
+			<include name="org.antlr.runtime_3.2.0*.jar" />
+            <include name="com.google.inject_3.0.0*.jar" />
+			<include name="com.google.inject.multibindings_3.0.0*.jar" />
+			<include name="org.eclipse.emf.mwe2.runtime_2.9.1*.jar" />
+			<include name="org.eclipse.emf.mwe2.utils_1.3.21*.jar" />
+			<include name="org.eclipse.xtext.util_2.9.2*.jar" />
+			<include name="com.google.guava_15.0.0*.jar" />
+			<include name="javax.inject_1.0.0*.jar" />
+			<include name="org.apache.log4j_1.2.15*.jar" />
+			<include name="org.apache.commons.logging_1.1.1*.jar" />
+			<include name="org.eclipse.xtext.common.types_2.9.2*.jar" />
+			<include name="org.eclipse.core.runtime_3.13.0*.jar" />
+			<include name="org.eclipse.osgi_3.12.100*.jar" />
+			<include name="org.eclipse.osgi.compatibility.state_1.1.0*.jar" />
+			<include name="org.eclipse.equinox.common_3.9.0*.jar" />
+			<include name="org.eclipse.core.jobs_3.9.3*.jar" />
+			<include name="org.eclipse.equinox.registry_3.7.0*.jar" />
+			<include name="org.eclipse.equinox.preferences_3.7.0*.jar" />
+			<include name="org.eclipse.core.contenttypes_3.6.0*.jar" />
+			<include name="org.eclipse.equinox.app_1.3.400*.jar" />
+			<include name="org.hamcrest.core_1.3.0*.jar" />
+			<include name="org.eclipse.osgi.services_3.6.0*.jar" />
+			<include name="org.eclipse.jdt_3.13.4*.jar" />
+			<include name="org.eclipse.jdt.core_3.13.102*.jar" />
+			<include name="org.eclipse.jdt.core.manipulation_1.9.100*.jar" />
+			<include name="org.eclipse.jdt.compiler.tool_1.2.101*.jar" />
+			<include name="org.eclipse.text_3.6.100*.jar" />
+	    </fileset>
+	</path>
+	
+	<path id="ant.path">
+	   <fileset dir="${eclipse.plugins.dir}">
+			<include name="org.junit_4*/junit.jar" />
+	    </fileset>
+	   <pathelement path="${ant.lib.dir}/ant-junit.jar"/>
+	</path>
+
+  
+  <target name="measureAll">
+     <!-- SSE REASONER -->
+     <junit fork="true" dir="${home.reasonerCore.test.dir}">
+	     <jvmarg value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata"/>
+		 <classpath>
+		    <path refid="includes"/>
+			<path refid="ant.path"/>
+		 </classpath>
+		 <test name="test.net.ssehub.easy.reasoning.sseReasoner.AllTests" todir="${home.reasonerCore.test.dir}/testdata/temp"/>
+		 <formatter type="plain" usefile="false" />
+	 </junit>
+	 <!-- RT-VIL -->
+     <junit fork="true" dir="${home.vil.rt.tests.dir}">
+	     <jvmarg value="-Dvil.rt.testdata.home=${home.vil.rt.tests.dir}/testdata"/>
+		 <classpath>
+		    <path refid="includes"/>
+		    <path refid="ant.path"/>
+			<pathelement path="${home.instantiatorCore.rt.dir}/bin"/>
+			<pathelement path="${home.vil.rt.core.dir}/bin"/>
+			<pathelement path="${home.vil.rt.tests.dir}/bin"/>
+			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
+			<pathelement path="${home.instantiator.serializer.dir}/bin"/>
+			<pathelement path="${home.template.tests.dir}/bin"/>
+		 </classpath>
+		 <test name="de.uni_hildesheim.sse.vil.rt.tests.AllTests" todir="${home.vil.rt.tests.dir}/testdata/temp"/>
+		 <formatter type="plain" usefile="false" />
+	 </junit>
+	 <!-- SCENARIOS -->
+     <junit fork="true" dir="${home.scenario.tests.dir}">
+	     <jvmarg value="-Deasy_producer.scenarios.testdata.home=${home.scenario.tests.dir}/testdata"/>
+	     <jvmarg value="-Deasy.scenario.instantiate=false"/>
+		 <classpath>
+		    <path refid="includes"/>
+			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
+			<pathelement path="${home.template.tests.dir}/bin"/>
+		    <path refid="ant.path"/>
+			<pathelement path="${home.scenario.tests.dir}/bin"/>
+		 </classpath>
+		 <test name="net.ssehub.easy.producer.scenario_tests.AllTests" todir="${home.scenario.tests.dir}/testdata/temp"/>
+		 <formatter type="plain" usefile="false" />
+	 </junit>
+	 <!-- SCENARIOS.SCALELOG -->
+     <junit fork="true" dir="${home.scalelog}">
+	     <jvmarg value="-Deasy_producer.scenarios.scalelog.testdata.home=${home.scalelog}/ScenarioTests.ScaleLog/testdata"/>
+	     <jvmarg value="-Deasy.scenario.instantiate=false"/>
+		 <classpath>
+		    <path refid="includes"/>
+			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
+			<pathelement path="${home.template.tests.dir}/bin"/>
+			<pathelement path="${home.scenario.tests.dir}/bin"/>
+		    <pathelement path="${home.scalelog}/ScenarioTests.ScaleLog/bin"/>
+			<path refid="ant.path"/>
+		 </classpath>
+		 <formatter type="plain" usefile="false" />
+		 <test name="net.ssehub.easy.scaleLog.AllTests" todir="${home.scalelog}/ScenarioTests.ScaleLog/testdata/temp"/>
+	 </junit>
+  </target>
+
+</project>
