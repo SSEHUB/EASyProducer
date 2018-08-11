@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="measureReasoner" default="measureAll" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-  <property name="sleep.secs" value="0"/>
+  <property name="repeated.sleep.secs" value="5"/>
   <!-- execute within EASy Plugins only -->
   <!-- we mix here Maven (for Eclipse based on EASy-Dependencies) and local classpath for uncommitted experiments / backpatches if needed -->
   <!-- local path definitions, e.g., absolute paths - see local-build.properties.template -->
@@ -92,47 +92,9 @@
 		
         <!-- EASy-Producer -->
         <pathelement path="${libs.easy.persistence}"/>
-    
-		<!-- Eclipse-Plugins -->
-		<!--<fileset dir="${eclipse.plugins.dir}">
-			<include name="org.eclipse.xtext_2.9.2*.jar" />
-			<include name="org.eclipse.emf.ecore.xmi_2.13*.jar" />
-			<include name="org.eclipse.emf.ecore_2.13*.jar" />
-			<include name="org.eclipse.emf.common_2.13*.jar" />
-			<include name="org.antlr.runtime_3.2.0*.jar" />
-            <include name="com.google.inject_3.0.0*.jar" />
-			<include name="com.google.inject.multibindings_3.0.0*.jar" />
-			<include name="org.eclipse.emf.mwe2.runtime_2.9.1*.jar" />
-			<include name="org.eclipse.emf.mwe2.utils_1.3.21*.jar" />
-			<include name="org.eclipse.xtext.util_2.9.2*.jar" />
-			<include name="com.google.guava_15.0.0*.jar" />
-			<include name="javax.inject_1.0.0*.jar" />
-			<include name="org.apache.log4j_1.2.15*.jar" />
-			<include name="org.apache.commons.logging_1.1.1*.jar" />
-			<include name="org.eclipse.xtext.common.types_2.9.2*.jar" />
-			<include name="org.eclipse.core.runtime_3.13.0*.jar" />
-			<include name="org.eclipse.osgi_3.12.100*.jar" />
-			<include name="org.eclipse.osgi.compatibility.state_1.1.0*.jar" />
-			<include name="org.eclipse.equinox.common_3.9.0*.jar" />
-			<include name="org.eclipse.core.jobs_3.9.3*.jar" />
-			<include name="org.eclipse.equinox.registry_3.7.0*.jar" />
-			<include name="org.eclipse.equinox.preferences_3.7.0*.jar" />
-			<include name="org.eclipse.core.contenttypes_3.6.0*.jar" />
-			<include name="org.eclipse.equinox.app_1.3.400*.jar" />
-			<include name="org.hamcrest.core_1.3.0*.jar" />
-			<include name="org.eclipse.osgi.services_3.6.0*.jar" />
-			<include name="org.eclipse.jdt_3.13.4*.jar" />
-			<include name="org.eclipse.jdt.core_3.13.102*.jar" />
-			<include name="org.eclipse.jdt.core.manipulation_1.9.100*.jar" />
-			<include name="org.eclipse.jdt.compiler.tool_1.2.101*.jar" />
-			<include name="org.eclipse.text_3.6.100*.jar" />
-	    </fileset>-->
 	</path>
 	
 	<path id="ant.path">
-	   <fileset dir="${eclipse.plugins.dir}">
-			<include name="org.junit_4*/junit.jar" />
-	    </fileset>
 	   <pathelement path="${ant.lib.dir}/ant-junit.jar"/>
 	</path>
 
@@ -152,10 +114,11 @@
       <attribute name="testId" default="."/>
       <attribute name="testdataDir" default="testdata"/>
       <attribute name="testdataTempDir" default="temp"/>
+      <attribute name="sleep.secs" default="0"/>
       <element name="extraclasspath" optional="true" />
       <element name="extrajvmargs" optional="true" />
       <sequential>
-          <sleep seconds="${sleep.secs}"/>
+          <sleep seconds="@{sleep.secs}"/>
           <junit fork="true" dir="@{dir}" haltonfailure="true">
               <jvmarg value="-D@{testPropName}=@{dir}/@{testdataDir}"/>
               <extrajvmargs/>
@@ -171,17 +134,20 @@
           <mkdir dir="${dir.results}/@{testId}"/>
           <copy todir="${dir.results}/@{testId}">
               <fileset dir="@{dir}/@{testdataDir}/@{testdataTempDir}">
-			      <include name="*.tsv"/>
-			  </fileset>
-	      </copy>
+                  <include name="*.tsv"/>
+              </fileset>
+          </copy>
       </sequential>
   </macrodef>
   
-  <target name="measureAll" depends="init">
+  <macrodef name="measureRun">
+    <attribute name="testId" default="."/>
+    <attribute name="sleep.secs" default="0"/>
+    <sequential>
      <!-- SSE REASONER -->
-     <measure dir="${home.reasonerCore.test.dir}" testPropName="reasonerCore.testdata.home" testName="test.net.ssehub.easy.reasoning.sseReasoner.AllTests"/>
+     <measure dir="${home.reasonerCore.test.dir}" testPropName="reasonerCore.testdata.home" testName="test.net.ssehub.easy.reasoning.sseReasoner.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}"/>
      <!-- RT-VIL -->
-     <measure dir="${home.vil.rt.tests.dir}" testPropName="vil.rt.testdata.home" testName="de.uni_hildesheim.sse.vil.rt.tests.AllTests">
+     <measure dir="${home.vil.rt.tests.dir}" testPropName="vil.rt.testdata.home" testName="de.uni_hildesheim.sse.vil.rt.tests.AllTests" testId="@{testId} sleep.secs="@{sleep.secs}">
          <extraclasspath>
 			<pathelement path="${home.instantiatorCore.rt.dir}/bin"/>
 			<pathelement path="${home.vil.rt.core.dir}/bin"/>
@@ -192,7 +158,7 @@
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS -->
-     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.AllTests">
+     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.AllTests" testId="@{testId} sleep.secs="@{sleep.secs}">
            <extrajvmargs>
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
@@ -203,7 +169,7 @@
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS.SCALELOG -->
-     <measure dir="${home.scalelog}/ScenarioTests.ScaleLog" testPropName="easy_producer.scenarios.scalelog.testdata.home" testName="net.ssehub.easy.scaleLog.AllTests">
+     <measure dir="${home.scalelog}/ScenarioTests.ScaleLog" testPropName="easy_producer.scenarios.scalelog.testdata.home" testName="net.ssehub.easy.scaleLog.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}>
            <extrajvmargs>
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
@@ -214,6 +180,19 @@
 		    <pathelement path="${home.scalelog}/ScenarioTests.ScaleLog/bin"/>
 		 </extraclasspath>
      </measure>
+    </sequential>
+  </macrodef>
+  
+  <target name="measureAll" depends="init">
+     <measureRun/> <!-- no sleep, use "." as id -->
+  </target>
+
+  <target name="measureAllRepeated" depends="init">
+     <measureRun testId="1" sleep.secs="${repeated.sleep.secs}"/>
+     <measureRun testId="2" sleep.secs="${repeated.sleep.secs}"/>
+     <measureRun testId="3" sleep.secs="${repeated.sleep.secs}"/>
+     <measureRun testId="4" sleep.secs="${repeated.sleep.secs}"/>
+     <measureRun testId="5" sleep.secs="${repeated.sleep.secs}"/>
   </target>
 
 </project>

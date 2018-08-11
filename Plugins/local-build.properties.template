@@ -1,5 +1,4 @@
 ant.lib.dir=W:/apache-ant-1.10.3/lib
 ant-maven.lib=${ant.lib.dir}/maven-ant-tasks-2.1.3.jar
-eclipse.plugins.dir=W:/eclipse/eclipse473/plugins
 home.scalelog=W:/IndenicaWorkspace
 benchmarks.home=W:/IndenicaWorkspace/benchmarks
