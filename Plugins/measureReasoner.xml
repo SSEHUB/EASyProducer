@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="measureReasoner" default="measureAll" basedir=".">
-
+<project name="measureReasoner" default="measureAll" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+  <property name="sleep.secs" value="0"/>
   <!-- execute within EASy Plugins only -->
+  <!-- we mix here Maven (for Eclipse based on EASy-Dependencies) and local classpath for uncommitted experiments / backpatches if needed -->
+  <!-- local path definitions, e.g., absolute paths - see local-build.properties.template -->
+  <property file="local-build.properties"/>
+  <!-- execute within take settings from Jenkins if running on jenkins, ignore if not available -->
   <property file="${user.home}/global-build.properties"/>
+  <property name="dir.results" value="${benchmarks.home}/auto"/>
   <!-- for local execution: override several path settings -->
-  <property name="ant.lib.dir" value="W:/apache-ant-1.10.3/lib"/>
-  <property name="eclipse.plugins.dir" value="W:/eclipse/eclipse473/plugins"/>
-  <property name="home.scalelog" value="W:/IndenicaWorkspace"/>
   <property name="libs.utils" value="VarModel/Utils/bin"/>
   <property name="libs.libs.common.io" value="VarModel/libs.commons.io/org.apache.commons.io_2.4.0.jar"/>
   <property name="libs.model" value="VarModel/Model/bin"/>
@@ -41,6 +43,11 @@
   <property name="home.scenario.tests.dir" location="EASy-Producer/ScenariosTest"/>
   <property name="home.template.tests.dir" value="Instantiation/de.uni_hildesheim.sse.vil.templatelang.tests"/>
 
+  <path id="maven-ant-tasks.classpath" path="${ant-maven.lib}" />
+  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+     uri="antlib:org.apache.maven.artifact.ant"
+     classpathref="maven-ant-tasks.classpath" />
+  
   <!-- taken from scenario tests -->	   
   	<path id ="includes">
         <!-- Model -->
@@ -87,7 +94,7 @@
         <pathelement path="${libs.easy.persistence}"/>
     
 		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
+		<!--<fileset dir="${eclipse.plugins.dir}">
 			<include name="org.eclipse.xtext_2.9.2*.jar" />
 			<include name="org.eclipse.emf.ecore.xmi_2.13*.jar" />
 			<include name="org.eclipse.emf.ecore_2.13*.jar" />
@@ -119,7 +126,7 @@
 			<include name="org.eclipse.jdt.core.manipulation_1.9.100*.jar" />
 			<include name="org.eclipse.jdt.compiler.tool_1.2.101*.jar" />
 			<include name="org.eclipse.text_3.6.100*.jar" />
-	    </fileset>
+	    </fileset>-->
 	</path>
 	
 	<path id="ant.path">
@@ -129,63 +136,84 @@
 	   <pathelement path="${ant.lib.dir}/ant-junit.jar"/>
 	</path>
 
+	<!-- Targets  -->
+	<target name="init">
+	    <mkdir dir="${dir.results}"/>
+	    <!--<maven pomFile="pom.xml" goal="compile"/> --> <!-- assuming we are up-to-date -->
+        <artifact:dependencies pathId="maven.classpath">
+            <pom file="pom.xml" id="pom"/>
+        </artifact:dependencies>
+	</target>
+	
+  <macrodef name="measure">
+      <attribute name="dir"/>
+      <attribute name="testPropName"/>
+      <attribute name="testName"/>
+      <attribute name="testId" default="."/>
+      <attribute name="testdataDir" default="testdata"/>
+      <attribute name="testdataTempDir" default="temp"/>
+      <element name="extraclasspath" optional="true" />
+      <element name="extrajvmargs" optional="true" />
+      <sequential>
+          <sleep seconds="${sleep.secs}"/>
+          <junit fork="true" dir="@{dir}" haltonfailure="true">
+              <jvmarg value="-D@{testPropName}=@{dir}/@{testdataDir}"/>
+              <extrajvmargs/>
+              <classpath>
+                  <path refid="includes"/>
+                  <path refid="maven.classpath"/>
+                  <path refid="ant.path"/>
+                  <extraclasspath/>
+              </classpath>
+              <test name="@{testName}" todir="@{dir}/@{testdataDir}/@{testdataTempDir}"/>
+              <formatter type="plain" usefile="false" />
+          </junit>
+          <mkdir dir="${dir.results}/@{testId}"/>
+          <copy todir="${dir.results}/@{testId}">
+              <fileset dir="@{dir}/@{testdataDir}/@{testdataTempDir}">
+			      <include name="*.tsv"/>
+			  </fileset>
+	      </copy>
+      </sequential>
+  </macrodef>
   
-  <target name="measureAll">
+  <target name="measureAll" depends="init">
      <!-- SSE REASONER -->
-     <junit fork="true" dir="${home.reasonerCore.test.dir}">
-	     <jvmarg value="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata"/>
-		 <classpath>
-		    <path refid="includes"/>
-			<path refid="ant.path"/>
-		 </classpath>
-		 <test name="test.net.ssehub.easy.reasoning.sseReasoner.AllTests" todir="${home.reasonerCore.test.dir}/testdata/temp"/>
-		 <formatter type="plain" usefile="false" />
-	 </junit>
-	 <!-- RT-VIL -->
-     <junit fork="true" dir="${home.vil.rt.tests.dir}">
-	     <jvmarg value="-Dvil.rt.testdata.home=${home.vil.rt.tests.dir}/testdata"/>
-		 <classpath>
-		    <path refid="includes"/>
-		    <path refid="ant.path"/>
+     <measure dir="${home.reasonerCore.test.dir}" testPropName="reasonerCore.testdata.home" testName="test.net.ssehub.easy.reasoning.sseReasoner.AllTests"/>
+     <!-- RT-VIL -->
+     <measure dir="${home.vil.rt.tests.dir}" testPropName="vil.rt.testdata.home" testName="de.uni_hildesheim.sse.vil.rt.tests.AllTests">
+         <extraclasspath>
 			<pathelement path="${home.instantiatorCore.rt.dir}/bin"/>
 			<pathelement path="${home.vil.rt.core.dir}/bin"/>
 			<pathelement path="${home.vil.rt.tests.dir}/bin"/>
 			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
 			<pathelement path="${home.instantiator.serializer.dir}/bin"/>
 			<pathelement path="${home.template.tests.dir}/bin"/>
-		 </classpath>
-		 <test name="de.uni_hildesheim.sse.vil.rt.tests.AllTests" todir="${home.vil.rt.tests.dir}/testdata/temp"/>
-		 <formatter type="plain" usefile="false" />
-	 </junit>
+		 </extraclasspath>
+     </measure>
 	 <!-- SCENARIOS -->
-     <junit fork="true" dir="${home.scenario.tests.dir}">
-	     <jvmarg value="-Deasy_producer.scenarios.testdata.home=${home.scenario.tests.dir}/testdata"/>
-	     <jvmarg value="-Deasy.scenario.instantiate=false"/>
-		 <classpath>
-		    <path refid="includes"/>
+     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.AllTests">
+           <extrajvmargs>
+             <jvmarg value="-Deasy.scenario.instantiate=false"/>
+           </extrajvmargs>
+           <extraclasspath>
 			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
 			<pathelement path="${home.template.tests.dir}/bin"/>
-		    <path refid="ant.path"/>
 			<pathelement path="${home.scenario.tests.dir}/bin"/>
-		 </classpath>
-		 <test name="net.ssehub.easy.producer.scenario_tests.AllTests" todir="${home.scenario.tests.dir}/testdata/temp"/>
-		 <formatter type="plain" usefile="false" />
-	 </junit>
+		 </extraclasspath>
+     </measure>
 	 <!-- SCENARIOS.SCALELOG -->
-     <junit fork="true" dir="${home.scalelog}">
-	     <jvmarg value="-Deasy_producer.scenarios.scalelog.testdata.home=${home.scalelog}/ScenarioTests.ScaleLog/testdata"/>
-	     <jvmarg value="-Deasy.scenario.instantiate=false"/>
-		 <classpath>
-		    <path refid="includes"/>
+     <measure dir="${home.scalelog}/ScenarioTests.ScaleLog" testPropName="easy_producer.scenarios.scalelog.testdata.home" testName="net.ssehub.easy.scaleLog.AllTests">
+           <extrajvmargs>
+             <jvmarg value="-Deasy.scenario.instantiate=false"/>
+           </extrajvmargs>
+           <extraclasspath>
 			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
 			<pathelement path="${home.template.tests.dir}/bin"/>
 			<pathelement path="${home.scenario.tests.dir}/bin"/>
 		    <pathelement path="${home.scalelog}/ScenarioTests.ScaleLog/bin"/>
-			<path refid="ant.path"/>
-		 </classpath>
-		 <formatter type="plain" usefile="false" />
-		 <test name="net.ssehub.easy.scaleLog.AllTests" todir="${home.scalelog}/ScenarioTests.ScaleLog/testdata/temp"/>
-	 </junit>
+		 </extraclasspath>
+     </measure>
   </target>
 
 </project>
