@@ -1,0 +1,384 @@
+project FamiliesCfg {
+
+    import ReconfigurableHardware;
+    import Families;
+    import AlgorithmsCfg;
+    import BasicsCfg;
+    Family fPreprocessor;
+    Family fCorrelationFinancial;
+    Family fSentimentAnalysis;
+    Family randomFamily;
+    Family fMapper;
+    Family fHayashiYoshida;
+    families = {
+        refBy(fPreprocessor), refBy(fCorrelationFinancial), refBy(fSentimentAnalysis), refBy(randomFamily), refBy(fMapper), refBy(fHayashiYoshida)
+    };
+    families.bindingTime = BindingTime.compile;
+    fPreprocessor = Family {
+        name = "fPreprocessor", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "springStream", 
+                fields = {
+                    Field {
+                        name = "symbolTuple", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(swPreprocessor)
+        }
+    };
+    fCorrelationFinancial = Family {
+        name = "fCorrelationFinancial", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "symbolList", 
+                fields = {
+                    Field {
+                        name = "allSymbols", 
+                        type = refBy(StringListType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "pairwiseFinancial", 
+                fields = {
+                    Field {
+                        name = "id0", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "id1", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "date", 
+                        type = refBy(StringTimeStampType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(DoubleType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            //refBy(correlationSW), refBy(SubPipelineAlgorithmVar_38)
+            refBy(SWTopoCorrelationFinancial), refBy(GenHWTopoCorrelationFinancial), refBy(correlationSW), refBy(HardwareAlgorithmVar_30), refBy(HardwareAlgorithmVar_31)
+        }
+    };
+    fSentimentAnalysis = Family {
+        name = "fSentimentAnalysis", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "analyzedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "timeSeriesGranularity"
+            }, IntegerParameter {
+                name = "sentimentClass"
+            }, RealParameter {
+                name = "classificationThreshold"
+            }
+        }, 
+        members = {
+            refBy(topoSentiWord), refBy(topoSVM)
+        }
+    };
+    randomFamily = Family {
+        name = "randomFamily", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "randomData", 
+                fields = {
+                    Field {
+                        name = "randomInteger", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(TimeStampType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "randomData", 
+                fields = {
+                    Field {
+                        name = "randomInteger", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(TimeStampType)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "delay"
+            }, BooleanParameter {
+                name = "flag"
+            }, IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            refBy(randomAlg1), refBy(randomAlg2)
+        }
+    };
+    fMapper = Family {
+        name = "fMapper", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "symbolList", 
+                fields = {
+                    Field {
+                        name = "allSymbols", 
+                        type = refBy(StringListType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "symbolsStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "configurationStream", 
+                fields = {
+                    Field {
+                        name = "pairKey", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "pairValue", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "resetWindowStream", 
+                fields = {
+                    Field {
+                        name = "windowStart", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            refBy(aMapper)
+        }
+    };
+    fHayashiYoshida = Family {
+        name = "fHayashiYoshida", 
+        input = {
+            Tuple {
+                name = "symbolsStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "configurationStream", 
+                fields = {
+                    Field {
+                        name = "pairKey", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "pairValue", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "resetWindowStream", 
+                fields = {
+                    Field {
+                        name = "windowStart", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "pairwiseFinancial", 
+                fields = {
+                    Field {
+                        name = "pairwiseCorrelationFinancial", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(aHayashiYoshida)
+        }
+    };
+    freeze {
+        families;
+        fPreprocessor;
+        fCorrelationFinancial;
+        fSentimentAnalysis;
+        randomFamily;
+        fMapper;
+        fHayashiYoshida;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

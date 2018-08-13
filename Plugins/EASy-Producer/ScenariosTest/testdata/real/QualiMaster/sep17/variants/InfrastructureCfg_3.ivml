@@ -1,0 +1,26 @@
+project InfrastructureCfg {
+
+	import Infrastructure;
+	import PipelinesCfg;
+	activePipelines = {
+		refBy(PriorityPip), refBy(PipelineVar_1), refBy(PipelineVar_2)
+	};
+	// TODO constraint no sub-pipeline here
+	
+	activePipelines.bindingTime = BindingTime.compile;
+	interfaceArtifact = "eu.qualimaster:PriorityPipelineInterfaces:0.5.0-SNAPSHOT";
+	interfaceArtifact.bindingTime = BindingTime.compile;
+	modelArtifact = "eu.qualimaster:infrastructureModel:0.5.0-SNAPSHOT";
+	modelArtifact.bindingTime = BindingTime.compile;
+	repositoryURL = "https://projects.sse.uni-hildesheim.de/qm/maven/";
+	repositoryURL.bindingTime = BindingTime.compile;
+	deploymentURL = "http://nexus.sse.uni-hildesheim.de/releases/Qualimaster/";
+	deploymentURL.bindingTime = BindingTime.compile;
+	freeze {
+		activePipelines;
+		interfaceArtifact;
+		modelArtifact;
+		repositoryURL;
+		deploymentURL;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

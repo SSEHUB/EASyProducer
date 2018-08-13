@@ -194,20 +194,86 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
      * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
      *   corresponds to name) is located in
-     * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
-     *   made executable
      * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
      * @param mode the testing mode
      * @return the base directory of the instantiated project
      * @throws IOException in case of I/O problems
      */
     protected File executeCase(String projectName, String[] versions, String caseFolder, 
-        String sourceProjectName, Mode mode, String... makeExecutable) throws IOException {
+        String sourceProjectName, Mode mode) throws IOException {
+        return executeCase(projectName, versions, caseFolder, sourceProjectName, mode, null);
+    }
+    
+    /**
+     * Executes a "real-world" case.
+     * 
+     * @param projectName the name of the project
+     * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
+     * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
+     *   corresponds to name) is located in
+     * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
+     * @param mode the testing mode
+     * @param modifier test modifier instance (may be <b>null</b>)
+     * @return the base directory of the instantiated project
+     * @throws IOException in case of I/O problems
+     */
+    protected File executeCase(String projectName, String[] versions, String caseFolder, 
+        String sourceProjectName, Mode mode, ITestModifier modifier) throws IOException {
         String[] names = new String[1];
         names[0] = projectName;
-        return executeCase(names, versions, caseFolder, sourceProjectName, mode, makeExecutable);
+        return executeCase(names, versions, caseFolder, sourceProjectName, mode, modifier);
     }
 
+    /**
+     * An instance that may modify certain behavior of a real-world test case on-the-fly.
+     * 
+     * @author Holger Eichelberger
+     */
+    protected interface ITestModifier {
+
+        /**
+         * Called after copying files from a base test template to the actual test folder.
+         * 
+         * @param target the actual test folder
+         */
+        public void postCopy(File target);
+        
+    }
+
+    /**
+     * A Test modifier that makes given files executable.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class MakeExecutableTestModifier implements ITestModifier {
+        
+        private String[] makeExecutable;
+
+        /**
+         * Creates a modifier with a set of files to be made executable.
+         * 
+         * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
+         *   made executable
+         */
+        public MakeExecutableTestModifier(String... makeExecutable) {
+            this.makeExecutable = makeExecutable;
+        }
+        
+        @Override
+        public void postCopy(File target) {
+            if (null != makeExecutable) {
+                for (String fName : makeExecutable) {
+                    File file = new File(target, fName);
+                    if (file.exists()) {
+                        file.setExecutable(true); // don't care for owner as this is intended to run on a temporary copy
+                    }
+                }
+            }
+        }
+        
+    }
+
+    
     /**
      * Executes a "real-world" case.
      * 
@@ -216,15 +282,32 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
      * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
      *   corresponds to name) is located in
-     * @param makeExecutable those files (in relative paths) within the temporary copy of the project to be 
-     *   made executable
      * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
      * @param mode the testing mode
      * @return the base directory of the instantiated project (<b>null</b> for no instantiation, i.e., do not assert)
      * @throws IOException in case of I/O problems
      */
+    protected File executeCase(String[] names, String[] versions, String caseFolder, String sourceProjectName, 
+        Mode mode) throws IOException {
+        return executeCase(names, versions, caseFolder, sourceProjectName, mode, null);
+    }
+    
+    /**
+     * Executes a "real-world" case.
+     * 
+     * @param names the name of the project, if only one entry the project folder / model name, else project folder 
+     * name, (optional) IVML/VIL model name, (optional) VIL model name
+     * @param versions the version of the models, index 0 IVML, index 1 VIL build file (may be <b>null</b>)
+     * @param caseFolder an optional set of intermediary folders where the actual case study (innermost folder 
+     *   corresponds to name) is located in
+     * @param sourceProjectName the optional name of the source project (null if same as <code>projectName</code>)
+     * @param mode the testing mode
+     * @param modifier test modifier instance (may be <b>null</b>)
+     * @return the base directory of the instantiated project (<b>null</b> for no instantiation, i.e., do not assert)
+     * @throws IOException in case of I/O problems
+     */
     protected File executeCase(String[] names, String[] versions, String caseFolder, 
-        String sourceProjectName, Mode mode, String... makeExecutable) throws IOException {
+        String sourceProjectName, Mode mode, ITestModifier modifier) throws IOException {
         ArtifactFactory.clear();
         String projectName = names[0];
         String iModelName = names.length > 1 ? names[1] : projectName;
@@ -238,7 +321,9 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             File sBase = new File(getTestFolder(), caseFolder + sourceProjectName);
             FileUtils.copyDirectory(sBase, sourceProjectFolder);
         }
-        makeExecutable(temp, makeExecutable);
+        if (null != modifier) {
+            modifier.postCopy(temp);
+        }
         File ivmlFolder = getIvmlFolderIn(temp);
         File vilFolder = getVilFolderIn(temp);
         File vtlFolder = getVtlFolderIn(temp);
@@ -504,23 +589,6 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             Assert.fail("unexpected exeption: " + e);
         }
         return result;
-    }
-    
-    /**
-     * Make the given files (relative to <code>base</code>) executable.
-     * 
-     * @param base the base directory
-     * @param makeExecutable a set of relative files (may be <b>null</b>)
-     */
-    private static void makeExecutable(File base, String[] makeExecutable) {
-        if (null != makeExecutable) {
-            for (String fName : makeExecutable) {
-                File file = new File(base, fName);
-                if (file.exists()) {
-                    file.setExecutable(true); // don't care for owner as this is intended to run on a temporary copy
-                }
-            }
-        }
     }
     
     /**

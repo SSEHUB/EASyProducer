@@ -168,6 +168,17 @@
 			<pathelement path="${home.scenario.tests.dir}/bin"/>
 		 </extraclasspath>
      </measure>
+	 <!-- SCENARIOS-Variants -->
+     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.MeasurementTests" testId="@{testId} sleep.secs="@{sleep.secs}">
+           <extrajvmargs>
+             <jvmarg value="-Deasy.scenario.instantiate=false"/>
+           </extrajvmargs>
+           <extraclasspath>
+			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
+			<pathelement path="${home.template.tests.dir}/bin"/>
+			<pathelement path="${home.scenario.tests.dir}/bin"/>
+		 </extraclasspath>
+     </measure>
 	 <!-- SCENARIOS.SCALELOG -->
      <measure dir="${home.scalelog}/ScenarioTests.ScaleLog" testPropName="easy_producer.scenarios.scalelog.testdata.home" testName="net.ssehub.easy.scaleLog.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}>
            <extrajvmargs>

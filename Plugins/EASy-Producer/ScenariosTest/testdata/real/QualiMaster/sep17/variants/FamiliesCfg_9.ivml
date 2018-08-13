@@ -1,0 +1,1038 @@
+project FamiliesCfg {
+
+    import ReconfigurableHardware;
+    import Families;
+    import AlgorithmsCfg;
+    import BasicsCfg;
+    Family fPreprocessor;
+    Family fCorrelationFinancial;
+    Family fSentimentAnalysis;
+    Family randomFamily;
+    Family switchFamily;
+    Family fTwitterEventDetection;
+    Family FamilyVar_14;
+    Family FamilyVar_15;
+    Family FamilyVar_17;
+    Family FamilyVar_19;
+    Family FamilyVar_21;
+    Family FamilyVar_22;
+    Family FamilyVar_23;
+    Family FamilyVar_24;
+    Family FamilyVar_26;
+    Family FamilyVar_27;
+    Family FamilyVar_28;
+    Family fMapper;
+    Family fHayashiYoshida;
+    families = {
+        refBy(fPreprocessor), refBy(fCorrelationFinancial), refBy(fSentimentAnalysis), refBy(randomFamily), refBy(fMapper), refBy(fHayashiYoshida), refBy(switchFamily), refBy(fTwitterEventDetection), refBy(FamilyVar_14), refBy(FamilyVar_15), refBy(FamilyVar_17), refBy(FamilyVar_19), refBy(FamilyVar_21), refBy(FamilyVar_22), refBy(FamilyVar_23), refBy(FamilyVar_24), refBy(FamilyVar_26), refBy(FamilyVar_27), refBy(FamilyVar_28)
+    };
+    families.bindingTime = BindingTime.compile;
+    fPreprocessor = Family {
+        name = "fPreprocessor", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "springStream", 
+                fields = {
+                    Field {
+                        name = "symbolTuple", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(swPreprocessor)
+        }
+    };
+    fCorrelationFinancial = Family {
+        name = "fCorrelationFinancial", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "symbolList", 
+                fields = {
+                    Field {
+                        name = "allSymbols", 
+                        type = refBy(StringListType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "pairwiseFinancial", 
+                fields = {
+                    Field {
+                        name = "id0", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "id1", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "date", 
+                        type = refBy(StringTimeStampType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(DoubleType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            //refBy(correlationSW), refBy(SubPipelineAlgorithmVar_38)
+            refBy(SWTopoCorrelationFinancial), refBy(GenHWTopoCorrelationFinancial), refBy(correlationSW), refBy(HardwareAlgorithmVar_30), refBy(HardwareAlgorithmVar_31)
+        }
+    };
+    fSentimentAnalysis = Family {
+        name = "fSentimentAnalysis", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "analyzedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "timeSeriesGranularity"
+            }, IntegerParameter {
+                name = "sentimentClass"
+            }, RealParameter {
+                name = "classificationThreshold"
+            }
+        }, 
+        members = {
+            refBy(topoSentiWord), refBy(topoSVM)
+        }
+    };
+    randomFamily = Family {
+        name = "randomFamily", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "randomData", 
+                fields = {
+                    Field {
+                        name = "randomInteger", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(TimeStampType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "randomData", 
+                fields = {
+                    Field {
+                        name = "randomInteger", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(TimeStampType)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "delay"
+            }, BooleanParameter {
+                name = "flag"
+            }, IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            refBy(randomAlg1), refBy(randomAlg2)
+        }
+    };
+    FamilyVar_14 = Family {
+        name = "fSpamDetection", 
+        description = "Detects spam in tweet stream", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }, Field {
+                        name = "spamPropability", 
+                        type = refBy(DoubleType)
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(spamDetection)
+        }
+    };
+    FamilyVar_15 = Family {
+        name = "fSpamRemoval", 
+        description = "Removes Spam from twitter stream", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }, Field {
+                        name = "spamPropability", 
+                        type = refBy(DoubleType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            RealParameter {
+                defaultValue = 0.5, 
+                name = "spamThreshold"
+            }
+        }, 
+        members = {
+            refBy(spamRemoval)
+        }
+    };
+    FamilyVar_17 = Family {
+        name = "fKeywordAnalyzer", 
+        description = "deduces typical keywords for a current event", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "events", 
+                        type = refBy(IFEventListType)
+                    }, Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "events", 
+                        type = refBy(IFEventListType)
+                    }, Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            RealParameter {
+                defaultValue = 0.5, 
+                name = "threshold"
+            }, RealParameter {
+                defaultValue = 0.5, 
+                name = "decay"
+            }
+        }, 
+        members = {
+            refBy(keywordAnalyzer)
+        }
+    };
+    FamilyVar_19 = Family {
+        name = "fRecommendations", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "events", 
+                        type = refBy(IFEventListType)
+                    }, Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "recommendationStream", 
+                fields = {
+                    Field {
+                        name = "recommendations", 
+                        type = refBy(StringType)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            RealParameter {
+                defaultValue = 0.5, 
+                name = "impactThreshold"
+            }, RealParameter {
+                defaultValue = 0.5, 
+                name = "stockCooccurrenceThreshold"
+            }
+        }, 
+        members = {
+            refBy(recommendations)
+        }
+    };
+    FamilyVar_21 = Family {
+        name = "fStockParser", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }, Field {
+                        name = "stocks", 
+                        type = refBy(StringListType)
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(AlgorithmVar_22)
+        }
+    };
+    FamilyVar_22 = Family {
+        name = "fDynamicGraphCompilation", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "pairwiseFinancial", 
+                fields = {
+                    Field {
+                        name = "id0", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "id1", 
+                        type = refBy(StringType)
+                    }, Field {
+                        name = "date", 
+                        type = refBy(StringTimeStampType)
+                    }, Field {
+                        name = "value", 
+                        type = refBy(DoubleType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "edgeStream", 
+                fields = {
+                    Field {
+                        name = "edge", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            RealParameter {
+                name = "correlationThreshold"
+            }
+        }, 
+        members = {
+            refBy(AlgorithmVar_25)
+        }
+    };
+    FamilyVar_23 = Family {
+        name = "fDynamicHubComputation", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "edgeStream", 
+                fields = {
+                    Field {
+                        name = "edge", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "hubStream", 
+                fields = {
+                    Field {
+                        name = "hubList", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                defaultValue = 30, 
+                name = "windowSize"
+            }, IntegerParameter {
+                defaultValue = 10, 
+                name = "hubListSize"
+            }
+        }, 
+        members = {
+            refBy(AlgorithmVar_26)
+        }
+    };
+    switchFamily = Family {
+        name = "switchFamily", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "randomData", 
+                fields = {
+                    Field {
+                        name = "randomInteger", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(TimeStampType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "randomData", 
+                fields = {
+                    Field {
+                        name = "randomInteger", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(TimeStampType)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "aggregationFactor"
+            }, IntegerParameter {
+                name = "delay"
+            }, BooleanParameter {
+                name = "flag"
+            }, IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            refBy(switchAlg1), refBy(switchAlg2)
+        }
+    };
+    fTwitterEventDetection = Family {
+        name = "fTwitterEventDetection", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16), 
+                        keyPart = false
+                    }, Field {
+                        name = "stocks", 
+                        type = refBy(StringListType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitterStream", 
+                fields = {
+                    Field {
+                        name = "events", 
+                        type = refBy(IFEventListType)
+                    }, Field {
+                        name = "status", 
+                        type = refBy(FieldTypeVar_16)
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                defaultValue = 1000, 
+                name = "hardThreshold"
+            }, RealParameter {
+                defaultValue = 0.5, 
+                name = "percentageThreshold"
+            }, IntegerParameter {
+                defaultValue = 86400, 
+                name = "lengthOfTimeWindow"
+            }, IntegerParameter {
+                defaultValue = 1, 
+                name = "frequenceOfCheckForEvent"
+            }
+        }, 
+        members = {
+            refBy(AlgorithmVar_24)
+        }
+    };
+    FamilyVar_24 = Family {
+        name = "fTransferEntropy", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "symbolList", 
+                fields = {
+                    Field {
+                        name = "allSymbols", 
+                        type = refBy(StringListType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "pairwiseFinancial", 
+                fields = {
+                    Field {
+                        name = "id0", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "id1", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "date", 
+                        type = refBy(StringTimeStampType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(DoubleType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                defaultValue = 300, 
+                name = "windowSize"
+            }, IntegerParameter {
+                defaultValue = 1, 
+                name = "windowAdvance"
+            }, IntegerParameter {
+                defaultValue = 128, 
+                name = "densitySize"
+            }
+        }, 
+        members = {
+            refBy(SoftwareAlgorithmVar_33)
+        }
+    };
+    fMapper = Family {
+        name = "fMapper", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "preprocessedStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }, Field {
+                        name = "volume", 
+                        type = refBy(IntegerType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "symbolList", 
+                fields = {
+                    Field {
+                        name = "allSymbols", 
+                        type = refBy(StringListType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "symbolsStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "configurationStream", 
+                fields = {
+                    Field {
+                        name = "pairKey", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "pairValue", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "resetWindowStream", 
+                fields = {
+                    Field {
+                        name = "windowStart", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        parameters = {
+            IntegerParameter {
+                name = "windowSize"
+            }
+        }, 
+        members = {
+            refBy(aMapper)
+        }
+    };
+    fHayashiYoshida = Family {
+        name = "fHayashiYoshida", 
+        input = {
+            Tuple {
+                name = "symbolsStream", 
+                fields = {
+                    Field {
+                        name = "symbolId", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "timestamp", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RealType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "configurationStream", 
+                fields = {
+                    Field {
+                        name = "pairKey", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }, Field {
+                        name = "pairValue", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }, Tuple {
+                name = "resetWindowStream", 
+                fields = {
+                    Field {
+                        name = "windowStart", 
+                        type = refBy(LongType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "pairwiseFinancial", 
+                fields = {
+                    Field {
+                        name = "pairwiseCorrelationFinancial", 
+                        type = refBy(StringType), 
+                        keyPart = false
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(aHayashiYoshida)
+        }
+    };
+    FamilyVar_26 = Family {
+        name = "fTimeGraphMapper", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "edgeStream", 
+                fields = {
+                    Field {
+                        name = "edge", 
+                        type = refBy(StringType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "dataStream", 
+                fields = {
+                    Field {
+                        name = "update", 
+                        type = refBy(ObjectType), 
+                        keyPart = false
+                    }, Field {
+                        name = "isAddition", 
+                        type = refBy(BooleanType)
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(SoftwareAlgorithmVar_34)
+        }
+    };
+    FamilyVar_27 = Family {
+        name = "fTimeGraphIndexer", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "dataStream", 
+                fields = {
+                    Field {
+                        name = "update", 
+                        type = refBy(ObjectType), 
+                        keyPart = false
+                    }, Field {
+                        name = "isAddition", 
+                        type = refBy(BooleanType)
+                    }
+                }
+            }, Tuple {
+                name = "internalRequests", 
+                fields = {
+                    Field {
+                        name = "internalRequest", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }, Tuple {
+                name = "unicastRequests", 
+                fields = {
+                    Field {
+                        name = "unicastExternalRequest", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }, Tuple {
+                name = "broadcastRequests", 
+                fields = {
+                    Field {
+                        name = "broadcastExternalRequest", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "externalResponses", 
+                fields = {
+                    Field {
+                        name = "externalResponse", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }, Tuple {
+                name = "internalRequests", 
+                fields = {
+                    Field {
+                        name = "internalRequest", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(SoftwareAlgorithmVar_35)
+        }
+    };
+    FamilyVar_28 = Family {
+        name = "fTimeGraphQueryExecutor", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "snapshotQueryStream", 
+                fields = {
+                    Field {
+                        name = "start", 
+                        type = refBy(LongType)
+                    }, Field {
+                        name = "end", 
+                        type = refBy(LongType)
+                    }
+                }
+            }, Tuple {
+                name = "pathQueryStream", 
+                fields = {
+                    Field {
+                        name = "start", 
+                        type = refBy(LongType)
+                    }, Field {
+                        name = "end", 
+                        type = refBy(LongType)
+                    }, Field {
+                        name = "vertexA", 
+                        type = refBy(StringType)
+                    }, Field {
+                        name = "vertexB", 
+                        type = refBy(StringType)
+                    }, Field {
+                        name = "type", 
+                        type = refBy(StringType)
+                    }
+                }
+            }, Tuple {
+                name = "externalResponses", 
+                fields = {
+                    Field {
+                        name = "externalResponse", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "snapshotStream", 
+                fields = {
+                    Field {
+                        name = "snapshot", 
+                        type = refBy(StringType)
+                    }
+                }
+            }, Tuple {
+                name = "pathStream", 
+                fields = {
+                    Field {
+                        name = "path", 
+                        type = refBy(StringType)
+                    }
+                }
+            }, Tuple {
+                name = "unicastRequests", 
+                fields = {
+                    Field {
+                        name = "unicastExternalRequest", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }, Tuple {
+                name = "broadcastRequests", 
+                fields = {
+                    Field {
+                        name = "broadcastExternalRequest", 
+                        type = refBy(ObjectType)
+                    }
+                }
+            }
+        }, 
+        members = {
+            refBy(SoftwareAlgorithmVar_36)
+        }
+    };
+    freeze {
+        families;
+        fPreprocessor;
+        fCorrelationFinancial;
+        fSentimentAnalysis;
+        randomFamily;
+        switchFamily;
+        fTwitterEventDetection;
+        FamilyVar_14;
+        FamilyVar_15;
+        FamilyVar_17;
+        FamilyVar_19;
+        FamilyVar_21;
+        FamilyVar_22;
+        FamilyVar_24;
+        FamilyVar_26;
+        FamilyVar_27;
+        FamilyVar_28;
+        fMapper;
+        fHayashiYoshida;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

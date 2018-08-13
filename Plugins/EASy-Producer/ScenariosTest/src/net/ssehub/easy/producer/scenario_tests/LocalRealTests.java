@@ -91,7 +91,7 @@ public class LocalRealTests extends RealTests {
      */
     @Test
     public void testQualiMasterSep17() throws IOException {
-        testQualiMasterFeb17Impl(Mode.REASON_INSTANTIATE);
+        testQualiMasterSep17Impl(Mode.REASON_INSTANTIATE);
     }
-
+    
 }

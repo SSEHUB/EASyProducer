@@ -1,0 +1,17 @@
+project PipelinesCfg {
+
+	import Basics;
+	import Pipelines;
+	import PriorityPipCfg;
+	import PipelineVar_1Cfg;
+	import PipelineVar_2Cfg;
+    import SubTopologyCfg;
+	pipelines = {
+		refBy(PriorityPip), refBy(PipelineVar_1), refBy(PipelineVar_2), refBy(SubTopology)
+	};
+	pipelines.userVisible = true;
+	pipelines.bindingTime = BindingTime.compile;
+	freeze {
+		pipelines;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}
