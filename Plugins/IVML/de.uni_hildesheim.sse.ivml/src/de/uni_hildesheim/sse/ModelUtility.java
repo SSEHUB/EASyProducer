@@ -34,6 +34,7 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.dslCore.translation.LogMessageReceiver;
 import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.dslCore.translation.MessageReceiver;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
@@ -59,11 +60,13 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
     implements IModelLoader<Project> {
 
     public static final ModelUtility INSTANCE = new ModelUtility();
-    
+    private final LogMessageReceiver logReceiver;
+                    
     /**
      * Prevents external creation.
      */
     private ModelUtility() {
+        logReceiver = new LogMessageReceiver(getClass(), null);
     }
 
     @Override
@@ -166,7 +169,8 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
      *             in case that an I/O error happens during parsing
      */
     public List<ModelInfo<Project>> obtainInfo(URI uri) throws IOException {
-        VariabilityUnit root = parse(uri, true, null, VariabilityUnit.class);
+        logReceiver.setLocationHint(uri);
+        VariabilityUnit root = parse(uri, true, logReceiver, VariabilityUnit.class);
         List<ModelInfo<Project>> result = new ArrayList<ModelInfo<Project>>();
         if (null != root) {
             for (de.uni_hildesheim.sse.ivml.Project project : root
