@@ -1554,7 +1554,7 @@ class Resolver implements IResolutionListener {
      * @return the time in ms
      */
     long getEvaluationTime() {
-        return translationTime;
+        return evaluationTime;
     }
     
     /**
@@ -1563,7 +1563,7 @@ class Resolver implements IResolutionListener {
      * @return the time in ms
      */
     long getTranslationTime() {
-        return evaluationTime;
+        return translationTime;
     }
 
     /**
