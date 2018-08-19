@@ -6,8 +6,10 @@
 	
   <target name="all">
      <delete file="local-build.properties"/>
+     <local name="base.absolute.path"/>
+     <property name="base.absolute.path" location="${basedir}"/>
      <propertyfile file="local-build.properties">
-         <entry key="home.scalelog" value="."/>
+         <entry key="home.scalelog" value="${base.absolute.path}"/>
      </propertyfile>
      <delete dir="ScenarioTests.ScaleLog"/>
      <mkdir dir="ScenarioTests.ScaleLog"/>
