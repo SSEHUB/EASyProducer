@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="measureEASy" default="all" basedir=".">
+
+  <target name="all">
+     <delete file="local-build.properties"/>
+     <propertyfile file="local-build.properties">
+         <entry key="home.scalelog" value="."/>
+     </propertyfile>
+     <delete dir="ScenarioTests.ScaleLog"/>
+     <mkdir dir="ScenarioTests.ScaleLog"/>
+     <unzip src="${benchmarks.home}/ScaleLog-Scenarios.zip" dest="ScenarioTests.ScaleLog"/>
+     <ant dir="." antfile="measureReasoner.xml" target="measureAll"/> <!-- measureAllRepeated -->
+     <delete dir="ScenarioTests.ScaleLog"/>
+  </target>
+
+</project>
