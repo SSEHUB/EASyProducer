@@ -37,6 +37,15 @@
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
   
+  <repositories>       
+    <repository>
+      <id>qm.eu</id>
+      <name>qm.eu</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories> 
+  
   <dependencyManagement>
     <dependencies>
         <dependency>
