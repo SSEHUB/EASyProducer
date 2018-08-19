@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="measureEASy" default="all" basedir=".">
 
+  <!-- import von globalen Properties Einstellungen -->
+  <property file="${user.home}/global-build.properties"/>
+	
   <target name="all">
      <delete file="local-build.properties"/>
      <propertyfile file="local-build.properties">
