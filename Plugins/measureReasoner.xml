@@ -149,12 +149,12 @@
      <!-- RT-VIL -->
      <measure dir="${home.vil.rt.tests.dir}" testPropName="vil.rt.testdata.home" testName="de.uni_hildesheim.sse.vil.rt.tests.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
          <extraclasspath>
-			<pathelement path="${home.instantiatorCore.rt.dir}/bin"/>
-			<pathelement path="${home.vil.rt.core.dir}/bin"/>
-			<pathelement path="${home.vil.rt.tests.dir}/bin"/>
-			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
-			<pathelement path="${home.instantiator.serializer.dir}/bin"/>
-			<pathelement path="${home.template.tests.dir}/bin"/>
+			<pathelement path="${home.instantiatorCore.rt.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.vil.rt.core.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.vil.rt.tests.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.vil.expressions.core.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.instantiator.serializer.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.template.tests.dir}/${build.classes.dir}"/>
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS -->
@@ -163,9 +163,9 @@
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
            <extraclasspath>
-			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
-			<pathelement path="${home.template.tests.dir}/bin"/>
-			<pathelement path="${home.scenario.tests.dir}/bin"/>
+			<pathelement path="${home.vil.expressions.core.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.template.tests.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.scenario.tests.dir}/${build.classes.dir}"/>
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS-Variants -->
@@ -174,9 +174,9 @@
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
            <extraclasspath>
-			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
-			<pathelement path="${home.template.tests.dir}/bin"/>
-			<pathelement path="${home.scenario.tests.dir}/bin"/>
+			<pathelement path="${home.vil.expressions.core.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.template.tests.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.scenario.tests.dir}/${build.classes.dir}"/>
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS.SCALELOG -->
@@ -185,10 +185,10 @@
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
            <extraclasspath>
-			<pathelement path="${home.vil.expressions.core.dir}/bin"/>
-			<pathelement path="${home.template.tests.dir}/bin"/>
-			<pathelement path="${home.scenario.tests.dir}/bin"/>
-		    <pathelement path="${home.scalelog}/ScenarioTests.ScaleLog/bin"/>
+			<pathelement path="${home.vil.expressions.core.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.template.tests.dir}/${build.classes.dir}"/>
+			<pathelement path="${home.scenario.tests.dir}/${build.classes.dir}"/>
+		    <pathelement path="${home.scalelog}/ScenarioTests.ScaleLog/${build.classes.dir}"/>
 		 </extraclasspath>
      </measure>
     </sequential>

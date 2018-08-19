@@ -2,3 +2,5 @@ ant.lib.dir=W:/apache-ant-1.10.3/lib
 ant-maven.lib=${ant.lib.dir}/maven-ant-tasks-2.1.3.jar
 home.scalelog=W:/IndenicaWorkspace
 benchmarks.home=W:/IndenicaWorkspace/benchmarks
+build.base.dir=bin
+build.classes.dir=bin
