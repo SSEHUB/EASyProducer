@@ -414,6 +414,8 @@ public class MeasurementCollector {
         stackStop.add("jdk.internal.reflect.NativeMethodAccessorImpl");
         stackStop.add("java.lang.reflect.Method");
         stackStop.add("org.junit.runners.model.FrameworkMethod");
+        stackStop.add("sun.reflect.NativeMethodAccessorImpl"); // JDK8
+        stackStop.add("sun.reflect.DelegatingMethodAccessorImpl"); // JDK8
     }
     
     /**
