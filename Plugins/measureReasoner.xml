@@ -199,10 +199,15 @@
   </target>
 
   <target name="measureAllRepeated" depends="init">
+  	 <echo message="Repeated Measurements: Round 1/5"/>
      <measureRun testId="1" sleep.secs="${repeated.sleep.secs}"/>
+     <echo message="Repeated Measurements: Round 2/5"/>
      <measureRun testId="2" sleep.secs="${repeated.sleep.secs}"/>
+     <echo message="Repeated Measurements: Round 3/5"/>
      <measureRun testId="3" sleep.secs="${repeated.sleep.secs}"/>
+     <echo message="Repeated Measurements: Round 4/5"/>
      <measureRun testId="4" sleep.secs="${repeated.sleep.secs}"/>
+     <echo message="Repeated Measurements: Round 5/5"/>
      <measureRun testId="5" sleep.secs="${repeated.sleep.secs}"/>
   </target>
 
