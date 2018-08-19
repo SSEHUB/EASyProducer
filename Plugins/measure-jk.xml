@@ -12,7 +12,7 @@
      <delete dir="ScenarioTests.ScaleLog"/>
      <mkdir dir="ScenarioTests.ScaleLog"/>
      <unzip src="${benchmarks.home}/ScaleLog-Scenarios.zip" dest="ScenarioTests.ScaleLog"/>
-     <ant dir="." antfile="measureReasoner.xml" target="measureAll"/> <!-- measureAllRepeated -->
+     <ant dir="." antfile="measureReasoner.xml" target="measureAll" inheritAll="false"/> <!-- measureAllRepeated -->
      <delete dir="ScenarioTests.ScaleLog"/>
   </target>
 
