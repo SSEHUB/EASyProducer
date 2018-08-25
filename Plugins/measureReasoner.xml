@@ -158,7 +158,7 @@
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS -->
-     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
+     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.LocalTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
            <extrajvmargs>
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
