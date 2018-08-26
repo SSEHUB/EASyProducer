@@ -43,6 +43,12 @@
   <property name="home.scenario.tests.dir" location="EASy-Producer/ScenariosTest"/>
   <property name="home.template.tests.dir" value="Instantiation/de.uni_hildesheim.sse.vil.templatelang.tests"/>
 
+  <property name="tests.easy.sseReasoner" value="test.net.ssehub.easy.reasoning.sseReasoner.AllTests"/>
+  <property name="tests.easy.rtvil" value="de.uni_hildesheim.sse.vil.rt.tests.AllTests"/>
+  <property name="tests.easy.scenarios" value="net.ssehub.easy.producer.scenario_tests.LocalTests"/>
+  <property name="tests.easy.measurements" value="net.ssehub.easy.producer.scenario_tests.MeasurementTests"/>
+  <property name="tests.scalelog.scenarios" value="net.ssehub.easy.scaleLog.AllTests"/>
+  
   <path id="maven-ant-tasks.classpath" path="${ant-maven.lib}" />
   <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
      uri="antlib:org.apache.maven.artifact.ant"
@@ -145,9 +151,9 @@
     <attribute name="sleep.secs" default="0"/>
     <sequential>
      <!-- SSE REASONER -->
-     <measure dir="${home.reasonerCore.test.dir}" testPropName="reasonerCore.testdata.home" testName="test.net.ssehub.easy.reasoning.sseReasoner.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}"/>
+     <measure dir="${home.reasonerCore.test.dir}" testPropName="reasonerCore.testdata.home" testName="${tests.easy.sseReasoner}" testId="@{testId}" sleep.secs="@{sleep.secs}"/>
      <!-- RT-VIL -->
-     <measure dir="${home.vil.rt.tests.dir}" testPropName="vil.rt.testdata.home" testName="de.uni_hildesheim.sse.vil.rt.tests.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
+     <measure dir="${home.vil.rt.tests.dir}" testPropName="vil.rt.testdata.home" testName="${tests.easy.rtvil}" testId="@{testId}" sleep.secs="@{sleep.secs}">
          <extraclasspath>
 			<pathelement path="${home.instantiatorCore.rt.dir}/${build.classes.dir}"/>
 			<pathelement path="${home.vil.rt.core.dir}/${build.classes.dir}"/>
@@ -158,7 +164,7 @@
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS -->
-     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.LocalTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
+     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="${tests.easy.scenarios}" testId="@{testId}" sleep.secs="@{sleep.secs}">
            <extrajvmargs>
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
@@ -169,7 +175,7 @@
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS-Variants -->
-     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="net.ssehub.easy.producer.scenario_tests.MeasurementTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
+     <measure dir="${home.scenario.tests.dir}" testPropName="easy_producer.scenarios.testdata.home" testName="${tests.easy.measurements}" testId="@{testId}" sleep.secs="@{sleep.secs}">
            <extrajvmargs>
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>
@@ -180,7 +186,7 @@
 		 </extraclasspath>
      </measure>
 	 <!-- SCENARIOS.SCALELOG -->
-     <measure dir="${home.scalelog}/ScenarioTests.ScaleLog" testPropName="easy_producer.scenarios.scalelog.testdata.home" testName="net.ssehub.easy.scaleLog.AllTests" testId="@{testId}" sleep.secs="@{sleep.secs}">
+     <measure dir="${home.scalelog}/ScenarioTests.ScaleLog" testPropName="easy_producer.scenarios.scalelog.testdata.home" testName="${tests.scalelog.scenarios}" testId="@{testId}" sleep.secs="@{sleep.secs}">
            <extrajvmargs>
              <jvmarg value="-Deasy.scenario.instantiate=false"/>
            </extrajvmargs>

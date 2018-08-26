@@ -10,6 +10,8 @@
      <property name="base.absolute.path" location="${basedir}"/>
      <propertyfile file="local-build.properties">
          <entry key="home.scalelog" value="${base.absolute.path}"/>
+		 <!-- Not all local tests work on Jenkins :| -->
+		 <entry key="tests.easy.scenarios" value="net.ssehub.easy.producer.scenario_tests.AllTests"/>
      </propertyfile>
      <delete dir="ScenarioTests.ScaleLog"/>
      <mkdir dir="ScenarioTests.ScaleLog"/>
