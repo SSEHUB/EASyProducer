@@ -5,7 +5,7 @@ vilScript EASyDemoCommandsVelocity (Project source, Configuration config, Projec
     version v0;
 
     main(Project source, Configuration config, Project target) = : {
-    	map(Project p : source.predecessors()) {
+    	for(Project p : source.predecessors()) {
     		instantiate p (p, config, target);
     	};
 		copySRCFiles(source, target);
