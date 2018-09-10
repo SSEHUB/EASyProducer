@@ -66,7 +66,7 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
      * Prevents external creation.
      */
     private ModelUtility() {
-        logReceiver = new LogMessageReceiver(getClass(), null);
+        logReceiver = new LogMessageReceiver(getClass(), IvmlBundleId.ID);
     }
 
     @Override
