@@ -790,15 +790,37 @@ class Resolver implements IResolutionListener {
      * @param type the compound type
      * @param cAcc the accessor expression (may be <b>null</b>)
      * @param declVar the compound variable as expression
+     * 
+     * @see #registerCompoundSlotMapping(Compound, ConstraintSyntaxTree, Variable)
      */
     private void registerCompoundMapping(Compound type, ConstraintSyntaxTree cAcc, Variable declVar) {
-        for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
-            AbstractVariable nestedDecl = type.getInheritedElement(i);
-            ConstraintSyntaxTree acc;
-            if (null == cAcc) {
-                acc = new CompoundAccess(declVar, nestedDecl.getName());
-            } else {
-                acc = new CompoundAccess(cAcc, nestedDecl.getName());
+        registerCompoundSlotMapping(type, cAcc, declVar);
+        annotationMapper.initialize(cAcc, declVar);
+        try {
+            annotationMapper.visitAnnotations(declVar.getVariable());
+        } catch (IvmlException e) {
+        }
+        annotationMapper.clear();
+    }
+    
+    /**
+     * Registers the slot mappings for compound slots of <code>type</code>. Considers shadowed slots and maps them
+     * to the most specific (non-shadowed) slot.
+     * 
+     * @param type the compound type
+     * @param cAcc the accessor expression (may be <b>null</b>)
+     * @param declVar the compound variable as expression
+     */
+    private void registerCompoundSlotMapping(Compound type, ConstraintSyntaxTree cAcc, Variable declVar) {
+        for (int i = 0, n = type.getDeclarationCount(); i < n; i++) {
+            AbstractVariable nestedDecl = type.getDeclaration(i);
+            ConstraintSyntaxTree acc = contexts.getLocalMapping(nestedDecl.getName());
+            if (null == acc) {
+                if (null == cAcc) {
+                    acc = new CompoundAccess(declVar, nestedDecl.getName());
+                } else {
+                    acc = new CompoundAccess(cAcc, nestedDecl.getName());
+                }
             }
             contexts.registerMapping(nestedDecl, acc);
             for (int a = 0, m = nestedDecl.getAttributesCount(); a < m; a++) {
@@ -807,12 +829,9 @@ class Resolver implements IResolutionListener {
                 contexts.registerMapping(attr, aAcc);
             }
         }
-        annotationMapper.initialize(cAcc, declVar);
-        try {
-            annotationMapper.visitAnnotations(declVar.getVariable());
-        } catch (IvmlException e) {
+        for (int r = 0, n = type.getRefinesCount(); r < n; r++) {
+            registerCompoundSlotMapping(type.getRefines(r), cAcc, declVar);
         }
-        annotationMapper.clear();
     }
 
     /**

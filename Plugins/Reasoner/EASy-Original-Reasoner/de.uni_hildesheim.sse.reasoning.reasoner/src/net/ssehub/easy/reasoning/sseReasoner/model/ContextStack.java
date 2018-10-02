@@ -63,6 +63,7 @@ public class ContextStack {
     private static class Context {
         private Map<AbstractVariable, ConstraintSyntaxTree> varMap 
             = new HashMap<AbstractVariable, ConstraintSyntaxTree>(30);
+        private Map<String, ConstraintSyntaxTree> nameMap = new HashMap<String, ConstraintSyntaxTree>();
         private DecisionVariableDeclaration iterator;
         private ConstraintSyntaxTree container;
         private Context predecessor;
@@ -76,6 +77,7 @@ public class ContextStack {
          */
         private void clear() {
             varMap.clear();
+            nameMap.clear();
             iterator = null;
             container = null;
             predecessor = null;
@@ -200,6 +202,10 @@ public class ContextStack {
      */
     public void registerMapping(AbstractVariable var, ConstraintSyntaxTree acc) {
         currentContext.varMap.put(var, acc);
+        String name = var.getName();
+        if (!currentContext.nameMap.containsKey(name)) {
+            currentContext.nameMap.put(name, acc);
+        }
     }
     
     /**
@@ -236,6 +242,17 @@ public class ContextStack {
             iter = iter.predecessor;
         } while (null == result && null != iter);
         return result;
+    }
+    
+    /**
+     * Returns the local mapping for the given variable {@code name} just from the current context. Names are 
+     * registered once, to the most local (non-shadowed) variable.
+     * 
+     * @param name the name of the variable
+     * @return the mapped access expression or <b>null</b> if there is no registered mapping
+     */
+    public ConstraintSyntaxTree getLocalMapping(String name) {
+        return currentContext.nameMap.get(name);
     }
 
     /**
