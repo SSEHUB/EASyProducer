@@ -151,4 +151,11 @@ public class CompoundTests extends AbstractTest {
         resultHandler(0, 0, prj);
     }
 
+    /**
+     * Tests shadowing a slot while keeping its constraints.
+     */
+    @Test
+    public void compoundShadowingTest() {
+        reasoningTest("CompoundShadowTest.ivml", 2);
+    } 
 }

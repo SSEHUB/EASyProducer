@@ -1,0 +1,23 @@
+project CompoundShadowTest {
+
+    compound VCmp {
+       Integer i = 0;
+    };
+
+    compound VCmp2 refines VCmp {
+       Integer j = 0;
+    };
+
+    compound ACmp {
+       VCmp v = {};
+       v.i > 0;
+    };
+    
+    compound ACmp2 refines ACmp {
+       VCmp2 v = {};
+    };
+    
+    ACmp a1 = {v = {i = -1}};
+    ACmp2 a2 = {v = {i = -1, j = 1}};
+    
+}
