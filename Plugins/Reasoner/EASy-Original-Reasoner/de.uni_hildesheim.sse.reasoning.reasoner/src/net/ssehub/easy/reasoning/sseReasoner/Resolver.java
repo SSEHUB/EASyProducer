@@ -393,7 +393,7 @@ class Resolver implements IResolutionListener {
      * @see #resolve()
      */
     private void evaluateConstraints(Project project) {
-        scopeAssignments.clearScopeAssignments();
+        scopeAssignments.clearScopeAssignments(project);
         evaluator.setDispatchScope(project);
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             usedVariables.clear();
@@ -774,12 +774,12 @@ class Resolver implements IResolutionListener {
                 registerCompoundMapping(type, cAcc, new Variable(decl));
                 nextMode = MODE_COMPOUND_TRANSLATE;
             }
-            if (MODE_COMPOUND_TRANSLATE == mode) {
-                translateCompoundContent(decl, variable, type, cAcc);
-                contexts.popContext();
-                contexts.recordProcessed(type);
-                nextMode = MODE_COMPOUND_NONE;
-            }
+        }
+        if (MODE_COMPOUND_TRANSLATE == mode) {
+            translateCompoundContent(decl, variable, type, cAcc);
+            contexts.popContext();
+            contexts.recordProcessed(type);
+            nextMode = MODE_COMPOUND_NONE;
         }
         return nextMode;
     }
@@ -1534,7 +1534,7 @@ class Resolver implements IResolutionListener {
         topLevelConstraints.clear();
         otherConstraints.clear();
         failedElements.clear();
-        scopeAssignments.clearScopeAssignments();
+        scopeAssignments.clear();
         // keep variablesMap for now
         constraintBase.clear();        
         // keep constraintCounter - is set during translation

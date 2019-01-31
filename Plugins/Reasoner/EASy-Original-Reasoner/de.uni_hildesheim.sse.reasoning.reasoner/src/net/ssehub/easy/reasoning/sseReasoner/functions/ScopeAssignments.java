@@ -8,6 +8,7 @@ import java.util.Set;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Class contains variables that were assigned in a specific scope..
@@ -45,11 +46,21 @@ public class ScopeAssignments {
     public boolean wasAssignedInThisScope(IDecisionVariable variable) {
         return currentScopeSet.contains(variable);
     }
+
+    /**
+     * Clears all assignments.
+     */
+    public void clear() {
+        scopeAssignments.clear();
+    }
     
     /**
-     * Method for clearing all scope assignments.
+     * Clears all scope assignments for {@code scope}.
+     * 
+     * @param scope the scope to clear
      */
-    public void clearScopeAssignments() {
+    public void clearScopeAssignments(Project scope) {
+        // currently the scope is not used, we clear everything
         for (Set<IDecisionVariable> set : scopeAssignments.values()) {
             set.clear();
         }
