@@ -64,7 +64,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
     
     @Override
     public void visitConstraintValue(ConstraintValue value) {
-        List<Constraint> constraints = resolver.obtainConstraints(varParent, clear, null);
+        List<Constraint> constraints = resolver.cleanupConstraints(varParent, clear, null);
         Value newValue = variable.getValue();
         ConstraintSyntaxTree cst = getConstraintValueExpression(newValue);
         if (null != cst) {

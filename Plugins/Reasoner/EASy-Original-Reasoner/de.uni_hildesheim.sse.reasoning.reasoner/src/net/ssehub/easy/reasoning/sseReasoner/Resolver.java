@@ -209,7 +209,7 @@ class Resolver implements IResolutionListener {
         // precondition: oldValue != newValue
         if (NullValue.INSTANCE == newValue) {
             // clear every constraint
-            obtainConstraints(variable, true, null);
+            cleanupConstraints(variable, true, null);
         } else if (NullValue.INSTANCE == oldValue) {
             // nothing to clear, just add all for newValue
             boolean inc = setIncremental(true); // use incremental mode, disable default values anyway
@@ -227,7 +227,7 @@ class Resolver implements IResolutionListener {
         } else {
             // remove those between newValue and oldValue (start at oldValue)
             Set<Compound> types = collectRefines(oldType, newType);
-            obtainConstraints(variable, true, types);        
+            cleanupConstraints(variable, true, types);        
             ReasoningUtils.SET_COMPOUND_POOL.releaseInstance(types);
         }
     }
@@ -242,7 +242,7 @@ class Resolver implements IResolutionListener {
      *    all constraints if {@code clear} is {@code true}.
      * @return the constraints stored for {@code variable}, may be <b>null</b>
      */
-    List<Constraint> obtainConstraints(IDecisionVariable variable, boolean clear, 
+    List<Constraint> cleanupConstraints(IDecisionVariable variable, boolean clear, 
         Set<Compound> deleteFilter) {
         IConfigurationElement iter = variable;
         List<Constraint> constraints;
