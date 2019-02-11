@@ -11,4 +11,4 @@ Export-Package: net.ssehub.easy.reasoning.core.frontend,
  net.ssehub.easy.reasoning.core.reasoner
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: University of Hildesheim - SSE
-Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.8"
+Require-Bundle: net.ssehub.easy.varModel
