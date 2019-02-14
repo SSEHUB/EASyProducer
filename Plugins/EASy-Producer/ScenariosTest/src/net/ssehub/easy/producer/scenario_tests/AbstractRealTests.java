@@ -24,6 +24,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -44,9 +45,7 @@ import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
  * @author Holger Eichelberger
  */
 public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
-
-    private static final int MAX_REASONING = 1; // increase for taking measurements
-    private static final int MAX_INSTANCE_REASONING = 2; // increase for taking measurements
+    
     protected boolean enableRealTimeAsserts;
 
     // a simple runtime variability test, at least that runtime reasoning seems to be working
@@ -66,8 +65,8 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                     System.out.println("Performing runtime reasoning/propagation...");
                     ReasonerConfiguration rCfg = new ReasonerConfiguration();
                     rCfg.setRuntimeMode(true);
-                    for (int r = 1; r <= MAX_REASONING; r++) {
-                        String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INC " + r) : null;
+                    for (int r = 1; r <= AbstractTest.NUM_INCREMENTAL_REASONING; r++) {
+                        String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INC", r) : null;
                         ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
                             cfg, rCfg, ProgressObserver.NO_OBSERVER);
                         if (null != id) {
@@ -81,13 +80,13 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                         assertFailureMessage(res, ppfe2);
                     }
 
-                    if (MAX_INSTANCE_REASONING > 0) {
+                    if (AbstractTest.NUM_INSTANCE_REASONING > 0) {
                         System.out.println("Performing runtime reasoning/propagation with instance ...");
                         long instanceCreation = System.currentTimeMillis();
                         IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
                         instanceCreation = System.currentTimeMillis() - instanceCreation;
-                        for (int r = 1; r <= MAX_INSTANCE_REASONING; r++) {
-                            String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INST " + r) : null;
+                        for (int r = 1; r <= AbstractTest.NUM_INSTANCE_REASONING; r++) {
+                            String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INST ", r) : null;
                             ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
                             if (null != id) {
                                 MeasurementCollector.endAuto(id);

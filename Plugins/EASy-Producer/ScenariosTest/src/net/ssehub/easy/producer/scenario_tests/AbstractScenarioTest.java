@@ -44,6 +44,8 @@ import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
+import static net.ssehub.easy.reasoning.core.reasoner.AbstractTest.NUM_FULL_REASONING;
+
 /**
  * Abstract functionality for scenario tests.
  * 
@@ -110,6 +112,16 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
          */
         protected boolean doMeasure() {
             return doMeasure;
+        }
+        
+        /**
+         * Returns the run count for this mode.
+         * 
+         * @param runCount the maximum desired run count if measurement is enabled
+         * @return {@code runCount} if {@link #doMeasure}, 1 else
+         */
+        protected int runCount(int runCount) {
+            return doMeasure ? runCount : 1;
         }
 
     }
@@ -413,18 +425,23 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
             rCfg.setTimeout(5000); // to be on the safe side
             TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
-            String id = mode.doMeasure() ? MeasurementCollector.start(config.getConfiguration(), "SCENARIO") : null;
-            ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
-                config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
-            if (null != id) {
-                MeasurementCollector.endAuto(id);
-                net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
-                    MeasurementCollector.getInstance(), id, getMeasurements(), res);
-                MeasurementCollector.end(id);
+            ReasoningResult result = null;
+            for (int r = 1; r < mode.runCount(NUM_FULL_REASONING); r++) {
+                String id = mode.doMeasure() 
+                    ? MeasurementCollector.start(config.getConfiguration(), "SCENARIO", r) : null;
+                ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
+                    config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
+                if (null != id) {
+                    MeasurementCollector.endAuto(id);
+                    net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                        MeasurementCollector.getInstance(), id, getMeasurements(), res);
+                    MeasurementCollector.end(id);
+                }
+                result = null == result ? res : result;
             }
-            res.logInformation(prj, rCfg);
-            Assert.assertFalse("Reasoning must not have a conflict", res.hasConflict());
-            Assert.assertFalse("Reasoning must not have a timeout", res.hasTimeout());
+            result.logInformation(prj, rCfg);
+            Assert.assertFalse("Reasoning must not have a conflict", result.hasConflict());
+            Assert.assertFalse("Reasoning must not have a timeout", result.hasTimeout());
         }
         return config;
     }
