@@ -426,7 +426,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             rCfg.setTimeout(5000); // to be on the safe side
             TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
             ReasoningResult result = null;
-            for (int r = 1; r < mode.runCount(NUM_FULL_REASONING); r++) {
+            for (int r = 1; r <= mode.runCount(NUM_FULL_REASONING); r++) {
                 String id = mode.doMeasure() 
                     ? MeasurementCollector.start(config.getConfiguration(), "SCENARIO", r) : null;
                 ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
