@@ -121,6 +121,7 @@ public class TSVMeasurementCollector extends MeasurementCollector {
                 printSep(out, "model name");
                 printSep(out, "URI");
                 printSep(out, "tag");
+                printSep(out, "runCount");
                 printSep(out, "caller");
                 for (IMeasurementIdentifier identifier : columns) {
                     printSep(out, identifier.name());
@@ -136,6 +137,7 @@ public class TSVMeasurementCollector extends MeasurementCollector {
             }
             printSeparator(out);
             printSep(out, record.getTag());
+            printSep(out, record.getRunCount());
             printSep(out, record.getCaller());
             for (IMeasurementIdentifier identifier : columns) {
                 Double measurement = record.getMeasurement(identifier);
@@ -180,6 +182,16 @@ public class TSVMeasurementCollector extends MeasurementCollector {
     }
 
     /**
+     * Prints an integer value.
+     * 
+     * @param out the output stream
+     * @param value the integer value
+     */
+    private static void print(PrintStream out, int value) {
+        out.print(value);
+    }
+
+    /**
      * Prints a string value and a separator.
      * 
      * @param out the output stream
@@ -188,6 +200,19 @@ public class TSVMeasurementCollector extends MeasurementCollector {
      * @see #printSeparator(PrintStream)
      */
     private static void printSep(PrintStream out, String value) {
+        print(out, value);
+        printSeparator(out);
+    }
+    
+    /**
+     * Prints an integer value and a separator.
+     * 
+     * @param out the output stream
+     * @param value the integer value
+     * 
+     * @see #printSeparator(PrintStream)
+     */
+    private static void printSep(PrintStream out, int value) {
         print(out, value);
         printSeparator(out);
     }

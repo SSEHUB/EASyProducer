@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="measureReasoner" default="measureAll" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
   <property name="repeated.sleep.secs" value="5"/>
+  <property name="repeated.runs.reasoning.full" value ="10"/>
+  <property name="repeated.runs.reasoning.incremental" value ="10"/>
+  <property name="repeated.runs.reasoning.instance" value ="10"/>
+  
   <!-- execute within EASy Plugins only -->
   <!-- we mix here Maven (for Eclipse based on EASy-Dependencies) and local classpath for uncommitted experiments / backpatches if needed -->
   <!-- local path definitions, e.g., absolute paths - see local-build.properties.template -->
@@ -125,8 +129,11 @@
       <element name="extrajvmargs" optional="true" />
       <sequential>
           <sleep seconds="@{sleep.secs}"/>
-          <junit fork="true" dir="@{dir}" haltonfailure="true">
+          <junit fork="true" dir="@{dir}" haltonfailure="true" outputtoformatters="false" showoutput="false">
               <jvmarg value="-D@{testPropName}=@{dir}/@{testdataDir}"/>
+              <jvmarg value="-Deasy.test.runs.reasoning.full=${repeated.runs.reasoning.full}"/>
+              <jvmarg value="-Deasy.test.runs.reasoning.incremental=${repeated.runs.reasoning.incremental}"/>
+              <jvmarg value="-Deasy.test.runs.reasoning.instance=${repeated.runs.reasoning.instance}"/>
               <extrajvmargs/>
               <classpath>
                   <path refid="includes"/>

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.varModel.confModel.AbstractConfigurationStatisticsVisitor;
 import net.ssehub.easy.varModel.confModel.AbstractConfigurationStatisticsVisitor.ConfigStatistics;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -248,6 +249,7 @@ public class MeasurementCollector {
         private Map<IMeasurementIdentifier, Double> measurements = new HashMap<IMeasurementIdentifier, Double>();
         private Configuration cfg;
         private String tag;
+        private int runCount;
         private String caller;
         private long start = -1;
         private long end = -1;
@@ -257,10 +259,12 @@ public class MeasurementCollector {
          * 
          * @param cfg the configuration we are recording for
          * @param tag the measurement tag
+         * @param runCount the repetition number of the experiment
          */
-        protected MeasurementRecord(Configuration cfg, String tag) {
+        protected MeasurementRecord(Configuration cfg, String tag, int runCount) {
             this.cfg = cfg;
             this.tag = tag;
+            this.runCount = runCount;
             this.caller = null;
             
             Throwable t = new Throwable();
@@ -331,6 +335,15 @@ public class MeasurementCollector {
         }
         
         /**
+         * Returns the experiment run count.
+         * 
+         * @return the run count
+         */
+        protected int getRunCount() {
+            return runCount;
+        }
+        
+        /**
          * Returns the calling method if available.
          * 
          * @return the calling method or <b>null</b> for none
@@ -381,7 +394,7 @@ public class MeasurementCollector {
         
         @Override
         public String toString() {
-            return cfg.getProject().getName() + " " + tag + " " + caller + " " + measurements;
+            return cfg.getProject().getName() + " " + tag + " " + runCount + " " + caller + " " + measurements;
         }
         
     }
@@ -465,10 +478,11 @@ public class MeasurementCollector {
      * 
      * @param cfg the configuration to measure for
      * @param tag a description what is being measured
+     * @param runCount the repetition number of the experiment
      * @return a unique measurement id for subsequent functions
      */
-    public static String start(Configuration cfg, String tag) {
-        return instance.startMeasurement(cfg, tag);
+    public static String start(Configuration cfg, String tag, int runCount) {
+        return instance.startMeasurement(cfg, tag, runCount);
     }
     
     /**
@@ -478,16 +492,17 @@ public class MeasurementCollector {
      * 
      * @param cfg the configuration to measure for
      * @param tag a description what is being measured
+     * @param runCount the repetition number of the experiment
      * @return a unique measurement id for subsequent functions
      */
-    public String startMeasurement(Configuration cfg, String tag) {
+    public String startMeasurement(Configuration cfg, String tag, int runCount) {
         String baseId = "" + System.currentTimeMillis();
         String id = baseId;
         int count = 0;
         while (records.containsKey(id)) {
             id = baseId + "-" + (count++);
         }
-        MeasurementRecord record = new MeasurementRecord(cfg, tag);
+        MeasurementRecord record = new MeasurementRecord(cfg, tag, runCount);
         records.put(id, record);
         recordStatistics(cfg, record);
         record.setStart(System.currentTimeMillis());
@@ -644,11 +659,12 @@ public class MeasurementCollector {
      * 
      * @param cfg the configuration to measure for
      * @param tag a description what is being measured
+     * @param runCount the repetition number of the experiment
      * @param measurements the measurements to set, automatic measurements will be ignored, registered mappings will 
      * be applied
      */
-    public static void record(Configuration cfg, String tag, Map<?, Double> measurements) {
-        instance.recordMeasurements(cfg, tag, measurements);
+    public static void record(Configuration cfg, String tag, int runCount, Map<?, Double> measurements) {
+        instance.recordMeasurements(cfg, tag, runCount, measurements);
     }
     
     /**
@@ -657,11 +673,12 @@ public class MeasurementCollector {
      * 
      * @param cfg the configuration to measure for
      * @param tag a description what is being measured
+     * @param runCount the repetition number of the experiment
      * @param measurements the measurements to set, automatic measurements will be ignored, registered mappings will 
      * be applied
      */
-    public void recordMeasurements(Configuration cfg, String tag, Map<?, Double> measurements) {
-        MeasurementRecord record = new MeasurementRecord(cfg, tag);
+    public void recordMeasurements(Configuration cfg, String tag, int runCount, Map<?, Double> measurements) {
+        MeasurementRecord record = new MeasurementRecord(cfg, tag, runCount);
         recordStatistics(cfg, record);
         for (Map.Entry<?, Double> ent : measurements.entrySet()) {
             IMeasurementIdentifier identifier = obtainIdentifier(ent.getKey());
@@ -822,6 +839,28 @@ public class MeasurementCollector {
         if (null != clsName) {
             stackStop.add(clsName);
         }
+    }
+    
+    /**
+     * Returns a system property as integer.
+     * 
+     * @param key the property key
+     * @param deflt the default value if the property is not set/cannot be parsed
+     * @param min the minimum value to be returned
+     * @return the value of the property
+     */
+    public static int getIntProperty(String key, int deflt, int min) {
+        int result = deflt;
+        String prop = System.getProperty(key, null);
+        if (null != prop) {
+            try {
+                result = Integer.parseInt(prop);
+            } catch (NumberFormatException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(MeasurementCollector.class, null).warn("Parsing env value for '" 
+                    + key + "': Number Format Exception " + e.getMessage());
+            }
+        }
+        return Math.max(min, result);
     }
 
 }
