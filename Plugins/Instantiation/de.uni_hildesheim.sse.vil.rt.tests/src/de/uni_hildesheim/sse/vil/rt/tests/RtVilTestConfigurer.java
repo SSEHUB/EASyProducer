@@ -132,7 +132,7 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script> {
                 File base = AbstractRtTest.determineTestDataDir(getSystemPropertyName());
                 TSVMeasurementCollector.ensureCollector(new File(base, 
                     "temp/measurements-rtvil.tsv"));
-                id = MeasurementCollector.start(config.getConfiguration(), "RT-VIL");
+                id = MeasurementCollector.start(config.getConfiguration(), "RT-VIL", 1);
             }
             
             @Override
