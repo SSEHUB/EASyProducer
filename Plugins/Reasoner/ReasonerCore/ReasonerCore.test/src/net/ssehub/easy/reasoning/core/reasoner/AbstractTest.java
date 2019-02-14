@@ -83,7 +83,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * The number of full reasoning executions based on {@link #KEY_NUM_RUNS_REASONING_FULL}. At least 1.
      * @see #performReasoning(IReasoner, Project, Configuration, ReasonerConfiguration)
      */
-    public static final int NUM_FULL_REASONING 
+    public static final int NUM_FULL_REASONING
         = MeasurementCollector.getIntProperty(KEY_NUM_RUNS_REASONING_FULL, 1, 1);
 
     /**
@@ -308,13 +308,17 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         ReasonerConfiguration rConfig, String tag) {
         ensureCollector();
         ReasoningResult result = null;
-        for (int r = 1; r <= NUM_FULL_REASONING; r++) {
+        for (int r = 1, n = NUM_FULL_REASONING; r <= n; r++) {
             String id = MeasurementCollector.start(config, tag, r);
             ReasoningResult res =  reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
             MeasurementCollector.endAuto(id);
             transferReasoningMeasures(id, res);
             MeasurementCollector.end(id);
             res.logInformation(project, rConfig);
+            if (n > 1) {
+                // we want to cause multiple reasoner calls, not re-reasoning on the same configuration here
+                config = new Configuration(project, false); 
+            }
             result = null == result ? res : result;
         }
         return result;
