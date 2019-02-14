@@ -8,7 +8,7 @@ vilScript Reasoner (Project source, Configuration config, Project target) {
             setOf(JavaFileArtifact) files = target.selectByKind(JavaFileArtifact);
             String utils = "/var/lib/jenkins/jobs/VarModel/workspace/Utils/build/jar/de.uni_hildesheim.sse.Utils.jar";
             String model = "/var/lib/jenkins/jobs/VarModel/workspace/Model/build/jar/de.uni_hildesheim.sse.varModel.jar";
-            String reasoner = "/var/lib/jenkins/jobs/ReasonerCore/workspace/ReasonerCore/build/jar/ReasonerCore.jar";
+            String reasoner = "/var/lib/jenkins/jobs/ReasonerCore/workspace/ReasonerCore/build/jar/net.ssehub.easy.reasoning.core.jar";
             // Set the classpath by adding each java file to the class path
             String newClasspath = target.path();
             String allFiles = "";

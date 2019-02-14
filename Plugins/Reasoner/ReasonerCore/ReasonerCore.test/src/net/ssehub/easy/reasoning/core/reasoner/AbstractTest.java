@@ -63,6 +63,42 @@ import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.AbstractTest<Project> {
 
     public static final String DEFAULT_TAG = "REASONING";
+
+    /**
+     * The system property key for the number number of full reasoning executions {@value}}.
+     */
+    public static final String KEY_NUM_RUNS_REASONING_FULL = "easy.test.runs.reasoning.full";
+
+    /**
+     * The system property key for the number number of incremental reasoning executions {@value}}.
+     */
+    public static final String KEY_NUM_RUNS_REASONING_INCREMENTAL = "easy.test.runs.reasoning.incremental";
+
+    /**
+     * The system property key for the number number of full instance executions {@value}}.
+     */
+    public static final String KEY_NUM_RUNS_REASONING_INSTANCE = "easy.test.runs.reasoning.instance";
+
+    /**
+     * The number of full reasoning executions based on {@link #KEY_NUM_RUNS_REASONING_FULL}. At least 1.
+     * @see #performReasoning(IReasoner, Project, Configuration, ReasonerConfiguration)
+     */
+    public static final int NUM_FULL_REASONING 
+        = MeasurementCollector.getIntProperty(KEY_NUM_RUNS_REASONING_FULL, 1, 1);
+
+    /**
+     * The number of incremental reasoning executions based on {@link #KEY_NUM_RUNS_REASONING_INCREMENTAL}. At least 0, 
+     * i.e., can be switched off.
+     */
+    public static final int NUM_INCREMENTAL_REASONING 
+        = MeasurementCollector.getIntProperty(KEY_NUM_RUNS_REASONING_INCREMENTAL, 1, 0);
+
+    /**
+     * The number of instance reasoning executions based on {@link #KEY_NUM_RUNS_REASONING_INSTANCE}. At least 0, 
+     * i.e., can be switched off.
+     */
+    public static final int NUM_INSTANCE_REASONING 
+        = MeasurementCollector.getIntProperty(KEY_NUM_RUNS_REASONING_INSTANCE, 2, 0);
     
     private ITestDescriptor descriptor;
     private String testPath;
@@ -259,24 +295,29 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
 
     /**
      * Performs reasoning and collects the result in {@link MeasurementCollector}.
+     * Repeats the reasoning {@link #NUM_FULL_REASONING} times.
      * 
      * @param reasoner the reasoner to use
      * @param project the project
      * @param config the configuration
      * @param rConfig the reasoner configuration
      * @param tag explicit tag for measurement recording (may be <b>null</b>)
-     * @return the reasoning result
+     * @return the (first) reasoning result
      */
     protected ReasoningResult performReasoning(IReasoner reasoner, Project project, Configuration config, 
         ReasonerConfiguration rConfig, String tag) {
         ensureCollector();
-        String id = MeasurementCollector.start(config, tag);
-        ReasoningResult res =  reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
-        MeasurementCollector.endAuto(id);
-        transferReasoningMeasures(id, res);
-        MeasurementCollector.end(id);
-        res.logInformation(project, rConfig);
-        return res;
+        ReasoningResult result = null;
+        for (int r = 1; r <= NUM_FULL_REASONING; r++) {
+            String id = MeasurementCollector.start(config, tag, r);
+            ReasoningResult res =  reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+            MeasurementCollector.endAuto(id);
+            transferReasoningMeasures(id, res);
+            MeasurementCollector.end(id);
+            res.logInformation(project, rConfig);
+            result = null == result ? res : result;
+        }
+        return result;
     }
 
     /**
@@ -307,30 +348,34 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         ReasonerConfiguration rConfig) {
         long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        return performInstanceReasoning(inst, config, 1, System.currentTimeMillis() - start);
+        return performInstanceReasoning(inst, config, System.currentTimeMillis() - start);
     }
 
     /**
      * Performs reasoning on a reasoner instance and collects the result in {@link MeasurementCollector}.
+     * Repeats the reasoning {@link #NUM_INSTANCE_REASONING} times.
      * 
      * @param inst the reasoner instance to use
      * @param config the configuration
-     * @param nr the number of the reasoning call on the same instance (just for measurement collection)
      * @param instanceCreationTime time taken for creating the reasoning instance (in ms, may be negative for none)
-     * @return the reasoning result
+     * @return the (first) reasoning result
      */
-    protected ReasoningResult performInstanceReasoning(IReasonerInstance inst, Configuration config, int nr, 
+    protected ReasoningResult performInstanceReasoning(IReasonerInstance inst, Configuration config, 
         long instanceCreationTime) {
         ensureCollector();
-        String id = MeasurementCollector.start(config, "IREASONING " + nr);
-        ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
-        MeasurementCollector.endAuto(id);
-        transferReasoningMeasures(id, res);
-        MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
-            instanceCreationTime);
-        MeasurementCollector.end(id);
-        res.logInformation(inst.getProject(), inst.getReasonerConfiguration());
-        return res;
+        ReasoningResult result = null;
+        for (int r = 1; r < NUM_INSTANCE_REASONING; r++) {
+            String id = MeasurementCollector.start(config, "IREASONING ", r);
+            ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
+            MeasurementCollector.endAuto(id);
+            transferReasoningMeasures(id, res);
+            MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
+                instanceCreationTime);
+            MeasurementCollector.end(id);
+            res.logInformation(inst.getProject(), inst.getReasonerConfiguration());
+            result = null == result ? res : result;
+        }
+        return result;
     }
 
     /**

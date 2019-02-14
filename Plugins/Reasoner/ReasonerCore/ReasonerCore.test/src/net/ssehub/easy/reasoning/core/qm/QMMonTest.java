@@ -66,7 +66,7 @@ public class QMMonTest extends AbstractTest {
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
         rConfig.setRuntimeMode(true);
         IReasoner reasoner = createReasoner();
-        ReasoningResult rResult = performReasoning(reasoner, prj, config, rConfig, DEFAULT_TAG + " 1");
+        ReasoningResult rResult = performReasoning(reasoner, prj, config, rConfig, DEFAULT_TAG);
         Assert.assertFalse(rResult.hasConflict());
 
         AbstractVariable alg1Decl = ModelQuery.findVariable(prj, "alg1", null);
@@ -79,7 +79,7 @@ public class QMMonTest extends AbstractTest {
         alg2.getNestedElement("throughputItem").setValue(
             ValueFactory.createValue(IntegerType.TYPE, 22), AssignmentState.ASSIGNED);
 
-        rResult = performReasoning(reasoner, prj, config, rConfig, DEFAULT_TAG + " 2");
+        rResult = performReasoning(reasoner, prj, config, rConfig, DEFAULT_TAG);
         Assert.assertTrue(rResult.hasConflict());
     }
 

@@ -314,7 +314,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         IReasoner reasoner = createReasoner();
         long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        ReasoningResult rResult = performInstanceReasoning(inst, config, 1, System.currentTimeMillis() - start);
+        ReasoningResult rResult = performInstanceReasoning(inst, config, System.currentTimeMillis() - start);
         Assert.assertFalse(rResult.hasConflict());
         
         AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
@@ -325,7 +325,7 @@ public class AdaptationScenarioTests extends AbstractTest {
 
         
         bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 4), AssignmentState.ASSIGNED);
-        rResult = performInstanceReasoning(inst, config, 2, -1);
+        rResult = performInstanceReasoning(inst, config, -1);
         Assert.assertTrue(rResult.hasConflict());
     }
 
@@ -346,7 +346,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         IReasoner reasoner = createReasoner();
         long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        ReasoningResult rResult = performInstanceReasoning(inst, config, 1, System.currentTimeMillis() - start);
+        ReasoningResult rResult = performInstanceReasoning(inst, config, System.currentTimeMillis() - start);
         Assert.assertFalse(rResult.hasConflict());
         
         AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
@@ -356,7 +356,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         Assert.assertFalse(rResult.hasConflict());
 
         bVar.setValue(ValueFactory.createValue(IntegerType.TYPE, 4), AssignmentState.ASSIGNED);
-        rResult = performInstanceReasoning(inst, config, 2, -1);
+        rResult = performInstanceReasoning(inst, config, -1);
         Assert.assertTrue(rResult.hasConflict());
     }
 
