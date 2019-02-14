@@ -426,16 +426,20 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             rCfg.setTimeout(5000); // to be on the safe side
             TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
             ReasoningResult result = null;
-            for (int r = 1; r <= mode.runCount(NUM_FULL_REASONING); r++) {
-                String id = mode.doMeasure() 
-                    ? MeasurementCollector.start(config.getConfiguration(), "SCENARIO", r) : null;
+            net.ssehub.easy.varModel.confModel.Configuration cfg = config.getConfiguration();
+            for (int r = 1, n = mode.runCount(NUM_FULL_REASONING); r <= n; r++) {
+                String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO", r) : null;
                 ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
-                    config.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
+                    cfg.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
                 if (null != id) {
                     MeasurementCollector.endAuto(id);
                     net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
                         MeasurementCollector.getInstance(), id, getMeasurements(), res);
                     MeasurementCollector.end(id);
+                }
+                if (n > 1) {
+                    // we want to cause multiple reasoner calls, not re-reasoning on the same configuration here
+                    cfg = new net.ssehub.easy.varModel.confModel.Configuration(prj);
                 }
                 result = null == result ? res : result;
             }
