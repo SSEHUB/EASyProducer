@@ -16,6 +16,9 @@
      <delete dir="ScenarioTests.ScaleLog"/>
      <mkdir dir="ScenarioTests.ScaleLog"/>
      <unzip src="${benchmarks.home}/ScaleLog-Scenarios.zip" dest="ScenarioTests.ScaleLog"/>
+  	 <!-- pre-run -->
+  	 <ant dir="." antfile="measureReasoner.xml" inheritAll="false"/>
+  	 <!-- full-run -->
      <ant dir="." antfile="measureReasoner.xml" target="measureAllRepeated" inheritAll="false"/>
      <zip destfile="benchmark-results.zip" basedir="${benchmarks.home}/auto"/>
      <delete dir="ScenarioTests.ScaleLog"/>
