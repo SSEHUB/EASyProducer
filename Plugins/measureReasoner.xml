@@ -135,8 +135,8 @@
               <jvmarg value="-Deasy.test.runs.reasoning.full=${repeated.runs.reasoning.full}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.incremental=${repeated.runs.reasoning.incremental}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.instance=${repeated.runs.reasoning.instance}"/>
-          	  <jvmarg value="-Deasy.test.timeout.reasoning.reasoning=${reasoning.timeout}"/>
-          	  <!-- safe side, force to go for a standalone resource initializer 
+          	  <!-- safe side, force to go for a standalone resource initializer
+          	  jvmarg value="-Deasy.test.timeout.reasoning.reasoning=${reasoning.timeout}" 
           	  jvmarg value="-Deasy.notInEclipse=true"-->
               <extrajvmargs/>
               <classpath>
