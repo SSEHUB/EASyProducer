@@ -130,14 +130,14 @@
       <element name="extrajvmargs" optional="true" />
       <sequential>
           <sleep seconds="@{sleep.secs}"/>
-          <junit fork="true" dir="@{dir}" haltonfailure="true" outputtoformatters="false" showoutput="false" maxmemory="1G">
+          <junit fork="true" dir="@{dir}" haltonfailure="true" outputtoformatters="false" showoutput="false">
               <jvmarg value="-D@{testPropName}=@{dir}/@{testdataDir}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.full=${repeated.runs.reasoning.full}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.incremental=${repeated.runs.reasoning.incremental}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.instance=${repeated.runs.reasoning.instance}"/>
           	  <jvmarg value="-Deasy.test.timeout.reasoning.reasoning=${reasoning.timeout}"/>
-          	  <!-- safe side, force to go for a standalone resource initializer -->
-          	  <jvmarg value="-Deasy.notInEclipse=true"/>
+          	  <!-- safe side, force to go for a standalone resource initializer 
+          	  <jvmarg value="-Deasy.notInEclipse=true"/>-->
               <extrajvmargs/>
               <classpath>
                   <path refid="includes"/>
