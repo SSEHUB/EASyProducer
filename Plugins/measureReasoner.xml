@@ -130,7 +130,7 @@
       <element name="extrajvmargs" optional="true" />
       <sequential>
           <sleep seconds="@{sleep.secs}"/>
-          <junit fork="true" dir="@{dir}" haltonfailure="true" outputtoformatters="false" showoutput="true">
+          <junit fork="true" dir="@{dir}" haltonfailure="true" outputtoformatters="false" showoutput="false" maxmemory="1G">
               <jvmarg value="-D@{testPropName}=@{dir}/@{testdataDir}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.full=${repeated.runs.reasoning.full}"/>
               <jvmarg value="-Deasy.test.runs.reasoning.incremental=${repeated.runs.reasoning.incremental}"/>
