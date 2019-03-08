@@ -249,6 +249,14 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
          * @param target the actual test folder
          */
         public void postCopy(File target);
+
+        /**
+         * Returns the (modified) temp folder name (last segment).
+         * 
+         * @param projectName the project name usually used as temp folder name.
+         * @return the temp folder name (last segment)
+         */
+        public String getTempFolderName(String projectName);
         
     }
 
@@ -281,6 +289,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
                     }
                 }
             }
+        }
+
+        @Override
+        public String getTempFolderName(String projectName) {
+            return projectName; // ok
         }
         
     }
@@ -324,7 +337,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         String projectName = names[0];
         String iModelName = names.length > 1 ? names[1] : projectName;
         String vModelName = names.length > 2 ? names[2] : iModelName;
-        File temp = createTempDir(projectName);
+        File temp = createTempDir(null != modifier ? modifier.getTempFolderName(projectName) : projectName);
         File base = new File(getTestFolder(), caseFolder + projectName);
         FileUtils.copyDirectory(base, temp);
         File sourceProjectFolder = null;
@@ -394,12 +407,18 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         try {
             // those loaders shall already be registered through subclassing AbstractTest
             if (add) {
+                System.out.println(" Adding IVML location " + ivmlFolder);
                 VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                System.out.println(" Adding VIL location " + vilFolder);
                 BuildModel.INSTANCE.locations().addLocation(vilFolder, ProgressObserver.NO_OBSERVER);
+                System.out.println(" Adding VTL location " + vtlFolder);
                 TemplateModel.INSTANCE.locations().addLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
             } else {
+                System.out.println(" Removing IVML location " + ivmlFolder);
                 VarModel.INSTANCE.locations().removeLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                System.out.println(" Removing VIL location " + vilFolder);
                 BuildModel.INSTANCE.locations().removeLocation(vilFolder, ProgressObserver.NO_OBSERVER);
+                System.out.println(" Removing VTL location " + vtlFolder);
                 TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
             }
         } catch (ModelManagementException e) {
@@ -423,7 +442,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         if (mode.doReason()) {
             System.out.println("Performing reasoning/propagation...");
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
-            rCfg.setTimeout(5000); // to be on the safe side
+            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.setReasoningTimeout(rCfg); // to be on the safe side
             TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
             ReasoningResult result = null;
             net.ssehub.easy.varModel.confModel.Configuration cfg = config.getConfiguration();

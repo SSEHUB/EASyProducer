@@ -69,19 +69,26 @@ public class RealMeasurementsTests extends AbstractRealTests {
     private static class QMTestModifier implements ITestModifier {
 
         private int variantNr;
+        private File target;
         
         @Override
         public void postCopy(File target) {
+            this.target = target;
             copy(new File(target, "variants/PipelinesCfg_" + variantNr + ".ivml"), 
-                new File(target, "EASY/pipelines/PipelinesCfg.ivml"));
+                new File(target, "EASy/pipelines/PipelinesCfg.ivml"));
             copy(new File(target, "variants/InfrastructureCfg_" + variantNr + ".ivml"), 
-                new File(target, "EASY/infrastructure/InfrastructureCfg.ivml"));
+                new File(target, "EASy/infrastructure/InfrastructureCfg.ivml"));
             copy(new File(target, "variants/AlgorithmsCfg_" + variantNr + ".ivml"), 
-                new File(target, "EASY/infrastructure/AlgorithmsCfg.ivml"));
+                new File(target, "EASy/infrastructure/AlgorithmsCfg.ivml"));
             copy(new File(target, "variants/FamiliesCfg_" + variantNr + ".ivml"), 
-                new File(target, "EASY/infrastructure/FamiliesCfg.ivml"));
+                new File(target, "EASy/infrastructure/FamiliesCfg.ivml"));
             copy(new File(target, "variants/DataManagementCfg_" + variantNr + ".ivml"), 
-                new File(target, "EASY/infrastructure/DataManagementCfg.ivml"));
+                new File(target, "EASy/infrastructure/DataManagementCfg.ivml"));
+            try {
+                FileUtils.deleteDirectory(new File(target, "variants"));
+            } catch (IOException e) {
+                System.out.println("ERROR: Cannot delete variants folder, " + e.getMessage());
+            }
         }
         
         /**
@@ -92,12 +99,22 @@ public class RealMeasurementsTests extends AbstractRealTests {
          */
         private void copy(File src, File tgt) {
             if (src.exists()) {
-                System.out.println("Copying " + src.getName());
+                System.out.println("Copying " + src + " to " + tgt);
                 try {
                     FileUtils.copyFile(src, tgt);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
+            }
+        }
+        
+        /**
+         * Cleans up if not already done.
+         */
+        private void cleanUp() {
+            if (null != target) {
+                FileUtils.deleteQuietly(target);
+                target = null;
             }
         }
         
@@ -108,6 +125,11 @@ public class RealMeasurementsTests extends AbstractRealTests {
          */
         private void setVariantNr(int variantNr) {
             this.variantNr = variantNr;
+        }
+
+        @Override
+        public String getTempFolderName(String projectName) {
+            return String.format("%02d_sv_%s", variantNr, projectName);
         }
         
     }
@@ -131,6 +153,7 @@ public class RealMeasurementsTests extends AbstractRealTests {
             System.out.println(">> Start Variant " + i);
             modifier.setVariantNr(i);
             executeCase(names, versions, "QualiMaster/", null, Mode.REASON, modifier);
+            modifier.cleanUp();
             System.out.println("<< End Variant " + i);
         }
         enableRealTimeAsserts = false;
