@@ -314,7 +314,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         IReasoner reasoner = createReasoner();
         long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        ReasoningResult rResult = performInstanceReasoning(inst, config, System.currentTimeMillis() - start);
+        ReasoningResult rResult = performInstanceReasoning(inst, config, Math.abs(System.currentTimeMillis() - start));
         Assert.assertFalse(rResult.hasConflict());
         
         AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);
@@ -346,7 +346,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         IReasoner reasoner = createReasoner();
         long start = System.currentTimeMillis();
         IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
-        ReasoningResult rResult = performInstanceReasoning(inst, config, System.currentTimeMillis() - start);
+        ReasoningResult rResult = performInstanceReasoning(inst, config, Math.abs(System.currentTimeMillis() - start));
         Assert.assertFalse(rResult.hasConflict());
         
         AbstractVariable bDecl = ModelQuery.findVariable(project, "b", null);

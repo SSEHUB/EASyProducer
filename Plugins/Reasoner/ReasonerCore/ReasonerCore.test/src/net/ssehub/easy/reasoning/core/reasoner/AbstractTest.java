@@ -78,6 +78,11 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * The system property key for the number number of full instance executions {@value}}.
      */
     public static final String KEY_NUM_RUNS_REASONING_INSTANCE = "easy.test.runs.reasoning.instance";
+    
+    /**
+     * The system property key for the reasoning timeout {@value}}.
+     */
+    public static final String KEY_TIMEOUT_REASONING = "easy.test.timeout.reasoning.reasoning";
 
     /**
      * The number of full reasoning executions based on {@link #KEY_NUM_RUNS_REASONING_FULL}. At least 1.
@@ -99,6 +104,12 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      */
     public static final int NUM_INSTANCE_REASONING 
         = MeasurementCollector.getIntProperty(KEY_NUM_RUNS_REASONING_INSTANCE, 2, 0);
+
+    /**
+     * The reasoning timeout {@link #KEY_TIMEOUT_REASONING}. No timeout if 0. 
+     */
+    public static final int TIMEOUT_REASONING
+        = MeasurementCollector.getIntProperty(KEY_TIMEOUT_REASONING, 5000, 0);
     
     private ITestDescriptor descriptor;
     private String testPath;
@@ -368,7 +379,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         long instanceCreationTime) {
         ensureCollector();
         ReasoningResult result = null;
-        for (int r = 1; r < NUM_INSTANCE_REASONING; r++) {
+        for (int r = 1; r <= NUM_INSTANCE_REASONING; r++) {
             String id = MeasurementCollector.start(config, "IREASONING ", r);
             ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
             MeasurementCollector.endAuto(id);
@@ -793,6 +804,17 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      */
     protected void assertContained(String message, Object actual, Object... expected) {
         Assert.assertTrue(message, Arrays.contains(expected, actual));
+    }
+
+    /**
+     * Configures the reasoning timeout in {@code rCfg} based on {@link #TIMEOUT_REASONING}.
+     * 
+     * @param rCfg the configuration to be modified
+     */
+    public static void setReasoningTimeout(ReasonerConfiguration rCfg) {
+        if (TIMEOUT_REASONING > 0) {
+            rCfg.setTimeout(TIMEOUT_REASONING);
+        }
     }
     
 }
