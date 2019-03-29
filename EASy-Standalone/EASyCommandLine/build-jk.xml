@@ -15,6 +15,7 @@
 		<pathelement path="${libs.reasonerCore}"/>
         <pathelement path="${libs.easy.PLugin}"/>
         <pathelement path="${libs.easy.persistence}"/>
+		<pathelement path="${libs.libs.common.io}"/>
         <!-- Lib -->
         <fileset dir="lib">
             <include name="**/*.jar" />
