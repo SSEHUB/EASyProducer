@@ -9,6 +9,10 @@
 	<property name="javacTarget" value="1.6"/>
 	
 	<path id ="includes">
+		<pathelement path="${libs.utils}"/>
+		<pathelement path="${libs.instantiator.core}"/>
+		<pathelement path="${libs.model}"/>
+		<pathelement path="${libs.reasonerCore}"/>
         <!-- Lib -->
         <fileset dir="lib">
             <include name="**/*.jar" />
