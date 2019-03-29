@@ -237,7 +237,7 @@
             <fileset dir="${home.ivml.dir}/${build.jar.dir}" includes="**/*.jar" />
             <fileset dir="${home.ivml.tests.dir}/${build.jar.dir}" includes="**/*.jar" />
             <!-- EASy-Producer: Needed for Serializer.Tests -->
-            <fileset dir="${home.easy.persistence.dir}/${build.jar.dir}" includes="**/*.jar" />
+            <!--<fileset dir="${home.easy.persistence.dir}/${build.jar.dir}" includes="**/*.jar" />-->
 		</copy>
         
         <!-- Maven Instantiatior must be unpacked -->
