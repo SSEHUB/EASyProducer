@@ -214,6 +214,11 @@
 		</copy>
         <zip destfile="build/zip/BundleSources.zip" basedir="build/zip"/>
     </target>
+    
+    <target name="cleanup">
+        <delete dir="build/zip/Plugins"/>
+        <delete dir="build/zip/Features"/>
+    </target>
 	
 	<target name="deploy">
         <!-- deploy without experimental stuff -->
@@ -345,6 +350,6 @@
     </target>
 
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
-	<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn"/>
-	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn"/>
+	<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn, cleanup"/>
+	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn, cleanup"/>
 </project>
