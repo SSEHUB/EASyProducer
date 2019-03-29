@@ -4,6 +4,7 @@ import java.io.CharArrayWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -1562,7 +1563,10 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testFormat() throws IOException {
+        Locale loc = Locale.getDefault();
+        Locale.setDefault(Locale.ENGLISH);
         assertEqualWithIvml("formatTest", "formatTest");
+        Locale.setDefault(loc);
     }
 
 }
