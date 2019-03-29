@@ -13,6 +13,8 @@
 		<pathelement path="${libs.instantiator.core}"/>
 		<pathelement path="${libs.model}"/>
 		<pathelement path="${libs.reasonerCore}"/>
+        <pathelement path="${libs.easy.PLugin}"/>
+        <pathelement path="${libs.easy.persistence}"/>
         <!-- Lib -->
         <fileset dir="lib">
             <include name="**/*.jar" />
