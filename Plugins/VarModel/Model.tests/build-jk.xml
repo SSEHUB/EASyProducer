@@ -16,6 +16,7 @@
 		<!-- Eclipse-Plugins -->
 		<fileset dir="${eclipse.plugins.dir}">
 			<include name="**/*.jar" />
+			<exclude name="**/commons-io-*.jar"/>
 		</fileset>
 	</path>
 	
