@@ -31,9 +31,6 @@ public class JavaLogger extends AbstractJavaLogger {
     
     /**
      * Constructor to initialize the instance of the logger.
-     * The log messages are printed to the console and to a log file.
-     * By default the log directory is set to the user home directory.
-     * Use the {@link #setLogDirectory(String) setLogDirectory} method to change the directory. 
      * To change the output format modify the {@link LogFormatter} class.
      * By default the logging level is set to ALL. In a productive environment the
      * level should be set to INFO.

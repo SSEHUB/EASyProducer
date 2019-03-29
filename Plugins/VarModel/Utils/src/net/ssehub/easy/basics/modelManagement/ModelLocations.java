@@ -277,7 +277,7 @@ public class ModelLocations <M extends IModel> {
      * @return the location (or <b>null</b> if the related location is currently not known)
      * @throws ModelManagementException in case that <code>file</code> cannot be accessed / resolved
      * 
-     * @see {@link #getLocationFor(File, boolean)}
+     * @see #getLocationFor(File, boolean)
      */
     private Location getLocationFor(File file) throws ModelManagementException {
         return getLocationFor(file, false);

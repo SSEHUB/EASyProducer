@@ -20,7 +20,8 @@ package net.ssehub.easy.basics.modelManagement;
  * values for variables, {@link #startEvaluation()} shall be called 
  * by {@link IVersionRestriction#evaluate(IRestrictionEvaluationContext, Version)}. {@link #unsetValue(IVariable)} shall
  * be called before ending the evaluation to clean up the variable binding. Finally 
- * {@link IVersionRestriction#evaluate(IRestrictionEvaluationContext, Version)} shall call {@link #endEvaluation()}.
+ * {@link IVersionRestriction#evaluate(IRestrictionEvaluationContext, Version)} shall call 
+ * {@link #endEvaluation(Object)}.
  * 
  * @author Holger Eichelberger
  */

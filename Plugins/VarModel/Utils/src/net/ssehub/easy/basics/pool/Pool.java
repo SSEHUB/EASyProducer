@@ -67,7 +67,7 @@ public class Pool <T> {
 //private java.util.Map<Object, Throwable> FREE = new java.util.HashMap<Object, Throwable>();    
 
     /**
-     * Releases an <code>instance</code> obtained from {@link #get()}.<br/>
+     * Releases an <code>instance</code> obtained from {@link #getInstance()}.<br/>
      * <b>Cave:</b> Do not release instances twice!
      * 
      * @param instance the instance to be released (ignored if <b>null</b>)
