@@ -1564,7 +1564,7 @@ public class ExecutionTests extends AbstractExecutionTest {
     @Test
     public void testFormat() throws IOException {
         Locale loc = Locale.getDefault();
-        Locale.setDefault(Locale.ENGLISH);
+        Locale.setDefault(Locale.GERMAN); // the file to check against has German number formatting
         assertEqualWithIvml("formatTest", "formatTest");
         Locale.setDefault(loc);
     }
