@@ -75,7 +75,7 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                                 MeasurementCollector.getInstance(), id, getMeasurements(), res);
                             MeasurementCollector.end(id);
                         }
-                        res.logInformation(prj, rCfg);
+                        res.logInformation(prj, rCfg, debug);
                         Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                         assertFailureMessage(res, ppfe2);
                     }
@@ -97,7 +97,7 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                                     instanceCreation);
                                 MeasurementCollector.end(id);
                             }
-                            res.logInformation(prj, rCfg);
+                            res.logInformation(prj, rCfg, debug);
                             Assert.assertTrue("Runtime configuration must have conflict", res.hasConflict());
                             assertFailureMessage(res, ppfe2);
                         }

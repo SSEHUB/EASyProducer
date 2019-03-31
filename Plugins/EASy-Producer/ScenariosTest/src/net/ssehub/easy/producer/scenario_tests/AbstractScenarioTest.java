@@ -462,7 +462,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
                 }
                 result = null == result ? res : result;
             }
-            result.logInformation(prj, rCfg);
+            result.logInformation(prj, rCfg, debug);
             Assert.assertFalse("Reasoning must not have a conflict", result.hasConflict());
             Assert.assertFalse("Reasoning must not have a timeout", result.hasTimeout());
         }

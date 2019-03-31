@@ -76,7 +76,11 @@ public class RealTests extends AbstractRealTests {
      */
     protected void cleanTempFolder(File baseFolder) {
         if (!debug) {
-            FileUtils.deleteQuietly(baseFolder);
+            try {
+                FileUtils.deleteDirectory(baseFolder);
+            } catch (IOException e) {
+                System.out.println("Cannot delete " + baseFolder + ": " + e.getMessage());
+            }
         }
     }
 

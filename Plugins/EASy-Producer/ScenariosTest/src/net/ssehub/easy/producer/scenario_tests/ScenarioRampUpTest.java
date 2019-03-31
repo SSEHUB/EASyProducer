@@ -43,7 +43,9 @@ public class ScenarioRampUpTest extends RampUpTest {
         CSTSemanticException, IOException {
         super.rampUpTest();
         RealTests t = new RealTests();
+        t.cleanTemp();
         t.testQualiMasterFeb17Impl(Mode.REASON_NO_MEASURE);
+        t.cleanTemp();
     }
 
 }

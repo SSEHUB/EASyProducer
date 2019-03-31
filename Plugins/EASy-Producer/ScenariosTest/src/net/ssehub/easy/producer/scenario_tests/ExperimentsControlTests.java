@@ -39,6 +39,9 @@ import test.de.uni_hildesheim.sse.AbstractTest;
  */
 public class ExperimentsControlTests extends AbstractTest {
 
+    // just for debugging
+    public static final boolean PRINT_REASONER_MESSAGES = false;
+    
     /**
      * Creates a file in {@link #getTestDataDir()}.
      * 
@@ -384,7 +387,7 @@ public class ExperimentsControlTests extends AbstractTest {
     private ReasoningResult doReasoning(Configuration cfg, ReasonerConfiguration rConfig) {
         ReasoningResult res = ReasonerFrontend.getInstance().propagate(cfg.getProject(), cfg, rConfig, 
             ProgressObserver.NO_OBSERVER);
-        res.logInformation(cfg.getProject(), rConfig);
+        res.logInformation(cfg.getProject(), rConfig, PRINT_REASONER_MESSAGES);
         return res;
     }
 
