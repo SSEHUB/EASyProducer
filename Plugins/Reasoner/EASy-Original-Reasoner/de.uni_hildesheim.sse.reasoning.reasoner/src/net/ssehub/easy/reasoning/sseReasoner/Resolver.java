@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -26,6 +25,7 @@ import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils;
 import net.ssehub.easy.reasoning.sseReasoner.model.SubstitutionVisitor;
+import net.ssehub.easy.reasoning.sseReasoner.model.TypeCache;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInConstraintFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesInNotSimpleAssignmentConstraintsFinder;
 import net.ssehub.easy.reasoning.sseReasoner.model.VariablesMap;
@@ -85,7 +85,7 @@ import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.*;
  * @author El-Sharkawy
  * @author Holger Eichelberger
  */
-class Resolver implements IResolutionListener {
+final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget {
 
     private static final EASyLogger LOGGER
         = EASyLoggerFactory.INSTANCE.getLogger(Resolver.class, Descriptor.BUNDLE_NAME);
@@ -99,6 +99,7 @@ class Resolver implements IResolutionListener {
     private boolean reuseInstance = false;
     private IAssignmentState assignmentState = AssignmentState.DERIVED;
     private IReasonerInterceptor interceptor;
+    private boolean inRescheduling = false;
 
     private EvalVisitor evaluator = new EvalVisitor();
     private FailedElements failedElements = new FailedElements();
@@ -397,7 +398,8 @@ class Resolver implements IResolutionListener {
         evaluator.setDispatchScope(project);
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             usedVariables.clear();
-            Constraint constraint = constraintBase.pop();
+            // .getFirst here and .removeFirst at end works for most, but not all test cases -> propagation
+            Constraint constraint = constraintBase.removeFirst();
             scopeAssignments.setCurrentScope(constraint);
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
             evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
@@ -465,7 +467,7 @@ class Resolver implements IResolutionListener {
 
         @Override // collect all top-level/enum/attribute assignment constraints
         public void visitConstraint(Constraint constraint) {
-            addConstraint(topLevelConstraints, constraint, true, null);
+            addConstraint(topLevelConstraints, constraint, true, null, null);
         }
 
         @Override // iterate over nested blocks/contained constraints
@@ -484,7 +486,7 @@ class Resolver implements IResolutionListener {
                 assignment.getElement(v).accept(this);
             }
             for (int c = 0; c < assignment.getConstraintsCount(); c++) {
-                addConstraint(topLevelConstraints, assignment.getConstraint(c), true, null);
+                addConstraint(topLevelConstraints, assignment.getConstraint(c), true, null, null);
             }
             for (int a = 0; a < assignment.getAssignmentCount(); a++) {
                 assignment.getAssignment(a).accept(this);
@@ -527,7 +529,7 @@ class Resolver implements IResolutionListener {
                     cst = substVisitor.accept(cst);
                     try {
                         cst.inferDatatype();
-                        addConstraint(topLevelConstraints, new Constraint(cst, parent), true, null);
+                        addConstraint(topLevelConstraints, new Constraint(cst, parent), true, null, null);
                     } catch (CSTSemanticException e) {
                         LOGGER.exception(e);
                     }
@@ -539,6 +541,7 @@ class Resolver implements IResolutionListener {
             translateDerivedDatatypeConstraints(decl, ((Reference) type).getType(), localDecl, parent, refCounter + 1);
         }
     }
+    
     
     /**
      * Translates annotation declarations.
@@ -578,7 +581,8 @@ class Resolver implements IResolutionListener {
     private void translateAnnotationDeclaration(Attribute decl, IDecisionVariable variable, ConstraintSyntaxTree cAcc, 
         boolean qualifyAttribute) {
         ConstraintSyntaxTree attAcc = cAcc;
-        if (null != cAcc && qualifyAttribute) {
+        if (null != cAcc 
+            && (qualifyAttribute || TypeQueries.isCompound(DerivedDatatype.resolveToBasis(decl.getType())))) {
             attAcc = new AttributeVariable(cAcc, decl);
         }
         translateDeclaration(decl, variable, attAcc);
@@ -601,14 +605,16 @@ class Resolver implements IResolutionListener {
         if (null != defaultValue) { // considering the actual type rather than base
             actType = inferTypeSafe(defaultValue, actType);
         }
-        if (null != var && null != var.getValue()) {
+/*        if (null != var && null != var.getValue()) {
             actType = var.getValue().getType();
-        }
+        }*/
         int compoundMode = MODE_COMPOUND_NONE;
         boolean isCompound = TypeQueries.isCompound(actType);
+        TypeCache.Entry tcEntry = null;
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
             compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, MODE_COMPOUND_REGISTER); 
+            tcEntry = contexts.getInConstruction(true);
         }
         // next if: implicit overriding of default values through AttributeAssignment - leave out her
         if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
@@ -621,26 +627,28 @@ class Resolver implements IResolutionListener {
                     // use closest parent instead of project -> runtime analysis
                     createConstraintVariableConstraint(defaultValue, selfEx, self, decl, var);
                 } 
-                ConstraintSyntaxTree acc;
-                if (decl instanceof Attribute) {
-                    Attribute attribute = (Attribute) decl;
-                    if (cAcc == null) {
-                        acc = new Variable(attribute); // shall not occur
-                    } else if (cAcc instanceof AttributeVariable) { // do not double qualify
-                        acc = cAcc;
+                if (!contexts.constraintVarOnly(false)) {
+                    ConstraintSyntaxTree acc;
+                    if (decl instanceof Attribute) {
+                        Attribute attribute = (Attribute) decl;
+                        if (cAcc == null) {
+                            acc = new Variable(attribute); // shall not occur
+                        } else if (cAcc instanceof AttributeVariable) { // do not double qualify
+                            acc = cAcc;
+                        } else {
+                            acc = new AttributeVariable(cAcc, attribute);
+                        }
                     } else {
-                        acc = new AttributeVariable(cAcc, attribute);
+                        acc = null != selfEx ? cAcc : new Variable(decl);
                     }
-                } else {
-                    acc = null != selfEx ? cAcc : new Variable(decl);
+                    defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
+                    defaultValue = substituteVariables(defaultValue, selfEx, self);
+                    ConstraintList targetCons = defaultConstraints; 
+                    if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
+                        targetCons = deferredDefaultConstraints;
+                    }
+                    addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var, null);
                 }
-                defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
-                defaultValue = substituteVariables(defaultValue, selfEx, self);
-                ConstraintList targetCons = defaultConstraints; 
-                if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
-                    targetCons = deferredDefaultConstraints;
-                }
-                addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var);
                 substVisitor.clear(); // clear false above 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e); // should not occur, ok to log
@@ -651,6 +659,7 @@ class Resolver implements IResolutionListener {
         }
         translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
+            contexts.setInConstruction(tcEntry);
             translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, compoundMode); 
         } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, actType, cAcc);
@@ -769,15 +778,29 @@ class Resolver implements IResolutionListener {
         int nextMode = MODE_COMPOUND_NONE;
         if (!contexts.alreadyProcessed(type)) {
             if (MODE_COMPOUND_REGISTER == mode) {
+                // type cache not completely removed on condition for consistency
+                ContextStack.TranslateMode tMode = contexts.getMappingMode(type);
                 contexts.pushContext(decl, null == variable);
-                contexts.transferTypeExcludes(type);
-                registerCompoundMapping(type, cAcc, new Variable(decl));
+                if (tMode != ContextStack.TranslateMode.NOTHING) {
+                    if ((!decl.isAttribute() && tMode != ContextStack.TranslateMode.TRANSFER)) {
+                        contexts.registerForTypeCache(type, decl);
+                    }
+                    contexts.transferTypeExcludes(type);
+                    if (tMode == ContextStack.TranslateMode.TRANSFER) {
+                        contexts.transferToContext(type, decl);
+                    } else {
+                        registerCompoundMapping(type, cAcc, new Variable(decl));
+                    }
+                }
                 nextMode = MODE_COMPOUND_TRANSLATE;
             }
         }
         if (MODE_COMPOUND_TRANSLATE == mode) {
-            translateCompoundContent(decl, variable, type, cAcc);
-            contexts.popContext();
+            // type cache not completely removed on condition for consistency
+            if (!contexts.transferConstraints(type, this, variable, decl)) {
+                translateCompoundContent(decl, variable, type, cAcc);
+            }
+            contexts.popContext(type);
             contexts.recordProcessed(type);
             nextMode = MODE_COMPOUND_NONE;
         }
@@ -968,10 +991,9 @@ class Resolver implements IResolutionListener {
             cst = substituteVariables(cst, selfEx, self);
             try { // compoundConstraints
                 Constraint constraint = new AttachedConstraint(cst, contexts.getCurrentType(), parent);
-                addConstraint(otherConstraints, constraint, true, variable);
-                if (ExpressionType.CONSTRAINT == type || ExpressionType.ASSIGNMENT_CONSTRAINT == type) {
-                    registerConstraint(variable, constraint);
-                }
+                addConstraint(otherConstraints, constraint, true, variable, 
+                    (ExpressionType.CONSTRAINT == type || ExpressionType.ASSIGNMENT_CONSTRAINT == type) 
+                        ? variable : null);
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }               
@@ -1016,7 +1038,6 @@ class Resolver implements IResolutionListener {
      *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
      * @param variable optional variable for registering constraints
-     * @see #registerConstraint(IDecisionVariable, Constraint)
      */
     private void processEvalConstraints(PartialEvaluationBlock evalBlock, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, IDecisionVariable variable) {
@@ -1030,8 +1051,7 @@ class Resolver implements IResolutionListener {
                 ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self);
                 try {
                     Constraint constraint = new Constraint(cst, project);
-                    addConstraint(otherConstraints, constraint, true, null);
-                    registerConstraint(variable, constraint);
+                    addConstraint(otherConstraints, constraint, true, null, variable);
                 } catch (CSTSemanticException e) {
                     LOGGER.exception(e);
                 } 
@@ -1107,8 +1127,10 @@ class Resolver implements IResolutionListener {
                         }
                         for (int s = 0; s < cmp.getDeclarationCount(); s++) {
                             DecisionVariableDeclaration slot = cmp.getDeclaration(s);
-                            translateAnnotationAssignment(effectiveAssignment, slot, 
-                                new CompoundAccess(acc, slot.getName()));
+                            if (!(slot.getParent() instanceof AttributeAssignment)) {
+                                translateAnnotationAssignment(effectiveAssignment, slot, 
+                                    new CompoundAccess(acc, slot.getName()));
+                            }
                         }
                     }
                 }
@@ -1139,11 +1161,13 @@ class Resolver implements IResolutionListener {
             } else {
                 cst = new AttributeVariable(compound, attrib);
             }
+            if (TypeCache.ENABLED) {
+                contexts.notifyCashMapping();
+            }
             cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, assignment.getExpression());
             cst = substituteVariables(cst, compound, null);
-            inferTypeSafe(cst, null);
             try {
-                addConstraint(otherConstraints, new AnnotationAssignmentConstraint(cst, project), false, null); 
+                addConstraint(otherConstraints, new AnnotationAssignmentConstraint(cst, project), false, null, null); 
             } catch (CSTSemanticException e) {
                 LOGGER.exception(e);
             }
@@ -1163,8 +1187,8 @@ class Resolver implements IResolutionListener {
         constraintBase.addAll(deferredDefaultConstraints, true);
         constraintBase.addAll(topLevelConstraints, true);
         constraintBase.addAll(otherConstraints, true);
-        constraintCounter = constraintBase.size();
-        variablesInConstraintsCounter = variablesMap.getDeclarationSize();
+        constraintCounter += constraintBase.size();
+        variablesInConstraintsCounter += variablesMap.getDeclarationSize();
         // if marked for re-use, copy constraint base
         if (null != copiedState) {
             ConstraintList copy = new ConstraintList();
@@ -1183,9 +1207,10 @@ class Resolver implements IResolutionListener {
      * @param checkForInitializers check also for initializers if (<code>true</code>), add only if (<code>false</code>)
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>. 
      *     This information is particularly relevant for constraints arising from constraint variables.
+     * @param register variable to register against, may be <b>null</b>
      */
     private void addConstraint(ConstraintList target, Constraint constraint, boolean checkForInitializers, 
-        IDecisionVariable variable) {
+        IDecisionVariable variable, IDecisionVariable register) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         try {
             cst = contexts.composeExpression(cst); // pass on possibly changed cst
@@ -1208,12 +1233,28 @@ class Resolver implements IResolutionListener {
             }
         }
         if (add) {
-            if (inTopLevelEvals && (target == otherConstraints || target == topLevelConstraints)) {
-                target.addFirst(constraint);
-            } else {
-                target.addLast(constraint);
+            boolean first = (inTopLevelEvals && (target == otherConstraints || target == topLevelConstraints));
+            addConstraint(target, first, constraint, register);
+            if (TypeCache.ENABLED) {
+                contexts.addConstraint(target, first, constraint, register != null);
             }
-            simpleAssignmentFinder.acceptAndClear(constraint, config);
+        }
+    }
+    
+    @Override
+    public final void addConstraint(ConstraintList target, boolean first, Constraint constraint, 
+        IDecisionVariable register) {
+        if (first) {
+            target.addFirst(constraint);
+        } else {
+            target.addLast(constraint);
+        }
+        simpleAssignmentFinder.acceptAndClear(constraint, config);
+        if (null != register) {
+            variablesMap.registerConstraint(register, constraint);
+            if (null != copiedState) {
+                copiedState.variablesMap.registerConstraint(register, constraint);
+            }
         }
     }
 
@@ -1235,9 +1276,12 @@ class Resolver implements IResolutionListener {
      */
     Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
+        boolean cvo = contexts.constraintVarOnly(true);
         cst = substituteVariables(cst, selfEx, self);
-        return createConstraintVariableConstraint(cst, self, 
+        Constraint result = createConstraintVariableConstraint(cst, self, 
             !(cst instanceof ConstantValue), parent, variable);
+        contexts.setConstraintVarOnly(cvo);
+        return result;
     }
 
     /**
@@ -1247,12 +1291,11 @@ class Resolver implements IResolutionListener {
      * @param cst the constraint
      * @param self the declaration of the variable representing <i>self</i> in <code>cst</code> (may be <b>null</b> 
      *    for none), just used for logging
-     * @param checkForInitializers whether initializers shall be checked (recursively) when adding aconstraint
+     * @param checkForInitializers whether initializers shall be checked (recursively) when adding a constraint
      * @param parent the parent for new constraints
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
      * @return the created constraint
-     * @see #addConstraint(ConstraintList, Constraint, boolean, IDecisionVariable)
-     * @see #registerConstraint(IDecisionVariable, Constraint)
+     * @see #addConstraint(ConstraintList, Constraint, boolean, IDecisionVariable, IDecisionVariable)
      */
     Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, AbstractVariable self, 
         boolean checkForInitializers, IModelElement parent, IDecisionVariable variable) {
@@ -1260,8 +1303,10 @@ class Resolver implements IResolutionListener {
         try {
             constraint = new ConstraintVariableConstraint(cst, parent);
             // constants can cause endless recursion
-            addConstraint(otherConstraints, constraint, checkForInitializers, variable);
-            registerConstraint(variable, constraint);
+            if (TypeCache.ENABLED) {
+                contexts.notifyCashMapping();
+            }
+            addConstraint(otherConstraints, constraint, checkForInitializers, variable, variable);
             if (Descriptor.LOGGING) {
                 LOGGER.debug((null != self ? self.getName() + "." : "") 
                     + (null != variable ? variable.getDeclaration().getName() : "")
@@ -1273,23 +1318,6 @@ class Resolver implements IResolutionListener {
         return constraint;
     }
     
-    /**
-     * Registers a <code>variable</code> and associated <code>constraint</code>.
-     * 
-     * @param variable the variable (may be <b>null</b>, call is ignored then)
-     * @param constraint the constraint
-     * 
-     * @see #register(IDecisionVariable, Constraint, Map, Map)
-     */
-    private void registerConstraint(IDecisionVariable variable, Constraint constraint) {
-        if (null != variable) {
-            variablesMap.registerConstraint(variable, constraint);
-            if (null != copiedState) {
-                copiedState.variablesMap.registerConstraint(variable, constraint);
-            }
-        }
-    }
-
     // <<< documented until here    
     
     // messages
@@ -1537,13 +1565,14 @@ class Resolver implements IResolutionListener {
         scopeAssignments.clear();
         // keep variablesMap for now
         constraintBase.clear();        
-        // keep constraintCounter - is set during translation
-        // keep variablesInConstraintsCounter - is set during translation
+        constraintCounter = 0;
+        variablesInConstraintsCounter = 0;
         reevaluationCounter = 0;
-        // keep variablesCounter - is set during translation
+        variablesCounter = 0;
         hasTimeout = false;
         isRunning = false;
         wasStopped = false;
+        inRescheduling = false;
         usedVariables.clear();
         substVisitor.clear();
         contexts.clear();
@@ -1560,6 +1589,9 @@ class Resolver implements IResolutionListener {
         hasTimeout = false;
         isRunning = false;
         wasStopped = false;
+        inRescheduling = false;
+        constraintCounter = 0;
+        variablesInConstraintsCounter = 0;
         reevaluationCounter = 0;
         translationTime = 0;
         evaluationTime = 0;
@@ -1635,6 +1667,20 @@ class Resolver implements IResolutionListener {
      */
     final void contextRegisterMapping(AbstractVariable var, ConstraintSyntaxTree acc) {
         contexts.registerMapping(var, acc);
+    }
+    
+    /**
+     * Notifies the resolver that following translations happen as part of constraint re-scheduling (or not).
+     * 
+     * @param inRescheduling are we in re-scheduling
+     */
+    final void notifyRescheduling(boolean inRescheduling) {
+        this.inRescheduling = inRescheduling;
+    }
+
+    @Override
+    public boolean inRescheduling() {
+        return inRescheduling;
     }
 
 }

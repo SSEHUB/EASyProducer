@@ -16,6 +16,7 @@
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -665,6 +666,25 @@ public class ReasoningUtils {
             }
         } else { // we are top-level
             result = new Variable(variable.getDeclaration());
+        }
+        return result;
+    }
+    
+    /**
+     * Returns a copy of the {@code source} map. Turns an empty map into {@code null}.
+     * 
+     * @param <K> the key
+     * @param <V> the value
+     * @param source the source map, may be <b>null</b>
+     * @return the copy or <b>null</b> if there was no or just an empty {@code source}
+     */
+    public static <K, V> Map<K, V> copyMapNull(Map<K, V> source) {
+        Map<K, V> result;
+        if (null != source && source.size() > 0) {
+            result = new HashMap<K, V>(source.size());
+            result.putAll(source);
+        } else {
+            result = null;
         }
         return result;
     }

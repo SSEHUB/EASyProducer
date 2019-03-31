@@ -222,7 +222,13 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        setResult(map(variable));
+        ConstraintSyntaxTree result = map(variable);
+        if (null == result || result == variable) {
+            // nothing happened, it might be a deep translation
+            super.visitAnnotationVariable(variable);
+        } else {
+            setResult(result);
+        }
     }
 
     @Override

@@ -26,6 +26,7 @@ import org.junit.runners.Suite.SuiteClasses;
     CompoundTests.class,
     InterfaceTests.class,
     ApplicationsTests.class,
+    TypeCacheTests.class
     })
 public class AllTests {
 

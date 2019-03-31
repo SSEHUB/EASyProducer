@@ -1,0 +1,23 @@
+project NestedAssignBlock2 {
+
+    version v0;
+    
+    annotate Integer at = 10 to NestedAssignBlock2;
+
+    compound Nested {
+        assign (at = 11) to {
+            Integer i;
+        }
+    }
+
+    compound Element {
+        assign (at = 9) to {
+            Nested nested;
+        }
+    }
+    
+    Element elt = {nested={i=1}};
+    elt.nested.at == 9;
+    elt.nested.i.at == 11;
+
+}

@@ -24,11 +24,16 @@ import java.util.Set;
 
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
+import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
+import net.ssehub.easy.reasoning.sseReasoner.model.TypeCache.IConstraintTarget;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Constraint.Type;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -53,24 +58,109 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  * 
  * @author Holger Eichelberger
  */
-public class ContextStack {
+public final class ContextStack {
+    
+    /**
+     * (Compound) Translation mode for active type caches. [type cache]
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum TranslateMode {
+        
+        /**
+         * Do nothing, i.e., create a context and go on.
+         */
+        NOTHING,
+        
+        /**
+         * Register mappings as without type cache.
+         */
+        REGISTER,
+        
+        /**
+         * Transfer existing mappings instead of creating new ones.
+         */
+        TRANSFER
+    }
     
     /**
      * A linked stack entry. Stack is formed through {@link #predecessor}.
      * 
      * @author Holger Eichelberger
      */
-    private static class Context {
+    static class Context {
+        
+        /**
+         * Variable-accessor mapping.
+         */
         private Map<AbstractVariable, ConstraintSyntaxTree> varMap 
             = new HashMap<AbstractVariable, ConstraintSyntaxTree>(30);
+        
+        /**
+         * Secundary name-accessor mapping, consistent with {@link #varMap}.
+         */
         private Map<String, ConstraintSyntaxTree> nameMap = new HashMap<String, ConstraintSyntaxTree>();
+        
+        /**
+         * Iterator variable for incremental container quantification.
+         */
         private DecisionVariableDeclaration iterator;
+
+        /**
+         * Container accessor for incremental container quantification.
+         */
         private ConstraintSyntaxTree container;
+        
+        /**
+         * Predecessor context for stacked lookups.
+         */
         private Context predecessor;
+        
+        /**
+         * Shall processed types be recorded.
+         */
         private boolean recordProcessedTypes;
+        
+        /**
+         * The processed types.
+         */
         private Set<IDatatype> processedTypes = new HashSet<IDatatype>();
+        
+        /**
+         * Stores type-excludes for constraint re-scheduling.
+         */
         private Set<? extends IDatatype> typeExcludes;
+        
+        /**
+         * Stores the associated type.
+         */
         private IDatatype type;
+        
+        /**
+         * A type cache entry in construction during translation.
+         */
+        private TypeCache.Entry inConstruction;
+        
+        /**
+         * Indicates whether the mapping shall be (type) cached in this context.
+         */
+        private boolean cashMapping;
+        
+        /**
+         * Indicates that only constraint variable constraints shall be translated/instantiated.
+         */
+        private boolean constraintVarOnly;
+        
+        /**
+         * A completed type cache entry to be used as fallback lookup for on-demand accessor instantiation.
+         */
+        private TypeCache.Entry fallback;
+        
+        /**
+         * The underlying variable being translated, used for fallback lookups in on-demand accessor instantiation 
+         * through {@link #fallback}.
+         */
+        private AbstractVariable self;
         
         /**
          * Clears this context.
@@ -85,6 +175,9 @@ public class ContextStack {
             processedTypes.clear();
             typeExcludes = null;
             type = null;
+            inConstruction = null;
+            cashMapping = false;
+            fallback = null;
         }
         
     }
@@ -105,6 +198,7 @@ public class ContextStack {
     
     private Context currentContext;
     private Set<? extends IDatatype> globalExcludes;
+    private transient TypeCache typeCache = TypeCache.ENABLED ? new TypeCache() : null;
 
     /**
      * Creates a context stack with implicit top-most (project) context.
@@ -166,9 +260,29 @@ public class ContextStack {
     private void pushContextImpl(Context context) {
         // make to current context, link into
         context.predecessor = currentContext;
+        context.inConstruction = currentContext.inConstruction;
+        context.constraintVarOnly = currentContext.constraintVarOnly;
+        context.self = currentContext.self;
         currentContext = context;
     }
 
+    /**
+     * Pops a context and transfers the cache information. [type cache]
+     * 
+     * @param type the type to transfer the data to if the actual context is in {@link Context#inConstruction} and
+     * cashing is needed {@link Context#cashMapping}.
+     */
+    public void popContext(IDatatype type) {
+        if (TypeCache.ENABLED) {
+            if (currentContext.inConstruction != null && currentContext.cashMapping) {
+                typeCache.transferContext(type, 
+                    ReasoningUtils.copyMapNull(currentContext.varMap), 
+                    ReasoningUtils.copyMapNull(currentContext.nameMap));
+            }
+        }
+        popContextImpl();
+    }
+    
     /**
      * Removes (and clears) the current context from the stack (except for the initial project context
      * which remains). Contexts are only cleaned up and released to the pool if they are not registered with
@@ -188,6 +302,7 @@ public class ContextStack {
         if (null != currentContext.predecessor) {
             context = currentContext;
             currentContext = context.predecessor;
+            currentContext.cashMapping |= context.cashMapping;
         }
         return context;
     }
@@ -224,7 +339,13 @@ public class ContextStack {
      * @return <code>true</code> if there is a mapping, <code>false</code> else
      */
     public boolean containsMapping(AbstractVariable var) {
-        return currentContext.varMap.containsKey(var); // not != null, may be null
+        boolean found = currentContext.varMap.containsKey(var); // not != null, may be null
+        if (TypeCache.ENABLED) { // method is needed, just disable additional functionality
+            if (!found && currentContext.fallback != null) {
+                found = currentContext.fallback.containsMapping(var);
+            }
+        }
+        return found;
     }
 
     /**
@@ -239,6 +360,11 @@ public class ContextStack {
         Context iter = currentContext;
         do {
             result = iter.varMap.get(var);
+            if (TypeCache.ENABLED) { // method is needed, just disable additional functionality
+                if (null == result && null != iter.fallback) {
+                    result = iter.fallback.getMapping(var, currentContext.self);
+                }
+            }
             iter = iter.predecessor;
         } while (null == result && null != iter);
         return result;
@@ -252,7 +378,214 @@ public class ContextStack {
      * @return the mapped access expression or <b>null</b> if there is no registered mapping
      */
     public ConstraintSyntaxTree getLocalMapping(String name) {
-        return currentContext.nameMap.get(name);
+        ConstraintSyntaxTree result = currentContext.nameMap.get(name);
+        if (TypeCache.ENABLED) { // method is needed, just disable additional functionality
+            if (null == result && null != currentContext.fallback) {
+                result = currentContext.fallback.getLocalMapping(name, currentContext.self);
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Adds a constraint to the type cache that is currently in construction for the actual context frame. [type cache]
+     * 
+     * @param target the target constraint list
+     * @param first add to the front or to the end of {@code target}
+     * @param constraint the (template) constraint to be stored
+     * @param register shall the constraint later be registered with {@link VariablesMap}
+     */
+    public void addConstraint(ConstraintList target, boolean first, Constraint constraint, boolean register) {
+        if (TypeCache.ENABLED) {
+            if (null != currentContext.inConstruction && constraint.getType() != Type.CONSTRAINT) {
+                currentContext.inConstruction.addConstraint(target, first, constraint, register);
+            }
+        }
+    }
+    
+    /**
+     * Transfers all constraints from the associated type cache entry into their respective target constraint
+     * sets. Substitute the original template variable by {@code var}. [type cache]
+     * 
+     * @param type the type to transfer the constraints for
+     * @param target the constraint target
+     * @param register the variable to register the new constraints with {@link VariablesMap}
+     * @param var the actual variable for substitution
+     * @return {@code true} if the transfer was done even if no constraint was transferred as no one was registered and 
+     *   no further translation shall happen, {@code false} if translation can go on, e.g. the type cache for {@code} 
+     *   type is currently in construction
+     */
+    public boolean transferConstraints(IDatatype type, IConstraintTarget target, IDecisionVariable register, 
+        AbstractVariable var) {
+        boolean result = false;
+        if (TypeCache.ENABLED) {
+            if (null == currentContext.inConstruction) {
+                if (typeCache.transferConstraints(type, target, register, var)) {
+                    if (TranslateMode.TRANSFER == getMappingMode(type)) {
+                        // for transfer keep translate
+                        currentContext.constraintVarOnly = true;
+                    } else {
+                        result = true;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the flag of the current context whether only constraint variables shall be translated. [type cache]
+     * 
+     * @param clear clears the original value to {@code false} (e.g., for temporary use)
+     * @return the original value
+     */
+    public boolean constraintVarOnly(boolean clear) {
+        boolean result;
+        //TypeCache.ENABLED as switching off on caller side will lead to warnings
+        if (TypeCache.ENABLED) {
+            result = currentContext.constraintVarOnly;
+            if (clear) {
+                result = false;
+            }
+        } else {
+            result = false;
+        }
+        return result;
+    }
+
+    /**
+     * Changes the flag of the current context whether only constraint variables shall be translated. [type cache]
+     * 
+     * @param constraintVarOnly the new value of the flag
+     */
+    public void setConstraintVarOnly(boolean constraintVarOnly) {
+        //TypeCache.ENABLED as switching off on caller side will lead to warnings
+        if (TypeCache.ENABLED) {
+            currentContext.constraintVarOnly = constraintVarOnly;
+        }
+    }
+    
+    /**
+     * Registers the given type and the prototypical template variable {@code var} as type in the type cache.
+     * As long as the containing context is active, all constraints added through 
+     * {@link #addConstraint(ConstraintList, boolean, Constraint, boolean))} will be related to the created type 
+     * cache entry. Upon 
+     * {@link #transferConstraints(IDatatype, IConstraintTarget, IDecisionVariable, AbstractVariable))} 
+     * all occurrences of {@code var} will be substituted by a given variable. [type cache]
+     * 
+     * @param type the type to relate to
+     * @param var the template variable
+     */
+    public void registerForTypeCache(IDatatype type, AbstractVariable var) {
+        //TypeCache.ENABLED on caller side
+        if (TypeCache.ENABLED) {
+            setInConstruction(typeCache.createEntryFor(type, var)); 
+        }
+    }
+
+    /**
+     * Returns whether the current context is currently constructing a type cache. [type cache]
+     * 
+     * @param clear clears the original value to {@code null} (e.g., for temporary use)
+     * @return the type cache entry
+     */
+    public TypeCache.Entry getInConstruction(boolean clear) {
+        //TypeCache.ENABLED as switching off on caller side will lead to warnings
+        TypeCache.Entry result;
+        if (TypeCache.ENABLED) {
+            result = currentContext.inConstruction;
+            if (clear) {
+                currentContext.inConstruction = null;
+            }
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Changes the type cache the current context is currently constructing. [type cache]
+     * 
+     * @param inConstruction the type cache being in construction, may be {@code null} for none
+     */
+    public void setInConstruction(TypeCache.Entry inConstruction) {
+        //TypeCache.ENABLED as switching off on caller side will lead to warnings
+        if (TypeCache.ENABLED) {
+            currentContext.inConstruction = inConstruction;
+        }
+    }
+
+    /**
+     * Notifies the current context that mappings shall be cached upon {@link #popContext(IDatatype)}. [type cache]
+     */
+    public void notifyCashMapping() {
+        if (TypeCache.ENABLED) {
+            currentContext.cashMapping = true;
+        }
+    }
+
+    /**
+     * Returns the type cache mapping mode when trying to register a new type. [type cache]
+     * 
+     * @param type the type the mode shall be returned for
+     * @return the mode
+     */
+    public TranslateMode getMappingMode(IDatatype type) {
+        TranslateMode result = TranslateMode.REGISTER;
+        if (TypeCache.ENABLED) {
+            TypeCache.Entry entry = typeCache.get(type);
+            if (null != entry) {
+                result = entry.hasMapping() ? TranslateMode.TRANSFER : TranslateMode.NOTHING;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Indicates that mapping information from the type cache shall be transferred into the current context.
+     * This may be done on-demand or in one step depending on {@link TypeCache#ON_DEMAND_ACCESSORS}. [type cache]
+     * 
+     * @param type the type to do the transfer for
+     * @param var the variable replacing the template variable
+     */
+    public void transferToContext(IDatatype type, AbstractVariable var) {
+        if (TypeCache.ENABLED) {
+            if (TypeCache.ON_DEMAND_ACCESSORS) {
+                // on-demand accessor instantiation
+                TypeCache.Entry entry = typeCache.get(type);
+                if (null != entry && null != var) {
+                    currentContext.fallback = entry;
+                    currentContext.self = var;
+                }
+            } else {
+                // one-step accessor instantiation
+                typeCache.transferToContext(type, this, var);
+                currentContext.fallback = null;
+                currentContext.self = null;
+            }
+        }
+    }
+    
+    /**
+     * Adds the type cache of {@code type} as parent to the type cache that is currently in construction. [type cache]
+     * 
+     * @param type the type to add
+     * @param target the target container for immediately transferring constraints
+     * @param register whether constraints shall be registered
+     * @param var the replacing variable
+     */
+    public void addAsParentCache(IDatatype type, IConstraintTarget target, IDecisionVariable register, 
+        AbstractVariable var) {
+        if (TypeCache.ENABLED) {
+            if (currentContext.inConstruction != null) {
+                TypeCache.Entry entry = typeCache.get(type);
+                if (null != entry) {
+                    currentContext.inConstruction.addParent(entry, target, register, var);
+                }
+            } else {
+                transferConstraints(type, target, register, var);
+            }
+        }
     }
 
     /**

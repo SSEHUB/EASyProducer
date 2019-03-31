@@ -13,4 +13,5 @@ Require-Bundle: net.ssehub.easy.reasoning.core;bundle-version="1.2.0",
 Service-Component: OSGI-INF/reasoner.xml
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: net.ssehub.easy.reasoning.sseReasoner
+Export-Package: net.ssehub.easy.reasoning.sseReasoner,
+ net.ssehub.easy.reasoning.sseReasoner.model

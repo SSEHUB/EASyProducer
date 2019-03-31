@@ -125,7 +125,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
         // visit for rescheduling
         variable.getValue().accept(this);
         
-        // re-set current state from locally saved valaues
+        // re-set current state from locally saved values
         this.varParent = sVarParent;
         this.variable = sVariable;
         this.oldValue = sOldValue;
@@ -136,6 +136,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
     public void notifyChanged(IDecisionVariable variable, Value oldValue) {
         AbstractVariable decl = variable.getDeclaration();
         if (!variable.isLocal()) {
+            resolver.notifyRescheduling(true);
             if (Descriptor.LOGGING) {
                 LOGGER.debug("Value changed: " + variable.getDeclaration().getName() + " " + variable.getValue()
                     + " Parent: " + (null == variable.getParent() ? null : variable.getParent()));                 
@@ -151,6 +152,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
             rescheduleConstraintsForChilds(variable);
             // All constraints for the parent (as this was also changed)
             rescheduleConstraintsForParent(variable);
+            resolver.notifyRescheduling(false);
         } else if (resolver.contextContainsMapping(decl)) {
             IDecisionVariable var = ((LocalDecisionVariable) variable).getVariable();
             resolver.contextRegisterMapping(decl, null == var ? null : new ResolvedVariable(var));
