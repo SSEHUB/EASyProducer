@@ -51,4 +51,9 @@ public class DefaultConstraint extends Constraint {
         return Type.DEFAULT;
     }
 
+    @Override
+    public Constraint createConstraint(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
+        return new DefaultConstraint(consSyntax, getParent());
+    }
+
 }

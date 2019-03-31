@@ -234,13 +234,26 @@ public class ReasoningResult {
 
     /**
      * Logs reasoning summary based on <code>prj</code>, the measures and the messages. Reasoners shall not produce
-     * output except for debugging stuff. If explicit output is required, call this method after reasoning.
+     * output except for debugging stuff. If explicit output is required, call this method after reasoning. Logs
+     * with reasoner messages by default.
      * 
      * @param prj the project representing the model
      * @param rConfig the configuration containing the information logger
      */
     public void logInformation(Project prj, ReasonerConfiguration rConfig) {
-        logInformation(prj, rConfig.getLogger());
+        logInformation(prj, rConfig, true);
+    }
+
+    /**
+     * Logs reasoning summary based on <code>prj</code>, the measures and the messages. Reasoners shall not produce
+     * output except for debugging stuff. If explicit output is required, call this method after reasoning.
+     * 
+     * @param prj the project representing the model
+     * @param rConfig the configuration containing the information logger
+     * @param withMessages include the reasoner messages (may be time consuming)
+     */
+    public void logInformation(Project prj, ReasonerConfiguration rConfig, boolean withMessages) {
+        logInformation(prj, rConfig.getLogger(), withMessages);
     }
  
     /**
@@ -249,8 +262,9 @@ public class ReasoningResult {
      * 
      * @param prj the project representing the model
      * @param infoLogger the information logger
+     * @param withMessages include the reasoner messages (may be time consuming)
      */
-    public void logInformation(Project prj, IAdditionalInformationLogger infoLogger) {
+    public void logInformation(Project prj, IAdditionalInformationLogger infoLogger, boolean withMessages) {
         infoLogger.info("Model: " + prj.getName());
         if (null != measures) {
             Set<IMeasurementKey> keys = measures.keySet();
@@ -268,7 +282,7 @@ public class ReasoningResult {
                 infoLogger.info(key.getExplanation() + ": " + getMeasure(key));
             }
         }
-        if (!messages.isEmpty()) {
+        if (withMessages && !messages.isEmpty()) {
             infoLogger.info("");
             for (int m = 0; m < messages.size(); m++) {
                 infoLogger.info(messages.get(m));

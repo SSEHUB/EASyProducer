@@ -47,4 +47,9 @@ public class ConstraintVariableConstraint extends Constraint {
         return Type.CONSTRAINT;
     }
 
+    @Override
+    public Constraint createConstraint(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
+        return new ConstraintVariableConstraint(consSyntax, getParent());
+    }
+
 }

@@ -108,6 +108,14 @@ public class AttributeTests extends AbstractTest {
     }    
 
     /**
+     * Assign attribute in nested manner across compounds.
+     */
+    @Test    
+    public void nestedAssignBlock2() {
+        reasoningTest("NestedAssignBlock2.ivml", 0); 
+    }    
+
+    /**
      * Constraint annotations.
      */
     @Test    

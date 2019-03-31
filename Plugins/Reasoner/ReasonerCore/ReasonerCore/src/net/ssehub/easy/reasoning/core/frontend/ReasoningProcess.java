@@ -128,7 +128,7 @@ public class ReasoningProcess implements Runnable {
      */
     private void logResult() {
         if (LOG_RESULT) {
-            result.logInformation(project, reasonerConfig);
+            result.logInformation(project, reasonerConfig, true);
         }
     }
 

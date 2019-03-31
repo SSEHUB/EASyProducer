@@ -111,6 +111,9 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     public static final int TIMEOUT_REASONING
         = MeasurementCollector.getIntProperty(KEY_TIMEOUT_REASONING, 5000, 0);
     
+    // just for debugging
+    public static final boolean PRINT_REASONER_MESSAGES = false;
+    
     private ITestDescriptor descriptor;
     private String testPath;
     
@@ -325,7 +328,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             MeasurementCollector.endAuto(id);
             transferReasoningMeasures(id, res);
             MeasurementCollector.end(id);
-            res.logInformation(project, rConfig);
+            res.logInformation(project, rConfig, PRINT_REASONER_MESSAGES);
             if (n > 1) {
                 // we want to cause multiple reasoner calls, not re-reasoning on the same configuration here
                 config = new Configuration(project, false); 
@@ -387,7 +390,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             MeasurementCollector.set(id, AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
                 instanceCreationTime);
             MeasurementCollector.end(id);
-            res.logInformation(inst.getProject(), inst.getReasonerConfiguration());
+            res.logInformation(inst.getProject(), inst.getReasonerConfiguration(), PRINT_REASONER_MESSAGES);
             result = null == result ? res : result;
         }
         return result;

@@ -51,4 +51,9 @@ public class AnnotationAssignmentConstraint extends Constraint {
         return Type.ANNOTATION_ASSIGNMENT;
     }
 
+    @Override
+    public Constraint createConstraint(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
+        return new AnnotationAssignmentConstraint(consSyntax, getParent());
+    }
+
 }

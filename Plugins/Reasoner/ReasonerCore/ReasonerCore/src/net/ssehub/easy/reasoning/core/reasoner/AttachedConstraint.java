@@ -50,4 +50,9 @@ public class AttachedConstraint extends Constraint {
         return type;
     }
 
+    @Override
+    public Constraint createConstraint(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
+        return new AttachedConstraint(consSyntax, type, getParent());
+    }
+
 }
