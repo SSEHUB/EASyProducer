@@ -229,4 +229,16 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
         return null;
     }
 
+    /**
+     * Creates a new constraint with same properties but changed constraint syntax tree.
+     * 
+     * @param consSyntax the syntax tree
+     * @return the new constraint
+     * @throws CSTSemanticException in case that the constraint semantics cannot be resolved
+     *   or that the specified constraint does not evaluate to a boolean expression
+     */
+    public Constraint createConstraint(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
+        return new Constraint(consSyntax, getParent());
+    }
+
 }

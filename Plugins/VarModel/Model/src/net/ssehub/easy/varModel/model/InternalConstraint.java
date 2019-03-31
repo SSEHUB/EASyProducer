@@ -52,4 +52,10 @@ public class InternalConstraint extends Constraint {
     public DerivedDatatype getDerivedDatatype() {
         return originType;
     }
+    
+    @Override
+    public Constraint createConstraint(ConstraintSyntaxTree consSyntax) throws CSTSemanticException {
+        return new InternalConstraint(originType, consSyntax, getParent());
+    }
+
 }

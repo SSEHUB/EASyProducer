@@ -75,7 +75,7 @@ public class AttributeVariable extends Variable {
     
     @Override
     public String toString() {
-        return qualifier != null ? qualifier.toString() + "." + super.toString() : super.toString();
+        return qualifier != null ? qualifier.toString() + "." + getVariable().getName() : super.toString();
     }
     
     @Override

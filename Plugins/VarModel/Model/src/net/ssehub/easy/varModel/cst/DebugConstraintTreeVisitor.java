@@ -113,7 +113,8 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
-        println("CALL " + call.getOperation() + " with parameter");
+        println("CALL " + call.getOperation() + "(resolved: " + (call.getResolvedOperation() != null) 
+            + ") with parameter");
         increaseIndentation();
         call.getOperand().accept(this);
         for (int p = 0; p < call.getParameterCount(); p++) {
@@ -156,7 +157,7 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
 
     @Override
     public void visitContainerOperationCall(ContainerOperationCall call) {
-        println("ContainerCall " + call.getOperation());
+        println("ContainerCall " + "(resolved: " + (call.getResolvedOperation() != null) + ") " + call.getOperation());
         increaseIndentation();
         println("container:");
         call.getContainer().accept(this);

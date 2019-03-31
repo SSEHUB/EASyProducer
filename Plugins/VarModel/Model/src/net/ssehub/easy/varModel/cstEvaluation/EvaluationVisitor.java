@@ -694,6 +694,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                     tmp = null;
                 }
             } else {
+                tmp = null;
                 error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type), 
                     Message.CODE_RESOLUTION);
             }
@@ -743,6 +744,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                     cst = null;
                 }
             } else {
+                cst = null;
                 error("Cannot determine all instances for " + IvmlDatatypeVisitor.getQualifiedType(type), 
                     Message.CODE_RESOLUTION);
             }
@@ -1006,7 +1008,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 call.getOperand().accept(this);
                 operand = result;
                 result = null; // clear result - kept in operand and released below
-                setAllowPropagation(op, oldState); 
+                setAllowPropagation(op, oldState);
                 if (IvmlKeyWords.ASSIGNMENT.equals(op.getName())) {
                     contextStack.push(operand);
                     pop = true;

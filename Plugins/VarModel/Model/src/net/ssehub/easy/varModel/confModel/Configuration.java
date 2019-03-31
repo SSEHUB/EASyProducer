@@ -60,6 +60,7 @@ import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenConstraintVarFilter
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenConstraintsFilter;
 import net.ssehub.easy.varModel.model.rewrite.modifier.FrozenTypeDefResolver;
 import net.ssehub.easy.varModel.model.rewrite.modifier.ModelElementFilter;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -869,7 +870,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
         Value result;
         Set setType = new Set(type.getName() + "Instances", rType, null);
         try {
-            result = ValueFactory.createValue(setType, null == instances ? null : instances.values().toArray());
+            // due to problem with equality of compound values, we skip the duplicate check here and rely
+            // on the internally used maps
+            result = new ContainerValue(setType, false, null == instances ? null : instances.values().toArray());
         } catch (ValueDoesNotMatchTypeException e) {
             result = null;
         }

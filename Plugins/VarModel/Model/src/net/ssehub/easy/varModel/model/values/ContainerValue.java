@@ -38,6 +38,7 @@ import net.ssehub.easy.varModel.persistency.StringProvider;
 public class ContainerValue extends StructuredValue implements Cloneable {
 
     // TODO add, set do not check for duplicates in case of sets!
+    // TODO duplicate check works with equals of slots for compound values... correct???
     
     private List<Value> nestedElements = new ArrayList<Value>();
 
@@ -48,9 +49,20 @@ public class ContainerValue extends StructuredValue implements Cloneable {
      * @throws ValueDoesNotMatchTypeException if the given value does not match this type
      */
     ContainerValue(Container container, Object... value) throws ValueDoesNotMatchTypeException {
+        this(container, true, value);
+    }
+
+    /**
+     * Constructor for a new ContainerValue.
+     * @param container the container which extends this ContainerValue
+     * @param check for duplicates
+     * @param value the value(s) to be assigned to this container
+     * @throws ValueDoesNotMatchTypeException if the given value does not match this type
+     */
+    public ContainerValue(Container container, boolean check, Object... value) throws ValueDoesNotMatchTypeException {
         this(container);
         // Check whether this is a SetValue and the given values contain duplicates.
-        if (duplicateValues(value)) {
+        if (check && duplicateValues(value)) {
             throw new ValueDoesNotMatchTypeException("Duplicates in '" 
                 + Arrays.toString(value) + "' are not allowed for a Set.",
                 ValueDoesNotMatchTypeException.NOT_ALLOWED_VALUE_STRUCTURE);

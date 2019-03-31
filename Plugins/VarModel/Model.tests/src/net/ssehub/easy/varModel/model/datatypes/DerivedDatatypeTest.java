@@ -62,6 +62,11 @@ public class DerivedDatatypeTest {
         OCLFeatureCall constraint = new OCLFeatureCall(var, IntegerType.GREATER_INTEGER_INTEGER.getName(), consValue);
         
         Constraint cons = new Constraint(constraint, null);
+        Assert.assertEquals(Constraint.Type.USUAL, cons.getType()); // default
+        Assert.assertNull(cons.getAttachedTo()); // default
+        Assert.assertTrue(cons.createConstraint(constraint) instanceof Constraint);
+        Assert.assertTrue(cons.toString().length() > 0);
+        Assert.assertTrue(cons.isBooleanConstraint());
         Constraint[] constraints = {cons};
         bitrate.setConstraints(constraints);
         
