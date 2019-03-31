@@ -61,6 +61,9 @@ import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;
  */
 public class RtVilTestConfigurer implements ITestConfigurer<Script> {
 
+    // just for debugging
+    public static final boolean PRINT_REASONER_MESSAGES = false;
+    
     @Override
     public String getSystemPropertyName() {
         return "vil.rt.testdata.home";
@@ -143,7 +146,7 @@ public class RtVilTestConfigurer implements ITestConfigurer<Script> {
                     AbstractRtTest.MEASUREMENTS, result);
                 MeasurementCollector.end(id);
                 result.logInformation(config.getConfiguration().getProject(), 
-                    ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
+                    ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT, PRINT_REASONER_MESSAGES);
             }
         });
         return result;

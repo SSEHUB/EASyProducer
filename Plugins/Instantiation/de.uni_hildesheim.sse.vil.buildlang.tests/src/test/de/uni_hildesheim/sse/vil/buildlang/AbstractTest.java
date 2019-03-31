@@ -478,8 +478,10 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
      */
     protected File createTempDir(String name) throws IOException {
         File dir = new File(getTempDir(), name);
+        int i = 0;
         while (dir.exists()) {
-            dir = new File(getTempDir(), name + (int) (Math.random() * 9));
+            dir = new File(getTempDir(), String.format("%02d_sc_%s", i, name));
+            i++;
         }
         dir.mkdirs();
         return dir;
@@ -488,7 +490,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
     /**
      * Cleans the temporary directory.
      */
-    protected final void cleanTemp() {
+    public final void cleanTemp() {
         try {
             File tmp = getTempDir();
             if (tmp.exists()) {
