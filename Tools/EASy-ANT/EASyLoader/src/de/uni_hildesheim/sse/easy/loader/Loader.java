@@ -23,7 +23,7 @@ import de.uni_hildesheim.sse.easy.loader.framework.Utils;
  * 
  * @author Holger Eichelberger
  */
-public class Loader extends AbstractLoader {
+public class Loader extends AbstractLoader implements ILoader {
 
     private List<BundleInfo> data;
     private ClassLoader loader;
@@ -46,6 +46,11 @@ public class Loader extends AbstractLoader {
     public Loader(File base) {
         super(base);
     }
+
+    @Override
+    public void startup() {
+        bootstrap(null);
+    }
     
     /**
      * Starts the loader for testing.
@@ -54,7 +59,7 @@ public class Loader extends AbstractLoader {
      */
     public static void main(String[] args) {
         Loader loader = new Loader();
-        loader.bootstrap(null);
+        loader.startup();
         loader.shutdown();
     }
     
@@ -135,9 +140,7 @@ public class Loader extends AbstractLoader {
         return loader;
     }
     
-    /**
-     * Performs a shutdown.
-     */
+    @Override
     public void shutdown() {
         if (null != loader && null != data) {
             boolean successful = true;
@@ -186,5 +189,9 @@ public class Loader extends AbstractLoader {
         }
     }
 
+    @Override
+    public void setVerbose(boolean verbose) {
+        // ignored
+    }
     
 }

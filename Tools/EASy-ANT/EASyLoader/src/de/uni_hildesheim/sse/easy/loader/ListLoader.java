@@ -16,7 +16,7 @@ import de.uni_hildesheim.sse.easy.loader.framework.Utils;
  * 
  * @author Holger Eichelberger
  */
-public class ListLoader {
+public class ListLoader implements ILoader {
 
     public static final String EASY_STARTUP_FILE_NAME = ".easyStartup";
     private List<StartupInfo> startupSequence = new ArrayList<StartupInfo>();
@@ -56,18 +56,14 @@ public class ListLoader {
         Utils.closeQuietly(is);
     }
     
-    /**
-     * Performs EASy startup activities.
-     */
+    @Override
     public void startup() {
         for (StartupInfo info : startupSequence) {
             info.start();
         }
     }
 
-    /**
-     * Performs EASy shutdown activities.
-     */
+    @Override
     public void shutdown() {
         for (StartupInfo info : startupSequence) {
             info.stop();
@@ -91,11 +87,7 @@ public class ListLoader {
         }
     }
     
-    /**
-     * Changes the verbosity mode.
-     * 
-     * @param verbose shall we be verbose?
-     */
+    @Override
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
     }
