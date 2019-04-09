@@ -36,6 +36,7 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
+		<echo>${toString:classpath}</echo>
 		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
 		</javac>
