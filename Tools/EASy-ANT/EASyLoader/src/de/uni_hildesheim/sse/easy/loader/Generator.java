@@ -57,6 +57,8 @@ public class Generator extends AbstractLoader {
         Options.setConsiderLoadedClasses(false);
         initializeRegistry();
         List<Class<?>> rtCls = new ArrayList<Class<?>>();
+        addRuntimeClass(ILoader.class, rtCls);
+        addRuntimeClass(NullLoader.class, rtCls);
         addRuntimeClass(ListLoader.class, rtCls);
         addRuntimeClass(InitType.class, rtCls);
         addRuntimeClass(StartupInfo.class, rtCls);
