@@ -80,6 +80,29 @@ public abstract class AbstractVariableIdentifier<V> {
      */
     protected abstract Value toIVMLValue(IDecisionVariable trgVariable, Object oValue)
         throws ValueDoesNotMatchTypeException;
+    
+    /**
+     * Allows an initial mapping values based on the id.
+     * 
+     * @param id the ID
+     * @param oValue the value provided by the input mapping
+     * @return the mapped value (here, {@code oValue})
+     */
+    protected Object mapValue(String id, Object oValue) {
+        return oValue;
+    }
+    
+    /**
+     * Allows mapping variables to runtime clones. The ID is calculated for 
+     * the original variable but if this method returns a different variable, associated
+     * with the returned variable.
+     * 
+     * @param variable the variable to be mapped
+     * @return the mapped variable (here, {@code variable})
+     */
+    protected IDecisionVariable mapVariable(IDecisionVariable variable) {
+        return variable;
+    }
 
     /**
      * Assigns the given value to the specified variable. Maybe overwritten by sub classes.

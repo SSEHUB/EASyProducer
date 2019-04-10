@@ -59,6 +59,25 @@ import net.ssehub.easy.varModel.confModel.Configuration;
  * @author Holger Eichelberger
  */
 public class Executor {
+
+    /**
+     * Characterizes the final executable.
+     * 
+     * @author Holger Eichelberger
+     */
+    protected interface IExecutable {
+        
+        /**
+         * Performs the final execution for a script.
+         * 
+         * @param executor the executor
+         * @param tracer the tracer
+         * @param args the script call arguments
+         * @throws VilException in case that artifact operations or script execution fails
+         */
+        public void execute(Executor executor, ITracer tracer, Map<String, Object> args) throws VilException;
+        
+    }
     
     /**
      * The default source project parameter (called {@link BuildlangExecution#PARAM_SOURCE}).
@@ -82,6 +101,22 @@ public class Executor {
      */
     public static final String DEFAULT_START_RULE_NAME = Script.DEFAULT_START_RULE_NAME;
 
+    /**
+     * Implements the default executable.
+     */
+    protected static final IExecutable DEFAULT_EXECUTABLE = new IExecutable() {
+        
+        public void execute(Executor executor, ITracer tracer, Map<String, Object> args) throws VilException {
+            BuildlangExecution exec = executor.getActualExecutor();
+            Object result = executor.getScript().accept(exec);
+            if (result instanceof RuleExecutionResult) {
+                RuleExecutionResult rExecResult = (RuleExecutionResult) result;
+                executor.handleExecutionResult(rExecResult, tracer, exec);
+            }
+        }
+        
+    };
+    
     private static final Set<String> DEFAULT_PARAMS = new HashSet<String>();
     
     private Map<String, Object> arguments = new HashMap<String, Object>();
@@ -90,7 +125,7 @@ public class Executor {
     private File base;
     private boolean frozenOnly = true;
     private transient BuildlangExecution executor;
-    
+
     /**
      * Creates an executor with default arguments.
      * 
@@ -433,6 +468,59 @@ public class Executor {
      * @throws IllegalArgumentException in case that input is missing or wrong
      */
     public void execute(ProgressObserver observer, boolean check) throws VilException {
+        execute(observer, check, DEFAULT_EXECUTABLE);
+    }
+    
+    /**
+     * The actual executor, valid only within {@link #execute(ProgressObserver, boolean, IExecutable)}.
+     * 
+     * @return the executor, may be <b>null</b>
+     */
+    public BuildlangExecution getActualExecutor() {
+        return executor;
+    }
+    
+    /**
+     * Returns the configuration form {@value args}.
+     * 
+     * @param args the (actual) execution arguments
+     * @return the configuration
+     * @throws VilException if no VIL (typed) configuration is present
+     */
+    protected static net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration getConfiguration(
+        Map<String, Object> args) throws VilException {
+        net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration result = null;
+        if (args.get(PARAM_CONFIG) 
+            instanceof net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration) {
+            result = 
+                (net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration) args.get(PARAM_CONFIG);
+        } else {
+            throw new VilException("No VIL configuration given", VilException.ID_INVALID);
+        }
+        return result;
+    }
+    
+    /**
+     * The actual script.
+     * 
+     * @return the script
+     */
+    public Script getScript() {
+        return script;
+    }
+    
+    /**
+     * Executes the contained VIL build language script with the given observer (mainly used within 
+     * parameter conversion) and possibly without default parameter checks (may be helpful in case of custom arguments).
+     * 
+     * @param observer the observer to be considered (must not be <b>null</b>)
+     * @param check carry out default parameter checks and default argument settings for EASy script execution (if 
+     *     disabled, full responsibility for proper execution is on caller side)
+     * @param executable the final executable
+     * @throws VilException in case that artifact operations or script execution fails
+     * @throws IllegalArgumentException in case that input is missing or wrong
+     */
+    protected void execute(ProgressObserver observer, boolean check, IExecutable executable) throws VilException {
         if (null == observer) {
             throw new IllegalArgumentException("observer must not be null");
         }
@@ -471,11 +559,7 @@ public class Executor {
         }
         executor = createExecutionEnvironment(tracer, base, startRuleName, actArgs);
         try {
-            Object result = script.accept(executor);
-            if (result instanceof RuleExecutionResult) {
-                RuleExecutionResult rExecResult = (RuleExecutionResult) result;
-                handleExecutionResult(rExecResult, tracer, executor);
-            }
+            executable.execute(this, tracer, actArgs);
             Project.clearProjectDescriptorCache();
             executor.release(true);
         } catch (VilException e) {

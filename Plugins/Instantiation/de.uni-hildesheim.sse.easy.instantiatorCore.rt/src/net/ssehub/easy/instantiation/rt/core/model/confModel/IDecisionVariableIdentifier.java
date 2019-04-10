@@ -80,7 +80,8 @@ public class IDecisionVariableIdentifier extends AbstractVariableIdentifier<IDec
     }
 
     @Override
-    protected Value toIVMLValue(IDecisionVariable trgVariable, Object oValue) throws ValueDoesNotMatchTypeException {
+    protected Value toIVMLValue(IDecisionVariable trgVariable, Object oValue) 
+        throws ValueDoesNotMatchTypeException {
         return ValueFactory.createValue(trgVariable.getDeclaration().getType(), oValue);
     }
 

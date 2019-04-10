@@ -113,6 +113,10 @@ public class VariableValueCopierTest extends AbstractRtTest {
         private int getCount() {
             return count;
         }
+
+        @Override
+        public void notifyCreated(IDecisionVariable origin, IDecisionVariable target) {
+        }
         
     }
     

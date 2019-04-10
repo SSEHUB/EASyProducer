@@ -98,6 +98,7 @@ public class AdaptiveConfiguration<V> {
             while (varItr.hasNext() && !tempValue.isEmpty()) {
                 IDecisionVariable topVar = varItr.next();
                 String id = identifier.iDecisionVariableToID(topVar);
+                topVar = identifier.mapVariable(topVar);
                 Object newValue = tempValue.get(id);
                 if (null != newValue) {
                     // Replace value with recent value
@@ -107,7 +108,6 @@ public class AdaptiveConfiguration<V> {
                     tempValue.remove(id);
                 }
             }
-            
             if (!tempValue.isEmpty()) {
                 /* 
                  * Some elements are not part of the model, e.g., intermediate spouts.
@@ -144,7 +144,6 @@ public class AdaptiveConfiguration<V> {
                 // Do nothing, ignore Value and log error
                 Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
             } catch (ConfigurationException e) {
-                // TODO Auto-generated catch block
                 Bundle.getLogger(AdaptiveConfiguration.class).exception(e);
             }
         }
@@ -160,6 +159,7 @@ public class AdaptiveConfiguration<V> {
     public void addValue(String id, Object value) {
         if (identifier.isNestedVariable(id)) {
             Iterator<String> idItr = identifier.getIDIterator(id);
+            value = identifier.mapValue(id, value);
             // Value of a slot in a compound
             String cmpName = idItr.next();
             String slotName = idItr.next();

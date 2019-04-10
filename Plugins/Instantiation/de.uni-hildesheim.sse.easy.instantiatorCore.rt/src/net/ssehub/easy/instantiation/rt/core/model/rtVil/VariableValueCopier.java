@@ -116,6 +116,15 @@ public class VariableValueCopier {
          */
         public void notifyAssigned(IDecisionVariable target, Value value, boolean added);
         
+        /**
+         * Notifies the listener about a new variable created for a given origin variable. A 
+         * {@link #notifyAssigned(IDecisionVariable, Value, boolean)} shall follow.
+         * 
+         * @param origin the origin variable
+         * @param target the new variable
+         */
+        public void notifyCreated(IDecisionVariable origin, IDecisionVariable target);
+        
     }
     
     /**
@@ -595,6 +604,7 @@ public class VariableValueCopier {
             prj.add(decl);
             IDecisionVariable var = cfg.createDecision(decl);
             if (null != var) {
+                notifyCreated(source, var);
                 var.setValue(value, newState);
                 if (null != freezeProvider) {
                     IFreezable[] freezables = new IFreezable[1];
@@ -641,6 +651,19 @@ public class VariableValueCopier {
     private void notifyAssigned(IDecisionVariable target, Value value, boolean added) {
         if (null != listener) {
             listener.notifyAssigned(target, value, added);
+        }
+    }
+    
+    /**
+     * Notifies the listener about a new variable created for a given origin variable. A 
+     * {@link #notifyAssigned(IDecisionVariable, Value, boolean)} shall follow.
+     * 
+     * @param origin the origin variable
+     * @param target the new variable
+     */
+    private void notifyCreated(IDecisionVariable origin, IDecisionVariable target) {
+        if (null != listener) {
+            listener.notifyCreated(origin, target);
         }
     }
 
