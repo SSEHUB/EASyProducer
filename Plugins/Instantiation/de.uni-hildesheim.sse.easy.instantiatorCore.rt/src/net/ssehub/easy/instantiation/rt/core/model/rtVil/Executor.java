@@ -18,10 +18,12 @@ package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 import java.io.File;
 import java.util.Map;
 
+import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 
 /**
  * A specialized executor for rt-VIL.
@@ -100,6 +102,27 @@ public class Executor extends net.ssehub.easy.instantiation.core.model.execution
     public Executor setReasoningHook(IReasoningHook reasoningHook) {
         this.reasoningHook = reasoningHook;
         return this;
+    }
+    
+    /**
+     * Performs reasoning in rt-VIL style. Applied language concept is <b>null</b>, i.e., top-level.
+     * 
+     * @param observer the observer to be considered (must not be <b>null</b>)
+     * @param listener reasoning listener to obtain the (filtered) reasoning results
+     * @throws VilException in case that reasoning or setup fails
+     */
+    public void reason(ProgressObserver observer, final IReasoningResultListener listener) throws VilException {
+        IExecutable executable = new IExecutable() {
+
+            @Override
+            public void execute(net.ssehub.easy.instantiation.core.model.execution.Executor executor, ITracer tracer, 
+                Map<String, Object> args) throws VilException {
+                Configuration cfg = getConfiguration(args);
+                ((RtVilExecution) executor.getActualExecutor()).reason(cfg, null, listener);
+            }
+            
+        };
+        execute(observer, true, executable);
     }
 
     @Override

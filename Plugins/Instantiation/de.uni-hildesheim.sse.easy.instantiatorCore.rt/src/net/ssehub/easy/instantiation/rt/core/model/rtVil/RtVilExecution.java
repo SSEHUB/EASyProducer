@@ -100,57 +100,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         
         @Override
         public Object call(RtVilExecution evaluator, CallArgument... args) throws VilException {
-            Object result = null;
             IRtVilConcept concept = obtainConcept(evaluator, 0, args);
             Configuration cfg = obtainConfiguration(evaluator, 1, args);
-            if (null != cfg) {
-                Script currentScript = evaluator.currentScript;
-                IRtValueAccess valueAccess = evaluator.valueAccess;
-                net.ssehub.easy.varModel.confModel.Configuration easyConfig = cfg.getConfiguration();
-                EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
-                evaluator.reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
-                ReasoningResult rResult = null;
-                try {
-                    rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
-                        easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
-                } catch (Throwable t) {
-                    // pretend it is ok
-                    logger.error("Reasoning exception: " + t.getMessage() + " - going on");
-                }
-                evaluator.reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg, rResult);
-                int errorCount = 0;
-                for (int m = 0; m < rResult.getMessageCount(); m++) {
-                    Message msg = rResult.getMessage(m);
-                    net.ssehub.easy.basics.messages.Status status = evaluator.reasoningHook.analyze(
-                        currentScript, concept, valueAccess, msg);
-                    if (null != status) {
-                        switch (status) {
-                        case UNSUPPORTED:
-                        case ERROR:
-                            errorCount++;
-                            logger.error(toText(msg));
-                            break;
-                        case INFO:
-                            logger.info(toText(msg));
-                            break;
-                        case WARNING:
-                            logger.warn(toText(msg));
-                            break;
-                        default:
-                            logger.info(toText(msg));
-                            break;
-                        }
-                    }
-                }
-                boolean ok = (0 == errorCount);
-                evaluator.getTracer().trace("Reasoner execution ok: " + ok);
-                logger.warn("Reasoner execution ok: " + ok);
-                if (!ok) {
-                    evaluator.reasoningHook.reasoningFailed(cfg);
-                }
-                result = ok;
-            }
-            return result;
+            return evaluator.reason(cfg, concept, null);
         }
         
         // checkstyle: resume exception type check
@@ -375,6 +327,76 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
         }
         return result;
     }
+
+    // checkstyle: stop exception type check
+
+    /**
+     * Performs reasoning for rt-VIL based on the knowledge in this instance.
+     * 
+     * @param cfg the configuration to reason on (may be a projected one, shall be compliant with the 
+     *     configuration the executor was called or one of its projections)
+     * @param concept the language concept the reasoning was called for (as required by the reasoning hook, may 
+     *     be <b>null</b>)
+     * @param listener an optional listener to be informed about the filtered reasoning results (may be <b>null</b>)
+     * @return the execution result for rt-VIL
+     */
+    protected Object reason(Configuration cfg, IRtVilConcept concept, IReasoningResultListener listener) {
+        Object result = null;
+        if (null != cfg) {
+            if (null == listener) {
+                listener = DefaultReasoningResultListener.INSTANCE;
+            }
+            net.ssehub.easy.varModel.confModel.Configuration easyConfig = cfg.getConfiguration();
+            EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(RtVilExecution.class, Bundle.ID);
+            reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
+            ReasoningResult rResult = null;
+            try {
+                rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
+                    easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
+            } catch (Throwable t) {
+                // pretend it is ok
+                logger.error("Reasoning exception: " + t.getMessage() + " - going on");
+            }
+            reasoningHook.postReasoning(currentScript, concept, valueAccess, cfg, rResult);
+            listener.notifyReasoningResult(rResult);
+            int errorCount = 0;
+            for (int m = 0; m < rResult.getMessageCount(); m++) {
+                Message msg = rResult.getMessage(m);
+                net.ssehub.easy.basics.messages.Status status = reasoningHook.analyze(
+                    currentScript, concept, valueAccess, msg);
+                if (null != status) {
+                    switch (status) {
+                    case UNSUPPORTED:
+                    case ERROR:
+                        errorCount++;
+                        logger.error(toText(msg));
+                        break;
+                    case INFO:
+                        logger.info(toText(msg));
+                        break;
+                    case WARNING:
+                        logger.warn(toText(msg));
+                        break;
+                    default:
+                        logger.info(toText(msg));
+                        break;
+                    }
+                    listener.notifyMessage(msg, status);
+                }
+            }
+            boolean ok = (0 == errorCount);
+            getTracer().trace("Reasoner execution ok: " + ok);
+            logger.warn("Reasoner execution ok: " + ok);
+            if (!ok) {
+                reasoningHook.reasoningFailed(cfg);
+            }
+            listener.notifyAssessmentResult(ok);
+            result = ok;
+        }
+        return result;
+    }
+    
+    // checkstyle: resume exception type check
 
     /**
      * Obtains a typed argument instance from the given dynamic call fallback argument. [helper]
