@@ -88,4 +88,13 @@ class StartupInfo {
         return result;
     }
     
+    /**
+     * Changes the verbose flag.
+     * 
+     * @param verbose the new state of the verbose flag
+     */
+    public void setVerbose(boolean verbose) {
+        this.verbose = verbose;
+    }
+    
 }

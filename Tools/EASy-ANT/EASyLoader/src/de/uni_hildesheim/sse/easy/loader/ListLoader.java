@@ -90,6 +90,9 @@ public class ListLoader implements ILoader {
     @Override
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
+        for (StartupInfo info : startupSequence) {
+            info.setVerbose(verbose);
+        }
     }
 
 }
