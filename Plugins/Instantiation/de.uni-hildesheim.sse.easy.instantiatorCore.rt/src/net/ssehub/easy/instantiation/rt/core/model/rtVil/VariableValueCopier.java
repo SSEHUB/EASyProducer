@@ -447,8 +447,8 @@ public class VariableValueCopier {
      */
     private void handleFurther(IDecisionVariable base, String[] names, Value value) throws ConfigurationException {
         // value is reference?
-        IDatatype valueType = value.getType();
-        if (Reference.TYPE.isAssignableFrom(valueType)) { // prerequisite
+        IDatatype valueType = null == value ? null : value.getType();
+        if (null != valueType && Reference.TYPE.isAssignableFrom(valueType)) { // prerequisite
             valueType = Reference.dereference(valueType);
             for (int t = 1; t < names.length; t++) {
                 IDecisionVariable further = findVariable(base, names[t]);
@@ -590,53 +590,58 @@ public class VariableValueCopier {
         boolean adding) throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
         Value result;
         source = Configuration.dereference(source);
-        Value value = source.getValue().clone();
-        IDatatype targetType = target.getDeclaration().getType(); 
-        if (Reference.TYPE.isAssignableFrom(targetType)) {
-            Configuration cfg = source.getConfiguration();
-            Project prj = cfg.getProject();
-            IModelElement topParent = source.getDeclaration().getTopLevelParent(); // create as close as possible to src
-            if (topParent instanceof Project) {
-                prj = (Project) topParent;
-            }
-            DecisionVariableDeclaration decl = new DecisionVariableDeclaration(namePrefix + "_" 
-                + source.getDeclaration().getName() + "_" + count++, source.getDeclaration().getType(), prj);
-            prj.add(decl);
-            IDecisionVariable var = cfg.createDecision(decl);
-            if (null != var) {
-                notifyCreated(source, var);
-                var.setValue(value, newState);
-                if (null != freezeProvider) {
-                    IFreezable[] freezables = new IFreezable[1];
-                    freezables[0] = decl;
-                    FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
-                    DecisionVariableDeclaration freezeIter 
-                        = new DecisionVariableDeclaration(freezeProvider.getFreezeVariableName(), iterType, prj);
-                    ConstraintSyntaxTree selector = freezeProvider.createButExpression(freezeIter);
-                    selector.inferDatatype();
-                    FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
-                    prj.add(freeze);
-                    
-                    FreezeEvaluator evaluator = new FreezeEvaluator(cfg);
-                    evaluator.setFreeze(freeze);
-                    var.freeze(evaluator);
+        if (null != source.getValue()) {
+            Value value = source.getValue().clone();
+            IDatatype targetType = target.getDeclaration().getType(); 
+            if (Reference.TYPE.isAssignableFrom(targetType)) {
+                Configuration cfg = source.getConfiguration();
+                Project prj = cfg.getProject();
+                // create as close as possible to src
+                IModelElement topParent = source.getDeclaration().getTopLevelParent();
+                if (topParent instanceof Project) {
+                    prj = (Project) topParent;
                 }
-                result = ValueFactory.createValue(targetType, decl);
-                target.setValue(result, newState);
-                notifyAssigned(target, result, adding);
+                DecisionVariableDeclaration decl = new DecisionVariableDeclaration(namePrefix + "_" 
+                    + source.getDeclaration().getName() + "_" + count++, source.getDeclaration().getType(), prj);
+                prj.add(decl);
+                IDecisionVariable var = cfg.createDecision(decl);
+                if (null != var) {
+                    notifyCreated(source, var);
+                    var.setValue(value, newState);
+                    if (null != freezeProvider) {
+                        IFreezable[] freezables = new IFreezable[1];
+                        freezables[0] = decl;
+                        FreezeVariableType iterType = new FreezeVariableType(freezables, prj);
+                        DecisionVariableDeclaration freezeIter 
+                            = new DecisionVariableDeclaration(freezeProvider.getFreezeVariableName(), iterType, prj);
+                        ConstraintSyntaxTree selector = freezeProvider.createButExpression(freezeIter);
+                        selector.inferDatatype();
+                        FreezeBlock freeze = new FreezeBlock(freezables, freezeIter, selector, prj);
+                        prj.add(freeze);
+                        
+                        FreezeEvaluator evaluator = new FreezeEvaluator(cfg);
+                        evaluator.setFreeze(freeze);
+                        var.freeze(evaluator);
+                    }
+                    result = ValueFactory.createValue(targetType, decl);
+                    target.setValue(result, newState);
+                    notifyAssigned(target, result, adding);
+                } else {
+                    IModelElement parent = decl.getParent();
+                    String parentType = null != parent ? decl.getParent().getClass().getSimpleName() : "<no type>";
+                    getLogger().error("Cannot create variable instance for " + decl.getName() + " of "
+                        + source.getDeclaration().getName() + " with:"
+                        + "\n - Parent = " + parent + "(" + parentType + ")"
+                        + "\n - Existing instance (should be null): " + cfg.getDecision(decl));
+                    result = null;
+                }
             } else {
-                IModelElement parent = decl.getParent();
-                String parentType = null != parent ? decl.getParent().getClass().getSimpleName() : "<no type>";
-                getLogger().error("Cannot create variable instance for " + decl.getName() + " of "
-                    + source.getDeclaration().getName() + " with:"
-                    + "\n - Parent = " + parent + "(" + parentType + ")"
-                    + "\n - Existing instance (should be null): " + cfg.getDecision(decl));
-                result = null;
+                target.setValue(value, newState);
+                notifyAssigned(target, value, adding);
+                result = value;
             }
         } else {
-            target.setValue(value, newState);
-            notifyAssigned(target, value, adding);
-            result = value;
+            result = null;
         }
         return result;
     }
