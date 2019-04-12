@@ -51,7 +51,11 @@
 	
 	<!-- Creates the jar files -->
 	<target name="jar" depends="compile">
-		<jar destfile="${basedir}/build/jar/${ant.project.name}.jar" basedir="${basedir}/build/classes"/>
+		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${basedir}/build/classes"/>
+	    <!-- Copy created jar to global EASy Plug-ins directory -->
+        <copy todir="${easy.bundles.dir}">
+            <fileset dir="${build.jar.dir}" includes="**/*.jar"/>
+        </copy>
         <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
         <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
             <classpath refid="maven.compile.classpath" />
