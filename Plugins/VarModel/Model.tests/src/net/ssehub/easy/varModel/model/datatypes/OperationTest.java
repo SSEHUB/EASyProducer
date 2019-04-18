@@ -302,7 +302,8 @@ public class OperationTest {
         Variable operand = map.get(operation.getOperand());
         
         //create a new OCLFeatureCall with the same operand, operation and parameters
-        if (null != operand && operation != AnyType.AS_TYPE) { // asType cannot be tested in that way 
+        // some cannot be tested in that way 
+        if (null != operand && operation != AnyType.AS_TYPE) { 
             Variable[] parameters = new Variable[operation.getParameterCount()];
             for (int j = 0; j < operation.getParameterCount(); j++) {                
                 parameters[j] = map.get(operation.getParameterType(j));  
@@ -312,8 +313,9 @@ public class OperationTest {
                 OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);
                 IDatatype opType = operation.getReturns();
                 IDatatype callType = call.inferDatatype();
-                Assert.assertTrue("expected type " + opType + " is not the same as " + callType, 
-                    TypeQueries.sameTypes(operation.getReturns(), call.inferDatatype()));
+                Assert.assertTrue("expected type " + opType + " is not the same as " + callType
+                    + " in " + operation.getSignature(), 
+                    TypeQueries.sameTypes(opType, callType));
             }
         }
         
@@ -424,7 +426,7 @@ public class OperationTest {
                     }
                     OCLFeatureCall call = new OCLFeatureCall(operand, operation.getName(), parameters);
                     
-                    Assert.assertEquals(operation.getReturns(), call.inferDatatype());
+                    Assert.assertTrue(TypeQueries.sameTypes(operation.getReturns(), call.inferDatatype()));
                 }
             }            
         }

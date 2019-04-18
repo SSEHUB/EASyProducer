@@ -39,6 +39,7 @@ public class CompoundOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Compound.NOTEQUALS, Compound.NOTEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Compound.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Compound.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, Compound.COPY);
     }
     
 }

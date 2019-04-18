@@ -150,6 +150,7 @@ public class RealOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, 
             RealType.ASSIGNMENT_REAL_INTEGER, RealType.ASSIGNMENT_REAL_REAL);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, RealType.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, RealType.COPY);
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, 
             RealType.NOTEQUALS_REAL_REAL, RealType.NOTEQUALS_REAL_REAL_ALIAS);
         EvaluatorRegistry.registerEvaluator(UNEQUALS_REAL_INT, 

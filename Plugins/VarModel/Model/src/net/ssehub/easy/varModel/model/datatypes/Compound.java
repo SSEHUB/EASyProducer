@@ -35,6 +35,7 @@ import net.ssehub.easy.varModel.model.IModelVisitor;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
 
 /**
  * A compound type groups multiple types into a single named unit.
@@ -72,7 +73,9 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
          OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
-         .markAsAcceptsNull();    
+        .markAsAcceptsNull();
+    public static final Operation COPY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
+        OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
     // checkstyle: resume declaration order check
 
     static {
@@ -83,6 +86,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         DTYPE.addOperation(NOTEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(COPY);
     }
 
     private boolean isAbstract;

@@ -17,7 +17,9 @@ package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IntegerType;
@@ -123,6 +125,37 @@ public class GenericOperations {
             BooleanValue result = BooleanValue.toBooleanValue(eval);
             return ConstantAccessor.POOL.getInstance().bind(result, true, context);
         }
+    };
+    
+    /**
+     * Implements the "copy" operation.
+     */
+    static final IOperationEvaluator COPY = new IOperationEvaluator() {
+
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = null;
+            if (null != operand && 1 == arguments.length) {
+                Value namePrefixValue = arguments[0].getValue();
+                String namePrefix;
+                if (namePrefixValue instanceof StringValue) {
+                    namePrefix = ((StringValue) namePrefixValue).getValue();
+                } else { // namePrefixValue == NullValue.INSTANCE
+                    namePrefix = null;
+                }
+                try {
+                    IDecisionVariable local = VariableValueCopier.copy(operand.getVariable(), namePrefix);
+                    result = VariableAccessor.POOL.getInstance().bind(local, operand.getContext(), true);
+                } catch (ConfigurationException e) {
+                    // result -> null
+                } catch (ValueDoesNotMatchTypeException e) {
+                    // result -> null
+                } catch (CSTSemanticException e) {
+                    // result -> null
+                }
+            }
+            return result;
+        }
+        
     };
 
     /**

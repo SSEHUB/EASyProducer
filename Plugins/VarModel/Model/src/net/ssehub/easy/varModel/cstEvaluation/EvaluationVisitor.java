@@ -461,7 +461,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     
     /**
      * Clears intermediary state information including {@link #clearResult() result}, 
-     * assignment state, messages, warnings, failed and selfVars.
+     * assignment state, messages, warnings, failed and selfVars. Call at least
+     * {@link #setAssignmentState(IAssignmentState)} to reuse this instance.
      */
     public void clearIntermediary() {
         clearResult();

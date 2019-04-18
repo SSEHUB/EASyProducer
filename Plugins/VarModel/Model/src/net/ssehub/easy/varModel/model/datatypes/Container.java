@@ -111,6 +111,8 @@ public class Container extends StructuredDatatype {
     
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
+    public static final Operation COPY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
+        OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
     public static final Operation SELECT_BY_TYPE = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
         OclKeyWords.SELECT_BY_TYPE, TYPE, AnyType.TYPE);    
     public static final Operation TYPE_SELECT = new Operation(TYPE, ReturnTypeMode.TYPED_PARAM_1, 
@@ -154,6 +156,7 @@ public class Container extends StructuredDatatype {
         DTYPE.addOperation(IS_ACYCLIC);
         DTYPE.addOperation(CLOSURE);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(COPY);
         DTYPE.addOperation(TYPE_SELECT);
         DTYPE.addOperation(SELECT_BY_TYPE);
         DTYPE.addOperation(SELECT_BY_KIND);

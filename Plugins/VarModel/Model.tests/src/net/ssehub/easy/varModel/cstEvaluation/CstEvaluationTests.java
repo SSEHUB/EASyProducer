@@ -47,7 +47,9 @@ import org.junit.runners.Suite.SuiteClasses;
     ReasonerCaseTests.class,
     VersionOperationsTest.class,
     CustomOpOnCustomDataTypesTest.class,
-    SelfTests.class
+    SelfTests.class,
+    VariableValueCopierTest.class,
+    CopyOperationTest.class
     })
 public class CstEvaluationTests {
 

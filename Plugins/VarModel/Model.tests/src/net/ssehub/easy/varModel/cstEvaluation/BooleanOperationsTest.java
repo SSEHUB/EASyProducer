@@ -235,5 +235,5 @@ public class BooleanOperationsTest {
     public void testAsType() throws ValueDoesNotMatchTypeException {
         Utils.testAsType(BooleanType.TYPE, true);
     }
-
+    
 }

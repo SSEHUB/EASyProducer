@@ -58,7 +58,7 @@ public class Operation {
         UNCHANGED(-1, -1, false, false),
         
         /**
-         * Change it to the immediate type of the operand.
+         * Change it to the immediate type of the operand. Do not apply to basic/primitive types.
          */
         IMMEDIATE_OPERAND(-1, -1, false, false),
 

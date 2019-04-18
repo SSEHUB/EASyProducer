@@ -72,6 +72,8 @@ public class StringType extends BasisDatatype {
     public static final Operation GREATER_EQUALS = Operation.createInfixOperator(BooleanType.TYPE, 
         OclKeyWords.GREATER_EQUALS, TYPE, TYPE);
 
+    public static final Operation COPY = new Operation(TYPE, OclKeyWords.COPY, TYPE, TYPE);
+
     // checkstyle: resume declaration order check
     
     static {
@@ -83,6 +85,7 @@ public class StringType extends BasisDatatype {
         DTYPE.addOperation(EQUALS_IGNORE_CASE);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(COPY);
         DTYPE.addOperation(SIZE);
         DTYPE.addOperation(TO_INTEGER);
         DTYPE.addOperation(TO_REAL);
