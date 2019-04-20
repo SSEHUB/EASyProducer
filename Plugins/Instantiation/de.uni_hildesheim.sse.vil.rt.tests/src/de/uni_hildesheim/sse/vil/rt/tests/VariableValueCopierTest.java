@@ -25,11 +25,11 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.ChangeHis
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.NoVariableFilter;
-import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier;
-import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier.CopySpec;
-import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier.EnumAttributeFreezeProvider;
-import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier.IAssignmentListener;
-import net.ssehub.easy.instantiation.rt.core.model.rtVil.VariableValueCopier.IFreezeProvider;
+import net.ssehub.easy.varModel.cstEvaluation.VariableValueCopier;
+import net.ssehub.easy.varModel.cstEvaluation.VariableValueCopier.CopySpec;
+import net.ssehub.easy.varModel.cstEvaluation.VariableValueCopier.EnumAttributeFreezeProvider;
+import net.ssehub.easy.varModel.cstEvaluation.VariableValueCopier.IAssignmentListener;
+import net.ssehub.easy.varModel.cstEvaluation.VariableValueCopier.IFreezeProvider;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IConfiguration;
@@ -51,7 +51,8 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
- * A test for {@link VariableValueCopier}.
+ * A test for {@link VariableValueCopier}. Although we moved the {@link VariableValueCopier} to the VarModel and have
+ * a similar test there, we just keep it here as it relies on IVML and does some additional VIL tests.
  * 
  * @author Holger Eichelberger
  */
