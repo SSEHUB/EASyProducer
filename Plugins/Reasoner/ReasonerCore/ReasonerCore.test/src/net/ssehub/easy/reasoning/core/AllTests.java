@@ -4,6 +4,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import net.ssehub.easy.reasoning.core.frontend.ReasonerAdapterTests;
+import net.ssehub.easy.reasoning.core.frontend.ReasoningFrontendTests;
 import net.ssehub.easy.reasoning.core.reasoner.AttributeValuesTest;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintBaseTest;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintListTest;
@@ -24,7 +26,9 @@ import net.ssehub.easy.reasoning.core.upgrader.UpgraderTests;
     AttributeValuesTest.class, 
     ConstraintListTest.class,
     ConstraintBaseTest.class, 
-    TypedConstraintTest.class})
+    TypedConstraintTest.class,
+    ReasoningFrontendTests.class,
+    ReasonerAdapterTests.class})
 public class AllTests {
         
 }

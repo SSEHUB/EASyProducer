@@ -522,12 +522,16 @@ public class ReasonerFrontend {
      * this method stores the selected reasoner just within the reasoner frontend and does not persist this selection.
      * 
      * @param descriptor
-     *            the descriptor denoting the reasoner
+     *            the descriptor denoting the reasoner (may be <b>null</b> for clearing an already set hint)
      * @throws IllegalArgumentException
      *             in case of illegal arguments
      */
     public void setReasonerHint(ReasonerDescriptor descriptor) {
-        reasonerHint = findReasoner(descriptor);
+        if (null == descriptor) {
+            reasonerHint = null;
+        } else {
+            reasonerHint = findReasoner(descriptor);
+        }
     }
 
     /**
@@ -673,7 +677,7 @@ public class ReasonerFrontend {
     }
 
     /**
-     * Sets the preferred reasoner.
+     * Sets the actually preferred reasoner as {@link #setReasonerHint(ReasonerDescriptor) hint}.
      * 
      * @return the preferred reasoner (may be <b>null</b> if there is none registered)
      * @see #getPreferredReasoner()

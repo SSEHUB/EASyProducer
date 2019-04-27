@@ -87,11 +87,11 @@
             <structure name="${ant.project.name}">
                 <classfiles>
                     <fileset dir="${home.reasonerCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    <fileset dir="${home.reasonerCore.test.dir}/${build.jar.dir}/" includes="**/*.jar" />
+                    <!--<fileset dir="${home.reasonerCore.test.dir}/${build.jar.dir}/" includes="**/*.jar" />-->
                 </classfiles>
                 <sourcefiles encoding="UTF-8">
                     <fileset dir="${home.reasonerCore.dir}/src" />
-                    <fileset dir="${home.reasonerCore.test.dir}/src" />
+                    <!--<fileset dir="${home.reasonerCore.test.dir}/src" />-->
                 </sourcefiles>
             </structure>
                                 
