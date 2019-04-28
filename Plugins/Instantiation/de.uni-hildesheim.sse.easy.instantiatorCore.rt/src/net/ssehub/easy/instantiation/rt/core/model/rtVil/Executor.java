@@ -24,6 +24,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleExecutionResult;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerAdapter;
 
 /**
  * A specialized executor for rt-VIL.
@@ -38,6 +39,7 @@ public class Executor extends net.ssehub.easy.instantiation.core.model.execution
     private IReasoningHook reasoningHook = null;
     private String failReason;
     private Integer failCode;
+    private ReasonerAdapter cache;
     
     /**
      * Creates an executor with default arguments.
@@ -143,6 +145,7 @@ public class Executor extends net.ssehub.easy.instantiation.core.model.execution
         result.setUseReasoner(useReasoner);
         result.setEnableEnactment(enactment);
         result.setReasoningHook(reasoningHook); // null is not a problem here
+        result.setReasonerCache(cache);
         return result;
     }
     
@@ -191,6 +194,17 @@ public class Executor extends net.ssehub.easy.instantiation.core.model.execution
      */
     public Integer getFailCode() {
         return failCode;
+    }
+    
+    /**
+     * Sets the reasoner cache for instance-based reasoning, i.e., for re-using already registered reasoners.
+     * 
+     * @param cache the cache instance
+     * @return <b>this</b>
+     */
+    public Executor setReasonerCache(ReasonerAdapter cache) {
+        this.cache = cache;
+        return this;
     }
     
 }

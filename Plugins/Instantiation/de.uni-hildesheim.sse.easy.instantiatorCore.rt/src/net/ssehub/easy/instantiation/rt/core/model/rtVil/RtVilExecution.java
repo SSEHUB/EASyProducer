@@ -41,7 +41,7 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.AbstractBreakdownCall.T
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.RtVilTypeRegistry;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.TupleType;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.types.TupleType.TupleInstance;
-import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerAdapter;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
@@ -215,6 +215,7 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     private ITracer rtTracer;
     private IChangeHistoryTracer chgTracer;
     private int nestedStrategyCount;
+    private ReasonerAdapter reasonerCache = new ReasonerAdapter();
     
     /**
      * Creates a new execution environment for evaluating local expressions.
@@ -286,6 +287,15 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     }
     
     /**
+     * Sets the reasoner cache.
+     * 
+     * @param reasonerCache the reasoner cache
+     */
+    public void setReasonerCache(ReasonerAdapter reasonerCache) {
+        this.reasonerCache = reasonerCache;
+    }
+    
+    /**
      * Compose the plain text of reasoner failures.
      * 
      * @param msg the message to be turned into text
@@ -351,8 +361,9 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
             reasoningHook.preReasoning(currentScript, concept, valueAccess, cfg);
             ReasoningResult rResult = null;
             try {
-                rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
-                    easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
+                rResult = reasonerCache.propagate(easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
+                //rResult = ReasonerFrontend.getInstance().propagate(easyConfig.getProject(), 
+                //    easyConfig, REASONER_CONFIGURATION, ProgressObserver.NO_OBSERVER);
             } catch (Throwable t) {
                 // pretend it is ok
                 logger.error("Reasoning exception: " + t.getMessage() + " - going on");
