@@ -326,6 +326,7 @@ public class ReasonerAdapter {
 
     /**
      * Registers for a reasoning adapter (cache entry) for {@code config} for instance-based reasoning.
+     * Already registered configurations are not re-registered.
      * 
      * @param config the configuration to prepare for (ignored if <b>null</b>)
      */

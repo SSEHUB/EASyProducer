@@ -140,12 +140,14 @@ public class ReasonerAdapterTests {
         assertNormal(adaptor, cfg, rConfig, observer, hint, useInstance); 
         assertNormal(adaptor, cfgI, rConfig, observer, hint, useInstance);
         adaptor.register(cfgI);
+        adaptor.register(cfgI); // re-register, shall not make a difference
         assertNormal(adaptor, cfg, rConfig, observer, hint, useInstance);
         assertInstance(adaptor, cfgI, rConfig, observer, hint, useInstance);
         adaptor.clear(cfgI);
         assertNormal(adaptor, cfg, rConfig, observer, hint, useInstance);
         assertNormal(adaptor, cfgI, rConfig, observer, hint, useInstance);
         adaptor.register(cfgI);
+        adaptor.register(cfgI); // re-register, shall not make a difference
         assertNormal(adaptor, cfg, rConfig, observer, hint, useInstance);
         assertInstance(adaptor, cfgI, rConfig, observer, hint, useInstance);
         adaptor.clear();
