@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.java.Registration;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
@@ -44,7 +44,7 @@ import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
-import static net.ssehub.easy.reasoning.core.reasoner.AbstractTest.NUM_FULL_REASONING;
+import static test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.NUM_FULL_REASONING;
 
 /**
  * Abstract functionality for scenario tests.
@@ -442,7 +442,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         if (mode.doReason()) {
             System.out.println("Performing reasoning/propagation...");
             ReasonerConfiguration rCfg = new ReasonerConfiguration();
-            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.setReasoningTimeout(rCfg); // to be on the safe side
+            test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.setReasoningTimeout(rCfg); // be on the safe side
             TSVMeasurementCollector.ensureCollector(new File(getTestDataDir(), "temp/" + getMeasurementFileName()));
             ReasoningResult result = null;
             net.ssehub.easy.varModel.confModel.Configuration cfg = config.getConfiguration();
@@ -452,7 +452,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
                     cfg.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
                 if (null != id) {
                     MeasurementCollector.endAuto(id);
-                    net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                    test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
                         MeasurementCollector.getInstance(), id, getMeasurements(), res);
                     MeasurementCollector.end(id);
                 }

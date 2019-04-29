@@ -24,8 +24,8 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
@@ -71,7 +71,7 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                             cfg, rCfg, ProgressObserver.NO_OBSERVER);
                         if (null != id) {
                             MeasurementCollector.endAuto(id);
-                            net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                            test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
                                 MeasurementCollector.getInstance(), id, getMeasurements(), res);
                             MeasurementCollector.end(id);
                         }
@@ -90,7 +90,7 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                             ReasoningResult res = inst.propagate(ProgressObserver.NO_OBSERVER);
                             if (null != id) {
                                 MeasurementCollector.endAuto(id);
-                                net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
+                                test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.transferReasoningMeasures(
                                     MeasurementCollector.getInstance(), id, getMeasurements(), res);
                                 MeasurementCollector.set(id, 
                                     AbstractTestDescriptor.MeasurementIdentifier.REASONER_INSTANCE_CREATION_TIME, 
