@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class EvalTests extends net.ssehub.easy.reasoning.core.reasoner.EvalTests {
+public class EvalTests extends test.net.ssehub.easy.reasoning.core.reasoner.EvalTests {
     
     /**
      * Creates a specific test instance.

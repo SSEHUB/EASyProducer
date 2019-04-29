@@ -10,7 +10,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author El-Sharkawy
  * @author Eichelberger
  */
-public class BooleanTests extends net.ssehub.easy.reasoning.core.reasoner.BooleanTests {
+public class BooleanTests extends test.net.ssehub.easy.reasoning.core.reasoner.BooleanTests {
 
     /**
      * Creates a specific test instance.

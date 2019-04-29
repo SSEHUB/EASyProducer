@@ -9,7 +9,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Holger Eichelberger
  * @author El-Sharkawy
  */
-public class OperationTests extends net.ssehub.easy.reasoning.core.frontend.OperationTests {
+public class OperationTests extends test.net.ssehub.easy.reasoning.core.frontend.OperationTests {
 
     /**
      * Creates a specific test instance.

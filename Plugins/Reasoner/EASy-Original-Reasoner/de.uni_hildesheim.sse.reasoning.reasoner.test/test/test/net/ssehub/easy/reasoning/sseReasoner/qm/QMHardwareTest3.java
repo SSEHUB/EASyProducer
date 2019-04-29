@@ -23,7 +23,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMHardwareTest3 extends net.ssehub.easy.reasoning.core.qm.QMHardwareTest3 {
+public class QMHardwareTest3 extends test.net.ssehub.easy.reasoning.core.qm.QMHardwareTest3 {
 
     /**
      * Creates a specific test instance.

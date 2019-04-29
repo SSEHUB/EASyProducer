@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class ConstraintVariableTests extends net.ssehub.easy.reasoning.core.capabilities.ConstraintVariableTests {
+public class ConstraintVariableTests extends test.net.ssehub.easy.reasoning.core.capabilities.ConstraintVariableTests {
     
     /**
      * Creates a specific test instance.

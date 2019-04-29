@@ -6,7 +6,7 @@ package net.ssehub.easy.reasoning.drools2;
  * 
  * @author Holger Eichelberger
  */
-public class OperationTests extends net.ssehub.easy.reasoning.core.frontend.OperationTests {
+public class OperationTests extends test.net.ssehub.easy.reasoning.core.frontend.OperationTests {
 
     /**
      * Creates a specific test instance.

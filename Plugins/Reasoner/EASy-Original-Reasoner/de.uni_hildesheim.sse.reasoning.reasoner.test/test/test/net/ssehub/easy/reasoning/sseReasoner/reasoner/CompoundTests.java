@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * 
  * @author Eichelberger
  */
-public class CompoundTests extends net.ssehub.easy.reasoning.core.reasoner.CompoundTests {
+public class CompoundTests extends test.net.ssehub.easy.reasoning.core.reasoner.CompoundTests {
 
     /**
      * Creates a specific test instance.

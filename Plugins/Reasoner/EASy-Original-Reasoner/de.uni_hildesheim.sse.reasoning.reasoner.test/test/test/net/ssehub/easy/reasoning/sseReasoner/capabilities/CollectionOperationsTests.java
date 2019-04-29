@@ -18,11 +18,11 @@ package test.net.ssehub.easy.reasoning.sseReasoner.capabilities;
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**
- * Configures the {@link net.ssehub.easy.reasoning.core.frontend.CollectionOperationsTests}
+ * Configures the {@link test.net.ssehub.easy.reasoning.core.frontend.CollectionOperationsTests}
  * for the SSE-Reasoner.
  * @author El-Sharkawy
  */
-public class CollectionOperationsTests extends net.ssehub.easy.reasoning.core.frontend.CollectionOperationsTests {
+public class CollectionOperationsTests extends test.net.ssehub.easy.reasoning.core.frontend.CollectionOperationsTests {
 
     /**
      * Creates a specific test instance.

@@ -23,7 +23,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMAlgorithmsTest1 extends net.ssehub.easy.reasoning.core.qm.QMAlgorithmsTest1 {
+public class QMAlgorithmsTest1 extends test.net.ssehub.easy.reasoning.core.qm.QMAlgorithmsTest1 {
 
     /**
      * Creates a specific test instance.

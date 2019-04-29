@@ -10,7 +10,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class HistoryStats extends net.ssehub.easy.reasoning.core.performance.HistoryStats {
+public class HistoryStats extends test.net.ssehub.easy.reasoning.core.performance.HistoryStats {
 
     /**
      * Creates a specific test instance.

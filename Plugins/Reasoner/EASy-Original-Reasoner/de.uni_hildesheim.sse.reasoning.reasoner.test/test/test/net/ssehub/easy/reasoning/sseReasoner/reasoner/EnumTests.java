@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * 
  * @author Eichelberger
  */
-public class EnumTests extends net.ssehub.easy.reasoning.core.reasoner.EnumTests {
+public class EnumTests extends test.net.ssehub.easy.reasoning.core.reasoner.EnumTests {
 
     /**
      * Creates a specific test instance.

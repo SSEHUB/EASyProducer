@@ -23,7 +23,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMFamiliesTest2 extends net.ssehub.easy.reasoning.core.qm.QMFamiliesTest2 {
+public class QMFamiliesTest2 extends test.net.ssehub.easy.reasoning.core.qm.QMFamiliesTest2 {
     
     /**
      * Creates a specific test instance.

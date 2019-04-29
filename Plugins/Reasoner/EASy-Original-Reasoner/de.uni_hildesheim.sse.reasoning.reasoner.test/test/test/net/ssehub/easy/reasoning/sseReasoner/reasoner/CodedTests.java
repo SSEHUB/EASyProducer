@@ -23,7 +23,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * 
  * @author El-Sharkawy
  */
-public class CodedTests extends net.ssehub.easy.reasoning.core.reasoner.CodedTests {
+public class CodedTests extends test.net.ssehub.easy.reasoning.core.reasoner.CodedTests {
 
     /**
      * Creates a specific test instance.

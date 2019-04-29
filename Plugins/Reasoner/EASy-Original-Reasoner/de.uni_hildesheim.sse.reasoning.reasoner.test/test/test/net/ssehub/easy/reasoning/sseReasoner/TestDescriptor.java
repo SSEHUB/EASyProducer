@@ -16,16 +16,16 @@
 package test.net.ssehub.easy.reasoning.sseReasoner;
 
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
-import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.reasoning.sseReasoner.Measures;
 import net.ssehub.easy.reasoning.sseReasoner.Reasoner;
 import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
 import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector.IMeasurementIdentifier;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import test.net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 
 /**
  * The test descriptor for the SSE reasoner.

@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class FailedDecisionsTests extends net.ssehub.easy.reasoning.core.capabilities.FailedDecisionsTests {
+public class FailedDecisionsTests extends test.net.ssehub.easy.reasoning.core.capabilities.FailedDecisionsTests {
 
     /**
      * Creates a specific test instance.

@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class CaseStudyStats extends net.ssehub.easy.reasoning.core.performance.CaseStudyStats {
+public class CaseStudyStats extends test.net.ssehub.easy.reasoning.core.performance.CaseStudyStats {
     
     /**
      * Creates a specific test instance.

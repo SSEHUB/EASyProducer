@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * 
  * @author Eichelberger
  */
-public class IntegerTests extends net.ssehub.easy.reasoning.core.reasoner.IntegerTests {
+public class IntegerTests extends test.net.ssehub.easy.reasoning.core.reasoner.IntegerTests {
 
     /**
      * Creates a specific test instance.

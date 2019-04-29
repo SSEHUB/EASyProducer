@@ -16,9 +16,9 @@
 package net.ssehub.easy.reasoning.drools;
 
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
-import net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
+import test.net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 
 /**
  * The test descriptor for this reasoner.

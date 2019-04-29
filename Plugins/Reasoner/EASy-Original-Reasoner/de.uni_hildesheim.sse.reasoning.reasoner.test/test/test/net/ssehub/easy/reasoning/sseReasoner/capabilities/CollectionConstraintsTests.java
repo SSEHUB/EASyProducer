@@ -8,7 +8,8 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class CollectionConstraintsTests extends net.ssehub.easy.reasoning.core.capabilities.CollectionConstraintsTests {
+public class CollectionConstraintsTests 
+    extends test.net.ssehub.easy.reasoning.core.capabilities.CollectionConstraintsTests {
 
     /**
      * Creates a specific test instance.

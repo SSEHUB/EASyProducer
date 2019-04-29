@@ -15,7 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.sseReasoner.qm;
 
-import net.ssehub.easy.reasoning.core.frontend.MismatchedTest;
+import test.net.ssehub.easy.reasoning.core.frontend.MismatchedTest;
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 /**

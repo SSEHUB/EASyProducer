@@ -22,7 +22,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * 
  * @author Holger Eichelberger
  */
-public class RampUpTest extends net.ssehub.easy.reasoning.core.reasoner.RampUpTest {
+public class RampUpTest extends test.net.ssehub.easy.reasoning.core.reasoner.RampUpTest {
 
     /**
      * Creates the test.

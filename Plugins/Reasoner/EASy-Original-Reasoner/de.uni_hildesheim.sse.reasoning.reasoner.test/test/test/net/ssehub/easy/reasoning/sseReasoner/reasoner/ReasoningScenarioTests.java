@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class ReasoningScenarioTests extends net.ssehub.easy.reasoning.core.reasoner.ReasoningScenarioTests {
+public class ReasoningScenarioTests extends test.net.ssehub.easy.reasoning.core.reasoner.ReasoningScenarioTests {
 
     /**
      * Creates a specific test instance.

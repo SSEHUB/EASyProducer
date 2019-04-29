@@ -9,7 +9,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class AttributeTests extends net.ssehub.easy.reasoning.core.capabilities.AttributeTests {
+public class AttributeTests extends test.net.ssehub.easy.reasoning.core.capabilities.AttributeTests {
 
     /**
      * Creates a specific test instance.

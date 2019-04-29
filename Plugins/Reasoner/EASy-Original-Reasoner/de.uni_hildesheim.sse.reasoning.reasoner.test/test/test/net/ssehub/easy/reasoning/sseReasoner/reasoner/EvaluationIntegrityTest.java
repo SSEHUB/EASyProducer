@@ -24,7 +24,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author El-Sharkawy
  * @author Sizonenko
  */
-public class EvaluationIntegrityTest extends net.ssehub.easy.reasoning.core.reasoner.EvaluationIntegrityTest {
+public class EvaluationIntegrityTest extends test.net.ssehub.easy.reasoning.core.reasoner.EvaluationIntegrityTest {
 
     /**
      * Creates a specific test instance.

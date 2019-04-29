@@ -8,7 +8,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class AdaptationIntegrityTests extends net.ssehub.easy.reasoning.core.adaptation.AdaptationIntegrityTests {
+public class AdaptationIntegrityTests extends test.net.ssehub.easy.reasoning.core.adaptation.AdaptationIntegrityTests {
 
     /**
      * Creates a specific test instance.

@@ -22,7 +22,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author El-Sharkawy
  *
  */
-public class StructureTests extends net.ssehub.easy.reasoning.core.frontend.StructureTests {
+public class StructureTests extends test.net.ssehub.easy.reasoning.core.frontend.StructureTests {
 
     /**
      * Creates a specific test instance.

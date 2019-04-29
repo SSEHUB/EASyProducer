@@ -24,7 +24,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMPipelinesTest1 extends net.ssehub.easy.reasoning.core.qm.QMPipelinesTest1 {
+public class QMPipelinesTest1 extends test.net.ssehub.easy.reasoning.core.qm.QMPipelinesTest1 {
 
     /**
      * Creates a specific test instance.

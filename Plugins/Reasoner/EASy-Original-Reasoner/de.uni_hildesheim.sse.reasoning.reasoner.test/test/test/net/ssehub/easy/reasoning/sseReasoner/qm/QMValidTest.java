@@ -24,7 +24,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMValidTest extends net.ssehub.easy.reasoning.core.qm.QMValidTest {
+public class QMValidTest extends test.net.ssehub.easy.reasoning.core.qm.QMValidTest {
     
     /**
      * Creates a specific test instance.

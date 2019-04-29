@@ -7,7 +7,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * 
  * @author krafczyk
  */
-public class StressTest extends net.ssehub.easy.reasoning.core.reasoner.StressTest {
+public class StressTest extends test.net.ssehub.easy.reasoning.core.reasoner.StressTest {
 
     /**
      * Creates a specific test instance.

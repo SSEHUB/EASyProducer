@@ -24,7 +24,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMMonTest extends net.ssehub.easy.reasoning.core.qm.QMMonTest {
+public class QMMonTest extends test.net.ssehub.easy.reasoning.core.qm.QMMonTest {
     
     /**
      * Creates a specific test instance.

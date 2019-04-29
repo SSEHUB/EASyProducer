@@ -10,7 +10,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class GeneratedStats extends net.ssehub.easy.reasoning.core.performance.GeneratedStats {
+public class GeneratedStats extends test.net.ssehub.easy.reasoning.core.performance.GeneratedStats {
 
     /**
      * Creates a specific test instance.

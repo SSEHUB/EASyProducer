@@ -23,7 +23,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class QMScenarioTests extends net.ssehub.easy.reasoning.core.qm.QMScenarioTests {
+public class QMScenarioTests extends test.net.ssehub.easy.reasoning.core.qm.QMScenarioTests {
 
     /**
      * Creates a specific test instance.

@@ -9,7 +9,7 @@ import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
  * @author Sizonenko
  * @author El-Sharkawy
  */
-public class IntegrityTests extends net.ssehub.easy.reasoning.core.reasoner.IntegrityTests {
+public class IntegrityTests extends test.net.ssehub.easy.reasoning.core.reasoner.IntegrityTests {
     
     /**
      * Creates a specific test instance.
