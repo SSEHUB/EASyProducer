@@ -17,6 +17,7 @@ package de.uni_hildesheim.sse.vil.rt.tests;
 
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import test.net.ssehub.easy.reasoning.sseReasoner.TestDescriptor;
 
 import java.util.List;
@@ -29,7 +30,6 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IVariableFilter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTestDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralMeasures;
 import net.ssehub.easy.reasoning.core.reasoner.IMeasurementKey;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;

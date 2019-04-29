@@ -45,7 +45,6 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.ReasoningHookAdapter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilExecution;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
-import net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -53,6 +52,7 @@ import net.ssehub.easy.varModel.varModel.testSupport.MeasurementCollector;
 import net.ssehub.easy.varModel.varModel.testSupport.TSVMeasurementCollector;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.TestTracerFactory;
+import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 
 /**
  * Configures the tests for rt-VIL.

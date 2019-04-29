@@ -54,7 +54,7 @@ public class RampUpTest extends AbstractRtTest {
     public void rampUpTest() throws ConfigurationException, ValueDoesNotMatchTypeException, 
         CSTSemanticException {
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        Configuration cfg = net.ssehub.easy.reasoning.core.reasoner.RampUpTest.createRampUpTest();
+        Configuration cfg = test.net.ssehub.easy.reasoning.core.reasoner.RampUpTest.createRampUpTest();
         IReasoner reasoner = createReasoner();
         // NO MEASUREMENT!!!
         ReasoningResult rResult = reasoner.propagate(cfg.getProject(), cfg, rConfig, ProgressObserver.NO_OBSERVER);
