@@ -51,8 +51,7 @@
 		<copy todir="${easy.bundles.dir}">
 			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
 		</copy>
-        <!-- save space on Jenkins, just leave the jars -->
-        <delete dir="${build.classes.dir}"/>
+        <!-- don't delete classes, needed for jacoco summary -->
         <delete dir="${doc.dir}"/>
     </target>
 </project>
