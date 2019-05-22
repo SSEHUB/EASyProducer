@@ -56,6 +56,7 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -689,7 +690,13 @@ public class VariableValueCopier {
         boolean adding) throws ConfigurationException, ValueDoesNotMatchTypeException, CSTSemanticException {
         Value result = null;
         source = Configuration.dereference(source);
-        if (null != source.getValue()) {
+        Value sValue = source.getValue();
+        // it might be a reference to null - initial configuration ;(
+        // this would cause re-copying the same (null-)variable over and over again
+        if (sValue instanceof ReferenceValue && ((ReferenceValue) sValue).getValue() == null) {
+            sValue = null;
+        }
+        if (null != sValue) {
             final boolean createNew = doCreateNewVars(namePrefix);
             IDatatype targetType = target.getDeclaration().getType(); 
             Value value;
