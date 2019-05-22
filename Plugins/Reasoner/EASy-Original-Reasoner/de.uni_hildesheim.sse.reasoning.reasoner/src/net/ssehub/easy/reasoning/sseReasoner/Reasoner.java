@@ -280,7 +280,7 @@ public class Reasoner implements IReasoner {
             result = null;
         }
         if (null == result) {
-            result = new Configuration(project, false);
+            result = new Configuration(project, true);
         }
         return result;
     }   
