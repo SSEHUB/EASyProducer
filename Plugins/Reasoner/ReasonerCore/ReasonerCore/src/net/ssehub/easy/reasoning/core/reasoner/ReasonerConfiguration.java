@@ -41,7 +41,7 @@ public class ReasonerConfiguration {
     private int timeout;
     private ReasonerDescriptor defaultReasoner;
     private boolean customMessages;
-    private boolean runtime;
+    private boolean incremental;
     private IAdditionalInformationLogger logger = ADDITIONAL_INFO_LOG_SYSOUT; // the legacy behavior
 
     /**
@@ -237,23 +237,47 @@ public class ReasonerConfiguration {
      * Defines whether runtime reasoning reasoning shall be activated. Currently, runtime reasoning assumes
      * that all required defaults and assignments have already been processed. In particular, the caller
      * is responsible for passing a "clean" configuration to the reasoner that leads to the expected
-     * results.
+     * results. Same as {@link #setIncrementalMode(boolean)}.
      * 
      * @param runtime if reasoning shall happen for runtime
      * @return <b>this</b>
      */
     public ReasonerConfiguration setRuntimeMode(boolean runtime) {
-        this.runtime = runtime;
+        this.incremental = runtime;
         return this;
     }
-    
+
+    /**
+     * Defines whether runtime incremental reasoning shall be performend. Currently, runtime reasoning assumes
+     * that all required defaults and assignments have already been processed. In particular, the caller
+     * is responsible for passing a "clean" configuration to the reasoner that leads to the expected
+     * results.
+     * 
+     * @param incremental if incremental reasoning shall happen
+     * @return <b>this</b>
+     */
+    public ReasonerConfiguration setIncrementalMode(boolean incremental) {
+        this.incremental = incremental;
+        return this;
+    }
+
     /**
      * Returns whether runtime reasoning shall be done (see {@link #setRuntimeMode(boolean)}.
      * 
-     * @return <code>true</code> if reasoning shall happen for runtime, <code>false</code> else
+     * @return <code>true</code> if reasoning shall happen for runtime, <code>false</code> else 
+     * (same as {@link #isIncrementalMode()})
      */
     public boolean isRuntimeMode() {
-        return runtime;
+        return incremental;
     }
-    
+
+    /**
+     * Returns whether incremental reasoning shall be done (see {@link #setIncrementalMode(boolean)}.
+     * 
+     * @return <code>true</code> if reasoning shall happen for runtime, <code>false</code> else
+     */
+    public boolean isIncrementalMode() {
+        return incremental;
+    }
+
 }
