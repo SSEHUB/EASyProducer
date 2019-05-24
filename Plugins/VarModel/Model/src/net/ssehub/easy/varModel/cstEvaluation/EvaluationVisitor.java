@@ -1447,7 +1447,8 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 ok = initialize(containers, declarators);
                 // iterate over inner iterator again and again until all outer iterators are done
                 pos = new int[iterCount];
-                while (ok && null != containers[0] && pos[0] < containers[0].getElementSize()) {
+                while (ok && containers.length > 0 && null != containers[0] 
+                    && pos[0] < containers[0].getElementSize()) {
                     int iter = pos.length - 1;
                     ContainerValue iterator = containers[iter];
                     boolean setSelf = selfVars.contains(declarators[iter].getDeclaration());
