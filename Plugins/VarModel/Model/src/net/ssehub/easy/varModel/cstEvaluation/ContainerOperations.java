@@ -558,7 +558,7 @@ public class ContainerOperations {
             if (1 == arguments.length) {
                 Value oValue = operand.getValue();
                 Value aValue = arguments[0].getValue();
-                if (oValue instanceof ContainerValue) {
+                if (oValue instanceof ContainerValue && aValue != null) {
                     ContainerValue cValue = (ContainerValue) oValue;
                     boolean bResult = cValue.indexOf(aValue) >= 0;
                     if (negate) {
