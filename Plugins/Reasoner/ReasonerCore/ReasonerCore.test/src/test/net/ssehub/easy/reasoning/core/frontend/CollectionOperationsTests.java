@@ -50,6 +50,18 @@ public class CollectionOperationsTests extends AbstractTest {
     public void testCompoundCollectionConstraintValid() throws IOException {
         reasoningTest("CompoundCollectionConstraintTest_Valid.ivml", 0);
     }
+
+    /**
+     * Tests whether the reasoner is able to handle fulfilled
+     * {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords#COLLECT}
+     * constraints based on a collection of {@link net.ssehub.easy.varModel.model.datatypes.Compound}s.
+     * 
+     * @throws IOException in case of problems reading a model
+     */
+    @Test
+    public void testCompoundCollectionConstraintEmptyValid() throws IOException {
+        reasoningTest("CompoundCollectionConstraintEmptyTest_Valid.ivml", 0);
+    }
     
     /**
      * Tests whether the reasoner is able to detect errors based in a

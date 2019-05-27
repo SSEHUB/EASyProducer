@@ -1,4 +1,4 @@
-project CompoundCollectionConstraintTest_Valid {
+project CompoundCollectionConstraintEmptyTest_Valid {
 
     version v0;
 	
@@ -7,11 +7,21 @@ project CompoundCollectionConstraintTest_Valid {
       Integer value;
     }
     
+    compound D {
+      C cmp;
+    }
+    
     setOf(C) cmps;
+    C cmp;
+    D cmp2 = {};
     cmps = {{name="Variable 1", value=1}, {name="Variable 2", value=2}};
     // Should check whether the names are unique by means of a SET over the names
-    cmps->collect(c|c.name).size() == 2;
+    not(cmps->includes(cmp));
+    cmps->excludes(cmp);
+    not(cmps->includes(cmp2.cmp));
+    cmps->excludes(cmp2.cmp);
     freeze {
+      cmp;
       cmps;
     }
 }
