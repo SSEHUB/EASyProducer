@@ -246,7 +246,7 @@ public class Reasoner implements IReasoner {
     protected void activate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
         ReasonerFrontend.getInstance().getRegistry().register(this);
-        LOGGER.info("EASy-Producer IVML Reasoner started ");
+        LOGGER.info("EASy-Producer IVML Reasoner activated");
     }
 
     /**
@@ -256,6 +256,7 @@ public class Reasoner implements IReasoner {
     protected void deactivate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
         ReasonerFrontend.getInstance().getRegistry().unregister(this);
+        LOGGER.info("EASy-Producer IVML Reasoner deactivated");
     }
 
     @Override
