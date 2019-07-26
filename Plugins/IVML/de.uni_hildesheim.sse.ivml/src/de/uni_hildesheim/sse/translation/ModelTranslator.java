@@ -383,7 +383,9 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             if (null == known) {
                 done.put(name, decl);
             } else {
-                if (!decl.getType().isAssignableFrom(known.getType())) {
+                IDatatype declType = DerivedDatatype.resolveToBasis(decl.getType());                
+                IDatatype knownType = DerivedDatatype.resolveToBasis(known.getType());       
+                if (!declType.isAssignableFrom(knownType)) {
                     TypedefCompound tdC = cmpMapping.get(known.getParent());
                     List<EObject> elts = tdC.getElements();
                     EObject cause = eProject;
