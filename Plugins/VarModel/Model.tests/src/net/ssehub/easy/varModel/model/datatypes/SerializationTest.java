@@ -32,7 +32,7 @@ public class SerializationTest {
     @Test
     public void testNoArgConstructors() {
         ClassTestUtils.assertNoArgConstructor(AnyType.class, CustomDynamicOperation.class, CustomOperation.class, 
-            DelegatingType.class, EnumLiteral.class, MetaType.class, Operation.class, RealType.class);
+            EnumLiteral.class, MetaType.class, Operation.class, RealType.class);
     }
 
 }
