@@ -131,6 +131,7 @@ BasicType :
 	| type='Boolean' 
 	| type='String'
     | type='Constraint'
+    | type='Any'
 	;
 
 Type : 

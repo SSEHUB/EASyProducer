@@ -286,7 +286,21 @@ public class TypeContext implements IResolutionScope {
      * @param var the decision variable declaration which shall be added
      */
     public void addToContext(DecisionVariableDeclaration var) {
-        directContext.peek().add(var);
+        String varName = var.getName();
+        ContainableModelElementList lst = directContext.peek();
+        int found = -1;
+        for (int i = 0; found < 0 && i < lst.getElementCount(); i++) {
+            ContainableModelElement elt = lst.getElement(i);
+            if (elt.getName().equals(varName) && elt instanceof DecisionVariableDeclaration) {
+                found = i;
+            }
+        }
+        // slot overriding
+        if (found >= 0) {
+            lst.set(found, var);
+        } else {
+            lst.add(var);
+        }
     }
 
     /**

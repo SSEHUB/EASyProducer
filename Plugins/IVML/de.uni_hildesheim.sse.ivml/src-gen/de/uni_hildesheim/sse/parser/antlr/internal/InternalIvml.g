@@ -1475,6 +1475,22 @@ ruleBasicType returns [EObject current=null]
 	    }
 
 )
+)
+    |(
+(
+		lv_type_5_0=	'Any' 
+    {
+        newLeafNode(lv_type_5_0, grammarAccess.getBasicTypeAccess().getTypeAnyKeyword_5_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getBasicTypeRule());
+	        }
+       		setWithLastConsumed($current, "type", lv_type_5_0, "Any");
+	    }
+
+)
 ))
 ;
 

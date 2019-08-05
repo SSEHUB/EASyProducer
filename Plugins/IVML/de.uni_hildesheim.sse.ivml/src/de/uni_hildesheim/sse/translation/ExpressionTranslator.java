@@ -1470,7 +1470,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             } // else: lhs is a type expression, inferDatatype would lead to a
               // MetaType
             type = TypeQueries.resolveFully(type);
-            if (Compound.TYPE.isAssignableFrom(type) && hasSlot((Compound) type, name)) {
+            if (TypeQueries.isCompound(type) && hasSlot((Compound) type, name)) {
                 result = new CompoundAccess(lhs, name);
                 IDatatype lhsType = lhs.inferDatatype();
                 if (!DefaultReasonerAccess.hasCapability(IvmlReasonerCapabilities.QUALIFIED_COMPOUND_ACCESS) 
@@ -1486,11 +1486,11 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                         + "' outside a compound is currently not supported in reasoning.", access, 
                         IvmlPackage.Literals.EXPRESSION_ACCESS__NAME, ErrorCodes.TYPE_QUALIFICATION);
                 }
-            } else if (Enum.TYPE.isAssignableFrom(type) && hasLiteral((Enum) type, name)) {
+            } else if (TypeQueries.isEnum(type) && hasLiteral((Enum) type, name)) {
                 result = new ConstantValue(ValueFactory.createValue(type, name));
                 context.checkEnumOclCompliance(((Enum) type).getName() + "." + name, access, 
                     IvmlPackage.Literals.EXPRESSION_ACCESS__NAME);
-            } else if (FreezeVariableType.TYPE.isAssignableFrom(type) 
+            } else if (TypeQueries.isFreezeVariableType(type) 
                 && null != ((FreezeVariableType) type).getAttribute(name)) {
                 result = new AttributeVariable(lhs, ((FreezeVariableType) type).getAttribute(name));
             } else {

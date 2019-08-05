@@ -796,12 +796,14 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cTypeStringKeyword_3_0 = (Keyword)cTypeAssignment_3.eContents().get(0);
 		private final Assignment cTypeAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
 		private final Keyword cTypeConstraintKeyword_4_0 = (Keyword)cTypeAssignment_4.eContents().get(0);
+		private final Assignment cTypeAssignment_5 = (Assignment)cAlternatives.eContents().get(5);
+		private final Keyword cTypeAnyKeyword_5_0 = (Keyword)cTypeAssignment_5.eContents().get(0);
 		
 		//BasicType:
-		//	type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint';
+		//	type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint' | type='Any';
 		@Override public ParserRule getRule() { return rule; }
 
-		//type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint'
+		//type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint' | type='Any'
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//type='Integer'
@@ -833,6 +835,12 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 
 		//'Constraint'
 		public Keyword getTypeConstraintKeyword_4_0() { return cTypeConstraintKeyword_4_0; }
+
+		//type='Any'
+		public Assignment getTypeAssignment_5() { return cTypeAssignment_5; }
+
+		//'Any'
+		public Keyword getTypeAnyKeyword_5_0() { return cTypeAnyKeyword_5_0; }
 	}
 
 	public class TypeElements extends AbstractParserRuleElementFinder {
@@ -3730,7 +3738,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//BasicType:
-	//	type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint';
+	//	type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint' | type='Any';
 	public BasicTypeElements getBasicTypeAccess() {
 		return pBasicType;
 	}

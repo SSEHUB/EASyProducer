@@ -413,6 +413,17 @@ public class AdvancedTests extends AbstractTest {
     /**
      * Tests refined compounds.
      * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testRefinedCompound2() throws IOException {
+        assertEqual(createFile("refinedCompound2"), "testRefinedCompound2", "0");
+    }
+
+    /**
+     * Tests refined compounds.
+     * 
      * @throws IOException should not occur
      */
     @Test

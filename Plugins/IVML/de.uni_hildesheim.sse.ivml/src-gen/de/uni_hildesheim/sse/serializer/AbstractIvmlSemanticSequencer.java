@@ -471,7 +471,14 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     BasicType returns BasicType
 	 *
 	 * Constraint:
-	 *     (type='Integer' | type='Real' | type='Boolean' | type='String' | type='Constraint')
+	 *     (
+	 *         type='Integer' | 
+	 *         type='Real' | 
+	 *         type='Boolean' | 
+	 *         type='String' | 
+	 *         type='Constraint' | 
+	 *         type='Any'
+	 *     )
 	 */
 	protected void sequence_BasicType(ISerializationContext context, BasicType semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

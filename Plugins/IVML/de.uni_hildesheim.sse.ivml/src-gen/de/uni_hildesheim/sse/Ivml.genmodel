@@ -4,7 +4,7 @@
     editorDirectory="/de.uni_hildesheim.sse.ivml.editor/src" modelPluginID="de.uni_hildesheim.sse.ivml"
     forceOverwrite="true" modelName="Ivml" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     complianceLevel="6.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.ivml.edit"
-    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.11">
+    editorPluginID="de.uni_hildesheim.sse.ivml.editor" runtimeVersion="2.13">
   <genPackages prefix="Ivml" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
       ecorePackage="Ivml.ecore#/">
     <genClasses ecoreClass="Ivml.ecore#//VariabilityUnit">

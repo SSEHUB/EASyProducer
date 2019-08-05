@@ -1,0 +1,26 @@
+project testRefinedCompound2 {
+
+    version v0;
+    compound DataProperty {
+        String name;
+    }
+
+    compound Base {
+        sequenceOf(DataProperty) input;
+        sequenceOf(DataProperty) output;
+        input->forAll(DataProperty p|checkProperty(p));
+    }
+
+    def Boolean checkProperty(DataProperty prop) = true;
+    compound Tuple refines DataProperty {
+    }
+
+    typedef Tuples sequenceOf(Tuple);
+    compound Refined refines Base {
+        Tuples input;
+        Tuples output;
+        input->forAll(Tuple p|checkProperty(p));
+    }
+
+    def Boolean checkProperty(Tuple prop) = true;
+}

@@ -53,6 +53,16 @@ public class BasicTests extends AbstractTest {
     }
 
     /**
+     * Tests the AnyType datatype.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAnyType() throws IOException {
+        assertEqual(createFile("anyType"), "anyType", "0");
+    }
+    
+    /**
      * Tests the basic datatypes with defaults.
      * 
      * @throws IOException should not occur
@@ -211,7 +221,6 @@ public class BasicTests extends AbstractTest {
     public void testContainerConstraintsFail() throws IOException {
         assertEqual(createFile("containerConstraintsFail"),
                 "testContainerConstraintsFail", "0",
-                CSTSemanticException.UNKNOWN_OPERATION,
                 CSTSemanticException.TYPE_MISMATCH);
     }
 

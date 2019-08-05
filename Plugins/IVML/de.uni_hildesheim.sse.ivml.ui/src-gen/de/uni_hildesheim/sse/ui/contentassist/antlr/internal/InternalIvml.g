@@ -2370,6 +2370,12 @@ rule__BasicType__Alternatives
 { after(grammarAccess.getBasicTypeAccess().getTypeAssignment_4()); }
 )
 
+    |(
+{ before(grammarAccess.getBasicTypeAccess().getTypeAssignment_5()); }
+(rule__BasicType__TypeAssignment_5)
+{ after(grammarAccess.getBasicTypeAccess().getTypeAssignment_5()); }
+)
+
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -13174,6 +13180,29 @@ rule__BasicType__TypeAssignment_4
 )
 
 { after(grammarAccess.getBasicTypeAccess().getTypeConstraintKeyword_4_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__BasicType__TypeAssignment_5
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getBasicTypeAccess().getTypeAnyKeyword_5_0()); }
+(
+{ before(grammarAccess.getBasicTypeAccess().getTypeAnyKeyword_5_0()); }
+
+	'Any' 
+
+{ after(grammarAccess.getBasicTypeAccess().getTypeAnyKeyword_5_0()); }
+)
+
+{ after(grammarAccess.getBasicTypeAccess().getTypeAnyKeyword_5_0()); }
 )
 
 ;

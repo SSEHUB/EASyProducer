@@ -210,6 +210,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getBasicTypeAccess().getTypeAssignment_2(), "rule__BasicType__TypeAssignment_2");
 					put(grammarAccess.getBasicTypeAccess().getTypeAssignment_3(), "rule__BasicType__TypeAssignment_3");
 					put(grammarAccess.getBasicTypeAccess().getTypeAssignment_4(), "rule__BasicType__TypeAssignment_4");
+					put(grammarAccess.getBasicTypeAccess().getTypeAssignment_5(), "rule__BasicType__TypeAssignment_5");
 					put(grammarAccess.getTypeAccess().getTypeAssignment_0(), "rule__Type__TypeAssignment_0");
 					put(grammarAccess.getTypeAccess().getIdAssignment_1(), "rule__Type__IdAssignment_1");
 					put(grammarAccess.getTypeAccess().getDerivedAssignment_2(), "rule__Type__DerivedAssignment_2");
