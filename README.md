@@ -15,13 +15,12 @@ Installation
 -------------
 EASy-Producer can be installed from the [official update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site") hosted at the University of Hildesheim, Germany. 
 
-We also provide a snapshot of the most recent developments in terms of a [nightly update site](https://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/ "EASy-Producer nightly update site") also 
-hosted at the University of Hildesheim, Germany. From there (but also [doc](/doc/ "doc")) previews of the upcoming documentation can be obtained. Please note that  Eclipse Help plugin of the nightly version 
-contains the same documentation as the latest release.
+We also provide a snapshot of the most recent developments in terms of a [nightly update site](https://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/ "EASy-Producer nightly update site") also hosted at the University of Hildesheim, Germany. From there (but also [doc](/doc/ "doc")) previews of the upcoming documentation can be obtained. Please note that Eclipse Help plugin of the nightly version contains the same documentation as the latest release.
 
 Support for Eclipse/JDK
 -----------------------
-EASy-Producer runs well with Eclipse 4.5 and JDK 8. Support for Eclipse 4.7 and JDK is on the way, but due to refactoring bundles required by Eclipse 4.7, not completely tested.
+EASy-Producer runs well with Eclipse 4.5 and JDK 8 as well as Eclipse 4.7 and JDK 11. However, as we rely on an older version of xText for the EASY-DSLs, development there
+still requires a JDK 8 (see developers guide).
 
 Running EASy-Producer/tests within Eclipse
 ------------------------------------------

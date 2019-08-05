@@ -31,6 +31,12 @@ public class ModelImport <M extends IModel> {
     private boolean isConflict;
 
     /**
+     * Constructor for serialization.
+     */
+    ModelImport() {
+    }
+    
+    /**
      * Creates an unrestricted script import.
      * 
      * @param name The name of the project to be imported.
