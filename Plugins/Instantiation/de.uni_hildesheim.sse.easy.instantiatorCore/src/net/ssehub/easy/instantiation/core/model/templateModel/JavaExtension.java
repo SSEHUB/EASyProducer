@@ -17,6 +17,12 @@ public class JavaExtension {
     private boolean isDefault;
     
     /**
+     * Constructor for serialization.
+     */
+    JavaExtension() {
+    }
+    
+    /**
      * Creates a java extension instance.
      * 
      * @param name the name of the Java class extending the functionality

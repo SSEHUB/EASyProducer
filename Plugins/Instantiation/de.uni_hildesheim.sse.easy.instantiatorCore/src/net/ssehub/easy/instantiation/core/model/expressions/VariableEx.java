@@ -10,6 +10,12 @@ import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 public class VariableEx extends VariableExpression {
 
     /**
+     * Constructor for serialization.
+     */ 
+    VariableEx() {
+    }
+    
+    /**
      * Creates a variable expression node.
      * 
      * @param variable the variable declaration used as variable here

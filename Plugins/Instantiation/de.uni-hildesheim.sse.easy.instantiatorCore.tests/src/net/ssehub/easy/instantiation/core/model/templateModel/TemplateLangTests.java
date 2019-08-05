@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({IndentationUtilsTests.class })
+@Suite.SuiteClasses({IndentationUtilsTests.class, SerializationTest.class })
 public class TemplateLangTests {
 
 }

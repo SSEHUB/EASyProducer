@@ -1,0 +1,7 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    cfg <- <config>
+    n1 <- compounds3::n1
+    n2 <- compounds3::n2
+    t1 <- {compounds3::Node::dInput [0]}
+    t2 <- {compounds3::Node::dInput [0]}
+    t3 <- {compounds3::Node::dInput [0]}    

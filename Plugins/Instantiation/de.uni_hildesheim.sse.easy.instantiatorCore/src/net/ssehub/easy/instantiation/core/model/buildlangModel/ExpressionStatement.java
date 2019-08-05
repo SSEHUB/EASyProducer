@@ -15,6 +15,13 @@ public class ExpressionStatement
     private ILanguageElement parent;
     
     /**
+     * Constructor for serialization.
+     */
+    ExpressionStatement() {
+        super(null);
+    }
+    
+    /**
      * Creates an expression statement.
      * 
      * @param expression the expression

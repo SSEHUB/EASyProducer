@@ -246,7 +246,8 @@ public abstract class TypeDescriptor <T> implements IMetaType {
         FieldDescriptor result = null;
         if (null != name) {
             int count = getFieldCount();
-            for (int i = 0; null == result && i < count; i++) {
+            // reverse due to refined slots
+            for (int i = count - 1; null == result && i >= 0; i--) {
                 FieldDescriptor tmp = getField(i);
                 if (name.equals(tmp.getName())) {
                     result = tmp;

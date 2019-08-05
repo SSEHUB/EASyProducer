@@ -46,6 +46,15 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
     private IDatatype type;
     
     /**
+     * For serialization.
+     * 
+     * @throws VilException shall not occur
+     */
+    IvmlTypeDescriptor() throws VilException {
+        super();
+    }
+    
+    /**
      * Creates a new type descriptor.
      * 
      * @param project the underlying IVML project the descriptor shall be created for
@@ -112,6 +121,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         if (ivmlType instanceof Compound) {
             TypeRegistry registry = getTypeRegistry();
             Compound comp = (Compound) ivmlType;
+            addElements(comp, registry, fields);
             for (int r = 0; r < comp.getRefinesCount(); r++) {
                 Compound refines = comp.getRefines(r);
                 TypeDescriptor<?> tmp = registry.getType(refines);
@@ -126,7 +136,6 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
                     }
                 }
             }
-            addElements(comp, registry, fields);
         }        
     }
     

@@ -1,0 +1,24 @@
+@advice(compounds3)
+template compoundTest3(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        compounds3 cfg = config;
+        Node n1 = cfg.n1;
+        'Node: ${n1.name}'
+        for (Flow f : n1.output) {
+            Node dest = f.destination;
+            'Flow: ${f.name} ${f.destination.name} ${dest.name}'
+        }
+        Node n2 = cfg.n2;
+        'Node: ${n2.name}'
+        Tuples t1 = n1.dInput;
+        for (Tuple t : t1) {
+            '${t.name}'
+        }
+        sequenceOf(Tuple) t2 = n2.dInput;
+        for (Tuple t : t2) {
+            '${t.name}'
+        }
+    }
+
+}

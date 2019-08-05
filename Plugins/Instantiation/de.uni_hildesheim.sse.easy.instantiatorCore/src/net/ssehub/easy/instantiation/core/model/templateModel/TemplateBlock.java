@@ -15,6 +15,12 @@ public class TemplateBlock extends AbstractTemplateElement {
     private ITemplateElement[] body;
 
     /**
+     * Constructor for serialization.
+     */ 
+    TemplateBlock() {
+    }
+    
+    /**
      * Creates a new block.
      * 
      * @param body the body

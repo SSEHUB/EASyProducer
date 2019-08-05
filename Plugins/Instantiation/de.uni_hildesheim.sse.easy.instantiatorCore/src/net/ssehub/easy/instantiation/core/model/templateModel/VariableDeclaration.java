@@ -19,6 +19,13 @@ public class VariableDeclaration extends
     private ILanguageElement parent;
     
     /**
+     * Constructor for serialization.
+     */
+    VariableDeclaration() {
+        super(null, null);
+    }
+    
+    /**
      * Creates a new variable declaration. Parent must be explicitly adjusted by parent instance.
      * 
      * @param name the name of the variable

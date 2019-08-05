@@ -12,6 +12,12 @@ public class SimpleStatementBlock implements IRuleBlock {
     private IRuleElement element;
 
     /**
+     * Constructor for serialization.
+     */ 
+    SimpleStatementBlock() {
+    }
+    
+    /**
      * Creates a simple statement block.
      * 
      * @param element the element that constitutes the block

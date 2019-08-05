@@ -37,6 +37,15 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
     private AbstractIvmlTypeDescriptor refines;
     
     /**
+     * For serialization.
+     * 
+     * @throws VilException shall not occur
+     */
+    AbstractIvmlTypeDescriptor() throws VilException {
+        super((TypeDescriptor<?>[]) null);
+    }
+    
+    /**
      * Creates a new type descriptor. Overridden constructors shall call {@link #setOperations(java.util.Collection)}
      * and {@link #setConversions(java.util.Collection)}.
      * 

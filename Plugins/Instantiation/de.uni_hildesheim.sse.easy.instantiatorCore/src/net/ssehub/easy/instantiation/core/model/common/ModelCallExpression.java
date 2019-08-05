@@ -25,6 +25,12 @@ public abstract class ModelCallExpression<V extends IMetaParameterDeclaration, M
     private boolean isSuper;
 
     /**
+     * Constructor for serialization.
+     */ 
+    protected ModelCallExpression() {
+    }
+    
+    /**
      * Creates a new model call expression.
      * 
      * @param model the actual model to resolve the operation on

@@ -35,6 +35,12 @@ import net.ssehub.easy.varModel.model.datatypes.Set;
 public class IvmlConfigurationFieldDescriptor extends AbstractIvmlFieldDescriptor {
 
     /**
+     * Constructor for serialization.
+     */ 
+    IvmlConfigurationFieldDescriptor() {
+    }
+    
+    /**
      * Creates the field descriptor.
      * 
      * @param declaringType the declaring type

@@ -1188,4 +1188,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("sorting", MAIN_RULE, "sorting", null);
     }
 
+    /**
+     * Refined compound slots.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompounds3() throws IOException {
+        assertSelfInstantiate("compounds3", MAIN_RULE, "compounds3", null);
+    }
+
 }

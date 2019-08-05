@@ -18,6 +18,12 @@ public class Imports <M extends IModel> {
     private List<ModelImport<M>> imports;
 
     /**
+     * Constructor for serialization.
+     */
+    Imports() {
+    }
+    
+    /**
      * Creates an imports instance.
      * 
      * @param imports the actual imports

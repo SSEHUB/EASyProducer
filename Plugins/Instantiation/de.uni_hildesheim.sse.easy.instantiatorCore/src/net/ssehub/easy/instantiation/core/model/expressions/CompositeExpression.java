@@ -16,6 +16,12 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 public class CompositeExpression extends Expression implements IExpressionIterator {
     
     private List<Expression> expressionList;
+
+    /**
+     * Constructor for serialization.
+     */
+    CompositeExpression() {
+    }
     
     /**
      * Creates a new composite expression.

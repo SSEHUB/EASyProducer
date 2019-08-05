@@ -29,6 +29,13 @@ public class IvmlConfigurationConversionOperationDescriptor extends IvmlOperatio
     public static final String NAME = "convertToGeneric";
 
     /**
+     * For serialization.
+     */
+    IvmlConfigurationConversionOperationDescriptor() {
+        super(null, NAME, false);
+    }
+    
+    /**
      * Creates the operation descriptor.
      * 
      * @param declaringType the declaring type

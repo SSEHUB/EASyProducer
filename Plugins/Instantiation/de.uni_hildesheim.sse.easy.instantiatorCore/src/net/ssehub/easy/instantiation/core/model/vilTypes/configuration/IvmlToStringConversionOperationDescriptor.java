@@ -31,6 +31,13 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 public class IvmlToStringConversionOperationDescriptor extends IvmlConversionOperationDescriptor {
 
     /**
+     * For serialization.
+     */
+    IvmlToStringConversionOperationDescriptor() {
+        super(null, null);
+    }
+    
+    /**
      * Creates a conversion to string operation descriptor.
      * 
      * @param declaringType the declaring type

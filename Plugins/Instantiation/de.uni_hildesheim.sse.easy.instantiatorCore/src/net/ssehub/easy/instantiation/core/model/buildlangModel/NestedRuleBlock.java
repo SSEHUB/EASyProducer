@@ -10,6 +10,13 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 public class NestedRuleBlock extends RuleBlock {
 
     /**
+     * Constructor for serialization.
+     */ 
+    public NestedRuleBlock() {
+        super("", null);
+    }
+    
+    /**
      * Creates a nested rule block.
      * 
      * @param body the rule body

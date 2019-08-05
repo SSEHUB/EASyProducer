@@ -10,10 +10,17 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
  * 
  * @author Holger Eichelberger
  */
-class IvmlConversionOperationDescriptor extends IvmlOperationDescriptor {
+public class IvmlConversionOperationDescriptor extends IvmlOperationDescriptor {
 
     public static final String NAME = "convertToGeneric";
 
+    /**
+     * Constructor for serialization.
+     */ 
+    IvmlConversionOperationDescriptor() {
+        this(null);
+    }
+    
     /**
      * Creates the operation descriptor.
      * 

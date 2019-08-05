@@ -15,6 +15,13 @@ public class ExpressionStatement
     implements ITemplateElement {
 
     private ILanguageElement parent;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    public ExpressionStatement() {
+        super(null);
+    }
     
     /**
      * Creates an expression statement.

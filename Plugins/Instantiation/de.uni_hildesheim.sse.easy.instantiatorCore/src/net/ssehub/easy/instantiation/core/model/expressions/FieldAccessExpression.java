@@ -33,6 +33,12 @@ public class FieldAccessExpression extends Expression {
     private boolean metaAccess;
     
     /**
+     * Constructor for serialization.
+     */
+    public FieldAccessExpression() {
+    }
+    
+    /**
      * Creates a static field access expression.
      * 
      * @param field the field to access

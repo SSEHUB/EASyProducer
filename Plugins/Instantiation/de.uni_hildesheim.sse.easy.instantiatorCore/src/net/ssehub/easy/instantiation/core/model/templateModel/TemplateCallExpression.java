@@ -14,6 +14,12 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 public class TemplateCallExpression extends ModelCallExpression<VariableDeclaration, Template, Def> {
 
     /**
+     * Constructor for serialization.
+     */
+    TemplateCallExpression() {
+    }
+    
+    /**
      * Creates a new template call expression.
      * 
      * @param template the actual script to resolve the call on

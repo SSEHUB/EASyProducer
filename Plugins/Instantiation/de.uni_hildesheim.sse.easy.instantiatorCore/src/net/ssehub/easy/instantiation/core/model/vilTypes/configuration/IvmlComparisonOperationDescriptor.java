@@ -18,6 +18,13 @@ public class IvmlComparisonOperationDescriptor extends IvmlOperationDescriptor {
     private boolean equality;
 
     /**
+     * For serialization.
+     */
+    IvmlComparisonOperationDescriptor() {
+        super(null, null, false);
+    }
+    
+    /**
      * Creates a new comparison operation descriptor.
      * 
      * @param declaringType the declaring type

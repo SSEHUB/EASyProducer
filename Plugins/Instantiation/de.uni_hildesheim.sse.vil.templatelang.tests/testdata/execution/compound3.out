@@ -1,0 +1,5 @@
+Node: n1
+Flow: n1->n2 n2 n2
+Node: n2
+t1
+t2

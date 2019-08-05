@@ -43,6 +43,12 @@ public class ContentStatement extends AbstractTemplateElement {
     }
     
     /**
+     * Constructor for serialization.
+     */
+    ContentStatement() {
+    }
+    
+    /**
      * Creates a new content statement.
      * 
      * @param content the content

@@ -17,6 +17,13 @@ public class Imports <M extends Script>
     private List<ModelImport<Template>> vtlRestrictions;
 
     /**
+     * Constructor for serializer.
+     */
+    Imports() {
+        super((List<ModelImport<M>>) null);
+    }
+    
+    /**
      * Creates an imports instance.
      * 
      * @param imports the actual imports

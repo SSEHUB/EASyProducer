@@ -28,6 +28,13 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     private boolean isProtected = false;
     
     /**
+     * Constructor for serialization.
+     */
+    Def() {
+        super(null);
+    }
+    
+    /**
      * Creates a new sub-template ('def').
      * 
      * @param name the name of the template

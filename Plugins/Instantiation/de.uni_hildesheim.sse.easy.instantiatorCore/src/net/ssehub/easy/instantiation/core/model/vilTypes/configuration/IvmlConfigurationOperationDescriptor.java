@@ -13,6 +13,13 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 class IvmlConfigurationOperationDescriptor extends IvmlOperationDescriptor {
 
     /**
+     * For serialization.
+     */
+    IvmlConfigurationOperationDescriptor() {
+        super(null, null, false);
+    }
+    
+    /**
      * Creates the operation descriptor.
      * 
      * @param declaringType the declaring type

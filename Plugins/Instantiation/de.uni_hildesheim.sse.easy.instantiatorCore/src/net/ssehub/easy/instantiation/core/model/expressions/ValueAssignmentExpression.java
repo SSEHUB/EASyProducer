@@ -19,6 +19,12 @@ public class ValueAssignmentExpression extends Expression {
     private Expression valueExpression;
     
     /**
+     * Constructor for serialization.
+     */ 
+    ValueAssignmentExpression() {
+    }
+    
+    /**
      * Creates a new value assignment expression which assigns <code>valueExpression</code> to 
      * <code>varDecl</code>.
      * 

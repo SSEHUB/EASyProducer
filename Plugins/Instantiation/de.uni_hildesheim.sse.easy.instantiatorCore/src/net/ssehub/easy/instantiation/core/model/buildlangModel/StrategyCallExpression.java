@@ -40,6 +40,14 @@ public class StrategyCallExpression extends CallExpression {
     private transient TypeRegistry typeRegistry = TypeRegistry.DEFAULT;
 
     /**
+     * Constructor for serialization.
+     * 
+     * @throws VilException shall not happen
+     */ 
+    StrategyCallExpression() throws VilException {
+    }
+    
+    /**
      * Creates a new instantiator strategy call.
      * 
      * @param parent the parent language unit (if given used as optional parameter during calls)

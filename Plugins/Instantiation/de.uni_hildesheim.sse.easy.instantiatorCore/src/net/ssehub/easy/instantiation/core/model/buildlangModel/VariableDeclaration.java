@@ -19,6 +19,13 @@ public class VariableDeclaration
     private ILanguageElement parent;
     
     /**
+     * Constructor for serializer.
+     */
+    VariableDeclaration() {
+        super(null, null);
+    }
+    
+    /**
      * Creates a new variable declaration.
      * 
      * @param name the name of the variable

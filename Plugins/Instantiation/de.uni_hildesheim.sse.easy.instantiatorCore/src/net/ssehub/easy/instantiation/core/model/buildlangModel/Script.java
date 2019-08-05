@@ -137,6 +137,13 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     }
 
     /**
+     * Constructor for serializer.
+     */
+    Script() {
+        this(null, null, null, null);
+    }
+
+    /**
      * Constructor for a script without parent, parameters or advices and with the default
      * type registry.
      * 

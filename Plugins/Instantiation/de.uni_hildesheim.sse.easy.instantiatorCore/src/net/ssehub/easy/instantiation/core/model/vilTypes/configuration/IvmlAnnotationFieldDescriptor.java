@@ -31,6 +31,12 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.Compatib
 public class IvmlAnnotationFieldDescriptor extends AbstractIvmlFieldDescriptor {
 
     /**
+     * For serialization.
+     */
+    IvmlAnnotationFieldDescriptor() {
+    }
+
+    /**
      * Creates the operation descriptor for an annotation access.
      * 
      * @param declaringType the declaring type

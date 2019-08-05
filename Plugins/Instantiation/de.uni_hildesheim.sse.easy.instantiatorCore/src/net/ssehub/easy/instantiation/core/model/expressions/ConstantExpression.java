@@ -18,6 +18,12 @@ public class ConstantExpression extends Expression {
     private TypeDescriptor<?> type;
     
     /**
+     * Constructor for serialization.
+     */
+    ConstantExpression() {
+    }
+    
+    /**
      * Creates a new constant expression.
      * 
      * @param type the type of this constant

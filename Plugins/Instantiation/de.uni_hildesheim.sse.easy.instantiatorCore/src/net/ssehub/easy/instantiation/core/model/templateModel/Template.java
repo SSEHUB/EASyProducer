@@ -38,6 +38,13 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     private FormattingConfiguration formattingConfiguration;
     
     /**
+     * Constructor for serialization.
+     */
+    Template() {
+        super(null, null, null);
+    }
+    
+    /**
      * Creates a VIL template instance.
      * 
      * @param name the name

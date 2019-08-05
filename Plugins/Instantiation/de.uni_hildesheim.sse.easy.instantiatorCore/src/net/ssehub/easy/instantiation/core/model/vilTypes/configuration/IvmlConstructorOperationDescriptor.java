@@ -33,6 +33,13 @@ public class IvmlConstructorOperationDescriptor extends IvmlOperationDescriptor 
     private IDatatype ivmlType;
     
     /**
+     * For serialization.
+     */
+    IvmlConstructorOperationDescriptor() {
+        super(null, null, false);
+    }
+    
+    /**
      * Creates a constructor descriptor without parameters.
      * 
      * @param declaringType the declaring type.

@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({TypeRegistryTest.class, TypeDescriptorTest.class, 
-    ArtifactFactoryTest.class, ConfigurationTests.class })
+    ArtifactFactoryTest.class, ConfigurationTests.class, SerializationTest.class })
 public class VilTests {
 
 }

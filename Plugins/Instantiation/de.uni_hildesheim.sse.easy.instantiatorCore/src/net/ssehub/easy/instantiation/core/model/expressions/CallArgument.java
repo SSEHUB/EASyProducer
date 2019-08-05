@@ -19,6 +19,12 @@ public class CallArgument {
     private boolean fixed;
 
     /**
+     * Constructor for serialization.
+     */
+    CallArgument() {
+    }
+    
+    /**
      * Creates a call argument for runtime operation resolution.
      * 
      * @param type the type of the argument

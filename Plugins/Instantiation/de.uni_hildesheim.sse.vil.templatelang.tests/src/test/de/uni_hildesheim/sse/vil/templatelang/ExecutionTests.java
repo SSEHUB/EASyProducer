@@ -484,6 +484,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testCompound2() throws IOException {
         assertEqualWithIvml("compound2", "compounds2");
     }
+    
+    /**
+     * Tests compounds with redefined slots via Any.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompound3() throws IOException {
+        assertEqualWithIvml("compound3", "compounds3");
+    }
 
     /**
      * Tests a switch statement with default in an untyped def.

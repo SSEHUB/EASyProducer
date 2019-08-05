@@ -19,6 +19,12 @@ public class MapExpression extends Expression implements IRuleBlock, IEnumeratin
     private TypeDescriptor<?> type;
     private TypeDescriptor<?>[] givenTypes;
     private boolean colon;
+
+    /**
+     * Constructor for serialization.
+     */
+    MapExpression() {
+    }
     
     /**
      * Creates a map statement.

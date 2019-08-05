@@ -17,6 +17,12 @@ public class AlternativeExpression extends Expression {
     private IRuleBlock ifPart;
     private IRuleBlock elsePart;
     private TypeDescriptor<?> type;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    AlternativeExpression() {
+    }
     
     /**
      * Creates an alternative expression.

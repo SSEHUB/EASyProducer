@@ -1,0 +1,16 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    n1 <- compounds3::n1
+    for f {
+        f <- compounds3::Node::output {0}
+        dest <- compounds3::Flow::destination
+    }
+    n2 <- compounds3::n2
+    t1 <- {compounds3::Node::dInput [0]}
+    for t {
+        t <- compounds3::Node::dInput [0]
+    }
+    t2 <- {compounds3::Node::dInput [0]}
+    for t {
+        t <- compounds3::Node::dInput [0]
+    }

@@ -31,10 +31,19 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  * 
  * @author Holger Eichelberger
  */
-class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IActualValueProvider, 
+public class IvmlProjectTypeDescriptor extends AbstractIvmlTypeDescriptor implements IActualValueProvider, 
     IActualTypeAssignmentProvider {
 
     private Project project;
+    
+    /**
+     * For serialization.
+     * 
+     * @throws VilException shall not occur
+     */
+    IvmlProjectTypeDescriptor() throws VilException {
+        super();
+    }
     
     /**
      * Creates a new type descriptor. Overridden constructors shall call {@link #setOperations(java.util.Collection)}

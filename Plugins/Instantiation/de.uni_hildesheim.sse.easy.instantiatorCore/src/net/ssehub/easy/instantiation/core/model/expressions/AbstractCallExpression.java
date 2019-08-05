@@ -40,9 +40,14 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         
     };
 
-
     private String name;
     private String prefix;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    protected AbstractCallExpression() {
+    }
     
     /**
      * Creates an instance from the given call name.

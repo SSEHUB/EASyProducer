@@ -49,6 +49,15 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     private boolean dotRight;
 
     /**
+     * Constructor for serialization.
+     * 
+     * @throws VilException shall not occur
+     */
+    protected CallExpression() throws VilException {
+        super(null, true);
+    }
+    
+    /**
      * Creates a new (undotted) call expression.
      * 
      * @param parent the parent language unit (if given used as optional parameter during calls)

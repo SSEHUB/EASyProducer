@@ -31,6 +31,13 @@ public abstract class AbstractIvmlFieldDescriptor extends FieldDescriptor {
     private AbstractVariable var;
     
     /**
+     * Constructor for serialization.
+     */
+    AbstractIvmlFieldDescriptor() {
+        super(null, null, null);
+    }
+    
+    /**
      * Creates the field descriptor.
      * 
      * @param declaringType the declaring type

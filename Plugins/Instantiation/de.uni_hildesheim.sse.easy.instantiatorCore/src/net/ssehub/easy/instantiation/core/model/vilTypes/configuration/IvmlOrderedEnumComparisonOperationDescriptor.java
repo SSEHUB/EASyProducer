@@ -67,6 +67,13 @@ public class IvmlOrderedEnumComparisonOperationDescriptor extends IvmlOperationD
     private OperationKind operation;
 
     /**
+     * For serialization.
+     */
+    IvmlOrderedEnumComparisonOperationDescriptor() {
+        super(null, null, false);
+    }
+    
+    /**
      * Creates a new comparison operation descriptor.
      * 
      * @param declaringType the declaring type

@@ -13,6 +13,12 @@ public class ParenthesisExpression extends Expression {
     private Expression expr;
     
     /**
+     * Constructor for serialization.
+     */
+    ParenthesisExpression() {
+    }
+    
+    /**
      * Creates a new parenthesis expression.
      * 
      * @param expr the expression within the parenthesis

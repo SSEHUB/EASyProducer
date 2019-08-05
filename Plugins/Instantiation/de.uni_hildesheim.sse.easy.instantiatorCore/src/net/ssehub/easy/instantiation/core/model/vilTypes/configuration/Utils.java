@@ -177,7 +177,7 @@ public class Utils {
      * @param fields the operations (signature-descriptor) (to be modified as a side effect)
      */
     protected static void addField(FieldDescriptor field, Map<String, FieldDescriptor> fields) {
-        String sig = field.getSignature();
+        String sig = field.getName(); // name is fully sufficient, in particular required for refined slots
         if (!fields.containsKey(sig)) {
             fields.put(sig, field);
         }

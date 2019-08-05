@@ -30,6 +30,12 @@ public class StringExpression extends Expression {
 
     private Expression expr;
     private boolean nested;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    StringExpression() {
+    }
     
     /**
      * Creates a string expression.

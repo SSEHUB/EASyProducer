@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({VariableExpressionTest.class, PathRuleMatcherTest.class,
-    StrategyCallExpressionTest.class, ScriptTests.class })
+    StrategyCallExpressionTest.class, ScriptTests.class, SerializationTest.class })
 public class BuildlangTests {
 
 }

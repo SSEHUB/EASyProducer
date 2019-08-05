@@ -49,6 +49,13 @@ public class Rule extends AbstractRule {
     private TypeDescriptor<?> returnType;
 
     /**
+     * Constructor for serialization.
+     */
+    Rule() {
+        super(null, null);
+    }
+    
+    /**
      * Create a new rule with the given name. As no descriptor is given,
      * call {@link #setDescriptorInformation(RuleDescriptor)} somewhen before using this rule.
      * 

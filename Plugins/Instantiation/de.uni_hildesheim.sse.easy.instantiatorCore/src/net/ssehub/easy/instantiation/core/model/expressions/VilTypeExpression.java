@@ -15,6 +15,12 @@ public class VilTypeExpression extends Expression {
     private TypeDescriptor<?> resolved;
 
     /**
+     * Constructor for serialization.
+     */
+    VilTypeExpression() {
+    }
+    
+    /**
      * Creates the representing instance.
      * 
      * @param identifier the identifier from VIL

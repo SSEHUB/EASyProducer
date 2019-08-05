@@ -64,6 +64,13 @@ public class IvmlOrderedEnumMinMaxOperationDescriptor extends IvmlOperationDescr
     private OperationKind operation;
     
     /**
+     * For serialization.
+     */
+    IvmlOrderedEnumMinMaxOperationDescriptor() {
+        super(null, null, false);
+    }
+    
+    /**
      * Creates a new min/max operation descriptor.
      * 
      * @param declaringType the declaring type

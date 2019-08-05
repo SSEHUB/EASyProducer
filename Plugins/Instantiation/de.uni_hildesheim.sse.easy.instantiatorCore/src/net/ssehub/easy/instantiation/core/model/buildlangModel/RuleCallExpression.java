@@ -14,6 +14,12 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 public class RuleCallExpression extends ModelCallExpression<VariableDeclaration, Script, AbstractRule> {
 
     /**
+     * Constructor for serialization.
+     */ 
+    RuleCallExpression() {
+    }
+    
+    /**
      * Creates a new rule call expression.
      * 
      * @param script the actual script to resolve the rule on

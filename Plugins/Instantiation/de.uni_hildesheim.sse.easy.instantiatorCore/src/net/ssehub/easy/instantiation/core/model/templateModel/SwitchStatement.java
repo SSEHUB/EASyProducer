@@ -29,6 +29,12 @@ public class SwitchStatement extends AbstractTemplateElement {
         private Expression value;
 
         /**
+         * Constructor for serialization.
+         */
+        Alternative() {
+        }
+        
+        /**
          * Creates the default alternative.
          * 
          * @param value the resulting value
@@ -85,6 +91,12 @@ public class SwitchStatement extends AbstractTemplateElement {
             return value.inferType();
         }
 
+    }
+    
+    /**
+     * Constructor for serialization.
+     */
+    SwitchStatement() {
     }
 
     /**

@@ -37,6 +37,12 @@ import net.ssehub.easy.varModel.model.values.Value;
 public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
     
     /**
+     * Constructor for serialization.
+     */
+    public IvmlAccessorFieldDescriptor() {
+    }
+    
+    /**
      * Creates the field descriptor.
      * 
      * @param declaringType the declaring type

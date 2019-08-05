@@ -12,7 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  *  
  * @author Holger Eichelberger
  */
-class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor {
+public class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor {
     
     public static final String NAME = "convertToSequence";
     private static final TypeDescriptor<?> RETURN;
@@ -27,6 +27,13 @@ class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDescriptor 
             returnType = TypeRegistry.anyType();
         }
         RETURN = returnType;
+    }
+    
+    /**
+     * Constructor for serialization.
+     */
+    IvmlSequenceConversionOperationDescriptor() {
+        this(null, null);
     }
 
     /**

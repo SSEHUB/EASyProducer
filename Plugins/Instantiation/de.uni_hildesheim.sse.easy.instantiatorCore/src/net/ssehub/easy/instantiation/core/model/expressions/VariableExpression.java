@@ -15,6 +15,12 @@ public class VariableExpression extends Expression {
     private String qualifiedName;
     
     /**
+     * Constructor for serialization.
+     */
+    VariableExpression() {
+    }
+    
+    /**
      * Creates a variable expression node.
      * 
      * @param variable the variable declaration used as variable here

@@ -21,6 +21,12 @@ public class LoopStatement extends AbstractTemplateElement {
     private Expression finalSeparatorExpression;
     
     // checkstyle: stop parameter number check
+
+    /**
+     * Constructor for serialization.
+     */ 
+    LoopStatement() {
+    }
     
     /**
      * Create a loop-statement.

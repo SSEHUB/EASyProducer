@@ -1,0 +1,13 @@
+@advice(compounds3)
+vilScript compoundsTest3 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        compounds3 cfg = config;
+        Node n1 = cfg.n1;
+        Node n2 = cfg.n2;
+        sequenceOf(Tuple) t1 = n1.dInput;
+        Tuples t2 = n2.dInput;
+        sequenceOf(CDataProperty) t3 = n1.dInput;
+    }
+
+}

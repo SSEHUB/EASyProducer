@@ -18,6 +18,12 @@ public class AlternativeStatement extends AbstractTemplateElement {
     private ITemplateElement elseStatement;
 
     /**
+     * Constructor for serialization.
+     */ 
+    AlternativeStatement() {
+    }
+    
+    /**
      * Create an alternative-statement with a single if-block only.
      * 
      * @param condition The condition which must be evaluated to <b>true</b> to process the if-block. 
