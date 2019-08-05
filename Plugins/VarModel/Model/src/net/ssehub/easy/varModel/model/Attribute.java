@@ -33,6 +33,13 @@ public class Attribute extends AbstractVariable {
     private Attribute origin;
 
     /**
+     * Constructor for serialization.
+     */
+    Attribute() {
+        super(null, null, null);
+    }
+    
+    /**
      * Constructor for an attribute.
      * @param name Name of the attribute
      * @param type the type of the attribute

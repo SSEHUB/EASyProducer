@@ -30,7 +30,8 @@ import org.junit.runners.Suite.SuiteClasses;
     ConstraintReplacerTest.class,
     ContainerOperationCallTest.class,
     OCLFeatureCallTest.class,
-    ParenthesisTest.class})
+    ParenthesisTest.class,
+    SerializationTest.class})
 public class AllCSTTests {
 
 }

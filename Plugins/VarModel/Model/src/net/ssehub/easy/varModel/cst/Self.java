@@ -12,6 +12,12 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 public class Self extends Leaf {
 
     private Compound type;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    Self() {
+    }
     
     /**
      * Creates a self constant for <code>type</code>.

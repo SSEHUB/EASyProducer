@@ -20,17 +20,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
-import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.DatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Enum;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IResolutionScope;
-import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.QualifiedNameMode;
-import net.ssehub.easy.varModel.model.datatypes.RealType;
-import net.ssehub.easy.varModel.model.datatypes.StringType;
+import net.ssehub.easy.varModel.model.datatypes.Types;
 import net.ssehub.easy.varModel.model.search.PrefixSearchVisitor;
 import net.ssehub.easy.varModel.model.search.SearchContext;
 import net.ssehub.easy.varModel.model.search.SearchResult;
@@ -277,17 +273,7 @@ public class ModelQuery {
             if (null == type) {
                 type = IDatatype.class;
             }
-            if (BooleanType.TYPE.getName().equals(name)) {
-                result = BooleanType.TYPE;
-            } else if (IntegerType.TYPE.getName().equals(name)) {
-                result = IntegerType.TYPE;
-            } else if (RealType.TYPE.getName().equals(name)) {
-                result = RealType.TYPE;
-            } else if (StringType.TYPE.getName().equals(name)) {
-                result = StringType.TYPE;
-            } else if (ConstraintType.TYPE.getName().equals(name)) {
-                result = ConstraintType.TYPE;
-            }
+            result = Types.getBasicTypeByName(name);
             // further checks happen inside the sub methods
             if (null != result && !type.isAssignableFrom(result.getClass())) { 
                 result = null;

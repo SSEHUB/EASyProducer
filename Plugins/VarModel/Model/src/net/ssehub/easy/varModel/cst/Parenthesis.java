@@ -30,6 +30,12 @@ public class Parenthesis extends ConstraintSyntaxTree {
      * Stores the expression in the parenthesis.
      */
     private ConstraintSyntaxTree expr;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    Parenthesis() {
+    }
     
     /**
      * Creates a new parenthesis node.

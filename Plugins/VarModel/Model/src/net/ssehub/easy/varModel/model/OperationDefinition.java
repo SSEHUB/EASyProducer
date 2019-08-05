@@ -27,6 +27,13 @@ public class OperationDefinition extends ContainableModelElement {
     private CustomOperation operation;
     
     /**
+     * Constructor for serialization.
+     */ 
+    OperationDefinition() {
+        super(null, null);
+    }
+    
+    /**
      * Constructor for containable model element.
      * @param parent the object, in which this specific one is embedded
      */

@@ -30,6 +30,12 @@ public class ReferenceValue extends Value {
     private ConstraintSyntaxTree valueEx; // a more complex expression that cannot be evaluated now
 
     /**
+     * Constructor for serialization.
+     */
+    ReferenceValue() {
+    }
+    
+    /**
      * Constructor for a new ReferenceValue.
      * @param origin Reference which extends this ReferenceValue
      * @param ref the reference of this value

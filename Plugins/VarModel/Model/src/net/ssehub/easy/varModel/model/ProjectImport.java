@@ -35,6 +35,13 @@ public class ProjectImport extends ModelImport<Project> {
     private boolean isCopied;
 
     /**
+     * Constructor for serialization.
+     */
+    ProjectImport() {
+        this(null);
+    }    
+    
+    /**
      * Simplified constructor for an unrestricted import of a project.
      * 
      * @param projectName the name of the project to be import

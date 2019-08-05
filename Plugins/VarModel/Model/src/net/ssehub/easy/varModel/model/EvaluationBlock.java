@@ -21,6 +21,13 @@ package net.ssehub.easy.varModel.model;
  * @author Marcel Lueder
  */
 public abstract class EvaluationBlock extends ContainableModelElement {
+
+    /**
+     * Constructor for serialization.
+     */
+    public EvaluationBlock() {
+        super(null, null);
+    }
     
     /**
      * Constructor for the evaluation block.

@@ -295,6 +295,10 @@ public class GenericOperations {
         EvaluatorRegistry.registerEvaluator(GET_LOCALE, AnyType.GET_LOCALE);
         EvaluatorRegistry.registerEvaluator(SET_LOCALE, AnyType.SET_LOCALE);
         EvaluatorRegistry.registerEvaluator(AS_TYPE, AnyType.AS_TYPE);
+        EvaluatorRegistry.registerEvaluator(ASSIGNMENT, AnyType.ASSIGNMENT);
+        EvaluatorRegistry.registerEvaluator(EQUALS, AnyType.EQUALS);
+        EvaluatorRegistry.registerEvaluator(UNEQUALS, AnyType.NOTEQUALS);
+        EvaluatorRegistry.registerEvaluator(UNEQUALS, AnyType.NOTEQUALS_ALIAS);
     }
 
     /**

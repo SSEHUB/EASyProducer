@@ -26,6 +26,12 @@ import net.ssehub.easy.varModel.model.datatypes.StructuredDatatype;
 abstract class StructuredValue extends Value {
 
     private IValueParent valueParent;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    StructuredValue() {
+    }
     
     /**
      * Constructor for the Class.

@@ -36,6 +36,12 @@ public class CompoundAccess extends ConstraintSyntaxTree {
     private ConstraintSyntaxTree compoundExpression;
     private String slotName;
     private AbstractVariable slot; // lazy
+
+    /**
+     * Constructor for serialization.
+     */
+    CompoundAccess() {
+    }
     
     /**
      * Creates a compound access node.

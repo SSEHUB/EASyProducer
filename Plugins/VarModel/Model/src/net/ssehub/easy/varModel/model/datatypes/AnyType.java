@@ -53,6 +53,15 @@ public class AnyType extends BasisDatatype {
     // actual result type is defined at runtime, use unchanged and accept potential runtime undefinedness
     public static final Operation AS_TYPE = new Operation(
         TYPE, ReturnTypeMode.UNCHANGED, OclKeyWords.AS_TYPE, TYPE, META_TYPE);
+    public static final Operation ASSIGNMENT = Operation.createInfixOperator(
+        BOOLEAN_TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
+    // equals is re-defined by some operations, resolve only as ultimate fallback
+    public static final Operation EQUALS = Operation.createInfixOperator(
+        BOOLEAN_TYPE, OclKeyWords.EQUALS, TYPE, TYPE).markAsFallback();
+    public static final Operation NOTEQUALS = Operation.createInfixOperator(
+        BOOLEAN_TYPE, OclKeyWords.UNEQUALS, TYPE, TYPE);
+    public static final Operation NOTEQUALS_ALIAS = Operation.createInfixOperator(
+        BOOLEAN_TYPE, OclKeyWords.UNEQUALS_ALIAS, TYPE, TYPE);
 
     // checkstyle: resume declaration order check
     
@@ -63,13 +72,17 @@ public class AnyType extends BasisDatatype {
         DTYPE.addOperation(SET_LOCALE);
         DTYPE.addOperation(GET_LOCALE);
         DTYPE.addOperation(AS_TYPE);
+        DTYPE.addOperation(ASSIGNMENT);
+        DTYPE.addOperation(NOTEQUALS);
+        DTYPE.addOperation(NOTEQUALS_ALIAS);
+        DTYPE.addOperation(EQUALS);
     }
     
     /**
      * Constructor for a new BooleanType.
      */
     private AnyType() {
-        super("AnyType", DTYPE);
+        super("Any", DTYPE);
     }
     
     @Override

@@ -31,6 +31,12 @@ public class IfThen extends ConstraintSyntaxTree {
     private IDatatype result;
 
     /**
+     * Constructor for serialization.
+     */ 
+    IfThen() {
+    }
+    
+    /**
      * Creates a new if-then-else node.
      * 
      * @param ifExpr the condition expression

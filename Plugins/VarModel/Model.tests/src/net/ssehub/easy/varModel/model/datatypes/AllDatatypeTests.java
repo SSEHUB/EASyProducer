@@ -36,7 +36,8 @@ import org.junit.runners.Suite.SuiteClasses;
     ReferenceTest.class,
     SequenceTestTMP.class,
     TypeMapperTests.class,
-    TypeQueriesTest.class
+    TypeQueriesTest.class,
+    SerializationTest.class
     })
 public class AllDatatypeTests {
 

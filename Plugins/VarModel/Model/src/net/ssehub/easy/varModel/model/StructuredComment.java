@@ -34,6 +34,12 @@ public class StructuredComment extends Comment {
     private Map<Object, Comment> comments = null;
     
     /**
+     * Constructor for serialization.
+     */
+    StructuredComment() {
+    }
+    
+    /**
      * Creates a new structured comment element.
      * 
      * @param comment the comment (to be stored as the "name" of this model element)

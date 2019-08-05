@@ -202,6 +202,6 @@ public class RealType extends BasisDatatype {
     */
     public boolean isAssignableFrom(IDatatype type) {
         // basically the same due to singletons
-        return super.isAssignableFrom(type) || INTEGER_TYPE.equals(type);
+        return super.isAssignableFrom(type) || INTEGER_TYPE.equals(type) || INTEGER_TYPE.getType().equals(type);
     }
 }

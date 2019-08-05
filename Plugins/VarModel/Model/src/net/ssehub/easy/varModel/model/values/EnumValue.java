@@ -20,12 +20,21 @@ import net.ssehub.easy.varModel.model.datatypes.EnumLiteral;
 
 /**
  * Holding enum literals.
+ * 
  * @author Marcel Lueder
  * @author Holger Eichelberger
  */
 public class EnumValue extends Value {
+    
     private EnumLiteral literal;
 
+    /**
+     * Constructor for serialization.
+     */
+    EnumValue() {
+       super(null); 
+    }
+    
     /**
      * Constructor for a new EnumValue.
      * @param enumType the Enum which defines the specific type of this EnumValue

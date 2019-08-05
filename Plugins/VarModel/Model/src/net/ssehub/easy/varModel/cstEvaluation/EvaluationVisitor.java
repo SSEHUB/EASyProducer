@@ -64,12 +64,12 @@ import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
-import net.ssehub.easy.varModel.model.datatypes.FreezeVariableType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.Operation.NestingMode;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
@@ -1615,7 +1615,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         boolean result = false;
         if (null != cst) {
             try {
-                result = FreezeVariableType.TYPE.isAssignableFrom(cst.inferDatatype());
+                result = TypeQueries.isFreezeVariableType(cst.inferDatatype());
             } catch (CSTSemanticException e) {
             }
         }
@@ -1724,7 +1724,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                         Message.CODE_RESOLUTION);
                     ok = false;
                 } else {
-                    if (Reference.TYPE.isAssignableFrom(decl.getType())) {
+                    if (TypeQueries.isReference(decl.getType())) {
                         values[pos++] = result.getReferenceValue();
                     } else {
                         Value val = result.getValue();
@@ -1756,7 +1756,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         Object[] values = new Object[initializer.getExpressionCount()];
         boolean isConstraintCollection = Container.isContainer(initializer.getType(), ConstraintType.TYPE);
         boolean ok = true;
-        boolean references = Reference.TYPE.isAssignableFrom(initializer.getType().getContainedType());
+        boolean references = TypeQueries.isReference(initializer.getType().getContainedType());
         contextStack.push(initializer);
         for (int s = 0; ok && s < values.length; s++) {
             contextStack.setContainerIndex(s);

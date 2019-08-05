@@ -43,6 +43,12 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     private List<Value> nestedElements = new ArrayList<Value>();
 
     /**
+     * Constructor for serialization.
+     */ 
+    ContainerValue() {
+    }
+    
+    /**
      * Constructor for a new ContainerValue.
      * @param container the container which extends this ContainerValue
      * @param value the value(s) to be assigned to this container

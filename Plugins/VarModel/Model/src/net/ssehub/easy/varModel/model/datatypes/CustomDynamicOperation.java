@@ -26,6 +26,12 @@ import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 public class CustomDynamicOperation extends CustomOperation {
 
     /**
+     * Constructor for serialization.
+     */ 
+    CustomDynamicOperation() {
+    }
+    
+    /**
      * Operation Constructor.
      * 
      * @param returns result type of the operation

@@ -33,6 +33,13 @@ package net.ssehub.easy.varModel.model;
 public class Comment extends ContainableModelElement {
 
     /**
+     * Constructor for serialization.
+     */
+    Comment() {
+        super(null, null);
+    }
+    
+    /**
      * Creates a new comment element.
      * 
      * @param comment the comment (to be stored as the "name" of this model element)

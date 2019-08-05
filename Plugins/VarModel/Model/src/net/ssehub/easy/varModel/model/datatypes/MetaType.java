@@ -54,7 +54,7 @@ public class MetaType extends BasisDatatype {
      * Creates the singleton instance of this class.
      */
     private MetaType() {
-        super("MetaType", AnyType.META_TYPE);
+        super("Meta", AnyType.META_TYPE);
     }
     
     @Override

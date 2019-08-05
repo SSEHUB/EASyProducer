@@ -40,6 +40,13 @@ public class DecisionVariableDeclaration extends AbstractVariable
     private List<Attribute> attributes;
     
     /**
+     * Constructor for serialization.
+     */
+    DecisionVariableDeclaration() {
+        super(null, null, null, null);
+    }
+    
+    /**
      * Constructor for decision variable declaration.
      * @param name Name of the decision variable declaration
      * @param type type of the new VariableDeclaration

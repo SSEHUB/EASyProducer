@@ -172,6 +172,15 @@ class DelegatingType implements IDatatype {
         assert operator.getOperand() == this;
         operationList.add(operator);
     }
+
+    /**
+     * Allows child classes to add Operations to itself.
+     * @param operator One operation, which should be added.
+     */
+    void prependOperation(Operation operator) {
+        assert operator.getOperand() == this;
+        operationList.add(0, operator);
+    }
     
     @Override
     public Class<? extends IDatatype> getTypeClass() {

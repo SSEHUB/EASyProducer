@@ -28,11 +28,18 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatypeVisitor;
  * 
  * @author Holger Eichelberger
  */
-class ProjectType implements IDatatype {
+public class ProjectType implements IDatatype {
 
     private final Project project;
     // this needs to be a list as it is truly dynamic
     private List<CustomOperation> operationList = new ArrayList<CustomOperation>();
+
+    /**
+     * Constructor for serialization.
+     */
+    ProjectType() {
+        this.project = null;
+    }
     
     /**
      * Creates the type instance of this.

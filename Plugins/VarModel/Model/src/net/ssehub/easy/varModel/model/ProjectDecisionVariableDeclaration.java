@@ -22,7 +22,13 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  * 
  * @author Holger Eichelberger
  */
-class ProjectDecisionVariableDeclaration extends DecisionVariableDeclaration {
+public class ProjectDecisionVariableDeclaration extends DecisionVariableDeclaration {
+    
+    /**
+     * Constructor for serialization.
+     */
+    ProjectDecisionVariableDeclaration() {
+    }
     
     /**
      * Constructor for decision variable declaration.

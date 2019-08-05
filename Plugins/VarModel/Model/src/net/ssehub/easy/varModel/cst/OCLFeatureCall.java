@@ -60,6 +60,12 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
     private ICustomOperationAccessor opAccessor;
     
     /**
+     * Constructor for serialization.
+     */
+    OCLFeatureCall() {
+    }
+    
+    /**
      * Constructs an OCL feature call as a node of a constraint
      * syntax tree. Please note that this node receives the name
      * of an operation/feature call while resolution whether

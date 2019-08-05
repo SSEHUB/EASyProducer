@@ -30,7 +30,8 @@ import org.junit.runners.Suite.SuiteClasses;
     // VarModelTest must be executed before VarModelListenerTest
     VarModelTest.class,
     VarModelListenerTest.class,
-    VersionedProjectInfosTest.class
+    VersionedProjectInfosTest.class,
+    SerializationTest.class
     })
 public class AllManagementTests {
 

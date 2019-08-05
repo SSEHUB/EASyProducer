@@ -71,6 +71,13 @@ public class Constraint extends ContainableModelElement implements IPartialEvalu
     }
     
     /**
+     * Constructor for serialization.
+     */
+    Constraint() {
+        this(null);
+    }
+    
+    /**
      * Constructor for a new Constraint.
      * 
      * @param parent the object, in which this specific one is embedded

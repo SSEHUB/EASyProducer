@@ -70,6 +70,13 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     private StructuredComment comment;
 
     /**
+     * Constructor for serialization.
+     */
+    Project() {
+        super(null);
+    }
+    
+    /**
      * Constructor for the project.
      * 
      * @param name

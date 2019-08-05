@@ -23,12 +23,19 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Class for a variable value.
+ * 
  * @author jaehne
  * @author Holger Eichelberger
- *
  */
 public class Variable extends Leaf {
+
     private AbstractVariable nestedVariable;
+    
+    /**
+     * Constructor for serialization.
+     */
+    Variable() {
+    }
     
     /**
      * The constructor for this class.

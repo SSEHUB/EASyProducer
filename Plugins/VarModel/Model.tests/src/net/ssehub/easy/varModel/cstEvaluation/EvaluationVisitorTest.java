@@ -817,7 +817,6 @@ public class EvaluationVisitorTest {
         ConstraintSyntaxTree equals = new OCLFeatureCall(new Variable(cDecl), 
             ConstraintType.EQUALS.getName(), cst1);
         equals.inferDatatype();
-        
         visitor.visit(equals);
         Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
         Assert.assertEquals(true, ((BooleanValue) visitor.getResult()).getValue().booleanValue());

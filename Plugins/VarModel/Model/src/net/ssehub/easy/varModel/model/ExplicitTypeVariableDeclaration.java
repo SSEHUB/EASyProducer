@@ -25,6 +25,12 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 public class ExplicitTypeVariableDeclaration extends DecisionVariableDeclaration {
 
     /**
+     * Constructor for serialization.
+     */ 
+    ExplicitTypeVariableDeclaration() {
+    }
+    
+    /**
      * Constructor for explicitly typed variable declarator.
      * 
      * @param name Name of the decision variable declaration

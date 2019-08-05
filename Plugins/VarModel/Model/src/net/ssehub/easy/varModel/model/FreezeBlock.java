@@ -28,6 +28,13 @@ public class FreezeBlock extends EvaluationBlock {
     private IFreezable[] freezables;
     private DecisionVariableDeclaration iter;
     private ConstraintSyntaxTree selector;
+
+    /**
+     * Constructor for serialization.
+     */
+    FreezeBlock() {
+        super(null, null);
+    }
     
     /**
      * Constructor for containable model element.

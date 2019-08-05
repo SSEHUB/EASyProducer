@@ -21,12 +21,19 @@ import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Class for a constant value.
+ * 
  * @author jaehne
  * @author Holger Eichelberger
- *
  */
 public class ConstantValue extends Leaf {
+    
     private Value constant;
+    
+    /**
+     * Constructor for serialization.
+     */
+    ConstantValue() {
+    }
     
     /**
      * Sole constructor for the creation of a constant value.

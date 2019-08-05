@@ -34,6 +34,12 @@ public class AttributeVariable extends Variable {
     private ConstraintSyntaxTree qualifier;
     
     /**
+     * Constructor for serialization.
+     */
+    AttributeVariable() {
+    }
+    
+    /**
      * Creates an attribute variable.
      * 
      * @param qualifier an optional expression required to uniquely address the specific

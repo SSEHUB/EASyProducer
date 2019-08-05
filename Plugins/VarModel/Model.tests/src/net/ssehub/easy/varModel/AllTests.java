@@ -37,6 +37,7 @@ import net.ssehub.easy.varModel.varModel.ProjectInfoTest;
 import net.ssehub.easy.varModel.varModel.ProjectInterfaceTest;
 import net.ssehub.easy.varModel.varModel.VersionTest;
 import net.ssehub.easy.varModel.varModel.management.AllManagementTests;
+import net.ssehub.easy.varModel.varModel.management.SerializationTest;
 import net.ssehub.easy.varModel.varModel.values.CompoundValueTest;
 import net.ssehub.easy.varModel.varModel.values.DerivedDatatypeValueTest;
 import net.ssehub.easy.varModel.varModel.values.IntValueTest;
@@ -68,6 +69,7 @@ import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
     PartialEvaluationBlockTest.class,
     ProjectInfoTest.class,
     CompoundValueTest.class,
+    net.ssehub.easy.varModel.varModel.values.SerializationTest.class,
     DerivedDatatypeValueTest.class,
     IntValueTest.class,
     RealValueTest.class,
@@ -80,6 +82,7 @@ import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
     VersionTest.class,
     ReferenceValueTest.class,
     ProjectInterfaceTest.class,
+    SerializationTest.class,
     AllFilterTests.class,
     //CompoundVariableTest (part of AllTestsForConfModel) must be executed after VarModelTest (AllManagementTests)
     AllTestsForConfModel.class,

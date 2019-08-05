@@ -31,6 +31,12 @@ public abstract class Value {
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(Value.class, Bundle.ID);
     
     private IDatatype origin;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    Value() {
+    }
     
     /**
      * Constructor. 

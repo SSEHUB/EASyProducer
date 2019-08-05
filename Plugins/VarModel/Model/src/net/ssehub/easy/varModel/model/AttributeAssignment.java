@@ -48,6 +48,12 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
         private String operation;
 
         /**
+         * Constructor for serialization.
+         */
+        Assignment() {
+        }
+        
+        /**
          * Creates an attribute-value assignment.
          * 
          * @param name the name of the attribute the value shall be assigned to
@@ -89,6 +95,13 @@ public class AttributeAssignment extends ContainableModelElement implements IDec
             return operation;
         }
         
+    }
+    
+    /**
+     * Constructor for serialization.
+     */
+    AttributeAssignment() {
+        this(null);
     }
     
     /**

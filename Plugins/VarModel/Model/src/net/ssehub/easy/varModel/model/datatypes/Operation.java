@@ -265,6 +265,14 @@ public class Operation {
     private FormattingHint formattingHint = FormattingHint.FUNCTION_CALL;
     
     private NestingMode nestingMode = NestingMode.NONE;
+
+    private boolean fallback = false;        
+
+    /**
+     * Constructor for serialization.
+     */ 
+    Operation() {
+    }
     
     /**
      * Creates a non-container operation (descriptor).
@@ -371,6 +379,17 @@ public class Operation {
      */
     public boolean isStatic() {
         return true;
+    }
+    
+    /**
+     * Returns whether this operation shall only be resolved as a fallback, i.e., as last resort
+     * if no other operation matches. Typically resolution starts at the most generic type. This
+     * flag reverses the resolution order for operations with the same name and number of parameters.
+     * 
+     * @return {@code true} for fallback operations, {@code false} else
+     */
+    public boolean isFallback() {
+        return fallback;
     }
     
     /**
@@ -680,6 +699,17 @@ public class Operation {
      */
     Operation markAsNestingContainerOperation() {
         nestingMode = NestingMode.NESTING;
+        return this;
+    }
+    
+    /**
+     * Marks this operation as a fallback operation, see {@link #isFallback()} for an explanation. Introduced as 
+     * constructors grew to more than 5 parameter. 
+     * 
+     * @return <b>this</b>
+     */
+    Operation markAsFallback() {
+        fallback = true;
         return this;
     }
 

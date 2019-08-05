@@ -36,10 +36,12 @@ public class TypeQueries {
      * @return the operation or <b>null</b> if none was found
      */
     public static Operation getOperation(IDatatype operand, String name, IDatatype... parameter) {
-        // rather preliminary, shall be part of an abstract superclass!
         Operation result = null;
+        Operation fallBack = null;
         if (null != operand) { // xtext
-            for (int o = 0; null == result && o < operand.getOperationCount(); o++) {
+            // constraintType operations are checked explicitly, must not be AnyType operations
+            boolean noAny = operand instanceof ConstraintType;
+            for (int o = 0; null == result && o <= operand.getOperationCount() - 1; o++) {
                 Operation tmp = operand.getOperation(o);
                 if (tmp.getName().equals(name)) {
                     int tmpParamCount = tmp.getParameterCount();
@@ -48,25 +50,32 @@ public class TypeQueries {
                             result = tmp;
                         }
                     } else if (parameter.length == tmpParamCount) {
-                        boolean eq = true;
+                        boolean eq = (noAny && tmp.getOperand() != AnyType.TYPE) || !noAny;
                         for (int p = 0; eq && p < tmpParamCount; p++) {
                             IDatatype specifiedType = tmp.getParameterType(p);
                             IDatatype givenType = parameter[p];
                             if (null != specifiedType && null != givenType) { // xtext
-                                eq = (specifiedType.isAssignableFrom(givenType)
-                                    || givenType.getTypeClass() == specifiedType.getTypeClass());
+                                eq = specifiedType.isAssignableFrom(givenType) 
+                                    || (givenType.getTypeClass() == specifiedType.getTypeClass());
                             }
                         }
-                        if (eq) {
+                        // register just for checkstyle
+                        boolean register = eq && null == result;
+                        if (register && tmp.isFallback()) {
+                            fallBack = tmp;
+                        } else if (register) {
                             result = tmp;
                         }
                     }
                 }
             }
         }
+        if (null == result) {
+            result = fallBack;
+        }
         return result;
     }
-    
+
     /**
      * Returns whether the two types given are the same.
      * 
@@ -107,7 +116,17 @@ public class TypeQueries {
      * @return <code>true</code> if <code>type</code> is an enum, <code>false</code> else
      */
     public static boolean isEnum(IDatatype type) {
-        return Enum.TYPE.isAssignableFrom(type);
+        return Enum.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
+    }
+
+    /**
+     * Returns whether <code>type</code> is a freeze variable.
+     * 
+     * @param type the type to check
+     * @return <code>true</code> if <code>type</code> is a a freeze variable, <code>false</code> else
+     */
+    public static boolean isFreezeVariableType(IDatatype type) {
+        return FreezeVariableType.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
     }
 
     /**
@@ -117,7 +136,7 @@ public class TypeQueries {
      * @return <code>true</code> if <code>type</code> is a reference, <code>false</code> else
      */
     public static boolean isReference(IDatatype type) {
-        return Reference.TYPE.isAssignableFrom(type);
+        return Reference.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
     }
     
     /**
@@ -127,7 +146,7 @@ public class TypeQueries {
      * @return <code>true</code> if <code>type</code> is a constraint, <code>false</code> else
      */
     public static boolean isConstraint(IDatatype type) {
-        boolean isConstraint = ConstraintType.TYPE.isAssignableFrom(type);
+        boolean isConstraint = ConstraintType.TYPE.isAssignableFrom(type) && AnyType.TYPE != type;
         if (isConstraint) { // comes from an old hack making ConstraintType and Boolean assignable :(
             IDatatype res = resolveFully(type.getType());
             isConstraint = !(res == BooleanType.TYPE || res == BooleanType.TYPE.getType());

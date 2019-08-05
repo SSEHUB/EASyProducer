@@ -32,6 +32,13 @@ public class EnumLiteral extends ModelElement {
     private IModelElement parent;
     
     /**
+     * Constructor for serialization.
+     */
+    EnumLiteral() {
+        super(null);
+    }
+    
+    /**
      * Constructor for the enum literal.
      * @param name Name of the enum literal
      * @param ord the ordinal number of this literal

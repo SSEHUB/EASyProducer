@@ -53,6 +53,12 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
     private Operation resolvedOperation; // lazy
     private IDatatype result; // lazy
     private IDatatype iteratorBase; // lazy
+
+    /**
+     * Constructor for serialization.
+     */
+    ContainerOperationCall() {
+    }
     
     /**
      * Creates a new let expression.

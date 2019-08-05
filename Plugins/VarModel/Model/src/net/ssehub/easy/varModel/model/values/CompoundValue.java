@@ -44,6 +44,12 @@ public class CompoundValue extends StructuredValue implements Cloneable {
     public static final String SPECIAL_SLOT_NAME_TYPE = ".";
     
     private HashMap<String, Value> nestedElements;
+
+    /**
+     * Constructor for serialization.
+     */ 
+    CompoundValue() {
+    }
     
     /**
      * Constructor for a new CompoundValue.

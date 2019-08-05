@@ -38,6 +38,12 @@ public class CustomOperation extends Operation {
     private Map<String, DecisionVariableDeclaration> namedParameters;
     
     /**
+     * Constructor for serialization.
+     */ 
+    CustomOperation() {
+    }
+    
+    /**
      * Operation Constructor.
      * 
      * @param returns result type of the operation

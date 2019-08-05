@@ -30,6 +30,12 @@ public class InternalConstraint extends Constraint {
     private DerivedDatatype originType;
 
     /**
+     * Constructor for serialization.
+     */ 
+    InternalConstraint() {
+    }
+    
+    /**
      * Creates a new internal constraint from an already parsed syntax tree.
      * 
      * @param originType The source of this constraint.
