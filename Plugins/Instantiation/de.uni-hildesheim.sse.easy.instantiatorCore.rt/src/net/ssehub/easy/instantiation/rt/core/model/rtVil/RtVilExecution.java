@@ -287,12 +287,14 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     }
     
     /**
-     * Sets the reasoner cache.
+     * Sets the reasoner cache. No change happens if {@code reasonerCache} is <b>null</b>.
      * 
      * @param reasonerCache the reasoner cache
      */
     public void setReasonerCache(ReasonerAdapter reasonerCache) {
-        this.reasonerCache = reasonerCache;
+        if (null != reasonerCache) {
+            this.reasonerCache = reasonerCache;
+        }
     }
     
     /**
