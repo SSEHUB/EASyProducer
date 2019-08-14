@@ -1147,23 +1147,27 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cAnnotationDeclAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cAnnotationDeclVariableDeclarationPartParserRuleCall_2_0 = (RuleCall)cAnnotationDeclAssignment_2.eContents().get(0);
 		private final Keyword cToKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Assignment cNamesAssignment_4 = (Assignment)cGroup.eContents().get(4);
-		private final RuleCall cNamesIdentifierParserRuleCall_4_0 = (RuleCall)cNamesAssignment_4.eContents().get(0);
-		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
-		private final Keyword cCommaKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
-		private final Assignment cNamesAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
-		private final RuleCall cNamesIdentifierParserRuleCall_5_1_0 = (RuleCall)cNamesAssignment_5_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_6 = (Keyword)cGroup.eContents().get(6);
+		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
+		private final Assignment cNamesAssignment_4_0 = (Assignment)cAlternatives_4.eContents().get(0);
+		private final Keyword cNamesFullStopKeyword_4_0_0 = (Keyword)cNamesAssignment_4_0.eContents().get(0);
+		private final Group cGroup_4_1 = (Group)cAlternatives_4.eContents().get(1);
+		private final Assignment cNamesAssignment_4_1_0 = (Assignment)cGroup_4_1.eContents().get(0);
+		private final RuleCall cNamesIdentifierParserRuleCall_4_1_0_0 = (RuleCall)cNamesAssignment_4_1_0.eContents().get(0);
+		private final Group cGroup_4_1_1 = (Group)cGroup_4_1.eContents().get(1);
+		private final Keyword cCommaKeyword_4_1_1_0 = (Keyword)cGroup_4_1_1.eContents().get(0);
+		private final Assignment cNamesAssignment_4_1_1_1 = (Assignment)cGroup_4_1_1.eContents().get(1);
+		private final RuleCall cNamesIdentifierParserRuleCall_4_1_1_1_0 = (RuleCall)cNamesAssignment_4_1_1_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		
 		////#> Compounds
 		// // --------------------- Extension: Compounds ----------------------
 		// AnnotateTo:
-		//	sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' names+=Identifier
-		//	(',' names+=Identifier)* ';';
+		//	sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' (names+='.' |
+		//	names+=Identifier (',' names+=Identifier)*) ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' names+=Identifier (','
-		//names+=Identifier)* ';'
+		//sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' (names+='.' |
+		//names+=Identifier (',' names+=Identifier)*) ';'
 		public Group getGroup() { return cGroup; }
 
 		//sname=('attribute' | 'annotate')
@@ -1193,26 +1197,38 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//'to'
 		public Keyword getToKeyword_3() { return cToKeyword_3; }
 
+		//(names+='.' | names+=Identifier (',' names+=Identifier)*)
+		public Alternatives getAlternatives_4() { return cAlternatives_4; }
+
+		//names+='.'
+		public Assignment getNamesAssignment_4_0() { return cNamesAssignment_4_0; }
+
+		//'.'
+		public Keyword getNamesFullStopKeyword_4_0_0() { return cNamesFullStopKeyword_4_0_0; }
+
+		//names+=Identifier (',' names+=Identifier)*
+		public Group getGroup_4_1() { return cGroup_4_1; }
+
 		//names+=Identifier
-		public Assignment getNamesAssignment_4() { return cNamesAssignment_4; }
+		public Assignment getNamesAssignment_4_1_0() { return cNamesAssignment_4_1_0; }
 
 		//Identifier
-		public RuleCall getNamesIdentifierParserRuleCall_4_0() { return cNamesIdentifierParserRuleCall_4_0; }
+		public RuleCall getNamesIdentifierParserRuleCall_4_1_0_0() { return cNamesIdentifierParserRuleCall_4_1_0_0; }
 
 		//(',' names+=Identifier)*
-		public Group getGroup_5() { return cGroup_5; }
+		public Group getGroup_4_1_1() { return cGroup_4_1_1; }
 
 		//','
-		public Keyword getCommaKeyword_5_0() { return cCommaKeyword_5_0; }
+		public Keyword getCommaKeyword_4_1_1_0() { return cCommaKeyword_4_1_1_0; }
 
 		//names+=Identifier
-		public Assignment getNamesAssignment_5_1() { return cNamesAssignment_5_1; }
+		public Assignment getNamesAssignment_4_1_1_1() { return cNamesAssignment_4_1_1_1; }
 
 		//Identifier
-		public RuleCall getNamesIdentifierParserRuleCall_5_1_0() { return cNamesIdentifierParserRuleCall_5_1_0; }
+		public RuleCall getNamesIdentifierParserRuleCall_4_1_1_1_0() { return cNamesIdentifierParserRuleCall_4_1_1_1_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_6() { return cSemicolonKeyword_6; }
+		public Keyword getSemicolonKeyword_5() { return cSemicolonKeyword_5; }
 	}
 
 	public class FreezeElements extends AbstractParserRuleElementFinder {
@@ -3816,8 +3832,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	////#> Compounds
 	// // --------------------- Extension: Compounds ----------------------
 	// AnnotateTo:
-	//	sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' names+=Identifier
-	//	(',' names+=Identifier)* ';';
+	//	sname=('attribute' | 'annotate') annotationType=Type annotationDecl=VariableDeclarationPart 'to' (names+='.' |
+	//	names+=Identifier (',' names+=Identifier)*) ';';
 	public AnnotateToElements getAnnotateToAccess() {
 		return pAnnotateTo;
 	}

@@ -398,7 +398,12 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     AnnotateTo returns AnnotateTo
 	 *
 	 * Constraint:
-	 *     ((sname='attribute' | sname='annotate') annotationType=Type annotationDecl=VariableDeclarationPart names+=Identifier names+=Identifier*)
+	 *     (
+	 *         (sname='attribute' | sname='annotate') 
+	 *         annotationType=Type 
+	 *         annotationDecl=VariableDeclarationPart 
+	 *         (names+='.' | (names+=Identifier names+=Identifier*))
+	 *     )
 	 */
 	protected void sequence_AnnotateTo(ISerializationContext context, AnnotateTo semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

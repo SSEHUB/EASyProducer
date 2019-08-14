@@ -110,6 +110,16 @@ public class AdvancedTests extends AbstractTest {
     }
 
     /**
+     * Tests attributes with dot.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testAttributes2() throws IOException {
+        assertEqual(createFile("attribute2"), "attributes2", "0");
+    }
+    
+    /**
      * Tests attributes at enumerations. (ScaleLog case)
      * 
      * @throws IOException should not occur

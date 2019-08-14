@@ -2134,49 +2134,65 @@ ruleAnnotateTo returns [EObject current=null]
     {
     	newLeafNode(otherlv_3, grammarAccess.getAnnotateToAccess().getToKeyword_3());
     }
+((
 (
+		lv_names_4_0=	'.' 
+    {
+        newLeafNode(lv_names_4_0, grammarAccess.getAnnotateToAccess().getNamesFullStopKeyword_4_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getAnnotateToRule());
+	        }
+       		addWithLastConsumed($current, "names", lv_names_4_0, ".");
+	    }
+
+)
+)
+    |((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getAnnotateToAccess().getNamesIdentifierParserRuleCall_4_0()); 
+	        newCompositeNode(grammarAccess.getAnnotateToAccess().getNamesIdentifierParserRuleCall_4_1_0_0()); 
 	    }
-		lv_names_4_0=ruleIdentifier		{
+		lv_names_5_0=ruleIdentifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getAnnotateToRule());
 	        }
        		add(
        			$current, 
        			"names",
-        		lv_names_4_0, 
+        		lv_names_5_0, 
         		"de.uni_hildesheim.sse.Ivml.Identifier");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)(	otherlv_5=',' 
+)(	otherlv_6=',' 
     {
-    	newLeafNode(otherlv_5, grammarAccess.getAnnotateToAccess().getCommaKeyword_5_0());
+    	newLeafNode(otherlv_6, grammarAccess.getAnnotateToAccess().getCommaKeyword_4_1_1_0());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getAnnotateToAccess().getNamesIdentifierParserRuleCall_5_1_0()); 
+	        newCompositeNode(grammarAccess.getAnnotateToAccess().getNamesIdentifierParserRuleCall_4_1_1_1_0()); 
 	    }
-		lv_names_6_0=ruleIdentifier		{
+		lv_names_7_0=ruleIdentifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getAnnotateToRule());
 	        }
        		add(
        			$current, 
        			"names",
-        		lv_names_6_0, 
+        		lv_names_7_0, 
         		"de.uni_hildesheim.sse.Ivml.Identifier");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-))*	otherlv_7=';' 
+))*))	otherlv_8=';' 
     {
-    	newLeafNode(otherlv_7, grammarAccess.getAnnotateToAccess().getSemicolonKeyword_6());
+    	newLeafNode(otherlv_8, grammarAccess.getAnnotateToAccess().getSemicolonKeyword_5());
     }
 )
 ;

@@ -196,7 +196,7 @@ AnnotateTo :
 	
 	annotationDecl=VariableDeclarationPart
 	'to'
-	names+=Identifier (',' names += Identifier)*
+	(names+='.' | (names+=Identifier (',' names += Identifier)*))
 	';'
 	;
 //#< Compounds

@@ -64,6 +64,7 @@ import net.ssehub.easy.varModel.model.ConstantDecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.DotAttribute;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.IAttributableElement;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
@@ -126,8 +127,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         }
 
         @Override
-        public void notifyProcessingEnded(ModelInfo<Project> info, Type type) {
-            // nothing to do
+        public void notifyProcessingEnded(ModelInfo<Project> info, Type type) { // nothing to do
         }
         
     };
@@ -1307,10 +1307,16 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     protected Attribute processAnnotation(AnnotateTo annotation, String name, TypeContext context, Attribute initial) {
         Attribute attr = null;
         IAttributableElement elt = null;
+        final boolean nameIsThisProject = name.equals(IvmlKeyWords.THIS_PROJECT);
         try {
-            AbstractVariable var = context.findVariable(name, null);
+            AbstractVariable var;
+            if (nameIsThisProject) {
+                var = null;
+            } else {
+                var = context.findVariable(name, null);
+            }
             if (null == var) {
-                if (context.getProject().getName().equals(name)) {
+                if (context.getProject().getName().equals(name) || nameIsThisProject) {
                     elt = context.getProject().getVariable();
                 } else {
                     error("cannot find '" + name + '"', annotation, IvmlPackage.Literals.ANNOTATE_TO__NAMES,
@@ -1337,7 +1343,11 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 }
                 expressionTranslator.warnDiscouragedNames(vDecl.getName(), vDecl, 
                     IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME);
-                attr = new Attribute(vDecl.getName(), type, context.getProject(), elt);
+                if (nameIsThisProject) {
+                    attr = new DotAttribute(vDecl.getName(), type, context.getProject(), elt);
+                } else {
+                    attr = new Attribute(vDecl.getName(), type, context.getProject(), elt);
+                }
                 if (null != vDecl.getDefault()) {
                     try {
                         expressionTranslator.initLevel();
@@ -1513,8 +1523,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             context.addToProject(null, null, comment);
             context.addToProject(tcomp, comment, compound);
         }
-        if (resolvable) {
-            // assignments first to find duplicates
+        if (resolvable) { // assignments first to find duplicates
             resolveAssignments(split.getAttrAssignments(), context, compound, force);
             resolveDeclarations(split.getVarDecls(), context, compound, force);
             // constraints are resolved afterwards
@@ -1704,8 +1713,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         boolean resolvable = true;
         IDatatype baseType;
         try {
-            baseType = context.resolveType(tmapping.getType()); // implicit
-                                                                // throw is fine
+            baseType = context.resolveType(tmapping.getType()); // implicit throw is fine
         } catch (TranslatorException e) {
             if (force) {
                 throw e;
@@ -1934,13 +1942,11 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * @param context the type context to be considered
      */
     protected void processImport(ImportStmt importStmt, TypeContext context) {
-        try {
-            // context may contain further "global" variables
+        try { // context may contain further "global" variables
             ProjectImport imp = ImportTranslator.processImport(importStmt, expressionTranslator, context);
             Project project = context.getProject();
             assignProjectComment(project, imp, CommentUtils.toComment(importStmt, project));
-            if (!context.getProject().addImport(imp)) {
-                // does not apply to conflicts!
+            if (!context.getProject().addImport(imp)) { // does not apply to conflicts!
                 error("project '" + imp.getProjectName() + "' is already imported", importStmt,
                     IvmlPackage.Literals.IMPORT_STMT__NAME, ErrorCodes.IMPORT);
             }
@@ -1957,8 +1963,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * @param context the type context to be considered
      */
     protected void processConflict(ConflictStmt conflictStmt, TypeContext context) {
-        try {
-            // context may contain further "global" variables
+        try { // context may contain further "global" variables
             context.getProject().addImport(ImportTranslator.processConflict(conflictStmt, expressionTranslator, 
                 context));
         } catch (TranslatorException e) {
