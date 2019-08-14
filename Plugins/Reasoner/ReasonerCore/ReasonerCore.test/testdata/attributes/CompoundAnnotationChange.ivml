@@ -1,0 +1,22 @@
+project CompoundAnnotationChange {
+
+    version v0;
+    
+    enum BindingTime {compile = 0, startup = 1, runtimeMon = 2, runtimeEnact = 3};
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    compound cmp {
+        String name;
+        String description;
+    }
+    
+    compound cmp2 refines cmp {
+        name.bindingTime = BindingTime::runtimeEnact;
+    }
+    
+    cmp2 c = {name = "n", description = "d"};
+    freeze {
+        c;
+    } but (f|f.bindingTime >= BindingTime::runtimeMon)
+
+}

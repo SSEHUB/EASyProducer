@@ -2,6 +2,13 @@ package test.net.ssehub.easy.reasoning.core.capabilities;
 
 import org.junit.Test;
 
+import org.junit.Assert;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.ModelQuery;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import test.net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 
@@ -80,6 +87,21 @@ public class AttributeTests extends AbstractTest {
         reasoningTest("CompoundIndividualAssign.ivml", 0);
     }
 
+    /**
+     * Changes an annotation value before freezing. Respective slot shall not be frozen.
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test    
+    public void compoundAnnotationChange() throws ModelQueryException {
+        Configuration cfg = reasoningTest("CompoundAnnotationChange.ivml", 0);
+        
+        AbstractVariable c = ModelQuery.findVariable(cfg.getProject(), "c", null);
+        IDecisionVariable cVar = cfg.getDecision(c);
+        Assert.assertEquals(AssignmentState.FROZEN, cVar.getNestedElement("description").getState());
+        Assert.assertEquals(AssignmentState.DEFAULT, cVar.getNestedElement("name").getState());
+    }
+    
     /**
      * Assign attribute with a default value to the project test. Test includes a 
      * failing constraint in the attribute assignment.
