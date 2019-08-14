@@ -913,7 +913,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
         DecisionVariable result = null;
         if (variable instanceof ContainerVariable) {
             ContainerVariable cVariable = (ContainerVariable) variable;
-            IDecisionVariable var = cVariable.addNestedElement();
+            IDecisionVariable var = cVariable.addNestedElement(type);
             try {
                 var.setValue(ValueFactory.createValue(type), AssignmentState.ASSIGNED);
                 if (filter.isEnabled(var)) {

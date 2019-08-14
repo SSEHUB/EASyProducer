@@ -369,7 +369,16 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      *   <code>false</code> else
      */
     public boolean isEmpty() {
-        return configuration.getProject().getElementCount() > 0;
+        int count = 0;
+        if (null != variables || null != attributes) {
+            // if filtered/initialized
+            count += null != variables ? variables.length : 0;
+            count += null != attributes ? attributes.length : 0;
+        } else {
+            // fallback
+            count = configuration.getProject().getElementCount();
+        }
+        return count == 0;
     }
 
     @Override
