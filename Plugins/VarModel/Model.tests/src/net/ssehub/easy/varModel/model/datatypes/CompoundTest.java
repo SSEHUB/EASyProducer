@@ -285,9 +285,8 @@ public class CompoundTest {
         refinedCP.add(assignBlock);
         // Different datatypes to avoid that isSame returns true
         DecisionVariableDeclaration decl2 = new DecisionVariableDeclaration("slot", RealType.TYPE, baseCP);
-        
         // Add second declaration with the same name -> Should fail
-        Assert.assertFalse("Could add the same slot name a second time", assignBlock.add(decl2));
+        Assert.assertTrue("Cannot add the refined slot", assignBlock.add(decl2));
     }
     
     /**
