@@ -2,6 +2,7 @@ project compoundOverlapping4 {
 
     version v0;
     annotate Integer bindingTime = 0 to compoundOverlapping4;
+    typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
     compound Base {
         assign (bindingTime = 1) to {
             String name;
@@ -14,10 +15,24 @@ project compoundOverlapping4 {
         }
     }
 
+    compound Base1 {
+        NonEmptyString name;
+    }
+
+    compound Refined1 refines Base1 {
+        assign (bindingTime = 2) to {
+            NonEmptyString name;
+        }
+    }
+
     Base b = {name = "b"};
     Refined r = {name = "r"};
+    Base1 b1 = {name = "b"};
+    Refined1 r1 = {name = "r"};
     freeze {
         b;
         r;
+        b1;
+        r1;
     }
 }
