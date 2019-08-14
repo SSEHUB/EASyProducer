@@ -1,0 +1,23 @@
+project compoundOverlapping4 {
+
+    version v0;
+    annotate Integer bindingTime = 0 to compoundOverlapping4;
+    compound Base {
+        assign (bindingTime = 1) to {
+            String name;
+        }
+    }
+
+    compound Refined refines Base {
+        assign (bindingTime = 2) to {
+            String name;
+        }
+    }
+
+    Base b = {name = "b"};
+    Refined r = {name = "r"};
+    freeze {
+        b;
+        r;
+    }
+}

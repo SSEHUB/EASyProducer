@@ -184,6 +184,16 @@ public class AdvancedTests extends AbstractTest {
     }
 
     /**
+     * Tests for compound overlapping with same name/type.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompoundOverlapping4() throws IOException {
+        assertEqual(createFile("compounds4"), "compoundOverlapping4", "0");
+    }
+    
+    /**
      * Tests for multi compound refinements.
      * 
      * @throws IOException should not occur

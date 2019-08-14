@@ -611,7 +611,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
             }
         }
         for (int a = 0; a < cont.getAssignmentCount(); a++) {
-            printed = visitCompoundDecisionVariableContainer(cont.getAssignment(a), value, printed, null);
+            printed = visitCompoundDecisionVariableContainer(cont.getAssignment(a), value, printed, done);
         }
         return printed;
     }
