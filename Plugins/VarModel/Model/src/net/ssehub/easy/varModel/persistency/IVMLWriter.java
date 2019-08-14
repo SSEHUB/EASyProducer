@@ -103,6 +103,7 @@ import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
+import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.OperationDefinition;
 import net.ssehub.easy.varModel.model.PartialEvaluationBlock;
 import net.ssehub.easy.varModel.model.Project;
@@ -761,7 +762,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
             }
             appendOutput(TO);
             appendOutput(WHITESPACE);
-            appendOutput(attribute.getElement().getName());
+            if (attribute.isDot()) {
+                appendOutput(IvmlKeyWords.THIS_PROJECT);
+            } else {
+                appendOutput(attribute.getElement().getName());
+            }
             for (int a = 0; a < attribute.getSeriesCount(); a++) {
                 Attribute attr = attribute.getSeries(a);
                 appendOutput(COMMA);

@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.DotAttribute;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
@@ -49,6 +50,17 @@ public class AttributeTest {
     public void test() {
         Attribute att = new Attribute("Attribut1", StringType.TYPE, pro, dec);
         Assert.assertEquals(dec, att.getElement());
+        Assert.assertFalse(att.isDot());
+    }
+
+    /**
+     * First test.
+     */
+    @Test
+    public void test2() {
+        Attribute att = new DotAttribute("Attribut1", StringType.TYPE, pro, dec);
+        Assert.assertEquals(dec, att.getElement());
+        Assert.assertTrue(att.isDot());
     }
 
 }

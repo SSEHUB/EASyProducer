@@ -211,5 +211,14 @@ public class Attribute extends AbstractVariable {
     public Attribute getOrigin() {
         return origin;
     }
+
+    /**
+     * Whether this attribute has been specified by ".".
+     * 
+     * @return <code>true</code> for dot, <code>false</code> else
+     */
+    public boolean isDot() {
+        return false;
+    }
     
 }

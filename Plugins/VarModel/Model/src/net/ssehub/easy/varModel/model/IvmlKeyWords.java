@@ -323,6 +323,11 @@ public class IvmlKeyWords extends OclKeyWords {
      * IVML DSL program end.
      */
     public static final String DSL_END = "DSL%";
+    
+    /**
+     * Shortcut for this project.
+     */
+    public static final String THIS_PROJECT = ".";
 
     /**
      * Prevents this class from being initialized from outside.
