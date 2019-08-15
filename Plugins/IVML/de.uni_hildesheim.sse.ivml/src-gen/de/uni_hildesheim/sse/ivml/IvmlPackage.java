@@ -998,13 +998,22 @@ public interface IvmlPackage extends EPackage
   int FREEZE_STATEMENT = 22;
 
   /**
+   * The feature id for the '<em><b>Dot</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FREEZE_STATEMENT__DOT = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FREEZE_STATEMENT__NAME = 0;
+  int FREEZE_STATEMENT__NAME = 1;
 
   /**
    * The feature id for the '<em><b>Access</b></em>' containment reference.
@@ -1013,7 +1022,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FREEZE_STATEMENT__ACCESS = 1;
+  int FREEZE_STATEMENT__ACCESS = 2;
 
   /**
    * The number of structural features of the '<em>Freeze Statement</em>' class.
@@ -1022,7 +1031,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int FREEZE_STATEMENT_FEATURE_COUNT = 2;
+  int FREEZE_STATEMENT_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.EvalImpl <em>Eval</em>}' class.
@@ -3664,6 +3673,17 @@ public interface IvmlPackage extends EPackage
   EClass getFreezeStatement();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.FreezeStatement#getDot <em>Dot</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Dot</em>'.
+   * @see de.uni_hildesheim.sse.ivml.FreezeStatement#getDot()
+   * @see #getFreezeStatement()
+   * @generated
+   */
+  EAttribute getFreezeStatement_Dot();
+
+  /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.FreezeStatement#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -5944,6 +5964,14 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EClass FREEZE_STATEMENT = eINSTANCE.getFreezeStatement();
+
+    /**
+     * The meta object literal for the '<em><b>Dot</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FREEZE_STATEMENT__DOT = eINSTANCE.getFreezeStatement_Dot();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' containment reference feature.

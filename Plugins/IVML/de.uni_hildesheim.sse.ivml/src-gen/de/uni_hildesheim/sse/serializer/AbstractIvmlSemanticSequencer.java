@@ -693,7 +693,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     FreezeStatement returns FreezeStatement
 	 *
 	 * Constraint:
-	 *     (name=QualifiedName access=AccessName?)
+	 *     (dot='.' | (name=QualifiedName access=AccessName?))
 	 */
 	protected void sequence_FreezeStatement(ISerializationContext context, FreezeStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -2322,19 +2322,35 @@ ruleFreezeStatement returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-((
+(((
+(
+		lv_dot_0_0=	'.' 
+    {
+        newLeafNode(lv_dot_0_0, grammarAccess.getFreezeStatementAccess().getDotFullStopKeyword_0_0_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFreezeStatementRule());
+	        }
+       		setWithLastConsumed($current, "dot", lv_dot_0_0, ".");
+	    }
+
+)
+)
+    |((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFreezeStatementAccess().getNameQualifiedNameParserRuleCall_0_0()); 
+	        newCompositeNode(grammarAccess.getFreezeStatementAccess().getNameQualifiedNameParserRuleCall_0_1_0_0()); 
 	    }
-		lv_name_0_0=ruleQualifiedName		{
+		lv_name_1_0=ruleQualifiedName		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFreezeStatementRule());
 	        }
        		set(
        			$current, 
        			"name",
-        		lv_name_0_0, 
+        		lv_name_1_0, 
         		"de.uni_hildesheim.sse.Ivml.QualifiedName");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -2343,24 +2359,24 @@ ruleFreezeStatement returns [EObject current=null]
 )(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getFreezeStatementAccess().getAccessAccessNameParserRuleCall_1_0()); 
+	        newCompositeNode(grammarAccess.getFreezeStatementAccess().getAccessAccessNameParserRuleCall_0_1_1_0()); 
 	    }
-		lv_access_1_0=ruleAccessName		{
+		lv_access_2_0=ruleAccessName		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getFreezeStatementRule());
 	        }
        		set(
        			$current, 
        			"access",
-        		lv_access_1_0, 
+        		lv_access_2_0, 
         		"de.uni_hildesheim.sse.Ivml.AccessName");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)?	otherlv_2=';' 
+)?))	otherlv_3=';' 
     {
-    	newLeafNode(otherlv_2, grammarAccess.getFreezeStatementAccess().getSemicolonKeyword_2());
+    	newLeafNode(otherlv_3, grammarAccess.getFreezeStatementAccess().getSemicolonKeyword_1());
     }
 )
 ;

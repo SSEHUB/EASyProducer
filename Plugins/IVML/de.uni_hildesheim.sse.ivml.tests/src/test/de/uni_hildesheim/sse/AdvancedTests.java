@@ -257,6 +257,17 @@ public class AdvancedTests extends AbstractTest {
     }
 
     /**
+     * Tests freezes with ".".
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testFreeze2() throws IOException {
+        assertEqual(createFile("freeze2"), "freezes2", "0");
+    }
+
+    /**
      * Tests freezes (fails due to freezing a type).
      * 
      * @throws IOException

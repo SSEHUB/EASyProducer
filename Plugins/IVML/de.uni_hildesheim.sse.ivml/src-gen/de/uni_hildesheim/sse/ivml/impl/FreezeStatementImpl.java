@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeStatementImpl#getDot <em>Dot</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeStatementImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.FreezeStatementImpl#getAccess <em>Access</em>}</li>
  * </ul>
@@ -32,6 +33,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements FreezeStatement
 {
+  /**
+   * The default value of the '{@link #getDot() <em>Dot</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDot()
+   * @generated
+   * @ordered
+   */
+  protected static final String DOT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDot() <em>Dot</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDot()
+   * @generated
+   * @ordered
+   */
+  protected String dot = DOT_EDEFAULT;
+
   /**
    * The cached value of the '{@link #getName() <em>Name</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -71,6 +92,29 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.FREEZE_STATEMENT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getDot()
+  {
+    return dot;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setDot(String newDot)
+  {
+    String oldDot = dot;
+    dot = newDot;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.FREEZE_STATEMENT__DOT, oldDot, dot));
   }
 
   /**
@@ -197,6 +241,8 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.FREEZE_STATEMENT__DOT:
+        return getDot();
       case IvmlPackage.FREEZE_STATEMENT__NAME:
         return getName();
       case IvmlPackage.FREEZE_STATEMENT__ACCESS:
@@ -215,6 +261,9 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.FREEZE_STATEMENT__DOT:
+        setDot((String)newValue);
+        return;
       case IvmlPackage.FREEZE_STATEMENT__NAME:
         setName((QualifiedName)newValue);
         return;
@@ -235,6 +284,9 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.FREEZE_STATEMENT__DOT:
+        setDot(DOT_EDEFAULT);
+        return;
       case IvmlPackage.FREEZE_STATEMENT__NAME:
         setName((QualifiedName)null);
         return;
@@ -255,12 +307,31 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case IvmlPackage.FREEZE_STATEMENT__DOT:
+        return DOT_EDEFAULT == null ? dot != null : !DOT_EDEFAULT.equals(dot);
       case IvmlPackage.FREEZE_STATEMENT__NAME:
         return name != null;
       case IvmlPackage.FREEZE_STATEMENT__ACCESS:
         return access != null;
     }
     return super.eIsSet(featureID);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String toString()
+  {
+    if (eIsProxy()) return super.toString();
+
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (dot: ");
+    result.append(dot);
+    result.append(')');
+    return result.toString();
   }
 
 } //FreezeStatementImpl

@@ -1424,9 +1424,19 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getFreezeStatement_Dot()
+  {
+    return (EAttribute)freezeStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getFreezeStatement_Name()
   {
-    return (EReference)freezeStatementEClass.getEStructuralFeatures().get(0);
+    return (EReference)freezeStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1436,7 +1446,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    */
   public EReference getFreezeStatement_Access()
   {
-    return (EReference)freezeStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)freezeStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -3021,6 +3031,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(freezeEClass, FREEZE__EX);
 
     freezeStatementEClass = createEClass(FREEZE_STATEMENT);
+    createEAttribute(freezeStatementEClass, FREEZE_STATEMENT__DOT);
     createEReference(freezeStatementEClass, FREEZE_STATEMENT__NAME);
     createEReference(freezeStatementEClass, FREEZE_STATEMENT__ACCESS);
 
@@ -3349,6 +3360,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getFreeze_Ex(), this.getLogicalExpression(), null, "ex", null, 0, 1, Freeze.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(freezeStatementEClass, FreezeStatement.class, "FreezeStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getFreezeStatement_Dot(), ecorePackage.getEString(), "dot", null, 0, 1, FreezeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFreezeStatement_Name(), this.getQualifiedName(), null, "name", null, 0, 1, FreezeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getFreezeStatement_Access(), this.getAccessName(), null, "access", null, 0, 1, FreezeStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

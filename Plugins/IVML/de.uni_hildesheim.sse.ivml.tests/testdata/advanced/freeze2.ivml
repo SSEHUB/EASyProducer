@@ -1,0 +1,20 @@
+project freezes2 {
+
+    version v0;
+    compound c {
+        Integer j;
+    }
+
+    Integer i;
+    String s;
+    c c0;
+    freeze {
+        i;
+        s;
+    }
+    freeze {
+        c0.j;
+        //* freezes2;
+        .;
+    } but (f|matches(name(f), "c*"))
+}

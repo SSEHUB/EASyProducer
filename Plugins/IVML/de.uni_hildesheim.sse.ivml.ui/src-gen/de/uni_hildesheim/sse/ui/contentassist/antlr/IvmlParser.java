@@ -48,6 +48,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDerivedTypeAccess().getAlternatives_0(), "rule__DerivedType__Alternatives_0");
 					put(grammarAccess.getAnnotateToAccess().getSnameAlternatives_0_0(), "rule__AnnotateTo__SnameAlternatives_0_0");
 					put(grammarAccess.getAnnotateToAccess().getAlternatives_4(), "rule__AnnotateTo__Alternatives_4");
+					put(grammarAccess.getFreezeStatementAccess().getAlternatives_0(), "rule__FreezeStatement__Alternatives_0");
 					put(grammarAccess.getOpDefStatementAccess().getAlternatives_8(), "rule__OpDefStatement__Alternatives_8");
 					put(grammarAccess.getExpressionAccess().getAlternatives(), "rule__Expression__Alternatives");
 					put(grammarAccess.getOptBlockExpressionAccess().getAlternatives(), "rule__OptBlockExpression__Alternatives");
@@ -96,6 +97,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFreezeAccess().getGroup(), "rule__Freeze__Group__0");
 					put(grammarAccess.getFreezeAccess().getGroup_4(), "rule__Freeze__Group_4__0");
 					put(grammarAccess.getFreezeStatementAccess().getGroup(), "rule__FreezeStatement__Group__0");
+					put(grammarAccess.getFreezeStatementAccess().getGroup_0_1(), "rule__FreezeStatement__Group_0_1__0");
 					put(grammarAccess.getEvalAccess().getGroup(), "rule__Eval__Group__0");
 					put(grammarAccess.getInterfaceDeclarationAccess().getGroup(), "rule__InterfaceDeclaration__Group__0");
 					put(grammarAccess.getExportAccess().getGroup(), "rule__Export__Group__0");
@@ -245,8 +247,9 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFreezeAccess().getNamesAssignment_2(), "rule__Freeze__NamesAssignment_2");
 					put(grammarAccess.getFreezeAccess().getIdAssignment_4_2(), "rule__Freeze__IdAssignment_4_2");
 					put(grammarAccess.getFreezeAccess().getExAssignment_4_4(), "rule__Freeze__ExAssignment_4_4");
-					put(grammarAccess.getFreezeStatementAccess().getNameAssignment_0(), "rule__FreezeStatement__NameAssignment_0");
-					put(grammarAccess.getFreezeStatementAccess().getAccessAssignment_1(), "rule__FreezeStatement__AccessAssignment_1");
+					put(grammarAccess.getFreezeStatementAccess().getDotAssignment_0_0(), "rule__FreezeStatement__DotAssignment_0_0");
+					put(grammarAccess.getFreezeStatementAccess().getNameAssignment_0_1_0(), "rule__FreezeStatement__NameAssignment_0_1_0");
+					put(grammarAccess.getFreezeStatementAccess().getAccessAssignment_0_1_1(), "rule__FreezeStatement__AccessAssignment_0_1_1");
 					put(grammarAccess.getEvalAccess().getNestedAssignment_3(), "rule__Eval__NestedAssignment_3");
 					put(grammarAccess.getEvalAccess().getStatementsAssignment_4(), "rule__Eval__StatementsAssignment_4");
 					put(grammarAccess.getInterfaceDeclarationAccess().getNameAssignment_1(), "rule__InterfaceDeclaration__NameAssignment_1");

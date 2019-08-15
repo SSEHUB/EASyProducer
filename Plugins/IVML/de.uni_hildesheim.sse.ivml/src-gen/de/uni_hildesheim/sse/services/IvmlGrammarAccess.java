@@ -1309,33 +1309,49 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	public class FreezeStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.FreezeStatement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cNameQualifiedNameParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
-		private final Assignment cAccessAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cAccessAccessNameParserRuleCall_1_0 = (RuleCall)cAccessAssignment_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Assignment cDotAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
+		private final Keyword cDotFullStopKeyword_0_0_0 = (Keyword)cDotAssignment_0_0.eContents().get(0);
+		private final Group cGroup_0_1 = (Group)cAlternatives_0.eContents().get(1);
+		private final Assignment cNameAssignment_0_1_0 = (Assignment)cGroup_0_1.eContents().get(0);
+		private final RuleCall cNameQualifiedNameParserRuleCall_0_1_0_0 = (RuleCall)cNameAssignment_0_1_0.eContents().get(0);
+		private final Assignment cAccessAssignment_0_1_1 = (Assignment)cGroup_0_1.eContents().get(1);
+		private final RuleCall cAccessAccessNameParserRuleCall_0_1_1_0 = (RuleCall)cAccessAssignment_0_1_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		
 		//FreezeStatement:
-		//	name=QualifiedName access=AccessName? ';';
+		//	(dot='.' | name=QualifiedName access=AccessName?) ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=QualifiedName access=AccessName? ';'
+		//(dot='.' | name=QualifiedName access=AccessName?) ';'
 		public Group getGroup() { return cGroup; }
 
+		//(dot='.' | name=QualifiedName access=AccessName?)
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+
+		//dot='.'
+		public Assignment getDotAssignment_0_0() { return cDotAssignment_0_0; }
+
+		//'.'
+		public Keyword getDotFullStopKeyword_0_0_0() { return cDotFullStopKeyword_0_0_0; }
+
+		//name=QualifiedName access=AccessName?
+		public Group getGroup_0_1() { return cGroup_0_1; }
+
 		//name=QualifiedName
-		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
+		public Assignment getNameAssignment_0_1_0() { return cNameAssignment_0_1_0; }
 
 		//QualifiedName
-		public RuleCall getNameQualifiedNameParserRuleCall_0_0() { return cNameQualifiedNameParserRuleCall_0_0; }
+		public RuleCall getNameQualifiedNameParserRuleCall_0_1_0_0() { return cNameQualifiedNameParserRuleCall_0_1_0_0; }
 
 		//access=AccessName?
-		public Assignment getAccessAssignment_1() { return cAccessAssignment_1; }
+		public Assignment getAccessAssignment_0_1_1() { return cAccessAssignment_0_1_1; }
 
 		//AccessName
-		public RuleCall getAccessAccessNameParserRuleCall_1_0() { return cAccessAccessNameParserRuleCall_1_0; }
+		public RuleCall getAccessAccessNameParserRuleCall_0_1_1_0() { return cAccessAccessNameParserRuleCall_0_1_1_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_2() { return cSemicolonKeyword_2; }
+		public Keyword getSemicolonKeyword_1() { return cSemicolonKeyword_1; }
 	}
 
 	public class EvalElements extends AbstractParserRuleElementFinder {
@@ -3856,7 +3872,7 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FreezeStatement:
-	//	name=QualifiedName access=AccessName? ';';
+	//	(dot='.' | name=QualifiedName access=AccessName?) ';';
 	public FreezeStatementElements getFreezeStatementAccess() {
 		return pFreezeStatement;
 	}

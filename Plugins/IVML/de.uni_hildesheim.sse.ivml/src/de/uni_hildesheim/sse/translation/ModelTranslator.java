@@ -210,14 +210,11 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * Creates a variability model from a given variability unit. This is the
      * top-level entry method.
      * 
-     * @param unit
-     *            the variability unit to be translated
-     * @param uri
-     *            the URI of the project to resolve (in order to find the
-     *            closest project, may be <b>null</b>)
-     * @param registerSuccessful
-     *            successfully created models shall be registered in
-     *            {@link VarModel}
+     * @param unit the variability unit to be translated
+     * @param uri the URI of the project to resolve (in order to find the
+     *        closest project, may be <b>null</b>)
+     * @param registerSuccessful successfully created models shall be registered in
+     *        {@link VarModel}
      * @param impResolver the import resolver (may be <b>null</b> to use a new default import resolver)           
      * @return the corresponding variability model
      */
@@ -818,8 +815,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * Resolve dependencies among operation definitions in proper sequence.
      * 
      * @param opDefs the operation definitions
-     * @param context
-     *            the type resolution context
+     * @param context the type resolution context
      */
     private void processOpDefs(List<OpDefStatement> opDefs, TypeContext context) {
         // similar to processDefinition (join?)
@@ -843,12 +839,9 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Resolves operation definitions.
      * 
-     * @param opDefs 
-     *            the operation definitions to be resolved (to be modified as a side effect)
-     * @param context
-     *            the type context
-     * @param force
-     *            if creation (and related errors) shall be forced or just tested
+     * @param opDefs the operation definitions to be resolved (to be modified as a side effect)
+     * @param context the type context
+     * @param force if creation (and related errors) shall be forced or just tested
      */
     private void processOpDefs(List<OpDefStatement> opDefs, TypeContext context, boolean force) {
         // similar to processTypedefs (join?)
@@ -872,12 +865,9 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Resolves compound type definitions.
      * 
-     * @param compounds
-     *            the compounds to be resolved (to be modified as a side effect)
-     * @param context
-     *            the type context
-     * @param force
-     *            if creation (and related errors) shall be forced or just tested
+     * @param compounds the compounds to be resolved (to be modified as a side effect)
+     * @param context the type context
+     * @param force if creation (and related errors) shall be forced or just tested
      */
     private void processTypedefs(List<Typedef> compounds, TypeContext context, boolean force) {
         Iterator<Typedef> tdIter = compounds.iterator();
@@ -977,18 +967,14 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * Process variable declaration <code>decl</code> add IVML object model
      * instances to <code>project</code> or <code>compound</code>.
      * 
-     * @param decl
-     *            the variable declarations in the project
-     * @param context
-     *            the resolution context
+     * @param decl the variable declarations in the project
+     * @param context the resolution context
      * @param container optional element to add the instances to instead of
-     *            <code>project</code>
-     * @param process
-     *            <code>false</code> if the declaration shall not be created but
-     *            only tested first, <code>true</code> if creation should be
-     *            done in case that the variable declaration can be processed
-     * @param force
-     *            process anyway, don't test
+     *        <code>project</code>
+     * @param process <code>false</code> if the declaration shall not be created but
+     *        only tested first, <code>true</code> if creation should be
+     *        done in case that the variable declaration can be processed
+     * @param force process anyway, don't test
      * @return <code>true</code> if the base type is yet available and the
      *         remaining type resolution was done, <code>false</code> if this
      *         typedef can actually not be processed
@@ -1073,17 +1059,13 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Processes a custom operation definition and adds it to the type context.
      * 
-     * @param op
-     *            the operation definition
-     * @param context
-     *            the type context to be considered
-     * @param force
-     *            if creation (and related errors) shall be forced or just tested
+     * @param op the operation definition
+     * @param context the type context to be considered
+     * @param force if creation (and related errors) shall be forced or just tested
      * @return <code>true</code> if processing was successful, <code>false</code>
      *         if (typically) a function is called which is currently not defined.
-     * @throws TranslatorException
-     *             in case that the processing of the <code>statement</code>
-     *             must be terminated abnormally
+     * @throws TranslatorException in case that the processing of the <code>statement</code>
+     *         must be terminated abnormally
      */
     protected boolean processOpdef(OpDefStatement op, TypeContext context, boolean force) throws TranslatorException {
         boolean done = true;
@@ -1231,10 +1213,8 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * Processes an interface. In case of success, the interface will be added
      * to the project in <code>context</code>.
      * 
-     * @param eIface
-     *            the interface to be processed
-     * @param context
-     *            the type context to be considered
+     * @param eIface the interface to be processed
+     * @param context the type context to be considered
      */
     protected void processInterface(InterfaceDeclaration eIface, TypeContext context) {
         if (null != eIface.getName()) { // due to incremental editing
@@ -1381,17 +1361,13 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Finds an operation on a given datatype.
      * 
-     * @param datatype
-     *            the datatype to search for
-     * @param operation
-     *            the operation to be searched for
-     * @param considerOperand
-     *            whether the operand of the operations defined in
-     *            <code>datatype</code> should be considered as first parameter
-     *            of <code>operation</code>, used to match the implicit project
-     *            parameter for ambigous operation checking
-     * @return <code>true</code> if the operation was found, <code>false</code>
-     *         else
+     * @param datatype the datatype to search for
+     * @param operation the operation to be searched for
+     * @param considerOperand whether the operand of the operations defined in
+     *     <code>datatype</code> should be considered as first parameter
+     *     of <code>operation</code>, used to match the implicit project
+     *     parameter for ambigous operation checking
+     * @return <code>true</code> if the operation was found, <code>false</code> else
      */
     private boolean findOperation(IDatatype datatype, Operation operation,
             boolean considerOperand) {
@@ -1425,13 +1401,10 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Processes an enum definition.
      * 
-     * @param tenum
-     *            the type definition for the enum
-     * @param context
-     *            the type context to be considered
+     * @param tenum the type definition for the enum
+     * @param context the type context to be considered
      * @throws TranslatorException
-     *             in case that the processing of the <code>statement</code>
-     *             must be terminated abnormally
+     *     in case that the processing of the <code>statement</code> must be terminated abnormally
      */
     private void processEnum(TypedefEnum tenum, TypeContext context) throws TranslatorException {
         int noOrdinals = 0;
@@ -1695,18 +1668,14 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Processes a typdef (type mapping).
      * 
-     * @param tmapping
-     *            the type mapping definition
-     * @param context
-     *            the type context to be considered
+     * @param tmapping the type mapping definition
+     * @param context the type context to be considered
      * @return <code>true</code> if the base type is yet available and the
      *         remaining type resolution was done, <code>false</code> if this
      *         typedef can actually not be processed
-     * @param force
-     *            if creation (and related errors) shall be forced or just tested
-     * @throws TranslatorException
-     *             in case that the processing of the <code>statement</code>
-     *             must be terminated abnormally
+     * @param force if creation (and related errors) shall be forced or just tested
+     * @throws TranslatorException in case that the processing of the <code>statement</code>
+     *         must be terminated abnormally
      */
     private boolean processMapping(TypedefMapping tmapping,
         TypeContext context, boolean force) throws TranslatorException {
@@ -1823,40 +1792,42 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      * Processes a freeze block. In case of errors the respective element is not
      * added to the resulting project.
      * 
-     * @param freeze
-     *            the freeze block
-     * @param context
-     *            the type context to be considered
+     * @param freeze the freeze block
+     * @param context the type context to be considered
      */
     protected void processFreeze(Freeze freeze, TypeContext context) {
         List<IFreezable> freezes = new ArrayList<IFreezable>();
         List<Comment> comments = new ArrayList<Comment>();
         for (FreezeStatement stmt : freeze.getNames()) {
             comments.add(CommentUtils.toComment(stmt, null));
-            String name = Utils.getQualifiedNameString(stmt.getName(), stmt.getAccess());
-            try {
-                IModelElement elt = context.findVariableUse(name);
-                if (null == elt) {
-                    elt = ModelQuery.findProject(context.getProject(), name);
-                }
-                if (null == elt) {
-                    error(name + "' is undefined", freeze, IvmlPackage.Literals.FREEZE__NAMES,
-                        ErrorCodes.UNKNOWN_ELEMENT);
-                } else {
-                    if (elt instanceof IFreezable) {
-                        freezes.add((IFreezable) elt);
+            if (null != stmt.getDot()) {
+                freezes.add(context.getProject());
+            } else {
+                String name = Utils.getQualifiedNameString(stmt.getName(), stmt.getAccess());
+                try {
+                    IModelElement elt = context.findVariableUse(name);
+                    if (null == elt) {
+                        elt = ModelQuery.findProject(context.getProject(), name);
+                    }
+                    if (null == elt) {
+                        error(name + "' is undefined", freeze, IvmlPackage.Literals.FREEZE__NAMES,
+                            ErrorCodes.UNKNOWN_ELEMENT);
                     } else {
-                        if (elt instanceof IDatatype) {
-                            error("Cannot freeze type declaration '" + name + "'", freeze, 
-                                IvmlPackage.Literals.FREEZE__NAMES, ErrorCodes.FREEZE);
-                        } else {                        
-                            error("'" + name + "' cannot be frozen", freeze, IvmlPackage.Literals.FREEZE__NAMES,
-                                ErrorCodes.UNKNOWN_ELEMENT);
+                        if (elt instanceof IFreezable) {
+                            freezes.add((IFreezable) elt);
+                        } else {
+                            if (elt instanceof IDatatype) {
+                                error("Cannot freeze type declaration '" + name + "'", freeze, 
+                                    IvmlPackage.Literals.FREEZE__NAMES, ErrorCodes.FREEZE);
+                            } else {                        
+                                error("'" + name + "' cannot be frozen", freeze, IvmlPackage.Literals.FREEZE__NAMES,
+                                    ErrorCodes.UNKNOWN_ELEMENT);
+                            }
                         }
                     }
+                } catch (IvmlException e) {
+                    error(e, freeze, IvmlPackage.Literals.FREEZE__NAMES);
                 }
-            } catch (IvmlException e) {
-                error(e, freeze, IvmlPackage.Literals.FREEZE__NAMES);
             }
         }
         IFreezable[] aFreeze = new IFreezable[freezes.size()];

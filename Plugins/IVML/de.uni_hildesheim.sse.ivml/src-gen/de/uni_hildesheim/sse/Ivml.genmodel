@@ -109,6 +109,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Freeze/ex"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//FreezeStatement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//FreezeStatement/dot"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeStatement/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//FreezeStatement/access"/>
     </genClasses>

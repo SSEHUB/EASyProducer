@@ -211,8 +211,7 @@ Freeze:
 	; 
 	
 FreezeStatement:
-	name=QualifiedName 
-	access=AccessName?
+	(dot='.' | (name=QualifiedName access=AccessName?))
 	';'	
 ;
 	
