@@ -8,6 +8,7 @@ import org.osgi.service.component.ComponentContext;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.impl.ReasonerHelper;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
@@ -146,10 +147,23 @@ public class DroolsReasoner implements IReasoner, IRules {
     public void setInterceptor(IReasonerInterceptor interceptor) {
     }
 
+    /**
+     * Creates the value for a certain IVML type/variable.
+     * 
+     * @param cfg the configuration to operate on (will not be modified)
+     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+     *     additional constraints, takes precedence over {@code type})
+     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
+     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @return the value creation result
+     */
     //@Override
     public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
-        return null;
+        // just the basic implementation
+        return ReasonerHelper.createValue(cfg, var, type, reasonerConfiguration, observer);
     }
 
 }

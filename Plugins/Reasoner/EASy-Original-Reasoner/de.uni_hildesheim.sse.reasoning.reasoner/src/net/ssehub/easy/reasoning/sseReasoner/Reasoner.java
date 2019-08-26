@@ -13,6 +13,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.impl.ReasonerHelper;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
@@ -329,7 +330,8 @@ public class Reasoner implements IReasoner {
     //@Override
     public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
-        return null;
+        // TODO replace
+        return ReasonerHelper.createValue(cfg, var, type, reasonerConfiguration, observer);
     }
 
 }
