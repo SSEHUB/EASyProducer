@@ -21,14 +21,17 @@ import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -108,6 +111,20 @@ public class Reasoner implements IReasoner {
         @Override
         public EvaluationResult evaluate(List<Constraint> constraints, ProgressObserver observer) {
             return Reasoner.this.evaluate(project, cfg, constraints, reasonerConfiguration, observer);
+        }
+        
+        /**
+         * Creates the value for a certain IVML type/variable.
+         * 
+         * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+         *     additional constraints, takes precedence over {@code type})
+         * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+         * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+         * @return the value creation result
+         */
+        //@Override
+        public ValueCreationResult createValue(AbstractVariable var, IDatatype type, ProgressObserver observer) {
+            return Reasoner.this.createValue(cfg, var, type, reasonerConfiguration, observer);
         }
 
         @Override
@@ -295,6 +312,24 @@ public class Reasoner implements IReasoner {
     @Override
     public void setInterceptor(IReasonerInterceptor interceptor) {
         this.interceptor = interceptor;
+    }
+    
+    /**
+     * Creates the value for a certain IVML type/variable.
+     * 
+     * @param cfg the configuration to operate on (will not be modified)
+     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+     *     additional constraints, takes precedence over {@code type})
+     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
+     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @return the value creation result
+     */
+    //@Override
+    public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
+        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+        return null;
     }
 
 }

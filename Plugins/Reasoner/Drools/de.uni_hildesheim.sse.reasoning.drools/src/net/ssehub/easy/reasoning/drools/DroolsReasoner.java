@@ -15,10 +15,13 @@ import net.ssehub.easy.reasoning.core.reasoner.IReasonerMessage;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.reasoning.drools.drl.IRules;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * This class is the Drools implementation for reasoning over IVML projects and configurations. 
@@ -141,6 +144,12 @@ public class DroolsReasoner implements IReasoner, IRules {
 
     @Override
     public void setInterceptor(IReasonerInterceptor interceptor) {
+    }
+
+    //@Override
+    public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
+        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+        return null;
     }
 
 }
