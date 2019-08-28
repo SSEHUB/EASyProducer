@@ -325,11 +325,10 @@ public class Reasoner implements IReasoner {
         if (null != t) {
             try {
                 Value dflt = ValueFactory.createValue(t);
-                Project p = null;
+                Project p = new Project("*");
                 AbstractVariable pVar = null;
                 // creation of temporary configuration due to performance reasons may be incomplete -> fallback
                 if (null != var) {
-                    p = new Project("*");
                     p.add(var);
                     pVar = var;
                     if (null == var.getDefaultValue()) {
@@ -337,33 +336,30 @@ public class Reasoner implements IReasoner {
                             OclKeyWords.ASSIGNMENT, new ConstantValue(dflt)), p));
                     }
                     ConstraintFunctions.addConstraintsToProject(var, cfg.getProject(), p);
-                } else if (null != type) {
-                    p = new Project("*");
-                    DecisionVariableDeclaration v = new DecisionVariableDeclaration("*", type, p);
+                } else {
+                    DecisionVariableDeclaration v = new DecisionVariableDeclaration("*", t, p);
                     v.setValue(new ConstantValue(dflt));
                     p.add(v);
                     pVar = v;
                 }
-                if (null != p) {
-                    Configuration c = new Configuration(p);
-                    Iterator<IDecisionVariable> iter = c.iterator();
-                    while (iter.hasNext()) {
-                        IDecisionVariable tVar = iter.next();
-                        if (tVar.getDeclaration() != pVar) { // var??
-                            IDecisionVariable oVar = cfg.getDecision(tVar.getDeclaration());
-                            try {
-                                tVar.setValue(oVar.getValue(), oVar.getState());
-                            } catch (ConfigurationException e) {
-                                LOGGER.warn("createValue: " + e.getMessage());
-                            }
+                Configuration c = new Configuration(p);
+                Iterator<IDecisionVariable> iter = c.iterator();
+                while (iter.hasNext()) {
+                    IDecisionVariable tVar = iter.next();
+                    if (tVar.getDeclaration() != pVar) { // var??
+                        IDecisionVariable oVar = cfg.getDecision(tVar.getDeclaration());
+                        try {
+                            tVar.setValue(oVar.getValue(), oVar.getState());
+                        } catch (ConfigurationException e) {
+                            LOGGER.warn("createValue: " + e.getMessage());
                         }
                     }
-                    ReasoningResult res = propagate(p, c, reasonerConfiguration, observer);
-                    if (!res.hasConflict()) {
-                        IDecisionVariable resVar = c.getDecision(pVar);
-                        if (null != resVar && null != resVar.getValue()) {
-                            result = new ValueCreationResult(resVar);
-                        }
+                }
+                ReasoningResult res = propagate(p, c, reasonerConfiguration, observer);
+                if (!res.hasConflict()) {
+                    IDecisionVariable resVar = c.getDecision(pVar);
+                    if (null != resVar && null != resVar.getValue()) {
+                        result = new ValueCreationResult(resVar);
                     }
                 }
             } catch (CSTSemanticException e) {
