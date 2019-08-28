@@ -3,6 +3,7 @@ package net.ssehub.easy.reasoning.sseReasoner;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -23,17 +24,27 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
+import net.ssehub.easy.reasoning.sseReasoner.functions.ConstraintFunctions;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.ConstraintEvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * This class is the EASy Producer Reasoner implementation for reasoning over IVML projects and configurations. 
@@ -114,16 +125,7 @@ public class Reasoner implements IReasoner {
             return Reasoner.this.evaluate(project, cfg, constraints, reasonerConfiguration, observer);
         }
         
-        /**
-         * Creates the value for a certain IVML type/variable.
-         * 
-         * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
-         *     additional constraints, takes precedence over {@code type})
-         * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
-         * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
-         * @return the value creation result
-         */
-        //@Override
+        @Override
         public ValueCreationResult createValue(AbstractVariable var, IDatatype type, ProgressObserver observer) {
             return Reasoner.this.createValue(cfg, var, type, reasonerConfiguration, observer);
         }
@@ -315,23 +317,66 @@ public class Reasoner implements IReasoner {
         this.interceptor = interceptor;
     }
     
-    /**
-     * Creates the value for a certain IVML type/variable.
-     * 
-     * @param cfg the configuration to operate on (will not be modified)
-     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
-     *     additional constraints, takes precedence over {@code type})
-     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
-     * @return the value creation result
-     */
-    //@Override
+    @Override
     public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
-        // TODO replace
-        return ReasonerHelper.createValue(cfg, var, type, reasonerConfiguration, observer);
+        ValueCreationResult result = null;
+        IDatatype t = null != var ? var.getType() : type;
+        if (null != t) {
+            try {
+                Value dflt = ValueFactory.createValue(t);
+                Project p = null;
+                AbstractVariable pVar = null;
+                // creation of temporary configuration due to performance reasons may be incomplete -> fallback
+                if (null != var) {
+                    p = new Project("*");
+                    p.add(var);
+                    pVar = var;
+                    if (null == var.getDefaultValue()) {
+                        p.addConstraint(new Constraint(new OCLFeatureCall(new Variable(var), 
+                            OclKeyWords.ASSIGNMENT, new ConstantValue(dflt)), p));
+                    }
+                    ConstraintFunctions.addConstraintsToProject(var, cfg.getProject(), p);
+                } else if (null != type) {
+                    p = new Project("*");
+                    DecisionVariableDeclaration v = new DecisionVariableDeclaration("*", type, p);
+                    v.setValue(new ConstantValue(dflt));
+                    p.add(v);
+                    pVar = v;
+                }
+                if (null != p) {
+                    Configuration c = new Configuration(p);
+                    Iterator<IDecisionVariable> iter = c.iterator();
+                    while (iter.hasNext()) {
+                        IDecisionVariable tVar = iter.next();
+                        if (tVar.getDeclaration() != pVar) { // var??
+                            IDecisionVariable oVar = cfg.getDecision(tVar.getDeclaration());
+                            try {
+                                tVar.setValue(oVar.getValue(), oVar.getState());
+                            } catch (ConfigurationException e) {
+                                LOGGER.warn("createValue: " + e.getMessage());
+                            }
+                        }
+                    }
+                    ReasoningResult res = propagate(p, c, reasonerConfiguration, observer);
+                    if (!res.hasConflict()) {
+                        IDecisionVariable resVar = c.getDecision(pVar);
+                        if (null != resVar && null != resVar.getValue()) {
+                            result = new ValueCreationResult(resVar);
+                        }
+                    }
+                }
+            } catch (CSTSemanticException e) {
+                LOGGER.warn("createValue: " + e.getMessage());
+            } catch (ValueDoesNotMatchTypeException e) {
+                LOGGER.warn("createValue: " + e.getMessage());
+            } // for debugging: catch throwable may be helpful
+        }
+        if (null == result) {
+            result = ReasonerHelper.createValue(cfg, var, type, reasonerConfiguration, observer);
+        }
+        return result;
     }
+    
 
 }

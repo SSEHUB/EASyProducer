@@ -15,14 +15,42 @@
  */
 package net.ssehub.easy.reasoning.sseReasoner.functions;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor.ExpressionType;
+import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BlockExpression;
+import net.ssehub.easy.varModel.cst.Comment;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.CompoundInitializer;
+import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.ContainerInitializer;
+import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
+import net.ssehub.easy.varModel.cst.IfThen;
+import net.ssehub.easy.varModel.cst.Let;
+import net.ssehub.easy.varModel.cst.MultiAndExpression;
+import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Parenthesis;
+import net.ssehub.easy.varModel.cst.Self;
+import net.ssehub.easy.varModel.cst.UnresolvedExpression;
+import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
+import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 
 /**
  * Generic constraint functions based on the {@link AbstractConstraintProcessor}.
@@ -89,6 +117,219 @@ public class ConstraintFunctions {
         for (int a = 0; a < assng.getAssignmentCount(); a++) {
             allAssignmentConstraints(assng.getAssignment(a), processor);
         }
-    }    
+    }
+    
+    /**
+     * A transitive constraint/variables finder.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class TransitiveConstraintFinder extends ConstraintFinder implements IConstraintTreeVisitor {
+        
+        private boolean add;
+        private Set<AbstractVariable> variables = new HashSet<AbstractVariable>();
+        private Set<AbstractVariable> scheduled = new HashSet<AbstractVariable>();
+        private Set<AbstractVariable> candidates = new HashSet<AbstractVariable>();
+        private Project scope;
+        private Project target;
+
+        /**
+         * Creates a finder with search scope and target project.
+         * 
+         * @param scope the scope
+         * @param target the target project
+         */
+        public TransitiveConstraintFinder(Project scope, Project target) {
+            super(scope);
+            this.scope = scope;
+            this.target = target;
+        }
+        
+        @Override
+        protected void startAccept(Project project) {
+            // override, do nothing; allow for further init in constructor
+        }
+
+        /**
+         * Call for the top-level variable to be visited.
+         * 
+         * @param var the variable
+         */
+        public void visit(AbstractVariable var) {
+            variables.add(var);
+            scope.accept(this);
+            while (!scheduled.isEmpty()) {
+                boolean visitAgain = false;
+                for (AbstractVariable v : scheduled) {
+                    if (!variables.contains(v)) {
+                        variables.add(v);
+                        // TODO duplicate variables, mock the target imports
+                        target.add(v);
+                        visitAgain = true;
+                    }
+                }
+                scheduled.clear();
+                if (visitAgain) {
+                    scope.accept(this);
+                }
+            }
+        }
+        
+        @Override
+        public void visitConstraint(Constraint constraint) {
+            add = false;
+            constraint.getConsSyntax().accept(this);
+            if (add) {
+                target.addConstraint(constraint);
+                scheduled.addAll(candidates);
+                candidates.clear();
+            }
+        }
+        
+        @Override
+        public void visitProject(Project project) {
+            Project old = target;
+            String pName = project.getName();
+            for (int i = 0; old == target && i < old.getImportsCount(); i++) {
+                ProjectImport imp = old.getImport(i);
+                if (imp.getName().equals(pName) && null != imp.getResolved()) {
+                    target = imp.getResolved();
+                }
+            }
+            if (old == target) {
+                target = new Project(pName);
+                ProjectImport imp = new ProjectImport(pName);
+                try {
+                    imp.setResolved(target);
+                    old.addImport(imp);
+                } catch (ModelManagementException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Descriptor.BUNDLE_NAME);
+                }
+            }
+            
+            super.visitProject(project);
+        }
+
+        @Override
+        public void visitConstantValue(ConstantValue value) {
+        }
+        
+        /**
+         * Handles the occurrence of a variable.
+         * 
+         * @param variable the variable
+         */
+        private void handle(AbstractVariable variable) {
+            boolean found = variables.contains(variable);
+            if (!found) {
+                candidates.add(variable);
+            }
+            add |= found;
+        }
+
+        @Override
+        public void visitVariable(Variable variable) {
+            handle(variable.getVariable());
+        }
+
+        @Override
+        public void visitAnnotationVariable(AttributeVariable variable) {
+            handle(variable.getVariable());
+        }
+
+        @Override
+        public void visitParenthesis(Parenthesis parenthesis) {
+            parenthesis.getExpr().accept(this);
+        }
+
+        @Override
+        public void visitComment(Comment comment) {
+        }
+
+        @Override
+        public void visitOclFeatureCall(OCLFeatureCall call) {
+            if (null != call.getOperand()) {
+                call.getOperand().accept(this);
+            }
+            for (int p = 0; p < call.getParameterCount(); p++) {
+                call.getParameter(p).accept(this);
+            }
+        }
+
+        @Override
+        public void visitLet(Let let) {
+            let.getInExpression().accept(this);
+        }
+
+        @Override
+        public void visitIfThen(IfThen ifThen) {
+            ifThen.getIfExpr().accept(this);
+            if (null != ifThen.getElseExpr()) {
+                ifThen.getElseExpr().accept(this);
+            }
+        }
+
+        @Override
+        public void visitContainerOperationCall(ContainerOperationCall call) {
+            call.getExpression().accept(this);
+        }
+
+        @Override
+        public void visitCompoundAccess(CompoundAccess access) {
+            if (null != access.getResolvedSlot()) {
+                access.getResolvedSlot().accept(this);
+            }
+        }
+
+        @Override
+        public void visitUnresolvedExpression(UnresolvedExpression expression) {
+        }
+
+        @Override
+        public void visitCompoundInitializer(CompoundInitializer initializer) {
+            for (int e = 0; e < initializer.getExpressionCount(); e++) {
+                initializer.getExpression(e).accept(this);
+            }
+        }
+
+        @Override
+        public void visitContainerInitializer(ContainerInitializer initializer) {
+            for (int e = 0; e < initializer.getExpressionCount(); e++) {
+                initializer.getExpression(e).accept(this);
+            }
+        }
+
+        @Override
+        public void visitSelf(Self self) {
+        }
+
+        @Override
+        public void visitBlockExpression(BlockExpression block) {
+            for (int e = 0; e < block.getExpressionCount(); e++) {
+                block.getExpression(e).accept(this);
+            }
+        }
+
+        @Override
+        public void visitMultiAndExpression(MultiAndExpression expression) {
+            for (int e = 0; e < expression.getExpressionCount(); e++) {
+                expression.getExpression(e).accept(this);
+            }
+        }
+
+    }
+    
+    /**
+     * Adds constraints related to {@code var} and transitively related constraints and variables
+     * in {@code scope} to {@code target} although the parent relationships of the added variables/constraints
+     * are then not correct. This method is intended for creating temporary projects/configurations.
+     * 
+     * @param var the variable used as starting point for the transitive search
+     * @param scope the search scope including imports
+     * @param target the target project to add the elements to
+     */
+    public static void addConstraintsToProject(AbstractVariable var, Project scope, Project target) {
+        new TransitiveConstraintFinder(scope, target).visit(var);
+    }
 
 }

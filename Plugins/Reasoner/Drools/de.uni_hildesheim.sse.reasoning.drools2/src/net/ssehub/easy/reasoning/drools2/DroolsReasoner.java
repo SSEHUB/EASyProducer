@@ -136,19 +136,7 @@ public class DroolsReasoner implements IReasoner {
     public void setInterceptor(IReasonerInterceptor interceptor) {
     }
 
-    /**
-     * Creates the value for a certain IVML type/variable.
-     * 
-     * @param cfg the configuration to operate on (will not be modified)
-     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
-     *     additional constraints, takes precedence over {@code type})
-     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
-     * @return the value creation result
-     */
-    //@Override
+    @Override
     public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
         // just the basic implementation
