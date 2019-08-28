@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
@@ -16,6 +17,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.UnmodifiableSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.UnmodifiableSet;
+import net.ssehub.easy.reasoning.core.frontend.ReasonerAdapter;
+import net.ssehub.easy.reasoning.core.impl.ReasonerHelper;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.ContainerVariable;
@@ -830,6 +835,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
      *    exists (<code>false</code>)
      */
     public void createValue(boolean override) {
+        createValue(getType(), override);
     }
     
     /**
@@ -845,20 +851,81 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
             if (type instanceof IvmlTypeDescriptor) {
                 IDatatype t = ((IvmlTypeDescriptor) type).getIvmlType();
                 if (variable.getDeclaration().getType().isAssignableFrom(t)) {
-                    try {
-                        variable.setValue(ValueFactory.createValue(t), AssignmentState.ASSIGNED);
-                    } catch (ConfigurationException e) {
-                        getLogger().warn(e.getMessage());
-                    } catch (ValueDoesNotMatchTypeException e) {
-                        getLogger().warn(e.getMessage());
-                    }
+                    createValue(variable, t);
                 } else {
                     getLogger().warn("given type is not compatible to variable type");
                 }
             }
         }
     }
+    
+    /**
+     * Creates a value for the given {@code type} via {@link ReasonerAdapter#getInstanceSafe() a safe reasoner adapter}.
+     * 
+     * @param var the target variable to modify
+     * @param type the type to create the value for
+     * @see #createValue(IDecisionVariable, IDatatype)
+     */
+    private void createValue(IDecisionVariable var, IDatatype type) {
+        ValueCreationResult vRes = ReasonerAdapter.getInstanceSafe().createValue(
+            var.getConfiguration().getConfiguration(), var.getDeclaration(), 
+            type, null, ProgressObserver.NO_OBSERVER);
+        
+        for (int m = 0; m < vRes.getMessageCount(); m++) {
+            Message msg = vRes.getMessage(m);
+            getLogger().warn(msg.getDescription());
+        }
+        if (vRes.getVariable() != null) {
+            transferState(vRes.getVariable(), var);
+            try {
+                var.setValue(vRes.getVariable().getValue(), AssignmentState.ASSIGNED);
+            } catch (ConfigurationException e) {
+                getLogger().warn(e.getMessage());
+            }
+        }
+    }
 
+    /**
+     * Transfers the states between {@code source} and {@code target}. May be required if
+     * the configuration initialization just freezes everything without evaluating constraints.
+     * The given variables must be of the same type.
+     * 
+     * @param source the source variable to take the states from
+     * @param target the target the target variable to apply the states to
+     */
+    private static void transferState(IDecisionVariable source, IDecisionVariable target) {
+        if (source.getState() != target.getState()) {
+            if (AssignmentState.FROZEN == target.getState()) {
+                // usually not needed, only if configuration is not exactly frozen
+                if (source.getConfiguration().getConfiguration().isApproximatelyFrozen()) {
+                    target.unfreeze(source.getState());
+                }
+            } else {
+                try {
+                    target.setValue(source.getValue(), source.getState());
+                } catch (ConfigurationException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(ReasonerHelper.class, Bundle.ID)
+                        .warn("transferState: " + e.getMessage());
+                }
+            }
+        }
+        for (int a = 0; a < source.getAttributesCount(); a++) {
+            IDecisionVariable sAttr = source.getAttribute(a);
+            IDecisionVariable tAttr = target.getAttribute(a);
+            transferState(sAttr, tAttr);
+        }
+        for (int n = 0; n < source.getNestedElementsCount(); n++) {
+            IDecisionVariable sNested = source.getNestedElement(n);
+            IDecisionVariable tNested = target.getNestedElement(sNested.getDeclaration().getName());
+            if (null == tNested) { // position as fallback
+                tNested = target.getNestedElement(n);
+            }
+            if (null != tNested) {
+                transferState(sNested, tNested);
+            }
+        }
+    }
+    
     /**
      * Adds a value if the actual variable represents an IVML collection. The declared element type is used
      * as type of the new value.
@@ -908,28 +975,23 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
      * 
      * @param type the type
      * @return the created variable
+     * @see #createValue(IDecisionVariable, IDatatype)
      */
     private DecisionVariable addValue(IDatatype type) {
         DecisionVariable result = null;
         if (variable instanceof ContainerVariable) {
             ContainerVariable cVariable = (ContainerVariable) variable;
             IDecisionVariable var = cVariable.addNestedElement(type);
-            try {
-                var.setValue(ValueFactory.createValue(type), AssignmentState.ASSIGNED);
-                if (filter.isEnabled(var)) {
-                    result = new DecisionVariable(config, var, filter);
-                    int nestedLength = null == nested ? 0 : nested.length;
-                    DecisionVariable[] tmp = new DecisionVariable[nestedLength + 1];
-                    if (null != nested) {
-                        System.arraycopy(nested, 0, tmp, 0, nestedLength);
-                    }
-                    tmp[nestedLength] = result;
-                    nested = tmp;
+            createValue(var, type);
+            if (filter.isEnabled(var)) {
+                result = new DecisionVariable(config, var, filter);
+                int nestedLength = null == nested ? 0 : nested.length;
+                DecisionVariable[] tmp = new DecisionVariable[nestedLength + 1];
+                if (null != nested) {
+                    System.arraycopy(nested, 0, tmp, 0, nestedLength);
                 }
-            } catch (ConfigurationException e) {
-                getLogger().warn(e.getMessage());
-            } catch (ValueDoesNotMatchTypeException e) {
-                getLogger().warn(e.getMessage());
+                tmp[nestedLength] = result;
+                nested = tmp;
             }
         }
         return result;

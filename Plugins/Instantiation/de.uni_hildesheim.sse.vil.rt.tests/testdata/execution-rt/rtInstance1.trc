@@ -1,0 +1,9 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        cfg <- <config>
+        node <- RTInstance1::node
+        -> createValue(DecisionVariable, Boolean) with (RTInstance1::Node::shedder, true)
+        shedder <- RTInstance1::Node::shedder
+        shedder.name <- NTH_ITEM
+        Reasoner execution ok: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)

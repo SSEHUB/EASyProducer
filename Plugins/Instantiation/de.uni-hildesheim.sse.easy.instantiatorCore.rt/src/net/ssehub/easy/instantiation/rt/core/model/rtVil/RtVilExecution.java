@@ -798,8 +798,10 @@ public class RtVilExecution extends BuildlangExecution implements IRtVilVisitor 
     public Object visitScript(Script script) throws VilException {
         Script tmp = currentScript;
         currentScript = script;
+        ReasonerAdapter.registerInstance(reasonerCache);
         Object result = super.visitScript(script); // just pass through, handled in executeDefault
         script.markAsExecuted();
+        ReasonerAdapter.unregisterInstance();
         currentScript = tmp;
         return result;
     }

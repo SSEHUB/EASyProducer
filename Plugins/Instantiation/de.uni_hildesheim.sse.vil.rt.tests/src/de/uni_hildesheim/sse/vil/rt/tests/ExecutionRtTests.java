@@ -538,6 +538,32 @@ public class ExecutionRtTests extends AbstractRtTest {
     }
 
     /**
+     * Tests value instantiation capabilities of rt-VIL for constraints during value creation.
+     * 
+     * @param name instances?
+     * @param ivmlName RTInstances1
+     * 
+     * @throws IOException should not occur
+     */
+    private void testRtInstances(String name, String ivmlName) throws IOException {
+        File modelFile = createFile(name);
+        Configuration cfg = getIvmlConfiguration(ivmlName, NoVariableFilter.INSTANCE);
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
+        //setup.setEnableEquals(false);
+        assertEqual(setup);
+        
+        DecisionVariable var = cfg.getByName("node");
+        Assert.assertNotNull(var);
+        DecisionVariable sVar = var.getByName("shedder");
+        Assert.assertNotNull(sVar);
+        DecisionVariable nVar = sVar.getByName("name");
+        Assert.assertNotNull(nVar);
+        Assert.assertEquals("NTH_ITEM", nVar.getStringValue());
+    }
+    
+    /**
      * Tests a single reference assignment (contributed by QualiMaster).
      * 
      * @throws IOException should not occur
@@ -939,6 +965,16 @@ public class ExecutionRtTests extends AbstractRtTest {
                     RuleExecutionResult.Status.SUCCESS, status);
             }
         }
+    }
+
+    /**
+     * Tests value instantiation capabilities of rt-VIL with constraints.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRtInstance1() throws IOException {
+        testRtInstances("rtInstance1", "RTInstance1");
     }
 
 }
