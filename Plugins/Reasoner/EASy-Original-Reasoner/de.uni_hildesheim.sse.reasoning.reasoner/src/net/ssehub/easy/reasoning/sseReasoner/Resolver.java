@@ -154,35 +154,15 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
 
     /**
      * Main constructor that activates Resolver constructor.
-     * @param project Project for evaluation.
-     * @param config Configuration to reason on.
-     * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     */
-    public Resolver(Project project, Configuration config, ReasonerConfiguration reasonerConfig) {
-        this.reasonerConfig = reasonerConfig;
-        this.config = config;
-    } 
-    
-    /**
-     * Main constructor that activates Resolver constructor with clean {@link Configuration}.
-     * @param project Project for evaluation.
-     * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     */
-    public Resolver(Project project, ReasonerConfiguration reasonerConfig) {
-        new Resolver(project, createCleanConfiguration(project), reasonerConfig);
-    } 
-    
-    /**
-     * Main constructor that activates Resolver constructor.
+     * 
      * @param config Configuration to reason on.
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      */
     public Resolver(Configuration config, ReasonerConfiguration reasonerConfig) {
-        new Resolver(config.getProject(), config, reasonerConfig);
-    }  
+        this.reasonerConfig = reasonerConfig;
+        this.config = config;
+    } 
 
     @Override
     public void localVariableCreated(LocalDecisionVariable var) {
@@ -1408,15 +1388,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     @SuppressWarnings("unused")
     private void conflictingDefault(AbstractVariable decl) {
         // currently unused
-    }
-    
-    /**
-     * Method for creating a clean {@link Configuration}.
-     * @param project Project for {@link Configuration}
-     * @return Created {@link Configuration}
-     */
-    private Configuration createCleanConfiguration(Project project) {
-        return new Configuration(project, false);
     }
     
     /**

@@ -60,16 +60,16 @@ public class Engine {
     
     /**
      * Main constructor for creating an instance of the reasoner.
+     * 
      * @param cfg Configuration to reason on.
-     * @param project Project to reason on.
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      * @param observer An optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
      * @param interceptor an optional interceptor instance
      */
-    public Engine(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public Engine(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer, IReasonerInterceptor interceptor) {
-        this.resolver = new Resolver(project, cfg, reasonerConfig);
+        this.resolver = new Resolver(cfg, reasonerConfig);
         this.resolver.setInterceptor(interceptor);
         boolean isRuntimeMode = reasonerConfig.isRuntimeMode();
         this.resolver.setIncremental(isRuntimeMode);

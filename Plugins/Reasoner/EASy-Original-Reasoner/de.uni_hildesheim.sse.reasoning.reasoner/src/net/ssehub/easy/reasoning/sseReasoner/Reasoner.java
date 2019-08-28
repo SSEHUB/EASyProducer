@@ -109,7 +109,7 @@ public class Reasoner implements IReasoner {
         @Override
         public ReasoningResult propagate(ProgressObserver observer) {
             if (null == engine) {
-                engine = new Engine(project, createConfiguration(project, cfg, reasonerConfiguration, false), 
+                engine = new Engine(createConfiguration(project, cfg, reasonerConfiguration, false), 
                     reasonerConfiguration, observer, interceptor);
                 engine.markForReuse();
             } else {
@@ -171,7 +171,7 @@ public class Reasoner implements IReasoner {
     public ReasoningResult isConsistent(Project project, ReasonerConfiguration reasonerConfig, 
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, null, reasonerConfig, true), 
+        Engine engine = new Engine(createConfiguration(project, null, reasonerConfig, true), 
             reasonerConfig, observer, interceptor);           
         return engine.reason();
     }
@@ -180,7 +180,7 @@ public class Reasoner implements IReasoner {
     public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, true), 
+        Engine engine = new Engine(createConfiguration(project, cfg, reasonerConfig, true), 
             reasonerConfig, observer, interceptor);
         return engine.reason();
     }
@@ -189,7 +189,7 @@ public class Reasoner implements IReasoner {
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) { // implemented also (for instance reuse) in reasoner instance
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
+        Engine engine = new Engine(createConfiguration(project, cfg, reasonerConfig, false), 
             reasonerConfig, observer, interceptor);
         return engine.reason();
     }
@@ -198,7 +198,7 @@ public class Reasoner implements IReasoner {
     public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(project, createConfiguration(project, cfg, reasonerConfig, false), 
+        Engine engine = new Engine(createConfiguration(project, cfg, reasonerConfig, false), 
             reasonerConfig, observer, interceptor);
         //engine.setAssignmentState(cfg.getResolutionState()); // too specific, remove resolution state at all??
         ReasoningResult res =  engine.reason();
