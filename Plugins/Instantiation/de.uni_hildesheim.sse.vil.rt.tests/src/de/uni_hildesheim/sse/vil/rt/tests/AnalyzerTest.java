@@ -209,7 +209,7 @@ public class AnalyzerTest extends AbstractRtTest {
              AssignmentState.ASSIGNED);
         cfg.getDecision(decl2).setValue(ValueFactory.createValue(IntegerType.TYPE, value2), AssignmentState.ASSIGNED);
 
-        ReasoningResult rResult = ReasonerFrontend.getInstance().check(prj, cfg, rCfg, ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = ReasonerFrontend.getInstance().check(cfg, rCfg, ProgressObserver.NO_OBSERVER);
         Assert.assertNotNull(rResult);
         Assert.assertTrue(rResult.hasConflict());
         
@@ -337,7 +337,7 @@ public class AnalyzerTest extends AbstractRtTest {
         cfg.getDecision(declRight).setValue(ValueFactory.createValue(RealType.TYPE, right.value), 
             AssignmentState.ASSIGNED);
 
-        ReasoningResult rResult = ReasonerFrontend.getInstance().check(prj, cfg, rCfg, ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = ReasonerFrontend.getInstance().check(cfg, rCfg, ProgressObserver.NO_OBSERVER);
         Assert.assertNotNull(rResult);
         Assert.assertEquals(deviation != null, rResult.hasConflict());
         

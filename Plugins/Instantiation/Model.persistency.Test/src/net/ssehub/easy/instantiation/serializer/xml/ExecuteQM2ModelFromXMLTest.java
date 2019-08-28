@@ -218,8 +218,7 @@ public class ExecuteQM2ModelFromXMLTest extends AbstractUtil {
         ReasonerFrontend rFrontend = ReasonerFrontend.getInstance();
         ReasonerDescriptor desc = rFrontend.setPreferredReasoner();
         System.out.println("Using reasoner: " + desc.getName());
-        ReasoningResult result = ReasonerFrontend.getInstance().check(project, cfg, configuration, 
-            ProgressObserver.NO_OBSERVER);
+        ReasoningResult result = ReasonerFrontend.getInstance().check(cfg, configuration, ProgressObserver.NO_OBSERVER);
         Assert.assertEquals("Reasoning encountered problems", 0, result.getMessageCount());
     }
     

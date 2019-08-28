@@ -382,8 +382,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Configuration cfg = getIvmlConfiguration("QM2", NoVariableFilter.INSTANCE);
         ReasonerConfiguration rCfg = new ReasonerConfiguration();
         rCfg.setRuntimeMode(true);
-        ReasonerFrontend.getInstance().check(cfg.getConfiguration().getProject(), cfg.getConfiguration(), rCfg, 
-             ProgressObserver.NO_OBSERVER);
+        ReasonerFrontend.getInstance().check(cfg.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
         
         URI uri = URI.createFileURI(modelFile.getAbsolutePath());
         TranslationResult<Script> result = getTestConfigurer().parse(uri);
@@ -431,8 +430,7 @@ public class ExecutionRtTests extends AbstractRtTest {
         Configuration cfg = getIvmlConfiguration("QM3", NoVariableFilter.INSTANCE);
         ReasonerConfiguration rCfg = new ReasonerConfiguration();
         rCfg.setRuntimeMode(true);
-        ReasonerFrontend.getInstance().check(cfg.getConfiguration().getProject(), cfg.getConfiguration(), rCfg, 
-             ProgressObserver.NO_OBSERVER);
+        ReasonerFrontend.getInstance().check(cfg.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
         
         URI uri = URI.createFileURI(modelFile.getAbsolutePath());
         TranslationResult<Script> result = getTestConfigurer().parse(uri);
