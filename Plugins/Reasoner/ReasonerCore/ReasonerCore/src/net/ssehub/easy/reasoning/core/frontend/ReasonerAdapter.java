@@ -23,8 +23,11 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Abstracts over instance-based and full reasoning. Configuration instances registered
@@ -34,6 +37,7 @@ import net.ssehub.easy.varModel.model.Constraint;
  */
 public class ReasonerAdapter {
 
+    private static Map<Thread, ReasonerAdapter> instances = new HashMap<Thread, ReasonerAdapter>();
     private Map<Configuration, IReasonerAdapter> cache = new HashMap<Configuration, IReasonerAdapter>();
     private IReasonerAdapter deflt;
     private boolean enableInstanceBasedReasoning;
@@ -105,6 +109,21 @@ public class ReasonerAdapter {
         public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints, 
             ReasonerConfiguration reasonerConfiguration, ProgressObserver observer);
 
+        /**
+         * Creates the value for a certain IVML type/variable.
+         * 
+         * @param cfg the configuration to operate on (will not be modified)
+         * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+         *     additional constraints)
+         * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+         * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+         *        may be <b>null</b>)
+         * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+         * @return the value creation result
+         */
+        public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type, 
+            ReasonerConfiguration reasonerConfiguration, ProgressObserver observer);
+        
     }
 
     /**
@@ -136,6 +155,12 @@ public class ReasonerAdapter {
         public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
             return ReasonerFrontend.getInstance().evaluate(cfg, constraints, reasonerConfiguration, observer);
+        }
+
+        @Override
+        public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
+                ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+            return ReasonerFrontend.getInstance().createValue(cfg, var, type, reasonerConfiguration, observer);
         }
         
     }
@@ -180,6 +205,12 @@ public class ReasonerAdapter {
         public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
             return instance.evaluate(constraints, observer);
+        }
+
+        @Override
+        public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
+                ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+            return instance.createValue(var, type, observer);
         }
         
     }
@@ -297,6 +328,23 @@ public class ReasonerAdapter {
     }
 
     /**
+     * Creates the value for a certain IVML type/variable.
+     * 
+     * @param cfg the configuration to operate on (will not be modified)
+     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+     *     additional constraints)
+     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
+     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @return the value creation result
+     */
+    public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type, 
+        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+        return getAdapter(cfg, reasonerConfiguration).createValue(cfg, var, type, reasonerConfiguration, observer);
+    }
+
+    /**
      * Defines whether instance-based reasoning shall be allowed/supported. Please reset already registered
      * configurations if needed.
      * 
@@ -335,5 +383,43 @@ public class ReasonerAdapter {
             cache.put(config, null); // yes, just mark that we want to have an instance-based reasoner later
         }
     }
+
+    /**
+     * Registers an instance for the current thread.
+     * 
+     * @param adapter the adapter instance to register
+     */
+    public static void registerInstance(ReasonerAdapter adapter) {
+        instances.put(Thread.currentThread(), adapter);
+    }
     
+    /**
+     * Unregisters an instance for the current thread.
+     */
+    public static void unregisterInstance() {
+        instances.remove(Thread.currentThread());
+    }
+    
+    /**
+     * Returns the registered instance for the current thread.
+     * 
+     * @return the registered instance, <b>null</b> for none
+     */
+    public static ReasonerAdapter getInstance() {
+        return instances.get(Thread.currentThread());
+    }
+
+    /**
+     * Returns the registered instance for the current thread.
+     * 
+     * @return the registered instance, <b>null</b> for none
+     */
+    public static ReasonerAdapter getInstanceSafe() {
+        ReasonerAdapter result = instances.get(Thread.currentThread());
+        if (null == result) {
+            result = new ReasonerAdapter(false);
+        }
+        return result;
+    }
+
 }

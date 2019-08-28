@@ -24,6 +24,7 @@ import net.ssehub.easy.reasoning.core.reasoner.IChainingReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Project;
 
@@ -42,10 +43,11 @@ public class FakeInstanceReasoner extends FakeReasoner implements IChainingReaso
      * @param descriptor the reasoner descriptor
      * @param results the results
      * @param eResult the evaluation result
+     * @param vResult the value creation result
      */
     public FakeInstanceReasoner(ReasonerDescriptor descriptor, Map<ResultType, ReasoningResult> results, 
-        EvaluationResult eResult) {
-        super(descriptor, results, eResult);
+        EvaluationResult eResult, ValueCreationResult vResult) {
+        super(descriptor, results, eResult, vResult);
     }
 
     @Override
@@ -73,6 +75,5 @@ public class FakeInstanceReasoner extends FakeReasoner implements IChainingReaso
     boolean providesInstance() {
         return true;
     }
-
 
 }

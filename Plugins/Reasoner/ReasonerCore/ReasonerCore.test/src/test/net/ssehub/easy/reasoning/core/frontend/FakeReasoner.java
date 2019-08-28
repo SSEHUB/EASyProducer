@@ -23,19 +23,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
+import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerMessage;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
+import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstantValue;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
 /**
  * Implements a fake reasoner not creating reasoner instances.
@@ -45,10 +57,12 @@ import net.ssehub.easy.varModel.model.Project;
 public class FakeReasoner implements IReasoner {
 
     public static final String FAKE_VERSION = "1.0";
+    public static final String MSG_VAL_CREATION_FAILED = "Both null";
     
     private ReasonerDescriptor descriptor;
     private Map<ResultType, ReasoningResult> results;
     private EvaluationResult eResult;
+    private ValueCreationResult vResult;
     private IReasonerMessage message;
     private IReasonerInterceptor interceptor;
     
@@ -71,12 +85,14 @@ public class FakeReasoner implements IReasoner {
      * @param descriptor the reasoner descriptor
      * @param results the results (no result shall be <b>null</b>)
      * @param eResult the evaluation result (shall not be <b>null</b>)
+     * @param vResult the value creation result (shall not be <b>null</b>)
      */
     public FakeReasoner(ReasonerDescriptor descriptor, Map<ResultType, ReasoningResult> results, 
-        EvaluationResult eResult) {
+        EvaluationResult eResult, ValueCreationResult vResult) {
         this.descriptor = descriptor;
         this.results = results;
         this.eResult = eResult;
+        this.vResult = vResult;
     }
     
     /**
@@ -190,6 +206,32 @@ public class FakeReasoner implements IReasoner {
     public static EvaluationResult createDefaultEvaluationResult() {
         return new EvaluationResult();
     }
+    
+    /**
+     * Creates a default value creation result.
+     * 
+     * @param val the expected value
+     * @param warning optional warning 
+     * @return the default value creation result
+     */
+    public static ValueCreationResult createValueCreationResult(Value val, String warning) {
+        Project p = new Project("*");
+        DecisionVariableDeclaration decl = new DecisionVariableDeclaration("*", val.getType(), p);
+        try {
+            decl.setValue(new ConstantValue(val));
+        } catch (ValueDoesNotMatchTypeException e) {
+            Assert.fail("Value shall be compatible");
+        } catch (CSTSemanticException e) {
+            Assert.fail("Value shall be compatible");
+        }
+        p.add(decl);
+        Configuration c = new Configuration(p, false, AssignmentState.ASSIGNED);
+        ValueCreationResult res = new ValueCreationResult(c.getDecision(decl));
+        if (null != warning) {
+            res.addMessage(new Message(warning, null, Status.WARNING));
+        }
+        return res;
+    }
 
     @Override
     public ReasonerDescriptor getDescriptor() {
@@ -293,6 +335,29 @@ public class FakeReasoner implements IReasoner {
      */
     boolean providesInstance() {
         return false;
+    }
+
+
+    /**
+     * Returns the expected value creation result (for the immediate preceding evaluation operation).
+     * 
+     * @return the value creation result (shall not be <b>null</b>)
+     */
+    ValueCreationResult getExpectedValueCreationResult() {
+        return vResult;
+    }
+
+    @Override
+    public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
+        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+        ValueCreationResult res;
+        if (null == var && null == type) {
+            res = new ValueCreationResult(null);
+            res.addMessage(new Message(MSG_VAL_CREATION_FAILED, null, Status.WARNING));
+        } else {
+            res = vResult;
+        }
+        return res;
     }
 
 }

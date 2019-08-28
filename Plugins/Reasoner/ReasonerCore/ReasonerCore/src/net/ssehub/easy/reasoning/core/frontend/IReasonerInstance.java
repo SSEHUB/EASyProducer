@@ -23,8 +23,11 @@ import net.ssehub.easy.reasoning.core.reasoner.IReasonerMessage;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * A reuseable reasoner instance. Project, configuration and reasoner configuration are
@@ -86,6 +89,17 @@ public interface IReasonerInstance {
      */
     public EvaluationResult evaluate(List<Constraint> constraints, ProgressObserver observer);
 
+    /**
+     * Creates the value for a certain IVML type/variable.
+     * 
+     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+     *     additional constraints)
+     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @return the value creation result
+     */
+    public ValueCreationResult createValue(AbstractVariable var, IDatatype type, ProgressObserver observer);
+    
     /**
      * Is called when a reasoner message is issued.
      * 

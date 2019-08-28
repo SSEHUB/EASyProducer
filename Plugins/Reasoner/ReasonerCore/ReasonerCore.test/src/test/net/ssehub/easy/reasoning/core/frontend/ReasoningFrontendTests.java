@@ -29,12 +29,16 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration.IAdditionalInformationLogger;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
 import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.cstEvaluation.IConstraintEvaluator;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
 import test.net.ssehub.easy.reasoning.core.frontend.FakeReasoner.ResultType;
 
 import java.io.File;
@@ -69,7 +73,8 @@ public class ReasoningFrontendTests {
             FakeReasoner.createDefaultResults(
                 new ReasoningResult(NAME_NORMAL_REASONER), 
                 createFailingReasoningResult(false, true)), // a fail
-            FakeReasoner.createDefaultEvaluationResult());
+            FakeReasoner.createDefaultEvaluationResult(), 
+            FakeReasoner.createValueCreationResult(BooleanValue.TRUE, null));
         frontend.getRegistry().register(fr);
         FakeInstanceReasoner fri = new FakeInstanceReasoner(
             FakeReasoner.createDefaultDescriptor(NAME_INSTANCE_REASONER, IvmlReasonerCapabilities.EVAL), // one more!
@@ -77,7 +82,8 @@ public class ReasoningFrontendTests {
                 null, 
                 createFailingReasoningResult(true, false),
                 createFailingReasoningResult(false, false)), 
-            FakeReasoner.createDefaultEvaluationResult());
+            FakeReasoner.createDefaultEvaluationResult(), 
+            FakeReasoner.createValueCreationResult(BooleanValue.TRUE, null));
         frontend.getRegistry().register(fri);
         Assert.assertEquals(2, frontend.getReasonersCount());
         Assert.assertEquals(2, frontend.getReadyForUseCount());
@@ -110,7 +116,6 @@ public class ReasoningFrontendTests {
         
         frontend.setTimeout(10000);
         Assert.assertEquals(10000, frontend.getTimeout());
-
         Assert.assertFalse(frontend.isChainingReasoner(fr.getDescriptor()));
         Assert.assertTrue(frontend.isChainingReasoner(fri.getDescriptor()));
 
@@ -243,6 +248,30 @@ public class ReasoningFrontendTests {
             observer, expected);
         assertInstanceOperations(frontend.createInstance(prj, cfg, reasonerConfiguration), cfg, reasonerConfiguration, 
             observer, expected);
+        
+        DecisionVariableDeclaration var = new DecisionVariableDeclaration("test", BooleanType.TYPE, null);
+        assertValueCreation(frontend.createValue(cfg, var, null, null, observer), true, expected);
+        assertValueCreation(frontend.createValue(cfg, var, BooleanType.TYPE, null, observer), true, expected);
+        assertValueCreation(frontend.createValue(cfg, var, null, null, observer), true, expected);
+        assertValueCreation(frontend.createValue(cfg, null, null, null, observer), false, expected);
+    }
+
+    /**
+     * Asserts a value creation result.
+     * 
+     * @param res the actual creation result
+     * @param successful shall the creation be asserted to be successful
+     * @param expected the expected reasoner to apply (may differentiate via the reasoning results)
+     */
+    private void assertValueCreation(ValueCreationResult res, boolean successful, FakeReasoner expected) {
+        Assert.assertNotNull(res);
+        if (successful) {
+            Assert.assertEquals(expected.getExpectedValueCreationResult().getValue(), res.getValue());
+            Assert.assertEquals(0, res.getMessageCount());
+        } else {
+            Assert.assertNull(res.getValue());
+            Assert.assertEquals(1, res.getMessageCount());
+        }
     }
     
     /**

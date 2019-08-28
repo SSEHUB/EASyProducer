@@ -15,12 +15,25 @@
  */
 package net.ssehub.easy.reasoning.core.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cst.CSTSemanticException;
+import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
+import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.values.Value;
+import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * Some helpful methods for reasoners.
@@ -30,7 +43,8 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 public class ReasonerHelper {
 
     /**
-     * Creates the value for a certain IVML type/variable. Just uses the value factory.
+     * Creates the value for a certain IVML type/variable. This method is intended as a generic fallback. It just uses 
+     * the {@link ValueFactory value factory} and does not do any reasoning. 
      * 
      * @param cfg the configuration to operate on (will not be modified)
      * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
@@ -43,7 +57,64 @@ public class ReasonerHelper {
      */
     public static ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type,
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
-        return null;
+        IDatatype t = null != var ? var.getType() : type;
+        List<String> messages = null;
+        Value val = null;
+        if (null == t) {
+            messages = appendMessage(messages, "No variable or type given (null).");
+        } else {
+            try {
+                val = ValueFactory.createValue(t);
+            } catch (ValueDoesNotMatchTypeException e) {
+                messages = appendMessage(messages, e.getMessage());
+            }
+        }
+        Project p = new Project("*");
+        DecisionVariableDeclaration pVar = new DecisionVariableDeclaration("*", type, p);
+        IDecisionVariable res = null;
+        try {
+            pVar.setValue(new ConstantValue(val));
+            p.add(pVar);
+            Configuration c = new Configuration(p);
+            res = c.getDecision(pVar);
+        } catch (CSTSemanticException e) {
+            appendMessage(messages, e);
+        } catch (ValueDoesNotMatchTypeException e) {
+            appendMessage(messages, e);
+        }
+        ValueCreationResult result = new ValueCreationResult(res);
+        if (null != messages) {
+            for (int m = 0; m < messages.size(); m++) {
+                result.addMessage(new Message(messages.get(m), null, Status.ERROR));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Appends the message of {@code th} to the list of messages.
+     * 
+     * @param messages the messages (may be <b>null</b>)
+     * @param th the throwable to take the message from
+     * @return {@code messages} or a new list
+     */
+    private static List<String> appendMessage(List<String> messages, Throwable th) {
+        return appendMessage(messages, th.getMessage());
+    }
+
+    /**
+     * Appends a message {@code text} to the list of messages.
+     * 
+     * @param messages the messages (may be <b>null</b>)
+     * @param message the message to append
+     * @return {@code messages} or a new list
+     */
+    private static List<String> appendMessage(List<String> messages, String message) {
+        if (null == messages) {
+            messages = new ArrayList<String>();
+        }
+        messages.add(message);
+        return messages;
     }
     
 }

@@ -16,6 +16,7 @@
 package test.net.ssehub.easy.reasoning.core.frontend;
 
 import org.junit.Test;
+import org.junit.Assert;
 
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
@@ -28,6 +29,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
 import test.net.ssehub.easy.reasoning.core.frontend.FakeReasoner.ResultType;
 
 import static test.net.ssehub.easy.reasoning.core.frontend.ReasoningFrontendTests.*;
@@ -60,12 +62,14 @@ public class ReasonerAdapterTests {
                 createFailingReasoningResult(false, false), createFailingReasoningResult(false, false), 
                 createFailingReasoningResult(false, false), createFailingReasoningResult(false, false), 
                 createFailingReasoningResult(false, false)),
-            FakeReasoner.createDefaultEvaluationResult());
+            FakeReasoner.createDefaultEvaluationResult(),
+            FakeReasoner.createValueCreationResult(BooleanValue.TRUE, null));
         frontend.getRegistry().register(fr);
         fri = new FakeExplicitInstanceReasoner(
             FakeReasoner.createDefaultDescriptor(NAME_INSTANCE_REASONER), 
             FakeReasoner.createDefaultResults(),
-            FakeReasoner.createDefaultEvaluationResult());
+            FakeReasoner.createDefaultEvaluationResult(), 
+            FakeReasoner.createValueCreationResult(BooleanValue.TRUE, null));
 
         // specific instance message overrides to separate instance-based from normal reasoning
         Map<ResultType, ReasoningResult> results = new HashMap<ResultType, ReasoningResult>();
@@ -88,6 +92,13 @@ public class ReasonerAdapterTests {
         ra.setEnableInstanceBasedReasoning(false);
         testAdaptor(frontend, ra, fr, false);
         testAdaptor(frontend, ra, fri, false);
+        
+        ReasonerAdapter.registerInstance(ra);
+        Assert.assertEquals(ra, ReasonerAdapter.getInstance());
+        Assert.assertEquals(ra, ReasonerAdapter.getInstanceSafe());
+        ReasonerAdapter.unregisterInstance();
+        Assert.assertNull(ReasonerAdapter.getInstance());
+        Assert.assertNotNull(ReasonerAdapter.getInstanceSafe());
     
         frontend.getRegistry().unregister(fr);
         frontend.getRegistry().unregister(fri);

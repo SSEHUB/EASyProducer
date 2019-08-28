@@ -20,8 +20,10 @@ import java.util.List;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * Provides a default implementation for reasoner instances by delegating the
@@ -93,6 +95,15 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
         EvaluationResult result;
         isRunning = true;
         result = delegate.evaluate(project, config, constraints, rConfig, observer);
+        isRunning = false;
+        return result;
+    }
+
+    @Override
+    public ValueCreationResult createValue(AbstractVariable var, IDatatype type, ProgressObserver observer) {
+        ValueCreationResult result;
+        isRunning = true;
+        result = delegate.createValue(config, var, type, rConfig, observer);
         isRunning = false;
         return result;
     }

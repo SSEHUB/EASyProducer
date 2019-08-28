@@ -26,6 +26,7 @@ import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
@@ -89,11 +90,12 @@ public class FakeExplicitInstanceReasoner extends FakeInstanceReasoner {
      * @param descriptor the reasoner descriptor
      * @param results the results
      * @param eResult the evaluation result
+     * @param vResult the value creation result
      * @see FakeExplicitInstanceReasoner#setInstanceResults(Map, EvaluationResult)
      */
     public FakeExplicitInstanceReasoner(ReasonerDescriptor descriptor, Map<ResultType, ReasoningResult> results,
-        EvaluationResult eResult) {
-        super(descriptor, results, eResult);
+        EvaluationResult eResult, ValueCreationResult vResult) {
+        super(descriptor, results, eResult, vResult);
     }
     
     /**

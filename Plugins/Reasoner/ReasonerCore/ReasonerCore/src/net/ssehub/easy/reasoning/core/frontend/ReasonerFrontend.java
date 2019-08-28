@@ -6,12 +6,14 @@ import java.util.List;
 
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.impl.ReasonerHelper;
 import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import net.ssehub.easy.reasoning.core.reasoner.IChainingReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.IReasonerRegistry;
+import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
@@ -26,8 +28,10 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.confModel.ConfigurationInitializerRegistry.IConfigurationInitializer;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * The main interface to the reasoner core infrastructure. Models and configurations will be transparently passed to
@@ -741,6 +745,31 @@ public class ReasonerFrontend {
             result = reasoner.createInstance(project, cfg, reasonerConfiguration);
         } else {
             result = null;
+        }
+        return result;
+    }
+    
+    /**
+     * Creates the value for a certain IVML type/variable.
+     * 
+     * @param cfg the configuration to operate on (will not be modified)
+     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+     *     additional constraints, takes precedence over {@code type})
+     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
+     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @return the value creation result
+     */
+    public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type, 
+        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
+        ValueCreationResult result;
+        IReasoner reasoner = getActualReasoner(cfg.getProject(), cfg, null, reasonerConfiguration);
+        if (null == reasoner) {
+            // use fallback via ValueFactory
+            result = ReasonerHelper.createValue(cfg, var, type, reasonerConfiguration, observer);
+        } else {
+            result = reasoner.createValue(cfg, var, type, reasonerConfiguration, observer);
         }
         return result;
     }

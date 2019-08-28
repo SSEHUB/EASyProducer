@@ -6,8 +6,10 @@ import java.util.List;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerInstance;
 import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
  * General interface for reasoner, which can be registered to the <tt>ReasonerRegistry</tt>. Please note that 
@@ -152,6 +154,21 @@ public interface IReasoner {
     public IReasonerInstance createInstance(Project project, Configuration cfg, 
         ReasonerConfiguration reasonerConfiguration);
 
+    /**
+     * Creates the value for a certain IVML type/variable.
+     * 
+     * @param cfg the configuration to operate on (will not be modified)
+     * @param var the variable to create the value for (may be <b>null</b> if {@code type} is given, may imply 
+     *     additional constraints)
+     * @param type the type to create the value for (may be <b>null</b> if {@code var} is given)
+     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
+     *        may be <b>null</b>)
+     * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
+     * @return the value creation result
+     */
+    public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type, 
+        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer);
+    
     /**
      * Defines the optional interceptor instance.
      * 

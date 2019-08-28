@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.values.Value;
+
 /**
  * Denotes the result of creating a value of an IVML variable through the reasoner considering 
  * the relevant constraints.
@@ -22,5 +25,35 @@ package net.ssehub.easy.reasoning.core.reasoner;
  * @author Holger Eichelberger
  */
 public class ValueCreationResult extends ReasoningResult {
+    
+    private IDecisionVariable var;
+    
+    /**
+     * Creates a value creation result.
+     * 
+     * @param var the decision variable holding the created value (may be <b>null</b> in case of errors, 
+     *     use {@link #addMessage(Message)})
+     */
+    public ValueCreationResult(IDecisionVariable var) {
+        this.var = var;
+    }
+
+    /**
+     * Returns the created value.
+     * 
+     * @return the created value (may be <b>null</b> in case of errors, use {@link #addMessage(Message)})
+     */
+    public Value getValue() {
+        return null == var ? null : var.getValue();
+    }
+    
+    /**
+     * Returns the holding variable.
+     * 
+     * @return the holding variable (may be <b>null</b> in case of errors, use {@link #addMessage(Message)})
+     */
+    public IDecisionVariable getVariable() {
+        return var;
+    }
 
 }
