@@ -83,7 +83,7 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                     if (AbstractTest.NUM_INSTANCE_REASONING > 0) {
                         System.out.println("Performing runtime reasoning/propagation with instance ...");
                         long instanceCreation = System.currentTimeMillis();
-                        IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(prj, cfg, rCfg);
+                        IReasonerInstance inst = ReasonerFrontend.getInstance().createInstance(cfg, rCfg);
                         instanceCreation = System.currentTimeMillis() - instanceCreation;
                         for (int r = 1; r <= AbstractTest.NUM_INSTANCE_REASONING; r++) {
                             String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INST ", r) : null;
