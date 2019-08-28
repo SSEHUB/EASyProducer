@@ -100,6 +100,15 @@ public class ConstraintFinder implements IModelVisitor {
         this.allAttributes = new ArrayList<AttributeAssignment>();
         this.handleEvals = handleEvals;
         isEvalConstraint = false;
+        startAccept(project);
+    }
+    
+    /**
+     * Starts accepting in the constructor. Overridden to allow for further initializations.
+     * 
+     * @param project the project to start accepting
+     */
+    protected void startAccept(Project project) {
         project.accept(this);
     }
 

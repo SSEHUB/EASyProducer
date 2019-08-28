@@ -90,6 +90,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             // TODO freezing shall be done incrementally by the Reasoner, currently freeze-state would not work
             // Assign frozen state to already frozen variables
             config.freezeValues(config.project, FilterType.ALL);
+            // mark configuration as approximately frozen and enable selective unfreezing during state transfer in 
+            // (runtime) VIL AbstractIVMLVariable
+            config.approximativeFreezing = true;
             return null; // no messages so far
         }
 
@@ -118,6 +121,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     private Project project;
     
     private boolean assignValues;
+    
+    private boolean approximativeFreezing;
     
     private LinkedHashMap<AbstractVariable, IDecisionVariable> decisions
         = new LinkedHashMap<AbstractVariable, IDecisionVariable>();
@@ -235,6 +240,15 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      */
     public Project getProject() {
         return project;
+    }
+    
+    /**
+     * Return whether this configuration is exactly or approximative (heuristicall) frozen.
+     * 
+     * @return {@code false} for exact freezing, {@code true} for approximative freezing
+     */
+    public boolean isApproximatelyFrozen() {
+        return approximativeFreezing;
     }
     
     /**
