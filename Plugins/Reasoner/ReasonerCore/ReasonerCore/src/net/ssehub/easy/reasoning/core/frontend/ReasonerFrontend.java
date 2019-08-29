@@ -95,7 +95,7 @@ public class ReasonerFrontend {
             public List<net.ssehub.easy.basics.messages.Message> initializeConfiguration(
                 Configuration config, ProgressObserver observer) {
                 List<net.ssehub.easy.basics.messages.Message> result = null;
-                IReasoner reasoner = canInitializeConfig(getActualReasoner(config.getProject(), config, null, null));
+                IReasoner reasoner = canInitializeConfig(getActualReasoner(config, null, null));
                 for (int r = 0; null == reasoner && r < registry.getReasonerCount(); r++) {
                     IReasoner tmp = registry.getReasoner(r);
                     if (isReadyForUse(tmp)) {
@@ -187,13 +187,12 @@ public class ReasonerFrontend {
      * Returns the actual and matching reasoner. Considers whether
      * the reasoner is ready for use via {@link ReasonerDescriptor#isReadyForUse()}.
      * 
-     * @param project the project to reason on (may be <b>null</b>)
      * @param configuration the configuration to reason on (may be <b>null</b>)
      * @param constraints the additional constraints to reason on (may be <b>null</b>)
      * @param reasonerConfiguration the configuration to be used for the specific reasoner call (may be <b>null</b>)
      * @return the actual reasoner (may be <b>null</b>)
      */
-    private IReasoner getActualReasoner(Project project, Configuration configuration, List<Constraint> constraints, 
+    private IReasoner getActualReasoner(Configuration configuration, List<Constraint> constraints, 
         ReasonerConfiguration reasonerConfiguration) {
         IReasoner result = null;
         if (null != reasonerConfiguration) {
@@ -252,7 +251,7 @@ public class ReasonerFrontend {
         ProgressObserver observer) {
 
         ReasoningResult result = null;
-        IReasoner reasoner = getActualReasoner(project, null, null, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(null, null, reasonerConfiguration);
         if (null != reasoner) {
             result = reasoner.isConsistent(project, reasonerConfiguration, observer);
         } else {
@@ -300,10 +299,10 @@ public class ReasonerFrontend {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
+    private ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer) {
         ReasoningResult result = null;
-        IReasoner reasoner = getActualReasoner(project, cfg, null, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
             result = reasoner.check(project, cfg, reasonerConfiguration, observer);
         } else {
@@ -355,7 +354,7 @@ public class ReasonerFrontend {
     public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer) {
         ReasoningResult result = null;
-        IReasoner reasoner = getActualReasoner(project, cfg, null, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
             result = reasoner.propagate(project, cfg, reasonerConfiguration, observer);
         } else {
@@ -411,7 +410,7 @@ public class ReasonerFrontend {
      *         status {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not
      *         support this operation.
      */
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints, 
+    private EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints, 
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
         EvaluationResult result = null;
 
@@ -430,7 +429,7 @@ public class ReasonerFrontend {
         }
 
         // evaluate
-        IReasoner reasoner = getActualReasoner(project, cfg, toEvaluate, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(cfg, toEvaluate, reasonerConfiguration);
         if (null != reasoner) {
             result = reasoner.evaluate(project, cfg, toEvaluate, reasonerConfiguration, observer);
         }
@@ -556,7 +555,7 @@ public class ReasonerFrontend {
      */
     public boolean hasReasonerCapability(IReasonerCapability capability, ReasonerConfiguration reasonerConfiguration) {
         boolean result = false;
-        IReasoner reasoner = getActualReasoner(null, null, null, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(null, null, reasonerConfiguration);
         if (null != reasoner) {
             result = reasoner.getDescriptor().hasCapability(capability);
         }
@@ -737,10 +736,10 @@ public class ReasonerFrontend {
      * @return a reusable reasoner instance, return a {@link DelegatingReasonerInstance} on this reasoner to
      *     avoid null pointer checking.
      */
-    public IReasonerInstance createInstance(Project project, Configuration cfg, 
+    private IReasonerInstance createInstance(Project project, Configuration cfg, 
         ReasonerConfiguration reasonerConfiguration) {
         IReasonerInstance result;
-        IReasoner reasoner = getActualReasoner(project, cfg, null, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
             result = reasoner.createInstance(project, cfg, reasonerConfiguration);
         } else {
@@ -764,7 +763,7 @@ public class ReasonerFrontend {
     public ValueCreationResult createValue(Configuration cfg, AbstractVariable var, IDatatype type, 
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
         ValueCreationResult result;
-        IReasoner reasoner = getActualReasoner(cfg.getProject(), cfg, null, reasonerConfiguration);
+        IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null == reasoner) {
             // use fallback via ValueFactory
             result = ReasonerHelper.createValue(cfg, var, type, reasonerConfiguration, observer);

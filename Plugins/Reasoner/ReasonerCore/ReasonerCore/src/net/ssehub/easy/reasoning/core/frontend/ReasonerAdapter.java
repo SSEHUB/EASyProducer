@@ -148,7 +148,7 @@ public class ReasonerAdapter {
         @Override
         public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
             ProgressObserver observer) {
-            return ReasonerFrontend.getInstance().check(cfg.getProject(), cfg, reasonerConfiguration, observer);
+            return ReasonerFrontend.getInstance().check(cfg, reasonerConfiguration, observer);
         }
 
         @Override

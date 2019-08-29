@@ -229,7 +229,7 @@ public class ReasoningFrontendTests {
         assertReasoningResult(expected, ResultType.CHECK, 
             frontend.check(cfg, reasonerConfiguration, observer));
         assertReasoningResult(expected, ResultType.CHECK, 
-            frontend.check(prj, cfg, reasonerConfiguration, observer));
+            frontend.check(cfg, reasonerConfiguration, observer));
         List<Constraint> constraints = new ArrayList<Constraint>();
         assertEvaluationResult(expected, frontend.evaluate(cfg, constraints, reasonerConfiguration, observer));
         assertReasoningResult(expected, ResultType.IS_CONSISTENT, 
@@ -245,8 +245,6 @@ public class ReasoningFrontendTests {
             frontend.upgradeReasoner(expected.getDescriptor(), new File(".").toURI(), observer));
 
         assertInstanceOperations(frontend.createInstance(cfg, reasonerConfiguration), cfg, reasonerConfiguration, 
-            observer, expected);
-        assertInstanceOperations(frontend.createInstance(prj, cfg, reasonerConfiguration), cfg, reasonerConfiguration, 
             observer, expected);
         
         DecisionVariableDeclaration var = new DecisionVariableDeclaration("test", BooleanType.TYPE, null);
