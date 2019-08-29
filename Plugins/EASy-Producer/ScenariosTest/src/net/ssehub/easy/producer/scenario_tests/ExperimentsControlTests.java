@@ -385,7 +385,7 @@ public class ExperimentsControlTests extends AbstractTest {
      * @return the reasoning result
      */
     private ReasoningResult doReasoning(Configuration cfg, ReasonerConfiguration rConfig) {
-        ReasoningResult res = ReasonerFrontend.getInstance().propagate(cfg.getProject(), cfg, rConfig, 
+        ReasoningResult res = ReasonerFrontend.getInstance().propagate(cfg, rConfig, 
             ProgressObserver.NO_OBSERVER);
         res.logInformation(cfg.getProject(), rConfig, PRINT_REASONER_MESSAGES);
         return res;

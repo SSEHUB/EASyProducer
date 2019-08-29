@@ -268,7 +268,7 @@ public class ConceptsTests extends AbstractEasyScenarioTest {
         if (0 == rf.getReasonersCount()) {
             rf.getRegistry().register(new net.ssehub.easy.reasoning.sseReasoner.Reasoner());
         }
-        ReasoningResult res = rf.propagate(ivmlModel, config, rCfg, ProgressObserver.NO_OBSERVER);
+        ReasoningResult res = rf.propagate(config, rCfg, ProgressObserver.NO_OBSERVER);
         res.logInformation(ivmlModel, rCfg, debug);
         if (success) { 
             Assert.assertFalse("The configuration for " + modelName + " shall be free of conflicts", res.hasConflict());

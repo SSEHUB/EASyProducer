@@ -67,7 +67,7 @@ public abstract class AbstractRealTests extends AbstractEasyScenarioTest {
                     rCfg.setRuntimeMode(true);
                     for (int r = 1; r <= AbstractTest.NUM_INCREMENTAL_REASONING; r++) {
                         String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO-INC", r) : null;
-                        ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
+                        ReasoningResult res = ReasonerFrontend.getInstance().propagate(
                             cfg, rCfg, ProgressObserver.NO_OBSERVER);
                         if (null != id) {
                             MeasurementCollector.endAuto(id);

@@ -448,7 +448,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             net.ssehub.easy.varModel.confModel.Configuration cfg = config.getConfiguration();
             for (int r = 1, n = mode.runCount(NUM_FULL_REASONING); r <= n; r++) {
                 String id = mode.doMeasure() ? MeasurementCollector.start(cfg, "SCENARIO", r) : null;
-                ReasoningResult res = ReasonerFrontend.getInstance().propagate(prj, 
+                ReasoningResult res = ReasonerFrontend.getInstance().propagate(
                     cfg.getConfiguration(), rCfg, ProgressObserver.NO_OBSERVER);
                 if (null != id) {
                     MeasurementCollector.endAuto(id);
