@@ -57,7 +57,7 @@ public class RampUpTest extends AbstractRtTest {
         Configuration cfg = test.net.ssehub.easy.reasoning.core.reasoner.RampUpTest.createRampUpTest();
         IReasoner reasoner = createReasoner();
         // NO MEASUREMENT!!!
-        ReasoningResult rResult = reasoner.propagate(cfg.getProject(), cfg, rConfig, ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = reasoner.propagate(cfg, rConfig, ProgressObserver.NO_OBSERVER);
         rResult.logInformation(cfg.getProject(), rConfig, false);
         Assert.assertFalse(rResult.hasConflict());
     }
