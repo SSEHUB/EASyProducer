@@ -42,8 +42,7 @@ public interface IReasoner {
     /**
      * Checks whether a given variability model (project) is satisfiable.
      * 
-     * @param project
-     *            The project which should be tested whether it is satisfiable.
+     * @param project The project which should be tested whether it is satisfiable.
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
@@ -57,10 +56,7 @@ public interface IReasoner {
     /**
      * Checks the configuration according to the given project structure and does not affect the configuration.
      * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            The current configuration based on the given project.
+     * @param cfg The current configuration to reason on.
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)                   
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
@@ -68,17 +64,14 @@ public interface IReasoner {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
+    public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
          ProgressObserver observer);
 
     /**
      * Checks the configuration according to the given model and propagates values, if possible.
      * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            The current configuration based on the given project (may be modified as a side effect
-     *            of value propagation)
+     * @param cfg The configuration to reason on (may be modified as a side effect
+     *        of value propagation)
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)                   
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
@@ -86,7 +79,7 @@ public interface IReasoner {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
+    public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer);
 
     /**
@@ -95,11 +88,8 @@ public interface IReasoner {
      * declare {@link GeneralReasonerCapabilities#INCREMENTAL_REASONING}. This method shell obey 
      * {@link Configuration#getResolutionState()}.
      * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            The current configuration based on the given project (may be modified as a side effect
-     *            of value propagation)
+     * @param cfg The configuration to reason on (may be modified as a side effect
+     *        of value propagation)
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)                   
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
@@ -107,19 +97,15 @@ public interface IReasoner {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult initialize(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
         ProgressObserver observer);
 
     /**
      * Evaluates a given list of constraints (in the sense of boolean conditions) which are related to and valid in the
      * context of the given project and configuration.
      * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            the configuration as a basis for the evaluation
-     * @param constraints
-     *            the constraints (expressions which evaluate to a boolean value)
+     * @param cfg the configuration as a basis for the evaluation
+     * @param constraints the constraints (expressions which evaluate to a boolean value)
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      * @param observer an optional progress observer, shall be {@link ProgressObserver#NO_OBSERVER} if unused
@@ -127,7 +113,7 @@ public interface IReasoner {
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
      */
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints, 
+    public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints, 
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer);
 
     /**
@@ -142,17 +128,13 @@ public interface IReasoner {
      * Creates a reasoner instance for repeated reasoning on the same model (no structural changes allowed
      * during two subsequent reasoning runs).
      * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            the configuration as a basis for the evaluation
+     * @param cfg the configuration as a basis for the evaluation
      * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *        may be <b>null</b>)
      * @return a reusable reasoner instance, return a {@link DelegatingReasonerInstance} on this reasoner to
      *     avoid null pointer checking.
      */
-    public IReasonerInstance createInstance(Project project, Configuration cfg, 
-        ReasonerConfiguration reasonerConfiguration);
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration);
 
     /**
      * Creates the value for a certain IVML type/variable.

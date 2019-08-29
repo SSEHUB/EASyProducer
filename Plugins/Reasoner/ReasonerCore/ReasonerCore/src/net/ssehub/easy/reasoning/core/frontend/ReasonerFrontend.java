@@ -106,7 +106,7 @@ public class ReasonerFrontend {
                 if (null != reasoner) {
                     // default reasoner configuration
                     ReasonerConfiguration initCfg = new ReasonerConfiguration();
-                    ReasoningResult tmp = reasoner.initialize(config.getProject(), config, initCfg, observer); 
+                    ReasoningResult tmp = reasoner.initialize(config, initCfg, observer); 
                     useFallback = tmp.reasoningUnsupported();
                     if (tmp.getMessageCount() > 0) {
                         result = new ArrayList<net.ssehub.easy.basics.messages.Message>();
@@ -304,7 +304,7 @@ public class ReasonerFrontend {
         ReasoningResult result = null;
         IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
-            result = reasoner.check(project, cfg, reasonerConfiguration, observer);
+            result = reasoner.check(cfg, reasonerConfiguration, observer);
         } else {
             result = new ReasoningResult();
             Message warning = new Message(NO_REASONING_AVAILABE_MSG, null, Status.WARNING);
@@ -356,7 +356,7 @@ public class ReasonerFrontend {
         ReasoningResult result = null;
         IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
-            result = reasoner.propagate(project, cfg, reasonerConfiguration, observer);
+            result = reasoner.propagate(cfg, reasonerConfiguration, observer);
         } else {
             result = new ReasoningResult();
             Message warning = new Message(NO_REASONING_AVAILABE_MSG, null, Status.WARNING);
@@ -431,7 +431,7 @@ public class ReasonerFrontend {
         // evaluate
         IReasoner reasoner = getActualReasoner(cfg, toEvaluate, reasonerConfiguration);
         if (null != reasoner) {
-            result = reasoner.evaluate(project, cfg, toEvaluate, reasonerConfiguration, observer);
+            result = reasoner.evaluate(cfg, toEvaluate, reasonerConfiguration, observer);
         }
         // construct result for erroneous
         if (null == result) {
@@ -741,7 +741,7 @@ public class ReasonerFrontend {
         IReasonerInstance result;
         IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
-            result = reasoner.createInstance(project, cfg, reasonerConfiguration);
+            result = reasoner.createInstance(cfg, reasonerConfiguration);
         } else {
             result = null;
         }

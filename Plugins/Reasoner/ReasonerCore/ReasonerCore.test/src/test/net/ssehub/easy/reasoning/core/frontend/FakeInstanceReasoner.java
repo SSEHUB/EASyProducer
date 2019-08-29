@@ -26,7 +26,6 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasonerDescriptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Implements a fake instance-based reasoner. The instances are based on {@link DelegatingReasonerInstance}.
@@ -51,9 +50,8 @@ public class FakeInstanceReasoner extends FakeReasoner implements IChainingReaso
     }
 
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-        ReasonerConfiguration reasonerConfiguration) {
-        return new DelegatingReasonerInstance(project, cfg, reasonerConfiguration, this);
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
+        return new DelegatingReasonerInstance(cfg, reasonerConfiguration, this);
     }
 
     @Override

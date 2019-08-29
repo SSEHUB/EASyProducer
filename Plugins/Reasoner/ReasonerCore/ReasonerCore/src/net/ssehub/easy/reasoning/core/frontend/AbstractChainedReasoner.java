@@ -194,7 +194,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
     }
 
     @Override
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
         ProgressObserver observer) {
         if (null == config) {
             config = cfg;
@@ -202,7 +202,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
         for (int r = 0; (null == reasoningResult || reasoningResult.hasConflict()) && r < reasoners.length; r++) {
             IChainingReasoner reasoner = reasoners[r];
             reasoner.setState(config, reasoningResult); // shall ignore null, null
-            reasoningResult = reasoner.check(project, config, reasonerConfiguration, observer);
+            reasoningResult = reasoner.check(config, reasonerConfiguration, observer);
             config = reasoners[r].getLastConfiguration();
         }
         ReasoningResult result = reasoningResult;
@@ -211,7 +211,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
     }
 
     @Override
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
         ProgressObserver observer) {
         if (null == config) {
             config = cfg;
@@ -219,7 +219,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
         for (int r = 0; (null == reasoningResult || reasoningResult.hasConflict()) && r < reasoners.length; r++) {
             IChainingReasoner reasoner = reasoners[r];
             reasoner.setState(config, reasoningResult); // shall ignore null, null
-            reasoningResult = reasoner.propagate(project, config, reasonerConfiguration, observer);
+            reasoningResult = reasoner.propagate(config, reasonerConfiguration, observer);
             config = reasoners[r].getLastConfiguration();
         }
         ReasoningResult result = reasoningResult;
@@ -228,7 +228,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
     }
 
     @Override
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints,
+    public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
         if (null == config) {
             config = cfg;
@@ -236,7 +236,7 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
         for (int r = 0; (null == evaluationResult || evaluationResult.hasConflict()) && r < reasoners.length; r++) {
             IChainingReasoner reasoner = reasoners[r];
             reasoner.setState(config, evaluationResult); // shall ignore null, null
-            evaluationResult = reasoner.evaluate(project, config, constraints, reasonerConfiguration, observer);
+            evaluationResult = reasoner.evaluate(config, constraints, reasonerConfiguration, observer);
             config = reasoners[r].getLastConfiguration();
         }
         EvaluationResult result = evaluationResult;
@@ -252,9 +252,8 @@ public abstract class AbstractChainedReasoner implements IChainingReasoner {
     }
 
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-        ReasonerConfiguration reasonerConfiguration) {
-        return new DelegatingReasonerInstance(project, cfg, reasonerConfiguration, this);
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
+        return new DelegatingReasonerInstance(cfg, reasonerConfiguration, this);
     }
 
     @Override

@@ -330,7 +330,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         ReasoningResult result = null;
         for (int r = 1, n = NUM_FULL_REASONING; r <= n; r++) {
             String id = MeasurementCollector.start(config, tag, r);
-            ReasoningResult res =  reasoner.propagate(project, config, rConfig, ProgressObserver.NO_OBSERVER);
+            ReasoningResult res =  reasoner.propagate(config, rConfig, ProgressObserver.NO_OBSERVER);
             MeasurementCollector.endAuto(id);
             transferReasoningMeasures(id, res);
             MeasurementCollector.end(id);
@@ -348,14 +348,12 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Performs reasoning on a reasoner instance of {@link ITestDescriptor#createReasoner() the reasoner provided by 
      * the test descriptor} and collects the result in {@link MeasurementCollector}.
      * 
-     * @param project the project
      * @param config the configuration
      * @param rConfig the reasoner configuration
      * @return the reasoning result
      */
-    protected ReasoningResult performInstanceReasoning(Project project, Configuration config, 
-        ReasonerConfiguration rConfig) {
-        return performInstanceReasoning(descriptor.createReasoner(), project, config, rConfig);
+    protected ReasoningResult performInstanceReasoning(Configuration config, ReasonerConfiguration rConfig) {
+        return performInstanceReasoning(descriptor.createReasoner(), config, rConfig);
     }
 
     /**
@@ -363,15 +361,14 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * in {@link MeasurementCollector}.
      * 
      * @param reasoner the reasoner to create the instance for
-     * @param project the project
      * @param config the configuration
      * @param rConfig the reasoner configuration
      * @return the reasoning result
      */
-    protected ReasoningResult performInstanceReasoning(IReasoner reasoner, Project project, Configuration config, 
+    protected ReasoningResult performInstanceReasoning(IReasoner reasoner, Configuration config, 
         ReasonerConfiguration rConfig) {
         long start = System.currentTimeMillis();
-        IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
+        IReasonerInstance inst = reasoner.createInstance(config, rConfig);
         return performInstanceReasoning(inst, config, System.currentTimeMillis() - start);
     }
 

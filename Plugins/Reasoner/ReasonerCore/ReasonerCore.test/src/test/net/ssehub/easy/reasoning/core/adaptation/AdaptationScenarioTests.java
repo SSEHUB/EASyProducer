@@ -313,7 +313,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
         IReasoner reasoner = createReasoner();
         long start = System.currentTimeMillis();
-        IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
+        IReasonerInstance inst = reasoner.createInstance(config, rConfig);
         ReasoningResult rResult = performInstanceReasoning(inst, config, Math.abs(System.currentTimeMillis() - start));
         Assert.assertFalse(rResult.hasConflict());
         
@@ -345,7 +345,7 @@ public class AdaptationScenarioTests extends AbstractTest {
         rConfig.setAdditionalInformationLogger(ReasonerConfiguration.ADDITIONAL_INFO_LOG_SYSOUT);
         IReasoner reasoner = createReasoner();
         long start = System.currentTimeMillis();
-        IReasonerInstance inst = reasoner.createInstance(project, config, rConfig);
+        IReasonerInstance inst = reasoner.createInstance(config, rConfig);
         ReasoningResult rResult = performInstanceReasoning(inst, config, Math.abs(System.currentTimeMillis() - start));
         Assert.assertFalse(rResult.hasConflict());
         

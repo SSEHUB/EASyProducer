@@ -70,7 +70,7 @@ public class RampUpTest extends AbstractTest {
         Configuration cfg = createRampUpTest();
         IReasoner reasoner = createReasoner();
         // NO MEASUREMENT!!!
-        ReasoningResult rResult = reasoner.propagate(cfg.getProject(), cfg, rConfig, ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = reasoner.propagate(cfg, rConfig, ProgressObserver.NO_OBSERVER);
         rResult.logInformation(cfg.getProject(), rConfig, false);
         Assert.assertFalse(rResult.hasConflict());
     }

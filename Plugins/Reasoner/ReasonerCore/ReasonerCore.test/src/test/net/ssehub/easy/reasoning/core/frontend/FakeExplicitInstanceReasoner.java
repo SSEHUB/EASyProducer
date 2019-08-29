@@ -29,7 +29,6 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.core.reasoner.ValueCreationResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.model.Constraint;
-import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Implements a fake instance-based reasoner with explicit propagation result for the instance-based reasoning. 
@@ -52,14 +51,13 @@ public class FakeExplicitInstanceReasoner extends FakeInstanceReasoner {
         /**
          * Creates a delegating reasoner instance.
          * 
-         * @param project the project to reason bound to this instance
          * @param config the configuration to reason bound to this instance
          * @param rConfig the reasoner configuration
          * @param delegate the delegate
          */
-        public FakeDelegatingReasonerInstance(Project project, Configuration config, ReasonerConfiguration rConfig,
+        public FakeDelegatingReasonerInstance(Configuration config, ReasonerConfiguration rConfig,
             IReasoner delegate) {
-            super(project, config, rConfig, delegate);
+            super(config, rConfig, delegate);
         }
         
         @Override
@@ -110,9 +108,8 @@ public class FakeExplicitInstanceReasoner extends FakeInstanceReasoner {
     }
     
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-        ReasonerConfiguration reasonerConfiguration) {
-        return new FakeDelegatingReasonerInstance(project, cfg, reasonerConfiguration, this);
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
+        return new FakeDelegatingReasonerInstance(cfg, reasonerConfiguration, this);
     }
     
     /**

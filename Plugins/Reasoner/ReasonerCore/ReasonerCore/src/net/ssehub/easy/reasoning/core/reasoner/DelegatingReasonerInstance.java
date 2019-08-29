@@ -36,7 +36,6 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  */
 public class DelegatingReasonerInstance implements IReasonerInstance {
 
-    private Project project;
     private IReasoner delegate;
     private Configuration config;
     private ReasonerConfiguration rConfig;
@@ -45,14 +44,12 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
     /**
      * Creates a delegating reasoner instance.
      * 
-     * @param project the project to reason bound to this instance
      * @param config the configuration to reason bound to this instance
      * @param rConfig the reasoner configuration
      * @param delegate the delegate
      */
-    public DelegatingReasonerInstance(Project project, Configuration config, ReasonerConfiguration rConfig, 
+    public DelegatingReasonerInstance(Configuration config, ReasonerConfiguration rConfig, 
         IReasoner delegate) {
-        this.project = project;
         this.config = config;
         this.rConfig = rConfig;
         this.delegate = delegate;
@@ -67,7 +64,7 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
     public ReasoningResult isConsistent(ProgressObserver observer) {
         ReasoningResult result;
         isRunning = true;
-        result = delegate.isConsistent(project, rConfig, observer);
+        result = delegate.isConsistent(config.getProject(), rConfig, observer);
         isRunning = false;
         return result;
     }
@@ -76,7 +73,7 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
     public ReasoningResult check(ProgressObserver observer) {
         ReasoningResult result;
         isRunning = true;
-        result = delegate.check(project, config, rConfig, observer);
+        result = delegate.check(config, rConfig, observer);
         isRunning = false;
         return result;
     }
@@ -85,7 +82,7 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
     public ReasoningResult propagate(ProgressObserver observer) {
         ReasoningResult result;
         isRunning = true;
-        result = delegate.propagate(project, config, rConfig, observer);
+        result = delegate.propagate(config, rConfig, observer);
         isRunning = false;
         return result;
     }
@@ -94,7 +91,7 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
     public EvaluationResult evaluate(List<Constraint> constraints, ProgressObserver observer) {
         EvaluationResult result;
         isRunning = true;
-        result = delegate.evaluate(project, config, constraints, rConfig, observer);
+        result = delegate.evaluate(config, constraints, rConfig, observer);
         isRunning = false;
         return result;
     }
@@ -125,7 +122,7 @@ public class DelegatingReasonerInstance implements IReasonerInstance {
 
     @Override
     public Project getProject() {
-        return project;
+        return config.getProject();
     }
 
     @Override

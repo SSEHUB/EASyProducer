@@ -250,25 +250,25 @@ public class FakeReasoner implements IReasoner {
     }
 
     @Override
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
         ProgressObserver observer) {
         return results.get(ResultType.CHECK);
     }
 
     @Override
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
         ProgressObserver observer) {
         return results.get(ResultType.PROPAGATE);
     }
 
     @Override
-    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult initialize(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
         ProgressObserver observer) {
         return results.get(ResultType.INITIALIZE);
     }
 
     @Override
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints,
+    public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
         return eResult;
     }
@@ -290,8 +290,7 @@ public class FakeReasoner implements IReasoner {
     }
 
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-        ReasonerConfiguration reasonerConfiguration) {
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
         return null;
     }
 
