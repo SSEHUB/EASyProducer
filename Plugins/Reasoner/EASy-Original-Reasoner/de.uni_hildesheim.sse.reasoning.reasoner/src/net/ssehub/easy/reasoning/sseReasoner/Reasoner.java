@@ -68,7 +68,6 @@ public class Reasoner implements IReasoner {
     private class ReasonerInstance implements IReasonerInstance {
 
         private Engine engine;
-        private Project project;
         private Configuration cfg;
         private ReasonerConfiguration reasonerConfiguration;
         private IReasonerInterceptor interceptor;
@@ -76,15 +75,13 @@ public class Reasoner implements IReasoner {
         /**
          * Creates a reusable reasoner instance.
          * 
-         * @param project the project which serves as basis for the related configuration.
          * @param cfg the configuration as a basis for the evaluation
          * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
          *        may be <b>null</b>)
          * @param interceptor the optional reasoner interceptor (may be <b>null</b>)
          */
-        private ReasonerInstance(Project project, Configuration cfg,
-            ReasonerConfiguration reasonerConfiguration, IReasonerInterceptor interceptor) {
-            this.project = project;
+        private ReasonerInstance( Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
+            IReasonerInterceptor interceptor) {
             this.cfg = cfg;
             this.interceptor = interceptor;
             this.reasonerConfiguration = null == reasonerConfiguration 
@@ -98,18 +95,18 @@ public class Reasoner implements IReasoner {
 
         @Override
         public ReasoningResult isConsistent(ProgressObserver observer) {
-            return Reasoner.this.isConsistent(project, reasonerConfiguration, observer);
+            return Reasoner.this.isConsistent(cfg.getProject(), reasonerConfiguration, observer);
         }
 
         @Override
         public ReasoningResult check(ProgressObserver observer) {
-            return Reasoner.this.check(project, cfg, reasonerConfiguration, observer);
+            return Reasoner.this.check(cfg, reasonerConfiguration, observer);
         }
 
         @Override
         public ReasoningResult propagate(ProgressObserver observer) {
             if (null == engine) {
-                engine = new Engine(createConfiguration(project, cfg, reasonerConfiguration, false), 
+                engine = new Engine(createConfiguration(null, cfg, reasonerConfiguration, false), 
                     reasonerConfiguration, observer, interceptor);
                 engine.markForReuse();
             } else {
@@ -122,7 +119,7 @@ public class Reasoner implements IReasoner {
 
         @Override
         public EvaluationResult evaluate(List<Constraint> constraints, ProgressObserver observer) {
-            return Reasoner.this.evaluate(project, cfg, constraints, reasonerConfiguration, observer);
+            return Reasoner.this.evaluate(cfg, constraints, reasonerConfiguration, observer);
         }
         
         @Override
@@ -147,7 +144,7 @@ public class Reasoner implements IReasoner {
 
         @Override
         public Project getProject() {
-            return project;
+            return cfg.getProject();
         }
 
         @Override
@@ -177,28 +174,28 @@ public class Reasoner implements IReasoner {
     }
 
     @Override
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(createConfiguration(project, cfg, reasonerConfig, true), 
+        Engine engine = new Engine(createConfiguration(null, cfg, reasonerConfig, true), 
             reasonerConfig, observer, interceptor);
         return engine.reason();
     }
 
     @Override
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) { // implemented also (for instance reuse) in reasoner instance
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(createConfiguration(project, cfg, reasonerConfig, false), 
+        Engine engine = new Engine(createConfiguration(null, cfg, reasonerConfig, false), 
             reasonerConfig, observer, interceptor);
         return engine.reason();
     }
 
     @Override
-    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult initialize(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {
         reasonerConfig =  null == reasonerConfig ? new ReasonerConfiguration() : reasonerConfig;
-        Engine engine = new Engine(createConfiguration(project, cfg, reasonerConfig, false), 
+        Engine engine = new Engine(createConfiguration(null, cfg, reasonerConfig, false), 
             reasonerConfig, observer, interceptor);
         //engine.setAssignmentState(cfg.getResolutionState()); // too specific, remove resolution state at all??
         ReasoningResult res =  engine.reason();
@@ -206,7 +203,7 @@ public class Reasoner implements IReasoner {
     }
 
     @Override
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints,
+    public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfig, ProgressObserver observer) {        
         final EvaluationResult result = new EvaluationResult(DESCRIPTOR.getName());
         EvalVisitor evaluator = new EvalVisitor(cfg, null, false, new IValueChangeListener() {
@@ -220,7 +217,7 @@ public class Reasoner implements IReasoner {
                 result.addAffected(variable);
             }
         });
-        evaluator.setDispatchScope(project);
+        evaluator.setDispatchScope(cfg.getProject());
         for (int c = 0; c < constraints.size(); c++) {
             Constraint constraint = constraints.get(c);
             evaluator.visit(constraint.getConsSyntax());
@@ -242,7 +239,7 @@ public class Reasoner implements IReasoner {
                 conflicts.add(eMsg.getVariable());
                 Message msg = new Message(eMsg.getDescription(), conflicts, eMsg.getStatus());
                 List<Project> conflictProjects = new ArrayList<Project>();
-                conflictProjects.add(project);
+                conflictProjects.add(cfg.getProject());
                 msg.addConflictingElementProjects(conflictProjects);
                 List<Set<IDecisionVariable>> problemVariables = new ArrayList<Set<IDecisionVariable>>();
                 Set<IDecisionVariable> tmp = new HashSet<IDecisionVariable>();
@@ -301,15 +298,14 @@ public class Reasoner implements IReasoner {
             result = null;
         }
         if (null == result) {
-            result = new Configuration(project, true);
+            result = new Configuration(null == project ? cfg.getProject() : project, true);
         }
         return result;
     }   
 
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-            ReasonerConfiguration reasonerConfiguration) {
-        return new ReasonerInstance(project, cfg, reasonerConfiguration, interceptor);
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
+        return new ReasonerInstance(cfg, reasonerConfiguration, interceptor);
     }
 
     @Override
@@ -355,7 +351,7 @@ public class Reasoner implements IReasoner {
                         }
                     }
                 }
-                ReasoningResult res = propagate(p, c, reasonerConfiguration, observer);
+                ReasoningResult res = propagate(c, reasonerConfiguration, observer);
                 if (!res.hasConflict()) {
                     IDecisionVariable resVar = c.getDecision(pVar);
                     if (null != resVar && null != resVar.getValue()) {

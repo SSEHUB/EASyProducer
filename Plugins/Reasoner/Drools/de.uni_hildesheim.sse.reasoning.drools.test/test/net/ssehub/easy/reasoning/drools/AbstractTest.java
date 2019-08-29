@@ -132,7 +132,7 @@ public abstract class AbstractTest {
        System.out.println("Reasoning " + project.getName());
        Configuration config = new Configuration(project);
        engine = new DroolsReasoner();
-       ReasoningResult result = engine.check(project, config, null, OBSERVER);
+       ReasoningResult result = engine.check(config, null, OBSERVER);
        Assert.assertEquals(expectedResult, result.hasConflict());
        return result;
        
@@ -144,7 +144,7 @@ public abstract class AbstractTest {
        System.out.println("Reasoning " + project.getName());
        Configuration config = new Configuration(project);
        engine = new DroolsReasoner();
-       ReasoningResult result = engine.propagate(project, config, null, OBSERVER);
+       ReasoningResult result = engine.propagate(config, null, OBSERVER);
        
        System.out.println("result is " + result.getMessageCount());
        System.out.println("has conflict ? " + result.hasConflict());
@@ -199,7 +199,7 @@ public abstract class AbstractTest {
     	   constraints.add(ModelUtility.INSTANCE.createConstraint(cons, project, false));
        }
        
-       EvaluationResult result = engine.evaluate(project, config, constraints, null, OBSERVER);
+       EvaluationResult result = engine.evaluate(config, constraints, null, OBSERVER);
        System.out.println("eval pair count " + result.getEvaluationPairCount());
        int count = result.getEvaluationPairCount();
        int totalUnsatisfiedEvaluationpairs = 0;

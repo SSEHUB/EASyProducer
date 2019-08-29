@@ -105,7 +105,7 @@ public class ReasoningScenarioTests {
     public void testPropagateAndReasonAgain() {
         // 1. Propagate Values
         DroolsReasoner reasoner = new DroolsReasoner();
-        reasoner.propagate(project, config, null, ProgressObserver.NO_OBSERVER);
+        reasoner.propagate(config, null, ProgressObserver.NO_OBSERVER);
         int nOfAssignedVariables = 0;
         for (IDecisionVariable decVar : config) {
             if (decVar.hasValue()) {
@@ -116,7 +116,7 @@ public class ReasoningScenarioTests {
         
         // 2. validate (again)
         reasoner = new DroolsReasoner();
-        reasoner.check(project, config, null, ProgressObserver.NO_OBSERVER);
+        reasoner.check(config, null, ProgressObserver.NO_OBSERVER);
         nOfAssignedVariables = 0;
         for (IDecisionVariable decVar : config) {
             if (decVar.hasValue()) {

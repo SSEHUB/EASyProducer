@@ -62,33 +62,33 @@ public class DroolsReasoner implements IReasoner, IRules {
     }
 
     @Override
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfig,
             ProgressObserver observer) {
         droolsVisitor = new DroolsVisitor();
         DroolsEngine engine = new DroolsEngine(droolsVisitor);
         engine.setPropagate(false);
-        ReasoningResult result = engine.check(project, cfg, reasonerConfig, observer); 
+        ReasoningResult result = engine.check(cfg.getProject(), cfg, reasonerConfig, observer); 
 
         return result;
     }
 
     @Override
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfig,
             ProgressObserver observer) {
         droolsVisitor = new DroolsVisitor();
         DroolsEngine engine = new DroolsEngine(droolsVisitor);
         engine.setPropagate(true);
-        ReasoningResult result = engine.check(project, cfg, reasonerConfig, observer); 
+        ReasoningResult result = engine.check(cfg.getProject(), cfg, reasonerConfig, observer); 
         
         return result;
     }
 
     @Override
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints,
+    public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfig, ProgressObserver observer) {
         DroolsEvaluation eval = new DroolsEvaluation();
         
-        return eval.evaluate(project, cfg, constraints, reasonerConfig, observer);
+        return eval.evaluate(cfg.getProject(), cfg, constraints, reasonerConfig, observer);
     }
 
     @Override
@@ -132,15 +132,14 @@ public class DroolsReasoner implements IReasoner, IRules {
     }
 
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-            ReasonerConfiguration reasonerConfiguration) {
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
         return null;
     }
 
     @Override
-    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult initialize(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
             ProgressObserver observer) {
-        return propagate(project, cfg, reasonerConfiguration, observer);
+        return propagate(cfg, reasonerConfiguration, observer);
     }
 
     @Override

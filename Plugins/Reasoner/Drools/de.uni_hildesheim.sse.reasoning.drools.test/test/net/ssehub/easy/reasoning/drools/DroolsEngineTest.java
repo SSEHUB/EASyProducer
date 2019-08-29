@@ -121,7 +121,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "StringExpressions.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -139,7 +139,7 @@ public class DroolsEngineTest {
         Project project = loadProject( BASICFILESPATH + "Regular_Expressions.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -156,7 +156,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "ContainerConstraints.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -173,7 +173,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "ValueProp.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -192,7 +192,7 @@ public class DroolsEngineTest {
         Project project = loadProject( BASICFILESPATH + "IsDefined.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         Assert.assertTrue(!result.hasConflict());
         for (int i = 0; i < result.getMessageCount(); i++) {
@@ -209,7 +209,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "ifthenelse.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -227,7 +227,7 @@ public class DroolsEngineTest {
         Project project = loadProject( BASICFILESPATH + "SimpleContainer.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -244,7 +244,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "TestAssgn_1.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -260,7 +260,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "compoundBlock.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -275,7 +275,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "PhaniNullPOinter.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -292,7 +292,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "AssignmentAttributes.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -311,7 +311,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "" + "AttributesTest.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -328,7 +328,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "SimpleAssignments.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -344,7 +344,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "Example1.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -361,7 +361,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "Example2.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -377,7 +377,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "Example3.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -393,7 +393,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "Example4.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -409,7 +409,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "Example5.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -426,7 +426,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "FailingCase.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -442,7 +442,7 @@ public class DroolsEngineTest {
         Project project = loadProject( ASSIGNMENTSFILEPATH + "CompoundAssignments.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -458,7 +458,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "PL_ReAssign.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -472,7 +472,7 @@ public class DroolsEngineTest {
      Project project = loadProject( CHALLENGESFILEPATH + "testYmsPlatform.ivml");
      Configuration config = new Configuration(project);
      engine = new DroolsReasoner();
-     ReasoningResult result = engine.propagate(project, config, null, null);
+     ReasoningResult result = engine.propagate(config, null, null);
      System.out.println("result is " + result.getMessageCount());
      Assert.assertTrue(result.hasConflict());
      for (int i = 0; i < result.getMessageCount(); i++) {
@@ -490,7 +490,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "NestedComp.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -508,7 +508,7 @@ public class DroolsEngineTest {
 //        Project project = loadProject( CHALLENGESFILEPATH + "sequenceTest.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -528,7 +528,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "assignments.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -547,7 +547,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "CompoundAccessAssignments.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -567,7 +567,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CONFIDENTIAL + "Constraints.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         System.out.println("Result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -584,7 +584,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "ProjectImportsTest.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         Assert.assertTrue(!result.hasConflict());
         for (int i = 0; i < result.getMessageCount(); i++) {
@@ -600,7 +600,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "AssignableTypeErrorProducer.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         Assert.assertTrue(!result.hasConflict());
         for (int i = 0; i < result.getMessageCount(); i++) {
@@ -615,7 +615,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "NewApproach.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         //Value updation.
         Assert.assertTrue(!result.hasConflict());
@@ -632,7 +632,7 @@ public class DroolsEngineTest {
           Project project = loadProject(path + "IVML_gen0" + ".ivml");
           Configuration conf = new Configuration(project);
           engine = new DroolsReasoner();
-          ReasoningResult result = engine.check(project, conf, null, null);
+          ReasoningResult result = engine.check(conf, null, null);
           System.out.println("......." + result.getMessageCount() + "...............");
       }
     
@@ -644,7 +644,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "PL_YMS_platform_0.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         for (int i = 0; i < result.getMessageCount(); i++) {
             System.out.println("Result -> " + result.getMessage(i).getDescription());
@@ -658,7 +658,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "updateOrderedEnum.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         Assert.assertTrue(result.hasConflict());
        
@@ -671,7 +671,7 @@ public class DroolsEngineTest {
         Project project = loadProject( BASICFILESPATH + "complex.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         System.out.println("result is " + result.getMessageCount());
         Assert.assertTrue(!result.hasConflict());
         
@@ -701,7 +701,7 @@ public class DroolsEngineTest {
       Project project = loadProject( CHALLENGESFILEPATH + "testDef.ivml");
       Configuration config = new Configuration(project);
       engine = new DroolsReasoner();
-      ReasoningResult result = engine.propagate(project, config, null, null);
+      ReasoningResult result = engine.propagate(config, null, null);
       System.out.println("result is " + result.getMessageCount());
       Assert.assertTrue(result.hasConflict());
       
@@ -714,7 +714,7 @@ public class DroolsEngineTest {
        Project project = loadProject( BASICFILESPATH + "complex.ivml");
        Configuration config = new Configuration(project);
        engine = new DroolsReasoner();
-       ReasoningResult result = engine.propagate(project, config, null, null);
+       ReasoningResult result = engine.propagate(config, null, null);
        Assert.assertTrue(!result.hasConflict());
        System.out.println("result is " + result.getMessageCount());
        
@@ -726,7 +726,7 @@ public class DroolsEngineTest {
 //      Project project = loadProject(CHALLENGESFILEPATH + "testInfra.ivml");
       Configuration config = new Configuration(project);
       engine = new DroolsReasoner();
-      ReasoningResult result = engine.propagate(project, config, null, null);
+      ReasoningResult result = engine.propagate(config, null, null);
       System.out.println("result is " + result.getMessageCount());
       for (int i = 0; i < result.getMessageCount(); i++) {
           System.out.println(result.getMessage(i).getDescription());
@@ -741,7 +741,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "PL_car_0.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.propagate(project, config, null, null);
+        ReasoningResult result = engine.propagate(config, null, null);
         Assert.assertTrue(result.hasConflict());
         
     }
@@ -753,9 +753,9 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "testEqs.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         if (!result.hasConflict()) {
-         ReasoningResult result2 = engine.propagate(project, config, null, null);
+         ReasoningResult result2 = engine.propagate(config, null, null);
          System.out.println("result2 -> " + result2.getMessageCount());
         }
         Assert.assertTrue(result.hasConflict());
@@ -768,7 +768,7 @@ public class DroolsEngineTest {
         Project project = loadProject( CHALLENGESFILEPATH + "TestNonNested.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         Assert.assertTrue(!result.hasConflict());
         
     }
@@ -779,13 +779,10 @@ public class DroolsEngineTest {
         Project project = loadProject( BASICFILESPATH + "en.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         Assert.assertTrue(result.hasConflict());
         
     }
-    
-    /*
-    */
     
     /*
      * Test division operators across integer and real.
@@ -796,7 +793,7 @@ public class DroolsEngineTest {
         Project project = loadProject( BASICFILESPATH + "testDiv.ivml");
         Configuration config = new Configuration(project);
         engine = new DroolsReasoner();
-        ReasoningResult result = engine.check(project, config, null, null);
+        ReasoningResult result = engine.check(config, null, null);
         if (result.hasConflict()) {
             
         }
@@ -819,7 +816,7 @@ public class DroolsEngineTest {
 //        constraints.add(cons2);
 //        EvaluationResult result1 = engine.evaluate(project, config, constraints, null, null);
 //        Assert.assertFalse(0 == result1.getEvaluationPairCount());
-        ReasoningResult result2 = engine.propagate(project, config, null, null);
+        ReasoningResult result2 = engine.propagate(config, null, null);
         Assert.assertTrue(!result2.hasConflict());
         
     }
@@ -976,7 +973,7 @@ public class DroolsEngineTest {
         conf.getDecision(sVar).setValue(value, null);
         
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(!r.hasConflict());
         System.out.println("......................");
     }
@@ -1020,11 +1017,9 @@ public class DroolsEngineTest {
         conf.getDecision(intDecVar).setValue(val1, null);
 
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(r.hasConflict());
         System.out.println("......................");
-        
-        
     }
     
     /**
@@ -1065,10 +1060,9 @@ public class DroolsEngineTest {
         conf.getDecision(compDecvar).setValue(cValue, null);
         
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(r.hasConflict());
         System.out.println("......................");
-        
     }
 
 
@@ -1140,12 +1134,10 @@ public class DroolsEngineTest {
         project.add(cons1);
          
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(r.hasConflict());
         System.out.println("......................");
     }
-    
-   
     
     /**
      *Method to test the operation Isempty on seq.
@@ -1172,13 +1164,10 @@ public class DroolsEngineTest {
         Constraint cons1 = new Constraint(ocl2, null);
         project.add(cons1);
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertFalse(r.hasConflict());
         System.out.println(" .. has conflict?");
     }
-    
-    
-    
     
     /**
      * Test for checking the constraint x = (y + z) * 2 .
@@ -1231,13 +1220,10 @@ public class DroolsEngineTest {
         conf.getDecision(decVarThree).setValue(zValue, null);
          
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(!r.hasConflict());
         System.out.println("......................");
-        
-        
     }
-    
     
     /**
      * Method which includes and tests the use of parenthesis in constraints.
@@ -1300,7 +1286,7 @@ public class DroolsEngineTest {
         conf.getDecision(realXDecl).setValue(val4, null);
         
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(r.hasConflict());
         System.out.println("......................");
         
@@ -1370,7 +1356,7 @@ public class DroolsEngineTest {
         conf.getDecision(integerADecl).setValue(val1, null);
         conf.getDecision(integerBDecl).setValue(val2, null);
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(!r.hasConflict());
         System.out.println("......................");
         
@@ -1455,7 +1441,7 @@ public class DroolsEngineTest {
         conf.getDecision(realYDecl).setValue(val4, null);
         
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertFalse(r.hasConflict());
         System.out.println("......................");
         
@@ -1528,7 +1514,7 @@ public class DroolsEngineTest {
         
         
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(r.hasConflict());
         System.out.println("......................");
         
@@ -1581,7 +1567,7 @@ public class DroolsEngineTest {
         Configuration conf = new Configuration(project);
 
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(!r.hasConflict());
         System.out.println("......................" + r.getMessageCount());
     }
@@ -1627,7 +1613,7 @@ public class DroolsEngineTest {
         conf.getDecision(boolC).setValue(boolVal2, null);
 
         engine = new DroolsReasoner();
-        ReasoningResult r = engine.check(project, conf, null, null);
+        ReasoningResult r = engine.check(conf, null, null);
         Assert.assertTrue(!r.hasConflict());
         System.out.println("......................");
 
@@ -1638,7 +1624,7 @@ public class DroolsEngineTest {
       Project project = loadProject( BASICFILESPATH + "compounds.ivml");
       Configuration conf = new Configuration(project);
       engine = new DroolsReasoner();
-      ReasoningResult result = engine.check(project, conf, null, null);
+      ReasoningResult result = engine.check(conf, null, null);
       System.out.println("......." + result.getMessageCount() + "...............");
       Assert.assertTrue(!result.hasConflict());
       

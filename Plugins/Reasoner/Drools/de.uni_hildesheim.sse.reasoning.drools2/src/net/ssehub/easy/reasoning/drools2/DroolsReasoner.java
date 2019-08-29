@@ -47,7 +47,6 @@ public class DroolsReasoner implements IReasoner {
 
     @Override
     public ReasoningResult upgrade(URI url, ProgressObserver observer) {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -59,7 +58,7 @@ public class DroolsReasoner implements IReasoner {
     }
 
     @Override
-    public ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) { 
         ReasonerModel model = new ReasonerModel(cfg, reasonerConfig);
         DroolsEngine engine = new DroolsEngine(model, ReasoningOperation.PROPAGATION, observer);           
@@ -67,7 +66,7 @@ public class DroolsReasoner implements IReasoner {
     }
 
     @Override
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfig,
+    public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer) {        
         ReasonerModel model = new ReasonerModel(cfg, reasonerConfig);
         DroolsEngine engine = new DroolsEngine(model, ReasoningOperation.PROPAGATION, observer);
@@ -75,7 +74,7 @@ public class DroolsReasoner implements IReasoner {
     }
 
     @Override
-    public EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints,
+    public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints,
             ReasonerConfiguration reasonerConfig, ProgressObserver observer) {
         
         EvaluationResult notSupportedResult = new EvaluationResult("Drools");
@@ -106,16 +105,13 @@ public class DroolsReasoner implements IReasoner {
     }
     
     @Override
-    public IReasonerInstance createInstance(Project project, Configuration cfg,
-            ReasonerConfiguration reasonerConfiguration) {
+    public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
         return null;
     }
 
     /**
      * Initializes the configuration according to the given model and propagates values, if possible.
      * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
      * @param cfg
      *            The current configuration based on the given project (may be modified as a side effect
      *            of value propagation)
@@ -127,9 +123,9 @@ public class DroolsReasoner implements IReasoner {
      *     this operation.
      */
     @Override
-    public ReasoningResult initialize(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration,
+    public ReasoningResult initialize(Configuration cfg, ReasonerConfiguration reasonerConfiguration,
             ProgressObserver observer) {
-        return propagate(project, cfg, reasonerConfiguration, observer);
+        return propagate(cfg, reasonerConfiguration, observer);
     }
 
     @Override
