@@ -126,7 +126,7 @@ public class EASy extends Task {
                 Project project = plpPre.getProject();
                 Configuration config = plpPre.getConfiguration();
                 ReasonerConfiguration rConfig = new ReasonerConfiguration();
-                ReasoningResult result = ReasonerFrontend.getInstance().check(project, config, rConfig, 
+                ReasoningResult result = ReasonerFrontend.getInstance().check(config, rConfig, 
                     ProgressObserver.NO_OBSERVER);
                 if (result.hasConflict()) {
                     String msg = "";

@@ -101,7 +101,7 @@ public class ReasoningCommands {
     public static boolean checkValidity(Project project) {
         Configuration config = new Configuration(project);
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        ReasoningResult result = ReasonerFrontend.getInstance().check(project, config, rConfig, 
+        ReasoningResult result = ReasonerFrontend.getInstance().check(config, rConfig, 
             ProgressObserver.NO_OBSERVER);
         return result.hasConflict();
     }
