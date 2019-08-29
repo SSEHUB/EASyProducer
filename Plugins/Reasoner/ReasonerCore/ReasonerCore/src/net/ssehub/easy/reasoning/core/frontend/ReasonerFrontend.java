@@ -65,7 +65,7 @@ public class ReasonerFrontend {
 
         @Override
         public void initialize(Configuration config, ProgressObserver observer) {
-            propagate(config.getProject(), config, null, observer);
+            propagate(config, null, observer);
         }
         
     }
@@ -281,26 +281,6 @@ public class ReasonerFrontend {
      */
     public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer) {
-        return check(cfg.getProject(), cfg, reasonerConfiguration, observer);
-    }
-    
-    /**
-     * Checks the configuration according to the given project structure and does not affect the configuration.
-     * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            The current configuration based on the given project.
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
-     *        progress shall be indicated           
-     * @return The result of this reasoning step. Can have the status
-     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
-     *     this operation.
-     */
-    private ReasoningResult check(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
-        ProgressObserver observer) {
         ReasoningResult result = null;
         IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {
@@ -310,7 +290,7 @@ public class ReasonerFrontend {
             Message warning = new Message(NO_REASONING_AVAILABE_MSG, null, Status.WARNING);
             result.addMessage(warning);
         }
-        return result;
+        return result;        
     }
 
     /**
@@ -331,27 +311,6 @@ public class ReasonerFrontend {
      * @see #propagate(Project, Configuration, ReasonerConfiguration, ProgressObserver)
      */
     public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
-        ProgressObserver observer) {
-        return propagate(cfg.getProject(), cfg, reasonerConfiguration, observer);
-    }
-
-    /**
-     * Checks the configuration according to the given model and propagates values, if possible.
-     * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            The current configuration based on the given project. (may be modified as a side effect
-     *            of value propagation)
-     * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
-     *        progress shall be indicated
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     * @return The result of this reasoning step. Can have the status
-     *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
-     *     this operation.
-     */
-    public ReasoningResult propagate(Project project, Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer) {
         ReasoningResult result = null;
         IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
@@ -387,30 +346,6 @@ public class ReasonerFrontend {
      * @see #evaluate(Project, Configuration, List, ReasonerConfiguration, ProgressObserver)
      */
     public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints, 
-        ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
-        return evaluate(cfg.getProject(), cfg, constraints, reasonerConfiguration, observer);
-    }
-    
-    /**
-     * Evaluates a given list of constraints (in the sense of boolean conditions) which are related to and valid in the
-     * context of the given project and configuration.
-     * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            the configuration as a basis for the evaluation
-     * @param constraints
-     *            the constraints (expressions which must evaluate to <code>true</code>)
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
-     *        progress shall be indicated           
-     * @return The result of this reasoning step. The result pairs may be given in a different order than in
-     *         <code>constraints</code>. <b>null</b> constraints are ignored and not returned as a result. Can have the
-     *         status {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not
-     *         support this operation.
-     */
-    private EvaluationResult evaluate(Project project, Configuration cfg, List<Constraint> constraints, 
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
         EvaluationResult result = null;
 
@@ -720,24 +655,6 @@ public class ReasonerFrontend {
      *@see #createInstance(Project, Configuration, ReasonerConfiguration)
      */
     public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
-        return createInstance(cfg.getProject(), cfg, reasonerConfiguration);
-    }
-    
-    /**
-     * Creates a reasoner instance for repeated reasoning on the same model (no structural changes allowed
-     * during two subsequent reasoning runs).
-     * 
-     * @param project
-     *            The project which serves as basis for the related configuration.
-     * @param cfg
-     *            the configuration as a basis for the evaluation
-     * @param reasonerConfiguration the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
-     *        may be <b>null</b>)
-     * @return a reusable reasoner instance, return a {@link DelegatingReasonerInstance} on this reasoner to
-     *     avoid null pointer checking.
-     */
-    private IReasonerInstance createInstance(Project project, Configuration cfg, 
-        ReasonerConfiguration reasonerConfiguration) {
         IReasonerInstance result;
         IReasoner reasoner = getActualReasoner(cfg, null, reasonerConfiguration);
         if (null != reasoner) {

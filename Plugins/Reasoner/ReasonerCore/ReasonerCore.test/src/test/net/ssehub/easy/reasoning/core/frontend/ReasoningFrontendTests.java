@@ -237,7 +237,7 @@ public class ReasoningFrontendTests {
         assertReasoningResult(expected, ResultType.PROPAGATE, 
             frontend.propagate(cfg, reasonerConfiguration, observer));
         assertReasoningResult(expected, ResultType.PROPAGATE,
-            frontend.propagate(prj, cfg, reasonerConfiguration, observer));
+            frontend.propagate(cfg, reasonerConfiguration, observer));
         ReasoningResult expRes = new ReasoningResult();
         expRes.addMessage(new Message("invalid URL", null, Status.ERROR));
         assertReasoningResult(expRes, frontend.upgradeReasoner(expected.getDescriptor(), null, observer));

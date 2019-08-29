@@ -97,7 +97,7 @@ public class ReasoningProcess implements Runnable {
                     if (null == config) {
                         setErrorResult("No configuration specified for reasoning");
                     }
-                    result = reasoner.propagate(project, config, reasonerConfig, observer);
+                    result = reasoner.propagate(config, reasonerConfig, observer);
                     logResult();
                     break;
                 default:

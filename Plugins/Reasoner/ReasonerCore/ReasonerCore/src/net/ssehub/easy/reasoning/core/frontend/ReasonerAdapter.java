@@ -136,7 +136,7 @@ public class ReasonerAdapter {
         @Override
         public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration rConfig, 
             ProgressObserver observer) {
-            return ReasonerFrontend.getInstance().propagate(cfg.getProject(), cfg, rConfig, observer);
+            return ReasonerFrontend.getInstance().propagate(cfg, rConfig, observer);
         }
 
         @Override
