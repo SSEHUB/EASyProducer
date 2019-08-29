@@ -622,7 +622,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      */
     public Configuration reason() {
         Configuration result;
-        ReasoningResult tmp = ReasonerFrontend.getInstance().propagate(project, configuration, 
+        ReasoningResult tmp = ReasonerFrontend.getInstance().propagate(configuration, 
             new ReasonerConfiguration(), ProgressObserver.NO_OBSERVER);
         if (tmp.providesInformationOnAffectedVariables()) {
             int aCount = tmp.getAffectedVariablesCount();
