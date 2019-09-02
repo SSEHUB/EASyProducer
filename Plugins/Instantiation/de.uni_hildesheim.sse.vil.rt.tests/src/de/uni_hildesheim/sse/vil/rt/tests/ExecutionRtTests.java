@@ -534,32 +534,6 @@ public class ExecutionRtTests extends AbstractRtTest {
         Assert.assertNotNull(ppValueVar);
         Assert.assertEquals(500, ppValueVar.getIntegerValue().intValue());
     }
-
-    /**
-     * Tests value instantiation capabilities of rt-VIL for constraints during value creation.
-     * 
-     * @param name instances?
-     * @param ivmlName RTInstances1
-     * 
-     * @throws IOException should not occur
-     */
-    private void testRtInstances(String name, String ivmlName) throws IOException {
-        File modelFile = createFile(name);
-        Configuration cfg = getIvmlConfiguration(ivmlName, NoVariableFilter.INSTANCE);
-        
-        Map<String, Object> param = createParameterMap(null, null, cfg);
-        EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
-        //setup.setEnableEquals(false);
-        assertEqual(setup);
-        
-        DecisionVariable var = cfg.getByName("node");
-        Assert.assertNotNull(var);
-        DecisionVariable sVar = var.getByName("shedder");
-        Assert.assertNotNull(sVar);
-        DecisionVariable nVar = sVar.getByName("name");
-        Assert.assertNotNull(nVar);
-        Assert.assertEquals("NTH_ITEM", nVar.getStringValue());
-    }
     
     /**
      * Tests a single reference assignment (contributed by QualiMaster).
@@ -972,7 +946,59 @@ public class ExecutionRtTests extends AbstractRtTest {
      */
     @Test
     public void testRtInstance1() throws IOException {
-        testRtInstances("rtInstance1", "RTInstance1");
+        final String name = "rtInstance1";
+        final String ivmlName = "RTInstance1";
+
+        File modelFile = createFile(name);
+        Configuration cfg = getIvmlConfiguration(ivmlName, NoVariableFilter.INSTANCE);
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
+        assertEqual(setup);
+        
+        DecisionVariable var = cfg.getByName("node");
+        Assert.assertNotNull(var);
+        DecisionVariable sVar = var.getByName("shedder");
+        Assert.assertNotNull(sVar);
+        DecisionVariable nVar = sVar.getByName("name");
+        Assert.assertNotNull(nVar);
+        Assert.assertEquals("NTH_ITEM", nVar.getStringValue());
+    }
+
+    /**
+     * Tests value instantiation capabilities of rt-VIL with constraints.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRtInstance2() throws IOException {
+        final String name = "rtInstance2";
+        final String ivmlName = "RTInstance2";
+
+        File modelFile = createFile(name);
+        Configuration cfg = getIvmlConfiguration(ivmlName, NoVariableFilter.INSTANCE);
+        
+        Map<String, Object> param = createParameterMap(null, null, cfg);
+        EqualitySetup<Script> setup = new EqualitySetup<Script>(modelFile, name, null, createTraceFile(name), param);
+        assertEqual(setup);
+
+        // global = 7
+        // shedder.value = 10
+        // shedder.name = "MyShedder"
+        DecisionVariable var = cfg.getByName("global");
+        Assert.assertNotNull(var);
+        Assert.assertNotNull(var.getIntegerValue());
+        Assert.assertEquals(7, var.getIntegerValue().intValue());
+        
+        DecisionVariable sVar = cfg.getByName("shedder");
+        Assert.assertNotNull(sVar);
+        DecisionVariable nVar = sVar.getByName("name");
+        Assert.assertNotNull(nVar);
+        Assert.assertEquals("MyShedder", nVar.getStringValue());
+        DecisionVariable vVar = sVar.getByName("value");
+        Assert.assertNotNull(vVar);
+        Assert.assertNotNull(vVar.getIntegerValue());
+        Assert.assertEquals(10, vVar.getIntegerValue().intValue());
     }
 
 }

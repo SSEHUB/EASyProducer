@@ -1,0 +1,15 @@
+project RTInstance2 {
+
+    import RTImp1;
+
+    annotate BindingTime bindingTime = BindingTime.compile to .;
+
+    assign (bindingTime = BindingTime.runtime) to {
+        Shedder shedder;
+    }
+    
+    freeze {
+        .;
+    } but (v | v.bindingTime == BindingTime.runtime);
+    
+}

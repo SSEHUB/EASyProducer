@@ -1,0 +1,25 @@
+project RTImp1 {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to .;
+
+    compound Component {
+        String name;
+    }
+
+    compound Shedder refines Component {
+        assign (bindingTime = BindingTime.runtime) to {
+            Integer value = global + 3;
+        }
+        name.bindingTime = BindingTime.runtime;
+    }
+
+    assign (bindingTime = BindingTime.runtime) to {
+        Integer global;
+    }
+
+    freeze {
+        .;
+    } but (v | v.bindingTime == BindingTime.runtime);
+    
+}

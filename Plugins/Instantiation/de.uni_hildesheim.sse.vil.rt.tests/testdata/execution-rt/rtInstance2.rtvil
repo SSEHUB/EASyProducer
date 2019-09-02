@@ -1,0 +1,21 @@
+import enact;
+
+@advice(RTInstance2)
+rtVilScript instances (Project source, Configuration config, Project target) {
+
+    strategy main(Project source, Configuration config, Project target) = {
+        objective true;
+        breakdown {
+            tactic t(config);
+        }
+    }
+
+    tactic t(Configuration config) = {
+        RTInstance2 cfg = config;
+        cfg.global = 7;
+        cfg.shedder.createValue(true);
+        Shedder shedder = cfg.shedder;
+        shedder.name = "MyShedder";
+    }
+
+}

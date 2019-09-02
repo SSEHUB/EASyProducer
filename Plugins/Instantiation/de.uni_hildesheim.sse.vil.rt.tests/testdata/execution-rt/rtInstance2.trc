@@ -1,0 +1,9 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    -> t(Configuration) with (<config>)
+        cfg <- <config>
+        cfg.global <- 7
+        -> createValue(DecisionVariable, Boolean) with (RTInstance2::shedder, true)
+        shedder <- RTInstance2::shedder
+        shedder.name <- MyShedder
+        Reasoner execution ok: true
+    -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
