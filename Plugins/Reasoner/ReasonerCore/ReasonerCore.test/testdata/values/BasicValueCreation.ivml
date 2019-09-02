@@ -1,0 +1,11 @@
+project BasicValueCreation {
+
+    compound Cmp {
+        Integer val;
+        val = 25;
+    }
+    
+    Cmp c = Cmp{};
+    // no freeze here
+    
+}
