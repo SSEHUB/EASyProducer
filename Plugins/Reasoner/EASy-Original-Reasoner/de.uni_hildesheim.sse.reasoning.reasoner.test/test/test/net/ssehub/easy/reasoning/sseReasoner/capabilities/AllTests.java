@@ -23,7 +23,8 @@ import org.junit.runners.Suite.SuiteClasses;
     CollectionOperationsTests.class,
     StructureTests.class,
     ConstraintVariableTests.class,
-    EvalTests.class
+    EvalTests.class, 
+    ValueCreationTests.class
     })
 public class AllTests {
 

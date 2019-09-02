@@ -46,10 +46,25 @@ import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IModelVisitor;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.model.datatypes.AnyType;
+import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
+import net.ssehub.easy.varModel.model.datatypes.Enum;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IDatatypeVisitor;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
+import net.ssehub.easy.varModel.model.datatypes.MetaType;
+import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
+import net.ssehub.easy.varModel.model.datatypes.RealType;
+import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.StringType;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
+import net.ssehub.easy.varModel.model.datatypes.VersionType;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 
 /**
@@ -124,14 +139,17 @@ public class ConstraintFunctions {
      * 
      * @author Holger Eichelberger
      */
-    private static class TransitiveConstraintFinder extends ConstraintFinder implements IConstraintTreeVisitor {
+    private static class TransitiveConstraintFinder extends ConstraintFinder implements IConstraintTreeVisitor, 
+        IDatatypeVisitor {
         
         private boolean add;
         private Set<AbstractVariable> variables = new HashSet<AbstractVariable>();
         private Set<AbstractVariable> scheduled = new HashSet<AbstractVariable>();
         private Set<AbstractVariable> candidates = new HashSet<AbstractVariable>();
+        private Set<Object> done = new HashSet<Object>();
         private Project scope;
         private Project target;
+        private IModelVisitor mVisitor;
 
         /**
          * Creates a finder with search scope and target project.
@@ -143,6 +161,7 @@ public class ConstraintFunctions {
             super(scope);
             this.scope = scope;
             this.target = target;
+            mVisitor = this;
         }
         
         @Override
@@ -156,13 +175,13 @@ public class ConstraintFunctions {
          * @param var the variable
          */
         public void visit(AbstractVariable var) {
-            variables.add(var);
+            addToVariables(var);
             scope.accept(this);
             while (!scheduled.isEmpty()) {
                 boolean visitAgain = false;
                 for (AbstractVariable v : scheduled) {
                     if (!variables.contains(v)) {
-                        variables.add(v);
+                        addToVariables(var);
                         // TODO duplicate variables, mock the target imports
                         target.add(v);
                         visitAgain = true;
@@ -171,6 +190,42 @@ public class ConstraintFunctions {
                 scheduled.clear();
                 if (visitAgain) {
                     scope.accept(this);
+                }
+            }
+        }
+
+        /**
+         * Internal method to start visiting a datatype. Due to additional checks,
+         * please do not visit the type directly.
+         * 
+         * @param type the type to be visited
+         */
+        private void visit(IDatatype type) {
+            if (null != type && !done.contains(type)) {
+                done.add(type);
+                type.accept(this);
+            }
+        }
+        
+        /**
+         * Adds a variable to {@link #variables}.
+         * 
+         * @param var the variable
+         */
+        private void addToVariables(AbstractVariable var) {
+            variables.add(var);
+            var.accept(mVisitor);
+        }
+        
+        @Override
+        public void visitDecisionVariableDeclaration(DecisionVariableDeclaration decl) {
+            visit(decl.getType());
+            if (null != decl.getDefaultValue()) {
+                int size = candidates.size();
+                decl.getDefaultValue().accept(this);
+                if (candidates.size() > size) { // add does not work here, default expression
+                    scheduled.addAll(candidates);
+                    candidates.clear();
                 }
             }
         }
@@ -206,7 +261,6 @@ public class ConstraintFunctions {
                     EASyLoggerFactory.INSTANCE.getLogger(getClass(), Descriptor.BUNDLE_NAME);
                 }
             }
-            
             super.visitProject(project);
         }
 
@@ -277,7 +331,7 @@ public class ConstraintFunctions {
         @Override
         public void visitCompoundAccess(CompoundAccess access) {
             if (null != access.getResolvedSlot()) {
-                access.getResolvedSlot().accept(this);
+                access.getResolvedSlot().accept(mVisitor);
             }
         }
 
@@ -315,6 +369,87 @@ public class ConstraintFunctions {
             for (int e = 0; e < expression.getExpressionCount(); e++) {
                 expression.getExpression(e).accept(this);
             }
+        }
+
+        @Override
+        public void visitDatatype(IDatatype datatype) {
+        }
+
+        @Override
+        public void visitAnyType(AnyType datatype) {
+        }
+
+        @Override
+        public void visitMetaType(MetaType datatype) {
+        }
+
+        @Override
+        public void visitDerivedType(DerivedDatatype datatype) {
+            datatype.getBasisType().accept(this);
+        }
+
+        @Override
+        public void visitBooleanType(BooleanType type) {
+        }
+
+        @Override
+        public void visitStringType(StringType type) {
+        }
+
+        @Override
+        public void visitConstraintType(ConstraintType type) {
+        }
+
+        @Override
+        public void visitIntegerType(IntegerType type) {
+        }
+
+        @Override
+        public void visitVersionType(VersionType type) {
+        }
+
+        @Override
+        public void visitRealType(RealType type) {
+        }
+
+        @Override
+        public void visitCompoundType(Compound compound) {
+            for (int e = 0; e < compound.getElementCount(); e++) {
+                compound.getElement(e).accept(mVisitor); 
+            }
+            for (int a = 0; a < compound.getAssignmentCount(); a++) {
+                compound.getAssignment(a).accept(mVisitor);
+            }
+        }
+        
+        @Override
+        public void visitAttributeAssignment(AttributeAssignment assignment) {
+            for (int e = 0; e < assignment.getElementCount(); e++) {
+                assignment.getElement(e).accept(mVisitor);
+            }
+            super.visitAttributeAssignment(assignment);
+        }
+        
+        @Override
+        public void visitSet(net.ssehub.easy.varModel.model.datatypes.Set set) {
+            for (int g = 0; g < set.getGenericTypeCount(); g++) {
+                set.getGenericType(g).accept(this);
+            }
+        }
+
+        @Override
+        public void visitSequence(Sequence sequence) {
+            for (int g = 0; g < sequence.getGenericTypeCount(); g++) {
+                sequence.getGenericType(g).accept(this);
+            }
+        }
+
+        @Override
+        public void visitEnumType(Enum enumType) {
+        }
+
+        @Override
+        public void visitOrderedEnumType(OrderedEnum enumType) {
         }
 
     }
