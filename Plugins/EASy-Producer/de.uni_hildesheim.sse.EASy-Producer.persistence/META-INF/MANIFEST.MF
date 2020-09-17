@@ -5,13 +5,13 @@ Bundle-SymbolicName: net.ssehub.easy.producer.core;singleton:=true
 Bundle-Version: 1.2.0
 Bundle-Activator: net.ssehub.easy.producer.core.persistence.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
-Require-Bundle: net.ssehub.easy.varModel;bundle-version="1.2.0",
- net.ssehub.easy.instantiation.core;bundle-version="1.2.0",
- net.ssehub.easy.reasoning.core;bundle-version="1.2.0",
- net.ssehub.easy.dslCore;bundle-version="1.2.0",
- de.uni_hildesheim.sse.ivml;bundle-version="1.2.0",
- de.uni_hildesheim.sse.vil.buildlang;bundle-version="1.2.0",
- de.uni_hildesheim.sse.vil.templatelang;bundle-version="1.2.0",
+Require-Bundle: net.ssehub.easy.varModel,
+ net.ssehub.easy.instantiation.core,
+ net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.dslCore,
+ de.uni_hildesheim.sse.ivml,
+ de.uni_hildesheim.sse.vil.buildlang,
+ de.uni_hildesheim.sse.vil.templatelang,
  net.ssehub.easy.libs.commons.io
 Import-Package: org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
