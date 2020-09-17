@@ -16,7 +16,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
  org.eclipse.xtext.common.types.ui,
  org.eclipse.xtext.ui.codetemplates.ui,
  org.eclipse.compare,
- net.ssehub.easy.instantiation.core;bundle-version="1.2.0",
+ net.ssehub.easy.instantiation.core,
  net.ssehub.easy.dslCore.ui,
  net.ssehub.easy.dslCore
 Import-Package: org.apache.log4j

@@ -25,12 +25,12 @@ Bundle-ClassPath: .,
  lib/xstream/xom-1.1.jar,
  lib/xstream/xpp3_min-1.1.4c.jar,
  lib/xstream/xstream-1.4.3.jar
-Require-Bundle: net.ssehub.easy.varModel;bundle-version="1.2.0",
+Require-Bundle: net.ssehub.easy.varModel,
  net.ssehub.easy.libs.commons.io,
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
  org.apache.commons.lang,
  net.ssehub.easy.instantiation.core,
- net.ssehub.easy.reasoning.sseReasoner;bundle-version="1.2.0"
+ net.ssehub.easy.reasoning.sseReasoner
 Export-Package: net.ssehub.easy.instantiation.serializer.xml,
  net.ssehub.easy.instantiation.serializer.xml.loader

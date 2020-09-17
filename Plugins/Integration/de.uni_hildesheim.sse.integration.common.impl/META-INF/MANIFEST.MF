@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.integration.common.impl;singleton:=true
 Bundle-Version: 1.2.0
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: net.ssehub.easy.integration.common;bundle-version="1.2.0",
- net.ssehub.easy.varModel;bundle-version="1.2.0",
- de.uni_hildesheim.sse.ivml;bundle-version="1.2.0"
+Require-Bundle: net.ssehub.easy.integration.common,
+ net.ssehub.easy.varModel,
+ de.uni_hildesheim.sse.ivml
 Export-Package: net.ssehub.easy.integration.common.impl

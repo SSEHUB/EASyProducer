@@ -8,7 +8,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: net.ssehub.easy.integration.common.eclipse
 Require-Bundle: org.eclipse.core.runtime;visibility:=reexport,
  org.eclipse.core.resources;visibility:=reexport,
- net.ssehub.easy.varModel;bundle-version="1.2.0";visibility:=reexport,
- net.ssehub.easy.integration.common;bundle-version="1.2.0";visibility:=reexport,
- net.ssehub.easy.producer.core;bundle-version="1.2.0",
- net.ssehub.easy.producer.eclipse;bundle-version="1.2.0"
+ net.ssehub.easy.varModel;visibility:=reexport,
+ net.ssehub.easy.integration.common;visibility:=reexport,
+ net.ssehub.easy.producer.core,
+ net.ssehub.easy.producer.eclipse

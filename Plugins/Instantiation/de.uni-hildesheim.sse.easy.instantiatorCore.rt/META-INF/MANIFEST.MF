@@ -6,13 +6,13 @@ Bundle-Version: 1.2.0
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Service-Component: OSGI-INF/instantiatorCoreRt.xml
-Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="1.2.0";visibility:=reexport,
- net.ssehub.easy.basics;bundle-version="1.2.0",
- net.ssehub.easy.varModel;bundle-version="1.2.0",
+Require-Bundle: net.ssehub.easy.instantiation.core;visibility:=reexport,
+ net.ssehub.easy.basics,
+ net.ssehub.easy.varModel,
  org.eclipse.equinox.ds,
  org.eclipse.core.runtime,
- net.ssehub.easy.reasoning.core;bundle-version="1.2.0",
- net.ssehub.easy.instantiation.serializer.xml;bundle-version="1.2.0",
+ net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.instantiation.serializer.xml,
  org.apache.commons.lang;bundle-version="2.6.0"
 Export-Package: net.ssehub.easy.instantiation.rt.core.model.confModel,
  net.ssehub.easy.instantiation.rt.core.model.rtVil,

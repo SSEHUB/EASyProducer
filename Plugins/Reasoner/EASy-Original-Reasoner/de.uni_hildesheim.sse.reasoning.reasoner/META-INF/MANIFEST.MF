@@ -7,8 +7,8 @@ Import-Package: de.uni_hildesheim.sse.ivml,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: University of Hildesheim - SSE
-Require-Bundle: net.ssehub.easy.reasoning.core;bundle-version="1.2.0",
- net.ssehub.easy.varModel;bundle-version="1.2.0",
+Require-Bundle: net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.varModel,
  org.eclipse.osgi.services
 Service-Component: OSGI-INF/reasoner.xml
 Bundle-ActivationPolicy: lazy

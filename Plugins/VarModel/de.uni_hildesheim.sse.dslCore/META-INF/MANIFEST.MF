@@ -7,7 +7,7 @@ Bundle-Vendor: SSE University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.emf.ecore,
  org.eclipse.xtext;bundle-version="2.5.0",
- net.ssehub.easy.basics;bundle-version="1.2.0";visibility:=reexport,
+ net.ssehub.easy.basics;visibility:=reexport,
  org.apache.log4j;bundle-version="1.2.15"
 Export-Package: net.ssehub.easy.dslCore,
  net.ssehub.easy.dslCore.test,
