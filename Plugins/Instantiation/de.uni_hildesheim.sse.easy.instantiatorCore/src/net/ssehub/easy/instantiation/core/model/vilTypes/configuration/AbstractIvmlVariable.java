@@ -1010,14 +1010,8 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
     	IDatatype type = getActualType();
     	// Unpack reference types
     	if (type instanceof Reference) {
-    		// Check if there is already a concrete variable referenced
-    		ReferenceValue rValue = (ReferenceValue) origVariable.getValue();
-    		if (null != rValue) {
-    			type = ((DecisionVariableDeclaration) rValue.getValue()).getType();
-    		} else {
-    			// Fallback: Use declared type of reference if no instance is referenced
-    			type = ((Reference) type).getType();
-    		}
+    		// Use declaration of reference
+    		type = getDecisionVariable().getDeclaration().getType();
     	}
     	return type;
     }
