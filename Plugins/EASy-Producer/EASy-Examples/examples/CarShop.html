@@ -1,0 +1,29 @@
+<html>
+    <body>
+        <h2>CarShop Example</h2>
+        This project can be self-instantiated (i.e., instantiation into the project, without driving a new project)
+        or can be instantiated into a derived project (default usage scenario for product lines).
+        This project demonstrates several modelling and instantiation concepts:
+        <h3>IVML Modelling Capabilities</h3>
+        <ul>
+            <li><b>Custom Data Type Definition:</b> Definition of a positive Integer and an enumeration.</li>
+            <li><b>Abstract Compounds:</b> Comparable with abstract classes.</li>
+            <li><b>Refined Compounds:</b> Comparable with inherited classes.</li>
+            <li><b>Default Values:</b> May be overwritten.</li>
+        </ul>
+        
+        <h3>VIL Instantiation Capabilities</h3>
+        <ul>
+            <li><b>Advices:</b> VIL script imports structure and data types defined in IVML model.</li>
+            <li><b>Dynamic Dispatch:</b> Differend instnatiation functions are defined for the refined compounds.
+            Correct function is automatically selected without need of instance checks and cast operations.</li>
+            <li><b>Syntax-based Modifications of Java-Code:</b> Changes constant values via AST-operations.</li>
+            <li><b>Syntax-based Operations on XML-files:</b> Selection of appropriate XML-files based on their content.</li>
+        </ul>
+        
+        <h3>Scenario</h3>
+        The user may configure an engine specification and a window (title and dimensions).
+        EASy-Producer will select car descriptions that match the selected criteria and configure
+        an demonstrator that displays the selected cars.
+    </body>
+</html>
