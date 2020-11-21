@@ -63,6 +63,27 @@
      </sequential>
    </macrodef>
    
+   <!-- like mvnDeploy but resolve artifactPattern (may be with wildcards) in jarFolder first and pass both as jarFolder/jarFile to mvnDeploy -->
+   <macrodef name="mvnDeployResolveArtifact">
+     <attribute name="folderName" default="NOT SET"/>
+     <attribute name="pomFile" default="pom.xml"/> 
+     <attribute name="jarFolder" default="target"/>
+     <attribute name="artifactPattern" default="NOT SET"/>
+     <sequential>
+       <path id="jarFile.id">
+          <fileset dir="@{jarFolder}">
+            <include name="@{artifactPattern}"/>
+          </fileset>
+        </path>
+        <local name="temp"/>
+        <property name="temp" refid="jarFile.id"/>
+        <local name="jarFile"/>
+        <basename property="jarFile" file="${temp}"/>
+        <mvnDeploy folderName="@{folderName}" pomFile="@{pomFile}" jarFolder="@{jarFolder}/" jarFile="${jarFile}" />
+     </sequential>
+   </macrodef>
+   
+   <!-- deploy pom only, e.g., for parent pom or dependency management -->
    <macrodef name="mvnDeployPom">
      <attribute name="folderName" default="NOT SET"/>
      <attribute name="pomFile" default="pom.xml"/> 
