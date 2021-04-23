@@ -13,6 +13,8 @@ public @interface ArtifactCreator {
 
     /**
      * The related artifact creator (class).
+     * 
+     * @return the artifact creator class
      */
     Class<? extends IArtifactCreator> value();
 

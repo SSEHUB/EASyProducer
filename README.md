@@ -26,6 +26,10 @@ Running EASy-Producer/tests within Eclipse
 ------------------------------------------
 We experienced some difficulties creating launch configurations for Eclipse 4.7. As a result, we provide a collection of Eclipse launch configurations in the "launching" folder. Please note that a JDK must be installed and available as installed JRE in Eclipse. See also the readme file there.
 
+Source code setup/plugins
+-------------------------
+Please install the Eclipse Checkstyle plugin. The configurations are compatible with Checkstyle 8.35. Setup a global checkstyle configuration named "SSE Checkstyle Configuration" as a project local configuration pointing to the checkstyle file in the project "EASy-Producer.Eclipse".
+
 Build Status
 ------------------
 | Component | Status |

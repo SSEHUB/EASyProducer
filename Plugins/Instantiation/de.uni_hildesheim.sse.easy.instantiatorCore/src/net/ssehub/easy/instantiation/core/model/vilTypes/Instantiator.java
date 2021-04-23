@@ -33,6 +33,7 @@ public @interface Instantiator {
      * To be recognized, instantiator methods must have the same name. Please note that VIL buildlanguage
      * keywords shall not be used as name as such instantiators will not be available!
      * 
+     * @return the name
      */
     String value();
     
@@ -40,6 +41,8 @@ public @interface Instantiator {
      * Whether this instantiator may react on implicit parameters 
      * such as {@link Constants#IMPLICIT_PARENT_PARAMETER_NAME}. <br/>
      * <code>true</code> for implicit parameters, <code>false</code> else
+     * 
+     * @return whether this instantiator may react on implicit parameters
      */
     boolean acceptsImplicitParameters() default false;
 }

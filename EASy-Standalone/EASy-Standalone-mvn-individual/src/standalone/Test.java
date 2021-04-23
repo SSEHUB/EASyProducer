@@ -64,7 +64,7 @@ public class Test {
                 System.out.println(StringProvider.toIvmlString(prj));
                 Configuration cfg = new Configuration(prj);
                 ReasonerConfiguration rCfg = new ReasonerConfiguration();
-                ReasoningResult rResult = ReasonerFrontend.getInstance().propagate(prj, cfg, rCfg, 
+                ReasoningResult rResult = ReasonerFrontend.getInstance().propagate(cfg, rCfg, 
                     ProgressObserver.NO_OBSERVER);
                 System.out.println("Reasoning is ok: " + (!rResult.hasConflict()));
             } catch (ModelManagementException e) {

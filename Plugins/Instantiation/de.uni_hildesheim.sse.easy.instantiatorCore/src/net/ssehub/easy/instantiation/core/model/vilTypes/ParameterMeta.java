@@ -33,6 +33,8 @@ public @interface ParameterMeta {
      * The generic parameters of the parameter/argument type. This is required as the type parameters
      * of Java generics cannot be accessed. Generics of complex types are just given in 
      * linear sequence. Empty by default. Might be replaced by new reflection functions in Java 8.
+     * 
+     * @return the generic parameters of the parameter/argument type
      */
     Class<?>[] generics() default { };
     
@@ -40,6 +42,8 @@ public @interface ParameterMeta {
      * Indicates a named parameter. The name may be the same as the parameter name but it may also differ.
      * Default values are either determined based on the default java values or, if given, from a static attribute
      * marked by {@link DefaultValue}. Names per method signature shall be unique.
+     * 
+     * @return the name of the named parameter
      */
     String name() default "";
 

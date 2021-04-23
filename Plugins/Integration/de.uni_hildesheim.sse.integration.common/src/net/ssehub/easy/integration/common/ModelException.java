@@ -23,7 +23,7 @@ public class ModelException extends Exception {
      * @param throwable the throwable carrying the description of the problem (message is taken)
      */
     public ModelException(Throwable throwable) {
-       super(throwable.getMessage());
+        super(throwable.getMessage());
     }
 
 }

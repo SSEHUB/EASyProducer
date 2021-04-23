@@ -32,7 +32,7 @@ public class EnumValue extends Value {
      * Constructor for serialization.
      */
     EnumValue() {
-       super(null); 
+        super(null); 
     }
     
     /**

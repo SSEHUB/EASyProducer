@@ -47,6 +47,8 @@ public @interface DefaultValue {
     
     /**
      * The name of the method/operation the default value(s) apply to.
+     * 
+     * @return the name
      */
     String name() default "";
 

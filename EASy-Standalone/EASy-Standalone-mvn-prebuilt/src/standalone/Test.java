@@ -115,7 +115,7 @@ public class Test {
         System.out.println(StringProvider.toIvmlString(project));
         Configuration cfg = new Configuration(project);
         System.out.println("Configuration created");
-        ReasoningResult rResult = rFront.propagate(project, cfg, rCfg, ProgressObserver.NO_OBSERVER);
+        ReasoningResult rResult = rFront.propagate(cfg, rCfg, ProgressObserver.NO_OBSERVER);
         if (rResult.hasConflict()) {
             throw new TestFailedException("Reasoning failed");
         }

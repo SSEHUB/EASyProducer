@@ -9,11 +9,14 @@
     Description: none
 -->
 <module name="Checker">
+  <module name="LineLength">
+    <property name="severity" value="error"/>
+    <property name="max" value="120"/>
+  </module>
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
     <module name="JavadocMethod">
       <property name="severity" value="error"/>
-      <property name="allowUndeclaredRTE" value="true"/>
     </module>
     <module name="JavadocType">
       <property name="severity" value="error"/>
@@ -71,10 +74,6 @@
     </module>
     <module name="UnusedImports">
       <property name="severity" value="warning"/>
-    </module>
-    <module name="LineLength">
-      <property name="severity" value="error"/>
-      <property name="max" value="120"/>
     </module>
     <module name="MethodLength">
       <property name="severity" value="error"/>

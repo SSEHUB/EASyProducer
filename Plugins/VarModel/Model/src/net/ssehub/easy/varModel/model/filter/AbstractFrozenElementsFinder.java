@@ -46,7 +46,7 @@ abstract class AbstractFrozenElementsFinder extends AbstractProjectVisitor {
      * @param filterType Specifies whether imports shall be considered or not.
      */
     protected AbstractFrozenElementsFinder(Project originProject, FilterType filterType) {
-       super(originProject, filterType);
+        super(originProject, filterType);
     }
     
     @Override

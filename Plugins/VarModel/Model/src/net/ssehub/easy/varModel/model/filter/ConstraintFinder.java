@@ -63,7 +63,7 @@ public class ConstraintFinder implements IModelVisitor {
      * @param project The project, where all constraints should be found.
      */
     public ConstraintFinder(Project project) {
-       this(project, true);
+        this(project, true);
     }
 
     /**

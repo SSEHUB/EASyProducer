@@ -1007,13 +1007,13 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
     @Override
     @Invisible
     public IDatatype determineActualTypeName() {
-    	IDatatype type = getActualType();
-    	// Unpack reference types
-    	if (type instanceof Reference) {
-    		// Use declaration of reference
-    		type = getDecisionVariable().getDeclaration().getType();
-    	}
-    	return type;
+        IDatatype type = getActualType();
+        // Unpack reference types
+        if (type instanceof Reference) {
+            // Use declaration of reference
+            type = getDecisionVariable().getDeclaration().getType();
+        }
+        return type;
     }
 
 }

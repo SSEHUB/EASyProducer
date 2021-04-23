@@ -9,12 +9,14 @@
     Description: none
 -->
 <module name="Checker">
+  <module name="LineLength">
+    <property name="severity" value="error"/>
+    <property name="max" value="120"/>
+  </module>
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
-    <module name="FileContentsHolder"/>
     <module name="JavadocMethod">
       <property name="severity" value="error"/>
-      <property name="allowUndeclaredRTE" value="true"/>
     </module>
     <module name="JavadocType">
       <property name="severity" value="error"/>
@@ -72,10 +74,6 @@
     </module>
     <module name="UnusedImports">
       <property name="severity" value="warning"/>
-    </module>
-    <module name="LineLength">
-      <property name="severity" value="error"/>
-      <property name="max" value="120"/>
     </module>
     <module name="MethodLength">
       <property name="severity" value="error"/>
@@ -188,9 +186,6 @@
     <module name="PackageDeclaration">
       <property name="severity" value="warning"/>
     </module>
-    <module name="JUnitTestCase">
-      <property name="severity" value="error"/>
-    </module>
     <module name="ReturnCount">
       <property name="max" value="1"/>
     </module>
@@ -223,15 +218,11 @@
       <property name="severity" value="error"/>
       <property name="caseIndent" value="0"/>
     </module>
-  </module>
-  <module name="StrictDuplicateCode">
-    <property name="severity" value="warning"/>
-    <property name="min" value="40"/>
-  </module>
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="checkstyle: stop parameter number check"/>
-    <property name="onCommentFormat" value="checkstyle: resume parameter number check"/>
-    <property name="checkFormat" value="ParameterNumberCheck"/>
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="checkstyle: stop parameter number check"/>
+      <property name="onCommentFormat" value="checkstyle: resume parameter number check"/>
+      <property name="checkFormat" value="ParameterNumberCheck"/>
+    </module>
   </module>
   <module name="FileLength">
     <property name="severity" value="error"/>

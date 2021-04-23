@@ -4,4 +4,7 @@
   <fileset name="all" enabled="true" check-config-name="SSE Checkstyle Configuration" local="false">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
+  <filter name="FilesFromPackage" enabled="true">
+    <filter-data value="Files"/>
+  </filter>
 </fileset-config>

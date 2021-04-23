@@ -50,7 +50,7 @@ public class Fenster extends JFrame {
                 Configuration cfg = new Configuration(project);
                 ReasonerFrontend rf = ReasonerFrontend.getInstance();
                 rf.setPreferredReasoner();
-                ReasoningResult result = rf.check(project, cfg, null, ProgressObserver.NO_OBSERVER);
+                ReasoningResult result = rf.check(cfg, null, ProgressObserver.NO_OBSERVER);
                 String conflictMsg = result.hasConflict() ? " (contains errors)" : " (conflict free)";
                 lbl.setText("Projekt geladen: " + project.getName() + conflictMsg);
                 DefaultListModel<String> model = new DefaultListModel<String>();

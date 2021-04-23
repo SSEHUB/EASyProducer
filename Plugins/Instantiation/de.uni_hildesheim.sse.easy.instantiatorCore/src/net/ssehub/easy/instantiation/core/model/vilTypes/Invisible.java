@@ -22,6 +22,9 @@ public @interface Invisible {
     /**
      * Whether this annotation shall be inherited by subclasses / overridden methods (default <code>false</code>).<br/>
      * <code>true</code> for inheriting, <code>false</code> else
+     * 
+     * @return whether this annotation shall be inherited
      */
     boolean inherit() default false;
+    
 }
