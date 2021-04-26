@@ -66,6 +66,7 @@ public class VersionSpecImpl extends MinimalEObjectImpl.Container implements Ver
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getRestriction()
   {
     return restriction;
@@ -93,6 +94,7 @@ public class VersionSpecImpl extends MinimalEObjectImpl.Container implements Ver
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRestriction(Expression newRestriction)
   {
     if (newRestriction != restriction)

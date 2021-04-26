@@ -144,6 +144,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getStatic()
   {
     return static_;
@@ -154,6 +155,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setStatic(String newStatic)
   {
     String oldStatic = static_;
@@ -167,6 +169,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getResult()
   {
     return result;
@@ -194,6 +197,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setResult(Type newResult)
   {
     if (newResult != result)
@@ -215,6 +219,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getId()
   {
     return id;
@@ -225,6 +230,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setId(String newId)
   {
     String oldId = id;
@@ -238,6 +244,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OpDefParameterList getParam()
   {
     return param;
@@ -265,6 +272,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(OpDefParameterList newParam)
   {
     if (newParam != param)
@@ -286,6 +294,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getImpl()
   {
     return impl;
@@ -313,6 +322,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setImpl(Expression newImpl)
   {
     if (newImpl != impl)
@@ -334,6 +344,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BlockExpression getBlock()
   {
     return block;
@@ -361,6 +372,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(BlockExpression newBlock)
   {
     if (newBlock != block)
@@ -525,7 +537,7 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (static: ");
     result.append(static_);
     result.append(", id: ");

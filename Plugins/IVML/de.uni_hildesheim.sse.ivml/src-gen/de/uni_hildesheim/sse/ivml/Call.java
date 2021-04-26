@@ -27,10 +27,6 @@ public interface Call extends EObject
   /**
    * Returns the value of the '<em><b>Call</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Call</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Call</em>' containment reference.
    * @see #setCall(FeatureCall)
@@ -53,10 +49,6 @@ public interface Call extends EObject
   /**
    * Returns the value of the '<em><b>Container Op</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Container Op</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Container Op</em>' containment reference.
    * @see #setContainerOp(ContainerOp)
@@ -79,10 +71,6 @@ public interface Call extends EObject
   /**
    * Returns the value of the '<em><b>Array Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Array Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Array Ex</em>' containment reference.
    * @see #setArrayEx(Expression)

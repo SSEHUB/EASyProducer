@@ -71,6 +71,7 @@ public class RuleElementBlockImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<RuleElement> getElements()
   {
     if (elements == null)

@@ -28,10 +28,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Other Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Other Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Other Ex</em>' containment reference.
    * @see #setOtherEx(ExpressionOrQualifiedExecution)
@@ -54,10 +50,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Unq Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Unq Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Unq Ex</em>' containment reference.
    * @see #setUnqEx(UnqualifiedExecution)
@@ -80,10 +72,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Super Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Super Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Super Ex</em>' containment reference.
    * @see #setSuperEx(SuperExecution)
@@ -106,10 +94,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>New Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>New Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>New Ex</em>' containment reference.
    * @see #setNewEx(ConstructorExecution)

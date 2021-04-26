@@ -30,10 +30,6 @@ public interface OpDefStatement extends EObject
   /**
    * Returns the value of the '<em><b>Static</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Static</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Static</em>' attribute.
    * @see #setStatic(String)
@@ -56,10 +52,6 @@ public interface OpDefStatement extends EObject
   /**
    * Returns the value of the '<em><b>Result</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Result</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Result</em>' containment reference.
    * @see #setResult(Type)
@@ -82,10 +74,6 @@ public interface OpDefStatement extends EObject
   /**
    * Returns the value of the '<em><b>Id</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Id</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Id</em>' attribute.
    * @see #setId(String)
@@ -108,10 +96,6 @@ public interface OpDefStatement extends EObject
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(OpDefParameterList)
@@ -134,10 +118,6 @@ public interface OpDefStatement extends EObject
   /**
    * Returns the value of the '<em><b>Impl</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Impl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Impl</em>' containment reference.
    * @see #setImpl(Expression)
@@ -160,10 +140,6 @@ public interface OpDefStatement extends EObject
   /**
    * Returns the value of the '<em><b>Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Block</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Block</em>' containment reference.
    * @see #setBlock(BlockExpression)

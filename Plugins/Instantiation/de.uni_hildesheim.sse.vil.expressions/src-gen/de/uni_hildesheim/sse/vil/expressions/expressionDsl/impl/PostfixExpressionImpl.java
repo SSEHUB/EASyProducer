@@ -66,6 +66,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PrimaryExpression getLeft()
   {
     return left;
@@ -93,6 +94,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(PrimaryExpression newLeft)
   {
     if (newLeft != left)

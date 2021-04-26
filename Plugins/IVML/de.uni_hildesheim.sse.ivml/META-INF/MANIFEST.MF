@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
  org.antlr.runtime,
- org.eclipse.equinox.ds,
+ org.eclipse.equinox.ds;resolution:=optional,
+ org.apache.felix.scr;resolution:=optional,
  org.eclipse.osgi.services,
  org.eclipse.xtext.common.types;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport,
@@ -24,12 +25,12 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  net.ssehub.easy.dslCore;visibility:=reexport,
  org.eclipse.emf.mwe2.launch;bundle-version="2.5.0";resolution:=optional,
  org.eclipse.xtext.xbase.lib,
- org.objectweb.asm;bundle-version="[5.0.1,6.0.0)";resolution:=optional
+ org.objectweb.asm;bundle-version="[5.0.1,9.2.0)";resolution:=optional
 Service-Component: OSGI-INF/ivmlParser.xml
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: de.uni_hildesheim.sse,
  de.uni_hildesheim.sse.translation,
  de.uni_hildesheim.sse.services,

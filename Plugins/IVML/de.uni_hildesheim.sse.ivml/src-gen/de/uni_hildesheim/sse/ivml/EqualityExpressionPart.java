@@ -27,10 +27,6 @@ public interface EqualityExpressionPart extends EObject
   /**
    * Returns the value of the '<em><b>Op</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Op</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Op</em>' attribute.
    * @see #setOp(String)
@@ -53,10 +49,6 @@ public interface EqualityExpressionPart extends EObject
   /**
    * Returns the value of the '<em><b>Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ex</em>' containment reference.
    * @see #setEx(RelationalExpression)
@@ -79,10 +71,6 @@ public interface EqualityExpressionPart extends EObject
   /**
    * Returns the value of the '<em><b>Container</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Container</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Container</em>' containment reference.
    * @see #setContainer(ContainerInitializer)

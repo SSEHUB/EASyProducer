@@ -85,6 +85,7 @@ public class UnqualifiedExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Call getCall()
   {
     return call;
@@ -112,6 +113,7 @@ public class UnqualifiedExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCall(Call newCall)
   {
     if (newCall != call)
@@ -133,6 +135,7 @@ public class UnqualifiedExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SubCall> getCalls()
   {
     if (calls == null)

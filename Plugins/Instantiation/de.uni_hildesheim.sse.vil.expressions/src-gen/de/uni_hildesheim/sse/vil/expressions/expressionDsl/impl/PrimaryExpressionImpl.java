@@ -102,6 +102,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionOrQualifiedExecution getOtherEx()
   {
     return otherEx;
@@ -129,6 +130,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOtherEx(ExpressionOrQualifiedExecution newOtherEx)
   {
     if (newOtherEx != otherEx)
@@ -150,6 +152,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public UnqualifiedExecution getUnqEx()
   {
     return unqEx;
@@ -177,6 +180,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setUnqEx(UnqualifiedExecution newUnqEx)
   {
     if (newUnqEx != unqEx)
@@ -198,6 +202,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SuperExecution getSuperEx()
   {
     return superEx;
@@ -225,6 +230,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSuperEx(SuperExecution newSuperEx)
   {
     if (newSuperEx != superEx)
@@ -246,6 +252,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ConstructorExecution getNewEx()
   {
     return newEx;
@@ -273,6 +280,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNewEx(ConstructorExecution newNewEx)
   {
     if (newNewEx != newEx)

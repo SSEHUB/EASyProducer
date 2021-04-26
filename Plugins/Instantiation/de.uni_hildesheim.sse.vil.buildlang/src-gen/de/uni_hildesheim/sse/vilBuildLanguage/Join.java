@@ -29,10 +29,6 @@ public interface Join extends EObject
   /**
    * Returns the value of the '<em><b>Var1</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var1</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var1</em>' containment reference.
    * @see #setVar1(JoinVariable)
@@ -55,10 +51,6 @@ public interface Join extends EObject
   /**
    * Returns the value of the '<em><b>Var2</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var2</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var2</em>' containment reference.
    * @see #setVar2(JoinVariable)
@@ -81,10 +73,6 @@ public interface Join extends EObject
   /**
    * Returns the value of the '<em><b>Condition</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Condition</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Condition</em>' containment reference.
    * @see #setCondition(Expression)

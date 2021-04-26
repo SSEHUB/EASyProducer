@@ -78,6 +78,7 @@ public class MultiplicativeExpressionImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public UnaryExpression getLeft()
   {
     return left;
@@ -105,6 +106,7 @@ public class MultiplicativeExpressionImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(UnaryExpression newLeft)
   {
     if (newLeft != left)
@@ -126,6 +128,7 @@ public class MultiplicativeExpressionImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MultiplicativeExpressionPart getRight()
   {
     return right;
@@ -153,6 +156,7 @@ public class MultiplicativeExpressionImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRight(MultiplicativeExpressionPart newRight)
   {
     if (newRight != right)

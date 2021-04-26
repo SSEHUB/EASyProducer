@@ -31,10 +31,6 @@ public interface BreakdownElement extends EObject
   /**
    * Returns the value of the '<em><b>Var Decl</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var Decl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Decl</em>' containment reference.
    * @see #setVarDecl(VariableDeclaration)
@@ -57,10 +53,6 @@ public interface BreakdownElement extends EObject
   /**
    * Returns the value of the '<em><b>Expr Stmt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr Stmt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr Stmt</em>' containment reference.
    * @see #setExprStmt(ExpressionStatement)
@@ -83,10 +75,6 @@ public interface BreakdownElement extends EObject
   /**
    * Returns the value of the '<em><b>Breakdown Stmt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Breakdown Stmt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Breakdown Stmt</em>' containment reference.
    * @see #setBreakdownStmt(BreakdownStatement)

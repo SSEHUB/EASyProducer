@@ -132,6 +132,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Literal getLit()
   {
     return lit;
@@ -159,6 +160,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLit(Literal newLit)
   {
     if (newLit != lit)
@@ -180,6 +182,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getEx()
   {
     return ex;
@@ -207,6 +210,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setEx(Expression newEx)
   {
     if (newEx != ex)
@@ -228,6 +232,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IfExpression getIfEx()
   {
     return ifEx;
@@ -255,6 +260,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIfEx(IfExpression newIfEx)
   {
     if (newIfEx != ifEx)
@@ -276,6 +282,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getRefEx()
   {
     return refEx;
@@ -303,6 +310,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRefEx(Expression newRefEx)
   {
     if (newRefEx != refEx)
@@ -324,6 +332,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Call> getCalls()
   {
     if (calls == null)
@@ -338,6 +347,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionAccess getAccess()
   {
     return access;
@@ -365,6 +375,7 @@ public class PrimaryExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAccess(ExpressionAccess newAccess)
   {
     if (newAccess != access)

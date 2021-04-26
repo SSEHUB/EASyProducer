@@ -29,10 +29,6 @@ public interface VariableDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Const</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Const</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Const</em>' attribute.
    * @see #setConst(String)
@@ -55,10 +51,6 @@ public interface VariableDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Type</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' containment reference.
    * @see #setType(Type)
@@ -82,10 +74,6 @@ public interface VariableDeclaration extends EObject
    * Returns the value of the '<em><b>Decls</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.VariableDeclarationPart}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Decls</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Decls</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getVariableDeclaration_Decls()

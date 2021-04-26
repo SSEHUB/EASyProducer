@@ -27,10 +27,6 @@ public interface PrimaryExpression extends de.uni_hildesheim.sse.vil.expressions
   /**
    * Returns the value of the '<em><b>Sys Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Sys Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sys Ex</em>' containment reference.
    * @see #setSysEx(SystemExecution)
@@ -53,10 +49,6 @@ public interface PrimaryExpression extends de.uni_hildesheim.sse.vil.expressions
   /**
    * Returns the value of the '<em><b>Map</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Map</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Map</em>' containment reference.
    * @see #setMap(Map)
@@ -79,10 +71,6 @@ public interface PrimaryExpression extends de.uni_hildesheim.sse.vil.expressions
   /**
    * Returns the value of the '<em><b>Join</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Join</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Join</em>' containment reference.
    * @see #setJoin(Join)
@@ -105,10 +93,6 @@ public interface PrimaryExpression extends de.uni_hildesheim.sse.vil.expressions
   /**
    * Returns the value of the '<em><b>Instantiate</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Instantiate</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Instantiate</em>' containment reference.
    * @see #setInstantiate(Instantiate)

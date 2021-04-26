@@ -136,6 +136,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getAbstract()
   {
     return abstract_;
@@ -146,6 +147,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAbstract(String newAbstract)
   {
     String oldAbstract = abstract_;
@@ -159,6 +161,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -169,6 +172,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -182,6 +186,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSuper()
   {
     return super_;
@@ -192,6 +197,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSuper(String newSuper)
   {
     String oldSuper = super_;
@@ -205,6 +211,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<VariableDeclaration> getVars()
   {
     if (vars == null)
@@ -338,7 +345,7 @@ public class CompoundImpl extends MinimalEObjectImpl.Container implements Compou
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (abstract: ");
     result.append(abstract_);
     result.append(", name: ");

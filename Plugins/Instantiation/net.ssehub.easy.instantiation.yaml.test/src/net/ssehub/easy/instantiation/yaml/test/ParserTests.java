@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.instantiation.yaml.YamlDeserializer;

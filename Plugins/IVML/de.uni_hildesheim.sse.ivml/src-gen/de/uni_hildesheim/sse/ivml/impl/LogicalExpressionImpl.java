@@ -85,6 +85,7 @@ public class LogicalExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EqualityExpression getLeft()
   {
     return left;
@@ -112,6 +113,7 @@ public class LogicalExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(EqualityExpression newLeft)
   {
     if (newLeft != left)
@@ -133,6 +135,7 @@ public class LogicalExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LogicalExpressionPart> getRight()
   {
     if (right == null)

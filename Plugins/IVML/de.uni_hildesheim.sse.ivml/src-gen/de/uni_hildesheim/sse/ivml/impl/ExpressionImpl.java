@@ -90,6 +90,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LetExpression getLet()
   {
     return let;
@@ -117,6 +118,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLet(LetExpression newLet)
   {
     if (newLet != let)
@@ -138,6 +140,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ImplicationExpression getExpr()
   {
     return expr;
@@ -165,6 +168,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(ImplicationExpression newExpr)
   {
     if (newExpr != expr)
@@ -186,6 +190,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ContainerInitializer getContainer()
   {
     return container;
@@ -213,6 +218,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContainer(ContainerInitializer newContainer)
   {
     if (newContainer != container)

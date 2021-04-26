@@ -28,10 +28,6 @@ public interface Export extends EObject
    * Returns the value of the '<em><b>Names</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.QualifiedName}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Names</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Names</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getExport_Names()

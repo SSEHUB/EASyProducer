@@ -7,12 +7,9 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
@@ -23,7 +20,6 @@ import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.drools2.DroolsEngine;
-import net.ssehub.easy.reasoning.drools2.DroolsReasonerDescriptor;
 import net.ssehub.easy.reasoning.drools2.model.ReasonerModel;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -36,9 +32,6 @@ import net.ssehub.easy.varModel.model.Project;
  * @author El-Sharkawy
  */
 public class GroupD2D extends AbstractTest<Project> {
-
-    private static final EASyLogger LOGGER =
-            EASyLoggerFactory.INSTANCE.getLogger(GroupD2D.class, DroolsReasonerDescriptor.BUNDLE_NAME);
     
     private static final File TESTDATA = determineTestDataFolder("reasonerCore.testdata.home");
     private static final File FOLDER = new File(TESTDATA, "testPerformance");

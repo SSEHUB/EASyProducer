@@ -29,10 +29,6 @@ public interface ExpressionOrQualifiedExecution extends EObject
   /**
    * Returns the value of the '<em><b>Val</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Val</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Val</em>' containment reference.
    * @see #setVal(Constant)
@@ -55,10 +51,6 @@ public interface ExpressionOrQualifiedExecution extends EObject
   /**
    * Returns the value of the '<em><b>Parenthesis</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Parenthesis</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Parenthesis</em>' containment reference.
    * @see #setParenthesis(Expression)
@@ -82,10 +74,6 @@ public interface ExpressionOrQualifiedExecution extends EObject
    * Returns the value of the '<em><b>Calls</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Calls</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Calls</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getExpressionOrQualifiedExecution_Calls()

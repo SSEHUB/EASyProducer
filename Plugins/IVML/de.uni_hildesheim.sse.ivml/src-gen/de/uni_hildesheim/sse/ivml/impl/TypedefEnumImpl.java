@@ -106,6 +106,7 @@ public class TypedefEnumImpl extends MinimalEObjectImpl.Container implements Typ
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -116,6 +117,7 @@ public class TypedefEnumImpl extends MinimalEObjectImpl.Container implements Typ
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -129,6 +131,7 @@ public class TypedefEnumImpl extends MinimalEObjectImpl.Container implements Typ
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<TypedefEnumLiteral> getLiterals()
   {
     if (literals == null)
@@ -143,6 +146,7 @@ public class TypedefEnumImpl extends MinimalEObjectImpl.Container implements Typ
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TypedefConstraint getConstraint()
   {
     return constraint;
@@ -170,6 +174,7 @@ public class TypedefEnumImpl extends MinimalEObjectImpl.Container implements Typ
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConstraint(TypedefConstraint newConstraint)
   {
     if (newConstraint != constraint)
@@ -302,7 +307,7 @@ public class TypedefEnumImpl extends MinimalEObjectImpl.Container implements Typ
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

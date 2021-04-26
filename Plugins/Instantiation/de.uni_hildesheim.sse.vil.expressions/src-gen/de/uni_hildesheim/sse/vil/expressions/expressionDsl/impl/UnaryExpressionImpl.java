@@ -87,6 +87,7 @@ public class UnaryExpressionImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getOp()
   {
     return op;
@@ -97,6 +98,7 @@ public class UnaryExpressionImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOp(String newOp)
   {
     String oldOp = op;
@@ -110,6 +112,7 @@ public class UnaryExpressionImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PostfixExpression getExpr()
   {
     return expr;
@@ -137,6 +140,7 @@ public class UnaryExpressionImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(PostfixExpression newExpr)
   {
     if (newExpr != expr)
@@ -255,7 +259,7 @@ public class UnaryExpressionImpl extends MinimalEObjectImpl.Container implements
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (op: ");
     result.append(op);
     result.append(')');

@@ -13,7 +13,7 @@ Require-Bundle:
  net.ssehub.easy.instantiation.core;visibility:=reexport,
  org.eclipse.jdt.core
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: University of Hildesheim - SSE
 Export-Package: net.ssehub.easy.producer.eclipse,
  net.ssehub.easy.producer.eclipse.contributions,

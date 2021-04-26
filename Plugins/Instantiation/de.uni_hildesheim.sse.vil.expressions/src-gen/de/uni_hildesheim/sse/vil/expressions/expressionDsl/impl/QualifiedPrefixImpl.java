@@ -66,6 +66,7 @@ public class QualifiedPrefixImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getQname()
   {
     if (qname == null)
@@ -153,7 +154,7 @@ public class QualifiedPrefixImpl extends MinimalEObjectImpl.Container implements
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (qname: ");
     result.append(qname);
     result.append(')');

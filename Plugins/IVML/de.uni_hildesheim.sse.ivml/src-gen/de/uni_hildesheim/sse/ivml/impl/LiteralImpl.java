@@ -66,6 +66,7 @@ public class LiteralImpl extends MinimalEObjectImpl.Container implements Literal
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Value getVal()
   {
     return val;
@@ -93,6 +94,7 @@ public class LiteralImpl extends MinimalEObjectImpl.Container implements Literal
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVal(Value newVal)
   {
     if (newVal != val)

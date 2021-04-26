@@ -73,6 +73,7 @@ public class RuleModifierImpl extends MinimalEObjectImpl.Container implements Ru
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProtected()
   {
     return protected_;
@@ -83,6 +84,7 @@ public class RuleModifierImpl extends MinimalEObjectImpl.Container implements Ru
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProtected(String newProtected)
   {
     String oldProtected = protected_;
@@ -167,7 +169,7 @@ public class RuleModifierImpl extends MinimalEObjectImpl.Container implements Ru
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (protected: ");
     result.append(protected_);
     result.append(')');

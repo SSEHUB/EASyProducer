@@ -24,10 +24,6 @@ public interface ExpressionStatement extends de.uni_hildesheim.sse.vil.expressio
   /**
    * Returns the value of the '<em><b>Alt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Alt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Alt</em>' containment reference.
    * @see #setAlt(Alternative)

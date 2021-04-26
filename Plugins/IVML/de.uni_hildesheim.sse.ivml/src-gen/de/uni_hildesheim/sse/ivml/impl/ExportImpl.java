@@ -71,6 +71,7 @@ public class ExportImpl extends MinimalEObjectImpl.Container implements Export
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<QualifiedName> getNames()
   {
     if (names == null)

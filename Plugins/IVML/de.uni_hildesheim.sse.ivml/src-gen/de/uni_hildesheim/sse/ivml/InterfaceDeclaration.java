@@ -28,10 +28,6 @@ public interface InterfaceDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -55,10 +51,6 @@ public interface InterfaceDeclaration extends EObject
    * Returns the value of the '<em><b>Exports</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.Export}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Exports</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Exports</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getInterfaceDeclaration_Exports()

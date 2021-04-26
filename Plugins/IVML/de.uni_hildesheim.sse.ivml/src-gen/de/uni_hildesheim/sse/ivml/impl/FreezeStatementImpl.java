@@ -99,6 +99,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getDot()
   {
     return dot;
@@ -109,6 +110,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDot(String newDot)
   {
     String oldDot = dot;
@@ -122,6 +124,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedName getName()
   {
     return name;
@@ -149,6 +152,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(QualifiedName newName)
   {
     if (newName != name)
@@ -170,6 +174,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AccessName getAccess()
   {
     return access;
@@ -197,6 +202,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAccess(AccessName newAccess)
   {
     if (newAccess != access)
@@ -327,7 +333,7 @@ public class FreezeStatementImpl extends MinimalEObjectImpl.Container implements
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (dot: ");
     result.append(dot);
     result.append(')');

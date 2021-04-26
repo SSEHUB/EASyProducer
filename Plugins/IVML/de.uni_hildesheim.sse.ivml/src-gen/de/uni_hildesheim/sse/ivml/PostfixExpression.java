@@ -30,10 +30,6 @@ public interface PostfixExpression extends EObject
   /**
    * Returns the value of the '<em><b>Call</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Call</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Call</em>' containment reference.
    * @see #setCall(FeatureCall)
@@ -57,10 +53,6 @@ public interface PostfixExpression extends EObject
    * Returns the value of the '<em><b>FCalls</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.Call}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>FCalls</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>FCalls</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getPostfixExpression_FCalls()
@@ -72,10 +64,6 @@ public interface PostfixExpression extends EObject
   /**
    * Returns the value of the '<em><b>Access</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Access</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Access</em>' containment reference.
    * @see #setAccess(ExpressionAccess)
@@ -98,10 +86,6 @@ public interface PostfixExpression extends EObject
   /**
    * Returns the value of the '<em><b>Left</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Left</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Left</em>' containment reference.
    * @see #setLeft(PrimaryExpression)

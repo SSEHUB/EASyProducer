@@ -99,6 +99,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -109,6 +110,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -122,6 +124,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getReason()
   {
     return reason;
@@ -149,6 +152,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setReason(Expression newReason)
   {
     if (newReason != reason)
@@ -170,6 +174,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getCode()
   {
     return code;
@@ -197,6 +202,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCode(Expression newCode)
   {
     if (newCode != code)
@@ -327,7 +333,7 @@ public class FailStatementImpl extends MinimalEObjectImpl.Container implements F
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

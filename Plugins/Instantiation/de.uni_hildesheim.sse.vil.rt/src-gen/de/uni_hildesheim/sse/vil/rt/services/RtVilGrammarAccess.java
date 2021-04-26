@@ -31,10 +31,14 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cScriptsLanguageUnitParserRuleCall_3_0 = (RuleCall)cScriptsAssignment_3.eContents().get(0);
 		
 		//ImplementationUnit:
-		//	{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*;
+		//	{ImplementationUnit} imports+=Import*
+		//	requires+=Require*
+		//	scripts+=LanguageUnit*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*
+		//{ImplementationUnit} imports+=Import*
+		//requires+=Require*
+		//scripts+=LanguageUnit*
 		public Group getGroup() { return cGroup; }
 
 		//{ImplementationUnit}
@@ -82,17 +86,29 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_11 = (Keyword)cGroup.eContents().get(11);
 		
 		//LanguageUnit:
-		//	advices+=Advice* 'rtVilScript' name=Identifier '(' param=ParameterList? ')' parent=ScriptParentDecl? '{'
-		//	version=VersionStmt? rtContents=rtContents '}' ';'?;
+		//	advices+=Advice*
+		//	'rtVilScript' name=Identifier
+		//	'(' param=ParameterList? ')'
+		//	parent=ScriptParentDecl?
+		//	'{'
+		//	version=VersionStmt?
+		//	rtContents=rtContents
+		//	'}' ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
 		//// do not rename - required for reuse
-		// advices+=Advice* 'rtVilScript' name=Identifier '(' param=ParameterList? ')'
-		//parent=ScriptParentDecl? '{' version=VersionStmt? rtContents=rtContents '}' ';'?
+		//    advices+=Advice*
+		//'rtVilScript' name=Identifier
+		//'(' param=ParameterList? ')'
+		//parent=ScriptParentDecl?
+		//'{'
+		//version=VersionStmt?
+		//rtContents=rtContents
+		//'}' ';'?
 		public Group getGroup() { return cGroup; }
 
 		//// do not rename - required for reuse
-		// advices+=Advice*
+		//    advices+=Advice*
 		public Assignment getAdvicesAssignment_0() { return cAdvicesAssignment_0; }
 
 		//Advice
@@ -166,19 +182,31 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementsCompoundParserRuleCall_1_5_0 = (RuleCall)cElementsAssignment_1_5.eContents().get(0);
 		
 		//rtContents:
-		//	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-		//	elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*;
+		//	{rtContents} (elements+=GlobalVariableDeclaration
+		//	| elements+=RuleDeclaration
+		//	| elements+=StrategyDeclaration
+		//	| elements+=TacticDeclaration
+		//	| elements+=TypeDef
+		//	| elements+=Compound)*;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-		//elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*
+		//{rtContents} (elements+=GlobalVariableDeclaration
+		//| elements+=RuleDeclaration
+		//| elements+=StrategyDeclaration
+		//| elements+=TacticDeclaration
+		//| elements+=TypeDef
+		//| elements+=Compound)*
 		public Group getGroup() { return cGroup; }
 
 		//{rtContents}
 		public Action getRtContentsAction_0() { return cRtContentsAction_0; }
 
-		//(elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-		//elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*
+		//(elements+=GlobalVariableDeclaration
+		//| elements+=RuleDeclaration
+		//| elements+=StrategyDeclaration
+		//| elements+=TacticDeclaration
+		//| elements+=TypeDef
+		//| elements+=Compound)*
 		public Alternatives getAlternatives_1() { return cAlternatives_1; }
 
 		//elements+=GlobalVariableDeclaration
@@ -227,10 +255,12 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cVarDeclVariableDeclarationParserRuleCall_1_0 = (RuleCall)cVarDeclAssignment_1.eContents().get(0);
 		
 		//GlobalVariableDeclaration:
-		//	persistent='persistent'? varDecl=VariableDeclaration;
+		//	persistent='persistent'?
+		//	varDecl=VariableDeclaration;
 		@Override public ParserRule getRule() { return rule; }
 
-		//persistent='persistent'? varDecl=VariableDeclaration
+		//persistent='persistent'?
+		//varDecl=VariableDeclaration
 		public Group getGroup() { return cGroup; }
 
 		//persistent='persistent'?
@@ -282,14 +312,26 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_14 = (Keyword)cGroup.eContents().get(14);
 		
 		//StrategyDeclaration:
-		//	{StrategyDeclaration} 'strategy' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions? '{'
+		//	{StrategyDeclaration}
+		//	'strategy' name=Identifier
+		//	'(' paramList=ParameterList? ')'
+		//	'=' conditions=RuleConditions?
+		//	'{'
 		//	varDecls+=VariableDeclaration* ('objective' objective=Expression ';')? ('breakdown' '{' weighting=WeightingStatement?
-		//	breakdown+=BreakdownElement+ '}') post+=RuleElement* '}' ';'?;
+		//	breakdown+=BreakdownElement+ '}') post+=RuleElement*
+		//	'}'
+		//	';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{StrategyDeclaration} 'strategy' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions? '{'
+		//{StrategyDeclaration}
+		//'strategy' name=Identifier
+		//'(' paramList=ParameterList? ')'
+		//'=' conditions=RuleConditions?
+		//'{'
 		//varDecls+=VariableDeclaration* ('objective' objective=Expression ';')? ('breakdown' '{' weighting=WeightingStatement?
-		//breakdown+=BreakdownElement+ '}') post+=RuleElement* '}' ';'?
+		//breakdown+=BreakdownElement+ '}') post+=RuleElement*
+		//'}'
+		//';'?
 		public Group getGroup() { return cGroup; }
 
 		//{StrategyDeclaration}
@@ -397,10 +439,14 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cBreakdownStmtBreakdownStatementParserRuleCall_2_0 = (RuleCall)cBreakdownStmtAssignment_2.eContents().get(0);
 		
 		//BreakdownElement:
-		//	varDecl=VariableDeclaration | exprStmt=ExpressionStatement | breakdownStmt=BreakdownStatement;
+		//	varDecl=VariableDeclaration
+		//	| exprStmt=ExpressionStatement
+		//	| breakdownStmt=BreakdownStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement | breakdownStmt=BreakdownStatement
+		//varDecl=VariableDeclaration
+		//| exprStmt=ExpressionStatement
+		//| breakdownStmt=BreakdownStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//varDecl=VariableDeclaration
@@ -505,12 +551,20 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
 		
 		//BreakdownStatement:
-		//	type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')? name=QualifiedPrefix '(' param=ArgumentList? ')'
-		//	('with' '(' part+=BreakdownWithPart (',' part+=BreakdownWithPart) ')')? ('@' time=Expression)? ';';
+		//	type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')?
+		//	name=QualifiedPrefix
+		//	'(' param=ArgumentList? ')' ('with' '('
+		//	part+=BreakdownWithPart (',' part+=BreakdownWithPart)
+		//	')')? ('@' time=Expression)?
+		//	';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')? name=QualifiedPrefix '(' param=ArgumentList? ')' ('with'
-		//'(' part+=BreakdownWithPart (',' part+=BreakdownWithPart) ')')? ('@' time=Expression)? ';'
+		//type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')?
+		//name=QualifiedPrefix
+		//'(' param=ArgumentList? ')' ('with' '('
+		//part+=BreakdownWithPart (',' part+=BreakdownWithPart)
+		//')')? ('@' time=Expression)?
+		//';'
 		public Group getGroup() { return cGroup; }
 
 		//type=('strategy' | 'tactic')
@@ -558,7 +612,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		//')'
 		public Keyword getRightParenthesisKeyword_5() { return cRightParenthesisKeyword_5; }
 
-		//('with' '(' part+=BreakdownWithPart (',' part+=BreakdownWithPart) ')')?
+		//('with' '('
+		//part+=BreakdownWithPart (',' part+=BreakdownWithPart)
+		//')')?
 		public Group getGroup_6() { return cGroup_6; }
 
 		//'with'
@@ -614,10 +670,14 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cValueExpressionParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
 		
 		//BreakdownWithPart:
-		//	name=Identifier '=' value=Expression;
+		//	name=Identifier
+		//	'='
+		//	value=Expression;
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=Identifier '=' value=Expression
+		//name=Identifier
+		//'='
+		//value=Expression
 		public Group getGroup() { return cGroup; }
 
 		//name=Identifier
@@ -655,12 +715,20 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cSemicolonKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
 		//TacticDeclaration:
-		//	{TacticDeclaration} 'tactic' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions?
-		//	block=RuleElementBlock ';'?;
+		//	{TacticDeclaration}
+		//	'tactic' name=Identifier
+		//	'(' paramList=ParameterList? ')'
+		//	'=' conditions=RuleConditions?
+		//	block=RuleElementBlock
+		//	';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{TacticDeclaration} 'tactic' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions?
-		//block=RuleElementBlock ';'?
+		//{TacticDeclaration}
+		//'tactic' name=Identifier
+		//'(' paramList=ParameterList? ')'
+		//'=' conditions=RuleConditions?
+		//block=RuleElementBlock
+		//';'?
 		public Group getGroup() { return cGroup; }
 
 		//{TacticDeclaration}
@@ -718,10 +786,18 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//RuleElementBlock:
-		//	{RuleElementBlock} '{' intent=IntentDeclaration? elements+=RuleElement* '}';
+		//	{RuleElementBlock}
+		//	'{'
+		//	intent=IntentDeclaration?
+		//	elements+=RuleElement*
+		//	'}';
 		@Override public ParserRule getRule() { return rule; }
 
-		//{RuleElementBlock} '{' intent=IntentDeclaration? elements+=RuleElement* '}'
+		//{RuleElementBlock}
+		//'{'
+		//intent=IntentDeclaration?
+		//elements+=RuleElement*
+		//'}'
 		public Group getGroup() { return cGroup; }
 
 		//{RuleElementBlock}
@@ -765,10 +841,18 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cFailFailStatementParserRuleCall_4_0 = (RuleCall)cFailAssignment_4.eContents().get(0);
 		
 		//RuleElement:
-		//	varDecl=VariableDeclaration | exprStmt=ExpressionStatement | while=While ';'? | for=For ';'? | fail=FailStatement;
+		//	varDecl=VariableDeclaration
+		//	| exprStmt=ExpressionStatement
+		//	| while=While ';'?
+		//	| for=For ';'?
+		//	| fail=FailStatement;
 		@Override public ParserRule getRule() { return rule; }
 
-		//varDecl=VariableDeclaration | exprStmt=ExpressionStatement | while=While ';'? | for=For ';'? | fail=FailStatement
+		//varDecl=VariableDeclaration
+		//| exprStmt=ExpressionStatement
+		//| while=While ';'?
+		//| for=For ';'?
+		//| fail=FailStatement
 		public Alternatives getAlternatives() { return cAlternatives; }
 
 		//varDecl=VariableDeclaration
@@ -979,7 +1063,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	
 	//ImplementationUnit:
-	//	{ImplementationUnit} imports+=Import* requires+=Require* scripts+=LanguageUnit*;
+	//	{ImplementationUnit} imports+=Import*
+	//	requires+=Require*
+	//	scripts+=LanguageUnit*;
 	public ImplementationUnitElements getImplementationUnitAccess() {
 		return pImplementationUnit;
 	}
@@ -989,8 +1075,14 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LanguageUnit:
-	//	advices+=Advice* 'rtVilScript' name=Identifier '(' param=ParameterList? ')' parent=ScriptParentDecl? '{'
-	//	version=VersionStmt? rtContents=rtContents '}' ';'?;
+	//	advices+=Advice*
+	//	'rtVilScript' name=Identifier
+	//	'(' param=ParameterList? ')'
+	//	parent=ScriptParentDecl?
+	//	'{'
+	//	version=VersionStmt?
+	//	rtContents=rtContents
+	//	'}' ';'?;
 	public LanguageUnitElements getLanguageUnitAccess() {
 		return pLanguageUnit;
 	}
@@ -1000,8 +1092,12 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//rtContents:
-	//	{rtContents} (elements+=GlobalVariableDeclaration | elements+=RuleDeclaration | elements+=StrategyDeclaration |
-	//	elements+=TacticDeclaration | elements+=TypeDef | elements+=Compound)*;
+	//	{rtContents} (elements+=GlobalVariableDeclaration
+	//	| elements+=RuleDeclaration
+	//	| elements+=StrategyDeclaration
+	//	| elements+=TacticDeclaration
+	//	| elements+=TypeDef
+	//	| elements+=Compound)*;
 	public RtContentsElements getRtContentsAccess() {
 		return pRtContents;
 	}
@@ -1011,7 +1107,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//GlobalVariableDeclaration:
-	//	persistent='persistent'? varDecl=VariableDeclaration;
+	//	persistent='persistent'?
+	//	varDecl=VariableDeclaration;
 	public GlobalVariableDeclarationElements getGlobalVariableDeclarationAccess() {
 		return pGlobalVariableDeclaration;
 	}
@@ -1021,9 +1118,15 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//StrategyDeclaration:
-	//	{StrategyDeclaration} 'strategy' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions? '{'
+	//	{StrategyDeclaration}
+	//	'strategy' name=Identifier
+	//	'(' paramList=ParameterList? ')'
+	//	'=' conditions=RuleConditions?
+	//	'{'
 	//	varDecls+=VariableDeclaration* ('objective' objective=Expression ';')? ('breakdown' '{' weighting=WeightingStatement?
-	//	breakdown+=BreakdownElement+ '}') post+=RuleElement* '}' ';'?;
+	//	breakdown+=BreakdownElement+ '}') post+=RuleElement*
+	//	'}'
+	//	';'?;
 	public StrategyDeclarationElements getStrategyDeclarationAccess() {
 		return pStrategyDeclaration;
 	}
@@ -1033,7 +1136,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//BreakdownElement:
-	//	varDecl=VariableDeclaration | exprStmt=ExpressionStatement | breakdownStmt=BreakdownStatement;
+	//	varDecl=VariableDeclaration
+	//	| exprStmt=ExpressionStatement
+	//	| breakdownStmt=BreakdownStatement;
 	public BreakdownElementElements getBreakdownElementAccess() {
 		return pBreakdownElement;
 	}
@@ -1053,8 +1158,12 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//BreakdownStatement:
-	//	type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')? name=QualifiedPrefix '(' param=ArgumentList? ')'
-	//	('with' '(' part+=BreakdownWithPart (',' part+=BreakdownWithPart) ')')? ('@' time=Expression)? ';';
+	//	type=('strategy' | 'tactic') ('(' guard=LogicalExpression ')')?
+	//	name=QualifiedPrefix
+	//	'(' param=ArgumentList? ')' ('with' '('
+	//	part+=BreakdownWithPart (',' part+=BreakdownWithPart)
+	//	')')? ('@' time=Expression)?
+	//	';';
 	public BreakdownStatementElements getBreakdownStatementAccess() {
 		return pBreakdownStatement;
 	}
@@ -1064,7 +1173,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//BreakdownWithPart:
-	//	name=Identifier '=' value=Expression;
+	//	name=Identifier
+	//	'='
+	//	value=Expression;
 	public BreakdownWithPartElements getBreakdownWithPartAccess() {
 		return pBreakdownWithPart;
 	}
@@ -1074,8 +1185,12 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TacticDeclaration:
-	//	{TacticDeclaration} 'tactic' name=Identifier '(' paramList=ParameterList? ')' '=' conditions=RuleConditions?
-	//	block=RuleElementBlock ';'?;
+	//	{TacticDeclaration}
+	//	'tactic' name=Identifier
+	//	'(' paramList=ParameterList? ')'
+	//	'=' conditions=RuleConditions?
+	//	block=RuleElementBlock
+	//	';'?;
 	public TacticDeclarationElements getTacticDeclarationAccess() {
 		return pTacticDeclaration;
 	}
@@ -1085,7 +1200,11 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RuleElementBlock:
-	//	{RuleElementBlock} '{' intent=IntentDeclaration? elements+=RuleElement* '}';
+	//	{RuleElementBlock}
+	//	'{'
+	//	intent=IntentDeclaration?
+	//	elements+=RuleElement*
+	//	'}';
 	public RuleElementBlockElements getRuleElementBlockAccess() {
 		return pRuleElementBlock;
 	}
@@ -1095,7 +1214,11 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RuleElement:
-	//	varDecl=VariableDeclaration | exprStmt=ExpressionStatement | while=While ';'? | for=For ';'? | fail=FailStatement;
+	//	varDecl=VariableDeclaration
+	//	| exprStmt=ExpressionStatement
+	//	| while=While ';'?
+	//	| for=For ';'?
+	//	| fail=FailStatement;
 	public RuleElementElements getRuleElementAccess() {
 		return pRuleElement;
 	}
@@ -1124,9 +1247,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getFailStatementAccess().getRule();
 	}
 
-	//Require: //here fqn because this may reference a specific project (of an external project)
-	// 'requireVTL' name=STRING
-	//	versionSpec=VersionSpec ';';
+	//Require:
+	//	// here fqn because this may reference a specific project (of an external project)
+	//	'requireVTL' name=STRING versionSpec=VersionSpec
+	//	';';
 	public VilBuildLanguageGrammarAccess.RequireElements getRequireAccess() {
 		return gaVilBuildLanguage.getRequireAccess();
 	}
@@ -1136,7 +1260,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ScriptParentDecl:
-	//	'extends' name=Identifier //here identifier because this references a complete project
+	//	'extends' name=Identifier // here identifier because this references a complete project
 	//;
 	public VilBuildLanguageGrammarAccess.ScriptParentDeclElements getScriptParentDeclAccess() {
 		return gaVilBuildLanguage.getScriptParentDeclAccess();
@@ -1148,7 +1272,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//LoadProperties:
 	//	'load' 'properties' path=STRING // here string because this references a file
-	// ';';
+	//	';';
 	public VilBuildLanguageGrammarAccess.LoadPropertiesElements getLoadPropertiesAccess() {
 		return gaVilBuildLanguage.getLoadPropertiesAccess();
 	}
@@ -1158,8 +1282,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ScriptContents:
-	//	{ScriptContents} (elements+=VariableDeclaration | elements+=Compound | elements+=TypeDef |
-	//	elements+=RuleDeclaration)*;
+	//	{ScriptContents} (elements+=VariableDeclaration
+	//	| elements+=Compound
+	//	| elements+=TypeDef
+	//	| elements+=RuleDeclaration)*;
 	public VilBuildLanguageGrammarAccess.ScriptContentsElements getScriptContentsAccess() {
 		return gaVilBuildLanguage.getScriptContentsAccess();
 	}
@@ -1169,9 +1295,15 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// ---------------- rules
-	// RuleDeclaration:
-	//	{RuleDeclaration} (modifier=RuleModifier? type=Type? name=Identifier '(' paramList=ParameterList? ')' '=')?
-	//	conditions=RuleConditions? block=super::RuleElementBlock ';'?;
+	//RuleDeclaration:
+	//	{RuleDeclaration} (modifier=RuleModifier?
+	//	type=Type?
+	//	name=Identifier
+	//	'(' paramList=ParameterList? ')'
+	//	'=')?
+	//	conditions=RuleConditions?
+	//	block=super::RuleElementBlock
+	//	';'?;
 	public VilBuildLanguageGrammarAccess.RuleDeclarationElements getRuleDeclarationAccess() {
 		return gaVilBuildLanguage.getRuleDeclarationAccess();
 	}
@@ -1181,8 +1313,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RuleConditions:
-	//	{RuleConditions} postcondition+=LogicalExpression? ':' (preconditions+=LogicalExpression (','
-	//	preconditions+=LogicalExpression)*)?;
+	//	{RuleConditions} postcondition+=LogicalExpression?
+	//	':' (preconditions+=LogicalExpression (',' preconditions+=LogicalExpression)*)?;
 	public VilBuildLanguageGrammarAccess.RuleConditionsElements getRuleConditionsAccess() {
 		return gaVilBuildLanguage.getRuleConditionsAccess();
 	}
@@ -1202,9 +1334,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// ----------------------- overriding and extending parts of the expression grammar -------------------
-	//
 	//ExpressionStatement:
-	//	(var=Identifier ('.' field=Identifier)? '=')? expr=Expression ';' | alt=Alternative ';'?;
+	//	(var=Identifier ('.' field=Identifier)? '=')?
+	//	expr=Expression ';' | alt=Alternative ';'?;
 	public VilBuildLanguageGrammarAccess.ExpressionStatementElements getExpressionStatementAccess() {
 		return gaVilBuildLanguage.getExpressionStatementAccess();
 	}
@@ -1214,8 +1346,14 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//PrimaryExpression:
-	//	otherEx=ExpressionOrQualifiedExecution | unqEx=UnqualifiedExecution | superEx=SuperExecution | sysEx=SystemExecution
-	//	| map=Map | join=Join | instantiate=Instantiate | newEx=ConstructorExecution;
+	//	otherEx=ExpressionOrQualifiedExecution
+	//	| unqEx=UnqualifiedExecution
+	//	| superEx=SuperExecution
+	//	| sysEx=SystemExecution
+	//	| map=Map
+	//	| join=Join
+	//	| instantiate=Instantiate
+	//	| newEx=ConstructorExecution;
 	public VilBuildLanguageGrammarAccess.PrimaryExpressionElements getPrimaryExpressionAccess() {
 		return gaVilBuildLanguage.getPrimaryExpressionAccess();
 	}
@@ -1225,7 +1363,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Instantiate:
-	//	'instantiate' (project=Identifier | ruleName=STRING) '(' param=ArgumentList? ')' versionSpec=VersionSpec?;
+	//	'instantiate' (project=Identifier | ruleName=STRING)
+	//	'(' param=ArgumentList? ')' versionSpec=VersionSpec?;
 	public VilBuildLanguageGrammarAccess.InstantiateElements getInstantiateAccess() {
 		return gaVilBuildLanguage.getInstantiateAccess();
 	}
@@ -1235,7 +1374,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LoopVariable:
-	//	type=Type? var=Identifier;
+	//	type=Type?
+	//	var=Identifier;
 	public VilBuildLanguageGrammarAccess.LoopVariableElements getLoopVariableAccess() {
 		return gaVilBuildLanguage.getLoopVariableAccess();
 	}
@@ -1267,7 +1407,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//While:
-	//	'while' '(' expr=Expression ')' block=super::RuleElementBlock;
+	//	'while' '(' expr=Expression ')'
+	//	block=super::RuleElementBlock;
 	public VilBuildLanguageGrammarAccess.WhileElements getWhileAccess() {
 		return gaVilBuildLanguage.getWhileAccess();
 	}
@@ -1277,7 +1418,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Alternative:
-	//	'if' '(' expr=Expression ')' if=StatementOrBlock (=> 'else' else=StatementOrBlock)?;
+	//	'if' '(' expr=Expression ')' if=StatementOrBlock (=>'else' else=StatementOrBlock)?;
 	public VilBuildLanguageGrammarAccess.AlternativeElements getAlternativeAccess() {
 		return gaVilBuildLanguage.getAlternativeAccess();
 	}
@@ -1297,7 +1438,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Join:
-	//	'join' '(' var1=JoinVariable ',' var2=JoinVariable ')' ('with' '(' condition=Expression ')')?;
+	//	'join' '('
+	//	var1=JoinVariable ','
+	//	var2=JoinVariable ')' ('with'
+	//	'(' condition=Expression ')')?;
 	public VilBuildLanguageGrammarAccess.JoinElements getJoinAccess() {
 		return gaVilBuildLanguage.getJoinAccess();
 	}
@@ -1307,7 +1451,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//JoinVariable:
-	//	excl='exclude'? var=Identifier ':' expr=Expression;
+	//	excl='exclude'? var=Identifier
+	//	':'
+	//	expr=Expression;
 	public VilBuildLanguageGrammarAccess.JoinVariableElements getJoinVariableAccess() {
 		return gaVilBuildLanguage.getJoinVariableAccess();
 	}
@@ -1327,7 +1473,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VariableDeclaration:
-	//	const='const'? type=Type name=Identifier ('=' expression=Expression)? ';';
+	//	const='const'?
+	//	type=Type
+	//	name=Identifier ('=' expression=Expression)?
+	//	';';
 	public ExpressionDslGrammarAccess.VariableDeclarationElements getVariableDeclarationAccess() {
 		return gaExpressionDsl.getVariableDeclarationAccess();
 	}
@@ -1337,8 +1486,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Compound:
-	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{' vars+=VariableDeclaration* '}'
-	//	';'?;
+	//	abstract='abstract'? 'compound' name=Identifier ('refines' super=Identifier)? '{'
+	//	vars+=VariableDeclaration*
+	//	'}' ';'?;
 	public ExpressionDslGrammarAccess.CompoundElements getCompoundAccess() {
 		return gaExpressionDsl.getCompoundAccess();
 	}
@@ -1348,7 +1498,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//TypeDef:
-	//	'typedef' name=Identifier type=Type ';';
+	//	'typedef'
+	//	name=Identifier
+	//	type=Type
+	//	';';
 	public ExpressionDslGrammarAccess.TypeDefElements getTypeDefAccess() {
 		return gaExpressionDsl.getTypeDefAccess();
 	}
@@ -1358,8 +1511,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//// used in extending languages
-	// Advice:
-	//	'@advice' '(' name=QualifiedName ')' versionSpec=VersionSpec?;
+	//Advice:
+	//	'@advice' '(' name=QualifiedName ')'
+	//	versionSpec=VersionSpec?;
 	public ExpressionDslGrammarAccess.AdviceElements getAdviceAccess() {
 		return gaExpressionDsl.getAdviceAccess();
 	}
@@ -1389,7 +1543,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Parameter:
-	//	type=Type name=Identifier ('=' dflt=Expression)?;
+	//	type=Type
+	//	name=Identifier ('=' dflt=Expression)?;
 	public ExpressionDslGrammarAccess.ParameterElements getParameterAccess() {
 		return gaExpressionDsl.getParameterAccess();
 	}
@@ -1399,7 +1554,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VersionStmt:
-	//	'version' version=VERSION ';';
+	//	'version'
+	//	version=VERSION
+	//	';';
 	public ExpressionDslGrammarAccess.VersionStmtElements getVersionStmtAccess() {
 		return gaExpressionDsl.getVersionStmtAccess();
 	}
@@ -1408,9 +1565,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getVersionStmtAccess().getRule();
 	}
 
-	//Import: //here fqn because this may reference a specific project (of an external project)
-	// 'import' name=Identifier
-	//	versionSpec=VersionSpec? ';';
+	//Import:
+	//	// here fqn because this may reference a specific project (of an external project)
+	//	'import' name=Identifier versionSpec=VersionSpec? ';';
 	public ExpressionDslGrammarAccess.ImportElements getImportAccess() {
 		return gaExpressionDsl.getImportAccess();
 	}
@@ -1430,7 +1587,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalExpression:
-	//	left=EqualityExpression right+=LogicalExpressionPart*;
+	//	left=EqualityExpression
+	//	right+=LogicalExpressionPart*;
 	public ExpressionDslGrammarAccess.LogicalExpressionElements getLogicalExpressionAccess() {
 		return gaExpressionDsl.getLogicalExpressionAccess();
 	}
@@ -1440,7 +1598,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalExpressionPart:
-	//	op=LogicalOperator ex=EqualityExpression;
+	//	op=LogicalOperator
+	//	ex=EqualityExpression;
 	public ExpressionDslGrammarAccess.LogicalExpressionPartElements getLogicalExpressionPartAccess() {
 		return gaExpressionDsl.getLogicalExpressionPartAccess();
 	}
@@ -1450,7 +1609,11 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//LogicalOperator:
-	//	'and' | 'or' | 'xor' | 'implies' | 'iff';
+	//	'and'
+	//	| 'or'
+	//	| 'xor'
+	//	| 'implies'
+	//	| 'iff';
 	public ExpressionDslGrammarAccess.LogicalOperatorElements getLogicalOperatorAccess() {
 		return gaExpressionDsl.getLogicalOperatorAccess();
 	}
@@ -1460,7 +1623,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityExpression:
-	//	left=RelationalExpression right=EqualityExpressionPart?;
+	//	left=RelationalExpression
+	//	right=EqualityExpressionPart?;
 	public ExpressionDslGrammarAccess.EqualityExpressionElements getEqualityExpressionAccess() {
 		return gaExpressionDsl.getEqualityExpressionAccess();
 	}
@@ -1470,7 +1634,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityExpressionPart:
-	//	op=EqualityOperator ex=RelationalExpression;
+	//	op=EqualityOperator
+	//	ex=RelationalExpression;
 	public ExpressionDslGrammarAccess.EqualityExpressionPartElements getEqualityExpressionPartAccess() {
 		return gaExpressionDsl.getEqualityExpressionPartAccess();
 	}
@@ -1480,7 +1645,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//EqualityOperator:
-	//	'==' | '<>' | '!=';
+	//	'=='
+	//	| '<>'
+	//	| '!=';
 	public ExpressionDslGrammarAccess.EqualityOperatorElements getEqualityOperatorAccess() {
 		return gaExpressionDsl.getEqualityOperatorAccess();
 	}
@@ -1500,7 +1667,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalExpressionPart:
-	//	op=RelationalOperator ex=AdditiveExpression;
+	//	op=RelationalOperator
+	//	ex=AdditiveExpression;
 	public ExpressionDslGrammarAccess.RelationalExpressionPartElements getRelationalExpressionPartAccess() {
 		return gaExpressionDsl.getRelationalExpressionPartAccess();
 	}
@@ -1510,7 +1678,10 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//RelationalOperator:
-	//	'>' | '<' | '>=' | '<=';
+	//	'>'
+	//	| '<'
+	//	| '>='
+	//	| '<=';
 	public ExpressionDslGrammarAccess.RelationalOperatorElements getRelationalOperatorAccess() {
 		return gaExpressionDsl.getRelationalOperatorAccess();
 	}
@@ -1520,7 +1691,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AdditiveExpression:
-	//	left=MultiplicativeExpression right+=AdditiveExpressionPart*;
+	//	left=MultiplicativeExpression
+	//	right+=AdditiveExpressionPart*;
 	public ExpressionDslGrammarAccess.AdditiveExpressionElements getAdditiveExpressionAccess() {
 		return gaExpressionDsl.getAdditiveExpressionAccess();
 	}
@@ -1530,7 +1702,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AdditiveExpressionPart:
-	//	op=AdditiveOperator ex=MultiplicativeExpression;
+	//	op=AdditiveOperator
+	//	ex=MultiplicativeExpression;
 	public ExpressionDslGrammarAccess.AdditiveExpressionPartElements getAdditiveExpressionPartAccess() {
 		return gaExpressionDsl.getAdditiveExpressionPartAccess();
 	}
@@ -1540,7 +1713,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//AdditiveOperator:
-	//	'+' | '-';
+	//	'+'
+	//	| '-';
 	public ExpressionDslGrammarAccess.AdditiveOperatorElements getAdditiveOperatorAccess() {
 		return gaExpressionDsl.getAdditiveOperatorAccess();
 	}
@@ -1550,7 +1724,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MultiplicativeExpression:
-	//	left=UnaryExpression right=MultiplicativeExpressionPart?;
+	//	left=UnaryExpression
+	//	right=MultiplicativeExpressionPart?;
 	public ExpressionDslGrammarAccess.MultiplicativeExpressionElements getMultiplicativeExpressionAccess() {
 		return gaExpressionDsl.getMultiplicativeExpressionAccess();
 	}
@@ -1560,7 +1735,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MultiplicativeExpressionPart:
-	//	op=MultiplicativeOperator expr=UnaryExpression;
+	//	op=MultiplicativeOperator
+	//	expr=UnaryExpression;
 	public ExpressionDslGrammarAccess.MultiplicativeExpressionPartElements getMultiplicativeExpressionPartAccess() {
 		return gaExpressionDsl.getMultiplicativeExpressionPartAccess();
 	}
@@ -1570,7 +1746,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//MultiplicativeOperator:
-	//	'*' | '/';
+	//	'*'
+	//	| '/';
 	public ExpressionDslGrammarAccess.MultiplicativeOperatorElements getMultiplicativeOperatorAccess() {
 		return gaExpressionDsl.getMultiplicativeOperatorAccess();
 	}
@@ -1580,7 +1757,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//UnaryExpression:
-	//	op=UnaryOperator? expr=PostfixExpression;
+	//	op=UnaryOperator?
+	//	expr=PostfixExpression;
 	public ExpressionDslGrammarAccess.UnaryExpressionElements getUnaryExpressionAccess() {
 		return gaExpressionDsl.getUnaryExpressionAccess();
 	}
@@ -1590,7 +1768,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//UnaryOperator:
-	//	'not' | '!' | '-';
+	//	'not'
+	//	| '!'
+	//	| '-';
 	public ExpressionDslGrammarAccess.UnaryOperatorElements getUnaryOperatorAccess() {
 		return gaExpressionDsl.getUnaryOperatorAccess();
 	}
@@ -1611,7 +1791,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ExpressionOrQualifiedExecution:
-	//	(val=Constant | '(' parenthesis=Expression ')') calls+=SubCall*;
+	//	(val=Constant
+	//	| '(' parenthesis=Expression ')') calls+=SubCall*;
 	public ExpressionDslGrammarAccess.ExpressionOrQualifiedExecutionElements getExpressionOrQualifiedExecutionAccess() {
 		return gaExpressionDsl.getExpressionOrQualifiedExecutionAccess();
 	}
@@ -1651,7 +1832,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//SubCall:
-	//	type=('.' | '->') call=Call | '[' arrayEx=Expression ']' // IVML addition to OCL
+	//	type=('.' | '->') call=Call
+	//	| '[' arrayEx=Expression ']' // IVML addition to OCL
 	//;
 	public ExpressionDslGrammarAccess.SubCallElements getSubCallAccess() {
 		return gaExpressionDsl.getSubCallAccess();
@@ -1692,7 +1874,11 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Call:
-	//	name=QualifiedPrefix '(' decl=Declarator? param=ArgumentList? ')';
+	//	name=QualifiedPrefix
+	//	'('
+	//	decl=Declarator?
+	//	param=ArgumentList?
+	//	')';
 	public ExpressionDslGrammarAccess.CallElements getCallAccess() {
 		return gaExpressionDsl.getCallAccess();
 	}
@@ -1702,7 +1888,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ArgumentList:
-	//	param+=NamedArgument (',' param+=NamedArgument)*;
+	//	param+=NamedArgument (','
+	//	param+=NamedArgument)*;
 	public ExpressionDslGrammarAccess.ArgumentListElements getArgumentListAccess() {
 		return gaExpressionDsl.getArgumentListAccess();
 	}
@@ -1712,7 +1899,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//NamedArgument:
-	//	(name=Identifier '=')? ex=Expression;
+	//	(name=Identifier '=')?
+	//	ex=Expression;
 	public ExpressionDslGrammarAccess.NamedArgumentElements getNamedArgumentAccess() {
 		return gaExpressionDsl.getNamedArgumentAccess();
 	}
@@ -1742,8 +1930,11 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Constant:
-	//	nValue=NumValue | sValue=STRING | qValue=QualifiedName | bValue=('true' | 'false') | null='null' | =>
-	//	version=VERSION;
+	//	nValue=NumValue
+	//	| sValue=STRING
+	//	| qValue=QualifiedName
+	//	| bValue=('true' | 'false') | null='null'
+	//	| =>version=VERSION;
 	public ExpressionDslGrammarAccess.ConstantElements getConstantAccess() {
 		return gaExpressionDsl.getConstantAccess();
 	}
@@ -1774,9 +1965,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//Type:
 	//	name=QualifiedPrefix // specific types will be dynamically loaded at start-up
-	// | set='setOf' param=TypeParameters |
-	//	seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters | call='callOf' return=Type?
-	//	param=TypeParameters;
+	//	| set='setOf' param=TypeParameters | seq='sequenceOf' param=TypeParameters | map='mapOf' param=TypeParameters |
+	//	call='callOf' return=Type? param=TypeParameters;
 	public ExpressionDslGrammarAccess.TypeElements getTypeAccess() {
 		return gaExpressionDsl.getTypeAccess();
 	}
@@ -1796,7 +1986,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ContainerInitializer:
-	//	{ContainerInitializer} '{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}';
+	//	{ContainerInitializer}
+	//	'{' (exprs+=ContainerInitializerExpression (',' exprs+=ContainerInitializerExpression)*)? '}';
 	public ExpressionDslGrammarAccess.ContainerInitializerElements getContainerInitializerAccess() {
 		return gaExpressionDsl.getContainerInitializerAccess();
 	}
@@ -1806,7 +1997,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ContainerInitializerExpression:
-	//	logical=LogicalExpression | container=ContainerInitializer;
+	//	logical=LogicalExpression
+	//	| container=ContainerInitializer;
 	public ExpressionDslGrammarAccess.ContainerInitializerExpressionElements getContainerInitializerExpressionAccess() {
 		return gaExpressionDsl.getContainerInitializerExpressionAccess();
 	}
@@ -1828,7 +2020,9 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal NUMBER:
-	//	'-'? ('0'..'9'+ ('.' '0'..'9'* EXPONENT?)? | '.' '0'..'9'+ EXPONENT? | '0'..'9'+ EXPONENT);
+	//	'-'? ('0'..'9'+ ('.' '0'..'9'* EXPONENT?)?
+	//	| '.' '0'..'9'+ EXPONENT?
+	//	| '0'..'9'+ EXPONENT);
 	public TerminalRule getNUMBERRule() {
 		return gaExpressionDsl.getNUMBERRule();
 	} 
@@ -1840,14 +2034,14 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	} 
 
 	//terminal STRING:
-	//	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"' | "'" ('\\' ('b' | 't' | 'n' |
-	//	'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
+	//	'"' ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | '"'))* '"' |
+	//	"'" ('\\' ('b' | 't' | 'n' | 'f' | 'r' | 'u' | '"' | "'" | '\\') | !('\\' | "'"))* "'";
 	public TerminalRule getSTRINGRule() {
 		return gaExpressionDsl.getSTRINGRule();
 	} 
 
 	//terminal ML_COMMENT:
-	//	'/ *'->'* /';
+	//	'/*'->'*/';
 	public TerminalRule getML_COMMENTRule() {
 		return gaExpressionDsl.getML_COMMENTRule();
 	} 

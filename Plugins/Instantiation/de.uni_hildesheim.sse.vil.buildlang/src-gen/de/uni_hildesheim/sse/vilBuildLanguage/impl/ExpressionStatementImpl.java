@@ -65,6 +65,7 @@ public class ExpressionStatementImpl extends de.uni_hildesheim.sse.vil.expressio
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Alternative getAlt()
   {
     return alt;
@@ -92,6 +93,7 @@ public class ExpressionStatementImpl extends de.uni_hildesheim.sse.vil.expressio
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAlt(Alternative newAlt)
   {
     if (newAlt != alt)

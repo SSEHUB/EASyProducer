@@ -78,6 +78,7 @@ public class ContainerInitializerExpressionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LogicalExpression getLogical()
   {
     return logical;
@@ -105,6 +106,7 @@ public class ContainerInitializerExpressionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLogical(LogicalExpression newLogical)
   {
     if (newLogical != logical)
@@ -126,6 +128,7 @@ public class ContainerInitializerExpressionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ContainerInitializer getContainer()
   {
     return container;
@@ -153,6 +156,7 @@ public class ContainerInitializerExpressionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContainer(ContainerInitializer newContainer)
   {
     if (newContainer != container)

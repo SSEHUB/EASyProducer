@@ -92,6 +92,7 @@ public class BreakdownElementImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableDeclaration getVarDecl()
   {
     return varDecl;
@@ -119,6 +120,7 @@ public class BreakdownElementImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVarDecl(VariableDeclaration newVarDecl)
   {
     if (newVarDecl != varDecl)
@@ -140,6 +142,7 @@ public class BreakdownElementImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionStatement getExprStmt()
   {
     return exprStmt;
@@ -167,6 +170,7 @@ public class BreakdownElementImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExprStmt(ExpressionStatement newExprStmt)
   {
     if (newExprStmt != exprStmt)
@@ -188,6 +192,7 @@ public class BreakdownElementImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BreakdownStatement getBreakdownStmt()
   {
     return breakdownStmt;
@@ -215,6 +220,7 @@ public class BreakdownElementImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBreakdownStmt(BreakdownStatement newBreakdownStmt)
   {
     if (newBreakdownStmt != breakdownStmt)

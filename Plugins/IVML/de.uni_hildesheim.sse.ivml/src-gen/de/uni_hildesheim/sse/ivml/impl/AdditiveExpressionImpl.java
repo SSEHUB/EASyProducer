@@ -85,6 +85,7 @@ public class AdditiveExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public MultiplicativeExpression getLeft()
   {
     return left;
@@ -112,6 +113,7 @@ public class AdditiveExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(MultiplicativeExpression newLeft)
   {
     if (newLeft != left)
@@ -133,6 +135,7 @@ public class AdditiveExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<AdditiveExpressionPart> getRight()
   {
     if (right == null)

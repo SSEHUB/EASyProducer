@@ -28,10 +28,6 @@ public interface Declaration extends EObject
   /**
    * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Type</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' containment reference.
    * @see #setType(Type)
@@ -55,10 +51,6 @@ public interface Declaration extends EObject
    * Returns the value of the '<em><b>Units</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.DeclarationUnit}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Units</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Units</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getDeclaration_Units()

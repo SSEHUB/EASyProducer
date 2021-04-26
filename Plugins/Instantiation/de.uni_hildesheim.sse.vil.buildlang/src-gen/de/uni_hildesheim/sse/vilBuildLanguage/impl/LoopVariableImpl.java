@@ -88,6 +88,7 @@ public class LoopVariableImpl extends MinimalEObjectImpl.Container implements Lo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -115,6 +116,7 @@ public class LoopVariableImpl extends MinimalEObjectImpl.Container implements Lo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -136,6 +138,7 @@ public class LoopVariableImpl extends MinimalEObjectImpl.Container implements Lo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVar()
   {
     return var;
@@ -146,6 +149,7 @@ public class LoopVariableImpl extends MinimalEObjectImpl.Container implements Lo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVar(String newVar)
   {
     String oldVar = var;
@@ -256,7 +260,7 @@ public class LoopVariableImpl extends MinimalEObjectImpl.Container implements Lo
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (var: ");
     result.append(var);
     result.append(')');

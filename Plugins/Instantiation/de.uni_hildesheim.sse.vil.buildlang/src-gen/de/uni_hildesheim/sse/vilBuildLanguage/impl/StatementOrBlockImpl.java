@@ -78,6 +78,7 @@ public class StatementOrBlockImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionStatement getExStmt()
   {
     return exStmt;
@@ -105,6 +106,7 @@ public class StatementOrBlockImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExStmt(ExpressionStatement newExStmt)
   {
     if (newExStmt != exStmt)
@@ -126,6 +128,7 @@ public class StatementOrBlockImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElementBlock getBlock()
   {
     return block;
@@ -153,6 +156,7 @@ public class StatementOrBlockImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(RuleElementBlock newBlock)
   {
     if (newBlock != block)

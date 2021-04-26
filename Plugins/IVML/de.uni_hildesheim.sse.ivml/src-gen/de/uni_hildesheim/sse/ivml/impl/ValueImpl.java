@@ -195,6 +195,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NumValue getNValue()
   {
     return nValue;
@@ -222,6 +223,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNValue(NumValue newNValue)
   {
     if (newNValue != nValue)
@@ -243,6 +245,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSValue()
   {
     return sValue;
@@ -253,6 +256,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSValue(String newSValue)
   {
     String oldSValue = sValue;
@@ -266,6 +270,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedName getQValue()
   {
     return qValue;
@@ -293,6 +298,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setQValue(QualifiedName newQValue)
   {
     if (newQValue != qValue)
@@ -314,6 +320,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getBValue()
   {
     return bValue;
@@ -324,6 +331,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBValue(String newBValue)
   {
     String oldBValue = bValue;
@@ -337,6 +345,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSelf()
   {
     return self;
@@ -347,6 +356,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSelf(String newSelf)
   {
     String oldSelf = self;
@@ -360,6 +370,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getNullValue()
   {
     return nullValue;
@@ -370,6 +381,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNullValue(String newNullValue)
   {
     String oldNullValue = nullValue;
@@ -383,6 +395,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getTValue()
   {
     return tValue;
@@ -410,6 +423,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTValue(Type newTValue)
   {
     if (newTValue != tValue)
@@ -431,6 +445,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVersion()
   {
     return version;
@@ -441,6 +456,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(String newVersion)
   {
     String oldVersion = version;
@@ -615,7 +631,7 @@ public class ValueImpl extends MinimalEObjectImpl.Container implements Value
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (sValue: ");
     result.append(sValue);
     result.append(", bValue: ");

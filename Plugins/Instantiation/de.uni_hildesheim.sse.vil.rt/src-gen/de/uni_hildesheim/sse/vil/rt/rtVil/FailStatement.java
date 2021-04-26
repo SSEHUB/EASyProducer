@@ -29,10 +29,6 @@ public interface FailStatement extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -55,10 +51,6 @@ public interface FailStatement extends EObject
   /**
    * Returns the value of the '<em><b>Reason</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Reason</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Reason</em>' containment reference.
    * @see #setReason(Expression)
@@ -81,10 +73,6 @@ public interface FailStatement extends EObject
   /**
    * Returns the value of the '<em><b>Code</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Code</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Code</em>' containment reference.
    * @see #setCode(Expression)

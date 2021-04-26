@@ -109,6 +109,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FeatureCall getCall()
   {
     return call;
@@ -136,6 +137,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCall(FeatureCall newCall)
   {
     if (newCall != call)
@@ -157,6 +159,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Call> getFCalls()
   {
     if (fCalls == null)
@@ -171,6 +174,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionAccess getAccess()
   {
     return access;
@@ -198,6 +202,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAccess(ExpressionAccess newAccess)
   {
     if (newAccess != access)
@@ -219,6 +224,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PrimaryExpression getLeft()
   {
     return left;
@@ -246,6 +252,7 @@ public class PostfixExpressionImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(PrimaryExpression newLeft)
   {
     if (newLeft != left)

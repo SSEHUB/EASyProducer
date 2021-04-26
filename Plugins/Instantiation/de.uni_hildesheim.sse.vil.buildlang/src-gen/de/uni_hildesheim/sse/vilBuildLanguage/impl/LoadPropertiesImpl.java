@@ -73,6 +73,7 @@ public class LoadPropertiesImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPath()
   {
     return path;
@@ -83,6 +84,7 @@ public class LoadPropertiesImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPath(String newPath)
   {
     String oldPath = path;
@@ -167,7 +169,7 @@ public class LoadPropertiesImpl extends MinimalEObjectImpl.Container implements 
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (path: ");
     result.append(path);
     result.append(')');

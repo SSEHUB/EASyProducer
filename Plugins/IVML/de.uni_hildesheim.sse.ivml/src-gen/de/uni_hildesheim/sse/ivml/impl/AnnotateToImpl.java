@@ -116,6 +116,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSname()
   {
     return sname;
@@ -126,6 +127,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSname(String newSname)
   {
     String oldSname = sname;
@@ -139,6 +141,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getAnnotationType()
   {
     return annotationType;
@@ -166,6 +169,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAnnotationType(Type newAnnotationType)
   {
     if (newAnnotationType != annotationType)
@@ -187,6 +191,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableDeclarationPart getAnnotationDecl()
   {
     return annotationDecl;
@@ -214,6 +219,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAnnotationDecl(VariableDeclarationPart newAnnotationDecl)
   {
     if (newAnnotationDecl != annotationDecl)
@@ -235,6 +241,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getNames()
   {
     if (names == null)
@@ -370,7 +377,7 @@ public class AnnotateToImpl extends MinimalEObjectImpl.Container implements Anno
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (sname: ");
     result.append(sname);
     result.append(", names: ");

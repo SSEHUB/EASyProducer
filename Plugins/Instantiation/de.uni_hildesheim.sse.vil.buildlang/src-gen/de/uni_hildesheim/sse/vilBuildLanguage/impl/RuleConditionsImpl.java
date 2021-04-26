@@ -83,6 +83,7 @@ public class RuleConditionsImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LogicalExpression> getPostcondition()
   {
     if (postcondition == null)
@@ -97,6 +98,7 @@ public class RuleConditionsImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LogicalExpression> getPreconditions()
   {
     if (preconditions == null)

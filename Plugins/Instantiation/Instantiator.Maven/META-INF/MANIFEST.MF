@@ -13,7 +13,8 @@ Service-Component: OSGI-INF/instantiator.xml
 Eclipse-BundleShape: dir
 Require-Bundle: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.basics,
- org.eclipse.equinox.ds,
+ org.eclipse.equinox.ds;resolution:=optional,
+ org.apache.felix.scr;resolution:=optional,
  org.eclipse.core.runtime,
  net.ssehub.easy.dslCore
 Bundle-ClassPath: .

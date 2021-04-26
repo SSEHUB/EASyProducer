@@ -29,10 +29,6 @@ public interface Eval extends EObject
    * Returns the value of the '<em><b>Nested</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.Eval}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Nested</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Nested</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getEval_Nested()
@@ -45,10 +41,6 @@ public interface Eval extends EObject
    * Returns the value of the '<em><b>Statements</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.ExpressionStatement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Statements</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Statements</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getEval_Statements()

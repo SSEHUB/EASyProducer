@@ -27,10 +27,6 @@ public interface ImportStmt extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -53,10 +49,6 @@ public interface ImportStmt extends EObject
   /**
    * Returns the value of the '<em><b>Interface</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Interface</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interface</em>' attribute.
    * @see #setInterface(String)
@@ -79,10 +71,6 @@ public interface ImportStmt extends EObject
   /**
    * Returns the value of the '<em><b>Restriction</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Restriction</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Restriction</em>' containment reference.
    * @see #setRestriction(Expression)

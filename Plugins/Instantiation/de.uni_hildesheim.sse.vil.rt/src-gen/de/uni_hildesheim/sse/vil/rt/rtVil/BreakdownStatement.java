@@ -37,10 +37,6 @@ public interface BreakdownStatement extends EObject
   /**
    * Returns the value of the '<em><b>Type</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Type</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' attribute.
    * @see #setType(String)
@@ -63,10 +59,6 @@ public interface BreakdownStatement extends EObject
   /**
    * Returns the value of the '<em><b>Guard</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Guard</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Guard</em>' containment reference.
    * @see #setGuard(LogicalExpression)
@@ -89,10 +81,6 @@ public interface BreakdownStatement extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' containment reference.
    * @see #setName(QualifiedPrefix)
@@ -115,10 +103,6 @@ public interface BreakdownStatement extends EObject
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(ArgumentList)
@@ -142,10 +126,6 @@ public interface BreakdownStatement extends EObject
    * Returns the value of the '<em><b>Part</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownWithPart}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Part</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Part</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getBreakdownStatement_Part()
@@ -157,10 +137,6 @@ public interface BreakdownStatement extends EObject
   /**
    * Returns the value of the '<em><b>Time</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Time</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Time</em>' containment reference.
    * @see #setTime(Expression)

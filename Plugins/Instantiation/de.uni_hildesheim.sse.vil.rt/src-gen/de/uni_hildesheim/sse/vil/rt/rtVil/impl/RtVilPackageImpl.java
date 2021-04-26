@@ -165,7 +165,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link RtVilPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -180,12 +180,14 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     if (isInited) return (RtVilPackage)EPackage.Registry.INSTANCE.getEPackage(RtVilPackage.eNS_URI);
 
     // Obtain or create and register package
-    RtVilPackageImpl theRtVilPackage = (RtVilPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof RtVilPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new RtVilPackageImpl());
+    Object registeredRtVilPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    RtVilPackageImpl theRtVilPackage = registeredRtVilPackage instanceof RtVilPackageImpl ? (RtVilPackageImpl)registeredRtVilPackage : new RtVilPackageImpl();
 
     isInited = true;
 
     // Initialize simple dependencies
     VilBuildLanguagePackage.eINSTANCE.eClass();
+    ExpressionDslPackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
     theRtVilPackage.createPackageContents();
@@ -196,7 +198,6 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
     // Mark meta-data to indicate it can't be changed
     theRtVilPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(RtVilPackage.eNS_URI, theRtVilPackage);
     return theRtVilPackage;
@@ -207,6 +208,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImplementationUnit()
   {
     return implementationUnitEClass;
@@ -217,6 +219,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLanguageUnit()
   {
     return languageUnitEClass;
@@ -227,6 +230,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_RtContents()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(0);
@@ -237,6 +241,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getrtContents()
   {
     return rtContentsEClass;
@@ -247,6 +252,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getrtContents_Elements()
   {
     return (EReference)rtContentsEClass.getEStructuralFeatures().get(0);
@@ -257,6 +263,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getGlobalVariableDeclaration()
   {
     return globalVariableDeclarationEClass;
@@ -267,6 +274,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getGlobalVariableDeclaration_Persistent()
   {
     return (EAttribute)globalVariableDeclarationEClass.getEStructuralFeatures().get(0);
@@ -277,6 +285,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getGlobalVariableDeclaration_VarDecl()
   {
     return (EReference)globalVariableDeclarationEClass.getEStructuralFeatures().get(1);
@@ -287,6 +296,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStrategyDeclaration()
   {
     return strategyDeclarationEClass;
@@ -297,6 +307,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStrategyDeclaration_Name()
   {
     return (EAttribute)strategyDeclarationEClass.getEStructuralFeatures().get(0);
@@ -307,6 +318,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_ParamList()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(1);
@@ -317,6 +329,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_Conditions()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(2);
@@ -327,6 +340,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_VarDecls()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(3);
@@ -337,6 +351,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_Objective()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(4);
@@ -347,6 +362,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_Weighting()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(5);
@@ -357,6 +373,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_Breakdown()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(6);
@@ -367,6 +384,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStrategyDeclaration_Post()
   {
     return (EReference)strategyDeclarationEClass.getEStructuralFeatures().get(7);
@@ -377,6 +395,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBreakdownElement()
   {
     return breakdownElementEClass;
@@ -387,6 +406,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownElement_VarDecl()
   {
     return (EReference)breakdownElementEClass.getEStructuralFeatures().get(0);
@@ -397,6 +417,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownElement_ExprStmt()
   {
     return (EReference)breakdownElementEClass.getEStructuralFeatures().get(1);
@@ -407,6 +428,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownElement_BreakdownStmt()
   {
     return (EReference)breakdownElementEClass.getEStructuralFeatures().get(2);
@@ -417,6 +439,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWeightingStatement()
   {
     return weightingStatementEClass;
@@ -427,6 +450,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getWeightingStatement_Name()
   {
     return (EAttribute)weightingStatementEClass.getEStructuralFeatures().get(0);
@@ -437,6 +461,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWeightingStatement_Expr()
   {
     return (EReference)weightingStatementEClass.getEStructuralFeatures().get(1);
@@ -447,6 +472,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBreakdownStatement()
   {
     return breakdownStatementEClass;
@@ -457,6 +483,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getBreakdownStatement_Type()
   {
     return (EAttribute)breakdownStatementEClass.getEStructuralFeatures().get(0);
@@ -467,6 +494,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownStatement_Guard()
   {
     return (EReference)breakdownStatementEClass.getEStructuralFeatures().get(1);
@@ -477,6 +505,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownStatement_Name()
   {
     return (EReference)breakdownStatementEClass.getEStructuralFeatures().get(2);
@@ -487,6 +516,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownStatement_Param()
   {
     return (EReference)breakdownStatementEClass.getEStructuralFeatures().get(3);
@@ -497,6 +527,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownStatement_Part()
   {
     return (EReference)breakdownStatementEClass.getEStructuralFeatures().get(4);
@@ -507,6 +538,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownStatement_Time()
   {
     return (EReference)breakdownStatementEClass.getEStructuralFeatures().get(5);
@@ -517,6 +549,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBreakdownWithPart()
   {
     return breakdownWithPartEClass;
@@ -527,6 +560,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getBreakdownWithPart_Name()
   {
     return (EAttribute)breakdownWithPartEClass.getEStructuralFeatures().get(0);
@@ -537,6 +571,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBreakdownWithPart_Value()
   {
     return (EReference)breakdownWithPartEClass.getEStructuralFeatures().get(1);
@@ -547,6 +582,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTacticDeclaration()
   {
     return tacticDeclarationEClass;
@@ -557,6 +593,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTacticDeclaration_Name()
   {
     return (EAttribute)tacticDeclarationEClass.getEStructuralFeatures().get(0);
@@ -567,6 +604,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTacticDeclaration_ParamList()
   {
     return (EReference)tacticDeclarationEClass.getEStructuralFeatures().get(1);
@@ -577,6 +615,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTacticDeclaration_Conditions()
   {
     return (EReference)tacticDeclarationEClass.getEStructuralFeatures().get(2);
@@ -587,6 +626,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTacticDeclaration_Block()
   {
     return (EReference)tacticDeclarationEClass.getEStructuralFeatures().get(3);
@@ -597,6 +637,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleElementBlock()
   {
     return ruleElementBlockEClass;
@@ -607,6 +648,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElementBlock_Intent()
   {
     return (EReference)ruleElementBlockEClass.getEStructuralFeatures().get(0);
@@ -617,6 +659,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleElement()
   {
     return ruleElementEClass;
@@ -627,6 +670,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElement_Fail()
   {
     return (EReference)ruleElementEClass.getEStructuralFeatures().get(0);
@@ -637,6 +681,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getIntentDeclaration()
   {
     return intentDeclarationEClass;
@@ -647,6 +692,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIntentDeclaration_ExprStmt()
   {
     return (EReference)intentDeclarationEClass.getEStructuralFeatures().get(0);
@@ -657,6 +703,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFailStatement()
   {
     return failStatementEClass;
@@ -667,6 +714,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFailStatement_Name()
   {
     return (EAttribute)failStatementEClass.getEStructuralFeatures().get(0);
@@ -677,6 +725,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFailStatement_Reason()
   {
     return (EReference)failStatementEClass.getEStructuralFeatures().get(1);
@@ -687,6 +736,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFailStatement_Code()
   {
     return (EReference)failStatementEClass.getEStructuralFeatures().get(2);
@@ -697,6 +747,7 @@ public class RtVilPackageImpl extends EPackageImpl implements RtVilPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RtVilFactory getRtVilFactory()
   {
     return (RtVilFactory)getEFactoryInstance();

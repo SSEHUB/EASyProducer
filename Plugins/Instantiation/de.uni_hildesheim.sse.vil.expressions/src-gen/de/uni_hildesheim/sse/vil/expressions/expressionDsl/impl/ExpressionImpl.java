@@ -78,6 +78,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LogicalExpression getExpr()
   {
     return expr;
@@ -105,6 +106,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(LogicalExpression newExpr)
   {
     if (newExpr != expr)
@@ -126,6 +128,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ContainerInitializer getInit()
   {
     return init;
@@ -153,6 +156,7 @@ public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInit(ContainerInitializer newInit)
   {
     if (newInit != init)

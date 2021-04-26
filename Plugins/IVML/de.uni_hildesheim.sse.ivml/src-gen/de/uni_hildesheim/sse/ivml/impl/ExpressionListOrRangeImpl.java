@@ -71,6 +71,7 @@ public class ExpressionListOrRangeImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ExpressionListEntry> getList()
   {
     if (list == null)

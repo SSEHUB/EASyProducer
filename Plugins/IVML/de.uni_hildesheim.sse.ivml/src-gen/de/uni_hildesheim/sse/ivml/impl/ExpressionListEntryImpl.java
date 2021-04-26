@@ -120,6 +120,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -130,6 +131,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -143,6 +145,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getAttrib()
   {
     return attrib;
@@ -153,6 +156,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAttrib(String newAttrib)
   {
     String oldAttrib = attrib;
@@ -166,6 +170,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ImplicationExpression getValue()
   {
     return value;
@@ -193,6 +198,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(ImplicationExpression newValue)
   {
     if (newValue != value)
@@ -214,6 +220,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ContainerInitializer getContainer()
   {
     return container;
@@ -241,6 +248,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContainer(ContainerInitializer newContainer)
   {
     if (newContainer != container)
@@ -381,7 +389,7 @@ public class ExpressionListEntryImpl extends MinimalEObjectImpl.Container implem
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(", attrib: ");

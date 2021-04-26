@@ -87,6 +87,7 @@ public class VariableDeclarationPartImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -97,6 +98,7 @@ public class VariableDeclarationPartImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -110,6 +112,7 @@ public class VariableDeclarationPartImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getDefault()
   {
     return default_;
@@ -137,6 +140,7 @@ public class VariableDeclarationPartImpl extends MinimalEObjectImpl.Container im
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDefault(Expression newDefault)
   {
     if (newDefault != default_)
@@ -255,7 +259,7 @@ public class VariableDeclarationPartImpl extends MinimalEObjectImpl.Container im
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

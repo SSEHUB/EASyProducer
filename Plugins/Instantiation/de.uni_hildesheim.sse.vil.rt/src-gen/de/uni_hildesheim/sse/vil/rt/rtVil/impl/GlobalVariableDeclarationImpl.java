@@ -88,6 +88,7 @@ public class GlobalVariableDeclarationImpl extends MinimalEObjectImpl.Container 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getPersistent()
   {
     return persistent;
@@ -98,6 +99,7 @@ public class GlobalVariableDeclarationImpl extends MinimalEObjectImpl.Container 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPersistent(String newPersistent)
   {
     String oldPersistent = persistent;
@@ -111,6 +113,7 @@ public class GlobalVariableDeclarationImpl extends MinimalEObjectImpl.Container 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableDeclaration getVarDecl()
   {
     return varDecl;
@@ -138,6 +141,7 @@ public class GlobalVariableDeclarationImpl extends MinimalEObjectImpl.Container 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVarDecl(VariableDeclaration newVarDecl)
   {
     if (newVarDecl != varDecl)
@@ -256,7 +260,7 @@ public class GlobalVariableDeclarationImpl extends MinimalEObjectImpl.Container 
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (persistent: ");
     result.append(persistent);
     result.append(')');

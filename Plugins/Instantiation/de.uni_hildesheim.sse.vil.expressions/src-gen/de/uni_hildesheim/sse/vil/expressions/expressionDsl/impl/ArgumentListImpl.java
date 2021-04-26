@@ -71,6 +71,7 @@ public class ArgumentListImpl extends MinimalEObjectImpl.Container implements Ar
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<NamedArgument> getParam()
   {
     if (param == null)

@@ -89,6 +89,7 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public AdditiveExpression getLeft()
   {
     return left;
@@ -116,6 +117,7 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(AdditiveExpression newLeft)
   {
     if (newLeft != left)
@@ -137,6 +139,7 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RelationalExpressionPart getRight()
   {
     return right;
@@ -164,6 +167,7 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRight(RelationalExpressionPart newRight)
   {
     if (newRight != right)
@@ -185,6 +189,7 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RelationalExpressionPart getRight2()
   {
     return right2;
@@ -212,6 +217,7 @@ public class RelationalExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRight2(RelationalExpressionPart newRight2)
   {
     if (newRight2 != right2)

@@ -85,6 +85,7 @@ public class AssignmentExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LogicalExpression getLeft()
   {
     return left;
@@ -112,6 +113,7 @@ public class AssignmentExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(LogicalExpression newLeft)
   {
     if (newLeft != left)
@@ -133,6 +135,7 @@ public class AssignmentExpressionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<AssignmentExpressionPart> getRight()
   {
     if (right == null)

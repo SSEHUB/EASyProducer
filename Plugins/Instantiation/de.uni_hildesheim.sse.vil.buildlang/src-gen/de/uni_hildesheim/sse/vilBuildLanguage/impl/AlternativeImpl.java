@@ -90,6 +90,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -117,6 +118,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -138,6 +140,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StatementOrBlock getIf()
   {
     return if_;
@@ -165,6 +168,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIf(StatementOrBlock newIf)
   {
     if (newIf != if_)
@@ -186,6 +190,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StatementOrBlock getElse()
   {
     return else_;
@@ -213,6 +218,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setElse(StatementOrBlock newElse)
   {
     if (newElse != else_)

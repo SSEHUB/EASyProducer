@@ -142,6 +142,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -152,6 +153,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -165,6 +167,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VersionStmt getVersion()
   {
     return version;
@@ -192,6 +195,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(VersionStmt newVersion)
   {
     if (newVersion != version)
@@ -213,6 +217,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ImportStmt> getImports()
   {
     if (imports == null)
@@ -227,6 +232,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ConflictStmt> getConflicts()
   {
     if (conflicts == null)
@@ -241,6 +247,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<InterfaceDeclaration> getInterfaces()
   {
     if (interfaces == null)
@@ -255,6 +262,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ProjectContents getContents()
   {
     return contents;
@@ -282,6 +290,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContents(ProjectContents newContents)
   {
     if (newContents != contents)
@@ -452,7 +461,7 @@ public class ProjectImpl extends MinimalEObjectImpl.Container implements Project
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

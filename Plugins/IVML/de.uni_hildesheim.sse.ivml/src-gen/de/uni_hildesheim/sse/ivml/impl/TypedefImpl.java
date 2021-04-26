@@ -90,6 +90,7 @@ public class TypedefImpl extends MinimalEObjectImpl.Container implements Typedef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TypedefEnum getTEnum()
   {
     return tEnum;
@@ -117,6 +118,7 @@ public class TypedefImpl extends MinimalEObjectImpl.Container implements Typedef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTEnum(TypedefEnum newTEnum)
   {
     if (newTEnum != tEnum)
@@ -138,6 +140,7 @@ public class TypedefImpl extends MinimalEObjectImpl.Container implements Typedef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TypedefCompound getTCompound()
   {
     return tCompound;
@@ -165,6 +168,7 @@ public class TypedefImpl extends MinimalEObjectImpl.Container implements Typedef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTCompound(TypedefCompound newTCompound)
   {
     if (newTCompound != tCompound)
@@ -186,6 +190,7 @@ public class TypedefImpl extends MinimalEObjectImpl.Container implements Typedef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TypedefMapping getTMapping()
   {
     return tMapping;
@@ -213,6 +218,7 @@ public class TypedefImpl extends MinimalEObjectImpl.Container implements Typedef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTMapping(TypedefMapping newTMapping)
   {
     if (newTMapping != tMapping)

@@ -235,7 +235,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link VilBuildLanguagePackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -250,7 +250,8 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     if (isInited) return (VilBuildLanguagePackage)EPackage.Registry.INSTANCE.getEPackage(VilBuildLanguagePackage.eNS_URI);
 
     // Obtain or create and register package
-    VilBuildLanguagePackageImpl theVilBuildLanguagePackage = (VilBuildLanguagePackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof VilBuildLanguagePackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new VilBuildLanguagePackageImpl());
+    Object registeredVilBuildLanguagePackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    VilBuildLanguagePackageImpl theVilBuildLanguagePackage = registeredVilBuildLanguagePackage instanceof VilBuildLanguagePackageImpl ? (VilBuildLanguagePackageImpl)registeredVilBuildLanguagePackage : new VilBuildLanguagePackageImpl();
 
     isInited = true;
 
@@ -266,7 +267,6 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
     // Mark meta-data to indicate it can't be changed
     theVilBuildLanguagePackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(VilBuildLanguagePackage.eNS_URI, theVilBuildLanguagePackage);
     return theVilBuildLanguagePackage;
@@ -277,6 +277,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImplementationUnit()
   {
     return implementationUnitEClass;
@@ -287,6 +288,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImplementationUnit_Imports()
   {
     return (EReference)implementationUnitEClass.getEStructuralFeatures().get(0);
@@ -297,6 +299,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImplementationUnit_Requires()
   {
     return (EReference)implementationUnitEClass.getEStructuralFeatures().get(1);
@@ -307,6 +310,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImplementationUnit_Scripts()
   {
     return (EReference)implementationUnitEClass.getEStructuralFeatures().get(2);
@@ -317,6 +321,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRequire()
   {
     return requireEClass;
@@ -327,6 +332,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRequire_Name()
   {
     return (EAttribute)requireEClass.getEStructuralFeatures().get(0);
@@ -337,6 +343,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRequire_VersionSpec()
   {
     return (EReference)requireEClass.getEStructuralFeatures().get(1);
@@ -347,6 +354,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLanguageUnit()
   {
     return languageUnitEClass;
@@ -357,6 +365,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Param()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(0);
@@ -367,6 +376,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Parent()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(1);
@@ -377,6 +387,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_LoadProperties()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(2);
@@ -387,6 +398,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Contents()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(3);
@@ -397,6 +409,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getScriptParentDecl()
   {
     return scriptParentDeclEClass;
@@ -407,6 +420,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getScriptParentDecl_Name()
   {
     return (EAttribute)scriptParentDeclEClass.getEStructuralFeatures().get(0);
@@ -417,6 +431,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLoadProperties()
   {
     return loadPropertiesEClass;
@@ -427,6 +442,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLoadProperties_Path()
   {
     return (EAttribute)loadPropertiesEClass.getEStructuralFeatures().get(0);
@@ -437,6 +453,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getScriptContents()
   {
     return scriptContentsEClass;
@@ -447,6 +464,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getScriptContents_Elements()
   {
     return (EReference)scriptContentsEClass.getEStructuralFeatures().get(0);
@@ -457,6 +475,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleDeclaration()
   {
     return ruleDeclarationEClass;
@@ -467,6 +486,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleDeclaration_Modifier()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(0);
@@ -477,6 +497,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleDeclaration_Type()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(1);
@@ -487,6 +508,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRuleDeclaration_Name()
   {
     return (EAttribute)ruleDeclarationEClass.getEStructuralFeatures().get(2);
@@ -497,6 +519,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleDeclaration_ParamList()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(3);
@@ -507,6 +530,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleDeclaration_Conditions()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(4);
@@ -517,6 +541,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleDeclaration_Block()
   {
     return (EReference)ruleDeclarationEClass.getEStructuralFeatures().get(5);
@@ -527,6 +552,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleConditions()
   {
     return ruleConditionsEClass;
@@ -537,6 +563,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleConditions_Postcondition()
   {
     return (EReference)ruleConditionsEClass.getEStructuralFeatures().get(0);
@@ -547,6 +574,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleConditions_Preconditions()
   {
     return (EReference)ruleConditionsEClass.getEStructuralFeatures().get(1);
@@ -557,6 +585,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleElementBlock()
   {
     return ruleElementBlockEClass;
@@ -567,6 +596,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElementBlock_Elements()
   {
     return (EReference)ruleElementBlockEClass.getEStructuralFeatures().get(0);
@@ -577,6 +607,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleElement()
   {
     return ruleElementEClass;
@@ -587,6 +618,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElement_VarDecl()
   {
     return (EReference)ruleElementEClass.getEStructuralFeatures().get(0);
@@ -597,6 +629,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElement_ExprStmt()
   {
     return (EReference)ruleElementEClass.getEStructuralFeatures().get(1);
@@ -607,6 +640,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElement_While()
   {
     return (EReference)ruleElementEClass.getEStructuralFeatures().get(2);
@@ -617,6 +651,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRuleElement_For()
   {
     return (EReference)ruleElementEClass.getEStructuralFeatures().get(3);
@@ -627,6 +662,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRuleModifier()
   {
     return ruleModifierEClass;
@@ -637,6 +673,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRuleModifier_Protected()
   {
     return (EAttribute)ruleModifierEClass.getEStructuralFeatures().get(0);
@@ -647,6 +684,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionStatement()
   {
     return expressionStatementEClass;
@@ -657,6 +695,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionStatement_Alt()
   {
     return (EReference)expressionStatementEClass.getEStructuralFeatures().get(0);
@@ -667,6 +706,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPrimaryExpression()
   {
     return primaryExpressionEClass;
@@ -677,6 +717,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_SysEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(0);
@@ -687,6 +728,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Map()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(1);
@@ -697,6 +739,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Join()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(2);
@@ -707,6 +750,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Instantiate()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(3);
@@ -717,6 +761,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInstantiate()
   {
     return instantiateEClass;
@@ -727,6 +772,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getInstantiate_Project()
   {
     return (EAttribute)instantiateEClass.getEStructuralFeatures().get(0);
@@ -737,6 +783,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getInstantiate_RuleName()
   {
     return (EAttribute)instantiateEClass.getEStructuralFeatures().get(1);
@@ -747,6 +794,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInstantiate_Param()
   {
     return (EReference)instantiateEClass.getEStructuralFeatures().get(2);
@@ -757,6 +805,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInstantiate_VersionSpec()
   {
     return (EReference)instantiateEClass.getEStructuralFeatures().get(3);
@@ -767,6 +816,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLoopVariable()
   {
     return loopVariableEClass;
@@ -777,6 +827,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoopVariable_Type()
   {
     return (EReference)loopVariableEClass.getEStructuralFeatures().get(0);
@@ -787,6 +838,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLoopVariable_Var()
   {
     return (EAttribute)loopVariableEClass.getEStructuralFeatures().get(1);
@@ -797,6 +849,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMap()
   {
     return mapEClass;
@@ -807,6 +860,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMap_Var()
   {
     return (EReference)mapEClass.getEStructuralFeatures().get(0);
@@ -817,6 +871,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMap_Separator()
   {
     return (EAttribute)mapEClass.getEStructuralFeatures().get(1);
@@ -827,6 +882,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMap_Expr()
   {
     return (EReference)mapEClass.getEStructuralFeatures().get(2);
@@ -837,6 +893,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMap_Block()
   {
     return (EReference)mapEClass.getEStructuralFeatures().get(3);
@@ -847,6 +904,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFor()
   {
     return forEClass;
@@ -857,6 +915,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFor_Var()
   {
     return (EReference)forEClass.getEStructuralFeatures().get(0);
@@ -867,6 +926,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFor_Separator()
   {
     return (EAttribute)forEClass.getEStructuralFeatures().get(1);
@@ -877,6 +937,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFor_Expr()
   {
     return (EReference)forEClass.getEStructuralFeatures().get(2);
@@ -887,6 +948,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFor_Block()
   {
     return (EReference)forEClass.getEStructuralFeatures().get(3);
@@ -897,6 +959,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWhile()
   {
     return whileEClass;
@@ -907,6 +970,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWhile_Expr()
   {
     return (EReference)whileEClass.getEStructuralFeatures().get(0);
@@ -917,6 +981,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWhile_Block()
   {
     return (EReference)whileEClass.getEStructuralFeatures().get(1);
@@ -927,6 +992,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAlternative()
   {
     return alternativeEClass;
@@ -937,6 +1003,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_Expr()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(0);
@@ -947,6 +1014,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_If()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(1);
@@ -957,6 +1025,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_Else()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(2);
@@ -967,6 +1036,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStatementOrBlock()
   {
     return statementOrBlockEClass;
@@ -977,6 +1047,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStatementOrBlock_ExStmt()
   {
     return (EReference)statementOrBlockEClass.getEStructuralFeatures().get(0);
@@ -987,6 +1058,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStatementOrBlock_Block()
   {
     return (EReference)statementOrBlockEClass.getEStructuralFeatures().get(1);
@@ -997,6 +1069,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getJoin()
   {
     return joinEClass;
@@ -1007,6 +1080,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getJoin_Var1()
   {
     return (EReference)joinEClass.getEStructuralFeatures().get(0);
@@ -1017,6 +1091,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getJoin_Var2()
   {
     return (EReference)joinEClass.getEStructuralFeatures().get(1);
@@ -1027,6 +1102,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getJoin_Condition()
   {
     return (EReference)joinEClass.getEStructuralFeatures().get(2);
@@ -1037,6 +1113,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getJoinVariable()
   {
     return joinVariableEClass;
@@ -1047,6 +1124,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJoinVariable_Excl()
   {
     return (EAttribute)joinVariableEClass.getEStructuralFeatures().get(0);
@@ -1057,6 +1135,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJoinVariable_Var()
   {
     return (EAttribute)joinVariableEClass.getEStructuralFeatures().get(1);
@@ -1067,6 +1146,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getJoinVariable_Expr()
   {
     return (EReference)joinVariableEClass.getEStructuralFeatures().get(2);
@@ -1077,6 +1157,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSystemExecution()
   {
     return systemExecutionEClass;
@@ -1087,6 +1168,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSystemExecution_Call()
   {
     return (EReference)systemExecutionEClass.getEStructuralFeatures().get(0);
@@ -1097,6 +1179,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSystemExecution_Calls()
   {
     return (EReference)systemExecutionEClass.getEStructuralFeatures().get(1);
@@ -1107,6 +1190,7 @@ public class VilBuildLanguagePackageImpl extends EPackageImpl implements VilBuil
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VilBuildLanguageFactory getVilBuildLanguageFactory()
   {
     return (VilBuildLanguageFactory)getEFactoryInstance();

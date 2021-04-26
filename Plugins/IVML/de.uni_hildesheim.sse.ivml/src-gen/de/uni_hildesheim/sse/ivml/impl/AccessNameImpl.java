@@ -66,6 +66,7 @@ public class AccessNameImpl extends MinimalEObjectImpl.Container implements Acce
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getAName()
   {
     if (aName == null)
@@ -153,7 +154,7 @@ public class AccessNameImpl extends MinimalEObjectImpl.Container implements Acce
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (aName: ");
     result.append(aName);
     result.append(')');

@@ -71,6 +71,7 @@ public class ContainerInitializerImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ContainerInitializerExpression> getExprs()
   {
     if (exprs == null)

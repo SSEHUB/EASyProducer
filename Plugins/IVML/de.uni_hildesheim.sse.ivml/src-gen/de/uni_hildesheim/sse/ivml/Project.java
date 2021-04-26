@@ -32,10 +32,6 @@ public interface Project extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -58,10 +54,6 @@ public interface Project extends EObject
   /**
    * Returns the value of the '<em><b>Version</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Version</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Version</em>' containment reference.
    * @see #setVersion(VersionStmt)
@@ -85,10 +77,6 @@ public interface Project extends EObject
    * Returns the value of the '<em><b>Imports</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.ImportStmt}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Imports</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Imports</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getProject_Imports()
@@ -101,10 +89,6 @@ public interface Project extends EObject
    * Returns the value of the '<em><b>Conflicts</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.ConflictStmt}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Conflicts</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Conflicts</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getProject_Conflicts()
@@ -117,10 +101,6 @@ public interface Project extends EObject
    * Returns the value of the '<em><b>Interfaces</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.InterfaceDeclaration}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Interfaces</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Interfaces</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getProject_Interfaces()
@@ -132,10 +112,6 @@ public interface Project extends EObject
   /**
    * Returns the value of the '<em><b>Contents</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Contents</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Contents</em>' containment reference.
    * @see #setContents(ProjectContents)

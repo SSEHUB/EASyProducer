@@ -99,6 +99,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getOp()
   {
     return op;
@@ -109,6 +110,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOp(String newOp)
   {
     String oldOp = op;
@@ -122,6 +124,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LogicalExpression getEx()
   {
     return ex;
@@ -149,6 +152,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setEx(LogicalExpression newEx)
   {
     if (newEx != ex)
@@ -170,6 +174,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ContainerInitializer getContainer()
   {
     return container;
@@ -197,6 +202,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContainer(ContainerInitializer newContainer)
   {
     if (newContainer != container)
@@ -327,7 +333,7 @@ public class AssignmentExpressionPartImpl extends MinimalEObjectImpl.Container i
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (op: ");
     result.append(op);
     result.append(')');

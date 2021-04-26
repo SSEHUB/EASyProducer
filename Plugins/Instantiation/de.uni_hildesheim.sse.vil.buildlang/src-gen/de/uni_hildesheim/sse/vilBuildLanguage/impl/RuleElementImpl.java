@@ -103,6 +103,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableDeclaration getVarDecl()
   {
     return varDecl;
@@ -130,6 +131,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVarDecl(VariableDeclaration newVarDecl)
   {
     if (newVarDecl != varDecl)
@@ -151,6 +153,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionStatement getExprStmt()
   {
     return exprStmt;
@@ -178,6 +181,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExprStmt(ExpressionStatement newExprStmt)
   {
     if (newExprStmt != exprStmt)
@@ -199,6 +203,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public While getWhile()
   {
     return while_;
@@ -226,6 +231,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setWhile(While newWhile)
   {
     if (newWhile != while_)
@@ -247,6 +253,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public For getFor()
   {
     return for_;
@@ -274,6 +281,7 @@ public class RuleElementImpl extends MinimalEObjectImpl.Container implements Rul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFor(For newFor)
   {
     if (newFor != for_)

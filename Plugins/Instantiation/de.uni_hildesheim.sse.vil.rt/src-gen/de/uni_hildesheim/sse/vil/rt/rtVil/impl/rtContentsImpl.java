@@ -71,6 +71,7 @@ public class rtContentsImpl extends MinimalEObjectImpl.Container implements rtCo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getElements()
   {
     if (elements == null)

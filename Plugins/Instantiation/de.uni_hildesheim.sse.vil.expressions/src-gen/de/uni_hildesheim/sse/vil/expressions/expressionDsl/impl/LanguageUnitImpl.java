@@ -118,6 +118,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Advice> getAdvices()
   {
     if (advices == null)
@@ -132,6 +133,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -142,6 +144,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -155,6 +158,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VersionStmt getVersion()
   {
     return version;
@@ -182,6 +186,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(VersionStmt newVersion)
   {
     if (newVersion != version)
@@ -203,6 +208,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Import> getImports()
   {
     if (imports == null)
@@ -341,7 +347,7 @@ public class LanguageUnitImpl extends MinimalEObjectImpl.Container implements La
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

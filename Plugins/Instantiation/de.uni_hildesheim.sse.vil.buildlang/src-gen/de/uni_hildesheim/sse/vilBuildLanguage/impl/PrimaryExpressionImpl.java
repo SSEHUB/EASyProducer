@@ -101,6 +101,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SystemExecution getSysEx()
   {
     return sysEx;
@@ -128,6 +129,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSysEx(SystemExecution newSysEx)
   {
     if (newSysEx != sysEx)
@@ -149,6 +151,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Map getMap()
   {
     return map;
@@ -176,6 +179,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setMap(Map newMap)
   {
     if (newMap != map)
@@ -197,6 +201,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Join getJoin()
   {
     return join;
@@ -224,6 +229,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setJoin(Join newJoin)
   {
     if (newJoin != join)
@@ -245,6 +251,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Instantiate getInstantiate()
   {
     return instantiate;
@@ -272,6 +279,7 @@ public class PrimaryExpressionImpl extends de.uni_hildesheim.sse.vil.expressions
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInstantiate(Instantiate newInstantiate)
   {
     if (newInstantiate != instantiate)

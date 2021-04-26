@@ -31,10 +31,6 @@ public interface RuleConditions extends EObject
    * Returns the value of the '<em><b>Postcondition</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Postcondition</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Postcondition</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleConditions_Postcondition()
@@ -47,10 +43,6 @@ public interface RuleConditions extends EObject
    * Returns the value of the '<em><b>Preconditions</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.LogicalExpression}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Preconditions</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Preconditions</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleConditions_Preconditions()

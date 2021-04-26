@@ -127,6 +127,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getAbstract()
   {
     return abstract_;
@@ -137,6 +138,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAbstract(String newAbstract)
   {
     String oldAbstract = abstract_;
@@ -150,6 +152,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -160,6 +163,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -173,6 +177,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getSuper()
   {
     if (super_ == null)
@@ -187,6 +192,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getElements()
   {
     if (elements == null)
@@ -321,7 +327,7 @@ public class TypedefCompoundImpl extends MinimalEObjectImpl.Container implements
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (abstract: ");
     result.append(abstract_);
     result.append(", name: ");

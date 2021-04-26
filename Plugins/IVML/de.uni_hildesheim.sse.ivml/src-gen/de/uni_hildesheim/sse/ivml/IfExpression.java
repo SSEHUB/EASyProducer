@@ -27,10 +27,6 @@ public interface IfExpression extends EObject
   /**
    * Returns the value of the '<em><b>If Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>If Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>If Ex</em>' containment reference.
    * @see #setIfEx(Expression)
@@ -53,10 +49,6 @@ public interface IfExpression extends EObject
   /**
    * Returns the value of the '<em><b>Then Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Then Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Then Ex</em>' containment reference.
    * @see #setThenEx(OptBlockExpression)
@@ -79,10 +71,6 @@ public interface IfExpression extends EObject
   /**
    * Returns the value of the '<em><b>Else Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Else Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Else Ex</em>' containment reference.
    * @see #setElseEx(OptBlockExpression)

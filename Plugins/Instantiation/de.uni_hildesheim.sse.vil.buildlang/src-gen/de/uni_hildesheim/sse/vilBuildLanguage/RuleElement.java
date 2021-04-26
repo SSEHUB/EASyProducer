@@ -30,10 +30,6 @@ public interface RuleElement extends EObject
   /**
    * Returns the value of the '<em><b>Var Decl</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var Decl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Decl</em>' containment reference.
    * @see #setVarDecl(VariableDeclaration)
@@ -56,10 +52,6 @@ public interface RuleElement extends EObject
   /**
    * Returns the value of the '<em><b>Expr Stmt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr Stmt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr Stmt</em>' containment reference.
    * @see #setExprStmt(ExpressionStatement)
@@ -82,10 +74,6 @@ public interface RuleElement extends EObject
   /**
    * Returns the value of the '<em><b>While</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>While</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>While</em>' containment reference.
    * @see #setWhile(While)
@@ -108,10 +96,6 @@ public interface RuleElement extends EObject
   /**
    * Returns the value of the '<em><b>For</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>For</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>For</em>' containment reference.
    * @see #setFor(For)

@@ -97,6 +97,7 @@ public class ExpressionOrQualifiedExecutionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Constant getVal()
   {
     return val;
@@ -124,6 +125,7 @@ public class ExpressionOrQualifiedExecutionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVal(Constant newVal)
   {
     if (newVal != val)
@@ -145,6 +147,7 @@ public class ExpressionOrQualifiedExecutionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getParenthesis()
   {
     return parenthesis;
@@ -172,6 +175,7 @@ public class ExpressionOrQualifiedExecutionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParenthesis(Expression newParenthesis)
   {
     if (newParenthesis != parenthesis)
@@ -193,6 +197,7 @@ public class ExpressionOrQualifiedExecutionImpl extends MinimalEObjectImpl.Conta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SubCall> getCalls()
   {
     if (calls == null)

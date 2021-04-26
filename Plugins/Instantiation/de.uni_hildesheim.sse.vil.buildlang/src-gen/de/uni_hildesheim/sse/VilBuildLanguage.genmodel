@@ -3,8 +3,8 @@
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/de.uni_hildesheim.sse.vil.buildlang/src-gen" editDirectory="/de.uni_hildesheim.sse.vil.buildlang.edit/src"
     editorDirectory="/de.uni_hildesheim.sse.vil.buildlang.editor/src" modelPluginID="de.uni_hildesheim.sse.vil.buildlang"
     forceOverwrite="true" modelName="VilBuildLanguage" updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    complianceLevel="6.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.buildlang.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.buildlang.editor" runtimeVersion="2.11"
+    complianceLevel="8.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.buildlang.edit"
+    editorPluginID="de.uni_hildesheim.sse.vil.buildlang.editor" runtimeVersion="2.20"
     usedGenPackages="platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
   <genPackages prefix="VilBuildLanguage" basePackage="de.uni_hildesheim.sse" disposableProviderFactory="true"
       ecorePackage="VilBuildLanguage.ecore#/">

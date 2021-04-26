@@ -162,6 +162,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public NumValue getNValue()
   {
     return nValue;
@@ -189,6 +190,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNValue(NumValue newNValue)
   {
     if (newNValue != nValue)
@@ -210,6 +212,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSValue()
   {
     return sValue;
@@ -220,6 +223,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSValue(String newSValue)
   {
     String oldSValue = sValue;
@@ -233,6 +237,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedName getQValue()
   {
     return qValue;
@@ -260,6 +265,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setQValue(QualifiedName newQValue)
   {
     if (newQValue != qValue)
@@ -281,6 +287,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getBValue()
   {
     return bValue;
@@ -291,6 +298,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBValue(String newBValue)
   {
     String oldBValue = bValue;
@@ -304,6 +312,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getNull()
   {
     return null_;
@@ -314,6 +323,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNull(String newNull)
   {
     String oldNull = null_;
@@ -327,6 +337,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVersion()
   {
     return version;
@@ -337,6 +348,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(String newVersion)
   {
     String oldVersion = version;
@@ -489,7 +501,7 @@ public class ConstantImpl extends MinimalEObjectImpl.Container implements Consta
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (sValue: ");
     result.append(sValue);
     result.append(", bValue: ");

@@ -13,7 +13,7 @@
     <property name="severity" value="error"/>
     <property name="max" value="120"/>
   </module>
-  <property name="severity" value="warning"/>
+  <property name="severity" value="ignore"/>
   <module name="TreeWalker">
     <module name="JavadocMethod">
       <property name="severity" value="error"/>

@@ -71,6 +71,7 @@ public class BlockExpressionImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ExpressionStatement> getExprs()
   {
     if (exprs == null)

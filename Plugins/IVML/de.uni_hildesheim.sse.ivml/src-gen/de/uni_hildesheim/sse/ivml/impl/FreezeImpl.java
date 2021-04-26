@@ -106,6 +106,7 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<FreezeStatement> getNames()
   {
     if (names == null)
@@ -120,6 +121,7 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getId()
   {
     return id;
@@ -130,6 +132,7 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setId(String newId)
   {
     String oldId = id;
@@ -143,6 +146,7 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LogicalExpression getEx()
   {
     return ex;
@@ -170,6 +174,7 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setEx(LogicalExpression newEx)
   {
     if (newEx != ex)
@@ -302,7 +307,7 @@ public class FreezeImpl extends MinimalEObjectImpl.Container implements Freeze
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (id: ");
     result.append(id);
     result.append(')');

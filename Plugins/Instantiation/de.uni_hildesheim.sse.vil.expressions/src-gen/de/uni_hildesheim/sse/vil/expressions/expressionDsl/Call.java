@@ -27,10 +27,6 @@ public interface Call extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' containment reference.
    * @see #setName(QualifiedPrefix)
@@ -53,10 +49,6 @@ public interface Call extends EObject
   /**
    * Returns the value of the '<em><b>Decl</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Decl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Decl</em>' containment reference.
    * @see #setDecl(Declarator)
@@ -79,10 +71,6 @@ public interface Call extends EObject
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(ArgumentList)

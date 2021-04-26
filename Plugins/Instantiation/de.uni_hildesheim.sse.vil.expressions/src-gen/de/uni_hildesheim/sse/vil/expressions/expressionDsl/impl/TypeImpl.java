@@ -173,6 +173,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedPrefix getName()
   {
     return name;
@@ -200,6 +201,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(QualifiedPrefix newName)
   {
     if (newName != name)
@@ -221,6 +223,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSet()
   {
     return set;
@@ -231,6 +234,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSet(String newSet)
   {
     String oldSet = set;
@@ -244,6 +248,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TypeParameters getParam()
   {
     return param;
@@ -271,6 +276,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(TypeParameters newParam)
   {
     if (newParam != param)
@@ -292,6 +298,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSeq()
   {
     return seq;
@@ -302,6 +309,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSeq(String newSeq)
   {
     String oldSeq = seq;
@@ -315,6 +323,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getMap()
   {
     return map;
@@ -325,6 +334,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setMap(String newMap)
   {
     String oldMap = map;
@@ -338,6 +348,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getCall()
   {
     return call;
@@ -348,6 +359,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCall(String newCall)
   {
     String oldCall = call;
@@ -361,6 +373,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getReturn()
   {
     return return_;
@@ -388,6 +401,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setReturn(Type newReturn)
   {
     if (newReturn != return_)
@@ -560,7 +574,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (set: ");
     result.append(set);
     result.append(", seq: ");

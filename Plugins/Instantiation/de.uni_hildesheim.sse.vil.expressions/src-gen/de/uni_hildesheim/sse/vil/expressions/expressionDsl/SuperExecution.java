@@ -28,10 +28,6 @@ public interface SuperExecution extends EObject
   /**
    * Returns the value of the '<em><b>Call</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Call</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Call</em>' containment reference.
    * @see #setCall(Call)
@@ -55,10 +51,6 @@ public interface SuperExecution extends EObject
    * Returns the value of the '<em><b>Calls</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Calls</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Calls</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getSuperExecution_Calls()

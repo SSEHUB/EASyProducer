@@ -78,6 +78,7 @@ public class EqualityExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RelationalExpression getLeft()
   {
     return left;
@@ -105,6 +106,7 @@ public class EqualityExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLeft(RelationalExpression newLeft)
   {
     if (newLeft != left)
@@ -126,6 +128,7 @@ public class EqualityExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EqualityExpressionPart getRight()
   {
     return right;
@@ -153,6 +156,7 @@ public class EqualityExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRight(EqualityExpressionPart newRight)
   {
     if (newRight != right)

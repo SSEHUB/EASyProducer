@@ -401,7 +401,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link ExpressionDslPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -416,7 +416,8 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     if (isInited) return (ExpressionDslPackage)EPackage.Registry.INSTANCE.getEPackage(ExpressionDslPackage.eNS_URI);
 
     // Obtain or create and register package
-    ExpressionDslPackageImpl theExpressionDslPackage = (ExpressionDslPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ExpressionDslPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ExpressionDslPackageImpl());
+    Object registeredExpressionDslPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    ExpressionDslPackageImpl theExpressionDslPackage = registeredExpressionDslPackage instanceof ExpressionDslPackageImpl ? (ExpressionDslPackageImpl)registeredExpressionDslPackage : new ExpressionDslPackageImpl();
 
     isInited = true;
 
@@ -429,7 +430,6 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     // Mark meta-data to indicate it can't be changed
     theExpressionDslPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(ExpressionDslPackage.eNS_URI, theExpressionDslPackage);
     return theExpressionDslPackage;
@@ -440,6 +440,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLanguageUnit()
   {
     return languageUnitEClass;
@@ -450,6 +451,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Advices()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(0);
@@ -460,6 +462,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLanguageUnit_Name()
   {
     return (EAttribute)languageUnitEClass.getEStructuralFeatures().get(1);
@@ -470,6 +473,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Version()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(2);
@@ -480,6 +484,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Imports()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(3);
@@ -490,6 +495,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVariableDeclaration()
   {
     return variableDeclarationEClass;
@@ -500,6 +506,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableDeclaration_Const()
   {
     return (EAttribute)variableDeclarationEClass.getEStructuralFeatures().get(0);
@@ -510,6 +517,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariableDeclaration_Type()
   {
     return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(1);
@@ -520,6 +528,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableDeclaration_Name()
   {
     return (EAttribute)variableDeclarationEClass.getEStructuralFeatures().get(2);
@@ -530,6 +539,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariableDeclaration_Expression()
   {
     return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(3);
@@ -540,6 +550,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCompound()
   {
     return compoundEClass;
@@ -550,6 +561,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCompound_Abstract()
   {
     return (EAttribute)compoundEClass.getEStructuralFeatures().get(0);
@@ -560,6 +572,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCompound_Name()
   {
     return (EAttribute)compoundEClass.getEStructuralFeatures().get(1);
@@ -570,6 +583,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getCompound_Super()
   {
     return (EAttribute)compoundEClass.getEStructuralFeatures().get(2);
@@ -580,6 +594,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCompound_Vars()
   {
     return (EReference)compoundEClass.getEStructuralFeatures().get(3);
@@ -590,6 +605,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypeDef()
   {
     return typeDefEClass;
@@ -600,6 +616,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypeDef_Name()
   {
     return (EAttribute)typeDefEClass.getEStructuralFeatures().get(0);
@@ -610,6 +627,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypeDef_Type()
   {
     return (EReference)typeDefEClass.getEStructuralFeatures().get(1);
@@ -620,6 +638,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAdvice()
   {
     return adviceEClass;
@@ -630,6 +649,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdvice_Name()
   {
     return (EReference)adviceEClass.getEStructuralFeatures().get(0);
@@ -640,6 +660,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdvice_VersionSpec()
   {
     return (EReference)adviceEClass.getEStructuralFeatures().get(1);
@@ -650,6 +671,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVersionSpec()
   {
     return versionSpecEClass;
@@ -660,6 +682,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVersionSpec_Restriction()
   {
     return (EReference)versionSpecEClass.getEStructuralFeatures().get(0);
@@ -670,6 +693,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getParameterList()
   {
     return parameterListEClass;
@@ -680,6 +704,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getParameterList_Param()
   {
     return (EReference)parameterListEClass.getEStructuralFeatures().get(0);
@@ -690,6 +715,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getParameter()
   {
     return parameterEClass;
@@ -700,6 +726,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getParameter_Type()
   {
     return (EReference)parameterEClass.getEStructuralFeatures().get(0);
@@ -710,6 +737,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getParameter_Name()
   {
     return (EAttribute)parameterEClass.getEStructuralFeatures().get(1);
@@ -720,6 +748,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getParameter_Dflt()
   {
     return (EReference)parameterEClass.getEStructuralFeatures().get(2);
@@ -730,6 +759,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVersionStmt()
   {
     return versionStmtEClass;
@@ -740,6 +770,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVersionStmt_Version()
   {
     return (EAttribute)versionStmtEClass.getEStructuralFeatures().get(0);
@@ -750,6 +781,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImport()
   {
     return importEClass;
@@ -760,6 +792,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImport_Name()
   {
     return (EAttribute)importEClass.getEStructuralFeatures().get(0);
@@ -770,6 +803,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImport_VersionSpec()
   {
     return (EReference)importEClass.getEStructuralFeatures().get(1);
@@ -780,6 +814,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionStatement()
   {
     return expressionStatementEClass;
@@ -790,6 +825,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getExpressionStatement_Var()
   {
     return (EAttribute)expressionStatementEClass.getEStructuralFeatures().get(0);
@@ -800,6 +836,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getExpressionStatement_Field()
   {
     return (EAttribute)expressionStatementEClass.getEStructuralFeatures().get(1);
@@ -810,6 +847,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionStatement_Expr()
   {
     return (EReference)expressionStatementEClass.getEStructuralFeatures().get(2);
@@ -820,6 +858,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpression()
   {
     return expressionEClass;
@@ -830,6 +869,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpression_Expr()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(0);
@@ -840,6 +880,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpression_Init()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(1);
@@ -850,6 +891,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLogicalExpression()
   {
     return logicalExpressionEClass;
@@ -860,6 +902,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLogicalExpression_Left()
   {
     return (EReference)logicalExpressionEClass.getEStructuralFeatures().get(0);
@@ -870,6 +913,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLogicalExpression_Right()
   {
     return (EReference)logicalExpressionEClass.getEStructuralFeatures().get(1);
@@ -880,6 +924,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLogicalExpressionPart()
   {
     return logicalExpressionPartEClass;
@@ -890,6 +935,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLogicalExpressionPart_Op()
   {
     return (EAttribute)logicalExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -900,6 +946,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLogicalExpressionPart_Ex()
   {
     return (EReference)logicalExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -910,6 +957,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEqualityExpression()
   {
     return equalityExpressionEClass;
@@ -920,6 +968,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpression_Left()
   {
     return (EReference)equalityExpressionEClass.getEStructuralFeatures().get(0);
@@ -930,6 +979,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpression_Right()
   {
     return (EReference)equalityExpressionEClass.getEStructuralFeatures().get(1);
@@ -940,6 +990,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEqualityExpressionPart()
   {
     return equalityExpressionPartEClass;
@@ -950,6 +1001,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getEqualityExpressionPart_Op()
   {
     return (EAttribute)equalityExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -960,6 +1012,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpressionPart_Ex()
   {
     return (EReference)equalityExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -970,6 +1023,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRelationalExpression()
   {
     return relationalExpressionEClass;
@@ -980,6 +1034,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpression_Left()
   {
     return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(0);
@@ -990,6 +1045,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpression_Right()
   {
     return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(1);
@@ -1000,6 +1056,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpression_Right2()
   {
     return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(2);
@@ -1010,6 +1067,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRelationalExpressionPart()
   {
     return relationalExpressionPartEClass;
@@ -1020,6 +1078,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRelationalExpressionPart_Op()
   {
     return (EAttribute)relationalExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -1030,6 +1089,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpressionPart_Ex()
   {
     return (EReference)relationalExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -1040,6 +1100,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAdditiveExpression()
   {
     return additiveExpressionEClass;
@@ -1050,6 +1111,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdditiveExpression_Left()
   {
     return (EReference)additiveExpressionEClass.getEStructuralFeatures().get(0);
@@ -1060,6 +1122,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdditiveExpression_Right()
   {
     return (EReference)additiveExpressionEClass.getEStructuralFeatures().get(1);
@@ -1070,6 +1133,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAdditiveExpressionPart()
   {
     return additiveExpressionPartEClass;
@@ -1080,6 +1144,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAdditiveExpressionPart_Op()
   {
     return (EAttribute)additiveExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -1090,6 +1155,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdditiveExpressionPart_Ex()
   {
     return (EReference)additiveExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -1100,6 +1166,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMultiplicativeExpression()
   {
     return multiplicativeExpressionEClass;
@@ -1110,6 +1177,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMultiplicativeExpression_Left()
   {
     return (EReference)multiplicativeExpressionEClass.getEStructuralFeatures().get(0);
@@ -1120,6 +1188,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMultiplicativeExpression_Right()
   {
     return (EReference)multiplicativeExpressionEClass.getEStructuralFeatures().get(1);
@@ -1130,6 +1199,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMultiplicativeExpressionPart()
   {
     return multiplicativeExpressionPartEClass;
@@ -1140,6 +1210,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMultiplicativeExpressionPart_Op()
   {
     return (EAttribute)multiplicativeExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -1150,6 +1221,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMultiplicativeExpressionPart_Expr()
   {
     return (EReference)multiplicativeExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -1160,6 +1232,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getUnaryExpression()
   {
     return unaryExpressionEClass;
@@ -1170,6 +1243,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUnaryExpression_Op()
   {
     return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(0);
@@ -1180,6 +1254,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getUnaryExpression_Expr()
   {
     return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(1);
@@ -1190,6 +1265,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPostfixExpression()
   {
     return postfixExpressionEClass;
@@ -1200,6 +1276,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPostfixExpression_Left()
   {
     return (EReference)postfixExpressionEClass.getEStructuralFeatures().get(0);
@@ -1210,6 +1287,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPrimaryExpression()
   {
     return primaryExpressionEClass;
@@ -1220,6 +1298,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_OtherEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(0);
@@ -1230,6 +1309,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_UnqEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(1);
@@ -1240,6 +1320,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_SuperEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(2);
@@ -1250,6 +1331,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_NewEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(3);
@@ -1260,6 +1342,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionOrQualifiedExecution()
   {
     return expressionOrQualifiedExecutionEClass;
@@ -1270,6 +1353,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionOrQualifiedExecution_Val()
   {
     return (EReference)expressionOrQualifiedExecutionEClass.getEStructuralFeatures().get(0);
@@ -1280,6 +1364,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionOrQualifiedExecution_Parenthesis()
   {
     return (EReference)expressionOrQualifiedExecutionEClass.getEStructuralFeatures().get(1);
@@ -1290,6 +1375,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionOrQualifiedExecution_Calls()
   {
     return (EReference)expressionOrQualifiedExecutionEClass.getEStructuralFeatures().get(2);
@@ -1300,6 +1386,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getUnqualifiedExecution()
   {
     return unqualifiedExecutionEClass;
@@ -1310,6 +1397,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getUnqualifiedExecution_Call()
   {
     return (EReference)unqualifiedExecutionEClass.getEStructuralFeatures().get(0);
@@ -1320,6 +1408,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getUnqualifiedExecution_Calls()
   {
     return (EReference)unqualifiedExecutionEClass.getEStructuralFeatures().get(1);
@@ -1330,6 +1419,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSuperExecution()
   {
     return superExecutionEClass;
@@ -1340,6 +1430,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSuperExecution_Call()
   {
     return (EReference)superExecutionEClass.getEStructuralFeatures().get(0);
@@ -1350,6 +1441,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSuperExecution_Calls()
   {
     return (EReference)superExecutionEClass.getEStructuralFeatures().get(1);
@@ -1360,6 +1452,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConstructorExecution()
   {
     return constructorExecutionEClass;
@@ -1370,6 +1463,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConstructorExecution_Type()
   {
     return (EReference)constructorExecutionEClass.getEStructuralFeatures().get(0);
@@ -1380,6 +1474,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConstructorExecution_Param()
   {
     return (EReference)constructorExecutionEClass.getEStructuralFeatures().get(1);
@@ -1390,6 +1485,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConstructorExecution_Calls()
   {
     return (EReference)constructorExecutionEClass.getEStructuralFeatures().get(2);
@@ -1400,6 +1496,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSubCall()
   {
     return subCallEClass;
@@ -1410,6 +1507,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getSubCall_Type()
   {
     return (EAttribute)subCallEClass.getEStructuralFeatures().get(0);
@@ -1420,6 +1518,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSubCall_Call()
   {
     return (EReference)subCallEClass.getEStructuralFeatures().get(1);
@@ -1430,6 +1529,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSubCall_ArrayEx()
   {
     return (EReference)subCallEClass.getEStructuralFeatures().get(2);
@@ -1440,6 +1540,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDeclarator()
   {
     return declaratorEClass;
@@ -1450,6 +1551,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclarator_Decl()
   {
     return (EReference)declaratorEClass.getEStructuralFeatures().get(0);
@@ -1460,6 +1562,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDeclaration()
   {
     return declarationEClass;
@@ -1470,6 +1573,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclaration_Type()
   {
     return (EReference)declarationEClass.getEStructuralFeatures().get(0);
@@ -1480,6 +1584,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclaration_Units()
   {
     return (EReference)declarationEClass.getEStructuralFeatures().get(1);
@@ -1490,6 +1595,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDeclarationUnit()
   {
     return declarationUnitEClass;
@@ -1500,6 +1606,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getDeclarationUnit_Id()
   {
     return (EAttribute)declarationUnitEClass.getEStructuralFeatures().get(0);
@@ -1510,6 +1617,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclarationUnit_Deflt()
   {
     return (EReference)declarationUnitEClass.getEStructuralFeatures().get(1);
@@ -1520,6 +1628,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCall()
   {
     return callEClass;
@@ -1530,6 +1639,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCall_Name()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(0);
@@ -1540,6 +1650,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCall_Decl()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(1);
@@ -1550,6 +1661,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCall_Param()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(2);
@@ -1560,6 +1672,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getArgumentList()
   {
     return argumentListEClass;
@@ -1570,6 +1683,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getArgumentList_Param()
   {
     return (EReference)argumentListEClass.getEStructuralFeatures().get(0);
@@ -1580,6 +1694,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getNamedArgument()
   {
     return namedArgumentEClass;
@@ -1590,6 +1705,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getNamedArgument_Name()
   {
     return (EAttribute)namedArgumentEClass.getEStructuralFeatures().get(0);
@@ -1600,6 +1716,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getNamedArgument_Ex()
   {
     return (EReference)namedArgumentEClass.getEStructuralFeatures().get(1);
@@ -1610,6 +1727,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getQualifiedPrefix()
   {
     return qualifiedPrefixEClass;
@@ -1620,6 +1738,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQualifiedPrefix_Qname()
   {
     return (EAttribute)qualifiedPrefixEClass.getEStructuralFeatures().get(0);
@@ -1630,6 +1749,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getQualifiedName()
   {
     return qualifiedNameEClass;
@@ -1640,6 +1760,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getQualifiedName_Prefix()
   {
     return (EReference)qualifiedNameEClass.getEStructuralFeatures().get(0);
@@ -1650,6 +1771,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQualifiedName_Qname()
   {
     return (EAttribute)qualifiedNameEClass.getEStructuralFeatures().get(1);
@@ -1660,6 +1782,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConstant()
   {
     return constantEClass;
@@ -1670,6 +1793,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConstant_NValue()
   {
     return (EReference)constantEClass.getEStructuralFeatures().get(0);
@@ -1680,6 +1804,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConstant_SValue()
   {
     return (EAttribute)constantEClass.getEStructuralFeatures().get(1);
@@ -1690,6 +1815,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConstant_QValue()
   {
     return (EReference)constantEClass.getEStructuralFeatures().get(2);
@@ -1700,6 +1826,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConstant_BValue()
   {
     return (EAttribute)constantEClass.getEStructuralFeatures().get(3);
@@ -1710,6 +1837,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConstant_Null()
   {
     return (EAttribute)constantEClass.getEStructuralFeatures().get(4);
@@ -1720,6 +1848,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConstant_Version()
   {
     return (EAttribute)constantEClass.getEStructuralFeatures().get(5);
@@ -1730,6 +1859,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getNumValue()
   {
     return numValueEClass;
@@ -1740,6 +1870,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getNumValue_Val()
   {
     return (EAttribute)numValueEClass.getEStructuralFeatures().get(0);
@@ -1750,6 +1881,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getType()
   {
     return typeEClass;
@@ -1760,6 +1892,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getType_Name()
   {
     return (EReference)typeEClass.getEStructuralFeatures().get(0);
@@ -1770,6 +1903,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getType_Set()
   {
     return (EAttribute)typeEClass.getEStructuralFeatures().get(1);
@@ -1780,6 +1914,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getType_Param()
   {
     return (EReference)typeEClass.getEStructuralFeatures().get(2);
@@ -1790,6 +1925,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getType_Seq()
   {
     return (EAttribute)typeEClass.getEStructuralFeatures().get(3);
@@ -1800,6 +1936,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getType_Map()
   {
     return (EAttribute)typeEClass.getEStructuralFeatures().get(4);
@@ -1810,6 +1947,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getType_Call()
   {
     return (EAttribute)typeEClass.getEStructuralFeatures().get(5);
@@ -1820,6 +1958,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getType_Return()
   {
     return (EReference)typeEClass.getEStructuralFeatures().get(6);
@@ -1830,6 +1969,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypeParameters()
   {
     return typeParametersEClass;
@@ -1840,6 +1980,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypeParameters_Param()
   {
     return (EReference)typeParametersEClass.getEStructuralFeatures().get(0);
@@ -1850,6 +1991,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getContainerInitializer()
   {
     return containerInitializerEClass;
@@ -1860,6 +2002,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContainerInitializer_Exprs()
   {
     return (EReference)containerInitializerEClass.getEStructuralFeatures().get(0);
@@ -1870,6 +2013,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getContainerInitializerExpression()
   {
     return containerInitializerExpressionEClass;
@@ -1880,6 +2024,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContainerInitializerExpression_Logical()
   {
     return (EReference)containerInitializerExpressionEClass.getEStructuralFeatures().get(0);
@@ -1890,6 +2035,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContainerInitializerExpression_Container()
   {
     return (EReference)containerInitializerExpressionEClass.getEStructuralFeatures().get(1);
@@ -1900,6 +2046,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionDslFactory getExpressionDslFactory()
   {
     return (ExpressionDslFactory)getEFactoryInstance();

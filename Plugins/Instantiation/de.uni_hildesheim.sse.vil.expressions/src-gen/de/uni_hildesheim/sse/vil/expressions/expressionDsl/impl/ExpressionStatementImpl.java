@@ -108,6 +108,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVar()
   {
     return var;
@@ -118,6 +119,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVar(String newVar)
   {
     String oldVar = var;
@@ -131,6 +133,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getField()
   {
     return field;
@@ -141,6 +144,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setField(String newField)
   {
     String oldField = field;
@@ -154,6 +158,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -181,6 +186,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -309,7 +315,7 @@ public class ExpressionStatementImpl extends MinimalEObjectImpl.Container implem
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (var: ");
     result.append(var);
     result.append(", field: ");

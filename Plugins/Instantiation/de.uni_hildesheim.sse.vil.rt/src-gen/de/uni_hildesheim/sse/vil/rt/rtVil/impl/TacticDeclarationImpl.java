@@ -113,6 +113,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -123,6 +124,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -136,6 +138,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ParameterList getParamList()
   {
     return paramList;
@@ -163,6 +166,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParamList(ParameterList newParamList)
   {
     if (newParamList != paramList)
@@ -184,6 +188,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleConditions getConditions()
   {
     return conditions;
@@ -211,6 +216,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConditions(RuleConditions newConditions)
   {
     if (newConditions != conditions)
@@ -232,6 +238,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElementBlock getBlock()
   {
     return block;
@@ -259,6 +266,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(RuleElementBlock newBlock)
   {
     if (newBlock != block)
@@ -401,7 +409,7 @@ public class TacticDeclarationImpl extends MinimalEObjectImpl.Container implemen
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

@@ -31,10 +31,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' containment reference.
    * @see #setName(QualifiedPrefix)
@@ -57,10 +53,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Set</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Set</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Set</em>' attribute.
    * @see #setSet(String)
@@ -83,10 +75,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(TypeParameters)
@@ -109,10 +97,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Seq</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Seq</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Seq</em>' attribute.
    * @see #setSeq(String)
@@ -135,10 +119,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Map</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Map</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Map</em>' attribute.
    * @see #setMap(String)
@@ -161,10 +141,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Call</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Call</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Call</em>' attribute.
    * @see #setCall(String)
@@ -187,10 +163,6 @@ public interface Type extends EObject
   /**
    * Returns the value of the '<em><b>Return</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Return</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Return</em>' containment reference.
    * @see #setReturn(Type)

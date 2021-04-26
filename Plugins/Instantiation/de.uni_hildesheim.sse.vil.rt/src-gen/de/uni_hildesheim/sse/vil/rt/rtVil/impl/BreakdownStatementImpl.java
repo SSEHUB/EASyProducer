@@ -143,6 +143,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getType()
   {
     return type;
@@ -153,6 +154,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(String newType)
   {
     String oldType = type;
@@ -166,6 +168,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LogicalExpression getGuard()
   {
     return guard;
@@ -193,6 +196,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setGuard(LogicalExpression newGuard)
   {
     if (newGuard != guard)
@@ -214,6 +218,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedPrefix getName()
   {
     return name;
@@ -241,6 +246,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(QualifiedPrefix newName)
   {
     if (newName != name)
@@ -262,6 +268,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ArgumentList getParam()
   {
     return param;
@@ -289,6 +296,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(ArgumentList newParam)
   {
     if (newParam != param)
@@ -310,6 +318,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<BreakdownWithPart> getPart()
   {
     if (part == null)
@@ -324,6 +333,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getTime()
   {
     return time;
@@ -351,6 +361,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTime(Expression newTime)
   {
     if (newTime != time)
@@ -519,7 +530,7 @@ public class BreakdownStatementImpl extends MinimalEObjectImpl.Container impleme
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (type: ");
     result.append(type);
     result.append(')');

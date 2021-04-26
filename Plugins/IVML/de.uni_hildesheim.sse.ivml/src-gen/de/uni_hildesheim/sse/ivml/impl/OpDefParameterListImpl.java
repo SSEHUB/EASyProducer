@@ -71,6 +71,7 @@ public class OpDefParameterListImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<OpDefParameter> getList()
   {
     if (list == null)

@@ -73,6 +73,7 @@ public class BasicTypeImpl extends MinimalEObjectImpl.Container implements Basic
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getType()
   {
     return type;
@@ -83,6 +84,7 @@ public class BasicTypeImpl extends MinimalEObjectImpl.Container implements Basic
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(String newType)
   {
     String oldType = type;
@@ -167,7 +169,7 @@ public class BasicTypeImpl extends MinimalEObjectImpl.Container implements Basic
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (type: ");
     result.append(type);
     result.append(')');

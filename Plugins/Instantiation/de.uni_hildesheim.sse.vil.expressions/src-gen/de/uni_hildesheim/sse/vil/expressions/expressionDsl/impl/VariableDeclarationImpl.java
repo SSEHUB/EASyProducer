@@ -120,6 +120,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getConst()
   {
     return const_;
@@ -130,6 +131,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConst(String newConst)
   {
     String oldConst = const_;
@@ -143,6 +145,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -170,6 +173,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -191,6 +195,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -201,6 +206,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -214,6 +220,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpression()
   {
     return expression;
@@ -241,6 +248,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpression(Expression newExpression)
   {
     if (newExpression != expression)
@@ -381,7 +389,7 @@ public class VariableDeclarationImpl extends MinimalEObjectImpl.Container implem
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (const: ");
     result.append(const_);
     result.append(", name: ");

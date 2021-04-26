@@ -30,10 +30,6 @@ public interface Freeze extends EObject
    * Returns the value of the '<em><b>Names</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.FreezeStatement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Names</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Names</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getFreeze_Names()
@@ -45,10 +41,6 @@ public interface Freeze extends EObject
   /**
    * Returns the value of the '<em><b>Id</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Id</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Id</em>' attribute.
    * @see #setId(String)
@@ -71,10 +63,6 @@ public interface Freeze extends EObject
   /**
    * Returns the value of the '<em><b>Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ex</em>' containment reference.
    * @see #setEx(LogicalExpression)

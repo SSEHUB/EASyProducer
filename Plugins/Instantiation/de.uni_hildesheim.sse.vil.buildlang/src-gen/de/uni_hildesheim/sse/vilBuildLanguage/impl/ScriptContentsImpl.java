@@ -71,6 +71,7 @@ public class ScriptContentsImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getElements()
   {
     if (elements == null)

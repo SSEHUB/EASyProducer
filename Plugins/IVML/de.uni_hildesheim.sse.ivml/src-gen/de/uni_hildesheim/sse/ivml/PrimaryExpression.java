@@ -32,10 +32,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Lit</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Lit</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Lit</em>' containment reference.
    * @see #setLit(Literal)
@@ -58,10 +54,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ex</em>' containment reference.
    * @see #setEx(Expression)
@@ -84,10 +76,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>If Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>If Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>If Ex</em>' containment reference.
    * @see #setIfEx(IfExpression)
@@ -110,10 +98,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Ref Ex</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ref Ex</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ref Ex</em>' containment reference.
    * @see #setRefEx(Expression)
@@ -137,10 +121,6 @@ public interface PrimaryExpression extends EObject
    * Returns the value of the '<em><b>Calls</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.ivml.Call}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Calls</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Calls</em>' containment reference list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getPrimaryExpression_Calls()
@@ -152,10 +132,6 @@ public interface PrimaryExpression extends EObject
   /**
    * Returns the value of the '<em><b>Access</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Access</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Access</em>' containment reference.
    * @see #setAccess(ExpressionAccess)

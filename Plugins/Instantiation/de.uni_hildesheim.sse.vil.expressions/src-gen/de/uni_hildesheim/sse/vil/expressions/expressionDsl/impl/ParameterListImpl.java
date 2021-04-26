@@ -71,6 +71,7 @@ public class ParameterListImpl extends MinimalEObjectImpl.Container implements P
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Parameter> getParam()
   {
     if (param == null)

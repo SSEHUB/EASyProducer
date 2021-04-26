@@ -90,6 +90,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FeatureCall getCall()
   {
     return call;
@@ -117,6 +118,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCall(FeatureCall newCall)
   {
     if (newCall != call)
@@ -138,6 +140,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ContainerOp getContainerOp()
   {
     return containerOp;
@@ -165,6 +168,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContainerOp(ContainerOp newContainerOp)
   {
     if (newContainerOp != containerOp)
@@ -186,6 +190,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getArrayEx()
   {
     return arrayEx;
@@ -213,6 +218,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setArrayEx(Expression newArrayEx)
   {
     if (newArrayEx != arrayEx)

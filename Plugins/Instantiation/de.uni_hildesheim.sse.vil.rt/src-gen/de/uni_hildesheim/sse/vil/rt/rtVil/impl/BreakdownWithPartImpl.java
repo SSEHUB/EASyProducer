@@ -88,6 +88,7 @@ public class BreakdownWithPartImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -98,6 +99,7 @@ public class BreakdownWithPartImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -111,6 +113,7 @@ public class BreakdownWithPartImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getValue()
   {
     return value;
@@ -138,6 +141,7 @@ public class BreakdownWithPartImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setValue(Expression newValue)
   {
     if (newValue != value)
@@ -256,7 +260,7 @@ public class BreakdownWithPartImpl extends MinimalEObjectImpl.Container implemen
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

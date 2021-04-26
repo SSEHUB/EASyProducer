@@ -66,6 +66,7 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpressions()
   {
     return expressions;
@@ -93,6 +94,7 @@ public class TypedefConstraintImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpressions(Expression newExpressions)
   {
     if (newExpressions != expressions)

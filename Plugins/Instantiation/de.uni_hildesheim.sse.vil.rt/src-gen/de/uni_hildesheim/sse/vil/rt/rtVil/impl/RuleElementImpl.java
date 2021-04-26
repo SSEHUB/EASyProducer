@@ -65,6 +65,7 @@ public class RuleElementImpl extends de.uni_hildesheim.sse.vilBuildLanguage.impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FailStatement getFail()
   {
     return fail;
@@ -92,6 +93,7 @@ public class RuleElementImpl extends de.uni_hildesheim.sse.vilBuildLanguage.impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFail(FailStatement newFail)
   {
     if (newFail != fail)

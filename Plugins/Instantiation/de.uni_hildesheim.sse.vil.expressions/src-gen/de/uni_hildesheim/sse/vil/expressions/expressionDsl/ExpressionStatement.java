@@ -27,10 +27,6 @@ public interface ExpressionStatement extends EObject
   /**
    * Returns the value of the '<em><b>Var</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var</em>' attribute.
    * @see #setVar(String)
@@ -53,10 +49,6 @@ public interface ExpressionStatement extends EObject
   /**
    * Returns the value of the '<em><b>Field</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Field</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Field</em>' attribute.
    * @see #setField(String)
@@ -79,10 +71,6 @@ public interface ExpressionStatement extends EObject
   /**
    * Returns the value of the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr</em>' containment reference.
    * @see #setExpr(Expression)

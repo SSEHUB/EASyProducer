@@ -585,7 +585,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link IvmlPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -600,7 +600,8 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     if (isInited) return (IvmlPackage)EPackage.Registry.INSTANCE.getEPackage(IvmlPackage.eNS_URI);
 
     // Obtain or create and register package
-    IvmlPackageImpl theIvmlPackage = (IvmlPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof IvmlPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new IvmlPackageImpl());
+    Object registeredIvmlPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    IvmlPackageImpl theIvmlPackage = registeredIvmlPackage instanceof IvmlPackageImpl ? (IvmlPackageImpl)registeredIvmlPackage : new IvmlPackageImpl();
 
     isInited = true;
 
@@ -613,7 +614,6 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     // Mark meta-data to indicate it can't be changed
     theIvmlPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(IvmlPackage.eNS_URI, theIvmlPackage);
     return theIvmlPackage;
@@ -624,6 +624,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVariabilityUnit()
   {
     return variabilityUnitEClass;
@@ -634,6 +635,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariabilityUnit_Projects()
   {
     return (EReference)variabilityUnitEClass.getEStructuralFeatures().get(0);
@@ -644,6 +646,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProject()
   {
     return projectEClass;
@@ -654,6 +657,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getProject_Name()
   {
     return (EAttribute)projectEClass.getEStructuralFeatures().get(0);
@@ -664,6 +668,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Version()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(1);
@@ -674,6 +679,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Imports()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(2);
@@ -684,6 +690,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Conflicts()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(3);
@@ -694,6 +701,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Interfaces()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(4);
@@ -704,6 +712,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProject_Contents()
   {
     return (EReference)projectEClass.getEStructuralFeatures().get(5);
@@ -714,6 +723,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getProjectContents()
   {
     return projectContentsEClass;
@@ -724,6 +734,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getProjectContents_Elements()
   {
     return (EReference)projectContentsEClass.getEStructuralFeatures().get(0);
@@ -734,6 +745,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypedef()
   {
     return typedefEClass;
@@ -744,6 +756,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedef_TEnum()
   {
     return (EReference)typedefEClass.getEStructuralFeatures().get(0);
@@ -754,6 +767,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedef_TCompound()
   {
     return (EReference)typedefEClass.getEStructuralFeatures().get(1);
@@ -764,6 +778,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedef_TMapping()
   {
     return (EReference)typedefEClass.getEStructuralFeatures().get(2);
@@ -774,6 +789,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypedefEnum()
   {
     return typedefEnumEClass;
@@ -784,6 +800,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypedefEnum_Name()
   {
     return (EAttribute)typedefEnumEClass.getEStructuralFeatures().get(0);
@@ -794,6 +811,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefEnum_Literals()
   {
     return (EReference)typedefEnumEClass.getEStructuralFeatures().get(1);
@@ -804,6 +822,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefEnum_Constraint()
   {
     return (EReference)typedefEnumEClass.getEStructuralFeatures().get(2);
@@ -814,6 +833,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypedefEnumLiteral()
   {
     return typedefEnumLiteralEClass;
@@ -824,6 +844,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypedefEnumLiteral_Name()
   {
     return (EAttribute)typedefEnumLiteralEClass.getEStructuralFeatures().get(0);
@@ -834,6 +855,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefEnumLiteral_Value()
   {
     return (EReference)typedefEnumLiteralEClass.getEStructuralFeatures().get(1);
@@ -844,6 +866,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypedefCompound()
   {
     return typedefCompoundEClass;
@@ -854,6 +877,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypedefCompound_Abstract()
   {
     return (EAttribute)typedefCompoundEClass.getEStructuralFeatures().get(0);
@@ -864,6 +888,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypedefCompound_Name()
   {
     return (EAttribute)typedefCompoundEClass.getEStructuralFeatures().get(1);
@@ -874,6 +899,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypedefCompound_Super()
   {
     return (EAttribute)typedefCompoundEClass.getEStructuralFeatures().get(2);
@@ -884,6 +910,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefCompound_Elements()
   {
     return (EReference)typedefCompoundEClass.getEStructuralFeatures().get(3);
@@ -894,6 +921,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAttrAssignment()
   {
     return attrAssignmentEClass;
@@ -904,6 +932,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAttrAssignment_Parts()
   {
     return (EReference)attrAssignmentEClass.getEStructuralFeatures().get(0);
@@ -914,6 +943,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAttrAssignment_Elements()
   {
     return (EReference)attrAssignmentEClass.getEStructuralFeatures().get(1);
@@ -924,6 +954,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAttrAssignmentPart()
   {
     return attrAssignmentPartEClass;
@@ -934,6 +965,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAttrAssignmentPart_Name()
   {
     return (EAttribute)attrAssignmentPartEClass.getEStructuralFeatures().get(0);
@@ -944,6 +976,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAttrAssignmentPart_Value()
   {
     return (EReference)attrAssignmentPartEClass.getEStructuralFeatures().get(1);
@@ -954,6 +987,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypedefMapping()
   {
     return typedefMappingEClass;
@@ -964,6 +998,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getTypedefMapping_NewType()
   {
     return (EAttribute)typedefMappingEClass.getEStructuralFeatures().get(0);
@@ -974,6 +1009,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefMapping_Type()
   {
     return (EReference)typedefMappingEClass.getEStructuralFeatures().get(1);
@@ -984,6 +1020,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefMapping_Constraint()
   {
     return (EReference)typedefMappingEClass.getEStructuralFeatures().get(2);
@@ -994,6 +1031,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getTypedefConstraint()
   {
     return typedefConstraintEClass;
@@ -1004,6 +1042,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getTypedefConstraint_Expressions()
   {
     return (EReference)typedefConstraintEClass.getEStructuralFeatures().get(0);
@@ -1014,6 +1053,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVariableDeclaration()
   {
     return variableDeclarationEClass;
@@ -1024,6 +1064,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableDeclaration_Const()
   {
     return (EAttribute)variableDeclarationEClass.getEStructuralFeatures().get(0);
@@ -1034,6 +1075,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariableDeclaration_Type()
   {
     return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(1);
@@ -1044,6 +1086,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariableDeclaration_Decls()
   {
     return (EReference)variableDeclarationEClass.getEStructuralFeatures().get(2);
@@ -1054,6 +1097,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVariableDeclarationPart()
   {
     return variableDeclarationPartEClass;
@@ -1064,6 +1108,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVariableDeclarationPart_Name()
   {
     return (EAttribute)variableDeclarationPartEClass.getEStructuralFeatures().get(0);
@@ -1074,6 +1119,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVariableDeclarationPart_Default()
   {
     return (EReference)variableDeclarationPartEClass.getEStructuralFeatures().get(1);
@@ -1084,6 +1130,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBasicType()
   {
     return basicTypeEClass;
@@ -1094,6 +1141,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getBasicType_Type()
   {
     return (EAttribute)basicTypeEClass.getEStructuralFeatures().get(0);
@@ -1104,6 +1152,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getType()
   {
     return typeEClass;
@@ -1114,6 +1163,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getType_Type()
   {
     return (EReference)typeEClass.getEStructuralFeatures().get(0);
@@ -1124,6 +1174,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getType_Id()
   {
     return (EReference)typeEClass.getEStructuralFeatures().get(1);
@@ -1134,6 +1185,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getType_Derived()
   {
     return (EReference)typeEClass.getEStructuralFeatures().get(2);
@@ -1144,6 +1196,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getNumValue()
   {
     return numValueEClass;
@@ -1154,6 +1207,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getNumValue_Val()
   {
     return (EAttribute)numValueEClass.getEStructuralFeatures().get(0);
@@ -1164,6 +1218,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getQualifiedName()
   {
     return qualifiedNameEClass;
@@ -1174,6 +1229,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getQualifiedName_QName()
   {
     return (EAttribute)qualifiedNameEClass.getEStructuralFeatures().get(0);
@@ -1184,6 +1240,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAccessName()
   {
     return accessNameEClass;
@@ -1194,6 +1251,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAccessName_AName()
   {
     return (EAttribute)accessNameEClass.getEStructuralFeatures().get(0);
@@ -1204,6 +1262,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getValue()
   {
     return valueEClass;
@@ -1214,6 +1273,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getValue_NValue()
   {
     return (EReference)valueEClass.getEStructuralFeatures().get(0);
@@ -1224,6 +1284,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getValue_SValue()
   {
     return (EAttribute)valueEClass.getEStructuralFeatures().get(1);
@@ -1234,6 +1295,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getValue_QValue()
   {
     return (EReference)valueEClass.getEStructuralFeatures().get(2);
@@ -1244,6 +1306,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getValue_BValue()
   {
     return (EAttribute)valueEClass.getEStructuralFeatures().get(3);
@@ -1254,6 +1317,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getValue_Self()
   {
     return (EAttribute)valueEClass.getEStructuralFeatures().get(4);
@@ -1264,6 +1328,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getValue_NullValue()
   {
     return (EAttribute)valueEClass.getEStructuralFeatures().get(5);
@@ -1274,6 +1339,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getValue_TValue()
   {
     return (EReference)valueEClass.getEStructuralFeatures().get(6);
@@ -1284,6 +1350,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getValue_Version()
   {
     return (EAttribute)valueEClass.getEStructuralFeatures().get(7);
@@ -1294,6 +1361,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDerivedType()
   {
     return derivedTypeEClass;
@@ -1304,6 +1372,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getDerivedType_Op()
   {
     return (EAttribute)derivedTypeEClass.getEStructuralFeatures().get(0);
@@ -1314,6 +1383,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDerivedType_Type()
   {
     return (EReference)derivedTypeEClass.getEStructuralFeatures().get(1);
@@ -1324,6 +1394,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAnnotateTo()
   {
     return annotateToEClass;
@@ -1334,6 +1405,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAnnotateTo_Sname()
   {
     return (EAttribute)annotateToEClass.getEStructuralFeatures().get(0);
@@ -1344,6 +1416,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnnotateTo_AnnotationType()
   {
     return (EReference)annotateToEClass.getEStructuralFeatures().get(1);
@@ -1354,6 +1427,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAnnotateTo_AnnotationDecl()
   {
     return (EReference)annotateToEClass.getEStructuralFeatures().get(2);
@@ -1364,6 +1438,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAnnotateTo_Names()
   {
     return (EAttribute)annotateToEClass.getEStructuralFeatures().get(3);
@@ -1374,6 +1449,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFreeze()
   {
     return freezeEClass;
@@ -1384,6 +1460,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFreeze_Names()
   {
     return (EReference)freezeEClass.getEStructuralFeatures().get(0);
@@ -1394,6 +1471,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFreeze_Id()
   {
     return (EAttribute)freezeEClass.getEStructuralFeatures().get(1);
@@ -1404,6 +1482,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFreeze_Ex()
   {
     return (EReference)freezeEClass.getEStructuralFeatures().get(2);
@@ -1414,6 +1493,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFreezeStatement()
   {
     return freezeStatementEClass;
@@ -1424,6 +1504,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFreezeStatement_Dot()
   {
     return (EAttribute)freezeStatementEClass.getEStructuralFeatures().get(0);
@@ -1434,6 +1515,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFreezeStatement_Name()
   {
     return (EReference)freezeStatementEClass.getEStructuralFeatures().get(1);
@@ -1444,6 +1526,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFreezeStatement_Access()
   {
     return (EReference)freezeStatementEClass.getEStructuralFeatures().get(2);
@@ -1454,6 +1537,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEval()
   {
     return evalEClass;
@@ -1464,6 +1548,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEval_Nested()
   {
     return (EReference)evalEClass.getEStructuralFeatures().get(0);
@@ -1474,6 +1559,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEval_Statements()
   {
     return (EReference)evalEClass.getEStructuralFeatures().get(1);
@@ -1484,6 +1570,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getInterfaceDeclaration()
   {
     return interfaceDeclarationEClass;
@@ -1494,6 +1581,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getInterfaceDeclaration_Name()
   {
     return (EAttribute)interfaceDeclarationEClass.getEStructuralFeatures().get(0);
@@ -1504,6 +1592,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getInterfaceDeclaration_Exports()
   {
     return (EReference)interfaceDeclarationEClass.getEStructuralFeatures().get(1);
@@ -1514,6 +1603,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExport()
   {
     return exportEClass;
@@ -1524,6 +1614,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExport_Names()
   {
     return (EReference)exportEClass.getEStructuralFeatures().get(0);
@@ -1534,6 +1625,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImportStmt()
   {
     return importStmtEClass;
@@ -1544,6 +1636,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImportStmt_Name()
   {
     return (EAttribute)importStmtEClass.getEStructuralFeatures().get(0);
@@ -1554,6 +1647,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImportStmt_Interface()
   {
     return (EAttribute)importStmtEClass.getEStructuralFeatures().get(1);
@@ -1564,6 +1658,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImportStmt_Restriction()
   {
     return (EReference)importStmtEClass.getEStructuralFeatures().get(2);
@@ -1574,6 +1669,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getConflictStmt()
   {
     return conflictStmtEClass;
@@ -1584,6 +1680,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getConflictStmt_Name()
   {
     return (EAttribute)conflictStmtEClass.getEStructuralFeatures().get(0);
@@ -1594,6 +1691,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getConflictStmt_Restriction()
   {
     return (EReference)conflictStmtEClass.getEStructuralFeatures().get(1);
@@ -1604,6 +1702,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVersionStmt()
   {
     return versionStmtEClass;
@@ -1614,6 +1713,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVersionStmt_Version()
   {
     return (EAttribute)versionStmtEClass.getEStructuralFeatures().get(0);
@@ -1624,6 +1724,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOpDefStatement()
   {
     return opDefStatementEClass;
@@ -1634,6 +1735,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getOpDefStatement_Static()
   {
     return (EAttribute)opDefStatementEClass.getEStructuralFeatures().get(0);
@@ -1644,6 +1746,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefStatement_Result()
   {
     return (EReference)opDefStatementEClass.getEStructuralFeatures().get(1);
@@ -1654,6 +1757,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getOpDefStatement_Id()
   {
     return (EAttribute)opDefStatementEClass.getEStructuralFeatures().get(2);
@@ -1664,6 +1768,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefStatement_Param()
   {
     return (EReference)opDefStatementEClass.getEStructuralFeatures().get(3);
@@ -1674,6 +1779,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefStatement_Impl()
   {
     return (EReference)opDefStatementEClass.getEStructuralFeatures().get(4);
@@ -1684,6 +1790,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefStatement_Block()
   {
     return (EReference)opDefStatementEClass.getEStructuralFeatures().get(5);
@@ -1694,6 +1801,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOpDefParameterList()
   {
     return opDefParameterListEClass;
@@ -1704,6 +1812,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefParameterList_List()
   {
     return (EReference)opDefParameterListEClass.getEStructuralFeatures().get(0);
@@ -1714,6 +1823,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOpDefParameter()
   {
     return opDefParameterEClass;
@@ -1724,6 +1834,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefParameter_Type()
   {
     return (EReference)opDefParameterEClass.getEStructuralFeatures().get(0);
@@ -1734,6 +1845,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getOpDefParameter_Id()
   {
     return (EAttribute)opDefParameterEClass.getEStructuralFeatures().get(1);
@@ -1744,6 +1856,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOpDefParameter_Val()
   {
     return (EReference)opDefParameterEClass.getEStructuralFeatures().get(2);
@@ -1754,6 +1867,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionStatement()
   {
     return expressionStatementEClass;
@@ -1764,6 +1878,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionStatement_Expr()
   {
     return (EReference)expressionStatementEClass.getEStructuralFeatures().get(0);
@@ -1774,6 +1889,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpression()
   {
     return expressionEClass;
@@ -1784,6 +1900,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpression_Let()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(0);
@@ -1794,6 +1911,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpression_Expr()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(1);
@@ -1804,6 +1922,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpression_Container()
   {
     return (EReference)expressionEClass.getEStructuralFeatures().get(2);
@@ -1814,6 +1933,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLetExpression()
   {
     return letExpressionEClass;
@@ -1824,6 +1944,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLetExpression_Type()
   {
     return (EReference)letExpressionEClass.getEStructuralFeatures().get(0);
@@ -1834,6 +1955,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLetExpression_Name()
   {
     return (EAttribute)letExpressionEClass.getEStructuralFeatures().get(1);
@@ -1844,6 +1966,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLetExpression_ValueExpr()
   {
     return (EReference)letExpressionEClass.getEStructuralFeatures().get(2);
@@ -1854,6 +1977,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLetExpression_SubExpr()
   {
     return (EReference)letExpressionEClass.getEStructuralFeatures().get(3);
@@ -1864,6 +1988,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getOptBlockExpression()
   {
     return optBlockExpressionEClass;
@@ -1874,6 +1999,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOptBlockExpression_Expr()
   {
     return (EReference)optBlockExpressionEClass.getEStructuralFeatures().get(0);
@@ -1884,6 +2010,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getOptBlockExpression_Block()
   {
     return (EReference)optBlockExpressionEClass.getEStructuralFeatures().get(1);
@@ -1894,6 +2021,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getBlockExpression()
   {
     return blockExpressionEClass;
@@ -1904,6 +2032,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getBlockExpression_Exprs()
   {
     return (EReference)blockExpressionEClass.getEStructuralFeatures().get(0);
@@ -1914,6 +2043,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAssignmentExpression()
   {
     return assignmentExpressionEClass;
@@ -1924,6 +2054,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAssignmentExpression_Left()
   {
     return (EReference)assignmentExpressionEClass.getEStructuralFeatures().get(0);
@@ -1934,6 +2065,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAssignmentExpression_Right()
   {
     return (EReference)assignmentExpressionEClass.getEStructuralFeatures().get(1);
@@ -1944,6 +2076,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAssignmentExpressionPart()
   {
     return assignmentExpressionPartEClass;
@@ -1954,6 +2087,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAssignmentExpressionPart_Op()
   {
     return (EAttribute)assignmentExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -1964,6 +2098,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAssignmentExpressionPart_Ex()
   {
     return (EReference)assignmentExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -1974,6 +2109,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAssignmentExpressionPart_Container()
   {
     return (EReference)assignmentExpressionPartEClass.getEStructuralFeatures().get(2);
@@ -1984,6 +2120,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImplicationExpression()
   {
     return implicationExpressionEClass;
@@ -1994,6 +2131,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImplicationExpression_Left()
   {
     return (EReference)implicationExpressionEClass.getEStructuralFeatures().get(0);
@@ -2004,6 +2142,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImplicationExpression_Right()
   {
     return (EReference)implicationExpressionEClass.getEStructuralFeatures().get(1);
@@ -2014,6 +2153,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getImplicationExpressionPart()
   {
     return implicationExpressionPartEClass;
@@ -2024,6 +2164,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getImplicationExpressionPart_Op()
   {
     return (EAttribute)implicationExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -2034,6 +2175,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getImplicationExpressionPart_Ex()
   {
     return (EReference)implicationExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -2044,6 +2186,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLogicalExpression()
   {
     return logicalExpressionEClass;
@@ -2054,6 +2197,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLogicalExpression_Left()
   {
     return (EReference)logicalExpressionEClass.getEStructuralFeatures().get(0);
@@ -2064,6 +2208,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLogicalExpression_Right()
   {
     return (EReference)logicalExpressionEClass.getEStructuralFeatures().get(1);
@@ -2074,6 +2219,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLogicalExpressionPart()
   {
     return logicalExpressionPartEClass;
@@ -2084,6 +2230,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLogicalExpressionPart_Op()
   {
     return (EAttribute)logicalExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -2094,6 +2241,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLogicalExpressionPart_Ex()
   {
     return (EReference)logicalExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -2104,6 +2252,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEqualityExpression()
   {
     return equalityExpressionEClass;
@@ -2114,6 +2263,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpression_Left()
   {
     return (EReference)equalityExpressionEClass.getEStructuralFeatures().get(0);
@@ -2124,6 +2274,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpression_Right()
   {
     return (EReference)equalityExpressionEClass.getEStructuralFeatures().get(1);
@@ -2134,6 +2285,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getEqualityExpressionPart()
   {
     return equalityExpressionPartEClass;
@@ -2144,6 +2296,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getEqualityExpressionPart_Op()
   {
     return (EAttribute)equalityExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -2154,6 +2307,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpressionPart_Ex()
   {
     return (EReference)equalityExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -2164,6 +2318,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getEqualityExpressionPart_Container()
   {
     return (EReference)equalityExpressionPartEClass.getEStructuralFeatures().get(2);
@@ -2174,6 +2329,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRelationalExpression()
   {
     return relationalExpressionEClass;
@@ -2184,6 +2340,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpression_Left()
   {
     return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(0);
@@ -2194,6 +2351,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpression_Right()
   {
     return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(1);
@@ -2204,6 +2362,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpression_Right2()
   {
     return (EReference)relationalExpressionEClass.getEStructuralFeatures().get(2);
@@ -2214,6 +2373,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getRelationalExpressionPart()
   {
     return relationalExpressionPartEClass;
@@ -2224,6 +2384,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getRelationalExpressionPart_Op()
   {
     return (EAttribute)relationalExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -2234,6 +2395,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getRelationalExpressionPart_Ex()
   {
     return (EReference)relationalExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -2244,6 +2406,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAdditiveExpression()
   {
     return additiveExpressionEClass;
@@ -2254,6 +2417,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdditiveExpression_Left()
   {
     return (EReference)additiveExpressionEClass.getEStructuralFeatures().get(0);
@@ -2264,6 +2428,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdditiveExpression_Right()
   {
     return (EReference)additiveExpressionEClass.getEStructuralFeatures().get(1);
@@ -2274,6 +2439,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAdditiveExpressionPart()
   {
     return additiveExpressionPartEClass;
@@ -2284,6 +2450,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getAdditiveExpressionPart_Op()
   {
     return (EAttribute)additiveExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -2294,6 +2461,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAdditiveExpressionPart_Ex()
   {
     return (EReference)additiveExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -2304,6 +2472,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMultiplicativeExpression()
   {
     return multiplicativeExpressionEClass;
@@ -2314,6 +2483,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMultiplicativeExpression_Left()
   {
     return (EReference)multiplicativeExpressionEClass.getEStructuralFeatures().get(0);
@@ -2324,6 +2494,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMultiplicativeExpression_Right()
   {
     return (EReference)multiplicativeExpressionEClass.getEStructuralFeatures().get(1);
@@ -2334,6 +2505,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getMultiplicativeExpressionPart()
   {
     return multiplicativeExpressionPartEClass;
@@ -2344,6 +2516,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getMultiplicativeExpressionPart_Op()
   {
     return (EAttribute)multiplicativeExpressionPartEClass.getEStructuralFeatures().get(0);
@@ -2354,6 +2527,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getMultiplicativeExpressionPart_Expr()
   {
     return (EReference)multiplicativeExpressionPartEClass.getEStructuralFeatures().get(1);
@@ -2364,6 +2538,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getUnaryExpression()
   {
     return unaryExpressionEClass;
@@ -2374,6 +2549,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getUnaryExpression_Op()
   {
     return (EAttribute)unaryExpressionEClass.getEStructuralFeatures().get(0);
@@ -2384,6 +2560,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getUnaryExpression_Expr()
   {
     return (EReference)unaryExpressionEClass.getEStructuralFeatures().get(1);
@@ -2394,6 +2571,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPostfixExpression()
   {
     return postfixExpressionEClass;
@@ -2404,6 +2582,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPostfixExpression_Call()
   {
     return (EReference)postfixExpressionEClass.getEStructuralFeatures().get(0);
@@ -2414,6 +2593,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPostfixExpression_FCalls()
   {
     return (EReference)postfixExpressionEClass.getEStructuralFeatures().get(1);
@@ -2424,6 +2604,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPostfixExpression_Access()
   {
     return (EReference)postfixExpressionEClass.getEStructuralFeatures().get(2);
@@ -2434,6 +2615,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPostfixExpression_Left()
   {
     return (EReference)postfixExpressionEClass.getEStructuralFeatures().get(3);
@@ -2444,6 +2626,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getCall()
   {
     return callEClass;
@@ -2454,6 +2637,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCall_Call()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(0);
@@ -2464,6 +2648,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCall_ContainerOp()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(1);
@@ -2474,6 +2659,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getCall_ArrayEx()
   {
     return (EReference)callEClass.getEStructuralFeatures().get(2);
@@ -2484,6 +2670,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFeatureCall()
   {
     return featureCallEClass;
@@ -2494,6 +2681,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getContainerOp()
   {
     return containerOpEClass;
@@ -2504,6 +2692,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContainerOp_Decl()
   {
     return (EReference)containerOpEClass.getEStructuralFeatures().get(0);
@@ -2514,6 +2703,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDeclarator()
   {
     return declaratorEClass;
@@ -2524,6 +2714,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclarator_Decl()
   {
     return (EReference)declaratorEClass.getEStructuralFeatures().get(0);
@@ -2534,6 +2725,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getDeclaration()
   {
     return declarationEClass;
@@ -2544,6 +2736,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclaration_Type()
   {
     return (EReference)declarationEClass.getEStructuralFeatures().get(0);
@@ -2554,6 +2747,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getDeclaration_Id()
   {
     return (EAttribute)declarationEClass.getEStructuralFeatures().get(1);
@@ -2564,6 +2758,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getDeclaration_Init()
   {
     return (EReference)declarationEClass.getEStructuralFeatures().get(2);
@@ -2574,6 +2769,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getActualArgumentList()
   {
     return actualArgumentListEClass;
@@ -2584,6 +2780,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getActualArgumentList_Args()
   {
     return (EReference)actualArgumentListEClass.getEStructuralFeatures().get(0);
@@ -2594,6 +2791,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getActualArgumentList_Name()
   {
     return (EAttribute)actualArgumentListEClass.getEStructuralFeatures().get(1);
@@ -2604,6 +2802,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getActualArgument()
   {
     return actualArgumentEClass;
@@ -2614,6 +2813,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getActualArgument_Name()
   {
     return (EAttribute)actualArgumentEClass.getEStructuralFeatures().get(0);
@@ -2624,6 +2824,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getActualArgument_Arg()
   {
     return (EReference)actualArgumentEClass.getEStructuralFeatures().get(1);
@@ -2634,6 +2835,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionAccess()
   {
     return expressionAccessEClass;
@@ -2644,6 +2846,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getExpressionAccess_Name()
   {
     return (EAttribute)expressionAccessEClass.getEStructuralFeatures().get(0);
@@ -2654,6 +2857,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionAccess_Calls()
   {
     return (EReference)expressionAccessEClass.getEStructuralFeatures().get(1);
@@ -2664,6 +2868,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionAccess_Access()
   {
     return (EReference)expressionAccessEClass.getEStructuralFeatures().get(2);
@@ -2674,6 +2879,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getPrimaryExpression()
   {
     return primaryExpressionEClass;
@@ -2684,6 +2890,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Lit()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(0);
@@ -2694,6 +2901,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Ex()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(1);
@@ -2704,6 +2912,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_IfEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(2);
@@ -2714,6 +2923,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_RefEx()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(3);
@@ -2724,6 +2934,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Calls()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(4);
@@ -2734,6 +2945,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getPrimaryExpression_Access()
   {
     return (EReference)primaryExpressionEClass.getEStructuralFeatures().get(5);
@@ -2744,6 +2956,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getContainerInitializer()
   {
     return containerInitializerEClass;
@@ -2754,6 +2967,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContainerInitializer_Type()
   {
     return (EReference)containerInitializerEClass.getEStructuralFeatures().get(0);
@@ -2764,6 +2978,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContainerInitializer_Init()
   {
     return (EReference)containerInitializerEClass.getEStructuralFeatures().get(1);
@@ -2774,6 +2989,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionListOrRange()
   {
     return expressionListOrRangeEClass;
@@ -2784,6 +3000,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionListOrRange_List()
   {
     return (EReference)expressionListOrRangeEClass.getEStructuralFeatures().get(0);
@@ -2794,6 +3011,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExpressionListEntry()
   {
     return expressionListEntryEClass;
@@ -2804,6 +3022,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getExpressionListEntry_Name()
   {
     return (EAttribute)expressionListEntryEClass.getEStructuralFeatures().get(0);
@@ -2814,6 +3033,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getExpressionListEntry_Attrib()
   {
     return (EAttribute)expressionListEntryEClass.getEStructuralFeatures().get(1);
@@ -2824,6 +3044,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionListEntry_Value()
   {
     return (EReference)expressionListEntryEClass.getEStructuralFeatures().get(2);
@@ -2834,6 +3055,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExpressionListEntry_Container()
   {
     return (EReference)expressionListEntryEClass.getEStructuralFeatures().get(3);
@@ -2844,6 +3066,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLiteral()
   {
     return literalEClass;
@@ -2854,6 +3077,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLiteral_Val()
   {
     return (EReference)literalEClass.getEStructuralFeatures().get(0);
@@ -2864,6 +3088,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getIfExpression()
   {
     return ifExpressionEClass;
@@ -2874,6 +3099,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIfExpression_IfEx()
   {
     return (EReference)ifExpressionEClass.getEStructuralFeatures().get(0);
@@ -2884,6 +3110,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIfExpression_ThenEx()
   {
     return (EReference)ifExpressionEClass.getEStructuralFeatures().get(1);
@@ -2894,6 +3121,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIfExpression_ElseEx()
   {
     return (EReference)ifExpressionEClass.getEStructuralFeatures().get(2);
@@ -2904,6 +3132,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IvmlFactory getIvmlFactory()
   {
     return (IvmlFactory)getEFactoryInstance();

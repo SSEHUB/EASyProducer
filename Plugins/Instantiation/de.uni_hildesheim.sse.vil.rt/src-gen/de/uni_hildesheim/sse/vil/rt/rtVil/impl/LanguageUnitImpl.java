@@ -65,6 +65,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vilBuildLanguage.imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public rtContents getRtContents()
   {
     return rtContents;
@@ -92,6 +93,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vilBuildLanguage.imp
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRtContents(rtContents newRtContents)
   {
     if (newRtContents != rtContents)

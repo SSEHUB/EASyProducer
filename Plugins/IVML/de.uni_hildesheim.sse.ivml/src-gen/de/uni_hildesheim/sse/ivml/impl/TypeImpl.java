@@ -90,6 +90,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BasicType getType()
   {
     return type;
@@ -117,6 +118,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(BasicType newType)
   {
     if (newType != type)
@@ -138,6 +140,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedName getId()
   {
     return id;
@@ -165,6 +168,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setId(QualifiedName newId)
   {
     if (newId != id)
@@ -186,6 +190,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public DerivedType getDerived()
   {
     return derived;
@@ -213,6 +218,7 @@ public class TypeImpl extends MinimalEObjectImpl.Container implements Type
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDerived(DerivedType newDerived)
   {
     if (newDerived != derived)

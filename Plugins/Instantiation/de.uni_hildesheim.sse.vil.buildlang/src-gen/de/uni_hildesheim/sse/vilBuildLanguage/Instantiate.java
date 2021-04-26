@@ -31,10 +31,6 @@ public interface Instantiate extends EObject
   /**
    * Returns the value of the '<em><b>Project</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Project</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Project</em>' attribute.
    * @see #setProject(String)
@@ -57,10 +53,6 @@ public interface Instantiate extends EObject
   /**
    * Returns the value of the '<em><b>Rule Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Rule Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Rule Name</em>' attribute.
    * @see #setRuleName(String)
@@ -83,10 +75,6 @@ public interface Instantiate extends EObject
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(ArgumentList)
@@ -109,10 +97,6 @@ public interface Instantiate extends EObject
   /**
    * Returns the value of the '<em><b>Version Spec</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Version Spec</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Version Spec</em>' containment reference.
    * @see #setVersionSpec(VersionSpec)

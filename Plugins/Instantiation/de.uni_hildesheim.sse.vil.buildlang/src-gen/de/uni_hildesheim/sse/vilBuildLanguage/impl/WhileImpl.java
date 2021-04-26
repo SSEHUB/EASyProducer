@@ -79,6 +79,7 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -106,6 +107,7 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -127,6 +129,7 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElementBlock getBlock()
   {
     return block;
@@ -154,6 +157,7 @@ public class WhileImpl extends MinimalEObjectImpl.Container implements While
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(RuleElementBlock newBlock)
   {
     if (newBlock != block)

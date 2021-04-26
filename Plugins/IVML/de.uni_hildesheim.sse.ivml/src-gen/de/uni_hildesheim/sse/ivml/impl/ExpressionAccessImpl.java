@@ -105,6 +105,7 @@ public class ExpressionAccessImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -115,6 +116,7 @@ public class ExpressionAccessImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -128,6 +130,7 @@ public class ExpressionAccessImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Call> getCalls()
   {
     if (calls == null)
@@ -142,6 +145,7 @@ public class ExpressionAccessImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionAccess getAccess()
   {
     return access;
@@ -169,6 +173,7 @@ public class ExpressionAccessImpl extends MinimalEObjectImpl.Container implement
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAccess(ExpressionAccess newAccess)
   {
     if (newAccess != access)
@@ -301,7 +306,7 @@ public class ExpressionAccessImpl extends MinimalEObjectImpl.Container implement
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

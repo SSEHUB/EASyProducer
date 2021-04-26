@@ -28,10 +28,6 @@ public interface QualifiedName extends EObject
   /**
    * Returns the value of the '<em><b>Prefix</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Prefix</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Prefix</em>' containment reference.
    * @see #setPrefix(QualifiedPrefix)
@@ -55,10 +51,6 @@ public interface QualifiedName extends EObject
    * Returns the value of the '<em><b>Qname</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Qname</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Qname</em>' attribute list.
    * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getQualifiedName_Qname()

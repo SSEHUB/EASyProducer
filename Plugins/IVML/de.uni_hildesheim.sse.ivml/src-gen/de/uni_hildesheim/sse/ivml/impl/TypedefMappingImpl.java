@@ -99,6 +99,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getNewType()
   {
     return newType;
@@ -109,6 +110,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNewType(String newNewType)
   {
     String oldNewType = newType;
@@ -122,6 +124,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -149,6 +152,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -170,6 +174,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TypedefConstraint getConstraint()
   {
     return constraint;
@@ -197,6 +202,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConstraint(TypedefConstraint newConstraint)
   {
     if (newConstraint != constraint)
@@ -327,7 +333,7 @@ public class TypedefMappingImpl extends MinimalEObjectImpl.Container implements 
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (newType: ");
     result.append(newType);
     result.append(')');

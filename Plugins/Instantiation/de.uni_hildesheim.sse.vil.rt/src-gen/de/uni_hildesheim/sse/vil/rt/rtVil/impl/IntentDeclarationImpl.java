@@ -67,6 +67,7 @@ public class IntentDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionStatement getExprStmt()
   {
     return exprStmt;
@@ -94,6 +95,7 @@ public class IntentDeclarationImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExprStmt(ExpressionStatement newExprStmt)
   {
     if (newExprStmt != exprStmt)

@@ -109,6 +109,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ParameterList getParam()
   {
     return param;
@@ -136,6 +137,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(ParameterList newParam)
   {
     if (newParam != param)
@@ -157,6 +159,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ScriptParentDecl getParent()
   {
     return parent;
@@ -184,6 +187,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParent(ScriptParentDecl newParent)
   {
     if (newParent != parent)
@@ -205,6 +209,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LoadProperties> getLoadProperties()
   {
     if (loadProperties == null)
@@ -219,6 +224,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ScriptContents getContents()
   {
     return contents;
@@ -246,6 +252,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setContents(ScriptContents newContents)
   {
     if (newContents != contents)

@@ -557,7 +557,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             StreamResult result = null;
             result = new StreamResult(this.file);
             try {
-                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                TransformerFactory transformerFactory = getTransformerFactory();
                 Transformer transformer = transformerFactory.newTransformer();
                 configureTransformer(transformer);
                 transformer.transform(source, result);
@@ -850,12 +850,29 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
 
     /**
+     * Returns the transformer builder factory.
+     * 
+     * @return the factory
+     */
+    protected TransformerFactory getTransformerFactory() {
+        // usually, this is defined through the JSL in javax.xml.transform.TransformerFactory
+        // however, since Java10/Eclipse 202? the JSL setting for SAX lead to a global override and
+        // due to local jars, the instance cannot be created blocking the creation of EASy-Projects
+        // and xtext editors. so we keep this knowledge local and create the factory directly
+        return new org.apache.xalan.processor.TransformerFactoryImpl();
+    }
+
+    /**
      * Returns the document builder factory.
      * 
      * @return the factory
      */
     protected DocumentBuilderFactory getDocumentBuilderFactory() {
-        return DocumentBuilderFactory.newInstance();
+        // usually, this is defined through the JSL in javax.xml.parsers.DocumentBuilderFactory
+        // however, since Java10/Eclipse 202? the JSL setting for SAX lead to a global override and
+        // due to local jars, the instance cannot be created blocking the creation of EASy-Projects
+        // and xtext editors
+        return new org.apache.xerces.jaxp.DocumentBuilderFactoryImpl();
     }
     
     /**

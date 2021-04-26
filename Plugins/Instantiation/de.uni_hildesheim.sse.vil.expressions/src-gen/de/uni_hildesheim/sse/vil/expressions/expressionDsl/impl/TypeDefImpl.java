@@ -87,6 +87,7 @@ public class TypeDefImpl extends MinimalEObjectImpl.Container implements TypeDef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -97,6 +98,7 @@ public class TypeDefImpl extends MinimalEObjectImpl.Container implements TypeDef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -110,6 +112,7 @@ public class TypeDefImpl extends MinimalEObjectImpl.Container implements TypeDef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -137,6 +140,7 @@ public class TypeDefImpl extends MinimalEObjectImpl.Container implements TypeDef
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -255,7 +259,7 @@ public class TypeDefImpl extends MinimalEObjectImpl.Container implements TypeDef
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

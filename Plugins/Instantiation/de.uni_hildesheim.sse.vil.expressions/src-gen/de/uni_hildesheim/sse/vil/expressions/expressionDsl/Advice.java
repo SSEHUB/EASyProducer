@@ -26,10 +26,6 @@ public interface Advice extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' containment reference.
    * @see #setName(QualifiedName)
@@ -52,10 +48,6 @@ public interface Advice extends EObject
   /**
    * Returns the value of the '<em><b>Version Spec</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Version Spec</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Version Spec</em>' containment reference.
    * @see #setVersionSpec(VersionSpec)

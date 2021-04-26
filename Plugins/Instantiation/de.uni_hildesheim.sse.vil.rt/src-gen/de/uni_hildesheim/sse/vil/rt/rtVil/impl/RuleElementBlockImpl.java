@@ -65,6 +65,7 @@ public class RuleElementBlockImpl extends de.uni_hildesheim.sse.vilBuildLanguage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IntentDeclaration getIntent()
   {
     return intent;
@@ -92,6 +93,7 @@ public class RuleElementBlockImpl extends de.uni_hildesheim.sse.vilBuildLanguage
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIntent(IntentDeclaration newIntent)
   {
     if (newIntent != intent)

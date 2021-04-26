@@ -73,6 +73,7 @@ public class VersionStmtImpl extends MinimalEObjectImpl.Container implements Ver
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVersion()
   {
     return version;
@@ -83,6 +84,7 @@ public class VersionStmtImpl extends MinimalEObjectImpl.Container implements Ver
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersion(String newVersion)
   {
     String oldVersion = version;
@@ -167,7 +169,7 @@ public class VersionStmtImpl extends MinimalEObjectImpl.Container implements Ver
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (version: ");
     result.append(version);
     result.append(')');

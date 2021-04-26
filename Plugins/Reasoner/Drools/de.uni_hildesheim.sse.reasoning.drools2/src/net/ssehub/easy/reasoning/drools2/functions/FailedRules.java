@@ -1,7 +1,6 @@
 package net.ssehub.easy.reasoning.drools2.functions;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -90,6 +90,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedPrefix getName()
   {
     return name;
@@ -117,6 +118,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(QualifiedPrefix newName)
   {
     if (newName != name)
@@ -138,6 +140,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Declarator getDecl()
   {
     return decl;
@@ -165,6 +168,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDecl(Declarator newDecl)
   {
     if (newDecl != decl)
@@ -186,6 +190,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ArgumentList getParam()
   {
     return param;
@@ -213,6 +218,7 @@ public class CallImpl extends MinimalEObjectImpl.Container implements Call
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(ArgumentList newParam)
   {
     if (newParam != param)

@@ -71,6 +71,7 @@ public class DeclaratorImpl extends MinimalEObjectImpl.Container implements Decl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Declaration> getDecl()
   {
     if (decl == null)

@@ -83,6 +83,7 @@ public class AttrAssignmentImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<AttrAssignmentPart> getParts()
   {
     if (parts == null)
@@ -97,6 +98,7 @@ public class AttrAssignmentImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getElements()
   {
     if (elements == null)

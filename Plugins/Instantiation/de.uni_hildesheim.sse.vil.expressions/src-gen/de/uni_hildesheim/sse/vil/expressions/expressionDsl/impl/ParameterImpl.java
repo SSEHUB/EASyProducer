@@ -99,6 +99,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -126,6 +127,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -147,6 +149,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -157,6 +160,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -170,6 +174,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getDflt()
   {
     return dflt;
@@ -197,6 +202,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDflt(Expression newDflt)
   {
     if (newDflt != dflt)
@@ -327,7 +333,7 @@ public class ParameterImpl extends MinimalEObjectImpl.Container implements Param
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

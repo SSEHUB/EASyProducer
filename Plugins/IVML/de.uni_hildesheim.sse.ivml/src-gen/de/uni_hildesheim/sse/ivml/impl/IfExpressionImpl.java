@@ -89,6 +89,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getIfEx()
   {
     return ifEx;
@@ -116,6 +117,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIfEx(Expression newIfEx)
   {
     if (newIfEx != ifEx)
@@ -137,6 +139,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OptBlockExpression getThenEx()
   {
     return thenEx;
@@ -164,6 +167,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setThenEx(OptBlockExpression newThenEx)
   {
     if (newThenEx != thenEx)
@@ -185,6 +189,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public OptBlockExpression getElseEx()
   {
     return elseEx;
@@ -212,6 +217,7 @@ public class IfExpressionImpl extends MinimalEObjectImpl.Container implements If
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setElseEx(OptBlockExpression newElseEx)
   {
     if (newElseEx != elseEx)

@@ -121,6 +121,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getProject()
   {
     return project;
@@ -131,6 +132,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setProject(String newProject)
   {
     String oldProject = project;
@@ -144,6 +146,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getRuleName()
   {
     return ruleName;
@@ -154,6 +157,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRuleName(String newRuleName)
   {
     String oldRuleName = ruleName;
@@ -167,6 +171,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ArgumentList getParam()
   {
     return param;
@@ -194,6 +199,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(ArgumentList newParam)
   {
     if (newParam != param)
@@ -215,6 +221,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VersionSpec getVersionSpec()
   {
     return versionSpec;
@@ -242,6 +249,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersionSpec(VersionSpec newVersionSpec)
   {
     if (newVersionSpec != versionSpec)
@@ -382,7 +390,7 @@ public class InstantiateImpl extends MinimalEObjectImpl.Container implements Ins
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (project: ");
     result.append(project);
     result.append(", ruleName: ");

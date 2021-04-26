@@ -71,6 +71,7 @@ public class VariabilityUnitImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Project> getProjects()
   {
     if (projects == null)

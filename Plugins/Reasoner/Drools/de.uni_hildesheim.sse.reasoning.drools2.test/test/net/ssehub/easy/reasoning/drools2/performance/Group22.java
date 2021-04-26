@@ -7,7 +7,6 @@ import org.eclipse.emf.common.util.URI;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.ModelUtility;
@@ -37,6 +36,7 @@ import net.ssehub.easy.varModel.model.Project;
  */
 public class Group22 extends AbstractTest<Project> {
 
+    @SuppressWarnings("unused")
     private static final EASyLogger LOGGER =
             EASyLoggerFactory.INSTANCE.getLogger(Group22.class, DroolsReasonerDescriptor.BUNDLE_NAME);
     

@@ -30,10 +30,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(ParameterList)
@@ -56,10 +52,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Parent</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Parent</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Parent</em>' containment reference.
    * @see #setParent(ScriptParentDecl)
@@ -83,10 +75,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
    * Returns the value of the '<em><b>Load Properties</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Load Properties</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Load Properties</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getLanguageUnit_LoadProperties()
@@ -98,10 +86,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Contents</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Contents</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Contents</em>' containment reference.
    * @see #setContents(ScriptContents)

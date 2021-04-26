@@ -65,6 +65,7 @@ public class ContainerOpImpl extends ActualArgumentListImpl implements Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Declarator getDecl()
   {
     return decl;
@@ -92,6 +93,7 @@ public class ContainerOpImpl extends ActualArgumentListImpl implements Container
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDecl(Declarator newDecl)
   {
     if (newDecl != decl)

@@ -73,6 +73,7 @@ public class NumValueImpl extends MinimalEObjectImpl.Container implements NumVal
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVal()
   {
     return val;
@@ -83,6 +84,7 @@ public class NumValueImpl extends MinimalEObjectImpl.Container implements NumVal
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVal(String newVal)
   {
     String oldVal = val;
@@ -167,7 +169,7 @@ public class NumValueImpl extends MinimalEObjectImpl.Container implements NumVal
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (val: ");
     result.append(val);
     result.append(')');

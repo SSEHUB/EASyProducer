@@ -29,10 +29,6 @@ public interface Declaration extends EObject
   /**
    * Returns the value of the '<em><b>Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Type</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Type</em>' containment reference.
    * @see #setType(Type)
@@ -56,10 +52,6 @@ public interface Declaration extends EObject
    * Returns the value of the '<em><b>Id</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Id</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Id</em>' attribute list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getDeclaration_Id()
@@ -71,10 +63,6 @@ public interface Declaration extends EObject
   /**
    * Returns the value of the '<em><b>Init</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Init</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Init</em>' containment reference.
    * @see #setInit(Expression)

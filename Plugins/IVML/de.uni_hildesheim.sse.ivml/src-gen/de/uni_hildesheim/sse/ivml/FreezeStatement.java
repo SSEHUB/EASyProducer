@@ -27,10 +27,6 @@ public interface FreezeStatement extends EObject
   /**
    * Returns the value of the '<em><b>Dot</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Dot</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Dot</em>' attribute.
    * @see #setDot(String)
@@ -53,10 +49,6 @@ public interface FreezeStatement extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' containment reference.
    * @see #setName(QualifiedName)
@@ -79,10 +71,6 @@ public interface FreezeStatement extends EObject
   /**
    * Returns the value of the '<em><b>Access</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Access</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Access</em>' containment reference.
    * @see #setAccess(AccessName)

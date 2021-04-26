@@ -78,6 +78,7 @@ public class ContainerInitializerImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedName getType()
   {
     return type;
@@ -105,6 +106,7 @@ public class ContainerInitializerImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(QualifiedName newType)
   {
     if (newType != type)
@@ -126,6 +128,7 @@ public class ContainerInitializerImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionListOrRange getInit()
   {
     return init;
@@ -153,6 +156,7 @@ public class ContainerInitializerImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInit(ExpressionListOrRange newInit)
   {
     if (newInit != init)

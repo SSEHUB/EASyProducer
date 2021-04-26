@@ -96,6 +96,7 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Import> getImports()
   {
     if (imports == null)
@@ -110,6 +111,7 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Require> getRequires()
   {
     if (requires == null)
@@ -124,6 +126,7 @@ public class ImplementationUnitImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LanguageUnit> getScripts()
   {
     if (scripts == null)

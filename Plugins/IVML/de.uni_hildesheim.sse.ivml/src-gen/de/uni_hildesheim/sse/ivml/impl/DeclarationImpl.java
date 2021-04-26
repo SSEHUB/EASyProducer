@@ -95,6 +95,7 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -122,6 +123,7 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -143,6 +145,7 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getId()
   {
     if (id == null)
@@ -157,6 +160,7 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getInit()
   {
     return init;
@@ -184,6 +188,7 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInit(Expression newInit)
   {
     if (newInit != init)
@@ -316,7 +321,7 @@ public class DeclarationImpl extends MinimalEObjectImpl.Container implements Dec
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (id: ");
     result.append(id);
     result.append(')');

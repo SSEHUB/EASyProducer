@@ -82,6 +82,7 @@ public class EvalImpl extends MinimalEObjectImpl.Container implements Eval
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Eval> getNested()
   {
     if (nested == null)
@@ -96,6 +97,7 @@ public class EvalImpl extends MinimalEObjectImpl.Container implements Eval
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<ExpressionStatement> getStatements()
   {
     if (statements == null)

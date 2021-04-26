@@ -30,10 +30,6 @@ public interface AnnotateTo extends EObject
   /**
    * Returns the value of the '<em><b>Sname</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Sname</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Sname</em>' attribute.
    * @see #setSname(String)
@@ -56,10 +52,6 @@ public interface AnnotateTo extends EObject
   /**
    * Returns the value of the '<em><b>Annotation Type</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Annotation Type</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Annotation Type</em>' containment reference.
    * @see #setAnnotationType(Type)
@@ -82,10 +74,6 @@ public interface AnnotateTo extends EObject
   /**
    * Returns the value of the '<em><b>Annotation Decl</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Annotation Decl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Annotation Decl</em>' containment reference.
    * @see #setAnnotationDecl(VariableDeclarationPart)
@@ -109,10 +97,6 @@ public interface AnnotateTo extends EObject
    * Returns the value of the '<em><b>Names</b></em>' attribute list.
    * The list contents are of type {@link java.lang.String}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Names</em>' attribute list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Names</em>' attribute list.
    * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getAnnotateTo_Names()

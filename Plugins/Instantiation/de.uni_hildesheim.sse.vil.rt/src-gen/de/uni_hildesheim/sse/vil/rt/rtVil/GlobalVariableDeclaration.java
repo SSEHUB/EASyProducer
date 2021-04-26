@@ -28,10 +28,6 @@ public interface GlobalVariableDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Persistent</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Persistent</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Persistent</em>' attribute.
    * @see #setPersistent(String)
@@ -54,10 +50,6 @@ public interface GlobalVariableDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Var Decl</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var Decl</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Decl</em>' containment reference.
    * @see #setVarDecl(VariableDeclaration)

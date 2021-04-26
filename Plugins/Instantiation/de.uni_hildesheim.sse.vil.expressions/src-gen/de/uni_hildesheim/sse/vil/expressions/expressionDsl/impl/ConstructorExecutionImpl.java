@@ -97,6 +97,7 @@ public class ConstructorExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -124,6 +125,7 @@ public class ConstructorExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -145,6 +147,7 @@ public class ConstructorExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ArgumentList getParam()
   {
     return param;
@@ -172,6 +175,7 @@ public class ConstructorExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(ArgumentList newParam)
   {
     if (newParam != param)
@@ -193,6 +197,7 @@ public class ConstructorExecutionImpl extends MinimalEObjectImpl.Container imple
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SubCall> getCalls()
   {
     if (calls == null)

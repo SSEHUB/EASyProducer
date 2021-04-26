@@ -109,6 +109,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getExcl()
   {
     return excl;
@@ -119,6 +120,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExcl(String newExcl)
   {
     String oldExcl = excl;
@@ -132,6 +134,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getVar()
   {
     return var;
@@ -142,6 +145,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVar(String newVar)
   {
     String oldVar = var;
@@ -155,6 +159,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -182,6 +187,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -310,7 +316,7 @@ public class JoinVariableImpl extends MinimalEObjectImpl.Container implements Jo
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (excl: ");
     result.append(excl);
     result.append(", var: ");

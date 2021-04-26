@@ -28,10 +28,6 @@ public interface RuleElementBlock extends EObject
    * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vilBuildLanguage.RuleElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Elements</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleElementBlock_Elements()

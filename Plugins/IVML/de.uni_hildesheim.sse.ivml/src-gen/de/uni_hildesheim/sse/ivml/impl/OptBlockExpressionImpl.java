@@ -78,6 +78,7 @@ public class OptBlockExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -105,6 +106,7 @@ public class OptBlockExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -126,6 +128,7 @@ public class OptBlockExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public BlockExpression getBlock()
   {
     return block;
@@ -153,6 +156,7 @@ public class OptBlockExpressionImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(BlockExpression newBlock)
   {
     if (newBlock != block)

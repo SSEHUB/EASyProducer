@@ -99,6 +99,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getType()
   {
     return type;
@@ -109,6 +110,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(String newType)
   {
     String oldType = type;
@@ -122,6 +124,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Call getCall()
   {
     return call;
@@ -149,6 +152,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCall(Call newCall)
   {
     if (newCall != call)
@@ -170,6 +174,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getArrayEx()
   {
     return arrayEx;
@@ -197,6 +202,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setArrayEx(Expression newArrayEx)
   {
     if (newArrayEx != arrayEx)
@@ -327,7 +333,7 @@ public class SubCallImpl extends MinimalEObjectImpl.Container implements SubCall
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (type: ");
     result.append(type);
     result.append(')');

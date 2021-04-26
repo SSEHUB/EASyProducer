@@ -168,6 +168,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -178,6 +179,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -191,6 +193,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ParameterList getParamList()
   {
     return paramList;
@@ -218,6 +221,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParamList(ParameterList newParamList)
   {
     if (newParamList != paramList)
@@ -239,6 +243,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleConditions getConditions()
   {
     return conditions;
@@ -266,6 +271,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setConditions(RuleConditions newConditions)
   {
     if (newConditions != conditions)
@@ -287,6 +293,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<VariableDeclaration> getVarDecls()
   {
     if (varDecls == null)
@@ -301,6 +308,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getObjective()
   {
     return objective;
@@ -328,6 +336,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setObjective(Expression newObjective)
   {
     if (newObjective != objective)
@@ -349,6 +358,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public WeightingStatement getWeighting()
   {
     return weighting;
@@ -376,6 +386,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setWeighting(WeightingStatement newWeighting)
   {
     if (newWeighting != weighting)
@@ -397,6 +408,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<BreakdownElement> getBreakdown()
   {
     if (breakdown == null)
@@ -411,6 +423,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<RuleElement> getPost()
   {
     if (post == null)
@@ -598,7 +611,7 @@ public class StrategyDeclarationImpl extends MinimalEObjectImpl.Container implem
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(')');

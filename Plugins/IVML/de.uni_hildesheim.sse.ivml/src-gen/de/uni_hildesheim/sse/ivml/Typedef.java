@@ -27,10 +27,6 @@ public interface Typedef extends EObject
   /**
    * Returns the value of the '<em><b>TEnum</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>TEnum</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>TEnum</em>' containment reference.
    * @see #setTEnum(TypedefEnum)
@@ -53,10 +49,6 @@ public interface Typedef extends EObject
   /**
    * Returns the value of the '<em><b>TCompound</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>TCompound</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>TCompound</em>' containment reference.
    * @see #setTCompound(TypedefCompound)
@@ -79,10 +71,6 @@ public interface Typedef extends EObject
   /**
    * Returns the value of the '<em><b>TMapping</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>TMapping</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>TMapping</em>' containment reference.
    * @see #setTMapping(TypedefMapping)

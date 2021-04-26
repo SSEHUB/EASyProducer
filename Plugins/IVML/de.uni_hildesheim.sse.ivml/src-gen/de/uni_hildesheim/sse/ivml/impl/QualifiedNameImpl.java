@@ -66,6 +66,7 @@ public class QualifiedNameImpl extends MinimalEObjectImpl.Container implements Q
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<String> getQName()
   {
     if (qName == null)
@@ -153,7 +154,7 @@ public class QualifiedNameImpl extends MinimalEObjectImpl.Container implements Q
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (qName: ");
     result.append(qName);
     result.append(')');

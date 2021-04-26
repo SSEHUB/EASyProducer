@@ -78,6 +78,7 @@ public class AdviceImpl extends MinimalEObjectImpl.Container implements Advice
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public QualifiedName getName()
   {
     return name;
@@ -105,6 +106,7 @@ public class AdviceImpl extends MinimalEObjectImpl.Container implements Advice
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(QualifiedName newName)
   {
     if (newName != name)
@@ -126,6 +128,7 @@ public class AdviceImpl extends MinimalEObjectImpl.Container implements Advice
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VersionSpec getVersionSpec()
   {
     return versionSpec;
@@ -153,6 +156,7 @@ public class AdviceImpl extends MinimalEObjectImpl.Container implements Advice
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVersionSpec(VersionSpec newVersionSpec)
   {
     if (newVersionSpec != versionSpec)

@@ -87,6 +87,7 @@ public class LogicalExpressionPartImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getOp()
   {
     return op;
@@ -97,6 +98,7 @@ public class LogicalExpressionPartImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setOp(String newOp)
   {
     String oldOp = op;
@@ -110,6 +112,7 @@ public class LogicalExpressionPartImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EqualityExpression getEx()
   {
     return ex;
@@ -137,6 +140,7 @@ public class LogicalExpressionPartImpl extends MinimalEObjectImpl.Container impl
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setEx(EqualityExpression newEx)
   {
     if (newEx != ex)
@@ -255,7 +259,7 @@ public class LogicalExpressionPartImpl extends MinimalEObjectImpl.Container impl
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (op: ");
     result.append(op);
     result.append(')');

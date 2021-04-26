@@ -119,6 +119,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<LoopVariable> getVar()
   {
     if (var == null)
@@ -133,6 +134,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getSeparator()
   {
     return separator;
@@ -143,6 +145,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSeparator(String newSeparator)
   {
     String oldSeparator = separator;
@@ -156,6 +159,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -183,6 +187,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -204,6 +209,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public RuleElementBlock getBlock()
   {
     return block;
@@ -231,6 +237,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(RuleElementBlock newBlock)
   {
     if (newBlock != block)
@@ -375,7 +382,7 @@ public class ForImpl extends MinimalEObjectImpl.Container implements For
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (separator: ");
     result.append(separator);
     result.append(')');

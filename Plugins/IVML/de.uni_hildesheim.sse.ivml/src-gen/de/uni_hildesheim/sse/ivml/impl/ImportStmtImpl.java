@@ -108,6 +108,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getName()
   {
     return name;
@@ -118,6 +119,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(String newName)
   {
     String oldName = name;
@@ -131,6 +133,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getInterface()
   {
     return interface_;
@@ -141,6 +144,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setInterface(String newInterface)
   {
     String oldInterface = interface_;
@@ -154,6 +158,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getRestriction()
   {
     return restriction;
@@ -181,6 +186,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setRestriction(Expression newRestriction)
   {
     if (newRestriction != restriction)
@@ -309,7 +315,7 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (name: ");
     result.append(name);
     result.append(", interface: ");

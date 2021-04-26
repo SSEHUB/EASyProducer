@@ -71,6 +71,7 @@ public class TypeParametersImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Type> getParam()
   {
     if (param == null)

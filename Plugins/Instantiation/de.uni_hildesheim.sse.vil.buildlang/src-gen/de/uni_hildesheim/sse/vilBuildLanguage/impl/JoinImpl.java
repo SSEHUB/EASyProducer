@@ -90,6 +90,7 @@ public class JoinImpl extends MinimalEObjectImpl.Container implements Join
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JoinVariable getVar1()
   {
     return var1;
@@ -117,6 +118,7 @@ public class JoinImpl extends MinimalEObjectImpl.Container implements Join
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVar1(JoinVariable newVar1)
   {
     if (newVar1 != var1)
@@ -138,6 +140,7 @@ public class JoinImpl extends MinimalEObjectImpl.Container implements Join
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JoinVariable getVar2()
   {
     return var2;
@@ -165,6 +168,7 @@ public class JoinImpl extends MinimalEObjectImpl.Container implements Join
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVar2(JoinVariable newVar2)
   {
     if (newVar2 != var2)
@@ -186,6 +190,7 @@ public class JoinImpl extends MinimalEObjectImpl.Container implements Join
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getCondition()
   {
     return condition;
@@ -213,6 +218,7 @@ public class JoinImpl extends MinimalEObjectImpl.Container implements Join
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCondition(Expression newCondition)
   {
     if (newCondition != condition)

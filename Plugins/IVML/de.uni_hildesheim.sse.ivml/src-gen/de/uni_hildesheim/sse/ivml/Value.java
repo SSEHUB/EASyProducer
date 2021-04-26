@@ -32,10 +32,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>NValue</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>NValue</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>NValue</em>' containment reference.
    * @see #setNValue(NumValue)
@@ -58,10 +54,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>SValue</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>SValue</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>SValue</em>' attribute.
    * @see #setSValue(String)
@@ -84,10 +76,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>QValue</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>QValue</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>QValue</em>' containment reference.
    * @see #setQValue(QualifiedName)
@@ -110,10 +98,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>BValue</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>BValue</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>BValue</em>' attribute.
    * @see #setBValue(String)
@@ -136,10 +120,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>Self</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Self</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Self</em>' attribute.
    * @see #setSelf(String)
@@ -162,10 +142,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>Null Value</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Null Value</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Null Value</em>' attribute.
    * @see #setNullValue(String)
@@ -188,10 +164,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>TValue</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>TValue</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>TValue</em>' containment reference.
    * @see #setTValue(Type)
@@ -214,10 +186,6 @@ public interface Value extends EObject
   /**
    * Returns the value of the '<em><b>Version</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Version</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Version</em>' attribute.
    * @see #setVersion(String)

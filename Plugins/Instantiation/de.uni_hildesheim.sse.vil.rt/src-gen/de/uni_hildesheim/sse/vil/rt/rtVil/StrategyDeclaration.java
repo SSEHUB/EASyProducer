@@ -40,10 +40,6 @@ public interface StrategyDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Name</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
@@ -66,10 +62,6 @@ public interface StrategyDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Param List</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param List</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param List</em>' containment reference.
    * @see #setParamList(ParameterList)
@@ -92,10 +84,6 @@ public interface StrategyDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Conditions</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Conditions</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Conditions</em>' containment reference.
    * @see #setConditions(RuleConditions)
@@ -119,10 +107,6 @@ public interface StrategyDeclaration extends EObject
    * Returns the value of the '<em><b>Var Decls</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var Decls</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var Decls</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getStrategyDeclaration_VarDecls()
@@ -134,10 +118,6 @@ public interface StrategyDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Objective</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Objective</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Objective</em>' containment reference.
    * @see #setObjective(Expression)
@@ -160,10 +140,6 @@ public interface StrategyDeclaration extends EObject
   /**
    * Returns the value of the '<em><b>Weighting</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Weighting</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Weighting</em>' containment reference.
    * @see #setWeighting(WeightingStatement)
@@ -187,10 +163,6 @@ public interface StrategyDeclaration extends EObject
    * Returns the value of the '<em><b>Breakdown</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.rt.rtVil.BreakdownElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Breakdown</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Breakdown</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getStrategyDeclaration_Breakdown()
@@ -203,10 +175,6 @@ public interface StrategyDeclaration extends EObject
    * Returns the value of the '<em><b>Post</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.rt.rtVil.RuleElement}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Post</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Post</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage#getStrategyDeclaration_Post()
