@@ -223,6 +223,16 @@
       <property name="onCommentFormat" value="checkstyle: resume parameter number check"/>
       <property name="checkFormat" value="ParameterNumberCheck"/>
     </module>
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="checkstyle: stop exception type check"/>
+      <property name="onCommentFormat" value="checkstyle: resume exception type check"/>
+      <property name="checkFormat" value="IllegalCatchCheck"/>
+    </module>
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="checkstyle: stop exception type check"/>
+      <property name="onCommentFormat" value="checkstyle: resume exception type check"/>
+      <property name="checkFormat" value="IllegalThrowsCheck"/>
+    </module>
   </module>
   <module name="FileLength">
     <property name="severity" value="error"/>
