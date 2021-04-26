@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Ant
 Bundle-SymbolicName: net.ssehub.easy.libs.ant
 Automatic-Module-Name: net.ssehub.easy.libs.ant
-Bundle-Version: 1.9.4
+Bundle-Version: 1.9.15
 Bundle-ClassPath: ant-launcher.jar,
   ant.jar
 Export-Package: org.apache.tools.ant,
