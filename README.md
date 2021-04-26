@@ -19,16 +19,21 @@ We also provide a snapshot of the most recent developments in terms of a [nightl
 
 Support for Eclipse/JDK
 -----------------------
-EASy-Producer runs well with Eclipse 4.5 and JDK 8 as well as Eclipse 4.7 and JDK 11. However, as we rely on an older version of xText for the EASY-DSLs, development there
-still requires a JDK 8 (see developers guide).
+Since Spring 2021, EASy-Producer is compatible with Eclipse 2021-03 (4.19.0)/JDK 13. Since Eclipse 4.9, a different bundle for Descriptive Services is required, which does not exist on older Eclipse version. We decided to include both, the old and the new bundle, as optional as suggested by some Eclipse page, i.e., EASy-Producer shall still work well with Eclipse 4.5 and JDK 8 as well as Eclipse 4.7 and JDK 11. 
+
+The specification of execution environments still targets JDK 8 (or - to be incrementally upgraded - JDK 6).
 
 Running EASy-Producer/tests within Eclipse
 ------------------------------------------
-We experienced some difficulties creating launch configurations for Eclipse 4.7. As a result, we provide a collection of Eclipse launch configurations in the "launching" folder. Please note that a JDK must be installed and available as installed JRE in Eclipse. See also the readme file there.
+We experienced some difficulties creating launch configurations since Eclipse 4.7. As a result, we provide a collection of Eclipse launch configurations in the "launching" folder. Please note that a JDK must be installed and available as installed JRE in Eclipse. See also the readme file there and the source code setup/plugins section below for required plugins.
 
 Source code setup/plugins
 -------------------------
 Please install the Eclipse Checkstyle plugin. The configurations are compatible with Checkstyle 8.35. Setup a global checkstyle configuration named "SSE Checkstyle Configuration" as a project local configuration pointing to the checkstyle file in the project "EASy-Producer.Eclipse".
+
+Please install also xText 2.25. 
+
+For reducing local execution plugin dependency issues and to ease debugging, we installed also Java XML Streaming API 1.0.1 and Apache Geronimo Activation Plug-in 1.1.0 from Eclipse Orbit, but this may not be needed in your setup.
 
 Build Status
 ------------------

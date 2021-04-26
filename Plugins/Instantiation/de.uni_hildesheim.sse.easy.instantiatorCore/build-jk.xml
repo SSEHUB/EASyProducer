@@ -28,6 +28,10 @@
 			<include name="**/*.jar" />
 			<exclude name="**/commons-io-*.jar"/>
 		</fileset>
+		<!-- local xalan, xerces --> 
+	    <fileset dir="./lib">
+	    	<include name="**/*.jar" />
+	    </fileset>
 	</path>
 	
 	<!-- Targets  -->
