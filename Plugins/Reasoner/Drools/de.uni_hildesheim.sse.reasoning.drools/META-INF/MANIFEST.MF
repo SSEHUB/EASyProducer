@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Drools
 Bundle-SymbolicName: net.ssehub.easy.reasoning.drools;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.reasoning.drools
 Bundle-Version: 0.6.3
 Bundle-Activator: net.ssehub.easy.reasoning.drools.Activator
 Import-Package: org.osgi.framework

@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AspectJ Instantiator Test
 Bundle-SymbolicName: net.ssehub.easy.instantiation.aspectj.tests;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.instantiation.aspectj.tests
 Bundle-Version: 0.0.1
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1",

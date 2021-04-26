@@ -10,3 +10,4 @@ Require-Bundle: org.eclipse.ui,
  de.uni_hildesheim.sse.ivml.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
+Automatic-Module-Name: ConstraintEditor

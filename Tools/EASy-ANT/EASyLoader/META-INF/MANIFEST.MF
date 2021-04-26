@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy standalone loader
 Bundle-SymbolicName: net.ssehub.easy.loader;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.loader
 Bundle-Version: 1.2.0
 Export-Package: de.uni_hildesheim.sse.easy.ant,
  de.uni_hildesheim.sse.easy.loader,

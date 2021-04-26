@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: DSL Core UI
 Bundle-SymbolicName: net.ssehub.easy.dslCore.ui;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.dslCore.ui
 Bundle-Version: 1.2.0
 Bundle-Activator: net.ssehub.easy.dslCore.ui.Activator
 Bundle-Vendor: SSE University of Hildesheim

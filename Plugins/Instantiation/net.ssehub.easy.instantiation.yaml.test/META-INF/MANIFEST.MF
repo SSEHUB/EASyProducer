@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Yaml Instantiation Support Test
 Bundle-SymbolicName: net.ssehub.easy.instantiation.yaml.test
+Automatic-Module-Name: net.ssehub.easy.instantiation.yaml.test
 Bundle-Version: 1.0.0.0
 Bundle-Activator: net.ssehub.easy.instantiation.yaml.test.Activator
 Require-Bundle: org.eclipse.ui,

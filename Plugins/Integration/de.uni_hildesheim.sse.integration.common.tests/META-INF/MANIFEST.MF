@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: IVML integration commons (tests)
 Bundle-SymbolicName: net.ssehub.easy.integration.common.tests;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.integration.common.tests
 Bundle-Version: 0.0.1
 Bundle-Vendor: SSE University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

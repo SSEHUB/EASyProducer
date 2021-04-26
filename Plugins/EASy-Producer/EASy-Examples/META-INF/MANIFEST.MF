@@ -5,6 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.producer.examples;singleton:=true
 Bundle-Version: 1.2.0
 Eclipse-BundleShape: dir
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Automatic-Module-Name: net.ssehub.easy.producer.examples
 Require-Bundle: net.ssehub.easy.instantiation.velocity,
  net.ssehub.easy.instantiation.xvcl,
  net.ssehub.easy.instantiation.ant,

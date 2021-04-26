@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven
 Bundle-SymbolicName: net.ssehub.easy.libs.maven
+Automatic-Module-Name: net.ssehub.easy.libs.maven
 Bundle-Version: 3.2.3.2
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: aether-api-0.9.0.M2.jar,

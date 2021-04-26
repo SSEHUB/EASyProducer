@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: drools2.tests
 Bundle-SymbolicName: net.ssehub.easy.reasoning.drools2.tests
+Automatic-Module-Name: net.ssehub.easy.reasoning.drools2.tests
 Bundle-Version: 0.0.1
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

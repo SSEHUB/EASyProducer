@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Java Instantiation Support
 Bundle-SymbolicName: net.ssehub.easy.instantiation.java;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.instantiation.java
 Bundle-Version: 1.2.0
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xvcl
 Bundle-SymbolicName: net.ssehub.easy.libs.xvcl
+Automatic-Module-Name: net.ssehub.easy.libs.xvcl
 Bundle-Version: 3.3.0.3
 Bundle-ClassPath: commons-logging-1.1.jar,
   dtdparser121.jar,

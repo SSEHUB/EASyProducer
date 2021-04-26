@@ -4,6 +4,7 @@ Bundle-Name: de.uni_hildesheim.sse.vil.expressions.ui
 Bundle-Vendor: SSE - University of Hildesheim
 Bundle-Version: 1.2.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.expressions.ui; singleton:=true
+Automatic-Module-Name: de.uni_hildesheim.sse.vil.expressions.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
  org.eclipse.xtext.ui,

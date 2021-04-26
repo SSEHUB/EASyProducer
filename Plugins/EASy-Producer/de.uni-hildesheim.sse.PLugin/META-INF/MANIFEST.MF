@@ -14,6 +14,7 @@ Require-Bundle:
  org.eclipse.jdt.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: net.ssehub.easy.producer.eclipse
 Bundle-Vendor: University of Hildesheim - SSE
 Export-Package: net.ssehub.easy.producer.eclipse,
  net.ssehub.easy.producer.eclipse.contributions,

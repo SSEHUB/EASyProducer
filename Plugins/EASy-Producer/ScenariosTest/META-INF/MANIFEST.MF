@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ScenariosTest
 Bundle-SymbolicName: net.ssehub.easy.producer.scenario_tests;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.producer.scenario_tests
 Bundle-Version: 0.0.1
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

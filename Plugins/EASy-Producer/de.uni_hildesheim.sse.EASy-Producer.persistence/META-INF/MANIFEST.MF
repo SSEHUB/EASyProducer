@@ -15,6 +15,7 @@ Require-Bundle: net.ssehub.easy.varModel,
  net.ssehub.easy.libs.commons.io
 Import-Package: org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Automatic-Module-Name: net.ssehub.easy.producer.core
 Bundle-ActivationPolicy: lazy
 Export-Package: net.ssehub.easy.producer.core.contributions,
  net.ssehub.easy.producer.core.mgmt,

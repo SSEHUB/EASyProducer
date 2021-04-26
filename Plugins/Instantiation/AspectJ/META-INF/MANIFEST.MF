@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AspectJ
 Bundle-SymbolicName: net.ssehub.easy.libs.aspectj.tools
+Automatic-Module-Name: net.ssehub.easy.libs.aspectj.tools
 Bundle-Version: 1.8.6
 Bundle-ClassPath: aspectjtools.jar
 Bundle-Vendor: SSE, University of Hildesheim

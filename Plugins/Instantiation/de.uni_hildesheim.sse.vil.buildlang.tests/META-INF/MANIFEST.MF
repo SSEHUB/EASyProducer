@@ -4,6 +4,7 @@ Bundle-Name: de.uni_hildesheim.sse.vil.buildlang.tests
 Bundle-Vendor: SSE - University of Hildesheim
 Bundle-Version: 0.0.1
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.buildlang.tests; singleton:=true
+Automatic-Module-Name: de.uni_hildesheim.sse.vil.buildlang.tests
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,

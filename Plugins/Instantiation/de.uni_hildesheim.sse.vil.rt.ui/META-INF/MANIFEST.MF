@@ -4,6 +4,7 @@ Bundle-Name: de.uni_hildesheim.sse.vil.rt.ui
 Bundle-Vendor: SSE - University of Hildesheim
 Bundle-Version: 1.2.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt.ui; singleton:=true
+Automatic-Module-Name: de.uni_hildesheim.sse.vil.rt.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.rt;visibility:=reexport,
  org.eclipse.xtext.ui,

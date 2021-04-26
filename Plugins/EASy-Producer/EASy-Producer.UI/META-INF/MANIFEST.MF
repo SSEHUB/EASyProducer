@@ -5,6 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.producer.ui;singleton:=true
 Bundle-Version: 1.2.0
 Bundle-Activator: net.ssehub.easy.producer.ui.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
+Automatic-Module-Name: net.ssehub.easy.producer.ui
 Require-Bundle: 
  org.eclipse.ui,
  org.eclipse.core.runtime,

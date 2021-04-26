@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Velocity Instantiator
 Bundle-SymbolicName: net.ssehub.easy.instantiation.velocity;singleton:=true
+Automatic-Module-Name: de.uni-hildesheim.sse.easy.instantiator.velocity
 Bundle-Version: 1.8.4
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

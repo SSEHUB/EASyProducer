@@ -5,6 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.producer.core.tests
 Bundle-Version: 0.0.1
 Fragment-Host: net.ssehub.easy.producer.core;bundle-version="0.7.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: net.ssehub.easy.producer.core.tests
 Bundle-ClassPath: .
 Require-Bundle: org.junit;bundle-version="4.8.1",
  net.ssehub.easy.instantiation.velocity;bundle-version="1.7.13",

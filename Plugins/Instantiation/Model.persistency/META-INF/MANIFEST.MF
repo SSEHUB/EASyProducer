@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: SSE Variability Model (IVML), optional persistency mechanisms
 Bundle-SymbolicName: net.ssehub.easy.instantiation.serializer.xml;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.instantiation.serializer.xml
 Bundle-Version: 1.2.0
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

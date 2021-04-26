@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Yaml Instantiation Support
 Bundle-SymbolicName: net.ssehub.easy.instantiation.yaml
+Automatic-Module-Name: net.ssehub.easy.instantiation.yaml
 Bundle-Version: 1.0.0.0
 Bundle-Activator: io.ssehub.easy.instantiation.yaml.Activator
 Bundle-Vendor: University of Hildesheim, SSE
