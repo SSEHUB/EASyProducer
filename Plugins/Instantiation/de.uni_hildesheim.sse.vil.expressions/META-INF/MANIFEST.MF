@@ -6,7 +6,7 @@ Bundle-Version: 1.2.0
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.expressions; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.expressions
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
+Require-Bundle: org.eclipse.xtext;bundle-version="2.12.0";visibility:=reexport,
  org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
  org.eclipse.xtext.generator;resolution:=optional,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,

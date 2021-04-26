@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.instantiation.ant;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.ant
 Bundle-Version: 1.9.4.1
 Bundle-Vendor: University of Hildesheim, SSE
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/instantiator.xml
 Require-Bundle: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.basics,
