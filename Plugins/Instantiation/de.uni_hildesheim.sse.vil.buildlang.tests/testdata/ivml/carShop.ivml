@@ -1,0 +1,27 @@
+project CarShop {
+
+    version v0;
+    typedef PositiveInteger Integer with (PositiveInteger > 0);
+    enum CombustionType {Gasoline, Diesel};
+    abstract compound Engine {
+        PositiveInteger horsepower;
+    }
+
+    compound CombustionEngine refines Engine {
+        CombustionType combustion;
+        PositiveInteger tankSize;
+    }
+
+    compound ElectricEngine refines Engine {
+        PositiveInteger batterySize;
+    }
+
+    Engine engine = ElectricEngine {
+        horsepower = 5,
+        batterySize = 10
+    };
+    
+    freeze {
+      .;
+    }
+}

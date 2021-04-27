@@ -1,0 +1,4 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    cfg <- <config>
+    -> selectCar(ElectricEngine, String) with (CarShop::engine, A)
+        -> println(Any) with (Electric)

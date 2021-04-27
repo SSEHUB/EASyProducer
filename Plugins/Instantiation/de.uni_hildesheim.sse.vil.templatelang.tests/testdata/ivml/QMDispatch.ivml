@@ -1,0 +1,114 @@
+project QMDispatch {
+
+    typedef PositiveInteger Integer with (PositiveInteger > 0 and isDefined(PositiveInteger));
+    typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
+    typedef ClassString OptionalClassString with (size(ClassString) > 0 and isDefined(ClassString));
+    typedef ArtifactString String with (size(ArtifactString) > 0 and matches(ArtifactString, ".+:.+:.+") and isDefined(ArtifactString)); 
+    typedef OptionalArtifactString String with (size(OptionalArtifactString) > 0 implies matches(OptionalArtifactString, ".+:.+:.+")); 
+    typedef OptionalClassString String;
+    typedef Description String;
+    typedef OptionalNaturalNumber Integer with (OptionalNaturalNumber >= 0);
+
+    compound FieldType {
+        NonEmptyString name;
+        ClassString class;
+        OptionalArtifactString artifact; // optional
+        OptionalClassString serializer; // optional
+        OptionalArtifactString serializerArtifact; // optional
+        Boolean isTimestamp = false;
+    }
+    
+    compound RecordFieldType refines FieldType {
+        Fields fields;      
+    }
+    
+    compound Field { // in order to fit the data structure in the Storm
+        NonEmptyString name;
+        refTo(FieldType) type;
+        Boolean keyPart = false; 
+        PositiveInteger nameSuffix = 0;
+    }
+    typedef Fields sequenceOf(Field) with (Fields->collect(f|f.name).hasDuplicates() == false/* and isDefined(Fields)*/);
+
+    abstract compound CStructuralProperty {
+        NonEmptyString name;
+    }
+
+    compound CDataProperty refines CStructuralProperty {
+    }
+
+    // for the moment we assume that we will not have nested Tuples
+    compound Tuple refines CDataProperty { // this conception is based on how the Storm describes the stream
+        NonEmptyString name;
+        Fields fields;
+        Constraint fieldsCheck = size(fields) > 0; 
+    } 
+    typedef Tuples sequenceOf(Tuple) /*with (isDefined(Tuples))*/;
+
+    compound CIrreversibleProperty refines CStructuralProperty {
+        Any type; // must be redefined
+        Any value; // must be redefined
+    }
+
+    compound CReversibleProperty refines CIrreversibleProperty {
+    }
+
+    compound Parameter refines CReversibleProperty {
+        //NonEmptyString name;
+    }
+    typedef Parameters sequenceOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size()/*  and isDefined(Parameters)*/);
+
+    compound DataElement {
+        NonEmptyString name;
+        Description description;
+        ArtifactString artifact;
+        NonEmptyString storageLocation;
+        OptionalNaturalNumber timeLine;
+        OptionalNaturalNumber cutoffCapacity;
+    }
+
+    compound DataSource refines DataElement {
+        Tuples input;
+        Parameters parameters;
+        ClassString sourceCls;
+        Boolean supportsHadoop = false;
+        setOf(Constraint) constraints;
+        Integer aggregationFrequency = 60000;
+    }
+
+    FieldType FieldTypeVar_17 = FieldType {
+        name = "LongWritable", 
+        class = "org.apache.hadoop.io.LongWritable"
+    };
+    
+    FieldType FieldTypeVar_18 = FieldType {
+        name = "Text", 
+        class = "org.apache.hadoop.io.Text"
+    };
+
+    DataSource DataSourceVar_12 = DataSource {
+        name = "HadoopElectricSource",
+        sourceCls = "eu.qualimaster.hadoop.HadoopElectricSource",
+        input = {
+            Tuple {
+                name = "elData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(FieldTypeVar_17)
+                    }, Field {
+                        name = "value", 
+                        type = refBy(FieldTypeVar_18)
+                    }
+                }
+            }
+        },      
+        supportsHadoop = true,
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT"
+    };
+    
+    freeze {
+       .;
+    }
+
+}

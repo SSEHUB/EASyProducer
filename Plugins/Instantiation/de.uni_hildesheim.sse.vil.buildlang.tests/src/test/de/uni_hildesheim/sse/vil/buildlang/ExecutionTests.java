@@ -1198,4 +1198,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertSelfInstantiate("compounds3", MAIN_RULE, "compounds3", null);
     }
 
+    /**
+     * Dynamic dispatch.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCarShop() throws IOException {
+        assertSelfInstantiate("carShop", MAIN_RULE, "CarShop", null);
+    }
+
 }

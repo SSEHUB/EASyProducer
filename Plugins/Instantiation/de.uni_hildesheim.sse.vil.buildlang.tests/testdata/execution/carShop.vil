@@ -1,0 +1,21 @@
+@advice(CarShop)
+vilScript CarShop (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        CarShop cfg = config;
+        selectCar(cfg.engine, "A");
+    }
+
+    selectCar(ElectricEngine engine, String engineType) = : {
+        println("Electric");
+    }
+
+    selectCar(CombustionEngine engine, String engineType) = : {
+        println("Combustion");
+    }
+
+    selectCar(Engine engine, String engineType) = : {
+        println("Unexpected engine type selected.");
+    }
+
+}

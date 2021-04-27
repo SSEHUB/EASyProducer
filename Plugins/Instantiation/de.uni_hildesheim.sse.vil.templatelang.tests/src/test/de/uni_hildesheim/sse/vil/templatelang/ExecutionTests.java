@@ -1579,4 +1579,14 @@ public class ExecutionTests extends AbstractExecutionTest {
         Locale.setDefault(loc);
     }
 
+    /**
+     * Tests a template about dynamic dispatch to sub-templates (contributed by S. El-Sharkawy).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testQmDispatch() throws IOException {
+        assertEqualWithIvml("qmDispatch", "QMDispatch");
+    }
+
 }

@@ -79,8 +79,10 @@ public class IvmlSequenceConversionOperationDescriptor extends IvmlOperationDesc
         Object result;
         if (args[0] instanceof Sequence) {
             result = args[0];
-        } else {
+        } else if (args[0] != null) {
             result = ((DecisionVariable) args[0]).variables();
+        } else {
+            result = null;
         }
         return result;
     }

@@ -1,0 +1,14 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    qm <- <config>
+    src <- QMDispatch::DataSourceVar_12
+    -> getHadoopType(Tuples, Boolean, Boolean) with (QMDispatch::DataSource::input, true, true)
+        -> [](Sequence, Integer) with ({QMDispatch::DataSource::input [0]}, 0) = QMDispatch::DataSource::input [0]
+        -> getHadoopType(Tuple, Boolean, Boolean) with (QMDispatch::DataSource::input [0], true, true)
+            visit if-branch
+            -> [](Sequence, Integer) with ({QMDispatch::Tuple::fields [0], QMDispatch::Tuple::fields [1]}, 0) = QMDispatch::Tuple::fields [0]
+            -> getHadoopType(Field, Boolean) with (QMDispatch::Tuple::fields [0], true)
+                -> getHadoopType(FieldType, Boolean) with (QMDispatch::Field::type, true)
+                    -> length(String) with (org.apache.hadoop.io.LongWritable) = 33
+                    -> >(Integer, Integer) with (33, 0) = true
+                    visit if-branch
+    s <- org.apache.hadoop.io.LongWritable

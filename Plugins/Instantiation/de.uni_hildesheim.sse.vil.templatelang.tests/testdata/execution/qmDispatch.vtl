@@ -1,0 +1,49 @@
+@advice(QMDispatch)
+template qmDispatch(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        QMDispatch qm = config;
+        DataSource src = qm.DataSourceVar_12;
+        String s = getHadoopType(src.input, true, true);
+        '${s}'
+    }
+
+    def String getHadoopType(Tuples tuples, Boolean input, Boolean key) {
+        getHadoopType(tuples[0], input, key);
+    }
+
+    def String getHadoopType(Tuple tuple, Boolean input, Boolean key) {
+        if (key) {
+            getHadoopType(tuple.fields[0], input);
+        } else {
+            getHadoopType(tuple.fields[1], input);
+        }
+    }
+
+    def String getHadoopType(Field field, Boolean input) {
+        getHadoopType(field.type, input);
+    }
+
+    def String getHadoopType(FieldType type, Boolean input) {
+        if (type.class.length() > 0) {
+            type.class;
+        } else {
+            translateHadoopType(type.name, input);
+        }
+    }
+
+    def String getHadoopType(RecordFieldType type, Boolean input) {
+        type.name;
+    }
+
+    def String translateHadoopType(String type, Boolean input) {
+        switch(type) {
+            "Integer" : "IntWritable",
+            "Long" : "LongWritable",
+            "String" : "Text",
+            default : type
+        }
+        type;
+    }
+
+}
