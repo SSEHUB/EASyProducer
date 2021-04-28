@@ -1,0 +1,26 @@
+project PL_Test_Closure {
+
+	version v0;
+	compound LinkNode {
+		Integer data;
+		sequenceOf(refTo(LinkNode)) seq_next;
+	}
+
+    LinkNode headInst;
+	refTo(LinkNode) head = refBy(headInst);
+	refBy(head).seq_next = {second};
+	
+    LinkNode secondInst;
+	refTo(LinkNode) second = refBy(secondInst);
+	refBy(second).seq_next = {tail};
+	
+    LinkNode tailInst;
+	refTo(LinkNode) tail = refBy(tailInst);
+	refBy(tail).seq_next = {head};
+	
+	sequenceOf(refTo(LinkNode)) seq_Nodes = {head, second, tail};
+	setOf(refTo(LinkNode)) is_closure = seq_Nodes->closure(p|p.seq_next);
+	Boolean is_Ac = seq_Nodes->isAcyclic(p|p.seq_next);
+
+
+}

@@ -1,0 +1,40 @@
+project PL_Test_Closure2 {
+
+	version v0;
+	compound Node{
+		Integer data;
+        	refTo(Node) next;
+    }
+    // make a linked list by references
+    Node headInst;
+    refTo(Node) head = refBy(headInst);
+	refBy(head).data = 888;
+	refBy(head).next = second;
+	
+    Node secondInst;
+	refTo(Node) second = refBy(secondInst);
+	refBy(second).data = 222;
+	refBy(second).next = third;
+	
+    Node thirdInst;
+    refTo(Node) third = refBy(thirdInst);
+	refBy(third).data = 333;
+	refBy(third).next = fourth;
+	
+    Node fourthInst;
+	refTo(Node) fourth = refBy(fourthInst);
+	refBy(fourth).data = 444;
+	refBy(fourth).next = tail;
+	
+    Node tailInst;
+	refTo(Node) tail = refBy(tailInst);
+    refBy(tail).data = 111;
+    refBy(tail).next = head;
+    //put them into a sequence
+    sequenceOf(refTo(Node)) seq_Nodes = { 
+		head,second,third,fourth,tail
+    }; 
+    setOf(refTo(Node)) is_closure = seq_Nodes -> closure(p|p.next);
+  
+    Boolean is_Ac = seq_Nodes->isAcyclic(p|p.next);
+}

@@ -2,9 +2,15 @@ package test.net.ssehub.easy.reasoning.core.reasoner;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.values.BooleanValue;
+import net.ssehub.easy.varModel.model.values.ContainerValue;
 
 /**
  * Configures the compound tests for reasoners.
@@ -158,4 +164,37 @@ public class CompoundTests extends AbstractTest {
     public void compoundShadowingTest() {
         reasoningTest("CompoundShadowTest.ivml", 2);
     } 
+
+    /**
+     * Closure test [contributed by Ke Liu].
+     * 
+     * @throws ModelQueryException in case that a model query fails
+     */
+    @Test
+    public void closureTest() throws ModelQueryException {
+        Configuration cfg = reasoningTest("PL_Test_Closure.ivml", 0);
+        IDecisionVariable closure = cfg.getDecision("is_closure", false);
+        Assert.assertTrue(closure.getValue() instanceof ContainerValue);
+        ContainerValue closureValue = (ContainerValue) closure.getValue();
+        Assert.assertEquals(3, closureValue.getElementSize());
+        IDecisionVariable isAc = cfg.getDecision("is_Ac", false);
+        Assert.assertEquals(BooleanValue.FALSE, isAc.getValue());
+    }     
+
+    /**
+     * Closure test [contributed by Ke Liu].
+     * 
+     * @throws ModelQueryException in case that a model query fails
+     */
+    @Test
+    public void closureTest2() throws ModelQueryException {
+        Configuration cfg = reasoningTest("PL_Test_Closure2.ivml", 0);
+        IDecisionVariable closure = cfg.getDecision("is_closure", false);
+        Assert.assertTrue(closure.getValue() instanceof ContainerValue);
+        ContainerValue closureValue = (ContainerValue) closure.getValue();
+        Assert.assertEquals(5, closureValue.getElementSize());
+        IDecisionVariable isAc = cfg.getDecision("is_Ac", false);
+        Assert.assertEquals(BooleanValue.FALSE, isAc.getValue());
+    }     
+
 }
