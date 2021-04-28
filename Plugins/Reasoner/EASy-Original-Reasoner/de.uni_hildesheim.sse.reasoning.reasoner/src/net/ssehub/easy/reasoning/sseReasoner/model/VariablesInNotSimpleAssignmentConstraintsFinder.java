@@ -26,7 +26,10 @@ import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.datatypes.Compound;
+import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
+import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -199,7 +202,7 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
                 ConstraintSyntaxTree operand = call.getOperand();
                 if (operand instanceof Variable || operand instanceof CompoundAccess) {
                     ConstraintSyntaxTree param0 = call.getParameter(0);
-                    if (param0 instanceof ConstantValue
+                    if (param0 instanceof ConstantValue // don't analyze "constants"
                         || param0 instanceof ContainerInitializer
                         || param0 instanceof CompoundInitializer) {
                         analyze = false; 
@@ -255,8 +258,17 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
         }
         access.accept(evaluator);
         IDecisionVariable var = evaluator.getResultVariable();
-        if (null != var) {
+        if (null != var) { // do we have a dynamic resolution
             modifyRelation(var.getDeclaration(), constraint);
+        } else { // else try a static resolution of the access, we just need the declaration
+            try {
+                IDatatype cType = Reference.dereference(access.getCompoundExpression().inferDatatype());
+                if (cType instanceof Compound) {
+                    modifyRelation(((Compound) cType).getElement(access.getSlotName()), constraint);
+                }
+            } catch (CSTSemanticException e) {
+                // no type, no action
+            }
         }
         evaluator.clearResult();
 

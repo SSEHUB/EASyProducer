@@ -286,7 +286,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     @Override
     public void notifyResolved(IDecisionVariable compound, String slotName, IDecisionVariable resolved) {
         if (!(resolved.isLocal())) {
-            usedVariables.add(resolved);                
+            usedVariables.add(resolved);
         }
     }
     
