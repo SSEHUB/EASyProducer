@@ -764,7 +764,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * @return the dereferenced variable (<b>null</b> if <code>var</code> was <b>null</b>)
      */
     public static IDecisionVariable dereference(IDecisionVariable var) {
-        if (null != var) {
+        if (null != var && null != var.getConfiguration()) { // conf may be null for local variables
             AbstractVariable varDecl = var.getDeclaration();
             IDatatype type = varDecl.getType();
             while (type instanceof Reference) {
@@ -778,7 +778,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                             res = findInParents(var, refDecl.getName());
                         }
                         var = res;
-                    } // TODO valueEx
+                    }
                 } else {
                     break;
                 }

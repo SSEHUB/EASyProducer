@@ -388,8 +388,8 @@ class ContainerIterators {
             } else {
                 resultContainer = null;
             }
-            nextValues = new ArrayList<Value>();
             handleResult(handleNextValue(iter, resultContainer, data, nextValues), result, value, -1);
+            nextValues = new ArrayList<Value>();
             Value val = value.getValue();
             if (val instanceof ContainerValue) {
                 ContainerValue valContainer = (ContainerValue) val;
@@ -445,12 +445,15 @@ class ContainerIterators {
                 data.put(DATA_CLOSURE_MARKED, marking);
             }
             if (!marking.contains(value)) {
-                nextValues.add(value);
-                if (null != result) {
-                    result.addElement(value);
-                    changed = true;
+                if (null != nextValues) {
+                    nextValues.add(value);
+                } else {
+                    if (null != result) {
+                        result.addElement(value);
+                        changed = true;
+                    }
+                    marking.add(value);
                 }
-                marking.add(value);
             } else {
                 data.put(DATA_CLOSURE_CYCLIC, Boolean.TRUE);
             }
@@ -499,59 +502,6 @@ class ContainerIterators {
         }
         
     };
-    
-    /**
-     * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#CLOSURE}.
-     */
-    /*static final IIteratorEvaluator CLOSURE = new CollectingIteratorEvaluator() {
-        
-        @Override
-        public Value aggregate(EvaluationAccessor result, Value iter, EvaluationAccessor value, 
-            Map<Object, Object> data) throws ValueDoesNotMatchTypeException {
-            Value rValue = result.getValue();
-            List<Value> nextValues = null;
-            if (rValue instanceof ContainerValue) {
-                ContainerValue resultContainer = (ContainerValue) rValue;
-                nextValues = new ArrayList<Value>();
-                handleNextValue(iter, resultContainer, data, nextValues);
-                Value val = value.getValue();
-                if (val instanceof ContainerValue) {
-                    ContainerValue valContainer = (ContainerValue) val;
-                    for (int e = 0; e < valContainer.getElementSize(); e++) {
-                        handleNextValue(valContainer.getElement(e), 
-                            resultContainer, data, nextValues);
-                    }
-                } else if (val instanceof ReferenceValue) {
-                    handleNextValue(val, resultContainer, data, nextValues);
-                }
-            }
-            
-            Value res = BooleanValue.FALSE; // just go on
-            if (null != nextValues) {
-                res = new ListWrapperValue(nextValues);
-            } 
-            return res;
-        }*/
-
-        /**
-         * Handles the next value by checking whether it was already added.
-         * 
-         * @param value the value
-         * @param result the result container to be changed if not already added
-         * @param data the temporary data storing already added elements
-         * @param nextValues the next values to be considered for iteration
-         * @throws ValueDoesNotMatchTypeException if adding <code>value</code> to <code>result</code> is failing
-         */
-        /*private void handleNextValue(Value value, ContainerValue result, Map<Object, Object> data, 
-            List<Value> nextValues) throws ValueDoesNotMatchTypeException {
-            if (!data.containsKey(value)) {
-                nextValues.add(value);
-                result.addElement(value);
-                data.put(value,  null);
-            }
-        }
-
-    };*/
     
     /**
      * Implements {@link net.ssehub.easy.varModel.model.datatypes.Container#SORTED_BY}.

@@ -130,7 +130,7 @@ public class Reference extends CustomDatatype {
         if (super.isAssignableFrom(type) && type instanceof Reference) {
             Reference r = (Reference) type;
             if (null == this.type) {
-                isAssignable = true; // this is akin to Reference.INSTANCE so everything reference can be assinged
+                isAssignable = true; // this is akin to Reference.INSTANCE so everything reference can be assigned
             } else {
                 if (null != r.type) {
                     isAssignable = this.type.isAssignableFrom(DerivedDatatype.resolveToBasis(r.type));

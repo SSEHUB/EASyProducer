@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 
 /**
@@ -31,12 +33,19 @@ public class ReferenceOperations {
         
         @Override
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result;
+            EvaluationAccessor result = null;
             if (null != operand) {
-                result = ConstantAccessor.POOL.getInstance().bind(operand.getDereferencedValue(), 
-                    false, operand.getContext());
-            } else {
-                result = null;
+                IDecisionVariable var = operand.getVariable();
+                if (var != null) { // dereferencing the variable allows for side-effect operations
+                    IDecisionVariable deref = Configuration.dereference(var);
+                    if (deref != var) {
+                        result = VariableAccessor.POOL.getInstance().bind(deref, operand.getContext());
+                    }
+                }
+                if (null == result) { // fallback, deref as value, no side-effect operations possible
+                    result = ConstantAccessor.POOL.getInstance().bind(operand.getDereferencedValue(), 
+                        false, operand.getContext());
+                }
             }
             return result;
         }

@@ -1775,7 +1775,18 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                     ok = false;
                 } else {
                     if (references) {
-                        values[s] = result.getReferenceValue();
+                        Value val = result.getValue();
+                        if (null == val) {
+                            error("cannot evaluate container initializer expression, leads to null/no reference", 
+                                Message.CODE_RESOLUTION);        
+                            ok = false;
+                        } else {
+                            if (TypeQueries.isReference(val.getType())) { // the parser accepts both
+                                values[s] = result.getValue();
+                            } else {
+                                values[s] = result.getReferenceValue();
+                            }
+                        }
                     } else {
                         Value val = result.getValue();
                         // Fails for one test case with AssignmentResolver-Init
