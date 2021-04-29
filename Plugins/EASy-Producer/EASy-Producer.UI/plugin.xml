@@ -2,6 +2,13 @@
 <?eclipse version="3.4"?>
 <plugin>
 
+   <extension id="application" point="org.eclipse.core.runtime.applications">
+      <application>
+         <run class="net.ssehub.easy.producer.ui.application.Application">
+         </run>
+      </application>
+   </extension>
+
    <extension
          point="org.eclipse.ui.newWizards">
       <category
@@ -156,5 +163,46 @@
         id="de.uni_hildesheim.sse.easy.ui.configuration.ProjectConfigurationPage">
      </page>
    </extension>
+   
+   <extension
+         id="EASyProducer"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.ui.ide.workbench"
+            name="%productName">
+         <property
+               name="appName"
+               value="%productName">
+         </property>
+         <property
+               name="startupForegroundColor"
+               value="ffffff">
+         </property>
+         <property
+               name="startupMessageRect"
+               value="7,265,320,25">
+         </property>
+         <property
+               name="startupProgressRect"
+               value="2,290,450,10">
+         </property>
+         <property
+               name="aboutImage"
+               value="eclipse_lg.png">
+         </property>
+         <property
+               name="aboutText"
+               value="%productBlurb">
+         </property>
+         <property
+               name="windowImages"
+               value="eclipse16.png,eclipse32.png,eclipse48.png">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
+         </property>
+      </product>
+   </extension>   
 
 </plugin>

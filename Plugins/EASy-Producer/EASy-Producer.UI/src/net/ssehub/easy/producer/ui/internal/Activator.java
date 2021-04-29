@@ -1,9 +1,16 @@
 package net.ssehub.easy.producer.ui.internal;
 
+import java.net.URL;
+
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory;
 import net.ssehub.easy.producer.core.mgmt.VilArgumentProvider;
@@ -22,6 +29,11 @@ public class Activator extends AbstractUIPlugin {
      */
     public static final String PLUGIN_ID = "net.ssehub.easy.producer.ui"; //$NON-NLS-1$
 
+    public static final String PRE = "icons/";
+    public static final String ERROR = PRE + "error.png";
+    public static final String WARNING = PRE + "warning.png";
+    public static final String LOGO = PRE + "logo_icon.png";
+    
     /**
      * The shared instance.
      */
@@ -88,6 +100,37 @@ public class Activator extends AbstractUIPlugin {
      */
     public static ImageDescriptor getImageDescriptor(String path) {
         return imageDescriptorFromPlugin(PLUGIN_ID, path);
+    }
+    
+    /**
+     * Get icon by path.
+     * 
+     * @param path the path to the image/icon
+     * @return the image/icon
+     */
+    public static Image getImage(String path) {
+        URL url = Activator.class.getClassLoader().getResource(path);
+        return ImageDescriptor.createFromURL(url).createImage();
+    }
+    
+    /**
+     * Returns the EASy logger for the specified class.
+     * 
+     * @param cls the class to return the logger for
+     * @return the logger
+     */
+    public static EASyLogger getLogger(Class<?> cls) {
+        return EASyLoggerFactory.INSTANCE.getLogger(cls, PLUGIN_ID);        
+    }
+    
+    /**
+     * Returns the version of the specified bundle as specified in its manifest.
+     * 
+     * @return The version in the following format: <tt>&lt;number&gt;.&lt;number&gt;.&lt;number&gt;</tt>
+     */
+    public static String getVersion() {
+        Bundle bundle = Platform.getBundle(PLUGIN_ID);
+        return (null != bundle) ? bundle.getVersion().toString() : "<unknown version>"; 
     }
 
 }
