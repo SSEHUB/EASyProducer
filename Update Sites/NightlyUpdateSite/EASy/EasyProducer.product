@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?pde version="3.5"?>
+
+<product name="%productName" uid="net.ssehub.easy.producer.ui.EasyProducer" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.2.0" useFeatures="false" includeLaunchers="true">
+
+   <aboutInfo>
+      <image path="eclipse_lg.png"/>
+      <text>
+         %productBlurb
+      </text>
+   </aboutInfo>
+
+   <configIni use="default">
+   </configIni>
+
+   <launcherArgs>
+      <programArgs>-consoleLog -debug -clean
+      </programArgs>
+      <vmArgs>-Xms180m -Xmx6036m -Deasy.logging.level=DEBUG
+      </vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      </vmArgsMac>
+   </launcherArgs>
+
+   <windowImages i16="eclipse16.png" i32="eclipse32.png" i48="eclipse48.png"/>
+
+   <splash
+      startupProgressRect="2,290,450,10"
+      startupMessageRect="7,265,320,25"
+      startupForegroundColor="ffffff" />
+   <launcher>
+      <win useIco="false">
+         <bmp/>
+      </win>
+   </launcher>
+
+
+   <vm>
+      <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-13</windows>
+   </vm>
+
+   <license>
+        <url>http://www.apache.org/licenses/</url>
+        <text>
+   Apache License
+
+Version 2.0, January 2004
+http://www.apache.org/licenses/
+
+   
+TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   
+
+1. Definitions.
+
+      
+
+    &quot;License&quot; shall mean the terms and conditions for use, reproduction,
+
+    and distribution as defined by Sections 1 through 9 of this document.
+
+
+    &quot;Licensor&quot; shall mean the copyright owner or entity authorized by
+    the copyright owner that is granting the License.
+
+
+
+    &quot;Legal Entity&quot; shall mean the union of the acting entity and all
+
+    other entities that control, are controlled by, or are under common
+
+    control with that entity. For the purposes of this definition,
+
+    &quot;control&quot; means (i) the power, direct or indirect, to cause the
+    direction or management of such entity, whether by contract or
+    otherwise, or (ii) ownership of fifty percent (50%) or more of the
+    outstanding shares, or (iii) beneficial ownership of such entity.
+
+
+    &quot;You&quot; (or &quot;Your&quot;) shall mean an individual or Legal Entity
+    exercising permissions granted by this License.
+
+
+    &quot;Source&quot; form shall mean the preferred form for making modifications,
+
+    including but not limited to software source code, documentation
+    
+    source, and configuration files.
+
+
+    &quot;Object&quot; form shall mean any form resulting from mechanical
+
+    transformation or translation of a Source form, including but
+
+    not limited to compiled object code, generated documentation,
+
+    and conversions to other media types.
+
+
+    &quot;Work&quot; shall mean the work of authorship, whether in Source or
+
+    Object form, made available under the License, as indicated by a
+    copyright notice that is included in or attached to the work
+
+    (an example is provided in the Appendix below).
+
+
+    &quot;Derivative Works&quot; shall mean any work, whether in Source or Object
+
+    form, that is based on (or derived from) the Work and for which the
+
+    editorial revisions, annotations, elaborations, or other modifications
+
+    represent, as a whole, an original work of authorship. For the purposes
+
+    of this License, Derivative Works shall not include works that remain
+    separable from, or merely link (or bind by name) to the interfaces of,
+    the Work and Derivative Works thereof.
+
+
+    &quot;Contribution&quot; shall mean any work of authorship, including
+
+    the original version of the Work and any modifications or additions
+
+    to that Work or Derivative Works thereof, that is intentionally
+
+    submitted to Licensor for inclusion in the Work by the copyright owner
+
+    or by an individual or Legal Entity authorized to submit on behalf of
+    the copyright owner. For the purposes of this definition, &quot;submitted&quot;
+
+    means any form of electronic, verbal, or written communication sent
+
+    to the Licensor or its representatives, including but not limited to
+
+    communication on electronic mailing lists, source code control systems,
+
+    and issue tracking systems that are managed by, or on behalf of, the
+
+    Licensor for the purpose of discussing and improving the Work, but
+    excluding communication that is conspicuously marked or otherwise
+
+    designated in writing by the copyright owner as &quot;Not a Contribution.&quot;
+
+
+    &quot;Contributor&quot; shall mean Licensor and any individual or Legal Entity
+
+    on behalf of whom a Contribution has been received by Licensor and
+
+    subsequently incorporated within the Work.
+
+
+2. Grant of Copyright License. Subject to the terms and conditions of
+
+    this License, each Contributor hereby grants to You a perpetual,
+
+    worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+
+    copyright license to reproduce, prepare Derivative Works of,
+    publicly display, publicly perform, sublicense, and distribute the
+
+    Work and such Derivative Works in Source or Object form.
+
+
+3. Grant of Patent License. Subject to the terms and conditions of
+
+    this License, each Contributor hereby grants to You a perpetual,
+
+    worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+
+    (except as stated in this section) patent license to make, have made,
+ 
+    use, offer to sell, sell, import, and otherwise transfer the Work,
+
+    where such license applies only to those patent claims licensable
+ 
+    by such Contributor that are necessarily infringed by their
+    Contribution(s) alone or by combination of their Contribution(s)
+    with the Work to which such Contribution(s) was submitted. If You
+    institute patent litigation against any entity (including a
+
+    cross-claim or counterclaim in a lawsuit) alleging that the Work
+    or a Contribution incorporated within the Work constitutes direct
+
+    or contributory patent infringement, then any patent licenses
+
+    granted to You under this License for that Work shall terminate
+
+    as of the date such litigation is filed.
+
+
+4. Redistribution. You may reproduce and distribute copies of the
+    Work or Derivative Works thereof in any medium, with or without
+
+    modifications, and in Source or Object form, provided that You
+
+    meet the following conditions:
+
+
+
+    (a) You must give any other recipients of the Work or
+
+          Derivative Works a copy of this License; and
+
+ 
+
+     (b) You must cause any modified files to carry prominent notices
+
+          stating that You changed the files; and
+
+
+     (c) You must retain, in the Source form of any Derivative Works
+
+           that You distribute, all copyright, patent, trademark, and
+
+          attribution notices from the Source form of the Work,
+
+          excluding those notices that do not pertain to any part of
+
+          the Derivative Works; and
+
+
+
+      (d) If the Work includes a &quot;NOTICE&quot; text file as part of its
+
+          distribution, then any Derivative Works that You distribute must
+
+          include a readable copy of the attribution notices contained
+
+          within such NOTICE file, excluding those notices that do not
+
+          pertain to any part of the Derivative Works, in at least one
+
+          of the following places: within a NOTICE text file distributed
+
+          as part of the Derivative Works; within the Source form or
+
+          documentation, if provided along with the Derivative Works; or,
+
+          within a display generated by the Derivative Works, if and
+
+          wherever such third-party notices normally appear. The contents
+
+          of the NOTICE file are for informational purposes only and
+
+          do not modify the License. You may add Your own attribution
+
+          notices within Derivative Works that You distribute, alongside
+
+          or as an addendum to the NOTICE text from the Work, provided
+
+          that such additional attribution notices cannot be construed
+
+          as modifying the License.
+
+ 
+
+      You may add Your own copyright statement to Your modifications and
+
+      may provide additional or different license terms and conditions
+
+      for use, reproduction, or distribution of Your modifications, or
+
+      for any such Derivative Works as a whole, provided Your use,
+
+      reproduction, and distribution of the Work otherwise complies with
+
+      the conditions stated in this License.
+
+
+
+5. Submission of Contributions. Unless You explicitly state otherwise,
+
+      any Contribution intentionally submitted for inclusion in the Work
+
+      by You to the Licensor shall be under the terms and conditions of
+
+      this License, without any additional terms or conditions.
+
+      Notwithstanding the above, nothing herein shall supersede or modify
+
+      the terms of any separate license agreement you may have executed
+
+      with Licensor regarding such Contributions.
+
+
+
+6. Trademarks. This License does not grant permission to use the trade
+
+      names, trademarks, service marks, or product names of the Licensor,
+
+      except as required for reasonable and customary use in describing the
+
+      origin of the Work and reproducing the content of the NOTICE file.
+
+
+
+7. Disclaimer of Warranty. Unless required by applicable law or
+
+      agreed to in writing, Licensor provides the Work (and each
+
+      Contributor provides its Contributions) on an &quot;AS IS&quot; BASIS,
+
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+
+      implied, including, without limitation, any warranties or conditions
+
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+
+      appropriateness of using or redistributing the Work and assume any
+
+      risks associated with Your exercise of permissions under this License.
+
+ 
+
+8. Limitation of Liability. In no event and under no legal theory,
+
+      whether in tort (including negligence), contract, or otherwise,
+
+      unless required by applicable law (such as deliberate and grossly
+
+      negligent acts) or agreed to in writing, shall any Contributor be
+
+      liable to You for damages, including any direct, indirect, special,
+
+      incidental, or consequential damages of any character arising as a
+
+      result of this License or out of the use or inability to use the
+
+      Work (including but not limited to damages for loss of goodwill,
+
+      work stoppage, computer failure or malfunction, or any and all
+
+      other commercial damages or losses), even if such Contributor
+
+      has been advised of the possibility of such damages.
+
+
+
+9. Accepting Warranty or Additional Liability. While redistributing
+
+      the Work or Derivative Works thereof, You may choose to offer,
+
+      and charge a fee for, acceptance of support, warranty, indemnity,
+
+      or other liability obligations and/or rights consistent with this
+
+      License. However, in accepting such obligations, You may act only
+
+      on Your own behalf and on Your sole responsibility, not on behalf
+
+      of any other Contributor, and only if You agree to indemnify,
+
+      defend, and hold each Contributor harmless for any liability
+
+      incurred by, or claims asserted against, such Contributor by reason
+
+      of your accepting any such warranty or additional liability.
+
+
+
+END OF TERMS AND CONDITIONS
+
+
+APPENDIX: How to apply the Apache License to your work.
+
+
+      To apply the Apache License to your work, attach the following
+
+      boilerplate notice, with the fields enclosed by brackets &quot;{}&quot;
+
+      replaced with your own identifying information. (Don&apos;t include
+
+      the brackets!)  The text should be enclosed in the appropriate
+
+      comment syntax for the file format. We also recommend that a
+
+      file or class name and description of purpose be included on the
+
+      same &quot;printed page&quot; as the copyright notice for easier
+
+      identification within third-party archives.
+
+
+
+   Copyright {yyyy} {name of copyright owner}
+
+ 
+
+  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+
+   you may not use this file except in compliance with the License.
+
+   You may obtain a copy of the License at
+
+
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+
+
+   Unless required by applicable law or agreed to in writing, software
+
+   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+   See the License for the specific language governing permissions and
+
+   limitations under the License.
+         </text>
+   </license>
+
+   <plugins>
+      <plugin id="ch.qos.logback.classic"/>
+      <plugin id="ch.qos.logback.core"/>
+      <plugin id="ch.qos.logback.slf4j" fragment="true"/>
+      <plugin id="com.google.gson"/>
+      <plugin id="com.google.guava"/>
+      <plugin id="com.google.inject"/>
+      <plugin id="com.ibm.icu"/>
+      <plugin id="com.jcraft.jsch"/>
+      <plugin id="com.sun.jna"/>
+      <plugin id="com.sun.jna.platform"/>
+      <plugin id="com.sun.xml.bind"/>
+      <plugin id="com.trilead.ssh2"/>
+      <plugin id="de.uni-hildesheim.sse.easy.instantiatorCore.rt"/>
+      <plugin id="de.uni_hildesheim.sse.ivml"/>
+      <plugin id="de.uni_hildesheim.sse.ivml.ui"/>
+      <plugin id="de.uni_hildesheim.sse.vil.buildlang"/>
+      <plugin id="de.uni_hildesheim.sse.vil.buildlang.ui"/>
+      <plugin id="de.uni_hildesheim.sse.vil.expressions"/>
+      <plugin id="de.uni_hildesheim.sse.vil.expressions.ui"/>
+      <plugin id="de.uni_hildesheim.sse.vil.rt"/>
+      <plugin id="de.uni_hildesheim.sse.vil.rt.ui"/>
+      <plugin id="de.uni_hildesheim.sse.vil.templatelang"/>
+      <plugin id="de.uni_hildesheim.sse.vil.templatelang.ui"/>
+      <plugin id="eu.qualimaster.libs.QualiMaster"/>
+      <plugin id="io.github.classgraph"/>
+      <plugin id="jakarta.xml.bind"/>
+      <plugin id="javax.activation"/>
+      <plugin id="javax.annotation"/>
+      <plugin id="javax.inject"/>
+      <plugin id="javax.servlet"/>
+      <plugin id="javax.xml"/>
+      <plugin id="javax.xml.bind"/>
+      <plugin id="javax.xml.stream"/>
+      <plugin id="lpg.runtime.java"/>
+      <plugin id="net.ssehub.easy.basics"/>
+      <plugin id="net.ssehub.easy.dslCore"/>
+      <plugin id="net.ssehub.easy.dslCore.ui"/>
+      <plugin id="net.ssehub.easy.instantiation.ant"/>
+      <plugin id="net.ssehub.easy.instantiation.aspectj"/>
+      <plugin id="net.ssehub.easy.instantiation.core"/>
+      <plugin id="net.ssehub.easy.instantiation.java"/>
+      <plugin id="net.ssehub.easy.instantiation.maven"/>
+      <plugin id="net.ssehub.easy.instantiation.serializer.xml"/>
+      <plugin id="net.ssehub.easy.instantiation.velocity"/>
+      <plugin id="net.ssehub.easy.instantiation.xvcl"/>
+      <plugin id="net.ssehub.easy.libs.ant"/>
+      <plugin id="net.ssehub.easy.libs.aspectj.tools"/>
+      <plugin id="net.ssehub.easy.libs.commons.io"/>
+      <plugin id="net.ssehub.easy.libs.maven"/>
+      <plugin id="net.ssehub.easy.libs.velocity"/>
+      <plugin id="net.ssehub.easy.libs.xvcl"/>
+      <plugin id="net.ssehub.easy.loader"/>
+      <plugin id="net.ssehub.easy.producer.core"/>
+      <plugin id="net.ssehub.easy.producer.core.tests" fragment="true"/>
+      <plugin id="net.ssehub.easy.producer.eclipse"/>
+      <plugin id="net.ssehub.easy.producer.eclipse.tests" fragment="true"/>
+      <plugin id="net.ssehub.easy.producer.ui"/>
+      <plugin id="net.ssehub.easy.reasoning.core"/>
+      <plugin id="net.ssehub.easy.reasoning.sseReasoner"/>
+      <plugin id="net.ssehub.easy.varModel"/>
+      <plugin id="org.antlr.runtime"/>
+      <plugin id="org.apache.ant"/>
+      <plugin id="org.apache.batik.constants"/>
+      <plugin id="org.apache.batik.css"/>
+      <plugin id="org.apache.batik.i18n"/>
+      <plugin id="org.apache.batik.util"/>
+      <plugin id="org.apache.commons.cli"/>
+      <plugin id="org.apache.commons.codec"/>
+      <plugin id="org.apache.commons.httpclient"/>
+      <plugin id="org.apache.commons.io"/>
+      <plugin id="org.apache.commons.jxpath"/>
+      <plugin id="org.apache.commons.lang"/>
+      <plugin id="org.apache.commons.logging"/>
+      <plugin id="org.apache.felix.gogo.command"/>
+      <plugin id="org.apache.felix.gogo.runtime"/>
+      <plugin id="org.apache.felix.gogo.shell"/>
+      <plugin id="org.apache.felix.scr"/>
+      <plugin id="org.apache.log4j"/>
+      <plugin id="org.apache.lucene.analyzers-common"/>
+      <plugin id="org.apache.lucene.analyzers-smartcn"/>
+      <plugin id="org.apache.lucene.core"/>
+      <plugin id="org.apache.xerces"/>
+      <plugin id="org.apache.xml.resolver"/>
+      <plugin id="org.apache.xml.serializer"/>
+      <plugin id="org.apache.xmlgraphics"/>
+      <plugin id="org.apiguardian"/>
+      <plugin id="org.eclipse.ant.core"/>
+      <plugin id="org.eclipse.compare"/>
+      <plugin id="org.eclipse.compare.core"/>
+      <plugin id="org.eclipse.core.commands"/>
+      <plugin id="org.eclipse.core.contenttype"/>
+      <plugin id="org.eclipse.core.databinding"/>
+      <plugin id="org.eclipse.core.databinding.beans"/>
+      <plugin id="org.eclipse.core.databinding.observable"/>
+      <plugin id="org.eclipse.core.databinding.property"/>
+      <plugin id="org.eclipse.core.expressions"/>
+      <plugin id="org.eclipse.core.externaltools"/>
+      <plugin id="org.eclipse.core.filebuffers"/>
+      <plugin id="org.eclipse.core.filesystem"/>
+      <plugin id="org.eclipse.core.filesystem.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.core.jobs"/>
+      <plugin id="org.eclipse.core.net"/>
+      <plugin id="org.eclipse.core.net.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.core.resources"/>
+      <plugin id="org.eclipse.core.resources.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.core.runtime"/>
+      <plugin id="org.eclipse.core.variables"/>
+      <plugin id="org.eclipse.debug.core"/>
+      <plugin id="org.eclipse.debug.ui"/>
+      <plugin id="org.eclipse.draw2d"/>
+      <plugin id="org.eclipse.e4.core.commands"/>
+      <plugin id="org.eclipse.e4.core.contexts"/>
+      <plugin id="org.eclipse.e4.core.di"/>
+      <plugin id="org.eclipse.e4.core.di.annotations"/>
+      <plugin id="org.eclipse.e4.core.di.extensions"/>
+      <plugin id="org.eclipse.e4.core.di.extensions.supplier"/>
+      <plugin id="org.eclipse.e4.core.services"/>
+      <plugin id="org.eclipse.e4.emf.xpath"/>
+      <plugin id="org.eclipse.e4.ui.bindings"/>
+      <plugin id="org.eclipse.e4.ui.css.core"/>
+      <plugin id="org.eclipse.e4.ui.css.swt"/>
+      <plugin id="org.eclipse.e4.ui.css.swt.theme"/>
+      <plugin id="org.eclipse.e4.ui.di"/>
+      <plugin id="org.eclipse.e4.ui.dialogs"/>
+      <plugin id="org.eclipse.e4.ui.ide"/>
+      <plugin id="org.eclipse.e4.ui.model.workbench"/>
+      <plugin id="org.eclipse.e4.ui.services"/>
+      <plugin id="org.eclipse.e4.ui.swt.win32" fragment="true"/>
+      <plugin id="org.eclipse.e4.ui.widgets"/>
+      <plugin id="org.eclipse.e4.ui.workbench"/>
+      <plugin id="org.eclipse.e4.ui.workbench.addons.swt"/>
+      <plugin id="org.eclipse.e4.ui.workbench.renderers.swt"/>
+      <plugin id="org.eclipse.e4.ui.workbench.swt"/>
+      <plugin id="org.eclipse.e4.ui.workbench3"/>
+      <plugin id="org.eclipse.ecf"/>
+      <plugin id="org.eclipse.ecf.filetransfer"/>
+      <plugin id="org.eclipse.ecf.identity"/>
+      <plugin id="org.eclipse.ecf.provider.filetransfer"/>
+      <plugin id="org.eclipse.ecf.provider.filetransfer.ssl" fragment="true"/>
+      <plugin id="org.eclipse.ecf.ssl" fragment="true"/>
+      <plugin id="org.eclipse.emf.codegen"/>
+      <plugin id="org.eclipse.emf.codegen.ecore"/>
+      <plugin id="org.eclipse.emf.codegen.ecore.ui"/>
+      <plugin id="org.eclipse.emf.common"/>
+      <plugin id="org.eclipse.emf.common.ui"/>
+      <plugin id="org.eclipse.emf.converter"/>
+      <plugin id="org.eclipse.emf.databinding"/>
+      <plugin id="org.eclipse.emf.databinding.edit"/>
+      <plugin id="org.eclipse.emf.ecore"/>
+      <plugin id="org.eclipse.emf.ecore.change"/>
+      <plugin id="org.eclipse.emf.ecore.edit"/>
+      <plugin id="org.eclipse.emf.ecore.editor"/>
+      <plugin id="org.eclipse.emf.ecore.xmi"/>
+      <plugin id="org.eclipse.emf.edit"/>
+      <plugin id="org.eclipse.emf.edit.ui"/>
+      <plugin id="org.eclipse.emf.importer"/>
+      <plugin id="org.eclipse.emf.mwe.core"/>
+      <plugin id="org.eclipse.emf.mwe.utils"/>
+      <plugin id="org.eclipse.emf.mwe2.language"/>
+      <plugin id="org.eclipse.emf.mwe2.launch"/>
+      <plugin id="org.eclipse.emf.mwe2.lib"/>
+      <plugin id="org.eclipse.emf.mwe2.runtime"/>
+      <plugin id="org.eclipse.emf.validation"/>
+      <plugin id="org.eclipse.equinox.app"/>
+      <plugin id="org.eclipse.equinox.bidi"/>
+      <plugin id="org.eclipse.equinox.common"/>
+      <plugin id="org.eclipse.equinox.concurrent"/>
+      <plugin id="org.eclipse.equinox.event"/>
+      <plugin id="org.eclipse.equinox.frameworkadmin"/>
+      <plugin id="org.eclipse.equinox.frameworkadmin.equinox"/>
+      <plugin id="org.eclipse.equinox.http.jetty"/>
+      <plugin id="org.eclipse.equinox.http.servlet"/>
+      <plugin id="org.eclipse.equinox.p2.artifact.repository"/>
+      <plugin id="org.eclipse.equinox.p2.core"/>
+      <plugin id="org.eclipse.equinox.p2.director"/>
+      <plugin id="org.eclipse.equinox.p2.director.app"/>
+      <plugin id="org.eclipse.equinox.p2.discovery"/>
+      <plugin id="org.eclipse.equinox.p2.discovery.compatibility"/>
+      <plugin id="org.eclipse.equinox.p2.engine"/>
+      <plugin id="org.eclipse.equinox.p2.garbagecollector"/>
+      <plugin id="org.eclipse.equinox.p2.jarprocessor"/>
+      <plugin id="org.eclipse.equinox.p2.metadata"/>
+      <plugin id="org.eclipse.equinox.p2.metadata.repository"/>
+      <plugin id="org.eclipse.equinox.p2.operations"/>
+      <plugin id="org.eclipse.equinox.p2.publisher"/>
+      <plugin id="org.eclipse.equinox.p2.publisher.eclipse"/>
+      <plugin id="org.eclipse.equinox.p2.repository"/>
+      <plugin id="org.eclipse.equinox.p2.repository.tools"/>
+      <plugin id="org.eclipse.equinox.p2.touchpoint.eclipse"/>
+      <plugin id="org.eclipse.equinox.p2.transport.ecf"/>
+      <plugin id="org.eclipse.equinox.p2.ui"/>
+      <plugin id="org.eclipse.equinox.p2.ui.discovery"/>
+      <plugin id="org.eclipse.equinox.p2.updatesite"/>
+      <plugin id="org.eclipse.equinox.preferences"/>
+      <plugin id="org.eclipse.equinox.registry"/>
+      <plugin id="org.eclipse.equinox.security"/>
+      <plugin id="org.eclipse.equinox.security.ui"/>
+      <plugin id="org.eclipse.equinox.security.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.equinox.simpleconfigurator"/>
+      <plugin id="org.eclipse.equinox.simpleconfigurator.manipulator"/>
+      <plugin id="org.eclipse.gef"/>
+      <plugin id="org.eclipse.gmf.bridge"/>
+      <plugin id="org.eclipse.gmf.bridge.ui"/>
+      <plugin id="org.eclipse.gmf.bridge.ui.dashboard"/>
+      <plugin id="org.eclipse.gmf.codegen"/>
+      <plugin id="org.eclipse.gmf.codegen.edit"/>
+      <plugin id="org.eclipse.gmf.common"/>
+      <plugin id="org.eclipse.gmf.graphdef"/>
+      <plugin id="org.eclipse.gmf.graphdef.codegen"/>
+      <plugin id="org.eclipse.gmf.graphdef.edit"/>
+      <plugin id="org.eclipse.gmf.map"/>
+      <plugin id="org.eclipse.gmf.map.edit"/>
+      <plugin id="org.eclipse.gmf.runtime.notation"/>
+      <plugin id="org.eclipse.gmf.tooldef"/>
+      <plugin id="org.eclipse.gmf.tooldef.edit"/>
+      <plugin id="org.eclipse.gmf.validate"/>
+      <plugin id="org.eclipse.gmf.xpand"/>
+      <plugin id="org.eclipse.gmf.xpand.qvtlibrary"/>
+      <plugin id="org.eclipse.help"/>
+      <plugin id="org.eclipse.help.base"/>
+      <plugin id="org.eclipse.help.ui"/>
+      <plugin id="org.eclipse.jdt"/>
+      <plugin id="org.eclipse.jdt.annotation"/>
+      <plugin id="org.eclipse.jdt.compiler.apt" fragment="true"/>
+      <plugin id="org.eclipse.jdt.compiler.tool" fragment="true"/>
+      <plugin id="org.eclipse.jdt.core"/>
+      <plugin id="org.eclipse.jdt.core.manipulation"/>
+      <plugin id="org.eclipse.jdt.debug"/>
+      <plugin id="org.eclipse.jdt.debug.ui"/>
+      <plugin id="org.eclipse.jdt.junit"/>
+      <plugin id="org.eclipse.jdt.junit.core"/>
+      <plugin id="org.eclipse.jdt.junit.runtime"/>
+      <plugin id="org.eclipse.jdt.junit4.runtime"/>
+      <plugin id="org.eclipse.jdt.launching"/>
+      <plugin id="org.eclipse.jdt.ui"/>
+      <plugin id="org.eclipse.jetty.continuation"/>
+      <plugin id="org.eclipse.jetty.http"/>
+      <plugin id="org.eclipse.jetty.io"/>
+      <plugin id="org.eclipse.jetty.security"/>
+      <plugin id="org.eclipse.jetty.server"/>
+      <plugin id="org.eclipse.jetty.servlet"/>
+      <plugin id="org.eclipse.jetty.util"/>
+      <plugin id="org.eclipse.jetty.util.ajax"/>
+      <plugin id="org.eclipse.jface"/>
+      <plugin id="org.eclipse.jface.databinding"/>
+      <plugin id="org.eclipse.jface.notifications"/>
+      <plugin id="org.eclipse.jface.text"/>
+      <plugin id="org.eclipse.lsp4j"/>
+      <plugin id="org.eclipse.lsp4j.jsonrpc"/>
+      <plugin id="org.eclipse.ltk.core.refactoring"/>
+      <plugin id="org.eclipse.ltk.ui.refactoring"/>
+      <plugin id="org.eclipse.m2e.archetype.common"/>
+      <plugin id="org.eclipse.m2e.core"/>
+      <plugin id="org.eclipse.m2e.core.ui"/>
+      <plugin id="org.eclipse.m2e.discovery"/>
+      <plugin id="org.eclipse.m2e.editor"/>
+      <plugin id="org.eclipse.m2e.editor.xml"/>
+      <plugin id="org.eclipse.m2e.importer"/>
+      <plugin id="org.eclipse.m2e.jdt"/>
+      <plugin id="org.eclipse.m2e.jdt.ui" fragment="true"/>
+      <plugin id="org.eclipse.m2e.launching"/>
+      <plugin id="org.eclipse.m2e.lifecyclemapping.defaults"/>
+      <plugin id="org.eclipse.m2e.logback.appender" fragment="true"/>
+      <plugin id="org.eclipse.m2e.maven.indexer"/>
+      <plugin id="org.eclipse.m2e.maven.runtime"/>
+      <plugin id="org.eclipse.m2e.maven.runtime.slf4j.simple"/>
+      <plugin id="org.eclipse.m2e.model.edit"/>
+      <plugin id="org.eclipse.m2e.profiles.core"/>
+      <plugin id="org.eclipse.m2e.profiles.ui"/>
+      <plugin id="org.eclipse.m2e.refactoring"/>
+      <plugin id="org.eclipse.m2e.scm"/>
+      <plugin id="org.eclipse.m2e.workspace.cli"/>
+      <plugin id="org.eclipse.m2m.qvt.oml"/>
+      <plugin id="org.eclipse.m2m.qvt.oml.common"/>
+      <plugin id="org.eclipse.m2m.qvt.oml.cst.parser"/>
+      <plugin id="org.eclipse.m2m.qvt.oml.ecore.imperativeocl"/>
+      <plugin id="org.eclipse.m2m.qvt.oml.emf.util"/>
+      <plugin id="org.eclipse.m2m.qvt.oml.project"/>
+      <plugin id="org.eclipse.m2m.qvt.oml.runtime"/>
+      <plugin id="org.eclipse.ocl"/>
+      <plugin id="org.eclipse.ocl.common"/>
+      <plugin id="org.eclipse.ocl.ecore"/>
+      <plugin id="org.eclipse.osgi"/>
+      <plugin id="org.eclipse.osgi.compatibility.state" fragment="true"/>
+      <plugin id="org.eclipse.osgi.services"/>
+      <plugin id="org.eclipse.osgi.util"/>
+      <plugin id="org.eclipse.pde.build"/>
+      <plugin id="org.eclipse.pde.core"/>
+      <plugin id="org.eclipse.platform"/>
+      <plugin id="org.eclipse.search"/>
+      <plugin id="org.eclipse.swt"/>
+      <plugin id="org.eclipse.swt.browser.chromium.win32.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.swt.win32.win32.x86_64" fragment="true"/>
+      <plugin id="org.eclipse.team.core"/>
+      <plugin id="org.eclipse.team.ui"/>
+      <plugin id="org.eclipse.text"/>
+      <plugin id="org.eclipse.ui"/>
+      <plugin id="org.eclipse.ui.browser"/>
+      <plugin id="org.eclipse.ui.cheatsheets"/>
+      <plugin id="org.eclipse.ui.console"/>
+      <plugin id="org.eclipse.ui.editors"/>
+      <plugin id="org.eclipse.ui.externaltools"/>
+      <plugin id="org.eclipse.ui.forms"/>
+      <plugin id="org.eclipse.ui.genericeditor"/>
+      <plugin id="org.eclipse.ui.ide"/>
+      <plugin id="org.eclipse.ui.ide.application"/>
+      <plugin id="org.eclipse.ui.intro"/>
+      <plugin id="org.eclipse.ui.navigator"/>
+      <plugin id="org.eclipse.ui.navigator.resources"/>
+      <plugin id="org.eclipse.ui.trace"/>
+      <plugin id="org.eclipse.ui.views"/>
+      <plugin id="org.eclipse.ui.views.properties.tabbed"/>
+      <plugin id="org.eclipse.ui.win32" fragment="true"/>
+      <plugin id="org.eclipse.ui.workbench"/>
+      <plugin id="org.eclipse.ui.workbench.texteditor"/>
+      <plugin id="org.eclipse.update.configurator"/>
+      <plugin id="org.eclipse.urischeme"/>
+      <plugin id="org.eclipse.wst.common.core"/>
+      <plugin id="org.eclipse.wst.common.emf"/>
+      <plugin id="org.eclipse.wst.common.environment"/>
+      <plugin id="org.eclipse.wst.common.frameworks"/>
+      <plugin id="org.eclipse.wst.common.frameworks.ui"/>
+      <plugin id="org.eclipse.wst.common.project.facet.core"/>
+      <plugin id="org.eclipse.wst.common.ui"/>
+      <plugin id="org.eclipse.wst.common.uriresolver"/>
+      <plugin id="org.eclipse.wst.sse.core"/>
+      <plugin id="org.eclipse.wst.sse.ui"/>
+      <plugin id="org.eclipse.wst.validation"/>
+      <plugin id="org.eclipse.wst.validation.ui"/>
+      <plugin id="org.eclipse.wst.xml.core"/>
+      <plugin id="org.eclipse.wst.xml.ui"/>
+      <plugin id="org.eclipse.wst.xsd.core"/>
+      <plugin id="org.eclipse.xpand"/>
+      <plugin id="org.eclipse.xsd"/>
+      <plugin id="org.eclipse.xtend"/>
+      <plugin id="org.eclipse.xtend.lib"/>
+      <plugin id="org.eclipse.xtend.lib.macro"/>
+      <plugin id="org.eclipse.xtend.typesystem.emf"/>
+      <plugin id="org.eclipse.xtext"/>
+      <plugin id="org.eclipse.xtext.builder"/>
+      <plugin id="org.eclipse.xtext.common.types"/>
+      <plugin id="org.eclipse.xtext.common.types.edit"/>
+      <plugin id="org.eclipse.xtext.common.types.ui"/>
+      <plugin id="org.eclipse.xtext.ecore"/>
+      <plugin id="org.eclipse.xtext.generator"/>
+      <plugin id="org.eclipse.xtext.ide"/>
+      <plugin id="org.eclipse.xtext.logging" fragment="true"/>
+      <plugin id="org.eclipse.xtext.smap"/>
+      <plugin id="org.eclipse.xtext.ui"/>
+      <plugin id="org.eclipse.xtext.ui.codetemplates"/>
+      <plugin id="org.eclipse.xtext.ui.codetemplates.ide"/>
+      <plugin id="org.eclipse.xtext.ui.codetemplates.ui"/>
+      <plugin id="org.eclipse.xtext.ui.shared"/>
+      <plugin id="org.eclipse.xtext.util"/>
+      <plugin id="org.eclipse.xtext.xbase"/>
+      <plugin id="org.eclipse.xtext.xbase.lib"/>
+      <plugin id="org.eclipse.xtext.xtext.generator"/>
+      <plugin id="org.hamcrest.core"/>
+      <plugin id="org.junit"/>
+      <plugin id="org.junit.platform.commons"/>
+      <plugin id="org.junit.platform.engine"/>
+      <plugin id="org.junit.platform.launcher"/>
+      <plugin id="org.objectweb.asm"/>
+      <plugin id="org.opentest4j"/>
+      <plugin id="org.sat4j.core"/>
+      <plugin id="org.sat4j.pb"/>
+      <plugin id="org.slf4j.api"/>
+      <plugin id="org.tigris.subversion.clientadapter"/>
+      <plugin id="org.tigris.subversion.clientadapter.javahl"/>
+      <plugin id="org.tigris.subversion.clientadapter.javahl.win64" fragment="true"/>
+      <plugin id="org.tigris.subversion.clientadapter.svnkit"/>
+      <plugin id="org.tigris.subversion.subclipse.core"/>
+      <plugin id="org.tigris.subversion.subclipse.graph"/>
+      <plugin id="org.tigris.subversion.subclipse.ui"/>
+      <plugin id="org.tmatesoft.sqljet"/>
+      <plugin id="org.tmatesoft.svnkit"/>
+      <plugin id="org.tukaani.xz"/>
+      <plugin id="org.w3c.css.sac"/>
+      <plugin id="org.w3c.dom.events"/>
+      <plugin id="org.w3c.dom.smil"/>
+      <plugin id="org.w3c.dom.svg"/>
+   </plugins>
+
+   <configurations>
+      <plugin id="org.apache.felix.scr" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
+   </configurations>
+
+   <preferencesInfo>
+      <targetfile overwrite="false"/>
+   </preferencesInfo>
+
+   <cssInfo>
+   </cssInfo>
+
+</product>
