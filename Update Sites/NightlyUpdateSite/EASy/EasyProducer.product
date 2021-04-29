@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="net.ssehub.easy.producer.ui.EasyProducer" id="org.eclipse.platform.ide" application="org.eclipse.ui.ide.workbench" version="1.2.0" useFeatures="false" includeLaunchers="true">
+<product name="%productName" uid="net.ssehub.easy.producer.ui.EasyProducer" id="net.ssehub.easy.producer.ui.EASyProducer" application="org.eclipse.ui.ide.workbench" version="1.2.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="eclipse_lg.png"/>
@@ -33,7 +33,6 @@
          <bmp/>
       </win>
    </launcher>
-
 
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-13</windows>
@@ -468,9 +467,7 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="net.ssehub.easy.libs.xvcl"/>
       <plugin id="net.ssehub.easy.loader"/>
       <plugin id="net.ssehub.easy.producer.core"/>
-      <plugin id="net.ssehub.easy.producer.core.tests" fragment="true"/>
       <plugin id="net.ssehub.easy.producer.eclipse"/>
-      <plugin id="net.ssehub.easy.producer.eclipse.tests" fragment="true"/>
       <plugin id="net.ssehub.easy.producer.ui"/>
       <plugin id="net.ssehub.easy.reasoning.core"/>
       <plugin id="net.ssehub.easy.reasoning.sseReasoner"/>
@@ -616,23 +613,6 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.equinox.simpleconfigurator"/>
       <plugin id="org.eclipse.equinox.simpleconfigurator.manipulator"/>
       <plugin id="org.eclipse.gef"/>
-      <plugin id="org.eclipse.gmf.bridge"/>
-      <plugin id="org.eclipse.gmf.bridge.ui"/>
-      <plugin id="org.eclipse.gmf.bridge.ui.dashboard"/>
-      <plugin id="org.eclipse.gmf.codegen"/>
-      <plugin id="org.eclipse.gmf.codegen.edit"/>
-      <plugin id="org.eclipse.gmf.common"/>
-      <plugin id="org.eclipse.gmf.graphdef"/>
-      <plugin id="org.eclipse.gmf.graphdef.codegen"/>
-      <plugin id="org.eclipse.gmf.graphdef.edit"/>
-      <plugin id="org.eclipse.gmf.map"/>
-      <plugin id="org.eclipse.gmf.map.edit"/>
-      <plugin id="org.eclipse.gmf.runtime.notation"/>
-      <plugin id="org.eclipse.gmf.tooldef"/>
-      <plugin id="org.eclipse.gmf.tooldef.edit"/>
-      <plugin id="org.eclipse.gmf.validate"/>
-      <plugin id="org.eclipse.gmf.xpand"/>
-      <plugin id="org.eclipse.gmf.xpand.qvtlibrary"/>
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.help.base"/>
       <plugin id="org.eclipse.help.ui"/>
@@ -666,34 +646,6 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.lsp4j.jsonrpc"/>
       <plugin id="org.eclipse.ltk.core.refactoring"/>
       <plugin id="org.eclipse.ltk.ui.refactoring"/>
-      <plugin id="org.eclipse.m2e.archetype.common"/>
-      <plugin id="org.eclipse.m2e.core"/>
-      <plugin id="org.eclipse.m2e.core.ui"/>
-      <plugin id="org.eclipse.m2e.discovery"/>
-      <plugin id="org.eclipse.m2e.editor"/>
-      <plugin id="org.eclipse.m2e.editor.xml"/>
-      <plugin id="org.eclipse.m2e.importer"/>
-      <plugin id="org.eclipse.m2e.jdt"/>
-      <plugin id="org.eclipse.m2e.jdt.ui" fragment="true"/>
-      <plugin id="org.eclipse.m2e.launching"/>
-      <plugin id="org.eclipse.m2e.lifecyclemapping.defaults"/>
-      <plugin id="org.eclipse.m2e.logback.appender" fragment="true"/>
-      <plugin id="org.eclipse.m2e.maven.indexer"/>
-      <plugin id="org.eclipse.m2e.maven.runtime"/>
-      <plugin id="org.eclipse.m2e.maven.runtime.slf4j.simple"/>
-      <plugin id="org.eclipse.m2e.model.edit"/>
-      <plugin id="org.eclipse.m2e.profiles.core"/>
-      <plugin id="org.eclipse.m2e.profiles.ui"/>
-      <plugin id="org.eclipse.m2e.refactoring"/>
-      <plugin id="org.eclipse.m2e.scm"/>
-      <plugin id="org.eclipse.m2e.workspace.cli"/>
-      <plugin id="org.eclipse.m2m.qvt.oml"/>
-      <plugin id="org.eclipse.m2m.qvt.oml.common"/>
-      <plugin id="org.eclipse.m2m.qvt.oml.cst.parser"/>
-      <plugin id="org.eclipse.m2m.qvt.oml.ecore.imperativeocl"/>
-      <plugin id="org.eclipse.m2m.qvt.oml.emf.util"/>
-      <plugin id="org.eclipse.m2m.qvt.oml.project"/>
-      <plugin id="org.eclipse.m2m.qvt.oml.runtime"/>
       <plugin id="org.eclipse.ocl"/>
       <plugin id="org.eclipse.ocl.common"/>
       <plugin id="org.eclipse.ocl.ecore"/>
@@ -782,15 +734,6 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.sat4j.core"/>
       <plugin id="org.sat4j.pb"/>
       <plugin id="org.slf4j.api"/>
-      <plugin id="org.tigris.subversion.clientadapter"/>
-      <plugin id="org.tigris.subversion.clientadapter.javahl"/>
-      <plugin id="org.tigris.subversion.clientadapter.javahl.win64" fragment="true"/>
-      <plugin id="org.tigris.subversion.clientadapter.svnkit"/>
-      <plugin id="org.tigris.subversion.subclipse.core"/>
-      <plugin id="org.tigris.subversion.subclipse.graph"/>
-      <plugin id="org.tigris.subversion.subclipse.ui"/>
-      <plugin id="org.tmatesoft.sqljet"/>
-      <plugin id="org.tmatesoft.svnkit"/>
       <plugin id="org.tukaani.xz"/>
       <plugin id="org.w3c.css.sac"/>
       <plugin id="org.w3c.dom.events"/>
