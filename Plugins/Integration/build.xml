@@ -131,13 +131,15 @@
 	    </emma>
 	</target> 
 	
-	<target name="test" depends="emmaReport">
+	<target name="test"> <!-- emma is outdated for Java 11, depends="emmaReport" -->
 		<!-- Gather Junit results -->
+        <!--
 		<copy todir="junitResults" failonerror="true" overwrite="true">
 			<fileset dir="${test.eclipse.path}/results/">
 				<include name="**/*.xml" />
 			</fileset>
 		</copy>
+        -->
 	</target>		
 	
 	<!-- Creates Javadoc -->
