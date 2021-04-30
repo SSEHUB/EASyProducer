@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EASy-Nightly-UpdateSite" default="createUpdateSite" basedir="." xmlns:plugins="antlib:de.uni_hildesheim.sse.easy.standalone.versionReplacement">
     <property file="${user.home}/global-build.properties"/>
+    <property name="configs" value="gtk.linux.x86_64,win32.win32.x86_64" />
 
     <path id ="task.libs">
 		<!-- Libs of the Task -->
@@ -32,12 +33,24 @@
         <antcall target="createArtifactJars"/>
         <antcall target="zip.Site"/>
         <antcall target="publish"/>
+		<antcall target="createProducts"/>
     </target>
     
     <target name="replacePlugins">
         <delete dir="gen/tmp"/>
         <mkdir dir="gen/tmp"/>
-        <plugins TempFolder="gen/tmp" SourceFolder="${user.home}/Eclipse/EASyPlugins" Version="${version}" DestinationFolder="gen/intermediate/plugins" ExclusionPattern="^.*(instantiator.copy.*.jar|(test|tests|drools).jar)$"/>
+    	<mkdir dir="gen/tmpBundles"/>
+        <!--
+        May be required for createProducts
+        <copy toDir="gen/tmpBundles">
+            <fileset dir="${user.home}/Eclipse/EASyProduct">
+              <filename name="*.jar"/>
+            </fileset>
+            <fileset dir="${user.home}/Eclipse/EASyPlugins">
+              <filename name="*.jar"/>
+            </fileset>        	
+        </copy>-->
+        <plugins TempFolder="gen/tmp" SourceFolder="gen/tmpBundles" Version="${version}" DestinationFolder="gen/intermediate/plugins" ExclusionPattern="^.*(instantiator.copy.*.jar|(test|tests|drools).jar)$"/>
     </target>
     
     <target name="createFeature">
@@ -61,6 +74,209 @@
             <arg value="-compress" />
             <arg value="-publishArtifacts" />
         </java>
+    </target>
+	
+    <target name="createProducts">
+        <!-- and now the update site for the RCP application -->
+        <product ProductFile="EASy/EasyProducer.product" DestinationFile="gen/intermediate/EasyProducer.product" Version="${version}"/>
+
+        <!-- create a repository and put all from target platform in it -->
+        <java jar="${eclipse.product.launcher}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="-application" />
+            <arg value="org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
+            <arg value="-metadataRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-artifactRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-configs"/>
+            <arg value="ANY"/>
+            <arg value="-source" />
+            <arg value="${user.home}/Eclipse/qmRepository" />
+            <arg value="-compress" />
+            <arg value="-publishArtifacts" />
+        </java>
+
+        <!-- import the RCP plugin into the repository -->
+        <java jar="${eclipse.product.launcher}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="-application" />
+            <arg value="org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
+            <arg value="-metadataRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-artifactRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-configs"/>
+            <arg value="ANY"/>
+            <arg value="-source" />
+            <arg value="${basedir}/gen/intermediate" />
+            <arg value="-compress" />
+            <arg value="-publishArtifacts" />
+            <arg value="-append" />
+        </java>
+
+        <mkdir dir="${basedir}/archive"/>
+        <tstamp>
+            <format property="NOW" pattern="yyyyMMdd-HHmmss" locale="en,EN"/>
+        </tstamp>
+
+    	<!-- import the RCP product into the repository
+             See: http://www.eclipse.org/forums/index.php/t/746045/ -->
+        <java jar="${eclipse.product.launcher}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="-application" />
+            <arg value="org.eclipse.equinox.p2.publisher.ProductPublisher" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
+            <arg value="-repository" />
+            <arg value="${eclipse.repository}"/>
+            <arg value="-metadataRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-artifactRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-executables"/>
+            <arg value="${user.home}/Eclipse/qmRepository/org.eclipse.equinox.executable_3.6.200.v20150602-1417.jar" />
+            <arg value="-productFile" />
+            <arg value="${basedir}/gen/intermediate/EasyProducer.product" />
+            <arg value="-flavor" />
+            <arg value="tooling" />
+            <arg value="-configs" />
+            <arg value="${configs}" />
+            <arg value="-append"/>
+        </java>
+    
+        <mkdir dir="${basedir}/gen/final/win32.win32.x86_64"/>    
+        <!-- Creation of a prepacked Eclipse/QM app -->
+        <java jar="${eclipse.product.launcher}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="-application" />
+            <arg value="org.eclipse.equinox.p2.director" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
+            <arg value="-repository" />
+            <arg value="${eclipse.repository}"/>
+            <arg value="-destination"/>
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-metadataRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-artifactRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-installIU" />
+            <arg value="net.ssehub.easy.producer.ui.EasyProducer" />
+            <arg value="-destination"/>
+            <arg value="${basedir}/gen/final/win32.win32.x86_64"/>
+            <arg value="-profileProperties" />
+            <arg value="org.eclipse.update.install.features=true" />
+                <arg value="-p2.os" />
+            <arg value="win32" />
+            <arg value="-p2.ws" />
+            <arg value="win32" />
+            <arg value="-p2.arch" />
+            <arg value="x86_64" />
+        </java>
+        <!-- copying is a hack -> product configuration based on features using org.eclipse.equinox.executable -->
+        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/EasyProducer.exe" file="${user.home}/Eclipse/qmRepository/binary/bin/win32/win32/x86_64/launcher.exe"/>
+        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/eclipsec.exe" file="${user.home}/Eclipse/qmRepository/binary/bin/win32/win32/x86_64/eclipsec.exe"/>
+        <!-- copy readme -->
+        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/README.txt" file="EASy/README.txt"/>
+        <!-- patch OSGi for Java9 and 10 -->
+        <!--<zip update="true" destfile="${basedir}/gen/final/win32.win32.x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" basedir="EASy/osgi" includes="JavaSE-1.9.profile JavaSE-10.profile profile.list"/>-->
+        <!-- package for Java8 -->
+        <!--<zip destfile="${basedir}/archive/EASy-Producer.win32.win32.x86_64-${NOW}-java8.zip" basedir="${basedir}/gen/final/win32.win32.x86_64"/>-->
+        <!-- replace ini for Java9 and 10  -->
+        <!--<copy todir="${basedir}/gen/final/win32.win32.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
+        <!-- package for Java9 and 10 -->
+        <!--<zip destfile="${basedir}/archive/EASy-Producer.win32.win32.x86_64-${NOW}-java9-10.zip" basedir="${basedir}/gen/final/win32.win32.x86_64"/>-->
+        <zip destfile="${basedir}/archive/EASy-Producer.win32.win32.x86_64-${NOW}.zip" basedir="${basedir}/gen/final/win32.win32.x86_64"/>
+
+        <mkdir dir="${basedir}/gen/final/gtk.linux.x86_64"/>
+        <java jar="${eclipse.product.launcher}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="-application" />
+            <arg value="org.eclipse.equinox.p2.director" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
+            <arg value="-repository" />
+            <arg value="${eclipse.repository}"/>
+            <arg value="-destination"/>
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-metadataRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-artifactRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-installIU" />
+            <arg value="net.ssehub.easy.producer.ui.EasyProducer" />
+            <arg value="-destination"/>
+            <arg value="${basedir}/gen/final/gtk.linux.x86_64"/>
+            <arg value="-profileProperties" />
+            <arg value="org.eclipse.update.install.features=true" />
+                <arg value="-p2.os" />
+                <arg value="gtk" />
+                <arg value="-p2.ws" />
+                <arg value="linux" />
+                <arg value="-p2.arch" />
+                <arg value="x86_64" />
+        </java>
+        <!-- copying is a hack -> product configuration based on features using org.eclipse.equinox.executable -->
+        <copy tofile="${basedir}/gen/final/gtk.linux.x86_64/EasyProducer" file="${user.home}/Eclipse/qmRepository/binary/bin/gtk/linux/x86_64/launcher"/>
+        <chmod file="${basedir}/gen/final/gtk.linux.x86_64/EasyProducer" perm="a+x"/>
+        <!-- copy readme -->
+        <copy tofile="${basedir}/gen/final/gtk.linux.x86_64/README.txt" file="EASy/README.txt"/>
+        <!-- patch OSGi for Java9 and 10 -->
+        <!--<zip update="true" destfile="${basedir}/gen/final/gtk.linux.x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" basedir="EASy/osgi" includes="JavaSE-1.9.profile JavaSE-10.profile profile.list"/>-->
+        <!-- package for Java8 -->
+        <!--<tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}-java8.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>-->
+        <!-- replace ini for Java9 and 10  -->
+        <!--<copy todir="${basedir}/gen/final/gtk.linux.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
+        <!-- package for Java9 and 10 -->
+        <!--<tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}-java9-10.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>-->
+        <tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>
+        
+        <mkdir dir="${basedir}/gen/final/cocoa.macosx.x86_64"/>
+        <java jar="${eclipse.product.launcher}" fork="true" failonerror="true" maxmemory="128m">
+            <arg value="-application" />
+            <arg value="org.eclipse.equinox.p2.director" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
+            <arg value="-repository" />
+            <arg value="${eclipse.repository}"/>
+            <arg value="-destination"/>
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-metadataRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-artifactRepository" />
+            <arg value="file:${basedir}/gen/final" />
+            <arg value="-installIU" />
+            <arg value="net.ssehub.easy.producer.ui.EasyProducer" />
+            <arg value="-destination"/>
+            <arg value="${basedir}/gen/final/cocoa.macosx.x86_64"/>
+            <arg value="-profileProperties" />
+            <arg value="org.eclipse.update.install.features=true" />
+                <arg value="-p2.os" />
+                <arg value="cocoa" />
+                <arg value="-p2.ws" />
+                <arg value="macosx" />
+                <arg value="-p2.arch" />
+                <arg value="x86_64" />
+        </java>
+        <!-- copying is a hack -> product configuration based on features using org.eclipse.equinox.executable -->
+        <mkdir dir="${basedir}/gen/final/cocoa.macosx.x86_64/EasyProducer.app"/>
+        <copy todir="${basedir}/gen/final/cocoa.macosx.x86_64/EasyProducer.app">
+            <fileset dir="${user.home}/Eclipse/qmRepository/binary/bin/cocoa/macosx/x86_64/Eclipse.app" includes="**"/>
+        </copy>
+        <!-- copy readme -->
+        <copy tofile="${basedir}/gen/final/cocoa.macosx.x86_64/README.txt" file="EASy/README.txt"/>
+        <!-- another hack -> ini-file, not sure whether needed -->
+        <!--<copy todir="${basedir}/gen/final/cocoa.macosx.x86_64/" file="${basedir}/gen/final/gtk.linux.x86_64/EASy.ini" overwrite="true"/>-->
+        <!-- patch OSGi for Java9 and 10 -->
+    	<!--<zip update="true" destfile="${basedir}/gen/final/cocoa.macosx.x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" basedir="EASy/osgi" includes="JavaSE-1.9.profile JavaSE-10.profile profile.list"/>-->
+        <!-- package for Java8 -->
+    	<!--<zip destfile="${basedir}/archive/EASy-Producer.cocoa.macosx.x86_64-${NOW}-java8.zip" basedir="${basedir}/gen/final/cocoa.macosx.x86_64"/>-->
+        <!-- replace ini for Java9 and 10  -->
+    	<!--<copy todir="${basedir}/gen/final/cocoa.macosx.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
+        <!-- package for Java9 and 10 -->
+        <!--<zip destfile="${basedir}/archive/EASy-Producer.cocoa.macosx.x86_64-${NOW}-java9-10.zip" basedir="${basedir}/gen/final/cocoa.macosx.x86_64"/>-->
+        <zip destfile="${basedir}/archive/EASy-Producer.cocoa.macosx.x86_64-${NOW}.zip" basedir="${basedir}/gen/final/cocoa.macosx.x86_64"/>
+
     </target>
     
     <target name="zip.Site">
