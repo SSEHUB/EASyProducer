@@ -2,6 +2,8 @@
 <project name="EASy-Nightly-UpdateSite" default="createUpdateSite" basedir="." xmlns:plugins="antlib:de.uni_hildesheim.sse.easy.standalone.versionReplacement">
     <property file="${user.home}/global-build.properties"/>
     <property name="configs" value="gtk.linux.x86_64,win32.win32.x86_64" />
+	
+	<property name="eclipse.launcher.classpath" value="${eclipse.home}/plugins/org.eclipse.osgi.compatibility.state_1.2.300.v20210212-1137.jar" />
 
     <path id ="task.libs">
 		<!-- Libs of the Task -->
@@ -30,10 +32,11 @@
         <antcall target="replacePlugins"/>
         <antcall target="createFeature"/>
         <antcall target="createSiteXML"/>
+        <!-- Eclipse 4.19 does not properly run
         <antcall target="createArtifactJars"/>
         <antcall target="zip.Site"/>
         <antcall target="publish"/>
-		<antcall target="createProducts"/>
+		<antcall target="createProducts"/>-->
     </target>
     
     <target name="replacePlugins">
@@ -62,7 +65,7 @@
     </target>
     
     <target name="createArtifactJars">
-        <java jar="${eclipse.launcher}" fork="true" failonerror="true" maxmemory="128m">
+        <java jar="${eclipse.launcher}" classpath="${eclipse.launcher.classpath}" fork="true" failonerror="true" maxmemory="128m">
             <arg value="-application" />
             <arg value="org.eclipse.equinox.p2.publisher.UpdateSitePublisher" />
             <arg value="-metadataRepository" />
