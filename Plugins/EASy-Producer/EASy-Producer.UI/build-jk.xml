@@ -50,6 +50,7 @@
 		</javac>
         <copy file="plugin.xml" todir="${build.classes.dir}"/>
 		<copy file="plugin_customization.ini" todir="${build.classes.dir}"/>
+        <copy dir="icons" todir="${build.classes.dir}"/>
     </target>
 	
 	<!-- Creates a jar file -->

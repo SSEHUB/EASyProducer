@@ -188,15 +188,19 @@
          </property>
          <property
                name="aboutImage"
-               value="eclipse_lg.png">
+               value="icons/EASy_Logo_02.png">
          </property>
          <property
                name="aboutText"
-               value="%productBlurb">
+               value="EASy-Producer
+
+Software Systems Engineering
+University of Hildesheim
+Germany">
          </property>
          <property
                name="windowImages"
-               value="eclipse16.png,eclipse32.png,eclipse48.png">
+               value="icons/EASy_Logo_16x16.png,icons/EASy_Logo_32x32.png,icons/EASy_Logo_48x48.png">
          </property>
          <property
                name="preferenceCustomization"
