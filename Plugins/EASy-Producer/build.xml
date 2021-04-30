@@ -287,8 +287,9 @@
 	    </emma>
 	</target> 
 	
-	<target name="test" depends="emmaReport">
+	<target name="test"> <!--EMMA is outdated and fails with Java 11, depends="emmaReport"-->
 		<!-- Gather Junit results -->
+        <!--
 		<copy todir="junitResults" failonerror="true" overwrite="true">
 			<fileset dir="${test.eclipse.path}/results/">
 				<include name="**/*.xml" />
@@ -299,6 +300,7 @@
                 <include name="*.tsv" />
             </fileset>
         </copy>
+        -->
 	</target>		
 	
     <target name="test.gui" depends="stopautagent">
