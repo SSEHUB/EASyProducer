@@ -48,9 +48,6 @@
         <javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
 		</javac>
-        <copy file="plugin.xml" todir="${build.classes.dir}"/>
-		<copy file="plugin_customization.ini" todir="${build.classes.dir}"/>
-        <copy dir="icons" todir="${build.classes.dir}"/>
     </target>
 	
 	<!-- Creates a jar file -->
@@ -60,6 +57,7 @@
 			<fileset dir="${basedir}">
 				<include name="icons/**/*" />
 				<include name="plugin.xml" />
+                <include name="plugin_customization.ini" />
 				<include name="about.ini" />
 			</fileset>
 		</copy>
