@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.basics;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.basics
 Bundle-Version: 1.2.0
 Bundle-Vendor: University of Hildesheim, SSE
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: edu.umd.cs.findbugs.annotations,
  net.ssehub.easy.basics,
  net.ssehub.easy.basics.io,
