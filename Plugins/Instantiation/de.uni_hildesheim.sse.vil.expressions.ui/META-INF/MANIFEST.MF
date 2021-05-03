@@ -21,7 +21,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
  net.ssehub.easy.dslCore.ui,
  net.ssehub.easy.dslCore
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: de.uni_hildesheim.sse.vil,
  de.uni_hildesheim.sse.vil.expressions.ui.contentassist,
  de.uni_hildesheim.sse.vil.expressions.ui.contentassist.antlr,

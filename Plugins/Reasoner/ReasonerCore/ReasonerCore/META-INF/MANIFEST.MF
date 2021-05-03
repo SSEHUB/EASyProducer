@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.reasoning.core;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.reasoning.core
 Bundle-Version: 1.2.0
 Import-Package: org.osgi.framework
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: net.ssehub.easy.reasoning.core.frontend,
  net.ssehub.easy.reasoning.core.impl,
  net.ssehub.easy.reasoning.core.performance,

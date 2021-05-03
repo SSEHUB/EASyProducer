@@ -8,8 +8,8 @@
 	<property name="src.dir" value="src"/>
 	<property name="src.gen.dir" value="src-gen"/>
 	<property name="xtend.gen.dir" value="xtend-gen"/>
-	<property name="javacSource" value="1.5"/>
-	<property name="javacTarget" value="1.5"/>
+	<property name="javacSource" value="1.8"/>
+	<property name="javacTarget" value="1.8"/>
 	
 	<path id ="includes">
 		<!-- Model -->

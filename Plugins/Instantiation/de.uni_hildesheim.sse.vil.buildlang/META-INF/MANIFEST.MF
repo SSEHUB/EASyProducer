@@ -29,7 +29,7 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
 Service-Component: OSGI-INF/vilParser.xml
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: de.uni_hildesheim.sse,
  de.uni_hildesheim.sse.buildLanguageTranslation,
  de.uni_hildesheim.sse.formatting,

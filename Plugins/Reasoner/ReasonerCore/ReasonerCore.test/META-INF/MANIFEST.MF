@@ -4,7 +4,7 @@ Bundle-Name: net.ssehub.easy.reasoning.core.tests
 Bundle-SymbolicName: net.ssehub.easy.reasoning.core.tests;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.reasoning.core.tests
 Bundle-Version: 0.0.1
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit,
  de.uni_hildesheim.sse.ivml;bundle-version="0.1.1",
  net.ssehub.easy.varModel.tests;bundle-version="0.0.10";visibility:=reexport,
