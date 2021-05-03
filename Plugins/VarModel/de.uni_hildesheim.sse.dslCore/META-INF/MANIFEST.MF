@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.dslCore;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.dslCore
 Bundle-Version: 1.2.0
 Bundle-Vendor: SSE University of Hildesheim
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.eclipse.emf.ecore,
  org.eclipse.xtext;bundle-version="2.5.0",
  net.ssehub.easy.basics;visibility:=reexport,
