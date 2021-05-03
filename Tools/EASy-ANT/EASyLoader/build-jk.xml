@@ -67,7 +67,7 @@
 	
 	<target name="bundle">
 		<echoproperties/>
-        <copy file="${org.eclipse.birt.runtime:org.eclipse.osgi.services:jar}" todir="${basedir}/build/jar"/>
+        <copy file="${org.eclipse.platform:org.eclipse.osgi.services:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse:osgi:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse.equinox:preferences:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse.equinox:common:jar}" todir="${basedir}/build/jar"/>

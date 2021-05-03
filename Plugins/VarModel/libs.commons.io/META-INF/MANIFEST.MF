@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: apache.commons.io
 Bundle-SymbolicName: net.ssehub.easy.libs.commons.io
 Automatic-Module-Name: net.ssehub.easy.libs.commons.io
-Bundle-Version: 2.4.0
-Bundle-ClassPath: org.apache.commons.io_2.4.0.jar
+Bundle-Version: 2.7.0
+Bundle-ClassPath: org.apache.commons.io_2.7.0.jar
 Export-Package: org.apache.commons.io,
  org.apache.commons.io.comparator,
  org.apache.commons.io.filefilter,

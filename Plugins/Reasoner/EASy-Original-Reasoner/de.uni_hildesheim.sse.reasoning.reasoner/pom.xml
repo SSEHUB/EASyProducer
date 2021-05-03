@@ -76,7 +76,7 @@
   
   <dependencies>
     <dependency>
-      <groupId>org.eclipse.birt.runtime</groupId>
+      <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.osgi.services</artifactId>
     </dependency>        
     <dependency>

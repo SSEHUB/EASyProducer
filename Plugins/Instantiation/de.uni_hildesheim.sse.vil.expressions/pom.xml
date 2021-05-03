@@ -122,11 +122,11 @@
         <artifactId>asm</artifactId>
      </dependency>
      <dependency>
-         <groupId>com.github.adedayo.eclipse.sdk</groupId>
-         <artifactId>org.eclipse.equinox.ds</artifactId>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.scr</artifactId>
      </dependency>
      <dependency>
-       <groupId>org.eclipse.birt.runtime</groupId>
+       <groupId>org.eclipse.platform</groupId>
        <artifactId>org.eclipse.osgi.services</artifactId>
      </dependency>
   </dependencies>  

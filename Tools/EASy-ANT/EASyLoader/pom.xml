@@ -73,17 +73,17 @@
   
   <dependencies>
         <dependency>
-          <groupId>org.eclipse.birt.runtime</groupId>
+          <groupId>org.eclipse.platform</groupId>
           <artifactId>org.eclipse.osgi.services</artifactId>
         </dependency>        
         <dependency>
-          <groupId>org.eclipse</groupId>
-          <artifactId>osgi</artifactId>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.osgi</artifactId>
         </dependency> 
         <dependency>
-          <groupId>org.eclipse.equinox</groupId>
-          <artifactId>preferences</artifactId>
-        </dependency> <!-- brings -->
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.equinox.preferences</artifactId>
+        </dependency>
         <dependency>
           <groupId>org.apache.ant</groupId>
           <artifactId>ant</artifactId>

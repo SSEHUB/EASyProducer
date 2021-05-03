@@ -77,13 +77,9 @@
   
   <dependencies>
 	<dependency>
-	    <groupId>com.github.adedayo.eclipse.sdk</groupId>
+	    <groupId>org.eclipse.platform</groupId>
 	    <artifactId>org.eclipse.ui</artifactId>
 	</dependency>
-    <dependency>
-       <groupId>org.eclipse.platform</groupId>
-       <artifactId>org.eclipse.core.resources</artifactId>
-    </dependency>
     <dependency>
        <groupId>org.eclipse.xtext</groupId>
        <artifactId>org.eclipse.xtext.ui.codetemplates.ui</artifactId>

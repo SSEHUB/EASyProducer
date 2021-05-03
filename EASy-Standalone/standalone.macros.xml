@@ -80,7 +80,7 @@ DS:de.uni_hildesheim.sse.easy.maven.Registration</concat>
 	<macrodef name="copyDependencies">
 		<attribute name="target" default="NOT_SET" />
 		<sequential>
-	        <copy file="${org.eclipse.birt.runtime:org.eclipse.osgi.services:jar}" todir="@{target}"/>
+	        <copy file="${org.eclipse.platform:org.eclipse.osgi.services:jar}" todir="@{target}"/>
 	        <copy file="${org.eclipse:osgi:jar}" todir="@{target}"/>
 	        <copy file="${org.eclipse.equinox:preferences:jar}" todir="@{target}"/>
 	        <copy file="${org.eclipse.equinox:common:jar}" todir="@{target}"/>

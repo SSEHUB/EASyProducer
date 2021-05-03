@@ -86,7 +86,7 @@
          <artifactId>org.eclipse.jdt.core</artifactId>
      </dependency>
      <dependency>
-         <groupId>at.bestsolution.eclipse</groupId>
+         <groupId>org.eclipse.platform</groupId>
          <artifactId>org.eclipse.text</artifactId>
      </dependency>
      <dependency>

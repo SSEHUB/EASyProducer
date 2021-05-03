@@ -42,16 +42,16 @@
         </dependency>
         <!-- eclipse -->
         <dependency>
-          <groupId>org.eclipse.birt.runtime</groupId>
+          <groupId>org.eclipse.platform</groupId>
           <artifactId>org.eclipse.osgi.services</artifactId>
         </dependency>        
         <dependency>
-          <groupId>org.eclipse</groupId>
-          <artifactId>osgi</artifactId>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.osgi</artifactId>
         </dependency> 
         <dependency>
-          <groupId>org.eclipse.equinox</groupId>
-          <artifactId>preferences</artifactId>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.equinox.preferences</artifactId>
         </dependency>
         <dependency>
            <groupId>org.eclipse.emf</groupId>
@@ -62,8 +62,8 @@
             <artifactId>org.eclipse.emf.common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.adedayo.eclipse.sdk</groupId>
-            <artifactId>org.eclipse.equinox.ds</artifactId>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr</artifactId>
         </dependency>
         <!-- xtext -->
         <dependency>
