@@ -6,8 +6,8 @@
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
 	<property name="src.gen.dir" value="src-gen"/>
-	<property name="javacSource" value="1.5"/>
-	<property name="javacTarget" value="1.5"/>
+	<property name="javacSource" value="11"/>
+	<property name="javacTarget" value="11"/>
 	
 	<path id ="includes">
 	    <!-- DSL core ui common classes -->
