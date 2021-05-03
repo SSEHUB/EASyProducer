@@ -5,7 +5,7 @@ Bundle-SymbolicName: net.ssehub.easy.instantiation.core;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.core
 Bundle-Version: 1.2.0
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/instantiatorCore.xml
 Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.6",
  org.eclipse.equinox.ds;resolution:=optional,

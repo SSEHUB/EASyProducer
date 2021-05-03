@@ -5,7 +5,7 @@ Bundle-SymbolicName: de.uni-hildesheim.sse.easy.instantiatorCore.rt;singleton:=t
 Automatic-Module-Name: de.uni-hildesheim.sse.easy.instantiatorCore.rt
 Bundle-Version: 1.2.0
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/instantiatorCoreRt.xml
 Require-Bundle: net.ssehub.easy.instantiation.core;visibility:=reexport,
  net.ssehub.easy.basics,
