@@ -71,6 +71,7 @@
         <copy file="${org.eclipse.platform:org.eclipse.osgi:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse.platform:org.eclipse.equinox.preferences:jar}" todir="${basedir}/build/jar"/>
         <copy file="${org.eclipse.platform:org.eclipse.equinox.common:jar}" todir="${basedir}/build/jar"/>
+        <copy file="${org.eclipse.platform:org.eclipse.equinox.registry:jar}" todir="${basedir}/build/jar"/>
 		<copy file="${org.apache.ant:ant:jar}" todir="${basedir}/build/jar"/>
 		<copy file="${org.apache.ant:ant-launcher:jar}" todir="${basedir}/build/jar"/>
 		<copy todir="${basedir}/build/jar" failonerror="false" overwrite="true">

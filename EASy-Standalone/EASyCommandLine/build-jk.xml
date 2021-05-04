@@ -8,6 +8,12 @@
 	<property name="javacSource" value="1.8"/>
 	<property name="javacTarget" value="1.8"/>
 	
+	<path id="includes.local">
+	    <fileset dir="lib">
+	        <include name="**/*.jar" />
+	    </fileset>
+	</path>	
+		
 	<path id ="includes">
 		<pathelement path="${libs.utils}"/>
 		<pathelement path="${libs.instantiator.core}"/>
@@ -17,9 +23,7 @@
         <pathelement path="${libs.easy.persistence}"/>
 		<pathelement path="${libs.libs.common.io}"/>
         <!-- Lib -->
-        <fileset dir="lib">
-            <include name="**/*.jar" />
-        </fileset>
+        <pathelement path="${includes.local}"/>
     </path>
 	
 	<!-- Targets  -->
@@ -59,10 +63,13 @@
 				<include name="*" />
 			</fileset>
 		</copy>
+        <manifestclasspath property="manifest_cp" jarfile="${build.base.dir}/bundle/${ant.project.name}.jar">
+            <classpath refid="includes.local" />
+        </manifestclasspath>        	
         <jar destfile="${build.base.dir}/bundle/${ant.project.name}.jar" basedir="${build.classes.dir}">
             <manifest>
                 <attribute name="Main-Class" value="net.ssehub.easy.standalone.cmd.CommandLineExecuter"/>
-                <attribute name="Class-Path" value="lib/org.eclipse.osgi_3.9.1.v20140110-1610.jar lib/org.eclipse.osgi.services_3.3.100.v20130513-1956.jar lib/eclipse-part.jar lib/easy-headless.jar lib/org.eclipse.equinox.common_3.6.200.jar lib/org.eclipse.equinox.preferences_3.5.100.jar"/>
+                <attribute name="Class-Path" value="${manifest_cp}"/>
             </manifest>
         </jar>
         <zip destfile="${build.base.dir}/EASyCommandLine.zip" basedir="${build.base.dir}/bundle" />
