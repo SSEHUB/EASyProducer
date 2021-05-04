@@ -84,19 +84,19 @@
 	    <artifactId>org.eclipse.xtext.common.types</artifactId>
 	</dependency>
 	<dependency>
-	    <groupId>org.eclipse.core</groupId>
-	    <artifactId>org.eclipse.core.runtime</artifactId>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.runtime</artifactId>
 	</dependency>
 	<dependency>
-	    <groupId>org.eclipse</groupId>
-	    <artifactId>osgi</artifactId>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.osgi</artifactId>
 	</dependency> 
 	<dependency>
-	    <groupId>org.eclipse.equinox</groupId>
-	    <artifactId>preferences</artifactId>
+	    <groupId>org.eclipse.platform</groupId>
+	    <artifactId>org.eclipse.equinox.preferences</artifactId>
 	</dependency>
 	<dependency>
-	    <groupId>org.eclipse.birt.runtime</groupId>
+	    <groupId>org.eclipse.platform</groupId>
 	    <artifactId>org.eclipse.osgi.services</artifactId>
 	</dependency>
 	<dependency>
@@ -104,7 +104,7 @@
 	    <artifactId>org.eclipse.jdt.core</artifactId>
 	</dependency>
 	<dependency>
-	    <groupId>at.bestsolution.eclipse</groupId>
+	    <groupId>org.eclipse.platform</groupId>
 	    <artifactId>org.eclipse.text</artifactId>
 	</dependency>
 
@@ -116,7 +116,7 @@
 	<dependency>
 	    <groupId>junit</groupId>
 	    <artifactId>junit</artifactId>
-	    <version>4.12</version>
+	    <version>4.13.1</version>
 	</dependency>
 	</dependencies>  
  </project>
