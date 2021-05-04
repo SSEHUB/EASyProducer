@@ -10,12 +10,10 @@
 	
 	<path id ="includes">
         <!-- Lib -->
-        <fileset dir="lib">
-            <include name="**/*.jar" />
-        </fileset>
+        <pathelement path="${libs.libs.common.io}"/>
 		<!-- Junit -->
         <fileset dir="${eclipse.plugins.dir}">
-            <include name="**/junit*.jar" />
+            <include name="**/org.junit*.jar" />
             <include name="**/org.hamcrest.core*.jar" />
         </fileset>
     </path>

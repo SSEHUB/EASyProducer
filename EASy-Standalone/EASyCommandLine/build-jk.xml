@@ -5,8 +5,8 @@
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.6"/>
-	<property name="javacTarget" value="1.6"/>
+	<property name="javacSource" value="1.8"/>
+	<property name="javacTarget" value="1.8"/>
 	
 	<path id ="includes">
 		<pathelement path="${libs.utils}"/>
