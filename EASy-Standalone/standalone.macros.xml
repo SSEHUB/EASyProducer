@@ -84,6 +84,7 @@ DS:de.uni_hildesheim.sse.easy.maven.Registration</concat>
 	        <copy file="${org.eclipse.platform:org.eclipse.osgi:jar}" todir="@{target}"/>
 	        <copy file="${org.eclipse.platform:org.eclipse.equinox.preferences:jar}" todir="@{target}"/>
 	        <copy file="${org.eclipse.platform:org.eclipse.equinox.common:jar}" todir="@{target}"/>
+			<copy file="${org.eclipse.platform:org.eclipse.equinox.registry:jar}" todir="@{target}"/>
 	        <copy file="${org.apache.ant:ant:jar}" todir="@{target}"/>
 	        <copy file="${org.apache.ant:ant-launcher:jar}" todir="@{target}"/>
 		</sequential>
