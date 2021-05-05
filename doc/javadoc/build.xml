@@ -5,7 +5,7 @@
     <include file="${user.home}/macros.xml"/>
    
     <path id ="includes">
-		<pathelement path="${eclipse.plugins.dir}/org.apache.commons.io_2.0.1.v201105210651.jar"/>
+		<pathelement path="${libs.libs.common.io}"/>
 		<!-- Libs of VarModel -->
         <!-- fileset dir="${home.model.persistency.dir}/lib" includes="**/*.jar"/ -->
         <!-- Libs of Instantiator -->
@@ -113,7 +113,7 @@
     
     <!-- Creates Javadoc -->
     <target name="javadoc" depends="gather.sources">
-    	<easyJavadoc sourcepath="${src.all.files}" destdir="${doc.dir}" source="1.8">
+    	<easyJavadoc sourcepath="${src.all.files}" destdir="${doc.dir}" source="11">
             <classpath refid="includes"/>
             <!-- JavaDoc Annotations used by Xtext -->
             <!--tag name="generated" scope="all" description="Generated via Xtext"/>
