@@ -166,6 +166,7 @@ public abstract class AbstractLoader {
      */
     private void collectBootstrapData(BundleInfo info, List<URL> urls, List<BundleInfo> instantiate, Object tag) {
         File resolved = info.getResolvedJar();
+System.out.println("Bootstrap " + info.getName()+" "+resolved);        
         if (null != resolved) {
             try {
                 if (alreadyKnownToClassLoader(info)) {

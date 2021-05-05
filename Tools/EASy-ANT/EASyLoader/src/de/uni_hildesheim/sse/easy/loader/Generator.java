@@ -728,7 +728,6 @@ public class Generator extends AbstractLoader {
             }
             URLProcessor processor = new URLProcessor(unbundle, easyJar, eclipseJar);
             for (URL url : urls) {
-                System.out.println("Considering URL: " + url);
                 boolean classpath = false;  
                 for (String classP : this.checkedClasspaths) {
                     String sUrl = url.toString();
