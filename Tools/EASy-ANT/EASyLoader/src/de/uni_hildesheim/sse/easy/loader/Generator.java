@@ -1015,7 +1015,9 @@ public class Generator extends AbstractLoader {
                         Utils.closeQuietly(is);
                     } catch (IOException e) {
                         Utils.closeQuietly(is);
-                        throw e;
+                        if (!e.getMessage().startsWith("duplicate entry:")) { // not nice, so far no tracking
+                            throw e;
+                        }
                     }
                 } else {
                     
@@ -1035,7 +1037,7 @@ public class Generator extends AbstractLoader {
                         }
                     } catch (IOException e) {
                         Utils.closeQuietly(is);
-                        LoaderLog.warn("Could not read stream from class: " + name, e);
+                        LoaderLog.warn("Could not read stream from class: " + name + " " + e.getMessage(), e);
                         throw e;
                     }
                     
