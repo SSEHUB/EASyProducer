@@ -284,7 +284,7 @@ public class Generator extends AbstractLoader {
         String libsFolder) { 
         
         //System.out.println(target + "\\LoaderLog.txt");
-        LoaderLog.init(target + "/LoaderLog.txt"); //TODO: ändern
+        LoaderLog.init(target + "/LoaderLog.txt");
         
         Generator gen = new Generator(new File(baseDir), new File(pluginPath), new File(eclipsePath),
             new File(binFolder), new File(libsFolder));
@@ -728,6 +728,7 @@ public class Generator extends AbstractLoader {
             }
             URLProcessor processor = new URLProcessor(unbundle, easyJar, eclipseJar);
             for (URL url : urls) {
+                System.out.println("Considering URL: " + url);
                 boolean classpath = false;  
                 for (String classP : this.checkedClasspaths) {
                     String sUrl = url.toString();
