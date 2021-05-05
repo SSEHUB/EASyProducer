@@ -1,0 +1,374 @@
+import commonVTLMethods;
+@advice(QM)
+template stormEndBolt(Configuration config, FileArtifact target, String topoName, String topLevelPip, DecisionVariable fmElt, Algorithm algorithm, String nextNode) {
+	String algName = algorithm.name.firstToUpperCase().toIdentifier();
+	String fmVarName = fmElt.varName();
+	FamilyElement fe = fmElt;
+	Family fm = fe.family;
+	String fmName = fm.name.firstToUpperCase().toIdentifier();
+	Boolean isActive;
+	def main(Configuration config, FileArtifact target, String topoName, String topLevelPip, DecisionVariable fmElt, Algorithm algorithm, String nextNode) {
+		isActive = isActiveAlgorithm(fm, algorithm);
+		setOf(String) types = coreTupleTypes(fmName, algorithm, false); //get the list of output types
+		'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	'' 
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/ 
+    	'import java.util.*;'
+    	'import java.io.IOException;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.tuple.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualimaster.common.signal.*;'
+    	'import eu.qualimaster.base.algorithm.*;'
+    	'import eu.qualimaster.families.inf.*;'
+    	if(looseSub) {
+    		'import com.esotericsoftware.kryo.io.Output;'
+    		'import java.util.concurrent.ConcurrentLinkedQueue;'
+    		'import eu.qualimaster.common.signal.PortManager.*;'
+			'import eu.qualimaster.common.signal.PortManager;'
+			'import eu.qualimaster.base.serializer.KryoGeneralTupleSerializer;'
+			'import eu.qualimaster.common.switching.*;'
+    	}
+		if(newSwitchLog) {
+    		'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+    	}  
+    	for(String type : types) {
+			'import eu.qualimaster.families.imp.${fmName}.I$type;'
+			'import eu.qualimaster.families.inf.I${fmName}.II$type;'
+		}  	    	    			
+		/****************************/
+    	/*        Bolt class        */  
+    	/****************************/
+    	''
+    	'/**'
+    	'* Defines the end bolt for the algorithm $algName (GEN).'  
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	String name = algName + "EndBolt";
+//    	if(looseSub) {
+//    		name = topoName + "EndBolt";
+//    	}
+    	'public class $name extends BaseSignalBolt {'
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/
+    	''    
+    	'    final static Logger logger = Logger.getLogger(${name}.class);'
+    	'    transient OutputCollector _collector;'
+    	'    private String streamId;'
+    		'private boolean emit = false;' | 4;
+    		'private boolean isActive;' | 4;
+    		if(looseSub) {
+    			'    private String host = "localhost";'
+		    	'    private int port;'
+		    	'    private transient TupleSender sender = null;'
+		    	'    private transient KryoGeneralTupleSerializer genSer = null;'
+		    	'private transient Queue<IGeneralTuple> queue = null;' | 4;
+		    	'private transient SynchronizedQueue<IGeneralTuple> syn = null;' | 4;
+		    	'private static int QUEUE_SIZE = 100;' | 4;
+    		}
+    		if(newSwitchLog) {
+				'private transient PrintWriter out = null;' | 4;
+			}
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/
+    	''
+    	'    public $name(String name, String namespace, String streamId) {'
+    	'        super(name, namespace, $genMonitoringProbes);'
+    			 'this.streamId = streamId;' | 8;
+    	'    }'  
+    			/****************************/
+		    	/*      prepare method      */  
+		    	/****************************/		
+		'' 	      
+		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'        super.prepare(map, topologyContext, collector);'
+				 '_collector = collector;' | 8;
+				 if(newSwitchLog) {
+				 	'String logDir = (String) map.get("LOG.DIRECTORY");' | 8;
+				 	'out = DataLogger.getPrintWriter(logDir + "${algName}EndBolt.log");' | 8;
+				 }
+				 if(looseSub) {
+				 	'isActive = "true".equals(map.get(Constants.CONFIG_KEY_INITIAL_SUBPIPELINE));' | 8;
+				 } else {
+				 	'isActive = $isActive; //initialized true with the first algorithm in the family' | 8;
+				 }
+				 'logger.info("Is this active? " + isActive);' | 8;
+			 	 if(newSwitchLog) {
+			 		'out.println("Is this active? " + isActive);' | 8;
+			 		'out.flush();' | 8;
+			 	 }
+				 if(!looseSub) {
+					 if(isActive) {
+					 	'emit = true;' | 8;	
+					 } else {
+					 	'emit = false;' | 8;	
+					 }	
+				 }	 
+				if(looseSub) {
+					'genSer = new KryoGeneralTupleSerializer(map); ' | 8;
+					'queue = new ConcurrentLinkedQueue<IGeneralTuple>();' | 8;
+	        		'syn = new SynchronizedQueue<IGeneralTuple>(queue, QUEUE_SIZE);' | 8;
+	        		
+	        		'PortManager portManager = getPortManager();' | 8;
+	        			'PortAssignment assignment = null;' | 8;
+	        			'while(assignment == null && portManager.isConnected()) {' | 8;
+			        		'try {' | 12;
+			        			'assignment = portManager.getPortAssignment("$topLevelPip", "$nextNode", 0, null);' | 16; //TODO: change hardcoded!
+							'} catch (SignalException e) {' | 12;
+								'e.printStackTrace();' | 16;
+							'}' | 12;
+	        			'}' | 8;   
+	        		'if(assignment != null) {' | 8;    		
+						'host = assignment.getHost();' | 12;
+	        			'port = assignment.getPort();' | 12;
+	        		'}' | 8;
+	        		if(newSwitchLog) {
+	        			'logger.info("Connecting to the host : " + host + ", the port: " + port);' | 8;
+			        	'out.println("Connecting to the host : " + host + ", the port: " + port);' | 8;
+			        	'out.flush();' | 8;
+			        }
+					'sender = new TupleSender(host, port);' | 8;
+					'Thread sendTupleThread = new Thread(new SendTuple());' | 8;
+	        		'sendTupleThread.start();' | 8;
+				}
+				'initMonitor();' | 8;
+				'logger.info("The end of the prepare method.");' | 8;
+			'}' | 4; 
+	    ''
+	    //override the initial monitor
+	    produceInitMonitor(true, 4);
+	    
+    			/****************************/
+		    	/*      execute method      */  
+		    	/****************************/	
+		if(looseSub) {
+			'/**' | 4;
+			' * A thread executes tuples.' | 4;
+			'**/' | 4;
+			'public class SendTuple implements Runnable {' | 4;
+            ''
+            'private AbstractMonitor monitor = createThreadMonitor();' | 8;
+            ''
+				'@Override' | 8;
+	    		'public void run() {' | 8;
+					'while(true) {' | 12;
+			            if (genMonitoringProbes) {      
+                        'monitor.startMonitoring();' | 16;
+                        }
+                        'IGeneralTuple tuple = syn.consume();' | 16;
+						'byte[] bytes = genSer.serialize(tuple);' | 16;
+						'sender.send(bytes);' | 16;
+                        if (genMonitoringProbes) {
+                        'monitor.endMonitoring(tuple);' | 16;
+                        }           
+					'}' | 12;
+				'}' | 8;
+			'}' | 4;  
+			''  
+			'    public void execute(Tuple tuple) {'
+				if(newSwitchLog) {
+	    			'out.println("Received data and emitting...");' | 8;
+	    			'out.flush();' | 8;
+	    		}
+	    			'if(isActive) {' | 8;
+				 		'//queue received data' | 12;
+				 		'syn.produce(new GeneralTuple(tuple.getValues()));' | 12;
+				 	'}' | 8;
+				 	'_collector.ack(tuple);' | 8;
+				 '}' | 4;	 
+		} else {   
+		'    public void execute(Tuple tuple) {'
+				'if(isActive) {' | 8;
+			 		'activeExecute(tuple);' | 12;
+			 	'} else {' | 8;
+			 		'passiveExecute(tuple);' | 12;
+			 	'}' | 8;
+			 '}' | 4;
+		
+			 ''	
+			 'public void activeExecute(Tuple tuple) {' | 4;
+				'if(emit) {' | 8;
+					castTupleTypes();
+			 		'//_collector.emit(streamId, new Values(tuple));' | 12;
+			 		'_collector.ack(tuple);' | 12;
+			 	'}' | 8;
+			 '}' | 4;
+			 ''
+			 'public void passiveExecute(Tuple tuple) {' | 4;
+				'if(emit) {' | 8;
+					castTupleTypes();
+			 		'//_collector.emit(streamId, new Values(tuple));' | 12;
+			 	'}' | 8;
+			 	'_collector.ack(tuple);' | 8;
+			 '}' | 4;
+			 }
+			 ''	
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+				'for(int i = 0; i < signal.getChangeCount(); i++) {' | 8;
+					'ParameterChange para = signal.getChange(i);' | 12;			
+					'switch (para.getName()) {' | 12;
+						'case "disable": //active' | 16;
+							if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter signal disable!");' | 20;
+				                'out.flush();' | 20;
+				            }
+				            if(!looseSub) {
+								'emit = false;' | 20;
+							} else {
+								'isActive = false;' | 20;
+							}
+							'try {' | 20;
+								'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(), "${algName}Intermediary", "stopped", true, null);' | 24; //"$topoName"
+	                    		'sendSignal(paraSignal);' | 24;
+                    		'} catch (SignalException e) {' | 20;
+					            'e.printStackTrace();' | 24;
+					        '}' | 20;
+                    		if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Sent parameter signal stopped to ${algName}Intermediary!");' | 20;
+				                'out.flush();' | 20;
+				            }
+							'break;' | 20;
+						'case "emit": //passive' | 16;
+							if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter signal emit!");' | 20;
+				                'out.flush();' | 20;
+				            }
+							'isActive = true;' | 20;
+							if(!looseSub) {
+								'emit = true;' | 20;
+							}
+							'try {' | 20;
+								'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(), "${algName}Intermediary", "ready", true, null);' | 24;//"$topoName"
+	                    		'sendSignal(paraSignal);' | 24;
+                    		'} catch (SignalException e) {' | 20;
+					            'e.printStackTrace();' | 24;
+					        '}' | 20;
+                    		if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Sent parameter signal ready to ${algName}Intermediary!");' | 20;
+				                'out.flush();' | 20;
+				            }
+							'break;' | 20;
+						'case "goToPassive": //passive' | 16;
+							if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter signal goToPassive!");' | 20;
+				                'out.flush();' | 20;
+				            }
+							'isActive = false;' | 20;
+							'emit = false;' | 20;
+							if(isHardwareAlgorithm(algorithm)) {
+								if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Sending a signal to stop algorithm!");' | 20;
+				                'out.flush();' | 20;
+				            	}
+				            	'try {' | 20;
+									'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(), "$fmVarName", "stopHWAlg", true, null);' | 24;//"$topoName"
+		                    		'sendSignal(paraSignal);' | 24;
+	                    		'} catch (SignalException e) {' | 20;
+						            'e.printStackTrace();' | 24;
+						        '}' | 20;
+							}
+							'break;' | 20;
+						'case "goToActive": //active' | 16;
+							if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter signal goToActive!");' | 20;
+				                'out.flush();' | 20;
+				            }
+							'isActive = true;' | 20;
+							if(!looseSub) {
+								'emit = true;' | 20;
+							}
+							'break;' | 20;
+					'}' | 12;	
+				'}' | 8;
+			'}' | 4;
+			''		    				 	 
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/
+		''              
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'				
+		'        declarer.declareStream(streamId, new Fields("endBolt"));'	
+			 '}' | 4;
+			 ''
+			 /********************************* */
+	    	/*******Prepare shut down signal** */
+	    	/********************************* */
+	    	'@Override' | 4;
+	    	'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+	        	'super.prepareShutdown(signal);' | 8;
+	        	if(looseSub) {
+	        	'if(null != sender) {' | 8;
+        			'sender.stop();' | 12;
+        		'}' | 8;
+        		}
+	    	'}' | 4;
+	    	''		  	  	    	
+    	'}'
+	}
+	
+	def castTupleTypes(mapOf(Tuple, Tuple) inputToOutputMapping, mapOf(Tuple,String) nameToOutputMap) {
+		String ifName = "I" + fmName;
+   			String ifInputName = "I" + ifName;
+    		String tupleName;
+    		String outputInfName;
+			String inputInfName;
+			String fImpInputName;
+    		for(Tuple t : fm.input) {
+				//get the tuple name
+				tupleName = t.name;
+				
+				//get input interface name
+				inputInfName = ifInputName + "${firstToUpperCase(tupleName)}Input";
+				//get input imp name
+				fImpInputName= 	ifName + "${firstToUpperCase(tupleName)}Input";
+				//get output interface name	
+				if(inputToOutputMapping.containsKey(t))	{
+		  			Tuple output = inputToOutputMapping.get(t);
+		  			outputInfName = nameToOutputMap.get(output);				
+				} 
+				'if(sTuple.getValue(0) instanceof $outputInfName) {' | 12;
+					'iTuple${firstToUpperCase(tupleName)} = ($outputInfName)sTuple.getValue(0);' | 16;
+					'input${firstToUpperCase(tupleName)} = new $fmName.$fImpInputName();' | 16;
+		 			for(Field f : t.fields) {
+			 			String fname = toIdentifier("${f.name}");
+			 			String mname = firstToUpperCase(fname);
+	         			'input${firstToUpperCase(tupleName)}.set${mname}(iTuple${firstToUpperCase(tupleName)}.get${mname}());' | 16;
+		 			}
+    				'_collector.emit(streamId, new Values(input${firstToUpperCase(tupleName)}));' | 16;
+    			'}' | 12;
+    		}
+	}
+	
+	def castTupleTypes() {
+		String ifName = "I" + fmName;
+   		String ifInputName = "I" + ifName;
+    	String tupleName;
+    	String outputInfName;
+		for(Tuple t : fm.output) {
+			//get the tuple name
+			tupleName = t.name;
+			
+			//get input interface name
+			outputInfName = ifInputName + "${firstToUpperCase(tupleName)}Output";
+			'if(tuple.getValue(0) instanceof $outputInfName) {' | 12;
+				'$outputInfName algOutput = ($outputInfName)tuple.getValue(0);' | 16;
+				if(newSwitchLog) {
+	                'out.println(Calendar.getInstance().getTimeInMillis() + "Emitting the tuple.");' | 20;
+	                'out.flush();' | 20;
+				}
+				'_collector.emit(streamId, new Values(algOutput));' | 16;
+			'}' | 12;
+		}
+	}
+}

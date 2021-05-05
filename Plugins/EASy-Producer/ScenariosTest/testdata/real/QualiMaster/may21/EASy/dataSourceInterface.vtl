@@ -1,0 +1,119 @@
+import commonVTLMethods;
+@advice(QM)
+template dataSourceInterface(Configuration config, FileArtifact target, DataSource elt, String pkg) {
+
+	/**
+	 * Produces the tuple type classes.
+	 */
+	def produceForTuples(sequenceOf(Tuple) tuples, String srcName, Integer indent) {
+		String inputName = "I" + srcName.firstToUpperCase();
+    	String tupleName;
+    		for (Tuple t : tuples) {      
+				//get the tuple name
+				tupleName = t.name;
+		        '/**' | 4;
+		        '* Define the source data input interface.' | 4;
+		        '**/' | 4;
+		        'public static interface ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Output extends Serializable{' | 4;	
+		        //generate the Getters and Setters    		
+    			for (Field f : t.fields) {
+    				String fname = toIdentifier("${f.name}");
+    				String mname = firstToUpperCase(fname);
+    				String ftype = fieldTypeName(f);
+    				'/**' | indent + 4;
+					'* Returns the input value for tuple field "${f.name}".' | indent + 5;
+					'* @return the tuple value' | indent + 5;
+					'*/' | indent + 5;
+    				'public ${ftype} get${mname}();' | indent + 4;
+    				''
+    				'/**' | indent + 4;
+					'* Sets the output value for tuple field "${f.name}".' | indent + 5;
+					'* @param ${fname} the field value' | indent + 5;
+					'*/' | indent + 5;
+					'public void set${mname}(${ftype} ${fname});' | indent + 4;
+    			}
+    			'}' | 4;
+    		}
+    		
+    		''   	
+	}
+	
+	def main(Configuration config, FileArtifact target, DataSource dataSrc, String pkg){
+		String srcName =dataSrc.name;
+		srcName = srcName.firstToUpperCase();
+		String inputName = "I" + srcName;
+        String furtherInterfaces = "";
+        if (dataSrc.supportsHadoop) {
+            String keyType = getHadoopType(dataSrc.input, true, true);
+            String valueType = getHadoopType(dataSrc.input, true, false);
+            furtherInterfaces = ", InputFormat<$keyType, $valueType>";
+        }
+		'package ${pkg}.inf;'
+		''
+		'import java.io.Serializable;'
+		'import eu.qualimaster.dataManagement.sources.IDataSource;'
+        if (dataSrc.supportsHadoop) {
+		'import org.apache.hadoop.mapred.InputFormat;'
+        'import eu.qualimaster.data.helper.*;'
+        }
+		''
+		'/**'
+		'* Define the data source interface(GEN).'
+		'**/'
+		'public interface I${toIdentifier(srcName)} extends IDataSource$furtherInterfaces {'
+		''
+        if (dataSrc.profilingSource) {
+        '/**' | 4;
+        '* Enforce the source to autoconnect mode and prevent self-connects (profiling).' | 4;
+        '**/' | 4;
+        'public void forceAutoconnect();' | 4;
+        }
+		''
+		//generate the tuple type interfaces
+		 produceForTuples(dataSrc.input, srcName, 4);		
+		''
+		String tupleName;
+		for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			for(Field f : t.fields) {
+			    String fname = toIdentifier("${f.name}");
+    		    String mname = firstToUpperCase(fname);	
+			}
+			
+		'/**' | 4;
+		'* Returns a specific type of data source.' | 4;
+		'* @return ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Output the source data' | 4;
+		'**/' | 4;
+	    'public ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Output get${firstToUpperCase(tupleName)}();' | 4;
+	    ''
+	    '/**' | 4;
+	    '* Returns an aggregation key from the key property of the tuple type for predicting source data. If null, do not aggregate or predict.' | 4;
+	    '* @return an aggregation key' | 4;
+	    '**/' | 4;
+	    'public String getAggregationKey(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Output tuple);' | 4;
+		}
+		
+        if (dataSrc.parameters.size()>0) {
+	        '    // data source parameters'
+	        ''
+	        for (Parameter p : dataSrc.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+	        	'    /**'
+	        	'     * Sets the data source parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the data source parameter'
+	        	'     */'
+	        	
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value);'
+	        	''
+	    	}
+    	}		
+		'}' 
+		}
+		
+		
+ 
+}

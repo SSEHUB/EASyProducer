@@ -1,0 +1,182 @@
+project PipelineVar_18Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_18Cfg;
+	Pipeline PipelineVar_18;
+	Source PipelineVar_18_Source0;
+	Flow PipelineVar_18_Flow0;
+	FamilyElement PipelineVar_18_FamilyElement0;
+	Flow PipelineVar_18_Flow1;
+	FamilyElement PipelineVar_18_FamilyElement1;
+	Flow PipelineVar_18_Flow2;
+	PipelineVar_18_Flow2 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement1), 
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_27.output[1]), 
+		name = "f2", 
+		constraints = {}
+	};
+	Flow PipelineVar_18_Flow3;
+	FamilyElement PipelineVar_18_FamilyElement2;
+	Flow PipelineVar_18_Flow4;
+	PipelineVar_18_Flow4 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement1), 
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_28.output[2]), 
+		name = "f4", 
+		constraints = {}
+	};
+	Flow PipelineVar_18_Flow5;
+	Sink PipelineVar_18_Sink0;
+	PipelineVar_18_Sink0 = Sink {
+		sink = refBy(DataSinkVar_5), 
+		parallelism = 1, 
+		name = "TimeTravelSink", 
+		constraints = {}
+	};
+	PipelineVar_18_Flow5 = Flow {
+		destination = refBy(PipelineVar_18_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_28.output[0]), 
+		name = "f5", 
+		constraints = {}
+	};
+	Flow PipelineVar_18_Flow6;
+	PipelineVar_18_Flow6 = Flow {
+		destination = refBy(PipelineVar_18_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_28.output[1]), 
+		name = "f6", 
+		constraints = {}
+	};
+	Flow PipelineVar_18_Flow7;
+	PipelineVar_18_Flow7 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement1), 
+		grouping = Grouping.allGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_28.output[3]), 
+		name = "f3", 
+		constraints = {}
+	};
+	PipelineVar_18_FamilyElement2 = FamilyElement {
+		family = refBy(FamilyVar_28), 
+		defaultAlgorithm = refBy(AlgorithmsCfg::SoftwareAlgorithmVar_36), 
+		output = {
+			refBy(PipelineVar_18_Flow4), refBy(PipelineVar_18_Flow5), refBy(PipelineVar_18_Flow6), refBy(PipelineVar_18_Flow7)
+		}, 
+		parallelism = 1, 
+		name = "TimeGraphQueryExecutor", 
+		constraints = {}
+	};
+	PipelineVar_18_Flow3 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement2), 
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_27.output[0]), 
+		name = "f9", 
+		constraints = {}
+	};
+	PipelineVar_18_FamilyElement1 = FamilyElement {
+		family = refBy(FamilyVar_27), 
+		defaultAlgorithm = refBy(AlgorithmsCfg::SoftwareAlgorithmVar_35), 
+		output = {
+			refBy(PipelineVar_18_Flow2), refBy(PipelineVar_18_Flow3)
+		}, 
+		parallelism = 1, 
+		name = "TimeGraphIndexer", 
+		constraints = {}
+	};
+	PipelineVar_18_Flow1 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement1), 
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(FamiliesCfg::FamilyVar_26.output[0]), 
+		name = "f1", 
+		constraints = {}
+	};
+	PipelineVar_18_FamilyElement0 = FamilyElement {
+		family = refBy(FamilyVar_26), 
+		defaultAlgorithm = refBy(AlgorithmsCfg::SoftwareAlgorithmVar_34), 
+		output = {
+			refBy(PipelineVar_18_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "TimeGraphMapper", 
+		constraints = {}
+	};
+	PipelineVar_18_Flow0 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_11.input[0]), 
+		name = "f0", 
+		constraints = {}
+	};
+	PipelineVar_18_Source0 = Source {
+		output = {
+			refBy(PipelineVar_18_Flow0)
+		}, 
+		source = refBy(DataSourceVar_11), 
+		parallelism = 1, 
+		name = "GraphDataSource", 
+		constraints = {}
+	};
+	Source PipelineVar_18_Source1;
+	Flow PipelineVar_18_Flow8;
+	PipelineVar_18_Flow8 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement2), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_9.input[0]), 
+		name = "f7", 
+		constraints = {}
+	};
+	Flow PipelineVar_18_Flow9;
+	PipelineVar_18_Flow9 = Flow {
+		destination = refBy(PipelineVar_18_FamilyElement2), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::DataSourceVar_9.input[1]), 
+		name = "f8", 
+		constraints = {}
+	};
+	PipelineVar_18_Source1 = Source {
+		output = {
+			refBy(PipelineVar_18_Flow8), refBy(PipelineVar_18_Flow9)
+		}, 
+		source = refBy(DataSourceVar_9), 
+		permissibleParameters = {
+			refBy(DataManagementCfg::DataSourceVar_9.parameters[1]), refBy(DataManagementCfg::DataSourceVar_9.parameters[0])
+		}, 
+		parallelism = 1, 
+		name = "queries", 
+		constraints = {}
+	};
+	PipelineVar_18 = Pipeline {
+		name = "TimeTravelSimPip", 
+		sources = {
+			refBy(PipelineVar_18_Source0), refBy(PipelineVar_18_Source1)
+		}, 
+		numworkers = 18, 
+		artifact = "eu.qualimaster:TimeTravelSimPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_18;
+		PipelineVar_18_Source0;
+		PipelineVar_18_Flow0;
+		PipelineVar_18_FamilyElement0;
+		PipelineVar_18_Flow1;
+		PipelineVar_18_FamilyElement1;
+		PipelineVar_18_Flow2;
+		PipelineVar_18_Flow3;
+		PipelineVar_18_FamilyElement2;
+		PipelineVar_18_Flow4;
+		PipelineVar_18_Flow5;
+		PipelineVar_18_Sink0;
+		PipelineVar_18_Flow6;
+		PipelineVar_18_Flow7;
+		PipelineVar_18_Source1;
+		PipelineVar_18_Flow8;
+		PipelineVar_18_Flow9;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

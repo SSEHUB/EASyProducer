@@ -1,0 +1,159 @@
+project BatchingCfg {
+
+    import Basics;
+    import BasicsCfg;
+    import Families;
+    import FamiliesCfg;
+    import Batching;
+    import DataManagementCfg;
+
+    Mapper mapper_1 = Mapper {
+        name="ElectricMapper",
+        family=refBy(FamilyVar_29)
+    };
+
+    Mapper mapper_2 = Mapper {
+        name="FinancialMapper",
+        family=refBy(FamilyVar_31)
+    };
+
+    Mapper mapper_3 = Mapper {
+        name="TwitterMapper",
+        family=refBy(FamilyVar_33)
+    };
+
+    Mapper mapper_4 = Mapper {
+        name="CorrelationMapper",
+        family=refBy(FamilyVar_35)
+    };
+
+    mappers = {refBy(mapper_1), refBy(mapper_2), refBy(mapper_3), refBy(mapper_4)};
+
+    Reducer reducer_1 = Reducer {
+        name="ElectricReducer",
+        family=refBy(FamilyVar_30)
+    };
+
+    Reducer reducer_2 = Reducer {
+        name="FinancialReducer",
+        family=refBy(FamilyVar_32)
+    };
+
+    Reducer reducer_3 = Reducer {
+        name="TwitterReducer",
+        family=refBy(FamilyVar_34)
+    };
+
+    Reducer reducer_4 = Reducer {
+        name="CorrelationReducer",
+        family=refBy(FamilyVar_36)
+    };
+
+    reducers = {refBy(reducer_1), refBy(reducer_2), refBy(reducer_3), refBy(reducer_4)};
+
+    Job job_1 = Job {
+        name = "max_electricityUnits",
+        artifact = "eu.qualimaster.hadoop:HadoopJobTest:0.0.1-SNAPSHOT",
+        source = refBy(DataSourceVar_12),
+        mapper = refBy(mapper_1),
+        reducer = refBy(reducer_1),
+        sink = refBy(DataSinkVar_7),
+        fNumMapTasks.low = 1,
+        fNumMapTasks.high = 1,
+        fNumReduceTasks.low = 1,
+        fNumReduceTasks.high = 1,
+        fNumTasksPerJvm.low = 1,
+        fNumTasksPerJvm.high = 1
+    };
+    
+    SequentialJob job_2 = SequentialJob {
+        name = "testChainedJob",
+        artifact = "eu.qualimaster.hadoop:HadoopChainedJobTest:0.0.1-SNAPSHOT",
+        jobs = {refBy(job_1)}
+    };
+    
+    Job job_3 = Job {
+        name = "Priority Financial Preprocessing Job",
+        artifact = "eu.qualimaster.hadoop:HadoopFinancialPreprocessingJobTest:0.0.1-SNAPSHOT",
+        source = refBy(DataSourceVar_13),
+        mapper = refBy(mapper_2),
+        reducer = refBy(reducer_2),
+        sink = refBy(DataSinkVar_8),
+        fNumMapTasks.low = 1,
+        fNumMapTasks.high = 1,
+        fNumReduceTasks.low = 1,
+        fNumReduceTasks.high = 1,
+        fNumTasksPerJvm.low = 1,
+        fNumTasksPerJvm.high = 1
+    };
+    
+    Job job_4 = Job {
+        name = "Priority Social Preprocessing Job",
+        artifact = "eu.qualimaster.hadoop:HadoopSocialPreprocessingJobTest:0.0.1-SNAPSHOT",
+        source = refBy(DataSourceVar_14),
+        mapper = refBy(mapper_3),
+        reducer = refBy(reducer_3),
+        sink = refBy(DataSinkVar_8),
+        fNumMapTasks.low = 1,
+        fNumMapTasks.high = 1,
+        fNumReduceTasks.low = 1,
+        fNumReduceTasks.high = 1,
+        fNumTasksPerJvm.low = 1,
+        fNumTasksPerJvm.high = 1
+    };
+    
+    ParallelJob job_5 = ParallelJob {
+        name = "Priority Preprocessing Job",
+        jobs = {refBy(job_3), refBy(job_4)},
+        artifact = "eu.qualimaster.hadoop:HadoopPreprocessingJobTest:0.0.1-SNAPSHOT"
+    };
+
+    Job job_6 = Job {
+        name = "Priority Correlation Job",
+        artifact = "eu.qualimaster.hadoop:HadoopCorrelationJobTest:0.0.1-SNAPSHOT",
+        source = refBy(DataSourceVar_15),
+        mapper = refBy(mapper_4),
+        reducer = refBy(reducer_4),
+        sink = refBy(DataSinkVar_9),
+        fNumMapTasks.low = 1,
+        fNumMapTasks.high = 1,
+        fNumReduceTasks.low = 1,
+        fNumReduceTasks.high = 1,
+        fNumTasksPerJvm.low = 1,
+        fNumTasksPerJvm.high = 1
+    };
+
+    SequentialJob job_7 = SequentialJob {
+        name = "Priority Financial Job",
+        jobs = {refBy(job_5), refBy(job_6)},
+        artifact = "eu.qualimaster.hadoop:HadoopFinancialJobTest:0.0.1-SNAPSHOT"
+    };
+
+    // current assumption: jobs are ordered in generation sequence, i.e., according to dependencies
+    // can be automated by ordinals in the configuration (derived) or in VIL 
+    jobs = {refBy(job_1), refBy(job_2), refBy(job_3), refBy(job_4), refBy(job_5), refBy(job_6), refBy(job_7)};
+    activeJobs = {refBy(job_1), refBy(job_2), refBy(job_3), refBy(job_4), refBy(job_5), refBy(job_6), refBy(job_7)};
+
+    freeze {
+		mapper_1;
+        mapper_2;
+        mapper_3;
+        mapper_4;
+		reducer_1;
+		reducer_2;
+		reducer_3;
+		reducer_4;
+		job_1;
+        job_2;
+        job_3;
+        job_4;
+        job_5;
+        job_6;
+        job_7;
+		mappers;
+		reducers;
+		jobs;
+        activeJobs;
+	} but (f|f.bindingTime >= BindingTime::runtimeMon)
+
+}

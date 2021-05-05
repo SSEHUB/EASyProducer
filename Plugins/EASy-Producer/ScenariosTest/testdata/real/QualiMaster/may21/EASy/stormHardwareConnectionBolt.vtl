@@ -1,0 +1,449 @@
+import commonVTLMethods;
+@advice(QM)
+template stormHardwareConnectionBolt(Configuration config, FileArtifact target, Family family, HardwareAlgorithm algorithm) {
+	sequenceOf(String) letters = {"a", "b", "c", "d", "e"}; 
+	String algName = algorithm.name;
+	MPCCNode node = algorithm.hwNode;
+	def main(Configuration config, FileArtifact target, Family family, HardwareAlgorithm algorithm) {
+		String fName = family.name.firstToUpperCase();
+		String ifName = "I" + fName.firstToUpperCase();	
+		'package eu.qualimaster.algorithms.${firstToUpperCase(toIdentifier(algName))};'
+		''
+		'import java.io.IOException;'
+		'import java.io.ByteArrayOutputStream;'
+		'import java.util.Map;'
+		'import backtype.storm.task.OutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Tuple;'
+		'import eu.qualimaster.common.signal.AbstractMonitor;'
+		'import eu.qualimaster.common.signal.BaseSignalBolt;'
+		'import eu.qualimaster.base.algorithm.HardwareTransmitter;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		'import eu.qualimaster.base.serializer.Parameters.*;'
+		'import eu.qualimaster.common.signal.ShutdownSignal;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'	
+		'import eu.qualimaster.common.signal.ParameterChange;'	
+		'import eu.qualimaster.common.signal.ValueFormatException;'
+		'import eu.qualimaster.observables.ResourceUsage;'
+		if(hwlog) {
+			'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+		}
+		if(ackThread) {
+			'import java.util.Queue;'
+			'import java.util.concurrent.ConcurrentLinkedQueue;'
+			'import eu.qualimaster.common.switching.SynchronizedQueue;'
+		}
+		produceImportFromInput(family.input, fName, 0);
+		''
+		'public class HardwareConnectionBolt extends BaseSignalBolt {'
+			'final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(HardwareConnectionBolt.class);' | 4;
+			'private transient OutputCollector collector;' | 4;
+			'private String ip;' | 4;
+			'private int port = 0;' | 4;
+			'private boolean ready = false;' | 4;
+			'private transient Queue<Tuple> queueTuple = new ConcurrentLinkedQueue<Tuple>();' | 4;
+			'private transient HardwareTransmitter hardwareConnection;' | 4;
+			'private transient ByteArrayOutputStream output = null;' | 4;
+			'private transient ByteArrayOutputStream paraOutput = null;' | 4;
+			'private String separator;' | 4;
+			produceInputVariable(family.input, ifName, 4);
+			if(hwlog) {
+				'private transient PrintWriter out = null;' | 4;
+				'private transient PrintWriter out1 = null;' | 4;
+				'private int counter = 0;' | 4;
+				'private long timestampInS = 0;' | 4;
+			}
+			if(ackThread) {
+				'private int size;' | 4;
+				'private transient DataAcker dataAcker;' | 4;
+				'private transient Queue<Tuple> queue = new ConcurrentLinkedQueue<Tuple>();' | 4;	
+				'private transient SynchronizedQueue<Tuple> syn = null;' | 4;
+			}
+			''
+			/*********************** */
+			/*******Constructor***** */
+			/*********************** */
+			'public HardwareConnectionBolt(String name, String namespace) {' | 4;
+        		'super(name, namespace, $genMonitoringProbes); ' | 8; 
+    		'}' | 4;
+    		''
+    		/************************* */
+    		/*******prepare method**** */
+    		/************************* */
+    		'@SuppressWarnings("rawtypes")' | 4;
+    		'public void prepare(Map map, TopologyContext topologyContext, OutputCollector outputCollector) {' | 4;
+    			'super.prepare(map, topologyContext, outputCollector);' | 8;
+    			'collector = outputCollector;' | 8;
+    			'ip = "${node.host}";' | 8; //replace to the ip configuration
+    			if(hwlog) {
+        			'counter = 0;' | 8;
+        			'timestampInS = System.currentTimeMillis()/1000;' | 8;
+        			'out = DataLogger.getPrintWriter("/var/nfs/spass/hardwareBolt.csv");' | 8;
+        			'out1 = DataLogger.getPrintWriter("/var/nfs/spass/hardwareBoltResult.csv");' | 8;
+        		}
+    			if(!dynamicHWUpload) { //static port
+        			'port = 2404; //default' | 8; //replace to the port configuration
+        			'ready = true;' | 8;
+        		} else {
+        			'ready = false;' | 8;
+        		}
+        		'queueTuple = new ConcurrentLinkedQueue<Tuple>();' | 8;
+        		'output = new ByteArrayOutputStream();' | 8;
+        		'paraOutput = new ByteArrayOutputStream();' | 8;
+        		produceTypesRegistration(family.input, fName, false, 8);
+        		if(ackThread) {
+        			'queue = new ConcurrentLinkedQueue<Tuple>();' | 8;
+        			'size = 50;' | 8;
+        			'syn = new SynchronizedQueue<Tuple>(queue, size);' | 8;
+        			'try {' | 8;
+      					'dataAcker = new DataAcker();' | 12;
+    				'} catch (Exception e) {' | 8;
+      					'logger.error("", e);' | 12;
+    				'}' | 8;
+    				'Thread dataAckerThread = new Thread(dataAcker);' | 8;
+    				'dataAckerThread.start();' | 8;
+        		}
+        		/* 
+        		if(dynamicHWUpload) {
+        			'while(port==0) {//waiting for the dynamic port' | 8;
+        			'}' | 8;
+        			if(hwlog) {
+        				'logger.info("Port is ready and continuing the processing...");' | 8;
+        				'out.println("Port is ready and continuing the processing...");' | 8;
+        				'out.flush();' | 8;
+	        		}
+        		}
+        		* 
+        		*/
+        		'initMonitor();' | 8;
+        		'logger.info("The end of the prepare method.");' | 8;
+    		'}' | 4;
+    		''
+    		//override the initial monitor
+	    	produceInitMonitor(true, 4);
+	    
+    		if(ackThread) {
+    			'public class DataAcker implements Runnable {' | 4;
+    				'private boolean cont = false;' | 8;
+    				''
+    				'public DataAcker() {' | 8;
+    					'cont = true;' | 12;
+    				'}' | 8;
+    				''
+    				'@Override' | 8;
+    				'public void run() {' | 8;
+    					'while(cont) {' | 12;
+    						'collector.ack(syn.consume());' | 16;
+    					'}' | 12;
+    				'}' | 8;
+    				''
+    				'public void stop() {' | 8;
+    					'cont = false;' | 12;
+    				'}' | 8;
+    			'}' | 4;
+    			''
+    		}
+    		''
+    		/************************** */
+    		/*******execute method***** */
+    		/************************** */
+    		'public void execute(Tuple tuple) {' | 4;
+    			'queueTuple.offer(tuple);' | 8;
+    			'if(ready) {' | 8;
+    				'sendTuple();' | 12;
+    			'}' | 8;        		
+        	'}' | 4;
+        	''
+        	'protected void sendTuple() {' | 4;
+        		if (genMonitoringProbes) {
+		            'AbstractMonitor monitor = createThreadMonitor();' | 8;
+		        }
+		        'Tuple tuple = queueTuple.poll();' | 8;
+        		produceInputForTuples(family.input, ifName, 8);
+        	'}' | 4;
+			/**************************** */
+			/*********connect method***** */
+			/**************************** */
+			'private boolean connect() {' | 4;
+        		'if (null == hardwareConnection) {' | 8;
+	            	'try {' | 12;
+	                	'hardwareConnection = new HardwareTransmitter(ip, port);' | 16;
+	                	'logger.info("Created a transmitter connection.");' | 16;
+	                	if(hwlog) {
+	                	'out.println("Created a transmitter connection.");' | 16;
+	                	'out.flush();' | 16;
+	                	}
+	            	'} catch (IOException e) {' | 12;
+	                	'e.printStackTrace();' | 16;
+	            	'}' | 12;
+        		'}' | 8;
+        		'return null != hardwareConnection;' | 8;
+    		'}' | 4;
+    		''
+    		/********************************/
+		    /* notifyParameterChange method */  
+		    /********************************/	    
+		sequenceOf(Parameter) parameters = family.parameters;
+		String protocol;	           
+        if(family.parameters.isConfigured()) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'logger.info("Received the parameter change signal!");' | 8;
+			if(hwlog) {
+				'out.println(Calendar.getInstance().getTimeInMillis() + ", Received the parameter change signal!"); ' | 8;
+				'out.flush();' | 8;
+			}
+			'String paraSeparator = null;' | 8;
+			'try {' | 8;
+			'for(int i = 0; i < signal.getChangeCount(); i++) {' | 12;
+			'ParameterChange para = signal.getChange(i);' | 16;	
+			'paraOutput.reset();' | 16;		
+			'switch (para.getName()) {' | 16;			
+			for(Parameter p : parameters) {
+				DecisionVariable paraVar = p;
+				String paraVarType = p.type();
+				String paraName = p.name;
+				String type = parameterTypeName(p);	
+				protocol = parameterHwProtocol(p);
+				'case "$paraName" :' | 20;
+					'logger.info("Received parameter changing signal $paraName");' | 24;
+					'$paraVarType ${paraName}Para = new $paraVarType();' | 24;
+					'${paraName}Para.setName("$paraName");' | 24;
+					'${paraName}Para.setValue(para.get${type.firstToUpperCase()}Value());' | 24;
+					'SerializerRegistry.getSerializerSafe("$paraVarType", $paraVarType.class).serializeTo(${paraName}Para, paraOutput);' | 24;
+					'paraSeparator = "p${protocol}";'	 | 24;
+					'if (connect()) {' | 24;
+        	 			'if(paraOutput != null && paraSeparator != null) {' | 28;
+        	 				'hardwareConnection.sendSeparator(paraSeparator);' | 32;
+			 				'hardwareConnection.sendData(paraOutput.toByteArray());' | 32;           
+            			'}' | 28;
+        			'}' | 24;
+					'break;' | 24;
+				}
+				'case "port": ' | 20;
+					'logger.info("Received signal port!"); ' | 24;
+					'port = para.getIntValue();' | 24;
+					'ready = true;' | 24;
+					'logger.info("Received signal port!" + port); ' | 24;
+					'recordOnce(ResourceUsage.USED_CPUS, 1);' | 24;
+					'recordOnce(ResourceUsage.USED_DFES, 1);' | 24;
+					if(hwlog) {
+					'out.println(Calendar.getInstance().getTimeInMillis() + ", Received signal port!" + port); ' | 24;
+					'out.flush();' | 24;
+					}
+					'break;' | 24;
+					
+				'case "omit": ' | 20;
+					'logger.info("Received signal omit, sending the omit message to hardware!!");' | 24;
+					if(hwlog) {
+					'out.println(Calendar.getInstance().getTimeInMillis() + ", Received signal omit, sending the omit message to hardware!!");' | 24;
+					'out.flush();' | 24;
+					}
+					'paraSeparator = "cc";'	 | 24;
+					'if (connect()) {' | 24;
+        	 			'hardwareConnection.sendSeparator(paraSeparator);' | 32;
+        			'}' | 24;
+        			'break;' | 20;
+        			
+        		'case "flush": ' | 20;
+					'logger.info("Received signal flush, sending the flush message to hardware!!");' | 24;
+					if(hwlog) {
+					'out.println(Calendar.getInstance().getTimeInMillis() + ", Received signal flush, sending the flush message to hardware!!");' | 24;
+					'out.flush();' | 24;
+					}
+					'if (connect()) {' | 24;
+        	 			'hardwareConnection.sendFlushMessage();' | 32;
+        			'}' | 24;
+        			'break;' | 20;
+        				
+        			'}' | 16;
+				'}' | 12;
+				'} catch (ValueFormatException e) {' | 8;
+				'e.printStackTrace();' | 12;
+				'} catch (IOException e) {' | 8;
+				'e.printStackTrace();' | 12;
+				'}' | 8;
+			'}' |4;		
+		}
+    		''
+    		/******************************** */
+    		/****declareOuputFields method*** */
+    		/******************************** */
+    		'public void declareOutputFields(OutputFieldsDeclarer outputFieldsDeclarer) {' | 4;
+    		'}' | 4;
+    		''
+    		
+    		/********************************* */
+	    	/*******Prepare shut down signal** */
+	    	/********************************* */
+	    	'@Override' | 4;
+	    	'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+	        	'super.prepareShutdown(signal);' | 8;
+	        	'dataAcker.stop();' | 8;
+	        	'try {' | 8;
+        			'if(hardwareConnection != null) {' | 12;
+                        'hardwareConnection.sendCloseMessage();' | 16;
+                        'hardwareConnection.close();' | 16;  
+                 	'}' | 12;        		
+            		'if(output != null) {' | 12;
+            			'output.close();' | 16;
+            		'}' | 12;
+            		'if(paraOutput != null) {' | 12;
+            			'paraOutput.close();' | 16;
+            		'}' | 12;
+        		'} catch (IOException e) {' | 8;
+            		'e.printStackTrace();' | 12;
+        		'}' | 8;
+        		'recordOnce(ResourceUsage.USED_CPUS, 0);' | 8;
+				'recordOnce(ResourceUsage.USED_DFES, 0);' | 8;
+	    	'}' | 4;
+	    	''
+    		'@Override' | 4;
+    		'public void cleanup() {' | 4;
+        		'super.cleanup();' | 8;
+        		'try {' | 8;
+        			'if(hardwareConnection != null) {' | 12;
+                        'hardwareConnection.sendCloseMessage();' | 16;
+                        'hardwareConnection.close();' | 16;  
+                 	'}' | 12;
+                 	'if(output != null) {' | 12;
+            			'output.close();' | 16;
+            		'}' | 12;
+            		'if(paraOutput != null) {' | 12;
+            			'paraOutput.close();' | 16;
+            		'}' | 12;
+        		'} catch (IOException e) {' | 8;
+            		'e.printStackTrace();' | 12;
+        		'}' | 8;
+    		'}' | 4;    		   		
+		'}'
+	}
+
+	def produceInputForTuples(Tuples tuples, String ifName, Integer indent) {	
+		'if(tuple != null) {' | indent - 4;
+		String inputInfName; //input interface name	
+		String inputImpName;		     
+		
+		String tupleName;
+		Boolean multiStream = false;
+
+		Integer tuplesSize = tuples.size();
+		Integer innerIndent = indent;
+		if(tuplesSize > 1){
+			multiStream = true;
+			innerIndent = indent + 4;
+		}
+		String letter;
+		Integer counter = 0;
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;			
+			//get input interface name
+			inputInfName = "I" + ifName + "${firstToUpperCase(tupleName)}Input";
+			inputImpName =ifName + "${firstToUpperCase(tupleName)}Input";
+			letter = letters.get(counter);									
+			if(multiStream){
+				'if(tuple.getValue(0) instanceof $inputInfName) {' | indent;
+			}
+			'if(!(tuple.getValue(0) instanceof IIFCorrelationFinancialSymbolListInput)) {'
+			'separator = "d${letter}";' | innerIndent;
+			'input${firstToUpperCase(tupleName)} = ($inputInfName)tuple.getValue(0);' | innerIndent;
+			/* 
+			if(hwlog) {
+				'out.println(Calendar.getInstance().getTimeInMillis() + ", Sending data to hardware: "' | indent;
+	    		for(Field f : t.fields) {
+					 String fname = toIdentifier("${f.name}");
+	    			 String mname = firstToUpperCase(fname);
+	    	         '+ ", $mname: "+ input${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+				 }
+				 ');' | indent;
+	    		'out.flush();' | indent;
+	    		'logger.info(Calendar.getInstance().getTimeInMillis() + ", Sending data to hardware: "' | indent;
+	    		for(Field f : t.fields) {
+					 String fname = toIdentifier("${f.name}");
+	    			 String mname = firstToUpperCase(fname);
+	    	         '+ ", $mname: "+ input${firstToUpperCase(tupleName)}.get${mname}()' | indent;
+				 }
+				 ');' | indent;
+			}
+			* 
+			*/
+			
+			'try {' | innerIndent;
+				'output.reset();' | innerIndent + 4;
+		    	'SerializerRegistry.getSerializerSafe("$inputImpName", $inputInfName.class).serializeTo(input${firstToUpperCase(tupleName)}, output);' | innerIndent + 4;
+			 '} catch (IOException e) {' | innerIndent;
+            	'e.printStackTrace();' | innerIndent + 4;
+        	 '}' | innerIndent;
+        	 '}'
+			 if(multiStream){
+			 	'}' | indent;
+			 }
+			 counter = counter +1;
+			 ''		
+		}	
+		if(ackEarlier) {
+			if(ackThread) {
+			 		'syn.produce(tuple);' | indent;
+			 	} else {
+            		'collector.ack(tuple);' | indent;
+            	}
+		}
+		'if (connect()) {' | indent;
+        	 'if(output != null && separator != null) {' | indent + 4;
+        	 	if (genMonitoringProbes) {
+				  'monitor.startMonitoring();' | indent + 8;
+		        }
+		        if(hwlog) {
+					'long now = System.currentTimeMillis();' | indent+24;
+                    'if(timestampInS == now/1000) {' | indent+24;
+                    	'counter++;' | indent+28;
+                    '} else {' | indent+24;
+                    	'out1.println(timestampInS + " " + counter);' | indent+28;
+						'out1.flush();' | indent+28;
+                    	'timestampInS = now/1000;' | indent+28;
+                    	'counter = 1;' | indent+28;
+                    '}'  indent+24;
+				}
+        	 	'hardwareConnection.sendSeparator(separator);' | indent + 8;
+			 	'hardwareConnection.sendData(output.toByteArray());' | indent + 8;  
+			 	if (genMonitoringProbes) {
+				  'monitor.endMonitoring(tuple);' | indent + 8;
+		        }
+			 	if(!ackEarlier) {
+				 	if(ackThread) {
+				 		'syn.produce(tuple);' | indent + 8;
+				 	} else {
+	            		'collector.ack(tuple);' | indent + 8;
+	            	}
+            	}
+            '}' | innerIndent + 4;
+        '}' | innerIndent;	
+      	'}' | indent - 4;						
+	}
+	
+	def produceInputVariable(Tuples tuples, String ifName, Integer indent) {
+		String tupleName;
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String inputInfName = 'I' + ifName + "${firstToUpperCase(tupleName)}Input";
+			'private transient $inputInfName input${firstToUpperCase(tupleName)} = null;' | indent;
+		}
+	}
+	
+	def produceImportFromInput(Tuples tuples, String fName, Integer indent) {
+		String ifName = 'I' + fName;
+		String tupleName;
+		'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.*;'
+		'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.*;'
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String inputInfName = ifName + "${firstToUpperCase(tupleName)}Input";
+			'import eu.qualimaster.families.inf.${firstToUpperCase(toIdentifier(ifName))}.I$inputInfName;' | indent;
+			'import eu.qualimaster.families.imp.${firstToUpperCase(toIdentifier(fName))}.$inputInfName;' | indent;
+		}
+	}
+}

@@ -1,0 +1,73 @@
+import commonVTLMethods;
+@advice(QM)
+@indent(indentation = 4, additional = 0)
+template hadoopMapper(Configuration config, FileArtifact target, Mapper mapper, String package) {
+
+    def main(Configuration config, FileArtifact target, Mapper mapper, String package) {
+        String inputKeyType = getHadoopType(mapper.family.input, true, true);
+        String inputValueType = getHadoopType(mapper.family.input, true, false);
+        String outputKeyType = getHadoopType(mapper.family.output, false, true);
+        String outputValueType = getHadoopType(mapper.family.output, false, false);
+        String className = getJavaClassName("${mapper.name}Mapper");
+        String algInterfaceName = "I${mapper.family.name}";
+        String initAlgName = getInitialAlgorithm(mapper.family);
+        'package eu.qualimaster.${package};
+        
+         import java.util.*;
+         import java.io.*;
+         import org.apache.hadoop.fs.Path;
+         import org.apache.hadoop.conf.*;
+         import org.apache.hadoop.io.*;
+         import org.apache.hadoop.mapred.*;
+         import org.apache.hadoop.util.*;
+         import eu.qualimaster.common.signal.*;
+
+         /**
+         * Signal-enabled mapper.
+         */
+         public class ${className} extends SignalMapReduceBase<${algInterfaceName}> implements Mapper<
+             $inputKeyType, 
+             $inputValueType, 
+             $outputKeyType, 
+             $outputValueType>, IHadoopSignalReceiver {
+
+             ${produceHadoopInOrOutputVariable(mapper.family.input, false, mapper.family.name, true, "in")}
+             ${produceHadoopInOrOutputVariable(mapper.family.output, true, mapper.family.name, true, "out")}
+
+             /**
+              * Creates a mapper instance.
+              */
+             public ${className}Reducer() {
+                 super(${package}, ${className});
+             }
+
+             @Override
+             public void configure(JobConf job) {
+                 super.configure(job);
+                 ${produceParameterHandlers(mapper.family)}
+                 ${produceAlgorithmHandlers(algInterfaceName, mapper.family)}
+                 setAlgorithm(job.get("${mapper.name}.alg", "${initAlgName}"));
+             }
+
+             @Override
+             public void map($inputKeyType key, 
+                 $inputValueType value, 
+                 OutputCollector<$outputKeyType, $outputValueType> output, 
+                 Reporter reporter) throws IOException {
+                 executeDeferredAlgorithmChange();
+                 in.setKey(key);
+                 in.setValue(value);
+                 algorithm.execute(in, out);
+                 if (0 == output.count()) {
+                     output.addFurther(); // for next execution
+                 } else {
+                     // at the moment, we support one or none
+                     output.collect(${hadoopConvert(outputKeyType, "out.getKey()", mapper.family.output, true)}, 
+                         ${hadoopConvert(outputValueType, "out.getValue()", mapper.family.output, false)});
+                 }
+             }
+
+         }'
+    }
+
+}

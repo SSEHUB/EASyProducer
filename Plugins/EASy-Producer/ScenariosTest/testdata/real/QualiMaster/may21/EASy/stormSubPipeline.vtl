@@ -1,0 +1,237 @@
+import commonVTLMethods;
+@advice(QM)
+template stormSubPipeline(Configuration config, FileArtifact target, SubPipeline pipeline, Family family, String algName) {
+	setOf(String) bolts = {}; //collect the generated bolt name
+	setOf(String) flows = {}; //collect the passed flow name(varname)
+	setOf(String) produced = {}; //collect the produced element(for only generating the spout/Bolt definition once) 
+	mapOf(String, Integer) nodeToRepeatNumMap = {};
+	mapOf(String, String) parameterToNode = {};
+	String pipName = pipeline.name;
+	String fName = family.name;
+	String lastFamilyElementTmp;
+	String lastFamilyElement;
+	Integer maxParallelism = 0;
+	
+	def processElement(Source elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, Boolean newFlow, Boolean connector) {
+    	String nameVar = elt.varName(); 
+    	String name = elt.name; 
+    	DataSource dataSrc = elt.source;    	
+ 		
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, false, connector);
+    	}
+    	
+		Boolean nFlow;	   	
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}					
+			processElement(flow.destination, flow.grouping, flow.tupleType, elt, nFlow, false);
+		}
+    }
+    
+    def processElement(Sink elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, Boolean newFlow, Boolean connector) {
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, true, connector);
+    	}    		
+    }
+    
+    def collectParameters(sequenceOf(Parameter) parameters, String name) {
+    	for(Parameter p : parameters) {
+    		parameterToNode.add(p.name, name);
+    	}
+    }
+    
+    def processElement(FamilyElement elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, Boolean newFlow, Boolean connector) {
+    	String nameVar = elt.varName(); 
+    	String name = elt.name; 
+
+        lastFamilyElementTmp = name;
+ 		
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, true, connector);
+    	}
+    	
+		Boolean nFlow;	   	
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}					
+			processElement(flow.destination, flow.grouping, flow.tupleType, elt, nFlow, false);
+		}
+    }
+    
+    def produceStatement(DecisionVariable elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, Boolean bolt, Boolean connector) {
+    	//name of the pre-element
+    	String eltNameVar = preElt.name;
+    	//name for Spout/Bolt
+    	String name = elt.varName();
+    	//Spout/Bolt class name
+    	String clsName = className(elt); 
+    	//get the parallelism
+    	Integer parallelism = elt.byName("parallelism"); 
+    	//obtain the maximum parallelism
+    	if(parallelism > maxParallelism) {
+ 			maxParallelism = parallelism;
+ 		}
+    	//obtain the meaningful display name of the element 
+    	String eltType = elt.type();
+    	String displayName;
+    	setOf(Flow) flows;
+    	Parameters parameters;
+    	if(eltType == "Source") {
+    		//cast the elt to Source
+    		Source source = elt;
+    		//get the display name
+    		displayName = source.name;
+    		//get the flows
+    		flows = source.output;
+    		parameters = source.source.parameters;
+    	} else if (eltType == "FamilyElement") {
+    		//cast the elt to FamilyElement
+    		FamilyElement familyElt = elt;
+    		//get the display name
+    		displayName = familyElt.name;
+    		//get the flows
+    		flows = familyElt.output;
+    		parameters = familyElt.family.parameters;
+    	} else if (eltType == "Sink") {
+    		//cast the elt to Source
+    		Sink sink = elt;
+    		//get the display name
+    		displayName = sink.name;
+    		//get the parameters
+    		parameters = sink.sink.parameters;
+    	}			   	
+    	
+        if (bolt) {    	    
+    	    if(isStringExisted(name, bolts)){ //no node to be produced but the grouping statement 
+    	    	grouping(name, grouping, tupleType, eltNameVar);
+ 	    	} else {
+ 	    	  collectParameters(parameters, displayName);
+ 	    	  '// Declare a Bolt "$displayName"' | 8;
+ 	          'BoltDeclarer $name =builder.setBolt(prefix+"${firstToUpperCase(displayName)}", new $clsName(prefix+"${firstToUpperCase(displayName)}", namespace), $parallelism)${produceNumTasks(elt)};' | 8;  
+    	      if(connector) {
+ 	    		'$name.$grouping(input, streamId);' | 8;
+ 	    	  } else {	    	
+		    	'//$name subscribing streams:' | 8;
+		    	//special grouping statement for the nodes which are not as connectors 
+		    	grouping(name, grouping, tupleType, eltNameVar);  	    	    	    	    	
+			  }
+    	      bolts.add(name); 
+ 	    	} 	    	
+        } else {
+        	'// Declare a Spout "$displayName"' | 8;
+		    'builder.setSpout(prefix+"${firstToUpperCase(displayName)}", new $clsName("${firstToUpperCase(displayName)}", namespace), $parallelism)${produceNumTasks(elt)};' | 8;
+        }
+    }
+
+    def grouping(String eltName, Grouping grouping, Tuple tupleType, String preEltName) { 
+    	String tName = tupleType.name.firstToUpperCase();
+    	String streamId = preEltName.firstToUpperCase() + tName;    	
+		'$eltName.$grouping(prefix+"${firstToUpperCase(preEltName)}", "$streamId");' | 8;		  	 	   	
+    }
+       
+	def createSubPipeline(SubPipeline pipeline) {
+		Tuple t;
+		//considering [Source, FamilyElement]
+		//start from the connectors
+		for (DecisionVariable r : pipeline.connectors) {
+    		processElement(r, Grouping.shuffleGrouping, t, r, true, true);
+    	}
+    	lastFamilyElement = lastFamilyElementTmp;//save the recorded last family element.
+ 		//check from the sources
+		for (DecisionVariable r : pipeline.sources) {
+    		processElement(r, Grouping.shuffleGrouping, t, r, true, false);
+    	}
+
+	}
+	def main(Configuration config, FileArtifact target, SubPipeline pipeline, Family family, String algName) {		
+		Integer numWorkers = pipeline.numworkers;
+		String pipName = pipeline.name;
+		algName = algName.toIdentifier();
+		fName = fName.firstToUpperCase();
+		'package eu.qualimaster.$algName.topology;'
+		''
+		'import org.apache.log4j.Logger;'
+		'import backtype.storm.Config;'
+		'import backtype.storm.topology.TopologyBuilder;'
+		'import eu.qualimaster.base.algorithm.ITopologyCreate;'
+		'import eu.qualimaster.base.algorithm.SubTopologyOutput;'
+		'import backtype.storm.topology.BoltDeclarer;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'
+		'import eu.qualimaster.common.signal.SignalException;'
+		'import eu.qualimaster.observables.IObservable;'
+		'import eu.qualimaster.families.inf.I$fName;'
+		''
+		'public class ${firstToUpperCase(toIdentifier(pipName))}SubTopology implements I$fName, ITopologyCreate {'
+		'    final static Logger logger = Logger.getLogger(${firstToUpperCase(toIdentifier(pipName))}SubTopology.class);'
+			for (Parameter p : family.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			'private ${parameterTypeName(p)} $paramName;' | 4;
+	    	}
+	    	'private transient State state;' | 4;
+	    	''
+			'public void switchState(State arg0) {' | 4;
+				'this.state = arg0;	' | 8;	
+			'}' | 4;
+			''
+			'public Double getMeasurement(IObservable observable) {' | 4;
+				'return null;' | 8;
+			'}' | 4;
+			''
+			'public SubTopologyOutput createSubTopology(TopologyBuilder builder,
+			Config config, String prefix, String input, String streamId) {' | 4;
+				'String namespace = "$pipName";' | 8;
+				'if(config.containsKey(eu.qualimaster.common.signal.Constants.CONFIG_KEY_SUBPIPELINE_NAME)) {' | 8;
+					'namespace = (String)config.get(eu.qualimaster.common.signal.Constants.CONFIG_KEY_SUBPIPELINE_NAME);' | 12;
+				'}' | 8;
+			createSubPipeline(pipeline);
+			Tuple t = family.output[0];//TODO:consider multiple outputs of the family
+			String tupleName = t.name;
+			'return new SubTopologyOutput(prefix+"${firstToUpperCase(lastFamilyElement)}", "${firstToUpperCase(lastFamilyElement)}${firstToUpperCase(tupleName)}", $numWorkers, $maxParallelism); //TODO: consider PipelineOptions to change the parallelisms' | 8;//This is based on the assumption that we only have on algorithm for the family in the subpipeline.
+			'}' | 4;
+			''
+			//produce the calculate statement based on the input-output pairs
+			produceForCalculate(family, false);
+			''
+			if (family.byName("parameters").variables().size()>0) {
+	        ''
+	        for (Parameter p : family.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String nodeName = parameterToNode.get(paramName);
+	        	'    /**'
+	        	'     * Sets the algorithm parameter "${paramName}". Note that the actual parameter change will be dynamically'
+	        	'     * handled by the infrastructure via parameter mapping. This method is only for the purpose of testing the'
+	        	'     * sub-topology.'
+	        	'     *'
+	        	'     * @param value the new value of the algorithm parameter'
+	        	'     */'
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
+	        	'        this.$paramName = $paramName;'
+	        	'        try {'
+                '            logger.info("sending new ${mname} signal " + value + "!");'
+                '            ParameterChangeSignal signal = new ParameterChangeSignal("${pipeline.name}", '
+                '                    "${firstToUpperCase(algName)}${firstToUpperCase(nodeName)}", "$paramName", value, null);'
+      		    '            signal.sendSignal();'
+    			'        } catch (Exception e) {'
+      			'            logger.error("Signal not sent!");'
+     			'            e.printStackTrace();'
+    			'        }'
+	        	'    }'
+	        	''      	
+	    	}
+    	}
+'}'
+	}
+}

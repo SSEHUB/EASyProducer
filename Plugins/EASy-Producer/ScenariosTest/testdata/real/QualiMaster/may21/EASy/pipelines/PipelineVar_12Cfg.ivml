@@ -1,0 +1,51 @@
+project PipelineVar_12Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_12Cfg;
+	Pipeline PipelineVar_12;
+	Source PipelineVar_12_Source0;
+	Flow PipelineVar_12_Flow0;
+	ReplaySink PipelineVar_12_ReplaySink0;
+	PipelineVar_12_ReplaySink0 = ReplaySink {
+		sink = refBy(randomSink), 
+		parallelism = 1, 
+		name = "ReplaySink", 
+		constraints = {}
+	};
+	PipelineVar_12_Flow0 = Flow {
+		destination = refBy(PipelineVar_12_ReplaySink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::randomSource.input[0]), 
+		name = "f1", 
+		constraints = {}
+	};
+	PipelineVar_12_Source0 = Source {
+		output = {
+			refBy(PipelineVar_12_Flow0)
+		}, 
+		source = refBy(randomSource), 
+		parallelism = 1, 
+		name = "RandomSource", 
+		constraints = {}
+	};
+	PipelineVar_12 = Pipeline {
+		name = "ReplayTestPip", 
+		sources = {
+			refBy(PipelineVar_12_Source0)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:ReplayTestPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_12;
+		PipelineVar_12_Source0;
+		PipelineVar_12_Flow0;
+		PipelineVar_12_ReplaySink0;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

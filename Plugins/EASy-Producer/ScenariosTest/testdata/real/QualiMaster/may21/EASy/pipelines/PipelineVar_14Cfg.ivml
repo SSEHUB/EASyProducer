@@ -1,0 +1,77 @@
+project PipelineVar_14Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_14Cfg;
+	Pipeline PipelineVar_14;
+	Source PipelineVar_14_Source0;
+	Flow PipelineVar_14_Flow0;
+	FamilyElement PipelineVar_14_FamilyElement0;
+	Flow PipelineVar_14_Flow1;
+	Sink PipelineVar_14_Sink0;
+	PipelineVar_14_Sink0 = Sink {
+		sink = refBy(randomSink), 
+		parallelism = 1, 
+		name = "snk", 
+		constraints = {}
+	};
+	PipelineVar_14_Flow1 = Flow {
+		destination = refBy(PipelineVar_14_Sink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::randomFamily.output[0]), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_14_FamilyElement0 = FamilyElement {
+		family = refBy(randomFamily), 
+		permissibleParameters = {
+			refBy(FamiliesCfg::randomFamily.parameters[2]), refBy(FamiliesCfg::randomFamily.parameters[1]), refBy(FamiliesCfg::randomFamily.parameters[0])
+		}, 
+		output = {
+			refBy(PipelineVar_14_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "processor", 
+		constraints = {}
+	};
+	PipelineVar_14_Flow0 = Flow {
+		destination = refBy(PipelineVar_14_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::randomSource.input[0]), 
+		name = "f1", 
+		constraints = {}
+	};
+	PipelineVar_14_Source0 = Source {
+		output = {
+			refBy(PipelineVar_14_Flow0)
+		}, 
+		source = refBy(randomSource), 
+		permissibleParameters = {
+			refBy(DataManagementCfg::randomSource.parameters[0])
+		}, 
+		parallelism = 1, 
+		name = "src", 
+		constraints = {}
+	};
+	PipelineVar_14 = Pipeline {
+		name = "ReflectiveRandomPip", 
+		sources = {
+			refBy(PipelineVar_14_Source0)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:ReflectiveRandomPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_14;
+		PipelineVar_14_Source0;
+		PipelineVar_14_Flow0;
+		PipelineVar_14_FamilyElement0;
+		PipelineVar_14_Flow1;
+		PipelineVar_14_Sink0;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

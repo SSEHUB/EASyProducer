@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:pipeline="pipeline" xmi:id="_baKK4HqaEeadgttKLyIo0A" type="Pipeline" name="PipelineVar_12.pipeline_diagram" measurementUnit="Pixel">
+  <children xmi:type="notation:Shape" xmi:id="_dmCzoHqaEeadgttKLyIo0A" type="2001" fontName="Segoe UI">
+    <children xmi:type="notation:DecorationNode" xmi:id="_dmGeAHqaEeadgttKLyIo0A" type="5001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_dmHFEHqaEeadgttKLyIo0A" y="5"/>
+    </children>
+    <element xmi:type="pipeline:Source" href="PipelineVar_12.pipeline#//@nodes.0"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_dmCzoXqaEeadgttKLyIo0A" x="168" y="314"/>
+  </children>
+  <children xmi:type="notation:Shape" xmi:id="_wYSxsHqaEeadgttKLyIo0A" type="2007" fontName="Segoe UI">
+    <children xmi:type="notation:DecorationNode" xmi:id="_wYTYwHqaEeadgttKLyIo0A" type="5007">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_wYT_0HqaEeadgttKLyIo0A" y="5"/>
+    </children>
+    <element xmi:type="pipeline:ReplaySink" href="PipelineVar_12.pipeline#//@nodes.1"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_wYSxsXqaEeadgttKLyIo0A" x="360" y="315"/>
+  </children>
+  <styles xmi:type="notation:DiagramStyle" xmi:id="_baKK4XqaEeadgttKLyIo0A"/>
+  <element xmi:type="pipeline:Pipeline" href="PipelineVar_12.pipeline#/"/>
+  <edges xmi:type="notation:Connector" xmi:id="_yPPFMHqaEeadgttKLyIo0A" type="4001" source="_dmCzoHqaEeadgttKLyIo0A" target="_wYSxsHqaEeadgttKLyIo0A">
+    <children xmi:type="notation:DecorationNode" xmi:id="_yPQTUHqaEeadgttKLyIo0A" type="6001">
+      <layoutConstraint xmi:type="notation:Location" xmi:id="_yPQ6YHqaEeadgttKLyIo0A" x="-2" y="11"/>
+    </children>
+    <styles xmi:type="notation:FontStyle" xmi:id="_yPPFMXqaEeadgttKLyIo0A" fontName="Segoe UI"/>
+    <element xmi:type="pipeline:Flow" href="PipelineVar_12.pipeline#//@flows.0"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_yPPFMnqaEeadgttKLyIo0A" points="[8, -2, -138, 0]$[140, -2, -6, 0]"/>
+    <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_yQDkkHqaEeadgttKLyIo0A" id="(0.8666666666666667,0.5333333333333333)"/>
+    <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_yQDkkXqaEeadgttKLyIo0A" id="(0.10909090909090909,0.5272727272727272)"/>
+  </edges>
+</notation:Diagram>

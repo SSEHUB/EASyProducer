@@ -1,0 +1,1368 @@
+import commonVTLMethods;
+@advice(QM)
+template stormIntermediarySpout(Configuration config, FileArtifact target, String topoName, String topLevelPip, DecisionVariable fmElt, Algorithm algorithm, mapOf(String, mapOf(Tuple, sequenceOf(Tuple))) globalMap, mapOf(String, setOf(DecisionVariable)) lastElementMap, mapOf(Tuple,String) nameToOutputMap, mapOf(String, Integer) algNameToPort) {
+	String fmVarName = fmElt.varName();
+	FamilyElement fe = fmElt;
+	Family fm = fe.family;
+	String fmName = fm.name.firstToUpperCase().toIdentifier();
+	String algClsName;	
+	Boolean isHwAlg;
+	Boolean isActive;
+	Boolean switchInvolvesHW;
+	def main(Configuration config, FileArtifact target, String topoName, String topLevelPip, DecisionVariable fmElt, Algorithm algorithm, mapOf(String, mapOf(Tuple, sequenceOf(Tuple))) globalMap, mapOf(String, setOf(DecisionVariable)) lastElementMap, mapOf(Tuple,String) nameToOutputMap, mapOf(String, Integer) algNameToPort) {
+		isHwAlg = isHardwareAlgorithm(algorithm);
+		isActive = isActiveAlgorithm(fm, algorithm); //TODO: assume the first algorithm as the active algorithm		
+		algClsName = algImplName(algorithm);
+		switchInvolvesHW = hasHardwareAlgorithm(fm);
+		setOf(String) types = coreTupleTypes(fmName, algorithm, true);
+		String algName = algorithm.name.firstToUpperCase().toIdentifier();
+		sequenceOf(Tuple) tuples = fm.input;
+		
+		//get the inputToOutputMapping of this family element
+		mapOf(Tuple, sequenceOf(Tuple)) inputToOutputMapping = {};
+		if(globalMap.containsKey(fmVarName)){
+			inputToOutputMapping = globalMap.get(fmVarName);
+		}
+		
+		setOf(DecisionVariable) lastElt = lastElementMap.get(fmVarName);
+
+		'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	''
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/ 
+		'import java.io.IOException;'
+		'import java.io.ObjectInputStream;'
+		'import java.io.ObjectOutputStream;'
+		'import java.io.OutputStream;'
+		'import java.io.InputStream;'
+		'import java.net.ServerSocket;'
+		'import java.net.Socket;'
+		'import java.net.UnknownHostException;'
+		'import java.util.Calendar;'
+		'import java.util.Iterator;'
+		'import java.util.Map;'
+		'import java.util.HashMap;'
+		'import java.util.Queue;'
+		'import java.util.LinkedList;'
+		'import java.util.concurrent.ConcurrentLinkedQueue;'
+		'import java.util.concurrent.ConcurrentLinkedDeque;'
+		'import org.apache.log4j.Logger;'
+		'import com.esotericsoftware.kryo.Kryo;'
+		'import com.esotericsoftware.kryo.io.Input;'
+		'import com.esotericsoftware.kryo.io.Output;'
+		'import com.esotericsoftware.kryo.KryoException;'
+
+		'import backtype.storm.Config;'
+		'import backtype.storm.spout.SpoutOutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Fields;'
+		'import backtype.storm.tuple.Values;'
+		'import eu.qualimaster.base.algorithm.ISwitchTuple;'
+		'import eu.qualimaster.base.pipeline.CollectingTopologyInfo;'
+		'import eu.qualimaster.common.signal.BaseSignalSpout;'
+		'import eu.qualimaster.common.signal.ParameterChange;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'
+		'import eu.qualimaster.common.signal.SignalException;'
+		'import eu.qualimaster.common.signal.ValueFormatException;'
+		'import eu.qualimaster.common.signal.ShutdownSignal;'
+		'import eu.qualimaster.common.signal.SignalMechanism;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		'import eu.qualimaster.base.serializer.KryoSwitchTupleSerializer;'
+		'import eu.qualimaster.families.imp.*;'
+		'import eu.qualimaster.families.inf.*;'
+		if(looseSub) {
+			'import java.net.InetAddress;'
+			'import eu.qualimaster.common.signal.PortManager.*;'
+			'import eu.qualimaster.common.signal.PortManager;'
+			'import eu.qualimaster.common.signal.Constants;'
+		}
+		if(newSwitchLog) {
+			'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+		}
+		produceImportsFromLastElements(lastElt, lastElementMap, topoName);
+ 
+		for(String type : types) {
+			'import eu.qualimaster.families.imp.${fmName}.I$type;'
+			'import eu.qualimaster.families.inf.I${fmName}.II$type;'
+		}		
+		/****************************/
+    	/*        Spout class        */  
+    	/****************************/    	
+    	'/**'
+    	'* Define the intermediary Spout class.'
+    	'* @generated'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	String name = algName + "Intermediary";
+//    	if(looseSub) {
+//    		name = topoName + "Intermediary";
+//    	}
+    	'public class $name extends BaseSignalSpout {'
+    		'private static final Logger LOGGER = Logger.getLogger($name.class);' | 4;
+    		'private final static int LOWER_SIZE = 10;' | 4;
+    		'private static int OVERLOAD_SIZE = 500;' | 4;
+    		'private transient SpoutOutputCollector _collector;' | 4;
+    		'private String streamId;' | 4;
+    		'private String nimbus_host = "localhost";' | 4;
+    		'private int thrift_port = 6027;' | 4;
+    		if(looseSub) {
+    			'private int port;' | 4; 
+    			'private transient Map<String,String> algToSub = new HashMap<String,String>(); //<subAlgName, subPipName>' | 4;
+    		} else {
+	    		if(algNameToPort.containsKey(algName)) {
+	    			Integer port = algNameToPort.get(algName);
+	    		'private static int port = $port;' | 4;
+	    		}
+	    		'private transient HashMap<String, Integer> algNameToPort = null;' | 4;
+    		}
+    		
+    		'private transient FillInQueueServer server;' | 4;
+    		'private Object msgId;' | 4;
+    		'private transient ConcurrentLinkedDeque<ISwitchTuple> outQueue = new ConcurrentLinkedDeque<ISwitchTuple>(); //output queue for checking the acknowledged items' | 4;
+    		'private transient Queue<ISwitchTuple> inQueue = new ConcurrentLinkedQueue<ISwitchTuple>(); //input queue' | 4;
+	    	'private transient Queue<ISwitchTuple> tmpQueue = new ConcurrentLinkedQueue<ISwitchTuple>(); //temporary queue' | 4;
+	    	'private transient Iterator<ISwitchTuple> iterator = null;' | 4;
+	    	'private ISwitchTuple sTuple = null;' | 4;
+	    	'private static KryoSwitchTupleSerializer kryoSer = null;' | 4;
+	    	'private boolean isPassivate = false; //indicating whether the spout shall emit data' | 4;
+	    	'private long lastProcessedId; //indicating the id of the last acknowledged data item' | 4;
+	    	'private boolean isActiveSpout; //indicating whether the spout is the original one' | 4;
+	    	'private long lastFamilyId; //indicating the id of the last data item emitted from the preceding family element' | 4;
+	    	'private long firstId; // the id of the first data item to be transferred' | 4;
+	    	'private String originalAlg; //the original algorithm name' | 4;
+	    	'private String targetAlg; //the target algorithm name' | 4;
+	    	'private boolean isTransferring; //indicating whether it is transferring data to the target algorithm in case of missing data items' | 4;
+	    	'private Output outputTarget = null;' | 4;
+	    	'private Socket socketTarget = null;' | 4;
+	    	'private boolean omitOnce; //flag control to only omit once' | 4;
+	    	'private boolean synOnce; //flag control to only send synchronize signal once' | 4;
+	    	if(switchInvolvesHW) {
+	    		'private boolean lastIdOnce;' | 4;
+	    		'private boolean isCompleting; //indicating the switch is completing' | 4;
+	    	}
+	    	'private long transferredId = 0; //the id of last transferred data item' | 4;
+	    	produceOutputVariable(tuples, inputToOutputMapping, nameToOutputMap, fmName);
+	    	produceInputVariable(tuples, true, fmName);
+	    	if(newSwitchLog) {
+				'private transient PrintWriter out = null;' | 4;
+			}
+    		''
+    		/****************************/
+		    /*    Class constructor     */  
+		    /****************************/  
+    		'public $name(String name, String namespace, String streamId) {' | 4;
+        		'super(name, namespace,$genMonitoringProbes);' | 8; 
+        		'this.streamId = streamId;' | 8;
+    		'}' | 4;
+    		''
+    		    /****************************/
+		    	/*     open method          */  
+		    	/****************************/    	
+    	'    @Override'
+        '    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {'
+        '		 super.open(conf, context, collector);'
+        '        _collector = collector;' 
+        		if(newSwitchLog) {
+        			'String logDir = (String) conf.get("LOG.DIRECTORY");' | 8;
+        			'out = DataLogger.getPrintWriter(logDir + "${name}.log");' | 8;
+				}
+        		'inQueue = new ConcurrentLinkedQueue<ISwitchTuple>();' | 8;
+	    		'outQueue = new ConcurrentLinkedDeque<ISwitchTuple>();' | 8;
+	    		if(looseSub) {
+	    			'algToSub = new HashMap<String, String>();' | 8;
+	    			for(Algorithm alg : fm.members) {
+	    				if(isGenSubtopology(alg)) {
+	    					SubPipelineAlgorithm subAlg = alg;
+	    					'algToSub.put("${alg.name}", "${subAlg.subPipeline.name}");' | 8;
+	    					'SignalMechanism.initEnabledSignalNamespaceState("${subAlg.subPipeline.name}");' | 8;
+	    				}
+	    				if(isHardwareAlgorithm(alg)) {
+	    					'algToSub.put("${alg.name}", "${alg.name}");' | 8;
+	    				}
+	    			}
+	    		}
+	    		'tmpQueue = new ConcurrentLinkedQueue<ISwitchTuple>();' | 8;
+        		'kryoSer = new KryoSwitchTupleSerializer(conf); ' | 8;
+        		'nimbus_host = (String) conf.get(Config.NIMBUS_HOST);' | 8;
+        		'thrift_port = (int) conf.get(Config.NIMBUS_THRIFT_PORT);' | 8;
+        		'isPassivate = false;' | 8;
+        		if(looseSub) {
+        			'isActiveSpout = "true".equals(conf.get(Constants.CONFIG_KEY_INITIAL_SUBPIPELINE));' | 8;
+        		} else {
+        			'isActiveSpout = $isActive;' | 8;
+        			'algNameToPort = new HashMap<String, Integer>();' | 8;
+        		}
+        		'LOGGER.info("Is this active? " + isActiveSpout);' | 8;
+    			if(newSwitchLog) {
+    				'out.println("Is this active? " + isActiveSpout);' | 8;
+    				'out.flush();' | 8;
+    			}
+        		'isTransferring = false;' | 8;
+        		'omitOnce = true;' | 8;
+        		'synOnce = true;' | 8;
+        		if(switchInvolvesHW) {
+        			'lastIdOnce = true;' | 8;
+        			'isCompleting = false;' | 8;
+        		}
+        		'firstId = 0;' | 8;
+        		if(looseSub) {
+        			'String localhost = "localhost";' | 8;
+	        		'try {' | 8;
+						'localhost = InetAddress.getLocalHost().getCanonicalHostName();' | 12;
+					'} catch (UnknownHostException e1) {' | 8;
+						'e1.printStackTrace();' | 12;
+					'}' | 8;
+	        		'PortAssignmentRequest portRequest = new PortAssignmentRequest(getPipeline(), getName(), 0, localhost, null);' | 8;
+	        		'PortManager portManager = getPortManager();' | 8;
+	        		'try {' | 8;
+						'PortAssignment assignment = portManager.registerPortAssignment(portRequest);' | 12;
+						'port = assignment.getPort();' | 12;
+						if(newSwitchLog) {
+						'LOGGER.info("Assigned port: " + port + " for the pipeline: " + portRequest.getPipeline() + ", the element: " + portRequest.getElement() + ", the port request:" + portRequest);' | 12;
+						'out.println("Assigned port: " + port + " for the pipeline: " + portRequest.getPipeline() + ", the element: " + portRequest.getElement() + ", the port request:" + portRequest);' | 12;
+						'out.flush();' | 12;
+						}
+						'} catch (SignalException e) {' | 8;
+							'e.printStackTrace();' | 12;
+					'}' | 8;
+        		} else {
+	        		for(Algorithm alg: fm.members) {
+	        			String algName = alg.name.firstToUpperCase().toIdentifier();
+	        			if(algNameToPort.containsKey(algName)) {
+	        				Integer port = algNameToPort.get(algName);
+	        				'algNameToPort.put("$algName", $port);' | 8; 
+	        			}
+	        		}
+        		}
+        		'try {' | 8;
+            		'server = new FillInQueueServer(conf);' | 12;
+        		'} catch (IOException e1) {' | 8;
+            		'e1.printStackTrace();' | 12;
+        		'}' | 8;
+        		'server.start();' | 8;
+				'initMonitor();' | 8;
+				'LOGGER.info("The end of the open method.");' | 8;
+        '	 }'
+        ''
+        //override the initial monitor
+	    produceInitMonitor(false, 4);
+	    '    /**'
+	    '     * Emits tuple.'
+	    '     * @param sTuple the tuple to be emitted'
+	    '     */'
+        'public void emitTuple(ISwitchTuple sTuple) {' | 4;
+        	String ifName = "I" + fmName;
+   			String ifInputName = "I" + ifName;
+    		String tupleName;
+    		String outputInfName;
+			String inputInfName;
+			String fImpInputName;
+    		for(Tuple t : tuples) {
+				//get the tuple name
+				tupleName = t.name;
+				
+				//get input interface name
+				inputInfName = ifInputName + "${firstToUpperCase(tupleName)}Input";
+				//get input imp name
+				fImpInputName= 	ifName + "${firstToUpperCase(tupleName)}Input";
+				//get output interface name	
+				if(inputToOutputMapping.containsKey(t))	{
+		  			sequenceOf(Tuple) outputs = inputToOutputMapping.get(t);
+		  			String number;
+			  		Integer size = outputs.size();
+			  		Integer count = 0;
+			  		for(Tuple tuple : outputs) {
+			  	  		count = count + 1;
+			  	  		outputInfName = nameToOutputMap.get(tuple);
+					  	if(size > 1) {
+						    number = "$count";
+						} else {
+						  	number = "";
+						}
+				  
+					  'if(sTuple.getValue(0) instanceof $outputInfName) {' | 8;
+						'iTuple${firstToUpperCase(tupleName)} = ($outputInfName)sTuple.getValue(0);' | 12;
+						'input${firstToUpperCase(tupleName)} = new $fmName.$fImpInputName();' | 12;
+			 			for(Field f : t.fields) {
+				 			String fname = toIdentifier("${f.name}");
+				 			String mname = firstToUpperCase(fname);
+		         			'input${firstToUpperCase(tupleName)}.set${mname}(iTuple${firstToUpperCase(tupleName)}.get${mname}());' | 12;
+			 			}
+	    				'msgId = sTuple.getId();' | 12;
+	    				'if(msgId.equals(0L)) {//do not enable the acknowledgement' | 12;
+            				'_collector.emit(streamId, new Values(input${firstToUpperCase(tupleName)}));' | 16;
+            			'} else {//pass down a message id for acknowledgement' | 12;
+	    					'_collector.emit(streamId, new Values(input${firstToUpperCase(tupleName)}), msgId);' | 16;
+	    				'}' | 12;
+	    			'}' | 8;
+    			
+				  }
+				} 
+				
+    		}
+        '}' | 4;
+		    	/****************************/
+		    	/*     nextTuple method     */  
+		    	/****************************/        
+        '    @Override'
+        '    public void nextTuple() {'
+        		/* 
+        		'if(!isActiveSpout) {' | 8;
+        			'if(outQueue.isEmpty()&&omitOnce && isPassivate) { //clean the outQueue' | 12;
+		                'omitOnce = false;' | 16;
+		                if(isHwAlg) {
+		                	if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + ", $name--outQueue is empty and sending the omit signal to the hardware bolt.");' | 16;
+			                'out.flush();' | 16;
+			                }
+			                'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+			                        "$topoName", "${algClsName}hardwareConnectionBolt", "omit", true, null);' | 16;
+			                  'try {' | 16;
+			                    'sendSignal(paraSignal);' | 20;
+			                '} catch (SignalException e) {' | 16;
+			                    'e.printStackTrace();' | 20;
+			                '}' | 16;
+		                } else {
+			                if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + ", $name--outQueue is empty and sending the emit signal to the original Spout.");' | 16;
+			                'out.flush();' | 16;
+			                }
+			                'ParameterChangeSignal paraSignalId = new ParameterChangeSignal(
+			                        "$topoName", targetAlg+"EndBolt", "emit", true, null);' | 16;
+			                  'try {' | 16;
+			                    'sendSignal(paraSignalId);' | 20;
+			                '} catch (SignalException e) {' | 16;
+			                    'e.printStackTrace();' | 20;
+			                '}' | 16;
+		                }
+			        '}' | 12;
+			        '}' | 8;
+			        if(isHwAlg) {
+			        	'else if(outQueue.isEmpty() && lastIdOnce && isPassivate){ //another entrance to send the last processed id if the active alg is hardare algorithm' | 8;
+			        		'lastProcessedId = lastFamilyId;' | 12;
+			        		'try {' | 12;
+								'ParameterChangeSignal paraSignal = new ParameterChangeSignal("$topoName", targetAlg+"Intermediary", "lastProcessedId", lastProcessedId, null);' | 16;
+		                		'sendSignal(paraSignal);' | 16;
+		                		'lastIdOnce = false;' | 16;
+		            		'} catch (SignalException e) {' | 12;
+					            'e.printStackTrace();' | 16;
+					        '}' | 12;
+					        'goToPassive();' | 12;
+					        if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Sent parameter signal lastProcessedId to target intermediary!" + lastProcessedId);' | 12;
+				                'out.flush();' | 12;
+				            }
+			        	'}' | 8;
+			        }
+			        * 
+			        */
+	        	'if((isTransferring) || (!tmpQueue.isEmpty()) && (!isPassivate)) {' | 8;
+	                'if(!tmpQueue.isEmpty()) {' | 12;
+	                'sTuple = consume(tmpQueue);' | 16;
+	                'emitTuple(sTuple);' | 16;
+	                if(newSwitchLog) {
+	                    'out.println(Calendar.getInstance().getTimeInMillis() + "$name--Emitting the tuple from transferred queue:" + sTuple.getId() + ", queue size:" + tmpQueue.size());' | 16;
+	                    'out.flush();' | 16;
+	                }
+	                '}' | 12;
+		        '} else if(/*(QUEUE_SIZE > outQueue.size()) && */(!inQueue.isEmpty()) && (!isPassivate)) {' | 8; //TODO: Limitation to QUEUE_SIZE creates problem
+		            'sTuple = consume(inQueue);' | 12;
+		            'if(sTuple.getId() != 0L) {//queue only during the switch' | 12;
+		            	'outQueue.offer(sTuple);' | 16;
+		            '}' | 12;
+        			'emitTuple(sTuple);' | 12;
+		            if(newSwitchLog) {
+		                'out.println(Calendar.getInstance().getTimeInMillis() + "$name--Emitting the tuple:" + sTuple.getId() + ", queue size:" + inQueue.size());' | 12;
+		                'out.flush();' | 12;
+		            }
+		        '}'	 | 8;	        	
+    	'}' | 4;
+    	''
+    	'    /**' 
+	    '     * Consumes data from the queue.' 
+	    '     * @param queue the queue to be consumed'
+	    '     */' 
+    	'private ISwitchTuple consume(Queue<ISwitchTuple> queue) {' | 4;
+	        '//wait if queue is empty'	 | 8;
+	        'while (queue.isEmpty()) {'	 | 8;
+	            'synchronized (queue) {' | 12;
+	            if(newSwitchLog) {
+	                'out.println("Queue is empty " + Thread.currentThread().getName()
+	                                    + " is waiting , size: " + queue.size());' | 16;
+	            }
+	                'try {' | 16;
+	                    'queue.wait();' | 20;
+	                '} catch (InterruptedException e) {' | 16;
+	                    'e.printStackTrace();' | 20;
+	                '}' | 16;
+	            '}' | 12;
+	        '}' | 8;
+	        '//Otherwise consume element and notify waiting producer' | 8;
+	        'synchronized (queue) {' | 8;
+	            'queue.notifyAll();' | 12;
+	            'return queue.poll();' | 12;
+	        '}' | 8;
+    '}' | 4;
+    		    /****************/
+		    	/** ack method **/  
+		    	/****************/
+		'@Override' | 4;
+		'public void ack(Object msgId) {' | 4;  
+			'boolean flag;' | 8;
+    		'ISwitchTuple ackItem = outQueue.peek();' | 8;
+    		'if(null != ackItem) {' | 8;
+    			'if(msgId.equals(ackItem.getId())) {' | 12;
+	    			'ackItem = outQueue.remove();' | 12;
+	    			if(newSwitchLog) {
+	                'out.println(System.currentTimeMillis() + "First: Acked the tuple with the msgId: " + msgId + " removed: " + ackItem.getId());' | 12;
+	                'out.flush();' | 12;
+	                }
+	    		'} else {' | 12;
+					'iterator = outQueue.descendingIterator();' | 16;
+		        	'while(iterator.hasNext()) {' | 16;
+		            	'ackItem = iterator.next();' | 20;
+		            	'if(msgId.equals(ackItem.getId())) {' | 20;
+			                'lastProcessedId = ackItem.getId();' | 24;
+			                'flag = outQueue.remove(ackItem);' | 24;
+			                if(newSwitchLog) {
+			                    'out.println(System.currentTimeMillis() + " Acked the tuple with the msgId: " + msgId + " removed: " + flag);' | 24;
+			                    'out.flush();' | 24;
+			                }
+			                'break;' | 24;
+			            '}' | 20;
+			        '}' | 16; 
+		        '}' | 12;
+	        '}' | 8;
+	        if(isHwAlg and switchInvolvesHW) {
+	        	'if(outQueue.isEmpty() && omitOnce && isPassivate) {' | 8;
+	        		if(newSwitchLog) {
+	                'out.println(Calendar.getInstance().getTimeInMillis() + ", Ack--outQueue is empty and sending the flush signal to the hardware bolt.");' | 12;
+	                'out.flush();' | 12;
+	                }
+	                'omitOnce = false;' | 12;
+	                'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+	                        getNamespace(), "${algClsName}hardwareConnectionBolt", "omit", true, null);' | 12; //"$topoName"
+	                  'try {' | 12;
+	                    'sendSignal(paraSignal);' | 16;
+	                '} catch (SignalException e) {' | 12;
+	                    'e.printStackTrace();' | 16;
+	                '}' | 12;
+	        	'}' | 8;
+	        } else {//TODO: check whether this is still needed
+	        	/* 
+	        	'if(outQueue.isEmpty()&&omitOnce && isPassivate) { //clean the outQueue' | 8;
+			                'omitOnce = false;' | 12;
+			                if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + ", Ack--outQueue is empty and sending the emit signal to the original Spout.");' | 12;
+			                'out.flush();' | 12;
+			                }
+			                'String targetPip = "$topoName";' | 12;
+				            if(looseSub) {
+				            	'if(algToSub.containsKey(targetAlg)) {' | 12;
+				            		'targetPip = algToSub.get(targetAlg);' | 16;
+				            	'}' | 12;
+				            }
+			                'ParameterChangeSignal paraSignalId = new ParameterChangeSignal(
+			                        getNamespace(), targetAlg+"EndBolt", "emit", true, null);' | 12; //targetPip
+			                  'try {' | 12;
+			                    'sendSignal(paraSignalId);' | 16;
+			                '} catch (SignalException e) {' | 12;
+			                    'e.printStackTrace();' | 16;
+			                '}' | 12;
+			                'completingSynchronization();' | 12;
+			        '}' | 8;
+			        * 
+			        */
+	        }             
+	    '}' | 4;
+    ''
+        		/****************/
+		    	/** fail method **/  
+		    	/****************/
+		'@Override' | 4;
+		'public void fail(Object msgId) {' | 4; 
+		/* for now, we sacrifice the tuples in the output queue which are waiting for acknowledgement  
+			if(isHwAlg) {
+				if(newSwitchLog) {
+	            'out.println(Calendar.getInstance().getTimeInMillis() + ", Fail--sending again the failed tuple." +msgId);'
+	            'out.flush();'
+	            }
+	            if(fastQueueOperation) {
+					'iterator = outQueue.descendingIterator();' | 8;
+				} else {
+		        	'iterator = outQueue.iterator();' | 8;
+		        }
+		        	'while(iterator.hasNext()) {' | 8;
+		            	'ISwitchTuple ackItem = iterator.next();' | 12;
+		            	'if(msgId.equals(ackItem.getId())) {' | 12;
+							'emitTuple(ackItem);' | 12;			                
+			                'break;' | 16;
+			            '}' | 12;
+			        '}' | 8;
+			}
+	         '//QUEUE_SIZE = QUEUE_SIZE + 5; //5 more tuples per one failed tuple for the outQueue' | 8;   
+	         * 
+	         */    
+	         if(newSwitchLog) {
+	            'out.println(Calendar.getInstance().getTimeInMillis() + ", Failing the tuple " + msgId + " push all tuples in the output queue into tmp queue and send again.");' | 8; 
+	            'out.flush();' | 8; 
+	            }
+	         'outQueue.clear();' | 8;    
+	    '}' | 4;
+	    ''
+    if(switchInvolvesHW) {
+    '/**'   | 4;
+    '* Returns the minimum id in the outQueue.' | 4;
+    '*/'	 | 4;
+    'public long minIdFromOutQueue() {' | 4;
+    	'long minId = 0;' | 8;
+		'iterator = outQueue.descendingIterator();' | 8; 
+		'if(!outQueue.isEmpty()) {' | 8;
+		'minId = outQueue.peek().getId();' | 12;
+		'}' | 8;
+		'while (iterator.hasNext()) {' | 8;
+			'ISwitchTuple ackItem = iterator.next();' | 12;
+			'if(ackItem.getId() < minId) {' | 12;
+				'minId = ackItem.getId();' | 16;
+			'}' | 12;
+		'}' | 8;
+		'return minId;' | 8;
+	'}' | 4;
+	}
+	''
+	String synPip = topoName;
+	if(looseSub) {
+		synPip = topLevelPip;
+	}
+	'    /**' 
+    '     * Sends synchronized signal to the preceding family element.' 
+    '     */'
+	'public void sendSynchronizedState() {' | 4;
+		'try {' | 8;
+			'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(),
+					"$fmVarName", "synchronized", true, null);' | 12; //"synPip"
+			'sendSignal(paraSignal);' | 12;
+		'} catch (SignalException e) {' | 8;
+			'e.printStackTrace();' | 12;
+		'}' | 8;
+	'}' | 4;
+	''
+	'    /**' 
+    '     * Completing the synchronization phase.'
+    '     */' 
+	'public void completingSynchronization() { //used by passive algorithm'  | 4;
+		if(isHwAlg and switchInvolvesHW) {
+        	'if(outQueue.isEmpty() && omitOnce && isPassivate) {' | 8;
+        		if(newSwitchLog) {
+                'out.println(Calendar.getInstance().getTimeInMillis() + ", lastProcessedId--outQueue is empty and sending the omit signal to the hardware bolt.");' | 12;
+                'out.flush();' | 12;
+                }
+                'omitOnce = false;' | 12;
+                'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+                        getNamespace(), "${algClsName}hardwareConnectionBolt", "omit", true, null);' | 12; //"$topoName"
+                  'try {' | 12;
+                    'sendSignal(paraSignal);' | 16;
+                '} catch (SignalException e) {' | 12;
+                    'e.printStackTrace();' | 16;
+                '}' | 12;
+        	'}' | 8;        	
+        }  
+		'//isPassivate = false;' | 8;
+		if(switchInvolvesHW) {
+			'isCompleting = true;' | 8;
+		}
+		'isTransferring = false;' | 8;
+		'isActiveSpout = true;' | 8;
+		'firstId = 0;' | 8;
+		'omitOnce = true;' | 8;
+		'synOnce = true;' | 8;
+		'sendSynchronizedState();'	 | 8;
+		'if(!isPassivate) {' | 8;
+			'goToActive();' | 12;
+		'}' | 8;
+		
+	'}' | 4;
+	''
+	'    /**' 
+    '     * Goes to active state, i.e., the target algorithm is activating.' 
+    '     */' 
+	'public void goToActive() {' | 4;		
+		'//isPassivate = false;' | 8;
+		'isTransferring = false;' | 8;
+		'isActiveSpout = true;' | 8;
+		'firstId = 0;' | 8;
+		'omitOnce = true;' | 8;
+		'synOnce = true;' | 8;
+		if(switchInvolvesHW) {
+			'lastIdOnce = true;' | 8;
+			'isCompleting = false;' | 8;
+		}
+		if(newSwitchLog) {
+        'out.println(Calendar.getInstance().getTimeInMillis() + ", Go to active and inform the end bolt.");' | 8;
+        'out.flush();' | 8;
+        }
+        'String targetPip = "$topoName";' | 8;
+        if(looseSub) {
+        	'if(algToSub.containsKey(targetAlg)) {' | 8;
+        		'targetPip = algToSub.get(targetAlg);' | 12;
+        	'}' | 8;
+        }
+        'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+                getNamespace(), targetAlg+"EndBolt", "goToActive", true, null);' | 8;//targetPip
+          'try {' | 8;
+            'sendSignal(paraSignal);' | 12;
+        '} catch (SignalException e) {' | 8;
+            'e.printStackTrace();' | 12;
+        '}' | 8;
+
+	'}' | 4;
+	''
+	'    /**' 
+    '     * Goes to passive state, i.e., the original algorithm is disactivating.' 
+    '     */' 
+	'public void goToPassive() {' | 4;	
+		'outQueue.clear();' | 8;	
+		'isPassivate = false;' | 8;
+		'isTransferring = false;' | 8;
+		'isActiveSpout = false;' | 8;
+		'firstId = 0;' | 8;
+		'omitOnce = true;' | 8;
+		'synOnce = true;' | 8;
+		if(switchInvolvesHW) {
+			'lastIdOnce = true;' | 8;
+		}
+		if(newSwitchLog) {
+        'out.println(Calendar.getInstance().getTimeInMillis() + ", Go to passive and inform the end bolt.");' | 8;
+        'out.flush();' | 8;
+        }
+        'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+                getNamespace(), originalAlg+"EndBolt", "goToPassive", true, null);' | 8;//"$topoName"
+          'try {' | 8;
+            'sendSignal(paraSignal);' | 12;
+        '} catch (SignalException e) {' | 8;
+            'e.printStackTrace();' | 12;
+        '}' | 8;
+	'}' | 4;
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/	    	           
+        if(newSwitch and hasDistAlgorithm(fm)) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'long minId;' | 8;
+			'for(int i = 0; i < signal.getChangeCount(); i++) {' | 8;
+			'ParameterChange para = signal.getChange(i);' | 12;			
+			'switch (para.getName()) {' | 12;			
+				'case "passivate"://ACTIVE and PASSIVE' | 16; 
+	                'isPassivate = true;' | 20;
+	                'String msg = para.getStringValue();' | 20;
+	                'String[] parts = msg.split(",");' | 20;
+	                'lastFamilyId = Integer.parseInt(parts[0]);' | 20;
+	                'originalAlg = parts[1];' | 20;
+	                'targetAlg = parts[2];' | 20;
+	                if(newSwitchLog) {
+		                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal passivate!" + " Original alg: " + originalAlg + ", Target alg: " + targetAlg + ", LastFamilyId: " + lastFamilyId);' | 20;
+		                'out.flush();' | 20;
+		            }
+	                'if(isActiveSpout) {' | 20;
+	                if(isHwAlg) {
+	                    'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+				                        getNamespace(), "${algClsName}hardwareConnectionBolt", "flush", true, null);' | 24;
+	                  'try {' | 24;
+		                    'sendSignal(paraSignal);' | 28;
+		                '} catch (SignalException e) {' | 24;
+		                    'e.printStackTrace();' | 28;
+		                '}' | 24;
+		                if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + "Sent parameter signal flush to ${algClsName}hardwareConnectionBolt!");' | 24;
+			                'out.flush();' | 24;
+		            	}
+	                } else {
+		                'try {' | 24;
+							'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(), "${algName}EndBolt", "disable", true, null);' | 28;
+	                		'sendSignal(paraSignal);' | 28;
+	            		'} catch (SignalException e) {' | 24;
+				            'e.printStackTrace();' | 28;
+				        '}' | 24;
+				        if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + "Sent parameter signal disable to ${algName}EndBolt!");' | 24;
+			                'out.flush();' | 24;
+		            	}
+		            	}
+			        '}' | 20;
+	                'break;' | 20;
+	            'case "stopped"://ACTIVE' | 16; 
+				if(newSwitchLog) {
+	                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal stopped!");' | 20;
+	                'out.flush();' | 20;
+	            }
+	            if(switchInvolvesHW) {
+	            	'if(lastIdOnce && isPassivate) {' | 20;
+	            	'minId = minIdFromOutQueue();' | 24;
+	            	'if(minId == 0) {' | 24;
+	            		'lastProcessedId = lastFamilyId;' | 28;
+	            		'goToPassive();' | 28;
+	            	'} else {' | 24;
+	            		'lastProcessedId = minId - 1;' | 28;
+	            	'}' | 24;
+	            }
+	            	'try {' | 20;
+	            		'String targetPip = "$topoName";' | 24;
+				            if(looseSub) {
+				            	'if(algToSub.containsKey(targetAlg)) {' | 24;
+				            		'targetPip = algToSub.get(targetAlg);' | 28;
+				            	'}' | 24;
+				            }
+						'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(), targetAlg+"Intermediary", "lastProcessedId", lastProcessedId, null);' | 24;//targetPip
+                		'sendSignal(paraSignal);' | 24;
+            		'} catch (SignalException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        '}' | 20;
+			        if(newSwitchLog) {
+		                'out.println(Calendar.getInstance().getTimeInMillis() + "Sent parameter signal lastProcessedId to target intermediary!" + lastProcessedId);' | 20;
+		                'out.flush();' | 20;
+		            }
+		            if(switchInvolvesHW) {
+		            '}' | 20;
+		            }
+	                'break;' | 20;
+	            'case "headId": //ACTIVE' | 16; 
+	            	'try {' | 20;
+	            		'long headId = para.getIntValue();' | 24;
+	            		if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal headId!" + headId);' | 20;
+			                'out.flush();' | 20;
+			            }
+	            		'transferMissingItems(headId);' | 20;
+	            	'} catch (ValueFormatException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        '}' | 20;
+			        'goToPassive();' | 20;
+	                'break;' | 20;
+	            'case "transfer": //ACTIVE' | 16; 
+				if(newSwitchLog) {
+	                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal transfer!");' | 20;
+	                'out.flush();' | 20;
+	            }
+	            	'isTransferring = true;' | 20;
+	            	'try {' | 20;
+	            	'transferAll();' | 24;
+	            	'} catch (SignalException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        '}' | 20;
+			        if(!looseSub) {
+			        	'goToPassive();' | 20;
+			        }
+	                'break;' | 20;
+	            'case "lastProcessedId"://PASSIVE' | 16; 
+	            	'try {' | 20;
+	            		'lastProcessedId = para.getIntValue();' | 24;
+	            		if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal lastProcessedId!" + lastProcessedId + ", currently the outQueue size: " + outQueue.size());' | 24;
+			                'out.flush();' | 24;
+			            }
+	            	'} catch (ValueFormatException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        '}' | 20;
+			        'if(lastProcessedId == lastFamilyId || outQueue.size() > OVERLOAD_SIZE || (lastFamilyId-lastProcessedId) > OVERLOAD_SIZE) {' | 20;
+			        if(isHwAlg and switchInvolvesHW) {
+			        	'if(/*outQueue.isEmpty() && */omitOnce && isPassivate) {' | 24;
+			        		if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + ", lastProcessedId--outQueue is empty and sending the omit signal to the hardware bolt.");' | 24;
+			                'out.flush();' | 24;
+			                }
+			                'omitOnce = false;' | 24;
+			                'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+			                        getNamespace(), "${algClsName}hardwareConnectionBolt", "omit", true, null);' | 24;//"$topoName"
+			                  'try {' | 24;
+			                    'sendSignal(paraSignal);' | 28;
+			                '} catch (SignalException e) {' | 24;
+			                    'e.printStackTrace();' | 28;
+			                '}' | 24;
+			        	'}' | 20;
+			        } else {
+			        	if(newSwitchLog) {
+		                'out.println(Calendar.getInstance().getTimeInMillis() + ", $name--completing the synchronization.");' | 24;
+		                'out.flush();' | 24;
+		                }
+		                /* for now, we sacrifice the tuples waiting for acknowledgement in the output queue */
+		                'outQueue.clear();' | 24;
+		                'isPassivate = false;' | 24;
+		                if(newSwitchLog) {
+		                'out.println(Calendar.getInstance().getTimeInMillis() + ", lastProcessedId--sending the emit signal to the target end Bolt.");' | 24;
+		                'out.flush();' | 24;
+		                }
+		                'String targetPip = "$topoName";' | 24;
+				            if(looseSub) {
+				            	'if(algToSub.containsKey(targetAlg)) {' | 24;
+				            		'targetPip = algToSub.get(targetAlg);' | 28;
+				            	'}' | 24;
+				            }
+		                'ParameterChangeSignal paraSignalId = new ParameterChangeSignal(
+		                        getNamespace(), targetAlg+"EndBolt", "emit", true, null);' | 24; //targetPip
+		                  'try {' | 24;
+		                    'sendSignal(paraSignalId);' | 28;
+		                '} catch (SignalException e) {' | 24;
+		                    'e.printStackTrace();' | 28;
+		                '}' | 24;
+			        }
+			        	'completingSynchronization();' | 24;
+			        '} else {' | 20;
+			        'try {' | 20;
+			        	'isTransferring = true; //it is in the transferring phase' | 24;
+			        	'synchronizeItems();' | 24;
+	                '} catch (SignalException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        '}' | 20; 
+			        '}' | 20;
+			        'break;' | 20; 
+	            'case "transferred": //PASSIVE' | 16; 
+	            	'try {' | 20;
+	            		'long value = para.getIntValue();' | 24;
+	            		if(newSwitchLog) {
+			                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal transferred!" + value);' | 20;
+			                'out.flush();' | 20;
+			            }
+	            		'if(value == 0) { //both queues are empty' | 24;
+	            		/* 
+                        'isTransferring = false;' | 24;
+                        'isActiveSpout = true;' | 24;
+                        'firstId = 0;' | 24;
+                        * 
+                        */
+                        if(newSwitchLog) {
+                        'out.println(Calendar.getInstance().getTimeInMillis() + ", notifyParameterChange--$name--Sending the synchronized signal from the $fmVarName.");' | 28;
+                        'out.flush();' | 28;
+                        }
+                        'completingSynchronization();' | 28;
+                        /* 
+                        'try {' | 20;
+                        	'ParameterChangeSignal paraSignal = new ParameterChangeSignal("$topoName", "$fmVarName", "synchronized", true);' | 24;
+                        	'sendSignal(paraSignal);' | 24;
+                        '} catch (SignalException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        	'}' | 20;
+			        	* 
+			        	*/
+                    '}' | 24;
+                    if(switchInvolvesHW) {
+                    	'else {' | 24;
+                    		'firstId = transferredId;' | 28;
+                    	'}' | 24;
+                    }
+	            	'} catch (ValueFormatException e) {' | 20;
+			            'e.printStackTrace();' | 24;
+			        '}' | 20;
+			        
+	                'break;' | 20;
+	            'case "ready"://PASSIVE' | 16; 
+				if(newSwitchLog) {
+	                'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal ready!");' | 20;
+	                'out.flush();' | 20;
+	            }
+	            	if(!isHwAlg) {
+	            	'isPassivate = false;' | 20;
+	            	'//isTransferring = true;' | 20;
+	            	}
+	            	if(isHwAlg and switchInvolvesHW){
+	            		'isPassivate = false;' | 20;
+	            		'if(isCompleting) {' | 20;
+	            		'goToActive();' | 24;
+	            		'}' | 20;
+	            	}
+	                'break;' | 20;
+			'}' | 12;
+			'}' | 8;
+			'}' |4;		
+		}
+		''
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/     	
+    	'public void declareOutputFields(OutputFieldsDeclarer declarer) {' | 4;
+        	'declarer.declareStream(streamId, new Fields("tuple"));' | 8;
+    	'}' | 4;  	
+		''
+				/************************************/
+				/*   SychronizeItems              */
+				/************************************/ 
+				'    /**' 
+			    '     * Synchronizes the data items.' 
+			    '     */' 
+				'public void synchronizeItems() throws SignalException { //called by passive Spout' | 4;
+				if(newSwitchLog) {
+			        'out.println(Calendar.getInstance().getTimeInMillis() + ", $name --Sychronizing output, inQueue: " + inQueue.size() + ", outQueue: " + outQueue.size());' | 8;
+			        'out.flush();' | 8;
+		        }
+			        'if(inQueue.isEmpty()) { //request the Spout1 to transfer all tuples' | 8;
+			            if(newSwitchLog) {
+				            'out.println(Calendar.getInstance().getTimeInMillis() + ", $name--Sending the transfer signal to Spout1.");' | 12;
+				            'out.flush();' | 12;
+			            }
+			            'firstId = lastFamilyId;' | 12;
+			            '//isTransferredData = true;' | 12;	
+			            'String origPip = "$topoName";' | 12;
+			            if(looseSub) {
+			            	'if(algToSub.containsKey(originalAlg)) {' | 12;
+			            		'origPip = algToSub.get(originalAlg);' | 16;
+			            	'}' | 12;
+			            }		            
+			            'ParameterChangeSignal paraSignal = new ParameterChangeSignal(getNamespace(), originalAlg+"Intermediary", "transfer", true, null);' | 12;//origPip
+			            'try {' | 12;
+			                'sendSignal(paraSignal);' | 16;
+			            '} catch (SignalException e) {' | 12;
+			                'e.printStackTrace();' | 16;
+			            '}' | 12;
+			        '} else {' | 8;
+			            'long id = lastProcessedId;' | 12;
+			            'if (!inQueue.isEmpty()) {' | 12;
+			                'id = inQueue.peek().getId();' | 16;
+			            '}' | 12;
+			            if(newSwitchLog) {
+				            'out.println(Calendar.getInstance().getTimeInMillis() + "$name--Synchronizing the last id of the current alg: " + id + " with the last processed id of the previous alg:" + lastProcessedId);' | 12;
+				            'out.flush();' | 12;
+			            }
+			            'if(id > lastProcessedId) { //the current alg is faster than the previous alg, to infrom the previous alg to send the missing items' | 12;
+			                if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + ", $name--Sending the headId signal to the original Spout with id:" + id);' | 16;
+				                'out.flush();' | 16;
+			                }
+			                'firstId = id-1;' | 16;
+			                '//isTransferredData = true;' | 16;
+			                 'String targetPip = "$topoName";' | 16;
+				            if(looseSub) {
+				            	'if(algToSub.containsKey(targetAlg)) {' | 16;
+				            		'targetPip = algToSub.get(targetAlg);' | 20;
+				            	'}' | 16;
+				            }
+			                'ParameterChangeSignal paraSignalId = new ParameterChangeSignal(getNamespace(), targetAlg+"Intermediary", "headId", id, null);' | 16;//targetPip
+			                'try {' | 16;
+			                    'sendSignal(paraSignalId);' | 20;
+			                '} catch (SignalException e) {' | 16;
+			                    'e.printStackTrace();' | 20;
+			                '}' | 16;
+			            '} else {' | 12;
+			                'while(id < lastProcessedId && !inQueue.isEmpty()) {' | 16;
+			                    'id = inQueue.poll().getId();' | 20;
+			                '}' | 16;
+			                /* 
+			                'isPassivate = false;'
+			                * 
+			                */
+			                if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + "Skipped tuples until the id:" + id);' | 16;
+				                'out.flush();' | 16;
+			                }
+			                //'isTransferring = false;'
+			                if(newSwitchLog) {
+				                'out.println(Calendar.getInstance().getTimeInMillis() + ", synchronizeItems--$name--Sending the synchronized signal from the switch family."); ' | 16;
+				                'out.flush();' | 16;
+			                }
+			                'completingSynchronization();' | 16;
+			                /* 
+			                'ParameterChangeSignal paraSignal = new ParameterChangeSignal("$topoName", "$fmVarName", "synchronized", true);'
+			                'sendSignal(paraSignal);'
+			                * 
+			                */
+			            '}' | 12;
+			        '}' | 8;
+    			'}' | 4;
+    			''
+    			'    /**' 
+			    '     * Transfers the missing data items.' 
+			    '     */'
+    			'public void transferMissingItems(long endId) { //ACTIVE: transferring tuples from lastProcessedId to endId' | 4;
+			        'long id;' | 8;
+			        if(newSwitchLog) {
+				        'out.println("Transferring missing items with outQueue: " + outQueue.size() + ", inQueue:" + inQueue.size());' | 8;
+				        'out.flush();' | 8;
+			        }
+			        'while (!outQueue.isEmpty()) {' | 8;
+			            'ISwitchTuple item = outQueue.poll();' | 12;
+			            'id = item.getId();' | 12;
+			            
+			            'if (id > lastProcessedId && id < endId && connectTargetAlg()) {' | 12;
+			                    if(newSwitchLog) {
+			                        'out.println(System.currentTimeMillis() + "outQueue--Transferring the missing items "+ id);' | 16;
+			                        'out.flush();' | 16;
+			                    }
+			                    'sendToTarget(item);' | 16; 
+			            '}' | 12;
+			            'if(id == endId) break;' | 12;
+			        '}' | 8;
+			            'if (!inQueue.isEmpty()) {' | 8;
+			                'id = inQueue.peek().getId();' | 12;
+			                'while (id < endId) {' | 12;
+			                    'ISwitchTuple item = outQueue.poll();' | 16;
+			                    'if (id > lastProcessedId && connectTargetAlg()) {' | 16;
+			                            if(newSwitchLog) {
+			                                'out.println(System.currentTimeMillis() + "inQueue--Transferring the missing items " + id);' | 20;
+			                                'out.flush();' | 20;
+			                            }
+			                            'sendToTarget(item);' | 20;
+			                    '}' | 16;
+			                    'id = item.getId();' | 16;
+			                '}' | 12;
+			            '}' | 8;
+			    '}' | 4;
+			    ''
+			    '    /**' 
+			    '     * Transfers all data items.' 
+			    '     */' 
+			    'public void transferAll() throws SignalException { //ACTIVE TODO: consider the case that there are some un-acked items' | 4;
+			        'long topId = 0;' | 8;
+			        'long tmpId = 0;' | 8;
+			        'long transferredId = 0;' | 8;
+			        'if(!outQueue.isEmpty()) {' | 8;
+			            'topId = outQueue.peek().getId();' | 12;
+			        '} else if(!inQueue.isEmpty()) {' | 8;
+			            'topId= inQueue.peek().getId();' | 12;
+			        '}' | 8;
+			        if(newSwitchLog) {
+				        'out.println("Transfer all items to the target Spout. with outQueue size:" + outQueue.size() + ", inQueue size:" + inQueue.size() + " Top id:" + topId);' | 8;
+				        'out.flush(); ' | 8;
+			        }
+			        '//transferring data from the outQueue' | 8;
+			        'while (!outQueue.isEmpty()) {' | 8;
+			            'ISwitchTuple item = outQueue.poll();' | 12;
+			            'tmpId = item.getId();' | 12;
+			            'if (tmpId > lastProcessedId) {' | 12;
+			                        if (newSwitchLog) {
+			                            'out.println(System.currentTimeMillis()
+			                                    + " Transferring the out queue to the target Spout."
+			                                    + item.getId());' | 16;
+			                            'out.flush();' | 16;
+			                        }
+			                            'sendToTarget(item);' | 16;
+			                            'transferredId = tmpId;' | 16;			                        			                   
+			            '}' | 12;
+			        '}' | 8;
+			        '//transferring data from the inQueue' | 8;
+			        'while (!inQueue.isEmpty()) {' | 8;
+			            'ISwitchTuple item = inQueue.poll();' | 8;
+			            'tmpId = item.getId();' | 8;
+			            'if (tmpId > lastProcessedId) {' | 8;
+			                        if (newSwitchLog) {
+			                            'out.println(System.currentTimeMillis()
+			                                    + " Transferring the in queue to the target Spout."
+			                                    + item.getId());' | 12;
+			                            'out.flush();' | 12;
+			                        }
+			                        'sendToTarget(item);' | 12;
+			                        'transferredId = tmpId;' | 12;
+			                '}' | 8;
+			        '}' | 8;
+			        if(!switchInvolvesHW) {
+			        'if(transferredId == 0) {' | 8;
+			        }
+			        if(newSwitchLog) {
+			            'out.println(Calendar.getInstance().getTimeInMillis() + ", transferAll --$name--Sending transferred signal with the last transferred Id: " + transferredId);' | 12;
+			            'out.flush();' | 12;
+			        }
+			        'String targetPip = "$topoName";' | 12;
+			            if(looseSub) {
+			            	'if(algToSub.containsKey(targetAlg)) {' | 12;
+			            		'targetPip = algToSub.get(targetAlg);' | 16;
+			            	'}' | 12;
+			            }
+			            'ParameterChangeSignal paraSignal = new ParameterChangeSignal(
+			                    getNamespace(), targetAlg+"Intermediary", "transferred", transferredId, null);' | 12;//targetPip
+			            'sendSignal(paraSignal);' | 12;
+			        if(!switchInvolvesHW) {
+			        '}' | 8;
+			        }
+			    '}' | 4;
+			    ''
+			    '    /**' 
+			    '     * Connects to the intermediary node of the target algorithm.' 
+			    '     */' 
+			    'public boolean connectTargetAlg() { //ACTIVE' | 4;
+			        'Socket s = null;' | 8;			        
+			        'int targetPort = 6027;' | 8;
+			        'if(null == socketTarget) {' | 8;
+			            'try {' | 12;
+			            	'String host = "localhost";' | 16;
+			            	if(looseSub) {//for loose pipeline
+			            		'PortManager portManager = getPortManager();' | 20;
+			        			'PortAssignment assignment = null;' |20;
+			        			'while(assignment == null && portManager.isConnected()) {' | 20;
+					        		'try {' | 24;
+					        			'assignment = portManager.getPortAssignment(getPipeline(), targetAlg+"Intermediary", 0, null);' | 28;
+									'} catch (SignalException e) {' | 24;
+										'e.printStackTrace();' | 28;
+									'}' | 24;
+			        			'}' | 20;
+			        			'if(assignment != null) {' | 20;
+						 			'host = assignment.getHost();' | 24;
+						 			'targetPort = assignment.getPort();' | 24;
+						 		'}' | 20;
+							 	if(newSwitchLog) {
+							 		'LOGGER.info("Connecting to the host : " + host + ", the port: " + targetPort);' | 20;
+						        	'out.println("Connecting to the host : " + host + ", the port: " + targetPort);' | 20;
+						        	'out.flush();' | 20;
+						        }
+			            	} else {
+				                'host = new CollectingTopologyInfo("$topoName", targetAlg+"Intermediary", nimbus_host, thrift_port).getExecutorHost();' | 16;
+				                'if(algNameToPort.containsKey(targetAlg)) {' | 16;
+				                	'targetPort = algNameToPort.get(targetAlg);' | 20;
+				                '}' | 16;
+			                }
+			                's = new Socket(host,targetPort);' | 16;
+			                if(newSwitchLog) {
+			                	'out.println("Connecting to : " + host + ":" + targetPort);' | 16;
+			                	'out.flush();' | 16;
+			                }
+			                'outputTarget = new Output(s.getOutputStream());' | 16;
+			                'socketTarget = s;' | 16;
+			            '} catch (UnknownHostException e) {' | 12;
+			                'e.printStackTrace();' | 16;
+			            '} catch (IOException e) {' | 12;
+			                'if (null != s) {' | 16;
+			                    'try {' | 20;
+			                        's.close();' | 24;
+			                    '} catch (IOException e1) {' | 20;
+			                        'e1.printStackTrace();' | 24;
+			                    '}' | 20;
+			                '}' | 16;
+			                'e.printStackTrace();' | 16;
+			            '}' | 12;
+			        '}' | 8;
+			        'return null != socketTarget;' | 8;
+			    '}' | 4;
+			    ''
+			    '    /**' 
+			    '     * Sends data items to the target algorithm.' 
+			    '     */'
+			    'public void sendToTarget(ISwitchTuple item) {' | 4;
+			    	'if(connectTargetAlg()) {' | 8;
+				    	'byte[] bytes = kryoSer.serialize(item);' | 12;
+						'outputTarget.writeInt(bytes.length);' | 12;
+			            'outputTarget.writeBytes(bytes);' | 12;
+			            'outputTarget.flush();' | 12;
+		            '}' | 8;
+			    '}' | 4;
+				/************************************/
+				/*   FillInQueueServer              */
+				/************************************/ 	
+		'    /**' 
+	    '     * Creates a server receiving data items.' 
+	    '     */' 
+		'public class FillInQueueServer implements Runnable {' | 4;
+        	'private ServerSocket serverSocket;' | 8;
+        	'private FillInQueueHandler handler;' | 8;
+        	'private boolean cont = true;' | 8;
+        	'private Map conf;' | 8;
+        	''
+        	'public FillInQueueServer(Map conf) throws IOException {' | 8;
+        		'this.conf = conf;' | 12;
+            	'serverSocket = new ServerSocket(port);' | 12; 
+//            serverSocket.setSoTimeout(10000);
+				if(newSwitchLog) {
+					'out.println("Server socket created on " + port);' | 12;
+					'out.flush();' | 12;
+				}
+            	'LOGGER.info("Server socket created on " + port); ' | 12;
+        	'}' | 8;
+        	''
+        	'public void start() {' | 8;
+            	'new Thread(this).start();' | 12;
+           		'LOGGER.info("Server thread started " + port);' | 12;
+        	'}' | 8;
+        	''
+        	'public void run() {' | 8;
+            	'while (cont) {' | 12;
+                	'try {' | 16;
+                    	'LOGGER.info("Accepting the socket connection....");' | 20;
+                    	'Socket socket = serverSocket.accept();' | 20;
+                    	'LOGGER.info("Socket connection accepted " + port);' | 20;
+                    	'handler = new FillInQueueHandler(conf, socket);' | 20;
+                    	'new Thread(handler).start();' | 20;
+                	'} catch (IOException e) {' | 16;
+                    	'e.printStackTrace();' | 20;
+                '}' | 16;
+            '}' | 12;
+        '}' | 8;
+        ''
+        'public void stop() throws IOException {' | 8;
+            'LOGGER.info("Stopping server");  ' | 12;
+            'cont = false;' | 12;
+            'handler.stop(); ' | 12;          
+            'serverSocket.close();' | 12;
+            'LOGGER.info("Stopped server");' | 12;
+        '}' | 8;
+        
+    '}' | 4;
+    ''
+    '    /**' 
+    '     * Creates a handler to receive data items.' 
+    '     */' 
+    'private class FillInQueueHandler implements Runnable {' | 4;
+        'private Socket socket;' | 8;
+        'private InputStream in; ' | 8;
+        'Input kryoInput = null;' | 8;
+        'private boolean cont = true;' | 8;
+        'KryoSwitchTupleSerializer serializer;' | 8;
+        ''
+        'private FillInQueueHandler(Map conf, Socket socket) throws IOException {' | 8;
+            'this.socket = socket;' | 12;
+            'in = socket.getInputStream();' | 12;
+            'kryoInput = new Input(in);' | 12;
+            'serializer = new KryoSwitchTupleSerializer(conf);' | 12;
+        '}' | 8;
+        ''
+        'public void run() {' | 8;
+            'while(cont) {' | 12;
+            'try {' | 16;
+                'int len = kryoInput.readInt();' | 16;
+                'byte[] ser = new byte[len];' | 16;
+                'kryoInput.readBytes(ser);' | 16;
+                'ISwitchTuple switchTuple = serializer.deserialize(ser); ' | 16; 
+                'if(switchTuple != null) {' | 16;
+                if(newSwitchLog) {
+                    'out.println( Calendar.getInstance().getTimeInMillis() + "$name--FillInQueueHandler -- Received the data with id :" + switchTuple.getId() + ", firstId: " + firstId + "is transferred data? " + (switchTuple.getId() > firstId));' | 20;
+                    'out.flush();' | 20;
+                }
+	                'if(isActiveSpout) {//when the spout is the active one, only need to fill data into inQueue.' | 16;
+	                	'produce(inQueue, switchTuple);' | 20;
+	                '} else {//when the spout is the passive one, transferred data to tmpQueue and other data to inQueue' | 16;
+	                	'if(switchTuple.getId() > firstId || switchTuple.getId() == 0) {' | 20;
+                            'produce(inQueue, switchTuple);' | 24;
+                        '} else {' | 20;
+                        	'produce(tmpQueue, switchTuple);' | 24;
+                            if(newSwitchLog) {
+                                'out.println(Calendar.getInstance().getTimeInMillis() + "$name--data id: " + switchTuple.getId() + ", firstId:" + firstId);' | 24;
+                                'out.flush();' | 24;
+                            }
+                            'if(synOnce) {' | 24;
+                                'synOnce = false;' | 28;
+                                if(newSwitchLog) {
+                                    'out.println(Calendar.getInstance().getTimeInMillis() + ", FillInQueueHandler--$name--Sending the synchronized signal from the $fmVarName.");' | 28;
+                                    'out.flush();' | 28;
+                                }
+                                'sendSynchronizedState();' | 28;
+                            '}' | 24;
+                            'if(switchTuple.getId() == firstId) {' | 24;
+                            if(newSwitchLog) {
+                                'out.println(Calendar.getInstance().getTimeInMillis() + ", reached the last transferred data, firstId:" + firstId);' | 28;
+                                'out.flush();' | 28;
+                            }
+                            'goToActive();' | 28;
+                            '}' | 24;
+                        '}' | 20;
+	                '}' | 16;
+                '}' | 12;  
+                '} catch (KryoException e) {' | 12;   
+                	'e.printStackTrace();' | 16;
+                '}' | 12;
+            '}' | 8;
+        '}' | 4;       
+        ''
+        'private void produce(Queue<ISwitchTuple> queue, ISwitchTuple data) {' | 4;
+            '//wait if queue is full' | 8;
+            'while (queue.size() == LOWER_SIZE) {' | 8;
+                'synchronized (queue) {' | 12;
+                if(newSwitchLog) {
+                    'out.println("Queue is full " + Thread.currentThread().getName()
+                                        + " is waiting , size: " + queue.size());' | 16;
+                }                        
+                    'try {' | 16;
+                        'queue.wait();' | 20;
+                    '} catch (InterruptedException e) {' | 16;
+                        'e.printStackTrace();' | 20;
+                    '}' | 16;
+                '}' | 12;
+            '}' | 8;
+            '//producing element and notify consumers' | 8;
+            'synchronized (queue) {' | 8;
+                'queue.offer(data);' | 12;
+                'queue.notifyAll();' | 12;
+            '}' | 8;
+        '}' | 4;
+        ''
+        'public void stop() throws IOException {' | 8;
+        	'LOGGER.info("Stopping handler");' | 16;
+        	'cont = false;' | 16;   
+            'if (null != socket) {' | 12;
+                'socket.close();' | 16;
+                'socket = null;' | 16;
+            '}' | 12;
+            'if (null != kryoInput) {' | 12;
+            	'kryoInput.close();' | 16;
+                'kryoInput = null;' | 16;
+            '}' | 12;
+            'if (null != in) {' | 12;
+            	'in.close();' | 16;
+                'in = null;' | 16;
+            '}' | 12;
+            'LOGGER.info("Stopped handler");' | 16;
+        '}' | 8;
+    	'}' | 4;
+    	''
+		/********************************* */
+    	/*******Prepare shut down signal** */
+    	/********************************* */
+    	'@Override' | 4;
+    	'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+        	'super.prepareShutdown(signal);' | 8;
+        	'try {' | 8;
+        		'server.stop();' | 12;
+        	'} catch(IOException e) {' | 8;
+        		'e.printStackTrace();' | 12;
+        	'}' | 8;
+    	'}' | 4;
+    	''
+	'}'
+		
+	}
+	
+	def setOf(String) coreTupleInputType (String fmName, Algorithm algorithm) {
+		setOf(String) listTupleTypes = {};
+		String tupleName = null;
+		sequenceOf(Tuple) tuples = algorithm.input;
+		for(Tuple t : tuples) { //TODO: multiple tuples!!
+			tupleName = t.name;
+			tupleName = tupleName.firstToUpperCase().toIdentifier();
+			listTupleTypes.add("${fmName}${tupleName}Input");
+		}
+		listTupleTypes;
+	}
+	
+	def setOf(String) lastTupleTypes(DecisionVariable elt, sequenceOf(Tuple) inputTuples, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, Tuple)) globalMap) {
+	    setOf(String) lastTypes = {};
+	    //get the inputToOutputMapping of this family element
+		String eltName = elt.varName().firstToUpperCase();
+		mapOf(Tuple, Tuple) inputToOutputMapping = {};
+		if(globalMap.containsKey(eltName)){
+			inputToOutputMapping = globalMap.get(eltName);
+		}
+		String tupleName;
+		String outputInfName;
+	    for(Tuple t : inputTuples) {
+			tupleName = t.name;
+			//get output interface name	
+			if(inputToOutputMapping.containsKey(t))	{
+			  Tuple output = inputToOutputMapping.get(t);
+			  outputInfName = nameToOutputMap.get(output);
+			  lastTypes.add(outputInfName);				
+			} 
+	    }
+	    lastTypes;
+	}
+	
+	def String subPipelineName(Family fm, String algorithm) {
+		String subPipName = null;
+		for(Algorithm alg : fm.members) {
+			if(alg.name == algorithm) {
+				SubPipelineAlgorithm subAlg = alg;
+				subPipName = subAlg.subPipeline.name;
+			}
+			
+		}
+		subPipName;
+	}
+	
+}

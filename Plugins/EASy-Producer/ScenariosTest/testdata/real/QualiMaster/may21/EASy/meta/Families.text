@@ -1,0 +1,23 @@
+Families::Family::name = name|The logical name of the algorithm family as it is used in pipelines.
+Families::Family::input = input fields|The input data fields accepted by this family (and its members).
+Families::Family::output = output fields|The output data fields provided by this family (and its members).
+Families::Family::members = family members|The actual members of the family serving as a pool for runtime selection.
+Families::Family::description = description|Freetext description for documentation purposes.
+Families::Family::parameters = adaptable parameters|Parameters of the family that can be changed at runtime.
+Families::Family::members = members|The actual algorithm members of this family.
+Families::Family::inputGivenCheck = Input should be assigned
+Families::Family::outputGivenCheck = Output should be assigned
+Families::Family::latency = processing latency (runtime)|algorithm processing latency in milliseconds
+Families::Family::throughputItems = throughput in items (runtime)|algorithm throughput in items per second
+Families::Family::throughputVolume = throughput in bytes (runtime)|algorithm throughput in bytes per second
+Families::Family::usedMemory = memory use (runtime)|algorithm memory use in bytes
+Families::Family::accuracyConfidence = accuracy confidence (runtime)|accuracy in terms of confidence
+Families::Family::accuracyErrorRate = accuracy error rate (runtime)|accuracy in terms of error rate
+Families::Family::believability = believability (runtime)|believability
+Families::Family::relevancy = relevancy (runtime)|relevancy
+Families::Family::completeness = completeness (runtime)|completeness
+Families::Family::volume = data stream volume (runtime)|processed data stream volume in bytes
+Families::Family::velocity = data stream velocity (runtime)|processed stream velocity in items per second
+Families::Family::variety = data stream variety (runtime)|processed stream variety
+Algorithms::algNamesUnique = All algorithm names must be uniqueFamilies::families = configured families
+Families::familyNameUnqiue = All family names must be unique

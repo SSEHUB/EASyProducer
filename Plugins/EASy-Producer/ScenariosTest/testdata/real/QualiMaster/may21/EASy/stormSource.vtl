@@ -1,0 +1,482 @@
+import commonVTLMethods;
+@advice(QM)
+template stormSource(Configuration config, FileArtifact target, DecisionVariable elt, String topoName, Boolean debug) {
+    Boolean loadShedding = false;
+	/*
+	 * Produces the variables of the output tuples.
+	 */	
+	def produceInOrOutputVariable(sequenceOf(Tuple) tuples, Boolean output, String srcName) {
+		String tupleName;
+		String ending;
+		if(output) {
+			ending = "Output";
+		} else{
+			ending = "Input";
+		}
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			String srcInfName = "I" + srcName.firstToUpperCase() + "${tupleName}${ending}";
+			'    transient ${toIdentifier(srcInfName)} dataItem${tupleName} = null;'
+		}
+	}
+	    
+    def main(Configuration config, FileArtifact target, DecisionVariable elt, String topoName, Boolean debug) {
+    	//name for the Spout class name
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        //ending for the streamId
+        String nontopoStream = "Stream";
+        String topoStream = "TopoStream";
+        //casting the decisionVariable to Source
+        Source src = elt;  
+        loadShedding = src.loadShedding; 
+        DataSource dataSrc = src.source;
+        String srcName = dataSrc.name;        
+        String qualifiedClsName = dataSrc.sourceCls; //dataSrc.sourceCls().firstToUpperCase() leads to a problem!! 
+        JavaPath clsNamePath = qualifiedClsName;
+        String srcClsName = clsNamePath.getName();
+        String srcInfName;
+        String tupleName;
+ 	
+        String streamId = elt.varName() + nontopoStream;
+        String topoStreamId = elt.varName() + topoStream;
+        String ifacePackageName;
+		if (dataSrc.profilingSource) {
+			ifacePackageName = "eu.qualimaster.${toIdentifier(topoName)}.topology";
+		} else {
+			ifacePackageName = "eu.qualimaster.data";
+		}
+        'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	''
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/    	
+    	'import java.util.*;'
+    	'import java.io.Serializable;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.topology.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.spout.*;'
+    	'import backtype.storm.tuple.*;'
+    	'import ${ifacePackageName}.inf.I${toIdentifier(srcName)};'
+        'import ${ifacePackageName}.inf.I${toIdentifier(srcName)}.*;'
+        'import ${ifacePackageName}.imp.${toIdentifier(srcName)};'
+		 if (!dataSrc.profilingSource) { // done through the import above
+        'import $qualifiedClsName;'
+        }
+        'import eu.qualimaster.common.signal.*;'
+        'import eu.qualimaster.events.EventManager;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+        'import eu.qualimaster.pipeline.DefaultModeException;'
+    	'import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;'
+		'import eu.qualimaster.monitoring.events.AlgorithmChangedMonitoringEvent;'
+		'import eu.qualimaster.monitoring.events.ParameterChangedMonitoringEvent;'
+		'import eu.qualimaster.dataManagement.sources.*;'
+		'import eu.qualimaster.dataManagement.events.HistoricalDataProviderRegistrationEvent;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		'import eu.qualimaster.dataManagement.DataManager;'
+    	''
+    	if(logData) {
+    		'import java.io.BufferedOutputStream;'
+			'import java.io.File;'
+			'import java.io.FileNotFoundException;'
+			'import java.io.FileOutputStream;'
+			'import java.io.PrintStream;'
+    	}
+    	/****************************/
+    	/*        Spout class        */  
+    	/****************************/    	
+    	'/**'
+    	'* Define the source Spout class(GEN).'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalSourceSpout implements IDataSourceListener {'
+    	''
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/    	
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    transient SpoutOutputCollector _collector;'
+    	'    transient I${toIdentifier(srcName)} sourceData;'  
+    	if(logData) {
+    		'transient PrintStream out = System.out;'    
+			'int counter = 0;'
+			'long record;'
+    	}  	
+    	//generates the variables of the output tuples
+    	if(!genInstance) {
+    	produceInOrOutputVariable(dataSrc.input, true, srcName);
+    	}
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/    	
+	    ''
+	    '    public $name(String name, String namespace) {'
+    	'        super(name, namespace, $genMonitoringProbes);'
+    	'    }'
+    	''
+    			/***********************************/
+		    	/* sendAlgorithmChangeEvent method */  
+		    	/***********************************/
+    	''
+		'    /**'
+		'     * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct' 
+		'     * testing.'
+		'     * @param algorithm the new algorithm'
+		'     * @param causeMsgId the message id of the causing message (may be empty or null)'
+		'     */'
+		'    private void sendAlgorithmChangeEvent(String algorithm, String causeMsgId) {'
+		'        EventManager.send(new AlgorithmChangedMonitoringEvent(getPipeline(), getName(), algorithm, causeMsgId));'
+		'    }'  
+		''  
+    			/***********************************/
+		    	/* sendParameterChangeEvent method */  
+		    	/***********************************/
+    	''
+		'    /**'
+		'     * Sends an parameter change event and considers whether the coordination layer shall be bypassed for direct' 
+		'     * testing.'
+		'     * @param parameter the parameter to be changed'
+		'     * @param value the new value'
+		'     * @param causeMsgId the message id of the causing message (may be empty or null)'
+		'     */'
+		'    private static void sendParameterChangeEvent(String parameter, Serializable value, String causeMsgId) {'
+		'        EventManager.send(new ParameterChangedMonitoringEvent("$topoName", "${elt.varName()}", parameter, value, causeMsgId));'
+		'    }' 
+        ''
+        '    /**'
+        '     * Sends an event for registering the historical data provider of a data source.'
+        '     * @param source the data source'
+        '     */'
+        '    private void sendHistoricalDataProviderRegistrationEvent(IDataSource source) {'
+        '        EventManager.send(new HistoricalDataProviderRegistrationEvent(getNamespace(), getName(), source.getHistoricalDataProvider(), source.getIdsNamesMap()));'
+        '    }' 
+		''
+		'    protected void configure(SourceMonitor monitor) {'
+		Integer freq = dataSrc.aggregationFrequency;
+		'        monitor.setAggregationInterval($freq);'
+		for(Tuple t : dataSrc.input){
+		    tupleName = t.name;
+            tupleName = firstToUpperCase(tupleName);
+		    srcInfName = toIdentifier("I" + srcName.firstToUpperCase() + "${tupleName}Output");
+        '        monitor.registerAggregationKeyProvider(new AggregationKeyProvider<$srcInfName>($srcInfName.class) {'
+        '            @Override'
+        '            public String getAggregationKey($srcInfName tuple) {'
+        '                return sourceData.getAggregationKey(tuple);'
+        '            }'
+        '        });'		    
+		}
+        '    }'		
+		''	
+		    	/****************************/
+		    	/*     open method          */  
+		    	/****************************/    	
+    	'    @Override'
+        '    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {'
+        '		 super.open(conf, context, collector);'
+        '        _collector = collector;'
+        if(logData) {
+        	'try {'
+		            'File file = new File("/var/nfs/spass");'
+		            'if (!file.exists()) {'
+		                'String userhome = System.getProperty("user.home");'
+		                'file = new File(userhome);'
+		            '}'
+		            'FileOutputStream fos = new FileOutputStream(new File(file, "source.csv"));'
+		            'BufferedOutputStream bos = new BufferedOutputStream(fos);'
+		            'out = new PrintStream(bos);'
+		        '} catch (FileNotFoundException e) {'
+		            'logger.error(e.getMessage(), e);'
+		        '}'
+			'counter = 0;'
+			'record = System.currentTimeMillis();'
+        }
+        String strategyStr = obtainManagementStrategyInstance(dataSrc); 
+        String ifName = 'I${toIdentifier(srcName)}';
+        '        try {'
+        if(safeCast) {
+        '            @SuppressWarnings("unchecked")'
+        '            Class<? extends $ifName> cls = (Class<? extends $ifName>) Class.forName("$qualifiedClsName");'
+        } else {
+        '            Class cls = Class.forName("$qualifiedClsName");'
+        }
+		'			boolean autoConnect = "true".equals(conf.get(Constants.CONFIG_KEY_SOURCE_AUTOCONNECT));'
+		'			if(autoConnect) {'
+        '            	sourceData = DataManager.DATA_SOURCE_MANAGER.createDataSource(getPipeline(), cls, $strategyStr);'
+println("STORMSRC " + dataSrc);        
+        if (dataSrc.profilingSource) {
+        '               sourceData.forceAutoconnect();'
+        }
+        '			} else {'
+	    	if(safeCast) {
+		'            	sourceData = cls.newInstance();'
+			} else {
+		'            	sourceData = (I${toIdentifier(srcName)}) cls.newInstance();'
+			}
+		'			}'
+		'			sendHistoricalDataProviderRegistrationEvent(sourceData);'
+		if (initByAdaptation) {
+		'		    sendAlgorithmChangeEvent("$srcClsName", null);'	
+		}
+		setDefaultParameterValue(dataSrc.parameters, "conf", "sourceData", 12);
+        '			if(!autoConnect) {'
+		'		    	sourceData.connect();'
+		'			}'
+		'        } catch (ClassNotFoundException e) {'
+		'            e.printStackTrace();'
+		'        } catch (InstantiationException e) {'
+		'            e.printStackTrace();'
+		'        } catch (IllegalAccessException e) {'
+		'            e.printStackTrace();'
+		if(safeCast) {
+		'        } catch (ClassCastException e) {'
+		'            e.printStackTrace();'
+		}
+		'        }'
+		if(separateSourceThread) {
+			'Thread emitThread = new Thread(new EmitTuple());'
+			'emitThread.start();'
+		}
+		'initMonitor();' | 8;
+		'logger.info("The end of the open method.");' | 8;
+        '    }'
+        ''
+        if(separateSourceThread) {
+        '/**' | 4;
+		' * A thread emits tuples.' | 4;
+		' */' | 4;
+		'public class EmitTuple implements Runnable {' | 4;
+			'private Boolean cont = true;' | 8;
+			'public EmitTuple() {'
+				'cont = true;'
+			'}'
+			'@Override' | 8;
+    		'public void run() {' | 8;
+				'while(cont) {' | 12;
+        if (genMonitoringProbes) {
+            '        startMonitoring();'
+        }
+//        '        boolean emitted = false;'
+        for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			String srcImpName = toIdentifier(srcName.firstToUpperCase()) + "${tupleName}Output";
+        	srcInfName = "I" + srcName.firstToUpperCase() + "${tupleName}Output";
+        '        // Emitting stream "${streamId}${tupleName}".'
+        if(genInstance) {
+        '        ${toIdentifier(srcInfName)} dataItem${tupleName} = new ${toIdentifier(srcName.firstToUpperCase())}.$srcImpName();'
+        } else {
+        	'        dataItem${tupleName} = new ${toIdentifier(srcName.firstToUpperCase())}.$srcImpName();'
+        }
+        '        try {'
+	    '            dataItem${tupleName} = sourceData.get${tupleName}();'
+	    '        } catch(DefaultModeException e) {'	
+	        for(Field f : t.fields) {
+	        	String fieldName = toIdentifier("${f.name}"); 
+				String upFieldName = firstToUpperCase(fieldName);
+				FieldType fdType = f.type;				
+				'dataItem${tupleName}.set${upFieldName}(${obtainDefaultValue(fdType)});' | 12;	
+	        }
+	        'sendDefaultModeMonitoringEvent(e);' | 12;
+	    '        }'
+	    String shedCode = "";
+	    if (loadShedding) {
+	        shedCode = " && isEnabled(dataItem${tupleName})";
+	    }
+	    '        if(dataItem${tupleName}!=null${shedCode}){'	
+	    if(logData) {
+	    	'long now = System.currentTimeMillis();'
+		    'if ((now - record) > 1000) {'
+			'record = now;'
+			'out.println(now + ":" + counter);'
+			'out.flush();'
+			'counter = 0;'
+		    '} else {'
+			'counter++;'
+		    '}'
+	    }
+	        if(debug){   		  
+		'            logger.info("Get data tuple for data source Spout:" + dataItem${tupleName});'
+		    }
+		    if(genMultiTupleTypes) {
+		    	streamId = formulateString(elt.varName());
+		    }		
+		'            _collector.emit("${streamId}${tupleName}", new Values(dataItem${tupleName}));' /*,dataItem${tupleName} */
+	    '        }'
+	    ''
+        }
+        if (genMonitoringProbes) { // doNextTuple/nextTuple contains endMonitoring
+		  '        endMonitoring();'
+        }
+        '        '					
+				'}' | 12;
+			'}' | 8;
+			''
+			'public void stop() {'
+			'cont = false;'
+			'}'
+		'}' | 4;
+		}
+        //override the initial monitor
+	    produceInitMonitor(false, 4);
+	    ''
+    			/*****************************************/
+		    	/* sendDefaultModeMonitoringEvent method */  
+		    	/*****************************************/
+		'    /**'
+		'     * Sends an a default mode monitoring event with a DefaultModeException case.' 
+		'     * @param exceptionCase the DefaultModeException case'
+		'     */'
+		'    private static void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {'
+		'        EventManager.send(new DefaultModeMonitoringEvent("$topoName", "${elt.varName()}", exceptionCase));'
+		'    }'        
+		    	/****************************/
+		    	/*     nextTuple method     */  
+		    	/****************************/        
+        '    @Override'
+        '    public void nextTuple() {'
+if(!separateSourceThread) {
+        if (genMonitoringProbes) {
+            '        startMonitoring();'
+        }
+//        '        boolean emitted = false;'
+        for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			String srcImpName = toIdentifier(srcName.firstToUpperCase()) + "${tupleName}Output";
+        	srcInfName = "I" + srcName.firstToUpperCase() + "${tupleName}Output";
+        '        // Emitting stream "${streamId}${tupleName}".'
+        if(genInstance) {
+        '        ${toIdentifier(srcInfName)} dataItem${tupleName} = new ${toIdentifier(srcName.firstToUpperCase())}.$srcImpName();'
+        } else {
+        	'        dataItem${tupleName} = new ${toIdentifier(srcName.firstToUpperCase())}.$srcImpName();'
+        }
+        '        try {'
+	    '            dataItem${tupleName} = sourceData.get${tupleName}();'
+	    '        } catch(DefaultModeException e) {'	
+	        for(Field f : t.fields) {
+	        	String fieldName = toIdentifier("${f.name}"); 
+				String upFieldName = firstToUpperCase(fieldName);
+				FieldType fdType = f.type;				
+				'dataItem${tupleName}.set${upFieldName}(${obtainDefaultValue(fdType)});' | 12;	
+	        }
+	        'sendDefaultModeMonitoringEvent(e);' | 12;
+	    '        }'
+	    String shedCode = "";
+	    if (loadShedding) {
+	        shedCode = " && isEnabled(dataItem${tupleName})";
+	    }
+	    '        if(dataItem${tupleName}!=null${shedCode}){'	
+	        if(debug){   		  
+		'            logger.info("Get data tuple for data source Spout:" + dataItem${tupleName});'
+		    }
+		    if(genMultiTupleTypes) {
+		    	streamId = formulateString(elt.varName());
+		    }		
+		'            _collector.emit("${streamId}${tupleName}", new Values(dataItem${tupleName}));' /*,dataItem${tupleName} */
+	    '        }'
+	    ''
+        }
+        if (genMonitoringProbes) { // doNextTuple/nextTuple contains endMonitoring
+		  '        endMonitoring();'
+        }
+        '        '
+        }
+        '    }'
+        ''
+        
+        '@Override' | 4;
+        'public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {' | 4;
+        // don't just ignore this, relevant for figuring out when enactment is completed!
+        '    sendAlgorithmChangeEvent(signal.getAlgorithm(), signal.getCauseMessageId());' | 4;
+        '    super.notifyAlgorithmChange(signal);' | 4;
+        '}'
+        
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/               
+        if(dataSrc.parameters.isConfigured()) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'logger.info("Received the parameter change signal!");' | 4;
+			'for(int i = 0; i < signal.getChangeCount(); i++) {' | 8;
+			'logger.info("For-loop: Checking each parameter!");' | 8;
+			'ParameterChange para = signal.getChange(i);' | 12;			
+			'switch (para.getName()) {' | 12;			
+			sequenceOf(Parameter) parameters = dataSrc.parameters;
+			for(Parameter p : parameters) {
+				String paraName = p.name;
+				String type = parameterTypeName(p);				
+				'case "$paraName" :' | 16;
+				Integer indent = 16;
+				if(formatException(type)) {
+					indent = 20;
+					'try {' | indent;
+				}
+				'logger.info("Received the parameter $paraName!");' | indent+4;
+				'sourceData.setParameter${paraName.firstToUpperCase()}(para.get${type.firstToUpperCase()}Value()); ' | indent + 4;
+				'sendParameterChangeEvent("$paraName", para.get${type.firstToUpperCase()}Value(), signal.getCauseMessageId());' | indent+4;
+				if(formatException(type)) {
+					'} catch (ValueFormatException e) {' | indent;
+						'e.printStackTrace();' | indent+4;
+					'}' | indent;
+				} else {
+					indent = indent+4;
+				}
+				'break;' | indent;
+				}
+			'}' | 12;
+			'}' | 8;
+			'}' |4;	
+		}        
+        ''
+        '    @Override'
+        '    public void notifyIdsNamesMapChanged() {'
+        '        sendHistoricalDataProviderRegistrationEvent(sourceData);'
+        '    }'
+        ''
+				/****************************/
+				/*       close method       */
+				/****************************/             
+        '    @Override'
+        '    public void close() {'
+        '        super.close();'
+        '		 sourceData.disconnect();'
+        '    }'
+        ''
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/        
+        '	@Override'
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'
+		if(genMultiTupleTypes) {//use the tuple type to conduct the stream id, the stream id is in the form of "EltVarName+TupleName+AlgName"
+			produceStreamIdDeclaration(elt, false, 8);
+		} else {
+			for(Tuple t : dataSrc.input){
+			//get the tuple name
+			tupleName = t.name;
+			//change the first letter to upper letter
+			tupleName = firstToUpperCase(tupleName);
+			'        declarer.declareStream("${streamId}${tupleName}", new Fields("datastream${tupleName}"));'        	     				
+			}
+		}
+		'    }'
+		''
+		/********************************* */
+    	/*******Prepare shut down signal** */
+    	/********************************* */
+    	'@Override' | 4;
+    	'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+        	'super.prepareShutdown(signal);' | 8;
+        	'sourceData.disconnect();' | 8;
+    	'}' | 4;
+    	''
+    	'}'
+    }    
+}

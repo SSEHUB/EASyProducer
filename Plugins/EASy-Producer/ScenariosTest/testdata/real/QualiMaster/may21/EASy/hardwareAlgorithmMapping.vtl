@@ -1,0 +1,45 @@
+import commonVTLMethods;
+@advice(QM)
+template hardwareAlgorithmMapping(Configuration config, FileArtifact target, HardwareAlgorithm algorithm, String pipName) {
+	Boolean useThrift;
+    def main(Configuration config, FileArtifact target, HardwareAlgorithm algorithm, String pipName) {
+    	useThrift = not(genMonitoringProbes);
+    	Text text = target.getText();
+    		
+    	text.append("<mapping>\n");
+    	
+    	String algName = algorithm.name;
+    	String topologyClsName = "eu.qualimaster.algorithms.$algName.";
+    	String container;
+    	if(looseSub) {
+    		container = algName;
+    	} else {
+    		container = pipName;
+    	}
+    	Integer senderParallelism = algorithm.senderParallelism;
+		Integer receiverParallelism = algorithm.receiverParallelism;
+    	if(looseSub) {
+    		topologyClsName = topologyClsName + "Topology";
+    	} else {
+    		topologyClsName = topologyClsName + "${algName}SubTopology";
+    	}
+    	text.append('  <pipeline name="${algName}" class="$topologyClsName">\n');
+    	
+    	text.append('      <node name="${algName}HardwareConnectionBolt" type="family">\n');
+    	text.append("             <component name=\"${algName}HardwareConnectionBolt\" container=\"$container\" class=\"eu.qualimaster.algorithms.$algName.HardwareConnectionBolt\" receiver=\"true\" thrift=\"${useThrift}\" tasks=\"${senderParallelism}\" type=\"HARDWARE\"/>\n");
+    	text.append('      </node>\n');
+    	text.append('      <node name="${algName}HardwareConnectionSpout" type="source">\n');
+		text.append("             <component name=\"${algName}HardwareConnectionSpout\" container=\"$container\" class=\"eu.qualimaster.algorithms.$algName.HardwareConnectionSpout\" receiver=\"true\" thrift=\"${useThrift}\" tasks=\"${receiverParallelism}\" type=\"HARDWARE\"/>\n");    	
+    	text.append('      </node>\n');
+    	if(looseSub) {
+	    	appendIntermediaryComponent(algName, container, true, useThrift, text);
+    	}
+    	text.append('  </pipeline>\n');
+		text.append('\n');				        			
+
+		text.append("</mapping>\n");
+		target.rename("mapping.xml");
+    	
+    }
+
+}

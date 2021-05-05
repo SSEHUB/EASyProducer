@@ -1,0 +1,168 @@
+project Batching {
+
+    import MetaConcepts;
+    import Basics;
+    import Families;
+    import DataManagement;
+
+    annotate BindingTime bindingTime = BindingTime::compile to Batching;
+    
+    def static Boolean isHadoopTuple(Tuples tuples) = 
+        tuples.size() == 1 and tuples->forAll(Tuple t|t.fields.size() = 2);
+            
+    compound Mapper refines CActiveDataComponent {
+        refTo(Family) family;
+        // https://www.tutorialspoint.com/hadoop/hadoop_mapreduce.htm
+        Constraint inputOk = isHadoopTuple(family.input);
+        Constraint outputOk = isHadoopTuple(family.output);
+        
+        assign(bindingTime = BindingTime::runtimeMon) to {
+            setOf(refTo(Algorithm)) available = copy(family.members, "TMP_"); 
+            refTo(Algorithm) actual; // if static init -> first from available
+            //refined:Constraint actualAlgorithmCheck = isDefined(actual) implies available.includes(actual);
+        }
+    }
+    
+    sequenceOf(refTo(Mapper)) mappers;
+    
+    compound Reducer refines CActiveDataComponent {
+        refTo(Family) family;
+        // https://www.tutorialspoint.com/hadoop/hadoop_mapreduce.htm
+        Constraint inputOk = isHadoopTuple(family.input);
+        Constraint outputOk = isHadoopTuple(family.output);
+        assign(bindingTime = BindingTime::runtimeMon) to {
+            setOf(refTo(Algorithm)) available = copy(family.members, "TMP_"); 
+            refTo(Algorithm) actual; // if static init -> first from available
+            //refined:Constraint actualAlgorithmCheck = isDefined(actual) implies available.includes(actual);
+        }
+    }
+    
+    // may need to be adjusted in particular if types become more complex
+    // may be overloaded by dynamic dispatch, i.e., no static
+    def Boolean typesCompatible(FieldType t1, FieldType t2) = 
+       t1.name == t2.name;  
+
+    def Boolean typesCompatible(Field f1, Field f2) = 
+       typesCompatible(f1.type, f2.type);
+
+    def Boolean typesCompatible(Tuple t1, Tuple t2) = 
+       typesCompatible(t1.fields[0], t2.fields[0]);
+       
+    def Boolean typesCompatible(Tuples t1, Tuples t2) =
+      typesCompatible(t1[0], t2[0]);
+
+    def Boolean typesCompatible(Reducer r, Mapper m) =
+      typesCompatible(r.family.output, m.family.input);
+
+    def Boolean typesCompatible(Mapper m, Reducer r) =
+      typesCompatible(m.family.output, r.family.input);
+
+    def Boolean typesCompatible(DataSource s, Mapper m) =
+      typesCompatible(s.input, m.family.input);
+
+    def Boolean typesCompatible(Reducer r, DataSink s) =
+      typesCompatible(r.family.output, s.output);
+
+    def Boolean typesCompatible(setOf(Reducer) red, setOf(Mapper) map) =
+      red->exists(r|map->exists(m|typesCompatible(r, m))); 
+
+    sequenceOf(refTo(Reducer)) reducers;
+    
+    abstract compound AbstractJob refines CDataComponent {
+        ArtifactString artifact;
+        PositiveIntegerInterval fNumMapTasks; // alternative define an Interval in Basics and use that here
+        PositiveIntegerInterval fNumReduceTasks;
+        PositiveIntegerInterval fNumTasksPerJvm;
+
+        assign(bindingTime = BindingTime::runtimeEnact) to {
+            PositiveInteger numMapTasks;
+            PositiveInteger numReduceTasks;
+            PositiveInteger numTasksPerJvm;
+            
+            Constraint mapTasksOk = inInterval(fNumMapTasks, numMapTasks);
+            Constraint reduceTasksOk = inInterval(fNumReduceTasks, numReduceTasks);
+            Constraint jvmTasksOk = inInterval(fNumTasksPerJvm, numTasksPerJvm);
+        }
+    }
+    
+    def sequenceOf(refTo(DataSource)) getSources(AbstractJob job) = {};
+    def sequenceOf(refTo(DataSink)) getSinks(AbstractJob job) = {};
+    def setOf(Reducer) pred(AbstractJob job) = {}; 
+    def setOf(Mapper) succ(AbstractJob job) = {}; 
+    
+    compound Job refines AbstractJob {
+        refTo(DataSource) source;
+        refTo(Mapper) mapper;
+        refTo(Reducer) reducer;
+        refTo(DataSink) sink;
+        
+        // enable propagation and failure check
+        Constraint sourceOk = source.supportsHadoop and isHadoopTuple(source.input);
+        Constraint sinkOk = sink.supportsHadoop and isHadoopTuple(sink.output);
+        Constraint typesOk = typesCompatible(mapper, reducer);
+        Constraint sourceTypesOk = typesCompatible(source, mapper);
+        Constraint sinkTypesOk = typesCompatible(reducer, sink);
+    }
+    
+    def sequenceOf(refTo(DataSource)) getSources(Job job) = {job.source};
+    def sequenceOf(refTo(DataSink)) getSinks(Job job) = {job.sink};
+    def setOf(Reducer) pred(Job job) = {job.reducer}; 
+    def setOf(Mapper) succ(Job job) = {job.mapper}; 
+    
+    // ParallelJob
+    //   SequentialJob
+    //      Job
+    //      SequentialJob
+    //        Job
+    //        Job
+    
+    def static Boolean checkJobChaining(sequenceOf(refTo(AbstractJob)) jobs, Integer pos) =
+        if (pos + 1 == jobs.size()) then
+            true
+        else 
+            typesCompatible(pred(jobs[pos]), succ(jobs[pos + 1])) and checkJobChaining(jobs, pos + 1)
+        endif;
+    
+    compound SequentialJob refines AbstractJob {
+        sequenceOf(refTo(AbstractJob)) jobs;
+        Constraint jobsExist = jobs->size() > 0;
+        
+        fNumMapTasks.low = jobs->collect(j|j.fNumMapTasks.low)->min();
+        fNumMapTasks.high = jobs->collect(j|j.fNumMapTasks.high)->max();
+        fNumReduceTasks.low = jobs->collect(j|j.fNumReduceTasks.low)->min();
+        fNumReduceTasks.high = jobs->collect(j|j.fNumReduceTasks.high)->max();
+        fNumTasksPerJvm.low = jobs->collect(j|j.fNumTasksPerJvm.low)->min();
+        fNumTasksPerJvm.high = jobs->collect(j|j.fNumTasksPerJvm.high)->max();
+        // enable propagation and failure check
+        Constraint sequenceOk = checkJobChaining(jobs, 0);
+    }
+
+    def sequenceOf(refTo(DataSource)) getSources(SequentialJob job) = {job.jobs.first().source};
+    def sequenceOf(refTo(DataSink)) getSinks(SequentialJob job) = {job.jobs.last().sink};
+    def setOf(Reducer) pred(SequentialJob job) = {pred(job.jobs.last())}; 
+    def setOf(Mapper) succ(SequentialJob job) = {succ(job.jobs.first())}; 
+    
+    compound ParallelJob refines AbstractJob {
+        sequenceOf(refTo(AbstractJob)) jobs;
+        Constraint jobsExist = jobs->size() > 0;
+        
+        // we do not have an individual source/sink here
+        fNumMapTasks.low = jobs->collect(j|j.fNumMapTasks.low)->sum();
+        fNumMapTasks.high = jobs->collect(j|j.fNumMapTasks.high)->sum();
+        fNumReduceTasks.low = jobs->collect(j|j.fNumReduceTasks.low)->sum();
+        fNumReduceTasks.high = jobs->collect(j|j.fNumReduceTasks.high)->sum();
+        fNumTasksPerJvm.low = jobs->collect(j|j.fNumTasksPerJvm.low)->sum();
+        fNumTasksPerJvm.high = jobs->collect(j|j.fNumTasksPerJvm.high)->sum();
+        Constraint sequenceOk = checkJobChaining(jobs, 0);
+    }
+
+    def sequenceOf(refTo(DataSource)) getSources(ParallelJob job) = {jobs->collect(j|getSources(j)).flatten()};
+    def sequenceOf(refTo(DataSink)) getSinks(ParallelJob job) = {jobs->collect(j|getSinks(j)).flatten()};
+    def setOf(Reducer) pred(ParallelJob job) = job.jobs->collect(j|pred(j)).flatten().toSet(); 
+    def setOf(Mapper) succ(ParallelJob job) = job.jobs->collect(j|succ(j)).flatten().toSet(); 
+
+    sequenceOf(refTo(AbstractJob)) jobs;
+    Constraint jobUnique = not(jobs->collect(p|p.name).hasDuplicates());
+    sequenceOf(refTo(AbstractJob)) activeJobs;
+    Constraint activeJobsCheck = isDefined(activeJobs) and jobs->includesAll(activeJobs);
+}

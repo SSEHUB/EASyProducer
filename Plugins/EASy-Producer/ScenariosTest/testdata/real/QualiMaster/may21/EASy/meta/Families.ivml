@@ -1,0 +1,35 @@
+project Families {
+	
+	import Basics;
+	import Algorithms;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Families;
+	
+	compound Family refines CFamily {
+		Description description;
+        //refining MetaConcepts
+		Tuples input;
+		Tuples output;
+		Parameters parameters;
+		setOf(refTo(Algorithm)) members; 
+		refTo(Algorithm) active;
+
+		//Constraint inputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(input, algorithm.input));
+		//Constraint outputCheck = members->forAll(refTo(Algorithm) algorithm | fieldCheck(output, algorithm.output));
+		//Constraint parameterCheck = members->forAll(refTo(Algorithm) algorithm | parameterCheck(parameters, algorithm.parameters));
+		//Constraint memberCheck = size(members) > 0 and isDefined(members);
+		Constraint inputGivenCheck = isDefined(input); //untested
+		Constraint outputGivenCheck = isDefined(output); //untested		
+	}
+
+	def static Boolean contains(Parameters parameters1, Parameters parameters2) = parameters2->forAll(p2 | parameters1->exists(p1 | p1.name == p2.name and typeOf(p1) == typeOf(p2)));
+
+	setOf(refTo(Family)) families;
+	Constraint familyNameUnqiue = size(families->collect(f|f.name)) == size(families);
+	def static sequenceOf(sequenceOf(NonEmptyString)) collectFieldNames(Tuples tuples) = tuples->collect(Tuple tuple|append(tuple.fields->collect(Field field|field.name), tuple.name)); // boldly add the tuple name for checking
+	def static sequenceOf(sequenceOf(refTo(FieldType))) collectFieldTypes(Tuples tuples) = tuples->collect(Tuple tuple|tuple.fields->collect(Field field | field.type));
+	def static Boolean fieldOverlapCheck(Tuples fTuples, Tuples aTuples) = overlaps(collectFieldNames(fTuples), collectFieldNames(aTuples)) and overlaps(collectFieldTypes(fTuples), collectFieldTypes(aTuples));
+	//refining MetaConcepts
+	def Boolean fieldCheck(Tuples fTuples, Tuples aTuples) = (collectFieldNames(fTuples) ==  collectFieldNames(aTuples)) and (collectFieldTypes(fTuples) == collectFieldTypes(aTuples));
+    def Boolean parameterCheck(Parameters fParam, Parameters aParam) = contains(fParam, aParam);
+} 

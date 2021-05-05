@@ -1,0 +1,321 @@
+import commonVTLMethods;
+@advice(QM)
+template commonPomMethods(Configuration config, FileArtifact target) {
+
+    String qmBuildVersion = "0.5.0-SNAPSHOT";
+	
+	def appendDependencyManagement(Text text) {
+		text.append("<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>InfrastructureDependencies</artifactId>
+            <version>${qmBuildVersion}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.qualimaster</groupId>
+            <artifactId>PipelineDependencies</artifactId>
+            <version>${qmBuildVersion}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>            
+    </dependencies>
+</dependencyManagement>\n");
+	}
+	
+	def appendAlgorithmAssembiliesDependency(Text text) {
+        text.append("   <dependency>
+          <groupId>eu.qualimaster</groupId>
+          <artifactId>AlgorithmAssemblies</artifactId>
+          <version>${qmBuildVersion}</version>
+      </dependency>\n");
+    }
+
+    def appendInterfaceDependency(String artifact, Text text) {
+        appendArtifact(artifact, text, true);
+    }
+
+    def appendQmInfrastructureDependencies(Text text) {
+        text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>StormCommons</artifactId>
+   </dependency>\n");
+        text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>DataManagementLayer</artifactId>
+   </dependency>\n");        
+        text.append("   <dependency>
+     <groupId>eu.qualimaster</groupId>
+     <artifactId>QualiMaster.Events</artifactId>
+   </dependency>\n");
+    }
+
+     def appendCommonProvidedInfraDependencies(Text text) {
+        text.append("    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>\n");
+   text.append("   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+   </dependency>\n");
+    text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+   </dependency>\n");
+    }
+
+    def appendCommonDependencies(Text text) {
+        text.append("    <dependency>      
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>\n");          
+   text.append("   <dependency>
+     <groupId>com.github.ptgoetz</groupId>
+     <artifactId>storm-hdfs</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-client</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+    text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-hdfs</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hadoop</groupId>
+     <artifactId>hadoop-common</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-common</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-protocol</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+   text.append("   <dependency>
+     <groupId>org.apache.hbase</groupId>
+     <artifactId>hbase-client</artifactId>
+     <scope>compile</scope>
+   </dependency>\n");
+    }
+
+    //only for generating a fat jar
+    def appendBasicInfrastructureDependencies(Text text) {
+        text.append("<dependency>
+      <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+      <version>0.9.3</version>  
+      <scope>provided</scope> 
+    </dependency>
+    <dependency>
+      <groupId>com.github.ptgoetz</groupId>
+      <artifactId>storm-hdfs</artifactId>
+      <version>0.1.2</version>
+       
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>          
+    </dependency>    
+    <!-- Hadoop Dependencies -->
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-client</artifactId>
+      <version>2.4.0</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-hdfs</artifactId>
+      <version>2.4.0</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-common</artifactId>
+      <version>2.4.0</version> 
+            
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>               
+    </dependency>   
+    <!-- HBase Dependencies -->
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-common</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-protocol</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase-client</artifactId>
+      <version>0.98.6-hadoop2</version>
+      
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-log4j12</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>        
+      </exclusions>      
+    </dependency>\n ");
+    }
+
+    def appendResources(Text text) {
+        text.append("        <resource>
+            <directory>"+"$"+"{basedir}/</directory>
+            <filtering>false</filtering>
+        </resource>\n");        
+    }
+
+    def produceDependencies(Family fm, Text text, setOf(String) artifacts) {
+        //added all algorithm dependencies
+        for(Algorithm alg : fm.members) {
+            String artifact;
+            if(isHardwareAlgorithm(alg)) {
+                artifact = "eu.qualimaster:" + formulateString(alg.name) + ":" + GenAlgVersion;
+            } else if (isGenSubtopology(alg)) {
+                SubPipelineAlgorithm subAlg = alg;
+                Pipeline subPip = subAlg.subPipeline;
+                artifact = subPip.artifact;
+            } else if (alg.type() == "SoftwareAlgorithm") {
+                SoftwareAlgorithm a = alg;
+                artifact = a.artifact;
+            }
+            appendArtifact(artifact, text, artifacts);
+        }   
+    }
+    
+    def produceDependencies(DataSource dataSrc, Text text, setOf(String) artifacts) {
+        if (!dataSrc.profilingSource) {
+            String artifact = dataSrc.artifact;  
+            appendArtifact(artifact, text, artifacts);
+        }
+    }
+    
+    def produceDependencies(DataSink dataSnk, Text text, setOf(String) artifacts) {
+        String snkName = dataSnk.name;
+        String artifact = dataSnk.artifact;
+        appendArtifact(artifact, text, artifacts);
+    }
+    
+    def appendRepositories(Text text, String repoURL) {
+        text.append("    <repository>\n      <id>qm.eu</id>\n      <name>qm.eu</name>\n      <url>$repoURL</url>\n    </repository>\n");
+    }
+
+    def appendArtifact(String artifact, Text text, setOf(String) artifacts) {
+        if(!isStringExisted(artifact, artifacts)) {
+            artifacts.add(artifact);
+            appendArtifact(artifact, text, true);
+        }                       
+    }
+    
+    // default value: legacy, this can also be used for the top-level POM entry without dependency-element
+    def appendArtifact(String artifact, Text text, Boolean withElt=false) {
+        sequenceOf(String) artList = artifact.split(":");
+        if(artList.size() == 3) {
+            if (withElt) {
+                text.append("<dependency>\n");
+            }
+            text.append("  <groupId>${artList[0]}</groupId>\n");
+            text.append("  <artifactId>${artList[1]}</artifactId>\n");
+            text.append("  <version>${artList[2]}</version>\n");    
+            if (withElt) {
+                text.append("</dependency>\n");
+            }
+        }
+    }
+
+}

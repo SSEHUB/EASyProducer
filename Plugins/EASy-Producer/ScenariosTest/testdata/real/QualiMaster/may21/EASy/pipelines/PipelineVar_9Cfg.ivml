@@ -1,0 +1,118 @@
+project PipelineVar_9Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to PipelineVar_9Cfg;
+	Pipeline PipelineVar_9;
+	Source PipelineVar_9_Source0;
+	Flow PipelineVar_9_Flow0;
+	FamilyElement PipelineVar_9_FamilyElement0;
+	Flow PipelineVar_9_Flow1;
+	FamilyElement PipelineVar_9_FamilyElement1;
+	Flow PipelineVar_9_Flow2;
+	ReplaySink PipelineVar_9_ReplaySink0;
+	PipelineVar_9_ReplaySink0 = ReplaySink {
+		sink = refBy(priorSnk), 
+		parallelism = 1, 
+		name = "ReplaySink", 
+		constraints = {}
+	};
+	PipelineVar_9_Flow2 = Flow {
+		destination = refBy(PipelineVar_9_ReplaySink0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fCorrelationFinancial.output[0]), 
+		name = "f3", 
+		constraints = {}
+	};
+	Flow PipelineVar_9_Flow3;
+	Sink PipelineVar_9_Sink1;
+	PipelineVar_9_Sink1 = Sink {
+		sink = refBy(priorSnk), 
+		parallelism = 1, 
+		name = "Sink", 
+		constraints = {}
+	};
+	PipelineVar_9_Flow3 = Flow {
+		destination = refBy(PipelineVar_9_Sink1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fCorrelationFinancial.output[0]), 
+		name = "f5", 
+		constraints = {}
+	};
+	PipelineVar_9_FamilyElement1 = FamilyElement {
+		family = refBy(fCorrelationFinancial), 
+		output = {
+			refBy(PipelineVar_9_Flow2), refBy(PipelineVar_9_Flow3)
+		}, 
+		parallelism = 1, 
+		name = "FinancialCorrelation", 
+		permissibleParameters = {refBy(fCorrelationFinancial.parameters[0])},
+		constraints = {}
+	};
+	PipelineVar_9_Flow1 = Flow {
+		destination = refBy(PipelineVar_9_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(FamiliesCfg::fPreprocessor.output[0]), 
+		name = "f2", 
+		constraints = {}
+	};
+	PipelineVar_9_FamilyElement0 = FamilyElement {
+		family = refBy(fPreprocessor), 
+		output = {
+			refBy(PipelineVar_9_Flow1)
+		}, 
+		parallelism = 1, 
+		name = "Preprocessor", 
+		constraints = {}
+	};
+	PipelineVar_9_Flow0 = Flow {
+		destination = refBy(PipelineVar_9_FamilyElement0), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::spring.input[1]), 
+		name = "f1", 
+		constraints = {}
+	};
+	Flow PipelineVar_9_Flow4;
+	PipelineVar_9_Flow4 = Flow {
+		destination = refBy(PipelineVar_9_FamilyElement1), 
+		grouping = Grouping.shuffleGrouping, 
+		tupleType = refBy(DataManagementCfg::spring.input[0]), 
+		name = "f4", 
+		constraints = {}
+	};
+	PipelineVar_9_Source0 = Source {
+		output = {
+			refBy(PipelineVar_9_Flow0), refBy(PipelineVar_9_Flow4)
+		}, 
+		source = refBy(spring), 
+		parallelism = 1, 
+		name = "FinancialDataSource", 
+		constraints = {}
+	};
+	PipelineVar_9 = Pipeline {
+		name = "ReplayPip", 
+		sources = {
+			refBy(PipelineVar_9_Source0)
+		}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:ReplayPip:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		PipelineVar_9;
+		PipelineVar_9_Source0;
+		PipelineVar_9_Flow0;
+		PipelineVar_9_FamilyElement0;
+		PipelineVar_9_Flow1;
+		PipelineVar_9_FamilyElement1;
+		PipelineVar_9_Flow2;
+		PipelineVar_9_ReplaySink0;
+		PipelineVar_9_Flow3;
+		PipelineVar_9_Sink1;
+		PipelineVar_9_Flow4;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

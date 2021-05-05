@@ -1,0 +1,57 @@
+import commonVTLMethods;
+@advice(QM)
+@indent(indentation = 4, additional = 0)
+template hadoopSequentialJob(Configuration config, FileArtifact target, SequentialJob job, String package) {
+
+    def createJobs(SequentialJob job) {
+        for (AbstractJob job: job.jobs) {
+            String className = getJavaClassName("${job.name}Job");
+            'result.addAll(eu.qualimaster.${className}.createJobs(options));'
+        }
+    }
+
+    def main(Configuration config, FileArtifact target, SequentialJob job, String package) {
+        String className = getJavaClassName("${job.name}Job");
+        'package eu.qualimaster.${package};
+        
+         import java.util.*;
+         import java.io.*;
+         import org.apache.hadoop.fs.Path;
+         import org.apache.hadoop.conf.*;
+         import org.apache.hadoop.io.*;
+         import org.apache.hadoop.mapred.*;
+         import org.apache.hadoop.util.*;
+        
+         /**
+          * Implements the job "${job.name}".
+          */
+         public class ${className} {
+
+             /**
+              * Creates the related job configurations.
+              *
+              * @param options the start-time options
+              * @return the job configurations
+              */
+             public static List<JobConf> createJobs(PipelineOptions options) throws Exception {
+                 List<JobConf> result = new ArrayList<JobConf>();
+                 ${createJobs(job)}
+                 return result;
+             }
+
+             /**
+              * Creates the jobs via {@link #createJobs()} and runs them for completion.
+              *
+              * @param args the start arguments
+              */
+             public static void main(String[] args) throws Exception {
+                 PipelineOptions options = new PipelineOptions(args);
+                 for (JobConf j : createJobs(options)) {
+                     JobClient.runJob(j);
+                 }
+             }
+             
+         }'
+    }
+
+}

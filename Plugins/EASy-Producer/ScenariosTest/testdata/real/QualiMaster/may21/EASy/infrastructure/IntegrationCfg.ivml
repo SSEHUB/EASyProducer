@@ -1,0 +1,20 @@
+project IntegrationCfg {
+    
+    import Basics;
+    import Integration;
+    import PipelinesCfg;
+    import BatchingCfg;
+    
+    LambdaStyle style1  = {
+        job = job_7,
+        pipeline = refBy(PriorityPip)
+    };
+    
+    styles = {refBy(style1)};
+    
+    freeze {
+        style1;
+        styles;    
+    } but (f|f.bindingTime >= BindingTime::runtimeMon)
+    
+}

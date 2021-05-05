@@ -1,0 +1,1545 @@
+import commonVTLMethods;
+@advice(QM)
+template stormFamilyElement(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName, mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, sequenceOf(Tuple))) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap, mapOf(String, Integer) algToPort, Family subPipelineFamily, mapOf(Tuple, Grouping) tupleToGrouping, String subAlgName, Boolean debug, Boolean connector) {//subPipelineFamily is only for the family element in the subpipeline, otherwise null
+	Boolean forSubPipeline = false;	//indicates whether this is used in the sub-pipeline
+	Boolean hasSubPipeline = false;	//indicates whether the family has distributed algorithms including manually-implemented and generated sub-topologies		
+	Boolean lastHasSubPipeline = false; //indicates whether the last elements have sub-pipeline-based algorithm																																																																																																 //subAlgName is for the prefix in the subtopology
+	Boolean loadShedding = false;//indicates whether it shall enable loadShedding.
+	mapOf(String, String) impNameToConfName = {}; //<algImpName, algConfName>
+	Boolean sendSymbolList = false;//indicates whether it shall send symbollist (only for correlation computation component)
+	
+	Boolean logOutput = false; //ONLY TEMPORARY, TO BE REMOVED!
+	def requestHardwareConnections(HardwareAlgorithm hwAlg, Boolean isStatic, Boolean hasDistAlg) {
+		MPCCNode node = hwAlg.hwNode;
+		String algName = hwAlg.name;
+		'try {' | 20;
+		if(newSwitchLog and hasDistAlg) {
+		'out.println(Calendar.getInstance().getTimeInMillis() + "Connecting the hardware in order to get the dynamic ports");' | 8;	
+		'out.flush();' | 8;
+		}
+		
+		if(isStatic) {
+			'String host = "${node.host}";' | 24;
+        	'int sendingPort = ${node.commandSendingPort};' | 24;
+        	'int receivingPort = ${node.commandReceivingPort};' | 24;
+        	'String url = "hello";//actual algorithm executable information is passed from the parameter signal but not in STATIC mode' | 24;
+		} else {
+        	'String host = signal.getStringParameter(AlgorithmChangeParameter.COPROCESSOR_HOST, "${node.host}");' | 24;
+        	'int sendingPort = signal.getIntParameter(AlgorithmChangeParameter.CONTROL_REQUEST_PORT, ${node.commandSendingPort});' | 24;
+        	'int receivingPort = signal.getIntParameter(AlgorithmChangeParameter.CONTROL_RESPONSE_PORT, ${node.commandReceivingPort});' | 24;
+			'String url = signal.getStringParameter(AlgorithmChangeParameter.IMPLEMENTING_ARTIFACT, null);' | 24;
+		}
+		'HardwareControlConnection hardwareConnection = new HardwareControlConnection(host, sendingPort, receivingPort);' | 24;
+		'ByteString executable = ByteString.copyFromUtf8(url);' | 24;
+		'UploadMessageOut msg = hardwareConnection.uploadAlgorithm("${algName}", ${hwAlg.receiverParallelism}, executable);' | 24;
+		
+        'ParameterChangeSignal signalForBolt= new ParameterChangeSignal("$topoName",
+                    "${algName}HardwareConnectionBolt", "port", msg.getPortIn(), null);' | 24;
+        /*     
+        'ParameterChangeSignal signalForBolt= new ParameterChangeSignal("$topoName",
+                    "${algName}HardwareConnectionBolt", "port", 2404, null);' | 24;
+                    * 
+                    */
+        'sendSignal(signalForBolt);' | 24;
+ 
+		            if(newSwitchLog and hasDistAlg) {
+					'logger.info(Calendar.getInstance().getTimeInMillis() + "Received the dynamic ports, portIn:  " + msg.getPortIn() + ", portsOut: " + msg + ", signalForBolt: " + signalForBolt.toString());' | 8;
+		'out.println(Calendar.getInstance().getTimeInMillis() + "Received the dynamic ports, portIn:  " + msg.getPortIn() + ", portsOut: " + msg + ", signalForBolt: " + signalForBolt.toString());' | 8;	
+		'out.flush();' | 8;
+		}
+
+        'String ports = "";' | 24;
+ 
+    		'ports = ports + msg.getPortOut(0);' | 24;
+		'for (int i=1; i<msg.getPortOutCount(); i++) {' | 24;
+			'ports = ports + "," + msg.getPortOut(i);' | 28;
+		'}' | 24;           		
+		
+		'ParameterChangeSignal signalForSpout= new ParameterChangeSignal("$topoName",
+                    "${algName}HardwareConnectionSpout", "port", ports, null);' | 24;           			
+        'sendSignal(signalForSpout);' | 24;
+		if(newSwitchLog and hasDistAlg) {
+		'logger.info(Calendar.getInstance().getTimeInMillis() + "Received the dynamic out ports, portOut:  " + ports + ", signalForSpout: " + signalForSpout.toString());' | 8;
+		'out.println(Calendar.getInstance().getTimeInMillis() + "Received the dynamic out ports, portOut:  " + ports + ", signalForSpout: " + signalForSpout.toString());' | 8;	
+		'out.flush();' | 8;
+		}
+            
+		'} catch (IOException e) {' | 20;
+			'e.printStackTrace();' | 24;						
+		'} catch (SignalException e) {' | 20;
+			'e.printStackTrace();' | 24;
+		'}' | 20;
+	}
+	
+	def createAlgorithmInstance(setOf(String) destinations, String ifName, String cls, Boolean forNotify, Integer indent) {
+		'try {' | indent;
+		'Class cls = Class.forName("$cls");' | indent+4;
+		if(destinations.size() == 0) {
+			if(forNotify) {
+				if(newSwitch and hasSubPipeline and !forSubPipeline) {
+					'if(!algChange) {//initialize the algorithm' | indent+4;
+					if (ifName=="IFHayashiYoshida") {//for test
+						'alg = ($ifName) cls.getConstructor(int.class).newInstance(taskId);' | indent+4;
+					} else {
+						'alg = ($ifName) cls.newInstance();' | indent+8;
+					}
+					'} else {' | indent+4;
+					if (ifName=="IFHayashiYoshida") {//for test
+						'algSwitch = ($ifName) cls.getConstructor(int.class).newInstance(taskId);' | indent+4;
+					} else {
+						'algSwitch = ($ifName) cls.newInstance();' | indent+8;
+					}
+					'}' | indent+4;
+				} else if (ifName=="IFHayashiYoshida") {//for test
+					'alg = ($ifName) cls.getConstructor(int.class).newInstance(taskId);' | indent+4;
+				} else {
+					'alg = ($ifName) cls.newInstance();' | indent+4;
+				}								
+			} else {
+				if (ifName=="IFHayashiYoshida") {//for test
+					'alg = ($ifName) cls.getConstructor(int.class).newInstance(taskId);' | indent+4;
+				} else { // for test
+					'alg = ($ifName) cls.newInstance();' | indent+4;
+				}
+			}
+		} else {
+			String args = "";
+        	String argsClass = "";
+        	Boolean first = true;
+        	for(String d : destinations) {
+                if(first) {
+                    first = false;
+                    args = args + "taskId${firstToUpperCase(d)}";
+                    argsClass = argsClass + "List.class";
+                } else {
+                    args = args + ", taskId${firstToUpperCase(d)}";
+                    argsClass = argsClass + ", List.class";
+                }
+        	}
+        	if(destinations.size() != 0) {
+        		args = args + ", ${elt.varName()}TaskId";
+        		argsClass = argsClass + ", int.class";
+        	}
+        	
+        	if(forNotify) {
+				if(newSwitch and !forSubPipeline) {
+					'if(!algChange) {//initialize the algorithm' | indent+4;
+						'alg = ($ifName) cls.getConstructor($argsClass).newInstance($args);' | indent+8;
+					'} else {' | indent+4;
+						'algSwitch = ($ifName) cls.getConstructor($argsClass).newInstance($args);' | indent+8;
+					'}' | indent+4;
+				} else {
+					'alg = ($ifName) cls.getConstructor($argsClass).newInstance($args);' | indent+4;
+				}
+			} else {
+				'alg = ($ifName) cls.getConstructor($argsClass).newInstance($args);' | indent+4;
+			}
+		}
+		'} catch (ClassNotFoundException e) {' | indent;
+		'e.printStackTrace();' | indent+4;
+		'} catch (InstantiationException e) {' | indent;
+		'e.printStackTrace();' | indent+4;
+		'} catch (IllegalAccessException e) {' | indent;
+		'e.printStackTrace();' | indent+4;
+		if(destinations.size() > 0) {
+		'} catch (NoSuchMethodException e) {' | indent;
+		'e.printStackTrace();' | indent+4;
+		'} catch (InvocationTargetException e) {' | indent;
+		'e.printStackTrace();' | indent+4;
+		}
+		'}' | indent;
+	}	
+	
+	def produceInputForTuples(mapOf(Tuple, sequenceOf(Tuple)) inputToOutputMapping, mapOf(Tuple,String) nameToOutputMap, DecisionVariable elt, setOf(DecisionVariable) lastElt) {
+		FamilyElement fe = elt;
+		Family fm = fe.family;
+		String name = fm.name;
+		String fName = name.firstToUpperCase();	
+		//String familyName = elt.byName("family").varName().firstToUpperCase();	
+		String inputInfName; //input interface name
+		String outputInfName; //output interface name	
+        String ifName = "I" + fName;
+        String ifInputName = "I" + ifName;
+
+        String fImpName = fName.firstToUpperCase();
+		String fImpInputName;
+		
+		String tupleName;
+		Boolean multiStream = false;
+		Integer indent = 4;
+		sequenceOf(Tuple) tuples = fm.input;
+		Integer tuplesSize = tuples.size();
+		for(Tuple t : tuples) {
+			//get the tuple name
+			tupleName = t.name;
+			if(tuplesSize > 1){
+				multiStream = true;
+				indent = 8;
+			}
+			//get input interface name
+			inputInfName = ifInputName + "${firstToUpperCase(tupleName)}Input";
+			//get input imp name
+			fImpInputName= 	ifName + "${firstToUpperCase(tupleName)}Input";
+			//get output interface name	
+			if(inputToOutputMapping.containsKey(t))	{
+			  sequenceOf(Tuple) outputs = inputToOutputMapping.get(t);
+			  String number;
+			  Integer size = outputs.size();
+			  Integer count = 0;
+			  for(Tuple tuple : outputs) {
+			  	  count = count + 1;
+			  	  outputInfName = nameToOutputMap.get(tuple);
+			  	  if(size > 1) {
+				      number = "$count";
+				  } else {
+				  	  number = "";
+				  }
+			
+				if(!connector and receiveByField and subAlgName != "") { //direct receiving based on the stream id
+					produceDirectReceive(lastElt, tuple);
+				} else {	
+//				  if(multiStream){
+					'if(tupleItem instanceof $outputInfName) {' | indent;
+//				}
+				'iTuple${firstToUpperCase(tupleName)}$number = ($outputInfName)tupleItem;' | indent+4;
+				}
+				
+				if(genInstance) {
+					'input${firstToUpperCase(tupleName)} = new $fName.$fImpInputName();' | indent+4;
+				}				
+				 for(Field f : t.fields) {
+					 String fname = toIdentifier("${f.name}");
+	    			 String mname = firstToUpperCase(fname);
+	    			 if(!connector and receiveByField and subAlgName != "") {
+	    			 	'input${firstToUpperCase(tupleName)}.set${mname}(tuple.get${firstToUpperCase(f.type.class)}ByField("${formulateString(mname)}"));' | indent+4;
+	    			 } else {
+	    	         'input${firstToUpperCase(tupleName)}.set${mname}(iTuple${firstToUpperCase(tupleName)}$number.get${mname}());' | indent+4;
+				 	}				 	
+				 }				 
+				 
+				 'try {' | indent+4;
+				 'if(alg != null) {' | indent+8;
+				 if(genMultiTupleTypes) {
+					'alg.calculate(input${firstToUpperCase(tupleName)}${resultTypesString(fm)});'| indent+12;
+				 } else { //original one tuple type case in the algorithm output
+				 	'alg.calculate(input${firstToUpperCase(tupleName)}, result);'| indent+12;
+				 }
+				 '} else {' | indent+8;
+				    	'long now = System.currentTimeMillis();' | indent+8;
+					    'if ((now - record) > 1000) {//print this error log once per second' | indent+8;
+					    	'logger.error("Algorithm is not assigned!");' | indent+12;
+							'record = now;' | indent+12;
+					    '}' | indent+8;
+					 '}' | indent+8;
+				'} catch(Throwable e) {' | indent+4;
+					'long now = System.currentTimeMillis();' | indent+8;
+				    'if ((now - record) > 1000) {//print this error log once per second' | indent+8;
+				    	'e.printStackTrace();' | indent+12;
+						'record = now;' | indent+12;
+				    '}' | indent+8;
+				 if(genMultiTupleTypes) {
+					produceResultDefaultValue(fm, indent);
+				 } else {//original one tuple type case in the algorithm output
+					sequenceOf(Tuple) outputTuples = fm.output;
+					for(Tuple ot : outputTuples) {
+						for(Field fd : ot.fields) {
+						String fieldName = toIdentifier("${fd.name}"); 
+						String upFieldName = firstToUpperCase(fieldName);
+						FieldType fdType = fd.type;
+						'result.set${upFieldName}(${obtainDefaultValue(fdType)});' | indent+8;	
+						}
+					}
+				}
+				'if (e instanceof DefaultModeException) {' | indent+8;
+					'sendDefaultModeMonitoringEvent((DefaultModeException) e);' | indent+12;
+				'}' | indent+8;
+				'}' | indent+4;
+			    
+			    if(!looseSub and !newSwitch and hasDistAlgorithm(fm)) {
+			    	'if(alg instanceof ITopologyCreate) {' | indent+4;
+				    	if(debug) {
+					    'logger.info("Emitting data with streamId: "+ streamId + ", data:");'| indent+8;		    
+					    }
+					    '_collector.emit(streamId, new Values(input${firstToUpperCase(tupleName)}));'| indent+8;
+				    '}' | indent+4;
+			    } 
+			    
+			    //loose sub-pipeline algorithm -- excluded for the new switch
+				if(!newSwitch and looseSub and !forSubPipeline and hasSubPipeline) {
+					'if(alg instanceof ITopologyCreate) {' | indent+4;
+						'values.clear();' | indent+8;
+						'values.add(input${firstToUpperCase(tupleName)});' | indent+8;
+						'IGeneralTuple genTuple = new GeneralTuple(values);' | indent+8;
+						'byte[] bytes = genSer.serialize(genTuple);' | indent+8;
+						'sender.send(bytes);' | indent+8;
+					'}' | indent+4;
+				}
+//			    if(multiStream){
+					 	'}' | indent;
+//					 }
+				 ''
+				 
+			  }				
+			}
+		} //tu	
+		
+		if(newSwitch and hasDistAlgorithm(fm)) {
+					'if(alg instanceof ITopologyCreate) {' | indent+4;
+				    	if(debug) {
+					    'logger.info("Sending data via network to the intermediary Spout: ");'| indent+8;		    
+					    }
+					    'if(both) {' | indent+8;
+					    	'id++;' | indent+12;
+					    '}' | indent+8;
+					    'values.clear();' | indent+8;
+                		'values.add(tupleItem);' | indent+8;
+					    'switchTuple = new SwitchTuple(id, values);'| indent+8;
+//					    if(looseSub) {
+					    	'synQueue.produce(switchTuple);' | indent+8;
+//					    } else {
+//					    	'queue.offer(switchTuple);' | indent+8;
+//					    }
+					    'if(emit && !both && !queue.isEmpty()) {' | indent+8;
+//					    if(looseSub) {
+					    	'byte[] bytes = kryoSer.serialize(synQueue.consume());' | indent+12;
+//					    } else {
+//					    	'byte[] bytes = kryoSer.serialize(queue.poll());' | indent+12;
+//					    }
+						    for(Algorithm alg : fm.members) {
+					    		String algClsName = algImplName(alg);	
+					    		String aName = alg.name.firstToUpperCase().toIdentifier();
+					    		impNameToConfName.add(algClsName, aName);
+						    	'if(alg instanceof $algClsName) {' | indent+12;
+									'sendTo${aName}(bytes);' | indent+16;
+						    	'}' | indent+12;
+			        		}
+					    '}' | indent+8;
+					    'long current = Calendar.getInstance().getTimeInMillis();' | indent+8;
+					    'if(both && ((current - startRecord) <= duration) && emit) {' | indent+8;
+					    	'if(!queue.isEmpty()) {' | indent+12;
+//					    	if(looseSub) {
+					    		'item = synQueue.consume();' | indent+12;
+//					    	} else {
+//						    	'item = queue.poll();' | indent+16;
+//						    }
+						    	'byte[] bytes = kryoSer.serialize(item);' | indent+16;
+						    	
+		                		for(Algorithm alg : fm.members) {	
+						    		String aName = alg.name.firstToUpperCase().toIdentifier();
+						    		'sendTo${aName}(bytes);' | indent+16;
+						    		}
+						    	if(newSwitchLog) { //print the tuple has been sent
+						    		'out.println(Calendar.getInstance().getTimeInMillis() + ": Sent the item with the id: " + item.getId() + ", with the value:"' | indent+16;
+//						    		for(Field f : t.fields) {
+//										 String fname = toIdentifier("${f.name}");
+//						    			 String mname = firstToUpperCase(fname);
+//						    	         '+ ", $mname: "+ (($outputInfName)item.getValue(0)).get${mname}()' | indent+16;
+//									 }
+									 ');' | indent+16;
+						    		'out.flush();' | indent+16;
+						    	}
+					    	'}' | indent+12;
+	            		'} else if(both && ((current - startRecord) > duration)){' | indent+8;
+	            			if(newSwitchLog) {
+	            			'out.println(Calendar.getInstance().getTimeInMillis() + ": Real Switching!!!!!!!!!!!!!!!!!!!!!!!!!");' | indent+12;
+	            			'out.flush();' | indent+12;
+	            			}
+	            			'emit = false;' | indent+12;
+	            			'both = false;' | indent+12;
+	            			'id = 0;' | indent+12;
+	            			'if(item != null) {' | indent+12;
+	            			'try {' | indent+12;
+	            				'String idAndTarget = item.getId() + "," + originalAlg + "," + targetAlg;' | indent+16;
+	            				String namespace = topoName;
+	            				for(Algorithm alg : fm.members) {
+	            					if(looseSub) {
+	            						if(isGenSubtopology(alg)) {
+	            							SubPipelineAlgorithm subAlg = alg;
+	            							namespace = subAlg.subPipeline.name;
+	            						}
+	            						if(isHardwareAlgorithm(alg)) {
+	            							namespace = alg.name;
+	            						}
+	            					}
+	            					String aName = alg.name.firstToUpperCase().toIdentifier();
+	            					//'ParameterChangeSignal signal${aName} = new ParameterChangeSignal("$namespace",
+								'ParameterChangeSignal signal${aName} = new ParameterChangeSignal(getNamespace(),
+	                        "${aName}Intermediary", "passivate", idAndTarget, null);' | indent+16;
+	                    			'sendSignal(signal${aName});' | indent+16;
+	                    		}
+	            			'} catch (SignalException e) {' | indent+12;
+	                    		'e.printStackTrace();' | indent+16;
+	                		'}' | indent+12;
+	                		'alg = algSwitch;' | indent+12;
+	                		'//sendAlgorithmChangeEvent(algSwitch.getClass().getSimpleName(), null);//inform later when the switch is done' | indent+12;
+	                		'}' | indent+12;
+	            		'}' | indent+8;
+				    '}' | indent+4;
+				}
+	}	
+	
+	def resultTypesString(Family family) {
+		String result = "";
+		String tupleName;
+		for(Tuple t : family.output) {
+			tupleName = t.name;
+			result = result + ", " + t.name + "Result";
+		}
+		result;
+	}
+	
+	def produceDirectReceive(setOf(DecisionVariable) lastElt, Tuple tuple) {
+		String name;
+		String streamId;
+		for(DecisionVariable d : lastElt) {
+			name = d.byName("name");
+			for(Tuple t : tuples(d)) {
+				if(t == tuple) {
+					streamId = formulateString(name) + formulateString(t.name);
+					'if (sourceStreamId.equals("$streamId")) {'
+				}
+			}
+		}
+	}
+	
+	def sequenceOf(Tuple) tuples(DecisionVariable elt) {
+		sequenceOf(Tuple) result = {};
+		result;
+	}
+	
+	def sequenceOf(Tuple) tuples(Source elt) {
+		DataSource dataSrc = elt.source;
+		dataSrc.input;
+	}
+	
+	def sequenceOf(Tuple) tuples(FamilyElement elt) {
+		Family fm = elt.family;
+		fm.output;
+	}
+	
+	
+	/*produce the result-related variables (declaration or instance) */
+	def produceResultVariables(FamilyElement fe, Boolean instance) {
+		String nameVar = fe.varName();
+		String name = fe.name;
+		String streamId;
+		Family family = fe.family;
+		setOf(Flow) flows = fe.output;
+		Boolean isDirect = false;
+		String fName = family.name;
+		String ifName = "I" + fName.firstToUpperCase();
+		String fImpName = fName.firstToUpperCase();
+		String tupleName;
+		for(Tuple t : family.output) {
+			isDirect = isDirectGroupping(flows, t);
+			tupleName = t.name;
+			String ifOutputName = "I" + ifName + firstToUpperCase(tupleName)+ "Output";
+			String fImpOutputName = ifName + firstToUpperCase(tupleName)+ "Output";
+			
+			if(subAlgName != "") { //sub-topology
+				streamId = formulateString(name) + formulateString(tupleName);
+			} else {
+				streamId = formulateString(nameVar) + formulateString(tupleName);
+			}
+			if(!instance) {
+    		'    private transient $fImpName.$fImpOutputName ${tupleName}Result = new $fImpName.$fImpOutputName();'
+    		} else {
+    			'${tupleName}Result = new $fImpName.$fImpOutputName();' | 8;
+    			//produce emitter instance, must distinguish between emit and emitDirect
+	    		'IItemEmitter<$ifOutputName> ${tupleName}Emitter = new IItemEmitter<$ifOutputName>() {' | 8;
+	    			'@Override' | 12;
+	    			'public void emitDirect(String streamId, $ifOutputName item) {' | 12;
+	    			if(isDirect) {
+	    				'_collector.emitDirect(item.getTaskId(), "$streamId", new Values(item));' | 16;
+	    			} else {
+	    				'_collector.emit("$streamId", new Values(item));' | 16;
+	    			}
+	    			'}' | 12;
+	    		'};' | 8;
+	    		'${tupleName}Result.setEmitter(${tupleName}Emitter);' | 8;
+	    		''
+    		}
+		}
+	}
+	
+	/* produce the default value settings for the result types */
+	def produceResultDefaultValue(Family family, Integer indent) {
+		String tupleName;
+		for(Tuple t : family.output) {
+			tupleName = t.name;
+			for(Field fd : t.fields) {
+				String fieldName = toIdentifier("${fd.name}"); 
+				String upFieldName = firstToUpperCase(fieldName);
+				FieldType fdType = fd.type;
+				'${tupleName}Result.set${upFieldName}(${obtainDefaultValue(fdType)});' | indent+8;	
+			}
+		}
+	}
+	
+	/* produce emitting statements based on the output types */
+	def produceResultEmit(FamilyElement familyElement, Integer indent) {
+		Family family = familyElement.family;
+		String fName = family.name;
+		String ifName = "I" + fName.firstToUpperCase();
+		String fImpName = fName.firstToUpperCase();
+		String tupleName;
+		for(Tuple t : family.output) {
+			tupleName = t.name;
+			String streamId;
+			if(subAlgName == "") {//for the main pipeline, remains as "streamId"
+				streamId = "streamId";
+			} else {
+				streamId = familyElement.varName().firstToUpperCase() + tupleName.firstToUpperCase();
+			}
+			'if(${tupleName}Result != null) {' | indent;
+				'_collector.emit("$streamId", new Values(${tupleName}Result));' | indent+4;
+			'}' | indent;   					
+		}
+	}
+	
+	def produceMultipleOutputs(FamilyElement familyElement, mapOf(Tuple, Grouping) tupleToGrouping, Integer indent) {
+		Family family = familyElement.family;
+		String fName = family.name;
+		String ifName = "I" + fName.firstToUpperCase();
+		String tupleName;
+		String streamId;
+		Grouping grouping;
+		for(Tuple t : family.output) {
+			if(tupleToGrouping.containsKey(t)) {
+				grouping = tupleToGrouping.get(t);
+			}
+			tupleName = t.name;
+			String ifOutputName = "I" + ifName + firstToUpperCase(tupleName)+ "Output";
+			//for the simple java algorithm, the stream id is the elt name plus tuple name.
+			if(subAlgName != "") {//the subtopology uses the actual configured name
+				streamId = formulateString(familyElement.name) + formulateString(tupleName);
+			} else {
+				streamId = formulateString(familyElement.varName()) + formulateString(tupleName);
+			}
+			'eu.qualimaster.base.algorithm.IOutputItemIterator<$ifOutputName> iter${firstToUpperCase(tupleName)} = ${tupleName}Result.iterator();' | indent;
+			'iter${firstToUpperCase(tupleName)}.reset();' | indent;
+		    'while (iter${firstToUpperCase(tupleName)}.hasNext()) {' | indent;
+		    if(logOutput) {
+		    	'long nowOutput = System.currentTimeMillis();'
+			    'if ((nowOutput - recordOutput) > 1000) {'
+				'recordOutput = nowOutput;'
+				'logger.error("The output rate at the time " + nowOutput + ":" + counter);'
+				'counter = 0;'
+			    '} else {'
+				'counter++;'
+			    '}'
+		    }
+		    	'$ifOutputName out = iter${firstToUpperCase(tupleName)}.next();' | indent+4;
+		    	String outValues = "";
+		    	Boolean first = true;
+		    	String split = "";
+		    	if(receiveByField) {
+		    		for(Field f : t.fields) {
+		    			String fname = f.name;
+		    			if(first) {
+		    				split = "";
+		    				first = false;
+		    			} else {
+		    				split = ",";
+		    			}
+		    			outValues = outValues + split + "out.get${formulateString(fname)}()";
+		    		}
+		    	} else {
+		    		outValues = "out";
+		    	}
+		    	if(isDirectGroupping(familyElement.output, t)) {
+		    		'_collector.emitDirect(out.getTaskId(), "$streamId", new Values($outValues));' | indent+4;  
+		    	} 
+		    	/*
+		    	else if (isAllGroupping(familyElement.output, t)) {
+		    		String dest = allGroupingDestName(familyElement.output, t);
+		    		'for(int i=0; i<taskId${firstToUpperCase(dest)}.size(); i++) {' | indent+4;
+		    			'_collector.emit("$streamId", new Values($outValues));' | indent+8;   
+		    		'}' | indent+4;
+		    	}
+		    	* */
+		    	else {
+            		'_collector.emit("$streamId", new Values($outValues));' | indent+4;   
+            	} 
+		    '}' | indent;	
+		
+		}		
+	}
+	
+	def produceStreamId(Family family, Boolean variable) {
+		Boolean first = true;//select the first subtopology algorithm as the initial algorithm to conduct the stream id
+		String sId;
+		for(Algorithm alg : family.members) {
+			if(first) {
+				if(isDistAlgorithm(alg)) {
+					first = false;
+					sId = formulateString(elt.varName()) + formulateString(alg.name);
+					if(variable) {
+						'    private String streamId = "$sId";'
+						} else {
+						'            streamId = "$sId";'	
+						}
+				}
+			}
+		}
+	}
+	
+	def produceForJavaAlgorithm() {
+		
+	}
+	
+	/* print log per tuple */
+	def produceLogVariable(sequenceOf(Tuple) tuples, Boolean variable, String fName) {
+		String ifName = "I" + fName;
+		String ifInputName = "I" + ifName;
+		String tupleName;
+		for(Tuple t : tuples) {
+			tupleName = t.name;
+			String inputInfName = ifInputName + "${firstToUpperCase(tupleName)}Input";
+			String fImpInputName = 	ifName + "${firstToUpperCase(tupleName)}Input";
+			if(variable) {
+				'    private transient PrintStream out${firstToUpperCase(tupleName)} = System.out;'
+			} else {
+				'        out${firstToUpperCase(tupleName)} = getPrintStream("gen-${firstToUpperCase(tupleName)}" + "-" + Thread.currentThread().getId() + "-" + topologyContext.getThisTaskId() + ".log");'
+			}
+		}
+	}
+	
+	
+    def main(Configuration config, FileArtifact target, DecisionVariable preElt, DecisionVariable elt, String topoName,mapOf(Tuple,String) nameToOutputMap, mapOf(String, mapOf(Tuple, sequenceOf(Tuple))) globalMap,mapOf(String, setOf(DecisionVariable)) lastElementMap, mapOf(String, Integer) algToPort, Family subPipelineFamily, mapOf(Tuple, Grouping) tupleToGrouping, String subAlgName, Boolean debug, Boolean connector) {
+        if(subAlgName != "") {
+			forSubPipeline = true;
+		}
+		
+        Boolean parameterSetting = true; //use for commenting the parameterSetting
+        //name for FamilyElement class
+        String name = elt.varName().firstToUpperCase() + elt.type();
+        //streamId endings
+        String nontopoStream = "Stream";
+        String topoStream = "TopoStream";        
+        
+        FamilyElement fe = elt;
+		Family fm = fe.family;
+		String fName = fm.name;
+		
+		//algorithm specific!!
+		if(fm.name == "fCorrelationFinancial") {
+			sendSymbolList = true;
+		}
+		
+		//ONLYTEMPORARY; TOBE REMOVED!!
+		if(fm.name == "fHayashiYoshida") {
+			logOutput = true;
+		}
+		
+		loadShedding = fe.loadShedding;
+		if(hasDistAlgorithm(fm)) {
+			hasSubPipeline = true;
+		}
+		
+//        String familyName = elt.byName("family").varName();
+        String ifName = "I" + fName.firstToUpperCase();      	
+		String fImpName = fName.firstToUpperCase();
+		String fImpInputName = ifName + "Input";
+		String fImpOutputName = ifName;
+		String streamId = elt.varName() + nontopoStream;
+		String topoStreamId = elt.varName();
+        String ifOutputName = "I" + ifName;
+        String tupleName;
+		
+		//get family varname
+		String fmVarName = elt.varName().firstToUpperCase();
+		setOf(DecisionVariable) lastElt = lastElementMap.get(fmVarName); //last elements linked to the current element
+		
+		//determine whether the last elements have sub-pipeline-based algorithm
+		for(DecisionVariable elt : lastElt) {
+			if(elt.type() == "FamilyElement") {
+				FamilyElement familyElt = elt;
+				Family fm = familyElt.family;
+				if(looseSub and hasGenAlgorithm(fm)) {
+					lastHasSubPipeline = true;
+				}
+			}
+		}
+		
+		//get family variable
+		Family eltFamily = elt.byName("family");
+		String fmNameInCapital = fName.firstToUpperCase();
+		
+		//get the inputToOutputMapping of this family element
+		String eltName = elt.varName().firstToUpperCase();
+		mapOf(Tuple, sequenceOf(Tuple)) inputToOutputMapping = {};
+		if(globalMap.containsKey(eltName)){
+			inputToOutputMapping = globalMap.get(eltName);
+		}
+//		if(!genMultiTupleTypes) {//originally considering only one tuple type in the output of the algorithm
+			//get the tuple name of the first output tuple to obtain the output interface/class name (assume that there is only one output from the family node)				
+			Tuples outputTuples = eltFamily.output;
+			Integer first = 1;
+			for(Tuple t : outputTuples) {
+				if(first == 1){
+					tupleName = t.name;
+					ifOutputName = ifOutputName + firstToUpperCase(tupleName)+ "Output";
+					fImpOutputName = fImpOutputName + firstToUpperCase(tupleName)+ "Output";
+					streamId =  streamId + firstToUpperCase(tupleName);
+				}
+				first = first + 1;
+			}
+//		}
+		'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	'' 
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/ 	
+    	'import java.util.*;'
+    	'import java.io.IOException;'
+    	'import java.lang.NoSuchMethodException;'
+    	'import java.lang.reflect.InvocationTargetException;'
+		'import java.io.OutputStream;'
+		'import java.io.Serializable;'
+		'import java.net.Socket;'
+		'import java.io.PrintWriter;'
+		'import eu.qualimaster.common.logging.DataLogger;'
+		'import java.net.UnknownHostException;'
+		'import com.esotericsoftware.kryo.io.Output;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.tuple.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.topology.*;'
+		'import eu.qualimaster.events.EventManager;'
+		'import eu.qualimaster.monitoring.events.AlgorithmChangedMonitoringEvent;' 
+		'import eu.qualimaster.monitoring.events.ParameterChangedMonitoringEvent;'    	
+    	'import eu.qualimaster.families.inf.*;'
+    	'import eu.qualimaster.families.inf.$ifName.*;'
+    	if(genMultiTupleTypes and subAlgName != "") { //import the family interface of the subpipeline family
+    		String isubfName = "I" + subPipelineFamily.name.firstToUpperCase();
+    		'import eu.qualimaster.families.inf.$isubfName.*;'
+    	}
+    	'import eu.qualimaster.families.imp.*;'
+    	//'import eu.qualimaster.hardware.imp.*;' --currently no hardware-based algorithm
+    	'import eu.qualimaster.common.signal.*;'
+    	'import eu.qualimaster.base.algorithm.*;'
+    	'import eu.qualimaster.base.algorithm.IFamily.State;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+    	'import eu.qualimaster.pipeline.DefaultModeException;'
+    	'import eu.qualimaster.pipeline.DefaultModeMonitoringEvent;'
+    	'import eu.qualimaster.base.serializer.KryoSwitchTupleSerializer;'
+    	'import backtype.storm.Config;'
+    	'import eu.qualimaster.base.pipeline.CollectingTopologyInfo;'
+    	'import eu.qualimaster.pipeline.AlgorithmChangeParameter;'
+    	produceAlgorithmImports(fe.family); 
+    	produceImportsFromLastElements(lastElt, lastElementMap, topoName);
+    	if(hasHardwareAlgorithm(fm)) {
+    		'import eu.qualimaster.common.hardware.*;'
+    		'import com.google.protobuf.ByteString;'
+		}
+    	if(newSwitch) {
+    		'import com.esotericsoftware.kryo.KryoException;'
+    		'import java.util.concurrent.ConcurrentLinkedQueue;'
+    		'import eu.qualimaster.common.switching.*;'
+			'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+    	}
+    	if(looseSub and !forSubPipeline and hasSubPipeline) {
+    		'import com.esotericsoftware.kryo.KryoException;'
+    		'import eu.qualimaster.base.serializer.KryoSwitchTupleSerializer;'
+			'import eu.qualimaster.base.serializer.KryoGeneralTupleSerializer;'
+			'import eu.qualimaster.common.signal.PortManager.*;'
+			'import eu.qualimaster.common.signal.PortManager;'
+    	}
+    	'import eu.qualimaster.base.algorithm.IItemEmitter;'
+    	/****************************/
+    	/*        Bolt class        */  
+    	/****************************/
+    	''
+    	'/**'
+    	'* Defines the FamilyElment in the pipeline(GEN).'  
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	'public class $name extends BaseSignalBolt {'
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/
+    	''    
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    transient OutputCollector _collector;'
+    	'    private boolean algChange = false;'
+    	'    private boolean firstTuple = false;'
+    	'    private long record = 0;'
+    	'    private int taskId;'
+    	
+    	if(logOutput) {
+			'int counter = 0;'
+			'long recordOutput = 0;'
+    	} 
+    	
+    	if(newSwitchLog) {
+			'private transient PrintWriter out = null;' | 4;
+		}
+    	if(!genMultiTupleTypes) {
+    	'    private String streamId = "$streamId";'
+    	} else {
+    		if(hasDistAlgorithm(fm)) {//only generated for subtopology-based algorithm in the new version of the code
+    			produceStreamId(fm, true);
+    		}
+    	}
+    	if(genMultiTupleTypes) {
+    		produceResultVariables(fe, false);
+    	} else {
+    		'    private transient $ifOutputName result = new $fImpName.$fImpOutputName();'
+    	}
+    	'    private transient $ifName alg = null; '
+    	//define the taskId related variables if there are direct emit in use
+    	setOf(String) destinations = {};
+    	directEmitDestination(fe.output, destinations); //collect the direct emit and all grouping related destinations
+    	for(String dest : destinations) {
+    		'private transient List<Integer> taskId${firstToUpperCase(dest)};' | 4;
+    	}
+    	if(destinations.size() != 0) {
+    		'private int ${elt.varName()}TaskId;' | 4;
+    	}
+    	
+    	produceOutputVariable(eltFamily.input, inputToOutputMapping, nameToOutputMap, fmNameInCapital);
+    	produceInputVariable(eltFamily.input, true, fmNameInCapital);    
+    	
+    	if(looseSub and !forSubPipeline and hasSubPipeline) {
+    		for(Algorithm alg : fm.members) {
+    		    'private String host${toIdentifier(firstToUpperCase(alg.name))} = "localhost";' | 4; //TODO: determine dynamically
+	    		'private int port${toIdentifier(firstToUpperCase(alg.name))} = 8999;' | 4;//TODO: determine dynamically
+    		}
+    		'private transient KryoGeneralTupleSerializer genSer = null;' | 4;
+    		'private transient KryoSwitchTupleSerializer swiSer = null;' | 4;
+    		'private transient TupleSender sender = null;' | 4;
+    	}
+    	if(newSwitch and !forSubPipeline and hasDistAlgorithm(fm)) {
+			'private static int QUEUE_SIZE = ${fe.switchQueueSize};' | 4;
+			'private transient SynchronizedQueue<ISwitchTuple> synQueue = null;' | 4;
+		}
+    	
+    	if(lastHasSubPipeline) {
+    		'private int port;' | 4;
+    		'private static int QUEUE_SIZE = 1;' | 4;
+    		'private transient TupleReceiverServer server = null;' | 4;
+    		'private transient Queue<IGeneralTuple> queue = new ConcurrentLinkedQueue<IGeneralTuple>();//receiving tuples' | 4;
+    		'private transient SynchronizedQueue<IGeneralTuple> syn = null;' | 4;
+    	}
+    	
+    	if(newSwitch or looseSub) {
+    		'private transient List<Object> values = new ArrayList<Object>();' | 4;
+    		'private String nimbus_host = "localhost";' | 4;
+    		'private int thrift_port = 6027;' | 4;
+    	}
+    	if(newSwitch and hasDistAlgorithm(fm)) {
+    		'private static final int DEFAULT_WARMUP_DELAY = 30000;' | 4;
+    		if(hasHardwareAlgorithm(fm)) {
+    		'private transient HardwareControlConnection hardwareConnection = null;' | 4;
+    		}
+    		'private transient $ifName algSwitch = null;' | 4;
+    		'private boolean both;' | 4;
+    		'private int duration = DEFAULT_WARMUP_DELAY;' | 4;
+    		'private long startRecord;' | 4;
+    		'private boolean emit;' | 4;
+    		'private long id = 0;' | 4;
+    		'private transient ISwitchTuple switchTuple = null;' | 4;
+    		'private transient KryoSwitchTupleSerializer kryoSer = null;' | 4;
+    		'private transient Queue<ISwitchTuple> queue = null;' | 4;    		
+    		'transient ISwitchTuple item = null;' | 4;
+    		'private String originalAlg;' | 4;
+    		'private String targetAlg;' | 4;
+    		'private transient HashMap<String, String> impNameToConfName = null;' | 4;
+
+    		Integer port;
+    		for(Algorithm alg : fm.members) {
+    			if(algToPort.containsKey(alg.name)) {
+    				port = algToPort.get(alg.name);
+    			}
+    			if(!looseSub) {
+	    			'private String host${toIdentifier(firstToUpperCase(alg.name))} = "localhost";' | 4;
+	    			'private int port${toIdentifier(firstToUpperCase(alg.name))} = $port;' | 4;
+	    		}
+	    		'private transient Output output${toIdentifier(firstToUpperCase(alg.name))} = null;' | 4;
+    			'private transient Socket socket${toIdentifier(firstToUpperCase(alg.name))} = null;' | 4;
+    		}
+    		'private String subTopologySpoutName;' | 4;
+    	}
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/
+    	''
+    	'    public $name(String name, String namespace) {'
+    	'        super(name, namespace, $genMonitoringProbes);'
+    	'    }'
+    	
+    			/***********************************/
+		    	/* sendAlgorithmChangeEvent method */  
+		    	/***********************************/
+    	''
+		'    /**'
+		'     * Sends an algorithm change event and considers whether the coordination layer shall be bypassed for direct' 
+		'     * testing.'
+		'     * @param algorithm the new algorithm'
+		'     * @param causeMsgId the message id of the causing message (may be empty or null)'
+		'     */'
+		'    private void sendAlgorithmChangeEvent(String algorithm, String causeMsgId) {'
+		'        EventManager.send(new AlgorithmChangedMonitoringEvent(getPipeline(), getName(), algorithm, causeMsgId));'
+		'    }' 
+    			/***********************************/
+		    	/* sendParameterChangeEvent method */  
+		    	/***********************************/
+    	''
+		'    /**'
+		'     * Sends an parameter change event and considers whether the coordination layer shall be bypassed for direct' 
+		'     * testing.'
+		'     * @param parameter the parameter to be changed'
+		'     * @param value the new value'
+		'     * @param causeMsgId the message id of the causing message (may be empty or null)'
+		'     */'
+		'    private void sendParameterChangeEvent(String parameter, Serializable value, String causeMsgId) {'
+		'        EventManager.send(new ParameterChangedMonitoringEvent(getPipeline(), getName(), parameter, value, causeMsgId));'
+		'    }' 		
+    			/*****************************************/
+		    	/* sendDefaultModeMonitoringEvent method */  
+		    	/*****************************************/
+    	''
+		'    /**'
+		'     * Sends an a default mode monitoring event with a DefaultModeException case.' 
+		'     * @param exceptionCase the DefaultModeException case'
+		'     */'
+		'    private void sendDefaultModeMonitoringEvent(DefaultModeException exceptionCase) {'
+		'        EventManager.send(new DefaultModeMonitoringEvent(getPipeline(), getName(), exceptionCase));'
+		'    }' 		
+    			/****************************/
+		    	/*      prepare method      */  
+		    	/****************************/		
+		'' 	      
+		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'        super.prepare(map, topologyContext, collector);'
+		'        _collector = collector;'
+		'        taskId = topologyContext.getThisTaskId();'
+		'        algChange = false;'
+		//TOBEREMOVED!
+		if(logOutput) {
+			'counter = 0;'
+		}
+		
+		if(newSwitchLog) {
+				'String logDir = (String) map.get("LOG.DIRECTORY");' | 8;
+				'out = DataLogger.getPrintWriter(logDir + "${name}.log");' | 8;
+		}
+		if(looseSub and hasGenAlgorithm(fm)) {
+		'//Enable the namespace of underlying sub-pipelines' | 8;
+		'installNamespaceLifecycleSignalHandler();' | 8;
+		}
+				 //get the task id of the destination nodes
+				 for(String dest : destinations) {
+				     String compName;
+				     if (subAlgName != "") {
+				         compName = "${firstToUpperCase(toIdentifier(subAlgName))}${firstToUpperCase(dest)}"; 
+				     } else {
+				         compName = directEmitDestinationEltName(fe.output, dest);
+				     }
+				 	'taskId${firstToUpperCase(dest)} = topologyContext.getComponentTasks("${compName}");' | 8;
+				 	'logger.info("taskIds${firstToUpperCase(dest)} = " + taskId${firstToUpperCase(dest)});' | 8;
+				 }
+				 if(destinations.size() != 0) {
+				 	'${elt.varName()}TaskId = topologyContext.getThisTaskId();' | 8;
+				 	'logger.info("${elt.varName()}TaskId = " + ${elt.varName()}TaskId);' | 8;
+				 }
+				 ''
+			if(!genInstance) {
+				produceInputVariable(eltFamily.input, false, fmNameInCapital);
+			}
+			if(newSwitch and hasDistAlgorithm(fm)) {
+				'nimbus_host = (String) map.get(Config.NIMBUS_HOST);' | 8;
+        		'thrift_port = (int) map.get(Config.NIMBUS_THRIFT_PORT);' | 8;
+        		'logger.info("The nimubs host is " + nimbus_host + " and the thrift port is " + thrift_port);' | 8;
+				'id = 0;' | 8;
+				'both = false;' | 8;
+				'emit = true;' | 8;
+				'kryoSer = new KryoSwitchTupleSerializer(map);' | 8;
+				'queue = new ConcurrentLinkedQueue<ISwitchTuple>();' | 8;
+				'impNameToConfName = new HashMap<String, String>();' | 8;
+				'values = new ArrayList<Object>();' | 8;
+			}
+			if(genMultiTupleTypes) {
+				produceResultVariables(fe, true);		    	
+			} else {
+				'result = new $fImpName.$fImpOutputName();' | 8;
+			}
+				
+			/** initialize the algorithm based on the default one **/
+			Algorithm alg;
+			if(isConfigured(fe.defaultAlgorithm) and fe.defaultAlgorithm != null) {
+				alg = fe.defaultAlgorithm; //take the configured one
+			} else {
+				alg = fm.members.asSequence().first(); //take the first one 
+			}
+
+			String algClsName = algImplName(alg);
+			String cls = algQualifiedClsName(alg);	
+			if(newSwitch and hasDistAlgorithm(fm)) {//TODO:auto-generated subtopology has no clas configuration					
+				String algConfName = alg.name.firstToUpperCase().toIdentifier();
+				'impNameToConfName.put("$algClsName", "$algConfName");' | 12;
+			}
+			'if("STATIC".equals(map.get(Constants.CONFIG_KEY_INIT_MODE))) {' | 8;
+			'try {' | 12;
+			createAlgorithmInstance(destinations, ifName, cls, false, 16);
+			/* for hardware algorithm to requestion the hardware connections*/
+			if(isHardwareAlgorithm(alg) and dynamicHWUpload) {
+				HardwareAlgorithm hwAlg = alg;
+				requestHardwareConnections(hwAlg, true, hasDistAlgorithm(fm));
+			}
+			
+			
+				setDefaultParameterValue(alg.parameters, "map", "alg", 16);
+				'if (alg != null) {' | 16;
+				'            	alg.switchState(State.ACTIVATE); //activate the current algorithm'
+				'}' | 16;
+				if (initByAdaptation) {
+				'		    	sendAlgorithmChangeEvent("${algImplName(alg)}", null);' //TODO qualified class name instead of class name
+				}
+			
+			if(genMultiTupleTypes) {
+	    		if(hasDistAlgorithm(fm)) {//only generated for subtopology-based algorithm in the new version of the code
+	    			produceStreamId(fm, false);
+	    		}
+			} else {
+				if (!isManualSubtopology(alg)) {
+					'streamId = "$streamId";' | 20;
+		        } else {
+		         	topoStreamId = topoStreamId + "1" + topoStream; //.........have to adjust, for now hardcode to initial the first topo streamId			         			        
+					'streamId = "$topoStreamId";' | 20;
+	        	}
+			}
+				
+			 String spoutName = alg.name;
+			 String pipeline;
+			 if(alg.type() == "SubPipelineAlgorithm") {//for the generated sub-pipeline to use the sub-pipeline name
+			 	SubPipelineAlgorithm subAlg = alg;
+			 	spoutName = subAlg.subPipeline.name;
+			 	pipeline = spoutName;
+			 }
+			 if(!looseSub) {
+			 	pipeline = topoName;
+			 }
+		     if(newSwitch and hasDistAlgorithm(fm)) { 
+		     	 'originalAlg = "$algConfName";' | 16; //initialize with the first algorithm 
+		     	 'targetAlg = "$algConfName";'	| 16; //initialize with the first algorithm 
+		         'if(alg instanceof ITopologyCreate) {' | 16;
+            		'subTopologySpoutName = "${firstToUpperCase(toIdentifier(alg.name))}Intermediary";' | 20;
+        		'}' | 16;
+				'host${toIdentifier(firstToUpperCase(alg.name))} = initSubtopologyConnection("$pipeline", subTopologySpoutName); // get the executor host' | 16;
+			 }
+			 'algChange = true;' | 16;		
+			 catchThrowable(12);	 
+			 '}' | 8;
+			 if(newSwitch and !forSubPipeline and hasDistAlgorithm(fm)) {
+				'synQueue = new SynchronizedQueue<ISwitchTuple>(queue, QUEUE_SIZE);' | 8;
+			}
+			 if(looseSub and !forSubPipeline and hasSubPipeline) {
+			 	'genSer = new KryoGeneralTupleSerializer(map); ' | 8;
+			 	'swiSer = new KryoSwitchTupleSerializer(map); ' | 8;
+				'values = new ArrayList<Object>();' | 8; 
+				/*				
+			 	if(isGenSubtopology(alg)) { //generated software algorithm
+			 		SubPipelineAlgorithm subAlg = alg;
+			 		SubPipeline subPip = subAlg.subPipeline;
+			 		String subPipName = formulateString(subPip.name);
+			 		'PortManager portManager = getPortManager();' | 8;
+        			'PortAssignment assignment = null;' | 8;
+        			'while(assignment == null && portManager.isConnected()) {' | 8;
+		        		'try {' | 12;
+		        			'assignment = portManager.getPortAssignment("$subPipName", "${subPipName}Intermediary", 0, null);' | 16;
+						'} catch (SignalException e) {' | 12;
+							'e.printStackTrace();' | 16;
+						'}' | 12;
+        			'}' | 8;
+        			'if(assignment != null) {' | 8;
+			 			'host${toIdentifier(firstToUpperCase(alg.name))} = assignment.getHost();' | 12;
+			 			'port${toIdentifier(firstToUpperCase(alg.name))} = assignment.getPort();' | 12;
+			 		'}' | 8;
+			 	if(newSwitchLog) {
+			 		'logger.info("Connecting to the host : " + host${toIdentifier(firstToUpperCase(alg.name))} + ", the port: " + port${toIdentifier(firstToUpperCase(alg.name))});' | 8;
+		        	'out.println("Connecting to the host : " + host${toIdentifier(firstToUpperCase(alg.name))} + ", the port: " + port${toIdentifier(firstToUpperCase(alg.name))});' | 8;
+		        	'out.flush();' | 8;
+		        }
+			 	'sender = new TupleSender(host${toIdentifier(firstToUpperCase(alg.name))} , port${toIdentifier(firstToUpperCase(alg.name))});' | 8;    
+				}
+				* 
+				*/
+			 }	
+			 'initMonitor();' | 8;
+			 ''
+			 if(lastHasSubPipeline) { //generate for next consuming bolt
+			 	'queue = new ConcurrentLinkedQueue<IGeneralTuple>();' | 8;
+			 	'syn = new SynchronizedQueue<IGeneralTuple>(queue, QUEUE_SIZE);' | 8;
+//			 	'try {' | 8;
+        			'TupleReceiverHandler handler = new TupleReceiverHandler(genSer, syn);' | 8;
+        			produceDynamicPortObtainment();
+            		'server = new TupleReceiverServer(handler, port);' | 12;
+//        		'} catch (IOException e1) {' | 8;
+//            		'e1.printStackTrace();' | 12;
+//        		'}' | 8;
+        		'server.start();' | 8;
+        		''
+        		'Thread exeTupleThread = new Thread(new ExecuteTuple());' | 8;
+        		'exeTupleThread.start();' | 8;
+			 }
+			 'logger.info("The end of the prepare method.");' | 8;		
+		'    }'
+	    ''
+	    //override the initial monitor
+	    produceInitMonitor(true, 4);
+    			/****************************/
+		    	/*      execute method      */  
+		    	/****************************/	
+		if(lastHasSubPipeline) {
+		'/*' | 4;
+		'* A thread executes tuples.' | 4;
+		'*/' | 4;
+		'public class ExecuteTuple implements Runnable {' | 4;
+			'@Override' | 8;
+			'public void run() {' | 8;
+				'while(true) {' | 12;
+					'forwardTuple(syn.consume().getValue(0));' | 16;
+				'}' | 12;
+			'}' | 8;
+		'}' | 4;
+		}
+		''
+		'public void forwardTuple(Object tupleItem) {' | 4;  
+		 	if (genMonitoringProbes) {		
+			'        startMonitoring();'
+			}
+			'        // delegate to family "$fName"'
+			'if (!firstTuple) {//the first tuple arrived' | 8;
+				'firstTuple = true;' | 12;
+				'record = System.currentTimeMillis();' | 12;
+				//TOBEREMOVED!
+				if(logOutput) {
+					'recordOutput = System.currentTimeMillis();' 
+				}
+			'}' | 8;
+			if(!connector and receiveByField and subAlgName != "") {
+				'String sourceStreamId = tuple.getSourceStreamId();' | 8;
+			}
+			 //produce input -- output casting statement
+			produceInputForTuples(inputToOutputMapping, nameToOutputMap, elt, lastElt);		
+	
+			'if(!(alg instanceof ITopologyCreate)) {' | 8; //TODO check result!=null ?
+			if(debug) {
+			'logger.info("Emitting data with streamId: " + streamId + ", data:" + result);' | 12;		
+			}
+	        if (genMultiOutputs) {
+	        	if(genMultiTupleTypes) {
+	        		produceMultipleOutputs(elt, tupleToGrouping, 12);
+	        	} else {
+		            'eu.qualimaster.base.algorithm.IOutputItemIterator<$ifOutputName> iter = result.iterator();' | 12;
+				    'iter.reset();' | 12;
+				    'while (iter.hasNext()) {' | 12;
+				    '$ifOutputName out = iter.next();' | 16;
+				    'if(out != null) {' | 16;
+		            '_collector.emit(streamId, new Values(out));' | 20; 
+		            '}' | 16;
+				    '}' | 12;
+			    }
+			} else {
+	           	 '_collector.emit(streamId, new Values(result));' | 12; 
+			}
+			'}' | 8;
+	
+			'//		 _collector.ack(tuple);'
+	        if (genMonitoringProbes) {	
+			'        endMonitoring();'
+			}
+		'}' | 4;
+		''
+        '    @Override'
+        if (loadShedding) {
+        '    protected void doExecute(Tuple tuple) {'
+		} else {
+        '    public void execute(Tuple tuple) {'        
+        }		
+        	'forwardTuple(tuple.getValue(0));' | 8;
+        	if(newSwitch and forSubPipeline) {//acknowledge when it's using the switch for a sub-pipeline
+        		'_collector.ack(tuple);' | 8;
+        	}
+		'    }'
+	    ''
+    			/********************************/
+		    	/* notifyParameterChange method */  
+		    	/********************************/	    
+		sequenceOf(Parameter) parameters = fm.parameters;	           
+        if(fm.parameters.isConfigured() and parameters.size()>0 or (newSwitch and hasDistAlgorithm(fm))) {
+			'@Override' | 4;
+			'public void notifyParameterChange(ParameterChangeSignal signal) {' | 4;
+			'try {' | 8;
+			'for(int i = 0; alg!=null && i < signal.getChangeCount(); i++) {' | 8;
+			'ParameterChange para = signal.getChange(i);' | 12;			
+			'switch (para.getName()) {' | 12;			
+			for(Parameter p : parameters) {
+				String paraName = p.name;
+				String type = parameterTypeName(p);				
+				'case "$paraName" :' | 16;
+				Integer indent = 16;
+				if(formatException(type)) {
+					indent = 20;
+					'try {' | indent;
+				}
+				'System.out.println("Received parameter changing signal $paraName");' | indent+4;
+				'alg.setParameter${paraName.firstToUpperCase()}(para.get${type.firstToUpperCase()}Value()); ' | indent+4;
+				'sendParameterChangeEvent("$paraName", para.get${type.firstToUpperCase()}Value(), signal.getCauseMessageId());' | indent+4;
+				if(formatException(type)) {
+					'} catch (ValueFormatException e) {' | indent;
+						'e.printStackTrace();' | indent+4;
+					'}' | indent;
+				} else {
+					indent = indent+4;
+				}
+				'break;' | indent;
+				}
+				//original plain switch code
+				if(newSwitch and hasDistAlgorithm(fm)) {
+					'case "synchronized": //for switching' | 16; //fixed signal for switching
+					if(newSwitchLog) {
+	                    'out.println(Calendar.getInstance().getTimeInMillis() + "Received parameter changing signal synchronized: " + queue.size());' | 20;
+	                	'out.flush();' | 20;
+	                }
+	                    'emit = true;' | 20;
+	                    'sendAlgorithmChangeEvent(alg.getClass().getSimpleName(), null);' | 20;
+	                    Integer indent = 16;
+	                    /* 
+	                    if(!looseSub) {
+	                    'while(!queue.isEmpty()) {' | 20;
+	                    'if(emit && !both && !queue.isEmpty()) {' | indent+8;
+					    	'byte[] bytes = kryoSer.serialize(queue.poll());' | indent+12;
+						    for(Algorithm alg : fm.members) {
+					    		String algClsName = algImplName(alg);	
+					    		String aName = alg.name.firstToUpperCase().toIdentifier();
+					    		impNameToConfName.add(algClsName, aName);
+						    	'if(alg instanceof $algClsName) {' | indent+12;
+									'sendTo${aName}(bytes);' | indent+16;
+						    	'}' | indent+12;
+			        		}
+					    '}' | indent+8;
+					    '}' | 20;
+					    'queue.notifyAll();' | 20;
+					    }
+					    * 
+					    */
+	                    'break;' | 20;
+	                  'case "stopHWAlg": //stop the hardware algorithm' | 16;
+	                  	 if(newSwitchLog) {
+		                    'out.println(Calendar.getInstance().getTimeInMillis() + "Received stopHWAlg signal!!");' | 20;
+		                	'out.flush();' | 20;
+		                }
+		                if(hasHardwareAlgorithm(fm)) {
+	                    for(Algorithm alg : fm.members) {
+	                    	if(isHardwareAlgorithm(alg)) {	                    		
+		    					String algClsName = algImplName(alg);	
+	                    		'if(alg instanceof $algClsName) {' | 20; 
+	                    			'if(hardwareConnection != null) {' | 24;
+	                    				'try {' | 28;
+	                    				if(newSwitchLog) {
+						                    'out.println(Calendar.getInstance().getTimeInMillis() + "Stopping the hardware algorithm " + originalAlg);' | 20;
+						                	'out.flush();' | 20;
+						                }
+	                    				'hardwareConnection.stopAlgorithm(originalAlg);' | 32;
+	                    				'hardwareConnection.stopServer();//to be deleted, just for test' | 32;
+	                    				'hardwareConnection.close();' | 32;
+	                    				'} catch (IOException e) {' | 28;
+	                    					'e.printStackTrace();' | 32;
+	                    				'}' | 28;
+	                    			'}' | 24;
+	                    		'}' | 20;
+	                    	}
+	                    }
+	                    '//if switch back to software algorithm, the hardware connection should be closed.' | 20;
+	                    }
+                }
+			'}' | 12;
+			'}' | 8;
+			catchThrowable(8);
+			'}' |4;		
+		}
+
+				/********************************/
+				/* notifyAlgorithmChange method */
+				/********************************/	
+	Integer algTopoCount = 1;
+		'@Override' | 4;
+		'public void notifyAlgorithmChange(AlgorithmChangeSignal signal) {' | 4;
+		'logger.info("Received algorithm switching signal " + signal.getAlgorithm());' | 8;	
+		if(newSwitchLog and hasDistAlgorithm(fm)) {
+		'out.println(Calendar.getInstance().getTimeInMillis() + "Received algorithm switching signal " + signal.getAlgorithm());' | 8;	
+		'out.flush();' | 8;
+		}
+		'try {' | 8;
+		'switch (signal.getAlgorithm()) {' | 8;	
+		for(Algorithm alg : fm.members) {
+			String algClsName = algImplName(alg);
+			String algName = alg.name;
+			String cls = algQualifiedClsName(alg);								
+	     	/* generated for subtopology (distributed) algorithms */    
+		    if(isDistAlgorithm(alg)) { 
+		    	topoStreamId = elt.varName();
+		    	topoStreamId = topoStreamId + "$algTopoCount" + topoStream;
+		    	if(algClsName != algName) {
+				'case "$algName":' | 12;
+				}
+				'case "$algClsName":' | 12;
+				if(newSwitchLog and hasDistAlgorithm(fm)) {
+					'out.println(Calendar.getInstance().getTimeInMillis() + "Is it the first change? " + algChange);' | 16;	
+					'out.flush();' | 16;
+				}
+				'logger.info("Is it the first change? " + algChange);' | 16;
+				'if(!algChange || !(alg instanceof $algClsName)) {' | 16;
+				'logger.info("Changing to the algorithm: " + signal.getAlgorithm());' | 20;
+				if(newSwitchLog and hasDistAlgorithm(fm)) {
+					'out.println(Calendar.getInstance().getTimeInMillis() + "Changing to the algorithm: " + signal.getAlgorithm());' | 20;	
+					'out.flush();' | 20;
+				}
+				if(!newSwitch) {
+					'if(alg != null) {' | 20;
+						'alg.switchState(State.PASSIVATE); //passivate the previous algorithm' | 24;
+					'}' | 20;
+				}
+		        createAlgorithmInstance(destinations, ifName, cls, true, 20);
+				/*** Hardware algorithm ***/
+				if(isHardwareAlgorithm(alg) and dynamicHWUpload) {
+					HardwareAlgorithm hwAlg = alg;
+					requestHardwareConnections(hwAlg, false, hasDistAlgorithm(fm));
+				}
+				
+				//wait the port assignment
+				if(looseSub and isGenSubtopology(alg)) { //generated software algorithm				
+			 		SubPipelineAlgorithm subAlg = alg;
+			 		SubPipeline subPip = subAlg.subPipeline;
+			 		String subPipName = formulateString(subPip.name);
+			 		'PortManager portManager = getPortManager();' | 20;
+        			'PortAssignment assignment = null;' |20;
+        			'while(assignment == null && portManager.isConnected()) {' | 20;
+		        		'try {' | 24;
+		        			'assignment = portManager.getPortAssignment(getPipeline(), "${alg.name}Intermediary", 0, null);' | 28;
+						'} catch (SignalException e) {' | 24;
+							'e.printStackTrace();' | 28;
+						'}' | 24;
+        			'}' | 20;
+        			'if(assignment != null) {' | 20;
+			 			'host${toIdentifier(firstToUpperCase(alg.name))} = assignment.getHost();' | 24;
+			 			'port${toIdentifier(firstToUpperCase(alg.name))} = assignment.getPort();' | 24;
+			 		'}' | 20;
+			 	if(newSwitchLog) {
+			 		'logger.info("Connecting to the host : " + host${toIdentifier(firstToUpperCase(alg.name))} + ", the port: " + port${toIdentifier(firstToUpperCase(alg.name))});' | 20;
+		        	'out.println("Connecting to the host : " + host${toIdentifier(firstToUpperCase(alg.name))} + ", the port: " + port${toIdentifier(firstToUpperCase(alg.name))});' | 20;
+		        	'out.flush();' | 20;
+		        }
+			 	'sender = new TupleSender(host${toIdentifier(firstToUpperCase(alg.name))} , port${toIdentifier(firstToUpperCase(alg.name))});' | 20; 
+			 	
+			 	//Algorithm specific -- only for the correlation algorithms!!!
+			 	if(sendSymbolList) {
+					'//send the symbolList explicitly only for the correlation algorithms'
+					'if(iTupleSymbolList != null) {'
+                    'List<Object> list = new ArrayList<Object>();'
+                    'list.add(iTupleSymbolList);'
+                    'ISwitchTuple symbolTuple = new SwitchTuple(id, list);'
+                    'byte[] bytes = kryoSer.serialize(symbolTuple);'
+                    'sendTo${toIdentifier(firstToUpperCase(alg.name))}(bytes);'
+                	'}'
+				}   
+				}
+				
+				if(newSwitch) {
+					if(!looseSub) {
+						'subTopologySpoutName = "${firstToUpperCase(toIdentifier(alg.name))}Intermediary";' | 20;
+						'host${toIdentifier(firstToUpperCase(alg.name))} = initSubtopologyConnection("$topoName", subTopologySpoutName);' | 20;
+					}
+					'startRecord = Calendar.getInstance().getTimeInMillis();' | 20;
+					'targetAlg = "${firstToUpperCase(toIdentifier(alg.name))}";' | 20;
+					'if(algChange) { //switch algorithm change' | 20;
+						'duration = Math.max(500, signal.getIntParameter(AlgorithmChangeParameter.WARMUP_DELAY, DEFAULT_WARMUP_DELAY));' | 24;
+						'both = true;' | 24;	
+						'originalAlg = impNameToConfName.get(alg.getClass().getSimpleName());' | 24;
+					'}' | 20;
+					
+				}
+				if(genMultiTupleTypes) {
+					String sId = formulateString(elt.varName()) + formulateString(alg.name);
+					'streamId = "$sId";' | 20;
+				} else {
+					'streamId = "$topoStreamId";' | 20;
+				}
+				
+				if(newSwitch) {
+					'if(!algChange) {//initialize the algorithm' | 20;
+						setDefaultParameterValue(alg.parameters, "", "alg", 24);
+					'} else {//switch to the algorithm' | 20;
+						setDefaultParameterValue(alg.parameters, "", "algSwitch", 24);
+					'}' | 20;
+				} else {
+					setDefaultParameterValue(alg.parameters, "", "alg", 20);
+				}
+				Integer indent = 20;
+				if(newSwitch) {
+					'if(!algChange) {' | 20;
+					indent = indent + 4;
+				}
+				'sendAlgorithmChangeEvent("$algClsName", signal.getCauseMessageId());' | indent;
+				if(newSwitch) {
+					'}' | 20;
+				}
+				
+				if(!newSwitch) {				
+				'if(alg != null) {' | 20;	
+					'alg.switchState(State.ACTIVATE); //activate the current algorithm' | 24;
+				'}' | 20;	
+				}
+				'algChange = true;' | 20;
+				'}' | 16;
+			    'break;' | 16;
+	    	    algTopoCount = algTopoCount + 1;
+		    } else { 
+			    /* generated for normal Java algorithms */
+			    'case "$algClsName":' | 12;
+				'if (!algChange || !(alg instanceof $algClsName)) {' | 16;
+				'algChange = true;' | 20;
+				'if(alg != null) {' | 20;
+					'alg.switchState(State.PASSIVATE); //passivate the previous algorithm' | 24;
+				'}' | 20;
+		        createAlgorithmInstance(destinations, ifName, cls, true, 20);
+				if(!genMultiTupleTypes) {			
+					'streamId = "$streamId";'  | 20;	
+				}
+				setDefaultParameterValue(alg.parameters, "", "alg", 20);
+				'sendAlgorithmChangeEvent("$algClsName", signal.getCauseMessageId());' | 20;
+				'if(alg != null) {' | 20;
+				'alg.switchState(State.ACTIVATE); //activate the current algorithm' | 24;
+				'}' | 20;
+				'}' | 16;
+				'break;' | 16;
+		    }						
+		}		
+		'}' | 8;	
+		'super.notifyAlgorithmChange(signal);' | 8;
+		catchThrowable(8);
+		'}' | 4;
+			      
+        ''
+				/************************************/
+				/* checkDisconnect method --not used*/
+				/************************************/    	
+	   	Boolean hasHW = false;
+	    if(hasHW){ // only generate when there is hardware algorithm
+	    '/**' | 4;
+	    '* Checks if the FamilyElement connects to hardware.' | 4;
+	    '* @param alg the family algorithm' | 4;
+	    '**/' | 4;
+	    '    protected void checkDisconnect($ifName alg) {'
+	    '        if (alg instanceof HardwareStub) {'
+		'            ((HardwareStub) alg).disconnect();'
+		'            }'
+	    '    }'
+	    ''	    	
+	    }
+				/****************************/
+				/*     cleanup method       */
+				/****************************/
+	    '    @Override'
+        '    public void cleanup() {'
+        '        super.cleanup();'
+        'if(alg != null) {' | 8;
+        'alg.switchState(State.TERMINATING);' | 12;
+        '}' | 8;
+        if(newSwitch and hasHardwareAlgorithm(fm)) {
+        'if(hardwareConnection != null) {' | 24;
+				'try {' | 28;
+				'hardwareConnection.stopServer();' | 32;
+				'hardwareConnection.close();' | 32;
+				'} catch (IOException e) {' | 28;
+					'e.printStackTrace();' | 32;
+				'}' | 28;
+			'}' | 24;
+			}
+        '    }'
+        '' 
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/              
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'				
+		if(genMultiTupleTypes) {
+			produceStreamIdDeclaration(elt, (subAlgName != ""), 8);
+		} else {
+			'        declarer.declareStream("$streamId", new Fields("$ifOutputName"));'
+			Integer algCount = 1;	
+			for(Algorithm alg : fm.members) {
+			    //declare all streamId of the topo-based algorithm
+			    if(isDistAlgorithm(alg)) { 
+			    	String algStreamId = elt.varName();
+			    	algStreamId = algStreamId + "$algCount" + topoStream;
+			    	'        declarer.declareStream("$algStreamId", new Fields("$ifOutputName"));'
+			    	algCount = algCount + 1;
+			    }  
+			}
+		}	
+		'    }'
+    	''
+    	
+    	/********************************* */
+    	/*******Prepare shut down signal** */
+    	/********************************* */
+    	'@Override' | 4;
+    	'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+        	'super.prepareShutdown(signal);' | 8;
+        	'if(alg != null) {' | 8;
+        		'alg.switchState(State.TERMINATING);' | 12;
+        	'}' | 8;
+    	'}' | 4;
+		''
+    	if((looseSub and hasSubPipeline) or (newSwitch and hasDistAlgorithm(fm)) and !forSubPipeline ) {
+    	'private String initSubtopologyConnection(String pipeline, String executor) {' | 4;
+        	'String host = new CollectingTopologyInfo(pipeline, executor, nimbus_host, thrift_port).getExecutorHost();' | 8;
+        	'logger.info("The executor: " + executor + "-- host: " + host); ' | 8;
+        	'return host;' | 8;
+     	'}' | 4;
+    	''
+    	}
+    	if((newSwitch and hasDistAlgorithm(fm)) and !forSubPipeline ) {
+    	for(Algorithm alg : fm.members) {
+    		String aName = alg.name.firstToUpperCase().toIdentifier();
+    		if(isDistAlgorithm(alg)) { //generate only when the algorithm is subtopology
+    	'public boolean connect${aName}() {' | 4;
+        	'Socket s = null;' | 8;
+        	'if(null == socket${aName}) {' | 8;
+            	'try {' | 12;               
+	                'System.out.println("FM--Creating the socket with the host: " + host${aName} + " and the port: " + port${aName});' | 16;
+	                's = new Socket(host${aName},port${aName});' | 16; 
+	                'output${aName} = new Output(s.getOutputStream());' | 16;
+	                'socket${aName} = s;' | 16;
+            	'} catch (UnknownHostException e) {' | 12;
+                	'e.printStackTrace();' | 16;
+            	'} catch (IOException e) {' | 12;
+                	'e.printStackTrace();' | 16;
+            	'}' | 12;
+        	'}' | 8;
+        	'return null != socket${aName};' | 8;
+    	'}' | 4;
+    	''
+    	'public void sendTo${aName}(byte[] bytes) {' | 4;
+    		'if(connect${aName}()) {' | 8;
+    			'try {' | 12;
+				'output${aName}.writeInt(bytes.length);' | 16;
+				'output${aName}.writeBytes(bytes);' | 16;
+				'output${aName}.flush();' | 16;
+				'emitted(bytes);' | 16;
+				'} catch (KryoException e) {' | 12;
+					'e.printStackTrace();' | 16;
+				'}' | 12;
+			'}'| 8;
+    	'}' | 4;
+    	}
+    	}
+    	}
+    	'}'
+    }       
+}

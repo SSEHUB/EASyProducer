@@ -1,0 +1,16 @@
+Adaptivity::updateFrequency = Adaptation frequency (ms)|Longest distance between two adaptation runs in milliseconds.
+Adaptivity::updateFrequencyLimit = Update Frequency must be 0 or more than 500
+Adaptivity::capacityLowWatermark = Pipeline node low load (%)|The lower load (percentage) boundary causing resource re-allocation for scale-in
+Adaptivity::capacityHighWatermark = Pipeline node high load (%)|The upper load (percentage) boundary causing resource re-allocation for scale-out
+Adaptivity::capacityHighLowWatermark = Pipeline node low load watermark must be smaller than high watermark
+Adaptivity::capacityPipelineSheddingWatermark = Pipeline shedding load (%)|The boundary causing load shedding for extreme overload cases.
+Adaptivity::capacityPipelineSheddingWatermarkMin = Pipeline shedding load must be larger than 0.5 (recommended 0.8 or higher)
+Adaptivity::capacityAveragePipelineOverload = Pipeline overload (%)|Average boundary enabling overload adaptation
+Adaptivity::capacityAveragePipelineOverloadMin = Pipeline overload load must be larger than 0.5 (recommended 0.8 or higher)
+Adaptivity::pipelineImportance = Pipeline observable weights|Weights to prioritize the importance of individual observables in single-pipeline adaptation.
+Adaptivity::crossPipelineTradeoffs = Cross-pipeline observable weights|Weights to prioritize the importance of individual observables in cross-pipeline adaptation.
+Adaptivity::supportsTaskReallocation = support task reallocation|Does the installed platform support task reallocation - set by monitoring.
+Adaptivity::maxClusterAllocation = maximum cluster allocation|The maximum rate the cluster shall be allocated, the rest shall be residual.
+Adaptivity::QualityParameterWeighting = Defines the weighting for a quality parameter.
+Adaptivity::QualityParameterWeighting::parameter = quality parameter|The quality parameter to define a weight for.
+Adaptivity::QualityParameterWeighting::weight = weight|The weight to indicate tradeoffs between quality parameters. Negative values cause an inversion by the actual maximum and a weighting by the absolute value.

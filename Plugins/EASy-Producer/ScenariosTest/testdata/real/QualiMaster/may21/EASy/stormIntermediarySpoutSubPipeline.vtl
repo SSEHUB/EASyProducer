@@ -1,0 +1,192 @@
+import commonVTLMethods;
+@advice(QM)
+template stormIntermediarySpoutSubPipeline(Configuration config, FileArtifact target, String topoName, Algorithm algorithm) {
+	def main(Configuration config, FileArtifact target, String topoName, Algorithm algorithm) {
+
+		'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	''
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/ 
+		'import java.util.Calendar;'
+		'import java.util.Map;'
+		'import java.util.Queue;'
+		'import java.util.LinkedList;'
+		'import java.util.concurrent.ConcurrentLinkedQueue;'
+		'import java.net.InetAddress;'
+		'import java.net.UnknownHostException;'
+		'import org.apache.log4j.Logger;'
+		'import java.io.IOException;'
+
+		'import backtype.storm.Config;'
+		'import backtype.storm.spout.SpoutOutputCollector;'
+		'import backtype.storm.task.TopologyContext;'
+		'import backtype.storm.topology.OutputFieldsDeclarer;'
+		'import backtype.storm.tuple.Fields;'
+		'import backtype.storm.tuple.Values;'
+		'import eu.qualimaster.base.algorithm.IGeneralTuple;'
+		'import eu.qualimaster.base.algorithm.ISwitchTuple;'
+		'import eu.qualimaster.base.pipeline.CollectingTopologyInfo;'
+		'import eu.qualimaster.common.signal.BaseSignalSpout;'
+		'import eu.qualimaster.common.signal.ParameterChange;'
+		'import eu.qualimaster.common.signal.ParameterChangeSignal;'
+		'import eu.qualimaster.common.signal.ShutdownSignal;'
+		'import eu.qualimaster.common.signal.SignalException;'
+		'import eu.qualimaster.common.signal.ValueFormatException;'
+		'import eu.qualimaster.common.switching.*;'
+		'import eu.qualimaster.common.switching.IState.SwitchState;'
+		'import eu.qualimaster.families.imp.*;'
+		'import eu.qualimaster.families.inf.*;'
+		'import eu.qualimaster.common.signal.PortManager.*;'
+		'import eu.qualimaster.common.signal.PortManager;'
+		if(newSwitchLog) {
+			'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+		}
+ 
+		/****************************/
+    	/*        Spout class        */  
+    	/****************************/    	
+    	'/**'
+    	'* Define the intermediary Spout class.'
+    	'* @generated'
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	String name = formulateString(algorithm.name) + "Intermediary";
+    	'public class $name extends BaseSwitchSpout {'
+    		'private static final Logger LOGGER = Logger.getLogger($name.class);' | 4;
+    		'private static int QUEUE_SIZE = 100;' | 4;
+    		'private transient SpoutOutputCollector _collector;' | 4;
+    		'private String streamId;' | 4;
+    		'private String nimbus_host = "localhost";' | 4;
+    		'private int thrift_port = 6027;' | 4;
+    		'private int port;' | 4;
+			'private transient AbstractSwitchMechanism mechanism;' | 4;
+			'private transient AbstractSwitchStrategy strategy;' | 4;
+    		'private transient TupleReceiverServer server;' | 4;
+    		'private Object msgId;' | 4;  
+    		'private boolean isClosed = false;' | 4;		
+	    	if(newSwitchLog) {
+				'private transient PrintWriter out = null;' | 4;
+			}
+    		''
+    		/****************************/
+		    /*    Class constructor     */  
+		    /****************************/  
+    		'public $name(String name, String namespace, String streamId) {' | 4;
+        		'super(name, namespace,$genMonitoringProbes);' | 8; 
+        		'this.streamId = streamId;' | 8;
+    		'}' | 4;
+    		''
+    		    /****************************/
+		    	/*     open method          */  
+		    	/****************************/    	
+    	'    @Override'
+        '    public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {'
+        '		 super.open(conf, context, collector);'
+        '        _collector = collector;' 
+        		if(newSwitchLog) {
+        			'String logDir = (String) conf.get("LOG.DIRECTORY");' | 8;
+        			'out = DataLogger.getPrintWriter(logDir + "${name}.log");' | 8;
+				}
+        		'nimbus_host = (String) conf.get(Config.NIMBUS_HOST);' | 8;
+        		'thrift_port = (int) conf.get(Config.NIMBUS_THRIFT_PORT);' | 8;        		
+        		'strategy = new SeparateIntermediaryStrategy(conf, SwitchState.ACTIVE_DEFAULT);' | 8; //TODO:Determine the default state from the configuration
+        		'mechanism = new ParallelTrackSwitchMechanism(strategy);' | 8;
+        		'setSwitchMechanism(mechanism);' | 8;
+        		'String localhost = "localhost";' | 8;
+        		'try {' | 8;
+					'localhost = InetAddress.getLocalHost().getCanonicalHostName();' | 12;
+				'} catch (UnknownHostException e1) {' | 8;
+					'e1.printStackTrace();' | 12;
+				'}' | 8;
+        		'PortAssignmentRequest portRequest = new PortAssignmentRequest(getPipeline(), getName(), 0, localhost, null);' | 8;
+        		'PortManager portManager = getPortManager();' | 8;
+        		'try {' | 8;
+					'PortAssignment assignment = portManager.registerPortAssignment(portRequest);' | 12;
+					'port = assignment.getPort();' | 12;
+					if(newSwitchLog) {
+					'LOGGER.info("Assigned port: " + port + " for the pipeline: " + portRequest.getPipeline() + ", the element: " + portRequest.getElement() + ", the port request:" + portRequest);' | 12;
+					'out.println("Assigned port: " + port + " for the pipeline: " + portRequest.getPipeline() + ", the element: " + portRequest.getElement() + ", the port request:" + portRequest);' | 12;
+					'out.flush();' | 12;
+					}
+					'} catch (SignalException e) {' | 8;
+						'e.printStackTrace();' | 12;
+				'}' | 8;
+            	'server = new TupleReceiverServer(strategy.getTupleReceiverHandler(), port);' | 8;
+        		'server.start();' | 8;
+        		'initMonitor();' | 8;
+        '	 }'
+        ''     
+        //override the initial monitor
+	    produceInitMonitor(false, 4);
+	    ''  
+		    	/****************************/
+		    	/*     nextTuple method     */  
+		    	/****************************/        
+        '    @Override'
+        '    public void nextTuple() {'
+        		'IGeneralTuple tuple = mechanism.getNextTuple();' | 8;
+        		'if(tuple != null) {' | 8;
+        			'if(tuple.isGeneralTuple()) {' | 12;
+		        		if(newSwitchLog) {
+		        			'out.println("Received GENERAL data and emitting...");' | 16;
+		        			'out.flush();' | 16;
+		        		}
+		        			'_collector.emit(streamId, tuple.getValues());' | 16;
+		        	'} else {' | 12;
+		        		if(newSwitchLog) {
+		        			'out.println("Received SWITCH data and emitting...");' | 16;
+		        			'out.flush();' | 16;
+		        		}
+		        			'ISwitchTuple swiTuple = (ISwitchTuple)tuple;' | 16;
+	            			'Object msgId = swiTuple.getId();' | 16;
+		        			'_collector.emit(streamId, tuple.getValues(), msgId);' | 16;
+		        	'}' | 12;
+        		'}' | 8;
+    	'}' | 4;
+    			''
+				/************************************/
+				/**********   ack method     ********/
+				/************************************/         			
+    			'@Override' | 4;
+    			'public void ack(Object msgId) {' | 4;
+        			'LOGGER.info("Acking the processed tuple: " + msgId);' | 8;
+        			'super.ack(msgId);' | 8;
+    			'}' | 4;
+    			''
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/     	
+    	'public void declareOutputFields(OutputFieldsDeclarer declarer) {' | 4;
+        	'declarer.declareStream(streamId, new Fields("tuple"));' | 8;
+    	'}' | 4;  	
+		''  
+				/************************************/
+				/*   close method     */
+				/************************************/ 
+		'@Override' | 4;
+    	'public void close() {' | 4;
+        'super.close();' | 8;
+        'isClosed = true;' | 8;
+        'try {' | 8;
+            'server.stop();' | 12;
+        '} catch (IOException e) {' | 8;
+            'e.printStackTrace();' | 12;
+        '}' | 8;
+    	'}' | 4;
+    ''
+    '@Override' | 4;
+    'protected void prepareShutdown(ShutdownSignal signal) {' | 4;
+        'super.close();' | 8;
+        'isClosed = true;' | 8;
+        'try {' | 8;
+            'server.stop();' | 12;
+        '} catch (IOException e) {' | 8;
+            'e.printStackTrace();' | 12;
+        '}' | 8;
+    '}' | 4;
+	'}'
+	}
+}

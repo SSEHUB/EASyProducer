@@ -1,0 +1,39 @@
+project Integration {
+
+    import Basics;
+    import Families;
+    import Pipelines;
+    import Batching;
+    import Infrastructure;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to Integration;
+
+    abstract compound Style { // CComponent requires too much here, define on top
+        refTo(Pipeline) pipeline;
+        refTo(Job) job; // -> AbstractJob, requires constraint function for input/output
+        
+        /* left out for initial testing */
+        Constraint pipelineOk = /*isDefined(pipeline) and*/ activePipelines->includes(pipeline);
+        Constraint jobOk = /*isDefined(job) and*/ activeJobs->includes(job);
+        Constraint inputOk = getSources(job)->exists(js|pipeline.sources->exists(s|fieldOverlapCheck(js.input, s.source.input)));
+        Constraint outputOk = getSinks(job)->exists(js|sinks(pipeline)->exists(s|fieldOverlapCheck(js.output, s.sink.output)));
+    }
+    
+    compound LambdaStyle refines Style {
+    }
+    
+    compound KappaStyle refines Style {
+    }
+    
+    setOf(refTo(Style)) styles;
+    
+    def setOf(refTo(PipelineNode)) allNodes(Pipeline pip) = 
+        pip.sources->closure(refTo(PipelineNode) n|nextNodes(n));
+        
+    def setOf(refTo(PipelineNode)) nextNodes(PipelineNode n) = {};
+    def setOf(refTo(PipelineNode)) nextNodes(Source s) = s.output->collect(f|f.destination);
+    def setOf(refTo(PipelineNode)) nextNodes(ProcessingElement e) = e.output->collect(f|f.destination);
+    
+    def setOf(refTo(Sink)) sinks(Pipeline pip) = allNodes(pip)->selectByKind(refTo(Sink));
+
+}

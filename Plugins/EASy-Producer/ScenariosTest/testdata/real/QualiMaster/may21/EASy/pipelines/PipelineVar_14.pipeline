@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline:Pipeline xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pipeline="pipeline" name="ReflectiveRandomPip" artifact="eu.qualimaster:ReflectiveRandomPip:0.0.1-SNAPSHOT">
+  <nodes xsi:type="pipeline:Source" name="src" source="2">
+    <permissibleParameters>DataManagementCfg::randomSource.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:FamilyElement" name="processor" family="5">
+    <permissibleParameters>FamiliesCfg::randomFamily.parameters[2]</permissibleParameters>
+    <permissibleParameters>FamiliesCfg::randomFamily.parameters[1]</permissibleParameters>
+    <permissibleParameters>FamiliesCfg::randomFamily.parameters[0]</permissibleParameters>
+  </nodes>
+  <nodes xsi:type="pipeline:Sink" name="snk" sink="1"/>
+  <flows name="f1" source="//@nodes.0" destination="//@nodes.1" tupleType="DataManagementCfg::randomSource.input[0]"/>
+  <flows name="f2" source="//@nodes.1" destination="//@nodes.2" tupleType="FamiliesCfg::randomFamily.output[0]"/>
+</pipeline:Pipeline>

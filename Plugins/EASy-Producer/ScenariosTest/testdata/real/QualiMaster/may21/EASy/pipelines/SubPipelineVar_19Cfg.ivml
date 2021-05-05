@@ -1,0 +1,72 @@
+project SubPipelineVar_19Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to SubPipelineVar_19Cfg;
+	SubPipeline SubPipelineVar_19;
+	FamilyElement SubPipelineVar_19_FamilyElement0;
+	Flow SubPipelineVar_19_Flow0;
+	FamilyElement SubPipelineVar_19_FamilyElement1;
+	SubPipelineVar_19_FamilyElement1 = FamilyElement {
+		family = refBy(fHayashiYoshida), 
+		output = {}, 
+		parallelism = 14, 
+		name = "HY", 
+		constraints = {}
+	};
+	SubPipelineVar_19_Flow0 = Flow {
+		destination = refBy(SubPipelineVar_19_FamilyElement1), 
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(FamiliesCfg::fMapper.output[0]), 
+		name = "f1", 
+		constraints = {}
+	};
+	Flow SubPipelineVar_19_Flow1;
+	SubPipelineVar_19_Flow1 = Flow {
+		destination = refBy(SubPipelineVar_19_FamilyElement1), 
+		grouping = Grouping.directGrouping, 
+		tupleType = refBy(FamiliesCfg::fMapper.output[1]), 
+		name = "f2", 
+		constraints = {}
+	};
+	Flow SubPipelineVar_19_Flow2;
+	SubPipelineVar_19_Flow2 = Flow {
+		destination = refBy(SubPipelineVar_19_FamilyElement1), 
+		grouping = Grouping.allGrouping, 
+		tupleType = refBy(FamiliesCfg::fMapper.output[2]), 
+		name = "f3", 
+		constraints = {}
+	};
+	SubPipelineVar_19_FamilyElement0 = FamilyElement {
+		family = refBy(fMapper), 
+		output = {
+			refBy(SubPipelineVar_19_Flow0), refBy(SubPipelineVar_19_Flow1), refBy(SubPipelineVar_19_Flow2)
+		}, 
+		parallelism = 1, 
+		name = "MP", 
+		constraints = {}
+	};
+	SubPipelineVar_19 = SubPipeline {
+		connectors = {
+			refBy(SubPipelineVar_19_FamilyElement0)
+		}, 
+		subPipelineFamily = refBy(FamiliesCfg::fCorrelationFinancial), 
+		name = "CorrelationSWAlternative", 
+		sources = {}, 
+		numworkers = 4, 
+		artifact = "eu.qualimaster:CorrelationSWAlternative:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		SubPipelineVar_19;
+		SubPipelineVar_19_FamilyElement0;
+		SubPipelineVar_19_Flow0;
+		SubPipelineVar_19_FamilyElement1;
+		SubPipelineVar_19_Flow1;
+		SubPipelineVar_19_Flow2;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

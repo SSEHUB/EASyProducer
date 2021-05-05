@@ -1,0 +1,3370 @@
+project AlgorithmsCfg {
+
+	import ReconfigurableHardware;
+	import ReconfigurableHardwareCfg;
+	import Algorithms;
+	import BasicsCfg;
+    import ComplexTypesCfg;
+	import PipelinesCfg;
+	SoftwareAlgorithm swPreprocessor;
+	SoftwareAlgorithm SWTopoCorrelationFinancial;
+	SoftwareAlgorithm HWTopoCorrelationFinancial;
+	HardwareAlgorithm GenHWTopoCorrelationFinancial;
+	SoftwareAlgorithm HWTopoCorrelationTwitter;
+	SoftwareAlgorithm SWTopoCorrelationTwitter;
+	SoftwareAlgorithm topoSentiWord;
+	SoftwareAlgorithm topoSVM;
+	SoftwareAlgorithm mismatchedAlg;
+	SoftwareAlgorithm randomAlg1;
+	SoftwareAlgorithm randomAlg2;
+	SoftwareAlgorithm switchAlg1;
+	SoftwareAlgorithm switchAlg2;
+	HardwareAlgorithm switchAlgHw;
+	SoftwareAlgorithm preprocessorTest;
+	SoftwareAlgorithm financialCorrelationTest;
+	SoftwareAlgorithm sentimentAnalysisTest;
+	SoftwareAlgorithm twitterCorrelationTest;
+	SoftwareAlgorithm AlgorithmVar_18;
+	SoftwareAlgorithm AlgorithmVar_19;
+	SoftwareAlgorithm AlgorithmVar_20;
+	SoftwareAlgorithm AlgorithmVar_21;
+	SoftwareAlgorithm AlgorithmVar_22;
+	SoftwareAlgorithm AlgorithmVar_23;
+	SoftwareAlgorithm AlgorithmVar_24;
+	SoftwareAlgorithm recommendations;
+	SoftwareAlgorithm eventEnrichment;
+	SoftwareAlgorithm keywordAnalyzer;
+	SoftwareAlgorithm tweetClassifier;
+	SoftwareAlgorithm spamRemoval;
+	SoftwareAlgorithm spamDetection;
+	SoftwareAlgorithm twitterStreamFiltering;
+	SoftwareAlgorithm twitterCrawling;
+	SoftwareAlgorithm expertSearch;
+	SoftwareAlgorithm financialNetworkExtraction;
+	SoftwareAlgorithm AlgorithmVar_25;
+	SoftwareAlgorithm AlgorithmVar_26;
+	SoftwareAlgorithm AlgorithmVar_27;
+	HardwareAlgorithm AlgorithmVar_28;
+	SoftwareAlgorithm aMapper;
+	SoftwareAlgorithm aHayashiYoshida;
+	SubPipelineAlgorithm correlationSW;
+	SoftwareAlgorithm SoftwareAlgorithmVar_29;
+	HardwareAlgorithm HardwareAlgorithmVar_30;
+	HardwareAlgorithm HardwareAlgorithmVar_31;
+	SubPipelineAlgorithm SubPipelineAlgorithmVar_32;
+	SoftwareAlgorithm SoftwareAlgorithmVar_33;
+	SoftwareAlgorithm SoftwareAlgorithmVar_34;
+	SoftwareAlgorithm SoftwareAlgorithmVar_35;
+	SoftwareAlgorithm SoftwareAlgorithmVar_36;
+	SubPipelineAlgorithm SubPipelineAlgorithmVar_37;
+	SubPipelineAlgorithm SubPipelineAlgorithmVar_38;
+    SoftwareAlgorithm SoftwareAlgorithmVar_39;
+    SoftwareAlgorithm SoftwareAlgorithmVar_40;
+    SoftwareAlgorithm SoftwareAlgorithmVar_41;
+    SoftwareAlgorithm SoftwareAlgorithmVar_42;
+    SoftwareAlgorithm SoftwareAlgorithmVar_43;
+    SoftwareAlgorithm SoftwareAlgorithmVar_44;
+    SoftwareAlgorithm SoftwareAlgorithmVar_45;
+    SoftwareAlgorithm SoftwareAlgorithmVar_46;
+	algorithms = {
+		refBy(swPreprocessor), refBy(SWTopoCorrelationFinancial), refBy(HWTopoCorrelationFinancial), refBy(SWTopoCorrelationTwitter), refBy(HWTopoCorrelationTwitter), refBy(topoSentiWord), refBy(topoSVM), refBy(mismatchedAlg), refBy(randomAlg1), refBy(randomAlg2), refBy(switchAlg1), refBy(switchAlg2), refBy(switchAlgHw), refBy(preprocessorTest), refBy(financialCorrelationTest), refBy(sentimentAnalysisTest), refBy(twitterCorrelationTest), refBy(AlgorithmVar_18), refBy(AlgorithmVar_19), refBy(AlgorithmVar_20), refBy(AlgorithmVar_21), refBy(AlgorithmVar_22), refBy(AlgorithmVar_23), refBy(AlgorithmVar_24), refBy(recommendations), refBy(eventEnrichment), refBy(keywordAnalyzer), refBy(tweetClassifier), refBy(spamRemoval), refBy(spamDetection), refBy(twitterStreamFiltering), refBy(twitterCrawling), refBy(expertSearch), refBy(financialNetworkExtraction), refBy(AlgorithmVar_25), refBy(AlgorithmVar_26), refBy(AlgorithmVar_27), refBy(GenHWTopoCorrelationFinancial), refBy(AlgorithmVar_28), refBy(aMapper), refBy(aHayashiYoshida), refBy(correlationSW), refBy(SoftwareAlgorithmVar_29), refBy(HardwareAlgorithmVar_30), refBy(HardwareAlgorithmVar_31), refBy(SubPipelineAlgorithmVar_32), refBy(SoftwareAlgorithmVar_33), refBy(SoftwareAlgorithmVar_34), refBy(SoftwareAlgorithmVar_35), refBy(SoftwareAlgorithmVar_36), refBy(SubPipelineAlgorithmVar_37), refBy(SubPipelineAlgorithmVar_38), refBy(SoftwareAlgorithmVar_39), refBy(SoftwareAlgorithmVar_40), refBy(SoftwareAlgorithmVar_41), refBy(SoftwareAlgorithmVar_42), refBy(SoftwareAlgorithmVar_43), refBy(SoftwareAlgorithmVar_44), refBy(SoftwareAlgorithmVar_45), refBy(SoftwareAlgorithmVar_46)
+	};
+	algorithms.bindingTime = BindingTime.compile;
+	swPreprocessor = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.Preprocessor", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "Preprocessor", 
+		input = {
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-preprocessor:3.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SWTopoCorrelationFinancial = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationFinancial", 
+		algTopologyClass = "TopoSoftwareCorrelationFinancial", 
+		scalable = true, 
+		parallelism = 14, 
+		minParallelism = 4, 
+		minNumtasks = 1, 
+		name = "TopoSoftwareCorrelationFinancial", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType)
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType)
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-financial-software:3.2-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items < 850
+		}, 
+		isValid = true
+	};
+	HWTopoCorrelationFinancial = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationFinancial", 
+		algTopologyClass = "TopoHardwareCorrelationFinancial", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TopoHardwareCorrelationFinancial", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType)
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType)
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-financial-hardware:3.1-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or (family_Items * family_Items) / (2 * pipeline_Hosts) >= 20000
+		}, 
+		isValid = true
+	};
+	GenHWTopoCorrelationFinancial = HardwareAlgorithm {
+		hwNode = refBy(cluster2), 
+		scalable = false, 
+		senderParallelism = 1, 
+		receiverParallelism = 12, 
+		name = "GenTopoHardwareCorrelationFinancial", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType)
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType)
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.hardware:hyHwProcessor:0.2.0-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items >= 850
+		}, 
+		isValid = true
+	};
+	HWTopoCorrelationTwitter = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.hardwaresubtopology.TopoHardwareCorrelationTwitter", 
+		algTopologyClass = "TopoHardwareCorrelationTwitter", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TopoHardwareCorrelationTwitter", 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-twitter-hardware:3.0-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SWTopoCorrelationTwitter = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.softwaresubtopology.TopoSoftwareCorrelationTwitter", 
+		algTopologyClass = "TopoSoftwareCorrelationTwitter", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TopoSoftwareCorrelationTwitter", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-twitter-software:3.0-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	topoSentiWord = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSentiWordNetTopology", 
+		algTopologyClass = "SentimentAnaylsisSentiWordNetTopology", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SentimentAnaylsisSentiWordNetTopology", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 60, 
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "sentimentClass"
+			}, RealParameter {
+				defaultValue = 2.5, 
+				name = "classificationThreshold"
+			}
+		}, 
+		artifact = "eu.qualimaster:SentiWordnetSubTopology:0.0.5-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	topoSVM = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.sentiment.topology.impl.SentimentAnaylsisSVMTopology", 
+		algTopologyClass = "SentimentAnaylsisSVMTopology", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SentimentAnaylsisSVMTopology", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 60, 
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "sentimentClass"
+			}, RealParameter {
+				defaultValue = 2.5, 
+				name = "classificationThreshold"
+			}
+		}, 
+		artifact = "eu.qualimaster:SVMSubTopology:0.0.5-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	mismatchedAlg = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.impl.MismatchedAlg", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "MismatchedAlg", 
+		input = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "symbolTuple1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "misString", 
+				fields = {
+					Field {
+						name = "streamID1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "quote", 
+						type = refBy(RealType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:MismatchedAlg:0.0.1", 
+		successor = null, 
+		isValid = true
+	};
+	randomAlg1 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.RandomProcessor1", 
+		algTopologyClass = "RandomProcessor1", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "RandomProcessor1", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 5, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "flag"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:RandomProcessor1:0.0.2-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items < 500
+		}, 
+		isValid = true
+	};
+	randomAlg2 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.RandomProcessor2", 
+		algTopologyClass = "RandomProcessor2", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "RandomProcessor2", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = false, 
+				name = "flag"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:RandomProcessor2:0.0.2-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items >= 500
+		}, 
+		isValid = true
+	};
+	switchAlg1 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.SwitchProcessor1", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SwitchProcessor1", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "aggregationFactor"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "flag"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:SwitchProcessor1:0.0.1-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items < 500
+		}, 
+		isValid = true
+	};
+	switchAlg2 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.SwitchProcessor2", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SwitchProcessor2", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "aggregationFactor"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "flag"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:SwitchProcessor2:0.0.1-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items >= 500
+		}, 
+		isValid = true
+	};
+	switchAlgHw = HardwareAlgorithm {
+		hwNode = refBy(cluster1), 
+		scalable = false, 
+		senderParallelism = 1, 
+		receiverParallelism = 1, 
+		name = "HardwareAlgorithmSubTopology", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 0, 
+				name = "aggregationFactor"
+			}, IntegerParameter {
+				defaultValue = 0, 
+				name = "delay"
+			}, BooleanParameter {
+				defaultValue = true, 
+				name = "flag"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:SwitchProcessorHardware:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	preprocessorTest = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "PreprocessorTSI", 
+		input = {
+			Tuple {
+				name = "springStream", 
+				fields = {
+					Field {
+						name = "symbolTuple", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	financialCorrelationTest = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.FinancialCorrelationTest", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "FinancialCorrelationTest", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:FinancialCorrelationTest:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	sentimentAnalysisTest = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.SentimentAnalysisTest", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SentimentAnalysisTest", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 60, 
+				name = "timeSeriesGranularity"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "sentimentClass"
+			}, RealParameter {
+				defaultValue = 2.5, 
+				name = "classificationThreshold"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:SentimentAnalysisTest:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	twitterCorrelationTest = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.TwitterCorrelationTest", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TwitterCorrelationTest", 
+		input = {
+			Tuple {
+				name = "analyzedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseTwitter", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationTwitter", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:TwitterCorrelationTest:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_18 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.eventdetection.family.impl.EventDetectionMovingAverageAlgorithm", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TwitterEventDetectionTopologyMovingAverage", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}, Field {
+						name = "stocks", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 1000, 
+				name = "hardThreshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "percentageThreshold"
+			}, IntegerParameter {
+				defaultValue = 86400, 
+				name = "lengthOfTimeWindow"
+			}, IntegerParameter {
+				defaultValue = 1, 
+				name = "frequenceOfCheckForEvent"
+			}
+		}, 
+		artifact = "eu.qualimaster:EventDetectionMovingAverageAlgorithm:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_19 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.eventdetection.topology.impl.TwitterEventDetectionTopologyKleinberg", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TwitterEventDetectionTopologyKleinberg", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		artifact = "eu.qualimaster:EventDetectionKleinbergTopology:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_20 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.event.prediction.topology.impl.EventPredictionFuturedatementionsTopology", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "EventPredictionFuturedatementionsTopology", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		artifact = "eu.qualimaster:EventPredictionFuturedatementionsTopology:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_21 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.event.prediction.topology.impl.EventPredictionCalendarTopology", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "EventPredictionCalendarTopology", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "symbols", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		artifact = "eu.qualimaster:EventPredictionCalendarTopology:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_22 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stockParser.family.impl.StockParserAlgorithm", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "StockParser  ", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:StockParser:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_23 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.simpleRecommendations.family.impl.SimpleRecommendationsAlgorithm", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SimpleRecommendations", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "recommendations", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:SimpleRecommendations:0.0.2-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_24 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.eventdetection.family.impl.EventDetectionHardThresholdAlgorithm", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "EventDetectionHardThreshold", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 1000, 
+				name = "hardThreshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "percentageThreshold"
+			}, IntegerParameter {
+				defaultValue = 86400, 
+				name = "lengthOfTimeWindow"
+			}, IntegerParameter {
+				defaultValue = 1, 
+				name = "frequenceOfCheckForEvent"
+			}
+		}, 
+		artifact = "eu.qualimaster:EventDetectionHardThresholdAlgorithm:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	recommendations = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.recommendations.family.impl.RecommendationsAlgorithm", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "Recommendations", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "recommendationStream", 
+				fields = {
+					Field {
+						name = "recommendations", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				defaultValue = 0.5, 
+				name = "impactThreshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "stockCooccurrenceThreshold"
+			}
+		}, 
+		artifact = "eu.qualimaster:Recommendations:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	eventEnrichment = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "EventEnrichment", 
+		description = "simply adds keywords to events", 
+		input = {
+			Tuple {
+				name = "eventStream", 
+				fields = {
+					Field {
+						name = "tweet", 
+						type = refBy(FieldTypeVar_16)
+					}, Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}
+				}
+			}, Tuple {
+				name = "keywordStream", 
+				fields = {
+					Field {
+						name = "keywords", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "enrichedEventsStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	keywordAnalyzer = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.keywordAnalyzer.correlation.BasicKeywordAnalyzerAlgorithm", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "KeywordAnalyzer", 
+		description = "deduces typical keywords for a current event", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType)
+					}, Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				defaultValue = 0.5, 
+				name = "threshold"
+			}, RealParameter {
+				defaultValue = 0.5, 
+				name = "decay"
+			}
+		}, 
+		artifact = "eu.qualimaster:KeywordAnalyzer:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	tweetClassifier = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TweetClassifier", 
+		description = "checks if tweet belongs to a certain stock", 
+		input = {
+			Tuple {
+				name = "modifiedTwitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType)
+					}
+				}
+			}, Tuple {
+				name = "keywordStream", 
+				fields = {
+					Field {
+						name = "keywords", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "modifiedTwitterStream", 
+				fields = {
+					Field {
+						name = "tweet", 
+						type = refBy(StatusType)
+					}, Field {
+						name = "stocks", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	spamRemoval = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.spam.SpamRemovalBolt", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SpamRemoval", 
+		description = "Removes Spam from twitter stream", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}, Field {
+						name = "spamPropability", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				defaultValue = 0.5, 
+				name = "spamThreshold"
+			}
+		}, 
+		artifact = "eu.qualimaster:SpamRemovalAlgorithm:0.1.5-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	spamDetection = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.stream.spam.SpamDetectionBolt", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SpamDetection", 
+		description = "Detects spam in tweet stream", 
+		input = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "twitterStream", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16)
+					}, Field {
+						name = "spamPropability", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:SpamDetectionAlgorithm:0.1.5-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	twitterStreamFiltering = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TwitterStreamFiltering", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(ObjectType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	twitterCrawling = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TwitterCrawling", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(FieldTypeVar_16), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "events", 
+						type = refBy(IFEventListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	expertSearch = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "ExpertSearch", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "experts", 
+						type = refBy(IFExpertListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}, Field {
+						name = "keywords", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}, Field {
+						name = "symbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	financialNetworkExtraction = SoftwareAlgorithm {
+		class = "eu.qualimaster.test.algorithms.PreprocessorTSI", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "FinancialNetworkExtraction", 
+		input = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "status", 
+						type = refBy(StatusType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "analysis", 
+				fields = {
+					Field {
+						name = "edges", 
+						type = refBy(IFEdgeListType), 
+						keyPart = false
+					}, Field {
+						name = "timeInterval", 
+						type = refBy(IFTimeIntervalType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "timeSeriesGranularity"
+			}
+		}, 
+		artifact = "eu.qualimaster.test:PreprocessorTSI:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_25 = SoftwareAlgorithm {
+		class = "eu.qualimaster.dynamicgraph.DynamicGraphCompilation", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "DynamicGraphCompilation", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType)
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType)
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "edgeStream", 
+				fields = {
+					Field {
+						name = "edge", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			RealParameter {
+				name = "correlationThreshold"
+			}
+		}, 
+		artifact = "eu.qualimaster:dynamic-graph-compilation:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_26 = SoftwareAlgorithm {
+		class = "eu.qualimaster.dynamicgraph.TopoDynamicHubComputation", 
+		algTopologyClass = "TopoDynamicHubComputation", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TopoDynamicHubComputation", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "edgeStream", 
+				fields = {
+					Field {
+						name = "edge", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "hubStream", 
+				fields = {
+					Field {
+						name = "hubList", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "hubListSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:dynamic-hub-computation:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_27 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.transferentropy.hardwaresubtopology.TopoHardwareTransferEntropyFinancial", 
+		algTopologyClass = "TopoHardwareTransferEntropyFinancial", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TransferEntropy", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:transferentropy-financial-hardware:3.0-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	AlgorithmVar_28 = HardwareAlgorithm {
+		hwNode = refBy(cluster2), 
+		scalable = false, 
+		senderParallelism = 1, 
+		receiverParallelism = 1, 
+		name = "GenTransferEntropy", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 120, 
+				name = "windowSize"
+			}, IntegerParameter {
+				defaultValue = 10, 
+				name = "windowAdvance"
+			}, IntegerParameter {
+				defaultValue = 32, 
+				name = "densitySize"
+			}
+		}, 
+		artifact = "eu.qualimaster:GenTransferEntropy:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	aMapper = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.Mapper", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "Mapper", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "symbolsStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}
+				}
+			}, Tuple {
+				name = "configurationStream", 
+				fields = {
+					Field {
+						name = "pairKey", 
+						type = refBy(StringType)
+					}, Field {
+						name = "pairValue", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "resetWindowStream", 
+				fields = {
+					Field {
+						name = "windowStart", 
+						type = refBy(LongType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-mapper:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	aHayashiYoshida = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.correlation.HayashiYoshida", 
+		algTopologyClass = null, 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "HayashiYoshida", 
+		input = {
+			Tuple {
+				name = "symbolsStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}
+				}
+			}, Tuple {
+				name = "configurationStream", 
+				fields = {
+					Field {
+						name = "pairKey", 
+						type = refBy(StringType)
+					}, Field {
+						name = "pairValue", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "resetWindowStream", 
+				fields = {
+					Field {
+						name = "windowStart", 
+						type = refBy(LongType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "pairwiseCorrelationFinancial", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:hayashi-yoshida:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	correlationSW = SubPipelineAlgorithm {
+		subPipeline = refBy(SubTopology), 
+		name = "CorrelationSW", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType)
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType)
+					}, Field {
+						name = "value", 
+						type = refBy(RealType)
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType)
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType)
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType)
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType)
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-financial-software:3.2-SNAPSHOT", 
+		successor = null, 
+		constraints = {
+			family_Items == 0 or family_Items < 850
+		}, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_29 = SoftwareAlgorithm {
+		class = "eu.qualimaster.timegraph.TimeGraph", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "SoftwareTimeGraph", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "dataStream", 
+				fields = {
+					Field {
+						name = "update", 
+						type = refBy(ObjectType)
+					}, Field {
+						name = "isAddition", 
+						type = refBy(BooleanType)
+					}
+				}
+			}, Tuple {
+				name = "snapshotQueryStream", 
+				fields = {
+					Field {
+						name = "start", 
+						type = refBy(LongType)
+					}, Field {
+						name = "end", 
+						type = refBy(LongType)
+					}
+				}
+			}, Tuple {
+				name = "pathQueryStream", 
+				fields = {
+					Field {
+						name = "start", 
+						type = refBy(LongType)
+					}, Field {
+						name = "end", 
+						type = refBy(LongType)
+					}, Field {
+						name = "vertexA", 
+						type = refBy(StringType)
+					}, Field {
+						name = "vertexB", 
+						type = refBy(StringType)
+					}, Field {
+						name = "type", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "snapshotStream", 
+				fields = {
+					Field {
+						name = "snapshot", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "pathStream", 
+				fields = {
+					Field {
+						name = "path", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:time-graph:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	HardwareAlgorithmVar_30 = HardwareAlgorithm {
+		hwNode = refBy(cluster1), 
+		scalable = false, 
+		senderParallelism = 1, 
+		receiverParallelism = 1, 
+		name = "TransferEntropyHardware", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.hardware:hyHwProcessor:0.2.0-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	HardwareAlgorithmVar_31 = HardwareAlgorithm {
+		hwNode = refBy(cluster1), 
+		scalable = false, 
+		senderParallelism = 1, 
+		receiverParallelism = 1, 
+		name = "MutualInformationHardware", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster.hardware:hyHwProcessor:0.2.0-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SubPipelineAlgorithmVar_32 = SubPipelineAlgorithm {
+		subPipeline = refBy(SubPipelineVar_11), 
+		name = "RandomSubPipelineAlgorithm1", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "delay"
+			}, BooleanParameter {
+				name = "flag"
+			}, IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-financial-software:3.2-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_33 = SoftwareAlgorithm {
+		class = "eu.qualimaster.algorithms.imp.TransferEntropy", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TransferEntropySoftware", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 300, 
+				name = "windowSize"
+			}, IntegerParameter {
+				defaultValue = 1, 
+				name = "windowAdvance"
+			}, IntegerParameter {
+				defaultValue = 128, 
+				name = "densitySize"
+			}
+		}, 
+		artifact = "eu.qualimaster:transfer-entropy:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_34 = SoftwareAlgorithm {
+		class = "eu.qualimaster.timegraph.TimeGraphMapper", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TimeGraphMapper", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "edgeStream", 
+				fields = {
+					Field {
+						name = "edge", 
+						type = refBy(StringType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "dataStream", 
+				fields = {
+					Field {
+						name = "update", 
+						type = refBy(ObjectType), 
+						keyPart = false
+					}, Field {
+						name = "isAddition", 
+						type = refBy(BooleanType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:time-graph:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_35 = SoftwareAlgorithm {
+		class = "eu.qualimaster.timegraph.TimeGraphIndexer", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TimeGraphIndexer", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "dataStream", 
+				fields = {
+					Field {
+						name = "update", 
+						type = refBy(ObjectType), 
+						keyPart = false
+					}, Field {
+						name = "isAddition", 
+						type = refBy(BooleanType)
+					}
+				}
+			}, Tuple {
+				name = "internalRequests", 
+				fields = {
+					Field {
+						name = "internalRequest", 
+						type = refBy(ObjectType)
+					}
+				}
+			}, Tuple {
+				name = "unicastRequests", 
+				fields = {
+					Field {
+						name = "unicastExternalRequest", 
+						type = refBy(ObjectType)
+					}
+				}
+			}, Tuple {
+				name = "broadcastRequests", 
+				fields = {
+					Field {
+						name = "broadcastExternalRequest", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "externalResponses", 
+				fields = {
+					Field {
+						name = "externalResponse", 
+						type = refBy(ObjectType)
+					}
+				}
+			}, Tuple {
+				name = "internalRequests", 
+				fields = {
+					Field {
+						name = "internalRequest", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:time-graph-external:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_36 = SoftwareAlgorithm {
+		class = "eu.qualimaster.timegraph.TimeGraphQueryExecutor", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "TimeGraphQueryExecutor", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "snapshotQueryStream", 
+				fields = {
+					Field {
+						name = "start", 
+						type = refBy(LongType)
+					}, Field {
+						name = "end", 
+						type = refBy(LongType)
+					}
+				}
+			}, Tuple {
+				name = "pathQueryStream", 
+				fields = {
+					Field {
+						name = "start", 
+						type = refBy(LongType)
+					}, Field {
+						name = "end", 
+						type = refBy(LongType)
+					}, Field {
+						name = "vertexA", 
+						type = refBy(StringType)
+					}, Field {
+						name = "vertexB", 
+						type = refBy(StringType)
+					}, Field {
+						name = "type", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "externalResponses", 
+				fields = {
+					Field {
+						name = "externalResponse", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "snapshotStream", 
+				fields = {
+					Field {
+						name = "snapshot", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "pathStream", 
+				fields = {
+					Field {
+						name = "path", 
+						type = refBy(StringType)
+					}
+				}
+			}, Tuple {
+				name = "unicastRequests", 
+				fields = {
+					Field {
+						name = "unicastExternalRequest", 
+						type = refBy(ObjectType)
+					}
+				}
+			}, Tuple {
+				name = "broadcastRequests", 
+				fields = {
+					Field {
+						name = "broadcastExternalRequest", 
+						type = refBy(ObjectType)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster:time-graph-external:0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SubPipelineAlgorithmVar_37 = SubPipelineAlgorithm {
+		subPipeline = refBy(SubPipelineVar_15), 
+		name = "RandomSubPipelineAlgorithm2", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "randomData", 
+				fields = {
+					Field {
+						name = "randomInteger", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(TimeStampType)
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				name = "delay"
+			}, BooleanParameter {
+				name = "flag"
+			}, IntegerParameter {
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-financial-software:3.2-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SubPipelineAlgorithmVar_38 = SubPipelineAlgorithm {
+		subPipeline = refBy(SubPipelineVar_19), 
+		name = "CorrelationSWAlternative", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "preprocessedStream", 
+				fields = {
+					Field {
+						name = "symbolId", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "timestamp", 
+						type = refBy(LongType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(RealType), 
+						keyPart = false
+					}, Field {
+						name = "volume", 
+						type = refBy(IntegerType), 
+						keyPart = false
+					}
+				}
+			}, Tuple {
+				name = "symbolList", 
+				fields = {
+					Field {
+						name = "allSymbols", 
+						type = refBy(StringListType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "pairwiseFinancial", 
+				fields = {
+					Field {
+						name = "id0", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "id1", 
+						type = refBy(StringType), 
+						keyPart = false
+					}, Field {
+						name = "date", 
+						type = refBy(StringTimeStampType), 
+						keyPart = false
+					}, Field {
+						name = "value", 
+						type = refBy(DoubleType), 
+						keyPart = false
+					}
+				}
+			}
+		}, 
+		parameters = {
+			IntegerParameter {
+				defaultValue = 30, 
+				name = "windowSize"
+			}
+		}, 
+		artifact = "eu.qualimaster:hy-correlation-financial-software:3.2-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_39 = SoftwareAlgorithm {
+		class = "eu.qualimaster.hadoop.ElectricMapper", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "ElectricMapper", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "elData", 
+				fields = {
+					Field {
+						name = "key", 
+						type = refBy(FieldTypeVar_17)
+					}, Field {
+						name = "value", 
+						type = refBy(FieldTypeVar_18)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "elData", 
+				fields = {
+					Field {
+						name = "key", 
+						type = refBy(FieldTypeVar_18)
+					}, Field {
+						name = "value", 
+						type = refBy(FieldTypeVar_19)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+	SoftwareAlgorithmVar_40 = SoftwareAlgorithm {
+		class = "eu.qualimaster.hadoop.IntAvgMaximizer", 
+		algTopologyClass = "", 
+		scalable = false, 
+		parallelism = 1, 
+		minParallelism = 1, 
+		minNumtasks = 1, 
+		name = "IntAvgMaximizer", 
+		description = "", 
+		input = {
+			Tuple {
+				name = "elData", 
+				fields = {
+					Field {
+						name = "key", 
+						type = refBy(FieldTypeVar_18)
+					}, Field {
+						name = "value", 
+						type = refBy(FieldTypeVar_19)
+					}
+				}
+			}
+		}, 
+		output = {
+			Tuple {
+				name = "elData", 
+				fields = {
+					Field {
+						name = "key", 
+						type = refBy(FieldTypeVar_18)
+					}, Field {
+						name = "value", 
+						type = refBy(FieldTypeVar_19)
+					}
+				}
+			}
+		}, 
+		artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+		successor = null, 
+		isValid = true
+	};
+    SoftwareAlgorithmVar_41 = SoftwareAlgorithm {
+        class = "eu.qualimaster.hadoop.FinancialMapper", 
+        algTopologyClass = "", 
+        scalable = false, 
+        parallelism = 1, 
+        minParallelism = 1, 
+        minNumtasks = 1, 
+        name = "FinancialMapper", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "springStream", 
+                fields = {
+                    Field {
+                       name = "key",
+                       type = refBy(StringType)  
+                    }, 
+                    Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_1)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "finIntermediaryData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_1)
+                    }
+                }
+            }
+        }, 
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+        successor = null, 
+        isValid = true
+    };
+    SoftwareAlgorithmVar_42 = SoftwareAlgorithm {
+        class = "eu.qualimaster.hadoop.FinancialReducer", 
+        algTopologyClass = "", 
+        scalable = false, 
+        parallelism = 1, 
+        minParallelism = 1, 
+        minNumtasks = 1, 
+        name = "FinancialReducer", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "finIntermediaryData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_1)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "finOutputData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                    }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_3)
+                    }
+                }
+            }
+        }, 
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+        successor = null, 
+        isValid = true
+    };
+    SoftwareAlgorithmVar_43 = SoftwareAlgorithm {
+        class = "eu.qualimaster.hadoop.TwitterMapper", 
+        algTopologyClass = "", 
+        scalable = false, 
+        parallelism = 1, 
+        minParallelism = 1, 
+        minNumtasks = 1, 
+        name = "TwitterMapper", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitInputData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                     }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_2)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitIntermediaryData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                   }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_2)
+                    }
+                }
+            }
+        }, 
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+        successor = null, 
+        isValid = true
+    };
+    SoftwareAlgorithmVar_44 = SoftwareAlgorithm {
+        class = "eu.qualimaster.hadoop.TwitterReducer", 
+        algTopologyClass = "", 
+        scalable = false, 
+        parallelism = 1, 
+        minParallelism = 1, 
+        minNumtasks = 1, 
+        name = "TwitterReducer", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "twitIntermediaryData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                     }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_2)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "twitOutputData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                     }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_3)
+                    }
+                }
+            }
+        }, 
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+        successor = null, 
+        isValid = true
+    };
+    SoftwareAlgorithmVar_45 = SoftwareAlgorithm {
+        class = "eu.qualimaster.hadoop.CombinedCorrelationMapper", 
+        algTopologyClass = "", 
+        scalable = false, 
+        parallelism = 1, 
+        minParallelism = 1, 
+        minNumtasks = 1, 
+        name = "CombinedCorrelationMapper", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "combinedInputData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                     }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_3)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "correlationIntermediaryData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                   }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_3)
+                    }
+                }
+            }
+        }, 
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+        successor = null, 
+        isValid = true
+    };
+    SoftwareAlgorithmVar_46 = SoftwareAlgorithm {
+        class = "eu.qualimaster.hadoop.CombinedCorrelationReducer", 
+        algTopologyClass = "", 
+        scalable = false, 
+        parallelism = 1, 
+        minParallelism = 1, 
+        minNumtasks = 1, 
+        name = "CombinedCorrelationReducer", 
+        description = "", 
+        input = {
+            Tuple {
+                name = "correlationIntermediaryData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                     }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_3)
+                    }
+                }
+            }
+        }, 
+        output = {
+            Tuple {
+                name = "correlationOutputData", 
+                fields = {
+                    Field {
+                        name = "key", 
+                        type = refBy(StringType)  
+                     }, Field {
+                        name = "value", 
+                        type = refBy(RecordFieldTypeVar_3)
+                    }
+                }
+            }
+        }, 
+        artifact = "eu.qualimaster.hadoop:HadoopExperiments:0.0.1-SNAPSHOT", 
+        successor = null, 
+        isValid = true
+    };
+	freeze {
+		algorithms;
+		swPreprocessor;
+		SWTopoCorrelationFinancial;
+		HWTopoCorrelationFinancial;
+		GenHWTopoCorrelationFinancial;
+		HWTopoCorrelationTwitter;
+		SWTopoCorrelationTwitter;
+		topoSentiWord;
+		topoSVM;
+		mismatchedAlg;
+		randomAlg1;
+		randomAlg2;
+		switchAlg1;
+		switchAlg2;
+		switchAlgHw;
+		preprocessorTest;
+		financialCorrelationTest;
+		sentimentAnalysisTest;
+		twitterCorrelationTest;
+		AlgorithmVar_18;
+		AlgorithmVar_19;
+		AlgorithmVar_20;
+		AlgorithmVar_21;
+		AlgorithmVar_22;
+		AlgorithmVar_23;
+		AlgorithmVar_24;
+		recommendations;
+		eventEnrichment;
+		keywordAnalyzer;
+		tweetClassifier;
+		spamRemoval;
+		spamDetection;
+		twitterStreamFiltering;
+		twitterCrawling;
+		expertSearch;
+		financialNetworkExtraction;
+		AlgorithmVar_25;
+		AlgorithmVar_26;
+		AlgorithmVar_27;
+		AlgorithmVar_28;
+		aMapper;
+		aHayashiYoshida;
+		correlationSW;
+		SoftwareAlgorithmVar_29;
+		HardwareAlgorithmVar_30;
+		HardwareAlgorithmVar_31;
+		SubPipelineAlgorithmVar_32;
+		SoftwareAlgorithmVar_33;
+		SoftwareAlgorithmVar_34;
+		SoftwareAlgorithmVar_35;
+		SoftwareAlgorithmVar_36;
+		SubPipelineAlgorithmVar_37;
+		SubPipelineAlgorithmVar_38;
+		SoftwareAlgorithmVar_39;
+        SoftwareAlgorithmVar_40;
+        SoftwareAlgorithmVar_41;
+        SoftwareAlgorithmVar_42;
+        SoftwareAlgorithmVar_43;
+        SoftwareAlgorithmVar_44;
+        SoftwareAlgorithmVar_45;
+        SoftwareAlgorithmVar_46;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

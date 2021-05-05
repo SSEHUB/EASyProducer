@@ -1,0 +1,32 @@
+project CloudResourceCfg {
+	
+	import CloudResources;	
+	
+	PublicCloudEnvironment AWS;
+	
+	AWS =  {
+		maxMemory = 100000,
+		maxProcessors = 100.0,
+		maxWorkingStorage = 160000,
+		name = "AWS",
+		amiID = "ami-51dbde38",
+		pathToKeyFile = "AwsVM"
+	};
+	
+	PrivateCloudEnvironment ON;
+	
+	ON = {
+		name = "OpenNebula",
+		maxMemory = 800000,
+		maxProcessors = 1.0,
+		maxWorkingStorage = 160000
+	};
+	
+	cloudEnvironments = {refBy(ON), refBy(AWS)};
+	
+	freeze{
+		ON;
+		AWS;
+		cloudEnvironments;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

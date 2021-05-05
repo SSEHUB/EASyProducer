@@ -1,0 +1,96 @@
+project Observables {
+	
+    import Basics;
+	
+	annotate BindingTime bindingTime = BindingTime.compile to Observables;
+
+    // don't move these alias definitions!
+    // define each category of observable / quality property as an own type
+    // avoid derived types with constraints here - speed up reasoning
+    
+    // time-behavior
+    typedef Latency Integer;
+    typedef Throughput_Items Integer;
+    typedef Throughput_Volume Integer;
+    typedef Enactment_Delay Integer;
+    
+    // resource utilization
+    typedef Used_Memory Integer;
+    typedef Available_Memory Integer;
+    typedef Available_Frequency Integer;
+    typedef Used_Machines Integer;
+    typedef Available_Machines Integer;
+    typedef Bandwidth Real;
+    typedef Capacity Real;
+    typedef Executors Integer;
+    typedef Hosts Integer;
+    typedef Tasks Integer;
+    typedef IsAvailable Boolean;
+    typedef Load Real;
+    typedef Ping NonNegativeReal; // TODO new
+    typedef UsedHarddiscMem Integer; // TODO new
+    typedef UsedProcessors NonNegativeReal; // TODO new
+    typedef UsedWorkingStorage PositiveInteger; // TODO new
+    
+    typedef Accuracy_Confidence Real;
+    typedef Accuracy_Error_Rate Real;
+    typedef Believability Real;
+    typedef Relevancy Real;
+    typedef Completeness Real;
+    // MPVolatility?
+    
+    typedef Volume Real;
+    typedef Velocity Real;
+    typedef Volatility Real;
+    typedef Variety Integer;
+    typedef Items Real;
+
+    abstract compound ObservableDecl {
+    	NonEmptyString type; // not nice
+    }
+
+    compound QualityParameter refines ObservableDecl {
+    }
+
+    compound ConfiguredQualityParameter refines QualityParameter{
+    	NonEmptyString monitorCls = null;
+    	OptionalArtifactString artifact;
+    }
+
+    sequenceOf(ConfiguredQualityParameter) qualityParameters = {
+    	{type="Latency"},
+    	{type="Throughput_Items"},
+    	{type="Throughput_Volume"},
+    	{type="Enactment_Delay"},
+    	{type="Used_Memory"},
+    	{type="Used_Machines"},
+    	{type="Available_Machines"},
+    	{type="Bandwidth"},
+    	{type="Capacity"},
+    	{type="Executors"},
+        {type="Tasks"},
+        {type="IsAvailable"}, // internal
+    	{type="Accuracy_Confidence"},
+    	{type="Accuracy_Error_Rate"},
+    	{type="Believability"},
+    	{type="Relevancy"},
+    	{type="Completeness"},
+    	{type="Volume"},
+    	{type="Velocity"},
+    	{type="Volatility"},
+    	{type="Variety"},
+    	{type="Items"},
+    	{type="Ping"},
+    	{type="UsedHarddiscMem"},
+    	{type="UsedProcessors"},
+    	{type="UsedWorkingStorage"}
+    };
+    Constraint paramTypes = qualityParameters->collect(p|p.type).asSet().size() == qualityParameters.size();
+    
+    sequenceOf(ConfiguredQualityParameter) configuredParameters = {};
+    Constraint cfgParamTypes = configuredParameters->collect(p|p.type).asSet().size() == configuredParameters.size();
+    	 
+    freeze {
+    	qualityParameters;
+    }
+} 

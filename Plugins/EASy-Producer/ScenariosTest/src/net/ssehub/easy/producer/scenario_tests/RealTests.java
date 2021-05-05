@@ -526,5 +526,18 @@ public class RealTests extends AbstractRealTests {
     public void testQualiMasterSep17() throws IOException {
         testQualiMasterFeb17Impl(Mode.REASON_INSTANTIATE);
     }
-    
+
+    /**
+     * Tests the QualiMaster model / derivation (June 2015, without rt-VIL).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testQualiMasterMay21() throws IOException {
+        String[] versions = {"0", "0"};
+        String[] names = {"may21", "QM"};
+        executeCase(names, versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
+        // no comparison here
+    }
+
 }

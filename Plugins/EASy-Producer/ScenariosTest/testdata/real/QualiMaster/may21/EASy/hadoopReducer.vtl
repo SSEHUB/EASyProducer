@@ -1,0 +1,75 @@
+import commonVTLMethods;
+@advice(QM)
+@indent(indentation = 4, additional = 0)
+template hadoopReducer(Configuration config, FileArtifact target, Reducer reducer, String package) {
+
+    def main(Configuration config, FileArtifact target, Reducer reducer, String package) {
+        String inputKeyType = getHadoopType(reducer.family.input, true, true);
+        String inputValueType = getHadoopType(reducer.family.input, true, false);
+        String outputKeyType = getHadoopType(reducer.family.output, false, true);
+        String outputValueType = getHadoopType(reducer.family.output, false, false);
+        String className = getJavaClassName("${reducer.name}Mapper");
+        String algInterfaceName = "I${reducer.family.name}";
+        String initAlgName = getInitialAlgorithm(reducer.family);
+        'package eu.qualimaster.$package;
+        
+         import java.util.*;
+         import java.io.*;
+         import org.apache.hadoop.fs.Path;
+         import org.apache.hadoop.conf.*;
+         import org.apache.hadoop.io.*;
+         import org.apache.hadoop.mapred.*;
+         import org.apache.hadoop.util.*;
+        
+         /**
+         * Signal-enabled reducer.
+         */
+         public class ${className}Reducer extends SignalMapReduceBase<${algInterfaceName}> implements Reducer<
+             $inputKeyType, 
+             $inputValueType, 
+             $outputKeyType, 
+             $outputValueType>, IHadoopSignalReceiver {
+
+             ${produceHadoopInOrOutputVariable(reducer.family.input, false, reducer.family.name, true, "in")}
+             ${produceHadoopInOrOutputVariable(reducer.family.output, true, reducer.family.name, true, "out")}
+
+             /**
+              * Creates a reducer instance.
+              */
+             public ${className}Reducer() {
+                 super(${package}, ${className});
+             }
+
+             @Override
+             public void configure(JobConf job) {
+                 super.configure(job);
+                 ${produceParameterHandlers(reducer.family)}
+                 ${produceAlgorithmHandlers(algInterfaceName, reducer.family)}
+                 setAlgorithm(job.get("${reducer.name}.alg", "${initAlgName}"));
+             }
+
+             @Override
+             public void reduce(
+                 $inputKeyType key, 
+                 Iterator<$inputValueType> values, 
+                 OutputCollector<$outputKeyType, $outputValueType> output, 
+                 Reporter reporter) throws IOException {
+                 executeDeferredAlgorithmChange();
+                 in.setKey(key);
+                 while (values.hasNext()) { 
+                     in.setValue(value);
+                     algorithm.execute(in, out);
+                     if (0 == output.count()) {
+                         output.addFurther(); // for next execution
+                     } else {
+                         // at the moment, we support one or none
+                         output.collect(key, ${hadoopConvert(outputKeyType, "out.getKey()", reducer.family.output, true)}, 
+                             ${hadoopConvert(outputValueType, "out.getValue()", reducer.family.output, false)}); 
+                     }
+                 }
+             }
+
+         }'
+    }
+
+}

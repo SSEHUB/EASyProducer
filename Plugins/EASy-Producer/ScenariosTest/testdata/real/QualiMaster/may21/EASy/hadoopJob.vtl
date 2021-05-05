@@ -1,0 +1,105 @@
+import commonVTLMethods;
+@advice(QM)
+@indent(indentation = 4, additional = 0)
+template hadoopJob(Configuration config, FileArtifact target, Job job, String package) {
+
+    def createConfigurer(String prefix, String interface, String namespace, DataElement dElt) {
+        '/**
+          * A signal configurer for the job ${prefix}.
+          */
+         private static class ${prefix}Configurer implements IConfigurer<${interface}> {
+
+             @Override
+             public String getNamespace() {
+                 return "${namespace}";
+             }
+
+             @Override
+             public String getElementName() {
+                 return "${dElt.name}";
+             }
+        
+             @Override
+             public void configure(DefaultHadoopSignalReceiver<T> receiver) {
+                 ${produceParameterHandlers(dElt)}
+                 addHandler(new DefaultAlgorithmChangeHandler<${interface}>("${dElt.name}", 
+                     ${getClassName(dElt)}.class));
+                 setAlgorithm("${dElt.name}");
+             }
+         }'
+    }
+
+    def main(Configuration config, FileArtifact target, Job job, String package) {
+        String className = getJavaClassName("${job.name}Job");
+        'package eu.qualimaster.${package};
+        
+         import java.util.*;
+         import java.io.*;
+         import org.apache.hadoop.fs.Path;
+         import org.apache.hadoop.conf.*;
+         import org.apache.hadoop.io.*;
+         import org.apache.hadoop.mapred.*;
+         import org.apache.hadoop.util.*;
+        
+         /**
+          * Implements the job "${job.name}".
+          */
+         public class ${className} {
+
+             ${createConfigurer("Source", "I${job.source.name}", job.name, job.source)}
+             ${createConfigurer("Sink", "I${job.sink.name}", job.name, job.sink)}
+
+             /**
+              * Creates the related job configurations.
+              *
+              * @param options the start-time options
+              * @return the job configurations
+              */
+             public static List<JobConf> createJobs(PipelineOptions options) throws Exception {
+                 List<JobConf> result = new ArrayList<JobConf>();
+
+                 Configuration cfg = new Configuration(true);
+                 cfg.set(eu.qualimaster.Configuration.HOST_EVENT, 
+                     String.valueOf(eu.qualimaster.Configuration.getEventHost()));
+                 cfg.set(eu.qualimaster.Configuration.PORT_EVENT, 
+                     String.valueOf(eu.qualimaster.Configuration.getEventPort()));
+                 cfg.set("${job.mapper.name}.alg", options.getOption("${job.mapper.name}.alg"));
+                 cfg.set("${job.reducer.name}.alg", options.getOption("${job.reducer.name}.alg"));
+                 // key in options fits e.g. to TextInputFormat, input complies to requested data location spec
+                 cfg.set(options.getOption("${job.name}.inputKey"), options.getOption("${job.name}.input"));
+                 cfg.set(options.getOption("${job.name}.outputKey"), options.getOption("${job.name}.output"));
+
+                 JobConf conf = new JobConf(cfg, ${className}.class);
+                 conf.setJobName("${job.name}");
+                 conf.setOutputKeyClass();
+                 conf.setOutputValueClass();
+                 conf.setMapperClass(${job.mapper.name}Mapper.class);
+                 conf.setCombinerClass(${job.reducer.name}Reducer.class);
+                 conf.setReducerClass(${job.reducer.name}Reducer.class);
+                 conf.setInputFormat(DelegatingSignalInputFormat.class);
+                 conf.setOutputFormat(DelegatingSignalOutputFormat.class);
+                 DelegatingSignalInputFormat.setConfigurer(conf, SourceConfigurer.class);
+                 DelegatingSignalOutputFormat.setConfigurer(conf, SinkConfigurer.class);
+                 conf.setNumMapTasks(options.getIntValue("${job.name}.numMapTasks", ${job.fNumMapTasks.low})); 
+                 conf.setNumReduceTasks(options.getIntValue("${job.name}.numReduceTasks", ${job.fNumReduceTasks.low})); 
+                 conf.setNumTasksToExecutePerJvm(options.getIntValue("${job.name}.numTasksPerJVM", ${job.fNumTasksPerJvm.low})); 
+                 result.add(conf);
+                 return result;
+             } 
+
+             /**
+              * Creates the jobs via {@link #createJobs()} and runs them for completion.
+              *
+              * @param args the start arguments
+              */
+             public static void main(String[] args) throws Exception {
+                 PipelineOptions options = new PipelineOptions(args);
+                 for (JobConf j : createJobs(options)) {
+                     JobClient.runJob(j);
+                 }
+             }
+             
+         }'
+    }
+
+}

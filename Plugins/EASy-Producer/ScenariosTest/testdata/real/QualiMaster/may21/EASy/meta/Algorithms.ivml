@@ -1,0 +1,94 @@
+project Algorithms {
+
+	import Basics;
+	import Observables;
+	import ReconfigurableHardware;
+	annotate BindingTime bindingTime = BindingTime.compile to Algorithms;
+
+	abstract compound Algorithm refines CDataComponent {
+		Description description;
+        //refining MetaConcepts
+		Tuples input;	
+		Tuples output;
+		Parameters parameters;
+		// additional
+		ArtifactString artifact;
+		refTo(Algorithm) successor = null;
+		setOf(Constraint) constraints;
+
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			Latency latency;
+			Throughput_Items throughputItems;
+			Throughput_Volume throughputVolume;
+			Used_Memory usedMemory;
+			Accuracy_Confidence accuracyConfidence;
+			Accuracy_Error_Rate accuracyErrorRate;
+			Believability believability;
+			Relevancy relevancy;
+			Completeness completeness;
+			Volume volume;
+			Velocity velocity;
+			Variety variety;
+			Hosts pipeline_Hosts;
+			Items items;
+			Items family_Items; // == propagate from pipeline node?
+			Items family_PredecessorItems; // == propagate from pipeline node?
+			Items family_PredictedItemsThreshold;
+			Boolean isValid = true;
+		} 
+		Constraint inputGivenCheck = isDefined(input);
+		Constraint outputGivenCheck = isDefined(output); 
+	} 
+	
+	compound SoftwareAlgorithm refines Algorithm {
+		ClassString class;
+
+        // should go into a "programmed sub-topology algorithm"
+		OptionalClassString algTopologyClass = null;
+        Boolean scalable = false;             // allow for pipeline scaling on startup? do not move into Algorithm
+        PositiveInteger parallelism = 1;      // configured executors
+        OptionalPositiveInteger numtasks;     // configured tasks
+        PositiveInteger minParallelism = 1;
+        PositiveInteger minNumtasks = 1;
+        OptionalPositiveInteger maxParallelism;
+        OptionalPositiveInteger maxNumtasks;
+        Constraint minParallel = minParallelism <= parallelism;
+        Constraint minTasks = minNumtasks <= numtasks;
+        Constraint maxParallel = parallelism <= maxParallelism;
+        Constraint maxTasks = numtasks <= maxNumtasks;
+        Constraint stormInvariant = parallelism <= numtasks;
+        assign(bindingTime = BindingTime.runtimeEnact) to {
+            Tasks tasks = numtasks;
+            Executors executors = parallelism;
+            Executors initialExecutors = parallelism;
+        }
+        algTopologyClass == null implies parallelism == 1;
+        algTopologyClass == null implies numtasks == 1;
+        algTopologyClass == null implies scalable == false;
+	} 
+	
+	compound HardwareAlgorithm refines Algorithm {
+		refTo(HwNode) hwNode; //META: -> requires
+        Boolean scalable = false;         // allow for pipeline scaling on startup? do not move into Algorithm!
+		PositiveInteger senderParallelism;
+		PositiveInteger receiverParallelism;
+		OptionalPositiveInteger senderNumTasks;
+		OptionalPositiveInteger receiverNumTasks;
+        Constraint stormInvariantSender = senderNumTasks <= senderParallelism;
+        Constraint stormInvariantReceiver = receiverNumTasks <= receiverParallelism;
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			refTo(HwNode) actualHwNode;
+		}
+        assign(bindingTime = BindingTime.runtimeEnact) to { // pip startup!
+            PositiveInteger actualSenderParallelism = senderParallelism;
+            PositiveInteger actualReceiverParallelism = receiverParallelism;
+            PositiveInteger initialSenderParallelism = senderParallelism;
+            PositiveInteger initialReceiverParallelism = receiverParallelism;
+            OptionalPositiveInteger actualSenderNumTasks = senderNumTasks;
+            OptionalPositiveInteger actualReceiverNumTasks = receiverNumTasks;
+        }
+	}
+	
+	setOf(refTo(Algorithm)) algorithms;
+	Constraint algNamesUnique = size(algorithms->collect(a|substitutes(a.name, " ", ""))) == size(algorithms); 
+}

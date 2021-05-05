@@ -1,0 +1,50 @@
+project CloudResources {
+	
+	import Basics;
+	import Observables;	
+	
+	annotate BindingTime bindingTime = BindingTime.compile to CloudResources;
+	
+	abstract compound CloudResource{
+		
+		MemorySize maxMemory;
+		NonNegativeReal maxProcessors;
+		MemorySize maxWorkingStorage;
+	
+		NonEmptyString name;
+		
+		assign(bindingTime = BindingTime.runtimeMon) to {
+			
+			UsedHarddiscMem usedHarddiscMem;
+			UsedProcessors usedProcessors;
+			UsedWorkingStorage usedWorkingStorage;
+		
+			Ping ping;
+			Bandwidth bandwidth;
+		
+		}
+		Constraint nameCheck = isDefined(name);
+		Constraint maxWorkingStorageCheck = isDefined(maxWorkingStorage);
+		Constraint maxProcessorsCheck = isDefined(maxProcessors);
+		Constraint maxMemoryCheck = isDefined(maxMemory);
+		Constraint returnToCluster = ping < 300.0;
+	}
+	
+	compound PublicCloudEnvironment refines CloudResource{
+		NonEmptyString amiID;
+		NonEmptyString pathToKeyFile;
+	
+		
+		Constraint amiIDCheck = isDefined(amiID);
+		Constraint pathToKeyFileCheck = isDefined(pathToKeyFile);
+		
+				
+	}
+	
+	compound PrivateCloudEnvironment refines CloudResource{		
+		NonEmptyString pathToTemplate;	
+					
+	}
+	
+	setOf(refTo(CloudResource)) cloudEnvironments;
+}

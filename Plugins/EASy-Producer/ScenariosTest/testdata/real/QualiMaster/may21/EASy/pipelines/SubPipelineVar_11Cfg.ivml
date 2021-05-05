@@ -1,0 +1,38 @@
+project SubPipelineVar_11Cfg {
+
+	import Basics;
+	import Pipelines;
+	import FamiliesCfg;
+	import DataManagementCfg;
+	annotate BindingTime bindingTime = BindingTime.compile to SubPipelineVar_11Cfg;
+	SubPipeline SubPipelineVar_11;
+	FamilyElement SubPipelineVar_11_FamilyElement0;
+	SubPipelineVar_11_FamilyElement0 = FamilyElement {
+		family = refBy(switchFamily), 
+		defaultAlgorithm = refBy(AlgorithmsCfg::switchAlg1), 
+		permissibleParameters = {
+			refBy(FamiliesCfg::switchFamily.parameters[1]), refBy(FamiliesCfg::switchFamily.parameters[3]), refBy(FamiliesCfg::switchFamily.parameters[0]), refBy(FamiliesCfg::switchFamily.parameters[2])
+		}, 
+		output = {}, 
+		parallelism = 1, 
+		name = "dataProcessor", 
+		constraints = {}
+	};
+	SubPipelineVar_11 = SubPipeline {
+		connectors = {
+			refBy(SubPipelineVar_11_FamilyElement0)
+		}, 
+		subPipelineFamily = refBy(FamiliesCfg::randomFamily), 
+		name = "RandomSubPipeline1", 
+		sources = {}, 
+		numworkers = 1, 
+		artifact = "eu.qualimaster:RandomSubPipeline1:0.0.1-SNAPSHOT", 
+		debug = false, 
+		fastSerialization = false, 
+		constraints = {}
+	};
+	freeze {
+		SubPipelineVar_11;
+		SubPipelineVar_11_FamilyElement0;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

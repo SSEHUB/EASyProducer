@@ -1,0 +1,8 @@
+Infrastructure::activePipelines = active pipeline|The active pipelines for which code shall be generated.
+Infrastructure::activePipelinesCheck = active pipelines must be configured.
+Infrastructure::subPipelineAlgorithms = sub-pipelines|Experimental - do not touch.
+Infrastructure::interfaceArtifact = interface artifact|The Maven artifact that contains the most recent version of the interfaces of algorithm families, sources and sinks.
+Infrastructure::modelArtifact = model artifact|The Maven artifact that contains the most recent version of this model.
+Infrastructure::repositoryURL = repository URL|The URL of the Maven repository for obtaining artifacts from.
+Infrastructure::deploymentURL = deployment URL|The URL of the (Nexus) Maven repository for deploying artifacts to (future use).
+Infrastructure::workerportCheck = All pipeline number of workers should be less then reserved ports for all machines

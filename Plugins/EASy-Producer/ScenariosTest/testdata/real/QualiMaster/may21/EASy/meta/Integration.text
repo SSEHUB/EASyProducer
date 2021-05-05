@@ -1,0 +1,6 @@
+Integration::AbstractStyle::pipeline = The pipeline to be integrated.
+Integration::AbstractStyle::job = The job to be integrated.
+Integration::AbstractStyle::pipelineOk = The pipeline must be defined and member of the active pipelines.
+Integration::AbstractStyle::jobOk = The job must be defined and member of the active jobs.
+Integration::AbstractStyle::inputOk = At least one of the pipeline sources must be input compatible with the job's mapper input.
+Integration::AbstractStyle::outputOk = At least one of the pipeline sinks must be output compatible with the job's reducer output.

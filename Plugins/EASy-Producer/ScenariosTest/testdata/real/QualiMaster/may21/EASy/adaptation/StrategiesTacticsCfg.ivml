@@ -1,0 +1,6 @@
+project StrategiesTacticsCfg {
+
+	import StrategiesTactics;
+
+	
+}

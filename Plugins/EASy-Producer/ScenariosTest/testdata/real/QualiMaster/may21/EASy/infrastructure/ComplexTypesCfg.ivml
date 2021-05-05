@@ -1,0 +1,87 @@
+project ComplexTypesCfg {
+    import Basics;
+    import BasicsCfg;
+    annotate BindingTime bindingTime = BindingTime.compile to ComplexTypesCfg;
+    
+    RecordFieldType RecordFieldTypeVar_1;
+    RecordFieldType RecordFieldTypeVar_2;
+    RecordFieldType RecordFieldTypeVar_3;
+
+    RecordFieldTypeVar_1 = RecordFieldType {
+        name = "FinancialSourceData",
+        fields = {
+            Field {
+                name = "symbolTuple", 
+                type = refBy(StringType)
+            },
+            Field {
+                name = "allSymbols",
+                type = refBy(StringListType)
+            }
+        }        
+    };
+    RecordFieldTypeVar_2 = RecordFieldType {
+        name = "TwitterSourceData",
+        fields = {
+            Field {
+                name = "status", 
+                type = refBy(FieldTypeVar_16)
+            },
+            Field {
+                name = "allSymbols", 
+                type = refBy(StringListType)
+            }
+        }        
+    };
+    RecordFieldTypeVar_3 = RecordFieldType {
+        name = "PrioritySinkData",
+        fields = {
+            Field {
+                name = "id0", 
+                type = refBy(StringType), 
+                keyPart = true
+            }, Field {
+                name = "id1", 
+                type = refBy(StringType), 
+                keyPart = true
+            }, Field {
+                name = "date", 
+                type = refBy(StringTimeStampType), 
+                keyPart = false
+            }, Field {
+                name = "value", 
+                type = refBy(DoubleType), 
+                keyPart = false
+            },
+            // analyzedStream
+            Field {
+                name = "symbolId", 
+                type = refBy(StringType), 
+                keyPart = false
+            }, Field {
+                name = "timestamp", 
+                type = refBy(LongType), 
+                keyPart = false
+            }, Field {
+                name = "valueA", 
+                type = refBy(RealType), 
+                keyPart = false,
+                nameSuffix = 1
+            }, Field {
+                name = "volume", 
+                type = refBy(IntegerType), 
+                keyPart = false
+            }
+        }
+    };
+    
+    rfTypes = {refBy(RecordFieldTypeVar_1), refBy(RecordFieldTypeVar_2), refBy(RecordFieldTypeVar_3)};
+
+    freeze {
+        RecordFieldTypeVar_1;
+        RecordFieldTypeVar_2;
+        RecordFieldTypeVar_3;
+        rfTypes;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon)
+
+}

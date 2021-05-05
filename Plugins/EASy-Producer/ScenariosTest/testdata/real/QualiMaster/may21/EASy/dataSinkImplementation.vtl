@@ -1,0 +1,178 @@
+import commonVTLMethods;
+@advice(QM)
+template dataSinkImplementation(Configuration config, FileArtifact target, DataSink elt, Boolean profiling) {  		
+	mapOf(String, String) specificTypes = {};
+	/*
+	 * Produces the tuple type classes.
+	 */
+	def produceForTuples(sequenceOf(Tuple) tuples, String snkName, Boolean output, Integer indent) {
+		String type;
+		String typeName;		
+    	String tupleName;
+    	
+    	for (Tuple t : tuples) { 
+    		//get the tuple name
+    		tupleName = t.name;     
+	    	if (output) {
+	    		type = "${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Output";
+	    		typeName = "output";
+    	    } else {
+	    		type = "${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Input";
+	    		typeName = "input";   		
+	    	}
+		    '/**' | indent;
+		    '* Define the source data input interface.' | indent;
+		    '**/' | 4;
+		    'public static class $type implements I${type} {' | indent;		        
+		   // 'private static final long serialVersionUID = 1L;' | indent + 4;
+		    //produce the variable instances.	
+		     for (Field f : t.fields) {
+	    	    String fname = toIdentifier("${f.name}");
+	    		String ftype = fieldTypeName(f);	  //previous type management 		
+	    		'private ${ftype} ${fname};' | indent + 4;
+    		 }
+    		   //generate the Getters and Setters. 		
+    			for (Field f : t.fields) {
+    				String fname = toIdentifier("${f.name}");
+    				String mname = firstToUpperCase(fname);
+    				String ftype = fieldTypeName(f);
+    				//collect the specific types for registering serialization class.
+    				serializerClass(f, specificTypes);
+    				'/**' | indent + 4;
+					'* Returns the input value for tuple field "${f.name}".' | indent + 4;
+					'* @return the tuple value' | indent + 4;
+					'*/' | indent + 4;
+    				'@Override' | indent + 4;
+		    		'public ${ftype} get${mname}() {' | indent + 4;
+		    			'return ${fname};' | indent + 8;
+		    		'}' | indent + 4;
+    				''
+    				'/**' | indent + 4;
+					'* Sets the output value for tuple field "${f.name}".' | indent + 4;
+					'* @param ${fname} the field value' | indent + 4;
+					'*/' | indent + 4;
+					'@Override' | indent + 4;
+		    		'public void set${mname}(${ftype} ${fname}) {' | indent + 4;
+		    			   'this.${fname} = ${fname};' | indent + 8;
+		    		'}' | indent + 4;
+    			}
+    			if(!profiling) {
+	    			//register the seriliazers.
+	    			String fserializer = formulateString(snkName) + "Serializers";
+	    			registerSerializer(fserializer, type, specificTypes, indent);
+    			}
+    			'}' | indent;
+    		}
+    		
+    		''   	
+	}
+	
+	def main(Configuration config, FileArtifact target, DataSink dataSnk, Boolean profiling){
+		String snkName =dataSnk.name;
+		snkName = snkName.firstToUpperCase();
+		String inputName = "I" + snkName;
+		'package eu.qualimaster.data.imp;'
+		''
+		//'import java.io.Serializable;'
+		'import eu.qualimaster.data.inf.I${toIdentifier(snkName)};'
+		'import eu.qualimaster.data.inf.I${toIdentifier(snkName)}.*;'
+		'import eu.qualimaster.dataManagement.strategies.*;'
+		'import eu.qualimaster.observables.*;'
+		'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+		if (dataSnk.supportsHadoop) {
+		    'import org.apache.hadoop.mapred.*;'
+		    'import java.io.*;'
+		    'import org.apache.hadoop.fs.*;'
+		    'import org.apache.hadoop.util.*;'
+            'import eu.qualimaster.data.helper.*;'
+		}
+		''
+		'/**'
+		'* Define the data source class(GEN).'
+		'**/'
+		'public class ${toIdentifier(snkName)} implements I${toIdentifier(snkName)}{'
+		''
+		//generate the tuple type classes.
+		 produceForTuples(dataSnk.output, snkName, false, 4);		
+		''
+		String tupleName;
+		for(Tuple t : dataSnk.output){
+			//get the tuple name
+			tupleName = t.name;
+			for(Field f : t.fields) {
+			    String fname = toIdentifier("${f.name}");
+    		    String mname = firstToUpperCase(fname);	
+			}
+			
+		'/**' | 4;
+		'* Posts a specific type of data sink.' | 4;
+		'* @param data the sink data ${toIdentifier(snkName)}${firstToUpperCase(tupleName)}Input' | 4;
+		'**/' | 4;
+		'@Override' | 4;
+	    'public void postData${firstToUpperCase(tupleName)}(${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input data) {' | 4;
+	    
+	    '}' | 4;
+	    ''
+	    '/**' | 4;
+		'* Emits tuple along with a ticket.' | 4;
+		'* @param ticket the ticket to identify the responses for application' | 4;
+		'* @param tuple the tuple ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input to be emitted ' | 4;
+		'**/' | 4;
+   	    'public void emit(int ticket, ${toIdentifier(inputName)}${firstToUpperCase(tupleName)}Input tuple) {' | 4;
+   	    '}' | 4;
+   	    ''
+		}
+		
+        if (dataSnk.parameters.size()>0) {
+	        '    // data sink parameters'
+	        ''
+	        for (Parameter p : dataSnk.parameters) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+    			String type = parameterTypeName(p);
+	        	'    /**'
+	        	'     * Sets the data sink parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the data sink parameter'
+	        	'     */'
+	        	
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
+	        	'    }'
+	        	''
+	    	}
+    	}
+    	
+    	'@Override' | 4;
+    	'public void connect() {}' | 4;
+		''
+		'@Override' | 4;
+		'public void disconnect(){}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public void setStrategy(IStorageStrategyDescriptor strategy) {}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public IStorageStrategyDescriptor getStrategy() { return NoStorageStrategyDescriptor.INSTANCE;}' | 4;
+ 		''
+ 		'@Override' | 4;
+ 		'public Double getMeasurement(IObservable observable) { return null;}'	| 4;
+
+        if (dataSnk.supportsHadoop) {
+            String keyType = getHadoopType(dataSnk.output, false, true);
+            String valueType = getHadoopType(dataSnk.output, false, false);
+            ''
+            '@Override' | 4;
+            'public RecordWriter<${keyType}, ${valueType}> getRecordWriter(FileSystem ignored, JobConf job, String name, Progressable progress) throws IOException { return null;}' | 4;
+            ''
+            '@Override' | 4;
+            'public void checkOutputSpecs(FileSystem ignored, JobConf job) throws IOException {}' |4;
+            
+            '@Override' |4;
+            'public void configure(JobConf job) {}' |4;
+        } 				
+		'}' 
+		}
+		
+		
+ 
+}

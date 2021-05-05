@@ -1,0 +1,396 @@
+import commonVTLMethods;
+@advice(QM)
+template mappingXml(Configuration config, FileArtifact target, Pipeline pipeline, setOf(DecisionVariable) families, String subAlgName) {
+	setOf(String, String) parameterToNode = {};
+	mapOf(String, setOf(String)) componentsInSubtopology = {};
+	setOf(Source) sources = {};
+	setOf(Sink) sinks = {};
+	Boolean useThrift;
+	Boolean forSubPip = false;
+	
+    def collectParametersXml(sequenceOf(Parameter) parameters, String fName, String nodeName, String prefix) { //consider the prefix for the receiver (the actual receiver name at runtime)
+    	String paraString = "";
+    	String decNodeName = prefix.firstToUpperCase() + nodeName.firstToUpperCase();
+    	for(Parameter p : parameters) {
+    		paraString = "parameter=\"${p.name}\" name=\"$fName\" receiver=\"$decNodeName\"";
+    		parameterToNode.add(paraString);
+    	}
+    }
+   
+   def collectParametersXml(sequenceOf(Parameter) parameters, String fName, String receiver) { //the receiver here is referred to the name of the family element
+    	String paraString = "";
+    	for(Parameter p : parameters) {
+    		paraString = "parameter=\"${p.name}\" name=\"$fName\" receiver=\"$receiver\"";
+    		parameterToNode.add(paraString);
+    	}
+    }
+    
+    def collectComponentsInSubtopology(String nodeName, String nodeClsName, FamilyElement fe, String subPipName) {
+    	String componentName = formulateString(subPipName) + formulateString(nodeName);
+    	String algs = "";
+	    int pos = 0;
+    	String pipName = pipeline.name;
+    	Integer parallelism = fe.parallelism;
+    	for(Algorithm alg : fe.family.members) {
+            String algName = algName(alg);
+            if (algs.length() > 0) {
+                algs = algs + " ";
+            }
+            algs = algs + 'alternative${pos} = "${algName}"';
+            pos = pos + 1;
+        }
+        if (algs.length() > 0) {
+            algs = " " + algs;
+        }
+        setOf(String) tmp = {};
+        Boolean receiver = fe.family.parameters.size() > 0;
+        //SET IT ALWAYS TO TRUE
+        receiver = true;
+    	String component = "<component name=\"$componentName\" container=\"$subPipName\" class=\"eu.qualimaster.$subPipName.topology.$nodeClsName\" receiver=\"$receiver\" thrift=\"${useThrift}\" tasks=\"$parallelism\"/>\n";
+    	if(componentsInSubtopology.containsKey(subPipName)) {
+    		tmp = componentsInSubtopology.get(subPipName);
+    	} 
+    	if(tmp.excludes(component)) {
+    		tmp.add(component);
+    	}
+    	componentsInSubtopology.add(subPipName, tmp);//used the sub-pipeline name as the key!
+    }
+    
+    def collectComponentsInHWAlgorithm(HardwareAlgorithm algorithm, String pipName) { 
+    	String algName = algorithm.name;  
+		Integer senderParallelism = algorithm.senderParallelism;
+		Integer receiverParallelism = algorithm.receiverParallelism;
+        setOf(String) tmp = {};
+    	String comBolt = "<component name=\"${algName}HardwareConnectionBolt\" container=\"$algName\" class=\"eu.qualimaster.algorithms.$algName.HardwareConnectionBolt\" receiver=\"true\" thrift=\"${useThrift}\" tasks=\"${senderParallelism}\" type=\"HARDWARE\"/>\n";
+    	tmp.add(comBolt);
+    	String comSpout = "<component name=\"${algName}HardwareConnectionSpout\" container=\"$algName\" class=\"eu.qualimaster.algorithms.$algName.HardwareConnectionSpout\" receiver=\"true\" thrift=\"${useThrift}\" tasks=\"${receiverParallelism}\" type=\"HARDWARE\"/>\n";
+    	tmp.add(comSpout);
+    	componentsInSubtopology.add(algName, tmp);
+    }
+    
+    def subTopologyMapping(SubPipelineAlgorithm alg, String fName, setOf(Algorithm) algorithms, Text text) {
+    	setOf(String) subNodes = {};
+        String pipName = pipeline.name;
+    	for(DecisionVariable v : alg.subPipeline.connectors) {
+    		subNodes.add(v.varName());
+		    appendForNode(v, subNodes, algorithms, pipName, alg.subPipeline.name, fName, true, null, text);
+		    processElement(v.byName("output").variables(), text, subNodes, algorithms, pipName, alg.subPipeline.name, fName, null, true);
+	    }
+    }
+    
+    def processElement(sequenceOf(DecisionVariable) output, Text text, setOf(String) nodes, setOf(Algorithm) algorithms, String pipName, String subPipName, String subPipelineFamilyName, Boolean isSubPipeline, String currentAlg) {     	
+        for(Flow v : output) { 
+            DecisionVariable elt = v.destination;
+            String nodeName = elt.varName();
+            if(!isStringExisted(nodeName, nodes)) {
+            	nodes.add(nodeName);
+				appendForNode(elt, nodes, algorithms, pipName, subPipName, subPipelineFamilyName, isSubPipeline, currentAlg, text); 
+            	processElement(elt.byName("output").variables(), text, nodes, algorithms, pipName, subPipName, subPipelineFamilyName, isSubPipeline, currentAlg);
+            }
+        } 
+    }
+    
+    def appendForNode(DecisionVariable elt, setOf(String) nodes, setOf(Algorithm) algorithms, String pipName, String subPipName, String subPipelineFamilyName, Boolean isSubPipeline, String currentAlg, Text text) {
+    	String nodeName = elt.varName();
+    	String nodeClsName = elt.varName().firstToUpperCase() + elt.type();
+    	String space="";
+    	if(elt.type() == "Source") {  
+	    	Source src =elt;
+	        DataSource dataSrc = src.source;
+	        String srcName = src.name; 
+	        if(subPipName != null) {
+    			nodeName = formulateString(currentAlg) + formulateString(srcName);
+    			space = "    ";
+    		} 
+	        //if(subPipelineFamilyName != null) {//only for collecting parameters
+    			collectParametersXml(dataSrc.parameters, srcName, nodeName);
+    		//} else {
+    			Boolean receiver = dataSrc.parameters.size() > 0; 
+    			//SET IT ALWAYS TO TRUE!
+    			receiver = true;
+    			if(!isSubPipeline) {
+		        	text.append('      ${space}<node name="${srcName}" type="source">\n');
+		        }
+		        text.append('          ${space}<component name="$nodeName" container="${pipName}" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="$receiver" thrift="${useThrift}" tasks="${src.parallelism}"/>\n');                    
+		        if(!isSubPipeline) {
+		        	text.append('      ${space}</node>\n');
+		        }
+	        //}
+	    }
+    	if(elt.type() == "Sink" or elt.type() == "ReplaySink") {
+    		//collect sinks
+    		sinks.add(elt);
+    		String sinkType;
+    		if(elt.type() == "Sink") {
+    			sinkType = "sink";
+    		} else {
+    			sinkType = "replaySink";
+    		}
+            Sink snk = elt;
+            DataSink dataSnk = snk.sink;
+            String snkName = snk.name;
+            if(subPipName != null) {
+    			nodeName = formulateString(currentAlg) + formulateString(snkName);
+    			space = "    ";
+    		}
+           // if(subPipelineFamilyName != null) {
+            	collectParametersXml(dataSnk.parameters, snkName, nodeName);
+           // } else {
+            	Boolean receiver = dataSnk.parameters.size() > 0; 
+            	//SET IT ALWAYS TO TRUE!
+    			receiver = true;
+            	if(elt.type() == "ReplaySink") {
+            		receiver = true;//receiver is always true for the replay sink
+            	}
+            	if(!isSubPipeline) {
+	            	text.append('      ${space}<node name="${snkName}" type="$sinkType">\n');
+	            }
+	            text.append('          ${space}<component name="$nodeName" container="${pipName}" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="$receiver" thrift="${useThrift}" tasks="${snk.parallelism}"/>\n'); 
+	            if(!isSubPipeline) {
+	            	text.append('      ${space}</node>\n');
+	            } 
+            //}
+        }         
+        if(elt.type() == "FamilyElement") {
+            FamilyElement fe = elt;
+            Family fm = fe.family;
+            String fmName = fe.name;
+            String topPipName = pipName;
+            if(subPipName != null) {
+            	if(looseSub) {
+            		nodeName = formulateString(currentAlg) + formulateString(fmName);//[subPipName+fmName] for loose sub-pipelines
+            	} else {
+    				nodeName = currentAlg + formulateString(fmName); //[algName+fmName] for tight sub-pipelines
+    				topPipName = pipeline.name;//use the top-level(main) pipeline name for tight case
+    			}
+    			if(!forSubPip) {
+    				space = "    ";
+    			}
+    		}
+            //if(subPipelineFamilyName != null) {
+            	collectParametersXml(fm.parameters, fmName, nodeName);
+//            	collectComponentsInSubtopology(fmName, nodeClsName, fe, subPipName);
+            //} else {
+	            String algs = "";
+	            int pos = 0;
+	            for(Algorithm alg : fm.members) {
+	                String algName = algName(alg);
+	                algorithms.add(alg);
+	                if (algs.length() > 0) {
+	                    algs = algs + " ";
+	                }
+	                algs = algs + 'alternative${pos} = "${algName}"';
+	                pos = pos + 1;
+	            }
+	            if (algs.length() > 0) {
+	                algs = " " + algs;
+	            }
+
+				Boolean receiver = fm.parameters.size() > 0;
+				//SET IT ALWAYS TO TRUE!
+    			receiver = true;
+				if(!isSubPipeline or forSubPip) { 										
+	            	text.append('      ${space}<node name="${fmName}" type="family">\n');
+	            }
+	            text.append('          ${space}<component name="$nodeName" container="${topPipName}" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="$receiver" thrift="${useThrift}" tasks="${fe.parallelism}"$algs/>\n'); 
+	            
+	            
+	            if(hasSubPipelineAlgorithm(fm) or hasHardwareAlgorithm(fm)) { //appending the components under this family -- DO NOT NEEDED!
+	            	for(Algorithm alg : fm.members) {
+	            		/* 
+	            		if(isGenSubtopology(alg)) {
+		                	SubPipelineAlgorithm subAlg = alg;
+		                	//collect the components in the sub-topology
+		                	Pipeline subPipeline = subAlg.subPipeline;
+		                	subTopologyMapping(subAlg, fe.name, algorithms, text);
+	                	} else */if (isHardwareAlgorithm(alg)) {
+	                		HardwareAlgorithm hwAlg = alg;
+	                		collectComponentsInHWAlgorithm(hwAlg, pipName);
+	                	}
+	            	}
+	            }
+	            
+	            if(!isSubPipeline or forSubPip) {
+	            	text.append('      ${space}</node>\n'); 
+	            }	            
+           // }
+        }
+        if(elt.type() == "DataManagementElement") {
+            DataManagementElement fe = elt;
+            String fmName = fe.name;
+            
+            //if(subPipelineFamilyName != null) {
+            //} else { 
+            	Boolean receiver = true;//always to true
+	            text.append('      <node name="${fmName}" type="data_mgt">\n');
+	            text.append('          <component name="$nodeName" container="${pipName}" class="eu.qualimaster.$pipName.topology.$nodeClsName" receiver="$receiver" thrift="${useThrift}"/>\n'); 
+	            text.append('      </node>\n'); 
+            //}
+        }   		
+    }
+    
+	def main(Configuration config, FileArtifact target, Pipeline pipeline, setOf(DecisionVariable) families, String subAlgName) {		
+		useThrift = not(genMonitoringProbes);		
+		Text text = target.getText();	
+		if(families.size() == 0)	{
+			forSubPip = true;
+		}		
+		
+		text.append("<mapping>\n");
+
+		String pipName = pipeline.name;
+		String topologyClsName = "eu.qualimaster.$pipName.topology.Topology";
+        setOf(String) nodes = {};
+        setOf(Algorithm) algorithms = {};
+		text.append('  <pipeline name="${pipName}" class="$topologyClsName">\n');
+		//add the entries for sub-pipelines
+		if(looseSub) {
+		for(Family fm : families) {
+			for(Algorithm alg : fm.members) {				
+				if(isHardwareAlgorithm(alg) or isGenSubtopology(alg)) {
+					String name;
+					if(isGenSubtopology(alg)) {//generated sub-algorithm
+						SubPipelineAlgorithm subAlg = alg;
+						SubPipeline subPip = subAlg.subPipeline;
+						name = subPip.name;
+					} else {//hardware algorithm
+						name = alg.name;
+					}					
+					text.append('      <pipeline name="${name}" algorithm="${alg.name}"/>\n');
+				}
+			}
+		}
+		}
+		
+		processPipeline(pipeline, subAlgName, nodes, algorithms, text);
+		
+		//add intermediary nodes for the loosely integrated pipelines
+		if(forSubPip and looseSub) {
+	        appendIntermediaryComponent(subAlgName, pipName, true, useThrift, text);
+	    }
+	    //add intermediary nodes for the tightly integrated pipeline with manual algorithms in the switch case
+	    if(newSwitch) {
+		    for(Algorithm alg : algorithms) {
+		    	if(isManualSubtopology(alg)) {
+		    		appendIntermediaryComponent(algName(alg), pipName, true, useThrift, text);	
+		    	}
+		    } 
+	    }  
+	         
+        for(Algorithm alg : algorithms) {
+	        String algName = algName(alg);
+            String cls;
+            String implName;
+            if(isGenSubtopology(alg)) {//generated subtopology
+            	SubPipelineAlgorithm subAlg = alg;
+			    String pName = subAlg.subPipeline.name;
+			    implName = pName.firstToUpperCase().toIdentifier() + "SubTopology";
+			    cls = "eu.qualimaster." + pName.toIdentifier() + ".topology." + implName;
+			    text.append('      <algorithm name="${algName}" implName="${implName}" class="${cls}">\n');
+			    setOf(String) nodes = {};
+        		setOf(Algorithm) algorithms = {};
+			    processPipeline(subAlg.subPipeline, algName, nodes, algorithms, text);
+			    //append intermediary nodes		    
+			    if(looseSub) {
+			    	appendIntermediaryComponent(algName, pName, false, useThrift, text);
+			    }				
+			    text.append('      </algorithm>\n');
+            } else if (isHardwareAlgorithm(alg)) { //generated hardware algorithm
+            	implName = formulateString(alg.name) + "SubTopology";
+            	cls = "eu.qualimaster.algorithms." + formulateString(alg.name) + "." + implName;
+            	text.append('      <algorithm name="${algName}" implName="${implName}" class="${cls}">\n');
+        		if(componentsInSubtopology.containsKey(algName)) {
+			    	setOf(String) coms = componentsInSubtopology.get(algName);
+			    	for(String com : coms) {
+			    		text.append('          $com');
+			    	}
+			    }
+			    text.append('      </algorithm>\n');
+           	} else {
+           		SoftwareAlgorithm a = alg;
+            	cls = a.class;
+            	JavaPath algPath = cls;
+            	implName = algPath.getName();           	
+            	text.append('      <algorithm name="${algName}" implName="${implName}" class="${cls}"/>\n');
+            }
+        }
+        //append source algorithms
+        for(Source source : sources) {
+        	DataSource dataSrc = source.source;
+        	String algName = dataSrc.name;
+        	String cls = dataSrc.sourceCls;
+        	JavaPath algPath = cls;
+            String implName = algPath.getName();
+        	text.append('      <algorithm name="${algName}" implName="${implName}" class="${cls}"/>\n');
+        }
+        //apend sink algorithms
+        for(Sink sink : sinks) {
+        	DataSink dataSnk = sink.sink;
+        	String algName = dataSnk.name;
+        	String cls = dataSnk.sinkCls;
+        	JavaPath algPath = cls;
+            String implName = algPath.getName();
+        	text.append('      <algorithm name="${algName}" implName="${implName}" class="${cls}"/>\n');
+        }
+    	for(String para : parameterToNode) {
+    		text.append('      <parameter $para/> \n');
+    	}
+        	
+		text.append('  </pipeline>\n');
+		text.append('\n');				        			
+
+		text.append("</mapping>\n");
+		target.rename("mapping.xml");
+	}
+	
+	def String algName(Algorithm alg) {
+	    // old mapping
+        //String n = alg.class;
+        //JavaPath algPath = n;
+	    //algPath.getName();
+	    // new mapping, this is the name as defined in the configuration!
+	    alg.name;
+	}
+	
+	/**
+	 * @param pipeline pipeline to be traversed
+	 * @param currentAlg the current algorithm name to be used in the algorithm information as part of the component name for tight sub-pipelines
+	 * @param nodes already-visited nodes
+	 * @param algorithms the algorithms used in the (sub-)pipeline
+	 */
+	def processPipeline(Pipeline pipeline, String currentAlg, setOf(String) nodes, setOf(Algorithm) algorithms, Text text) {
+		String pipName = pipeline.name;
+		Boolean isSub = isSubPipeline(pipeline);		
+		for(DecisionVariable v : pipeline.sources) {
+				//collect sources
+				sources.add(v);
+				String nodeName = v.varName();
+	            String nodeClsName = v.varName().firstToUpperCase() + v.type();	
+	            if(!isStringExisted(nodeName, nodes)) {
+	            	nodes.add(nodeName);
+		            appendForNode(v, nodes, algorithms, pipName, null, null, isSub, currentAlg, text);  
+		            processElement(v.byName("output").variables(), text, nodes, algorithms, pipName, null, null, isSub, currentAlg);
+	            }
+	        }
+	    if(pipeline.type() == "SubPipeline") {
+	    	SubPipeline subPip = pipeline;
+	        for(DecisionVariable v : subPip.connectors) {//considering the connectors from subpipeline
+		        String nodeName = v.varName();
+		        if(!isStringExisted(nodeName, nodes)) {
+	            	nodes.add(nodeName);
+			    	appendForNode(v, nodes, algorithms, pipName, pipName, null, isSub, currentAlg, text);
+			    	processElement(v.byName("output").variables(), text, nodes, algorithms, pipName, pipName, null, isSub, currentAlg);
+		    	}
+	    	}
+    	}
+	}
+	
+	def Boolean isSubPipeline(Pipeline pipeline) {
+		Boolean isSub = false;
+		if(pipeline.type() == "SubPipeline") {
+			isSub = true;
+		}
+		isSub;
+	}
+    	
+}

@@ -1,0 +1,158 @@
+import commonVTLMethods;
+@advice(QM)
+template stormEndBoltSubPipeline(Configuration config, FileArtifact target, String topoName, String topLevelPip, String nextNode, Algorithm algorithm) {
+	def main(Configuration config, FileArtifact target, String topoName, String topLevelPip, String nextNode, Algorithm algorithm) {
+		'package eu.qualimaster.${toIdentifier(topoName)}.topology;'
+    	'' 
+    	/****************************/
+    	/*        Imports           */  
+    	/****************************/ 
+    	'import java.util.*;'
+    	'import java.io.IOException;'
+    	'import org.apache.log4j.Logger;'
+    	'import backtype.storm.tuple.*;'
+    	'import backtype.storm.task.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualimaster.common.signal.*;'
+    	'import eu.qualimaster.base.algorithm.*;'
+    	'import eu.qualimaster.families.inf.*;'
+    	'import eu.qualimaster.common.switching.*;'
+    	'import eu.qualimaster.base.serializer.*;'
+    	'import backtype.storm.Config;'
+    	'import eu.qualimaster.base.pipeline.CollectingTopologyInfo;'
+    	'import java.util.concurrent.ConcurrentLinkedQueue;'
+    	'import eu.qualimaster.common.signal.PortManager.*;'
+		'import eu.qualimaster.common.signal.PortManager;'
+		if(newSwitchLog) {
+    		'import java.io.PrintWriter;'
+			'import eu.qualimaster.common.logging.DataLogger;'
+			'import java.util.Calendar;'
+    	}  
+    	  	    	    			
+		/****************************/
+    	/*        Bolt class        */  
+    	/****************************/
+    	''
+    	'/**'
+    	'* Defines the end bolt for the algorithm $algName (GEN).'  
+    	'**/'
+    	'@SuppressWarnings({ "rawtypes", "serial" })'
+    	String name = formulateString(algorithm.name) + "EndBolt";
+    	'public class $name extends BaseSignalBolt {'
+		    	/****************************/
+		    	/*     Class variables      */  
+		    	/****************************/
+    	''    
+    	'    final static Logger logger = Logger.getLogger($name.class);'
+    	'    transient OutputCollector _collector;'
+    	'    private String streamId;'
+    	'    private String host = "localhost";'
+    	'    private int port;'
+    	'    private transient TupleSender sender = null;'
+    	'    private transient KryoGeneralTupleSerializer genSer = null;'
+    	'private String nimbus_host = "localhost";' | 4;
+    	'private int thrift_port = 6027;' | 4;
+    	'private transient Queue<IGeneralTuple> queue = null;' | 4;
+    	'private transient SynchronizedQueue<IGeneralTuple> syn = null;' | 4;
+    	'private static int QUEUE_SIZE = 100;' | 4;
+    		if(newSwitchLog) {
+				'private transient PrintWriter out = null;' | 4;
+			}
+		    	/****************************/
+		    	/*    Class constructor     */  
+		    	/****************************/
+    	''
+    	'    public $name(String name, String namespace, String streamId) {'
+    	'        super(name, namespace, $genMonitoringProbes);'
+    			 'this.streamId = streamId;' | 8;
+    	'    }' 
+    	    	/****************************/
+		    	/*      prepare method      */  
+		    	/****************************/		
+		'' 	      
+		'    public void prepare(Map map, TopologyContext topologyContext, OutputCollector collector) {'
+		'        super.prepare(map, topologyContext, collector);'
+				 '_collector = collector;' | 8;	
+				 'nimbus_host = (String) map.get(Config.NIMBUS_HOST);' | 8;
+        		 'thrift_port = (int) map.get(Config.NIMBUS_THRIFT_PORT);' | 8;	 
+				 if(newSwitchLog) {
+				 	'String logDir = (String) map.get("LOG.DIRECTORY");' | 8;
+				 	'out = DataLogger.getPrintWriter(logDir + "${topoName}EndBolt.log");' | 8;
+				 }
+				'genSer = new KryoGeneralTupleSerializer(map); ' | 8;
+				'queue = new ConcurrentLinkedQueue<IGeneralTuple>();' | 8;
+        		'syn = new SynchronizedQueue<IGeneralTuple>(queue, QUEUE_SIZE);' | 8;
+        		
+        		'PortManager portManager = getPortManager();' | 8;
+        			'PortAssignment assignment = null;' | 8;
+        			'while(assignment == null && portManager.isConnected()) {' | 8;
+		        		'try {' | 12;
+		        			'assignment = portManager.getPortAssignment(getPipeline(), "$nextNode", 0, null);' | 16; //TODO: change hardcoded!
+						'} catch (SignalException e) {' | 12;
+							'e.printStackTrace();' | 16;
+						'}' | 12;
+        			'}' | 8;   
+        		'if(assignment != null) {' | 8;    		
+					'host = assignment.getHost();' | 12;
+        			'port = assignment.getPort();' | 12;
+        		'}' | 8;
+        		if(newSwitchLog) {
+        			'logger.info("Connecting to the host : " + host + ", the port: " + port);' | 8;
+		        	'out.println("Connecting to the host : " + host + ", the port: " + port);' | 8;
+		        	'out.flush();' | 8;
+		        }
+				'sender = new TupleSender(host, port);' | 8;
+				'Thread sendTupleThread = new Thread(new SendTuple());' | 8;
+        		'sendTupleThread.start();' | 8;
+
+        		'initMonitor();' | 8;
+        		'logger.info("The end of the prepare method.");' | 8;
+			'}' | 4; 
+    	''
+    	//override the initial monitor
+	    produceInitMonitor(true, 4);
+	    
+    			/****************************/
+		    	/*      execute method      */  
+		    	/****************************/	
+		'/**' | 4;
+		' * A thread executes tuples.' | 4;
+		'**/' | 4;
+		'public class SendTuple implements Runnable {' | 4;
+		''
+		'private AbstractMonitor monitor = createThreadMonitor();' | 8;
+		''
+			'@Override' | 8;
+    		'public void run() {' | 8;
+				'while(true) {' | 12;
+		            if (genMonitoringProbes) {      
+                    'monitor.startMonitoring();' | 16;
+                    }
+				    'IGeneralTuple tuple = syn.consume();' | 16;
+					'byte[] bytes = genSer.serialize(tuple);' | 16;
+					'sender.send(bytes);' | 16;
+                    if (genMonitoringProbes) {
+                    'monitor.endMonitoring(tuple);' | 16;
+                    }           
+				'}' | 12;
+			'}' | 8;
+		'}' | 4;  
+		''  	    
+		'    public void execute(Tuple tuple) {'
+			if(newSwitchLog) {
+    			'out.println("Received data and emitting...");' | 8;
+    			'out.flush();' | 8;
+    		}
+			 	'//queue received data' | 8;
+			 	'syn.produce(new GeneralTuple(tuple.getValues()));' | 8;
+			 '}' | 4;
+				/************************************/
+				/*   declareOutputFields method     */
+				/************************************/
+		''              
+		'    public void declareOutputFields(OutputFieldsDeclarer declarer) {'				
+		'        declarer.declareStream(streamId, new Fields("endBolt"));'	
+			 '}' | 4;		  	  	    	
+    	'}'
+	}
+}

@@ -1,0 +1,711 @@
+import commonVTLMethods;
+@advice(QM)
+template stormPipeline(Configuration config, FileArtifact target, Pipeline pipeline, String algName, mapOf(String, setOf(DecisionVariable)) familiesInPipeline, mapOf(String, setOf(DecisionVariable)) lastElementMap) { 
+	setOf(String) bolts = {}; //collect the generated bolt name
+	setOf(String) flows = {}; //collect the passed flow name(varname)
+	setOf(String) produced = {}; //collect the produced element(for only generating the spout/Bolt definition once) 
+	mapOf(String, Integer) nodeToRepeatNumMap = {};
+	String pipName = pipeline.name;
+    // check for endless recursions    
+    def main(Configuration config, FileArtifact target, Pipeline pip, String algName, mapOf(String, setOf(DecisionVariable)) familiesInPipeline, mapOf(String, setOf(DecisionVariable)) lastElementMap) {    	
+    	String pipName = pip.name.toIdentifier();
+    	Integer numworkers=pip.numworkers;
+    	Boolean fastSerialization=pip.fastSerialization;
+    	//Integer numworkers=1;
+    	Integer timeout = pip.timeout;
+    	//get all families used in this pipeline
+    	setOf(DecisionVariable) families = {};
+    	if(familiesInPipeline.containsKey(pipName)) {
+    		families = familiesInPipeline.get(pipName);
+    	}
+    	'package eu.qualimaster.$pipName.topology;'
+    	''
+    	'import org.apache.log4j.Logger;'    	
+    	'import backtype.storm.*;'
+    	'import backtype.storm.topology.*;'
+    	'import eu.qualimaster.Configuration;'
+    	'import eu.qualimaster.base.algorithm.*;'
+    	'import eu.qualimaster.infrastructure.PipelineOptions;'
+    	'import eu.qualimaster.base.pipeline.RecordingTopologyBuilder;'
+    	for(Family fm : families) {
+    		produceAlgorithmImports(fm);
+    	}
+    	
+    	''
+    	'/**'
+    	'* Define the main topology class(GEN).'
+    	'**/'
+    	'public class Topology{'
+    	'    final static Logger logger = Logger.getLogger(Topology.class);'
+    	'    static final String TOPOLOGY_NAME = "$pipName";'
+//    	'    private static int numWorkers = 0; //numWorkers to be configured'
+    	'    private static int maxNumWorkers = 1; //initialized by default value'
+    	'    private static int maxTaskParallelism = 1; //initialized by default value'
+    	'    private static PipelineOptions options = null; //initialized by default value'
+//    	'    private transient Config config = new Config();'
+//        '    private transient TopologyBuilder builder = new TopologyBuilder();'
+    	''
+    	'    /**'
+    	'     * Define a class for creating the main topology.'
+    	'     */'
+    	'    public static class MainTopologyCreator implements IMainTopologyCreate {'
+    	'        /**'
+    	'         * Create a main topology.'
+    	'         * @return a TopologyOutput carring the storm config and TopologyBuilder information'
+    	'         */'
+    	'        public TopologyOutput createMainTopology() {'
+    	'            int numWorkers = $numworkers; //initialized by the pipeline configuration'
+    	'            Config config = new Config();'
+    	'            config.setMessageTimeoutSecs($timeout);'
+    	'            config.setDebug(false);'
+    	'            config.put("windowSize", 1 * 30);  // Window size (in secs)'
+        '            config.put("windowAdvance", 1);  // Advance of the window (in secs)'
+        'if(options.isSubPipeline()) {' | 12;
+            	'config.put(eu.qualimaster.common.signal.Constants.CONFIG_KEY_SUBPIPELINE_NAME, options.getMainPipeline());' | 16;
+            '} else {' | 12;
+        '            config.put(eu.qualimaster.common.signal.Constants.CONFIG_KEY_SUBPIPELINE_NAME, TOPOLOGY_NAME); //sub-pipeline namespace'
+        '}' | 12;
+        '			//The settings to optimize the storm performance.'
+        '			config.put(Config.TOPOLOGY_RECEIVER_BUFFER_SIZE, 8);'
+		'			config.put(Config.TOPOLOGY_TRANSFER_BUFFER_SIZE, 32);'
+		'			config.put(Config.TOPOLOGY_EXECUTOR_RECEIVE_BUFFER_SIZE, 16384);'
+		'			config.put(Config.TOPOLOGY_EXECUTOR_SEND_BUFFER_SIZE, 16384);'
+//    	''
+//    	'        if (args != null && args.length > 0) {'
+    	'            config.put(Configuration.HOST_EVENT, Configuration.getEventHost());'
+        '            config.put(Configuration.PORT_EVENT, Configuration.getEventPort());'
+        '            config.put(Configuration.EVENT_DISABLE_LOGGING, Configuration.getEventDisableLogging());'
+        '			 config.put(Configuration.PIPELINE_INTERCONN_PORTS, Configuration.getPipelinePorts());'
+        if(newSwitchLog) {
+        '			 config.put("LOG.DIRECTORY", "/var/nfs/spass/");'
+        }
+//                   TODO switch to Configuration.transferConfiguraitonTo(config);
+//    	'        }'
+        if (fastSerialization) {
+        	'            eu.qualimaster.families.imp.SerializationRegistry.registerKryoSerializers(config);'
+        }
+        '            options.toConf(config);' // before first algorithm/sub-topology!!!
+    	''
+    	'            RecordingTopologyBuilder builder = new RecordingTopologyBuilder(options);'
+    	
+    	if(pip.type() == "SubPipeline") { //when it is a sub-pipeline
+    		'builder.setSpout("${algName}Intermediary", new ${algName}Intermediary("${algName}Intermediary", "$pipName", "${algName}IntermediaryStreamId"), 1);' | 12; //the intermediary spout 
+			String topologyCls = "${formulateString(pipName)}SubTopology";
+			String snkBolt = pipName.firstToUpperCase() + "SubOutput";
+			'            SubTopologyOutput $snkBolt = new $topologyCls().createSubTopology(builder,config,"$algName", "${algName}Intermediary", "${algName}IntermediaryStreamId");'
+			'BoltDeclarer ${algName}EndBolt = builder.setBolt("${algName}EndBolt", new ${algName}EndBolt("${algName}EndBolt", "$pipName", $snkBolt.getStreamId()), 1);' | 12; 
+			'${algName}EndBolt.shuffleGrouping($snkBolt.getBoltName(), $snkBolt.getStreamId());' | 12;
+    	} else {
+	    	for (DecisionVariable r : pip.sources) {
+	    		if(genMultiTupleTypes) {
+	    			Tuple t;
+	    			processElement(r, Grouping.shuffleGrouping, t, r, r, true, false);
+	    		} else {
+		    		setOf(String) s1 = {};
+		    		setOf(String) s2 = {};
+		    		setOf(String) outputTupleNames = {};
+		    		processElement(r, Grouping.shuffleGrouping, s1, s2, true, outputTupleNames);
+	    		}
+	    	} 
+    	}
+    	'            builder.close(TOPOLOGY_NAME, config);'  
+    	'            return new TopologyOutput(config, builder, numWorkers);'  	
+    	'        }'
+    	''
+    	'    }'
+    	'    /**'
+    	'     * Main method.'
+    	'     */'
+    	'    public static void main(String[] args) throws Exception {'
+    	'        //create the main topology.'
+    	'        options = new PipelineOptions(args);'
+    	'        MainTopologyCreator topoCreator = new MainTopologyCreator();'
+ 		'        TopologyOutput topo = topoCreator.createMainTopology();'
+ 		'        //get the topology information'
+ 		'        Config config = topo.getConfig();'
+ 		'        TopologyBuilder builder = topo.getBuilder();'
+ 		'        int defNumWorkers = topo.getNumWorkers();'
+        '        int numWorkers = options.getNumberOfWorkers(defNumWorkers);'
+ 		''
+ 		//'System.out.println("Calling the main class with" + java.util.Arrays.toString(args));'
+    	'        //submit the topology in the real cluster' 
+    	'        if (args != null && args.length > 0) {'
+    	'if(!options.isInProfilingMode()) {' |12; 
+    	'if(maxNumWorkers > numWorkers) {' |16;
+    	'logger.warn("WARNING: the number of workers in sub-topology is larger than in the main topology!");' | 20;
+    	'}' | 16;
+    	'}' |12;
+    	//'System.out.println("Starting pipelines");'
+    	'            config.setNumWorkers(numWorkers);'
+        '            StormSubmitter.submitTopology(args[0], config, builder.createTopology());'
+    	'        }'
+    	'        else{ //submit the topology locally' 
+    	'           config.setMaxTaskParallelism(maxTaskParallelism);'
+    	'           final LocalCluster cluster = new LocalCluster();'
+		'           cluster.submitTopology(TOPOLOGY_NAME, config, builder.createTopology());'		
+		'        }'
+    	'    }'
+    	'}'
+    }
+     
+    def processElement(DecisionVariable elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
+		'// unhandled type ${elt.type()}' | 8;
+    }
+
+	def processElement(DataManagementElement elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
+        // currently the same as FamilyElement -> infer grouping to fieldsGrouping?
+    	setOf(String) listName = {};        
+    	String name = elt.varName();
+    	Integer outputSize = elt.output.size();
+    	    	
+    	setOf(String) outputTupleNames = {};
+    	outputTupleNames = lastOutputTupleNames;
+    	
+    	if(newFlow){
+     	    produceStatement(elt, grouping, preLastName, lastName, true, isLastElementDM, lastOutputTupleNames);    	
+		} 
+		if(isStringExisted(name, produced)){			
+		}else {
+    	    listName.add(name);
+    	    produced.add(name);   		
+    	}
+        Boolean nFlow;
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}
+			if(nFlow) {//only when the flow is not visited
+				processElement(flow.destination, flow.grouping, lastName, listName, nFlow, true, outputTupleNames);
+			}			
+		}
+    }
+
+    def processElement(FamilyElement elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
+        // currently the same as DataManagementElement -> infer grouping to shuffleGrouping?
+    	setOf(String) listName = {}; 
+    	String nameVar = elt.varName();  
+    	Integer outputSize = elt.output.size();
+    	Family fm = elt.family;
+    	//collect the output tuple names from the current element
+    	setOf(String) outputTupleNames = {};
+    	for(Tuple t : fm.output) {
+    		String tupleName = t.name;
+    		outputTupleNames.add(tupleName);
+    	}
+        if(newFlow){
+    	    produceStatement(elt, grouping, preLastName, lastName, true, isLastElementDM, lastOutputTupleNames);
+    	}
+    	if(isStringExisted(nameVar, produced)){
+    		//do nothing    		
+    	}
+    	else{//the current element is not produced    		
+		    String snkBolt = "";
+		    String subTopoCreator = "";
+		    Family fm = elt.family;
+		    Integer topoCount = 1;		
+    	    for (Algorithm alg : fm.members) {
+			    if(isDistAlgorithm(alg)) { //produce the subTopology statement			    	
+				    snkBolt = nameVar.firstToUpperCase() + "${topoCount}SubOutput";
+                    subTopoCreator = nameVar.firstToUpperCase() + "${topoCount}SubCreator";
+				    String algCls = algQualifiedClsName(alg);//qualified class name	
+					String streamId = nameVar + "${topoCount}TopoStream";	
+					String topologyCls = algImplName(alg);//implementation name
+			   		String algName = alg.name.firstToUpperCase().toIdentifier();
+			   		
+			    	'            //generate the Storm-based algorithm topology name:$algClsName'
+			    	if (isManualSubtopology(alg)) {
+			    		produceConfInitAlgorithm(alg, algName);
+			    	}
+			    	if(newSwitch and fm.members.size() > 1) {
+		    			'builder.setSpout("${algName}Intermediary", new ${algName}Intermediary("${algName}Intermediary", "$pipName", "${algName}IntermediaryStreamId"), 1);' | 12; //set the default spout parallelism 
+			   			'            builder.startRecording("$algClsName");'
+			   			'            ITopologyCreate ${subTopoCreator} = new $topologyCls();'
+			   			'            SubTopologyOutput $snkBolt = ${subTopoCreator}.createSubTopology(builder,config,"$algName", "${algName}Intermediary", "${algName}IntermediaryStreamId");'
+			   			'            builder.endRecording(${subTopoCreator});'
+			   			'BoltDeclarer ${algName}EndBolt = builder.setBolt("${algName}EndBolt", new ${algName}EndBolt("${algName}EndBolt", "$pipName", $snkBolt.getStreamId()), 1);' | 12; 
+			   			'${algName}EndBolt.shuffleGrouping($snkBolt.getBoltName(), $snkBolt.getStreamId());' | 12;
+			   		} else {
+			   			'            builder.startRecording("$algClsName");'
+                        '            ITopologyCreate ${subTopoCreator} = new $topologyCls();'
+			    		'            SubTopologyOutput $snkBolt = ${subTopoCreator}.createSubTopology(builder,config,"$algName", "$nameVar", "$streamId");'
+			    		'            builder.endRecording(${subTopoCreator});'
+			    	}
+			    	
+			    	'maxNumWorkers = Math.max(maxNumWorkers, $snkBolt.getNumWorkers());' | 12;
+			    	'maxTaskParallelism = Math.max(maxTaskParallelism, $snkBolt.getMaxTaskParallelism());' | 12;	
+			    	listName.add(snkBolt);
+			    	topoCount = topoCount + 1;		    	    
+		    	} else { //for non-subTopology algorithm
+		    		if(isStringExisted(nameVar, listName)){		    			
+		    		} else {
+		    			listName.add(nameVar);
+		    		}		     		
+		    	}					 
+    	 	} 
+    	 	produced.add(nameVar); //added the current element to produced(mark it is produced)       	
+        }
+		Boolean nFlow;		   	
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}	
+			if(nFlow) {//only when the flow is not visited					
+				processElement(flow.destination, flow.grouping, lastName, listName, nFlow, false, outputTupleNames);
+			}
+		}
+    }
+    
+    def produceConfInitAlgorithm(Algorithm alg, String algName) {
+    }
+
+    def produceConfInitAlgorithm(SoftwareAlgorithm alg, String algName) {
+        'if (!config.containsKey(PipelineOptions.getExecutorParallelismKey("$algName"))) {' | 12;
+        'config.put(PipelineOptions.getExecutorParallelismKey("$algName"), ${alg.parallelism});' | 16;
+        '}' | 12;
+        if (alg.numtasks > 0) {
+        'if (!config.containsKey(PipelineOptions.getTaskParallelismKey("$algName"))) {' | 12;
+        'config.put(PipelineOptions.getTaskParallelismKey("$algName"), ${alg.numtasks});' | 16;
+        '}' | 12;
+        }
+    }
+    
+    /*
+     * Processes the element along the pipeline topology.
+     * @param elt the Source variable
+     * @param grouping the grouping type 
+     * @param preNameForTopo  
+     */
+    def processElement(Source elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, setOf(String) lastOutputTupleNames) {
+    	setOf(String) listName = {};//collect the name of the current element as the last element that linked to the next element
+    	String name = elt.varName(); 
+//    	Integer outputSize = elt.output.size();    	
+    	//get DataSource variable
+    	DataSource dataSrc = elt.source;
+    	//collect the output tuple names from the current element
+    	setOf(String) outputTupleNames = {};
+    	for(Tuple t : dataSrc.input) {
+    		String tupleName = t.name;
+    		outputTupleNames.add(tupleName);
+    	}
+    	
+    	if(newFlow){ //if the flow has not been passed (the flow is new), in Source it starts with true to produce the spout definition
+     		produceStatement(elt, grouping, preLastName, lastName, false, false, lastOutputTupleNames);    	
+		} 
+		if(isStringExisted(name, produced)){			
+		}else {//the elt is not produced
+    	    listName.add(name);
+    	    produced.add(name);   		
+    	}
+	    Boolean nFlow;
+	    //go through the flow outputs
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){ //check if the flow has been passed
+				nFlow = false; //the flow is not new
+			} else {
+				nFlow = true; //the flow is new
+				flows.add(flowName); //added the current flow to the set flows
+			}
+			if(nFlow) {//only when the flow is not visited
+				processElement(flow.destination, flow.grouping, lastName, listName, nFlow, false, outputTupleNames);
+			}
+		}
+    }
+    
+    def processElement(Sink elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean newFlow, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {   	
+    	if(newFlow){
+    	    produceStatement(elt, grouping, preLastName, lastName, true, isLastElementDM, lastOutputTupleNames);	
+    	}
+    	
+    }
+    
+    def produceStatement(DecisionVariable elt, Grouping grouping, setOf(String) preLastName, setOf(String) lastName, Boolean bolt, Boolean isLastElementDM, setOf(String) lastOutputTupleNames) {
+    	//name for Spout/Bolt
+    	String name = elt.varName();
+    	//Spout/Bolt class name
+    	String clsName = className(elt);
+    	//get the parallelism
+    	Integer parallelism = elt.byName("parallelism"); 
+    	//collect the tuple names from the current element input
+    	setOf(String) inputTupleNames = {};
+    	//obtain the meaningful display name of the element 
+    	String eltType = elt.type();
+    	String displayName;
+    	if(eltType == "Source") {
+    		//cast the elt to Source
+    		Source source = elt;
+    		//get the display name
+    		displayName = source.name;
+    		//no input tuple
+    	} else if (eltType == "FamilyElement") {
+    		//cast the elt to FamilyElement
+    		FamilyElement familyElt = elt;
+    		//get the display name
+    		displayName = familyElt.name;
+    		//collect the tuple names from the current element input
+    		Family fm = familyElt.family;
+    		for(Tuple t : fm.input) {
+    			String tupleName = t.name;
+    			inputTupleNames.add(tupleName);
+    		}    		
+    	} else if(eltType == "Sink") {
+    		//cast the elt to Sink
+    		Sink sink = elt;
+    		//get the display name
+    		displayName = sink.name;
+    		//collect the tuple names from the current element input
+    		DataSink dataSnk = sink.sink;
+    		for(Tuple t : dataSnk.output) {
+    			String tupleName = t.name;
+    			inputTupleNames.add(tupleName);
+    		}
+    	} else if(eltType == "DataManagementElement") {
+    		DataManagementElement dmElt = elt;
+    		displayName = dmElt.name;
+    		inputTupleNames = lastOutputTupleNames;
+    	}    			   	
+    	
+        if (bolt) {    	    
+    	    if(isStringExisted(name, bolts)){ 
+ 	    	} else {
+ 	    	  '// Declare a Bolt "$displayName"' | 12;
+ 	          'BoltDeclarer $name = builder.setBolt("$name", new $clsName("$name", "$pipName"), $parallelism)${produceNumTasks(elt)};' | 12;  
+    	      bolts.add(name); 
+ 	    	}
+ 	    		    	
+	    	'$name' | 12;   	    	    	    
+	    	if(isLastElementDM) { //if the last element is a DataManagementElement, then grouping to the element before the DME	        		
+			    grouping(elt, grouping, preLastName, lastOutputTupleNames, inputTupleNames);
+			} else {
+			    grouping(elt, grouping, lastName, lastOutputTupleNames, inputTupleNames);
+			}		        		               	  	    
+        } else {
+        	'// Declare a Spout "$displayName"' | 12;
+		    'builder.setSpout("$name", new $clsName("$name", "$pipName"), $parallelism)${produceNumTasks(elt)};' | 12;
+        }
+    }
+    
+    def grouping(DecisionVariable elt, Grouping grouping, setOf(String) lastName, setOf(String) lastOutputTupleNames, setOf(String) inputTupleNames) {  	   	
+        String sname;
+        String varName = elt.varName();
+        mapOf(String, String) nameToAlg = {};  
+        if(newSwitch) {
+        	setOf(DecisionVariable) lastElts= {};
+        	if(lastElementMap.containsKey(varName)) {
+        		lastElts = lastElementMap.get(varName);
+        	}
+        	mappingSubInstanceNameToAlgName(lastElts, nameToAlg); 
+        }     
+//    	if (elt.varName().length() > 0) {
+    		for(String last : lastName) {   						
+    		    if(containsEnding(last,"SubOutput")) { // for topo
+    		    	if(newSwitch) {
+    		    		String algName;
+    		    		if(nameToAlg.containsKey(last)) {
+    		    			algName = nameToAlg.get(last);
+    		    		}
+    		    		'.$grouping("${algName}EndBolt", $last.getStreamId())' | 16;
+    		    	} else {
+    			    	'.$grouping($last.getBoltName(), $last.getStreamId())' | 16; 	
+    			    }		
+    		    } else { // for non-topo 	   		    	
+    		    	for(String input : inputTupleNames) {
+    		           for(String output : lastOutputTupleNames) {
+    					  if(input == output) {
+    				          sname = last + "Stream${firstToUpperCase(input)}";   				    
+    				          '.$grouping("$last", "$sname")' | 16;
+    				      }
+    		           }
+    	            }   		    		    	
+    				
+    		    }     			
+    		}
+    		';' | 16; 		  	 
+//    	}    	   	
+    }    
+        
+    def Boolean containsEnding(String str, String subString) {
+    	Integer strLen = str.length();
+    	Integer subStringLen = subString.length();   	
+    	if(subStringLen > strLen){
+    		false;
+    	} else {
+    		String sub = str.substring(strLen-subStringLen, strLen);
+    		if(sub == subString) {
+    			true;
+    		} else {
+    			false;
+    		}
+    	}   	
+    }
+    
+    def mappingSubInstanceNameToAlgName(setOf(DecisionVariable) lastElts, mapOf(String, String) nameToAlg) {
+    	Integer counter = 1;
+        	for(DecisionVariable dv : lastElts) {
+	        	if(dv.type() == "FamilyElement") {
+	        		String dVarName = dv.varName();
+	        		Family fm = dv.byName("family");
+	        		for(Algorithm alg : fm.members) {
+	        			String algName = alg.name.firstToUpperCase().toIdentifier();
+	        			if(isDistAlgorithm(alg)) {
+	        				String VarSubName = dVarName+counter+"SubOutput";
+	        				nameToAlg.add(VarSubName, algName);
+	        				counter = counter + 1;
+	        			}
+	        		}
+	        	}
+	        	if(dv.type() == "DataManagementElement") {
+	        		String dVarName = dv.varName();	        		
+	        		if(lastElementMap.containsKey(dVarName)) {
+			    		setOf(DecisionVariable) lastElts = lastElementMap.get(dVarName);
+			    		mappingSubInstanceNameToAlgName(lastElts, nameToAlg);
+			    	}
+	        	}
+        	}
+    }
+
+    /**
+     *  The following methods are used for integrating the tuple type of the flow to the main pipeline generation.
+     */   
+    def processElement(DecisionVariable elt, Grouping grouping, Tuple tupleType, DecisionVariable preElt, DecisionVariable prePreElt, Boolean newFlow, Boolean isLastElementDM) {
+    	'//unhandled type ${elt.type()}'
+    }
+    def processElement(Source elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, PipelineNode prePreElt, Boolean newFlow, Boolean isLastElementDM) {
+    	String nameVar = elt.varName(); 
+    	DataSource dataSrc = elt.source;    	
+ 		
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, prePreElt, false, false);
+    	}
+    	
+    	if(isStringExisted(nameVar, produced)){			
+		}else {//the elt is not produced
+    	    produced.add(nameVar);   		
+    	}
+    	
+		Boolean nFlow;	   	
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}
+			if(nFlow) {//only when the flow is not visited					
+				processElement(flow.destination, flow.grouping, flow.tupleType, elt, preElt, nFlow, false);
+			}
+		}
+    }
+    
+    def processElement(Sink elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, PipelineNode prePreElt, Boolean newFlow, Boolean isLastElementDM) {
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, prePreElt, true, isLastElementDM);
+    	}    		
+    }
+    
+    def processElement(ReplaySink elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, PipelineNode prePreElt, Boolean newFlow, Boolean isLastElementDM) {
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, prePreElt, true, isLastElementDM);
+    	}    		
+    }
+    
+    def processElement(DataManagementElement elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, PipelineNode prePreElt, Boolean newFlow, Boolean isLastElementDM) {
+        // currently the same as FamilyElement -> infer grouping to fieldsGrouping?
+    	String nameVar = elt.varName();
+    	
+    	if(newFlow){
+     	    produceStatement(elt, grouping, tupleType, preElt, prePreElt, true, isLastElementDM);    	
+		} 
+		if(isStringExisted(nameVar, produced)){			
+		} else {
+    	    produced.add(nameVar);   		
+    	}
+        Boolean nFlow;
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}
+			if(nFlow) {//only when the flow is not visited
+				processElement(flow.destination, flow.grouping, flow.tupleType, elt, preElt, nFlow, true);
+			}	
+		}
+    }
+    
+    def processElement(FamilyElement elt, Grouping grouping, Tuple tupleType, PipelineNode preElt, PipelineNode prePreElt, Boolean newFlow, Boolean isLastElementDM) {
+    	String nameVar = elt.varName(); 
+ 		String name = elt.name;
+ 		
+        if(newFlow){
+    	    produceStatement(elt, grouping, tupleType, preElt, prePreElt, true, isLastElementDM);
+    	}
+    	if(isStringExisted(nameVar, produced)){
+    		//do nothing    		
+    	} else {//the current element is not produced    		
+		    String snkBolt = "";
+            String subTopoCreator = "";
+		    Family fm = elt.family;
+		    Integer topoCount = 1;		
+    	    for (Algorithm alg : fm.members) {
+			    if(isDistAlgorithm(alg) and !looseSub) { //produce the subTopology statement			    	
+				    snkBolt = nameVar.firstToUpperCase() + "${topoCount}SubOutput";
+				    subTopoCreator = nameVar.firstToUpperCase() + "${topoCount}SubCreator";
+				    String algCls = algQualifiedClsName(alg);
+				    String algClsName = algImplName(alg);
+					String streamId = formulateString(nameVar) + formulateString(alg.name);	
+					String topologyCls = algImplName(alg);
+			   		String algName = formulateString(alg.name);
+			    	'            //generate the Storm-based algorithm topology name:$algClsName'
+			    	if (isManualSubtopology(alg)) {
+			    		produceConfInitAlgorithm(alg, alg.name);
+			    	}
+			    	if(newSwitch and fm.members.size() > 1) {
+		    			'builder.setSpout("${algName}Intermediary", new ${algName}Intermediary("${algName}Intermediary", "$pipName", "${algName}IntermediaryStreamId"), 1);' | 12; //set the default spout parallelism 
+			   			if(!isGenSubtopology(alg) and !isHardwareAlgorithm(alg)) {
+				   		'            builder.startRecording("$algClsName");'
+				   		}
+				   		'            ITopologyCreate ${subTopoCreator} = new $topologyCls();'
+			   			'            SubTopologyOutput $snkBolt = ${subTopoCreator}.createSubTopology(builder,config,"$algName", "${algName}Intermediary", "${algName}IntermediaryStreamId");'
+			   			if(!isGenSubtopology(alg) and !isHardwareAlgorithm(alg)) {
+				    	'            builder.endRecording(${subTopoCreator});'
+				    	}
+			   			'BoltDeclarer ${algName}EndBolt = builder.setBolt("${algName}EndBolt", new ${algName}EndBolt("${algName}EndBolt", "$pipName", $snkBolt.getStreamId()), 1);' | 12; 
+			   			'${algName}EndBolt.shuffleGrouping($snkBolt.getBoltName(), $snkBolt.getStreamId());' | 12;
+			   		} else {
+			   			if(!isGenSubtopology(alg) and !isHardwareAlgorithm(alg)) {
+				   		'            builder.startRecording("$algClsName");'
+				   		}
+				   		'            ITopologyCreate ${subTopoCreator} = new $algClsName();'
+			    		'            SubTopologyOutput $snkBolt = ${subTopoCreator}.createSubTopology(builder,config,"$algName", "$nameVar", "$streamId");'
+			    		if(!isGenSubtopology(alg) and !isHardwareAlgorithm(alg)) {
+				    	'            builder.endRecording(${subTopoCreator});'
+				    	}
+			    	}
+			    	
+			    	'maxNumWorkers = Math.max(maxNumWorkers, $snkBolt.getNumWorkers());' | 12;
+			    	'maxTaskParallelism = Math.max(maxTaskParallelism, $snkBolt.getMaxTaskParallelism());' | 12;	
+			    	topoCount = topoCount + 1;		    	    
+		    	} else { //for non-subTopology algorithm
+		    				     		
+		    	}					 
+    	 	} 
+    	 	produced.add(nameVar); //added the current element to produced(mark it is produced)       	
+        }
+		Boolean nFlow;	   	
+		for (Flow flow : elt.output) {
+			String flowName = flow.varName();
+			if(isStringExisted(flowName, flows)){
+				nFlow = false;
+			} else {
+				nFlow = true;
+				flows.add(flowName);
+			}
+			if(nFlow) {//only when the flow is not visited
+				processElement(flow.destination, flow.grouping, flow.tupleType, elt, preElt, nFlow, false);
+			}	
+		}
+    }
+    
+    def produceStatement(DecisionVariable elt, Grouping grouping, Tuple tupleType, DecisionVariable preElt, DecisionVariable prePreElt, Boolean bolt, Boolean isLastElementDM) {
+    	//name for Spout/Bolt
+    	String name = elt.varName();
+    	//Spout/Bolt class name
+    	String clsName = className(elt); 
+    	//get the parallelism
+    	Integer parallelism = elt.byName("parallelism"); 
+    	
+    	//obtain the meaningful display name of the element 
+    	String eltType = elt.type();
+    	String displayName;
+    	setOf(Flow) flows;
+    	Parameters parameters;
+    	if(eltType == "Source") {
+    		//cast the elt to Source
+    		Source source = elt;
+    		//get the display name
+    		displayName = source.name;
+    		//get the flows
+    		flows = source.output;
+    		parameters = source.source.parameters;
+    	} else if (eltType == "FamilyElement") {
+    		//cast the elt to FamilyElement
+    		FamilyElement familyElt = elt;
+    		//get the display name
+    		displayName = familyElt.name;
+    		//get the flows
+    		flows = familyElt.output;
+    		parameters = familyElt.family.parameters;
+    	} else if (eltType == "Sink" or eltType == "ReplaySink") {
+    		//cast the elt to Source
+    		Sink sink = elt;
+    		//get the display name
+    		displayName = sink.name;
+    		//get the parameters
+    		parameters = sink.sink.parameters;
+    	} else if(eltType == "DataManagementElement") {
+    		DataManagementElement dmElt = elt;
+    		displayName = dmElt.name;
+    	}			   	
+    	
+        if (bolt) {    	    
+    	    if(isStringExisted(name, bolts)){ //no node to be produced but the grouping statement 
+ 	    	} else {
+ 	    	    '// Declare a Bolt "$displayName"' | 12;
+ 	            'BoltDeclarer ${formulateString(name)}=builder.setBolt("${formulateString(name)}", new $clsName("${formulateString(name)}", "$pipName"), $parallelism)${produceNumTasks(elt)};' | 12;  
+	    	    bolts.add(name); 
+	 	    } 	    	
+        } else {
+        	'// Declare a Spout "$displayName"' | 12;
+		    'builder.setSpout("${formulateString(name)}", new $clsName("${formulateString(name)}", "$pipName"), $parallelism)${produceNumTasks(elt)};' | 12;
+        }
+        
+        if(isLastElementDM) { //if the last element is a DataManagementElement, then grouping to the element before the DME	        		
+			grouping(name, grouping, tupleType, prePreElt);
+		} else {
+		    grouping(name, grouping, tupleType, preElt);
+		}
+    }
+
+    def grouping(String eltName, Grouping grouping, Tuple tupleType, DecisionVariable preElt) {
+    	String preEltName = preElt.varName(); 
+		String streamId = formulateString(preEltName) + formulateString(tupleType.name);    	
+		'$eltName.$grouping("${formulateString(preEltName)}", "$streamId");' | 12;
+    }   
+    
+    def grouping(String eltName, Grouping grouping, Tuple tupleType, FamilyElement preElt) {
+    	String preEltName = preElt.varName(); 
+		Family fm = preElt.byName("family");
+		Integer topoCount = 1;
+		Boolean once = true;
+    	for(Algorithm alg : fm.members) {	    			    		
+    		if(isDistAlgorithm(alg) and !looseSub) {
+    			String nodeName;
+    			String endBolt = formulateString(alg.name) + "EndBolt";
+    			String sub = formulateString(preEltName) + "${topoCount}SubOutput";
+    			if(newSwitch) {
+    				nodeName = "\"" + endBolt + "\"";
+    			} else {
+    				nodeName = sub + ".getBoltName()";
+    			}
+    			'$eltName.$grouping($nodeName, $sub.getStreamId());' | 12;
+    			topoCount = topoCount + 1;
+    		} else if(once) {
+    			once = false;
+				String streamId = formulateString(preElt.varName()) + formulateString(tupleType.name);    	
+				'$eltName.$grouping("${formulateString(preEltName)}", "$streamId");' | 12;
+    		}
+    	}
+    }                
+}

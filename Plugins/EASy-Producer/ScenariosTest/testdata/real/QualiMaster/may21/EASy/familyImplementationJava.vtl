@@ -1,0 +1,147 @@
+import commonVTLMethods;
+@advice(QM)
+template familyImplementationJava(Configuration config, FileArtifact target, Family family) {   
+	String fName = family.name.firstToUpperCase();
+	mapOf(String) specificTypes = {};
+	 
+    def produceForTuples(Tuples tuples, Boolean output, Boolean implementation, String fName, Integer indent) {
+	    String type;
+	    String typeName;
+    	String tupleName; 	    	   	   	
+    	for (Tuple t : tuples) {
+    		tupleName = t.name;
+    		tupleName = firstToUpperCase(tupleName);
+	        if (output) {
+    		    type = "${fName}${tupleName}Output";
+    		    typeName = "output";
+    	    } else {
+    		    type = "${fName}${tupleName}Input";
+    		    typeName = "input";   		
+    	    }
+    	    		  	    	   		   
+		    '/**' | indent;
+            '* Provides a default implementation of the data ${typeName} for the {@link ${type}} algorithm.' | indent + 1;
+            '* Actual execution system code may also directly wrap the respective tuple concept.' | indent + 1; 
+		    '*/' | indent + 1;
+		    String parents = "implements I${type}";
+		    if (genMultiOutputs and output) {
+		    	parents = "extends eu.qualimaster.base.algorithm.AbstractOutputItem<I${type}> $parents";
+		    }
+    	    'public static class $type $parents {' | indent;    	
+    	    ''	
+    	    //'private static final long serialVersionUID = 1L;' | indent + 4;
+    	    if (genMultiOutputs and output) {
+    	        '/**' | indent + 4;
+                '* Creates the item.' | indent + 5;
+                '*/' | indent + 5;
+                'public ${type}() {' | indent + 4;
+                'this(true);' | indent + 8;
+                '}' | indent + 4;
+                ''
+                '/**' | indent + 4;
+                '* Creates a sub-item.' | indent + 5;
+                '*' | indent + 5;
+                '* @param topLevel whether it is a top-level item' | indent + 5;
+                '*/' | indent + 5;
+                'private ${type}(boolean topLevel) {' | indent + 4;
+                'super(topLevel);' | indent + 8;
+                'setParent(this);' | indent + 8;
+                '}' | indent + 4;
+                ''
+                '@Override' | indent + 4;
+                'public ${type} createItem() {' | indent + 4;
+                    'return new ${type}(false);' | indent + 8;
+                '}' | indent + 4;
+                
+                '@Override' | indent + 4;
+                'public void setTaskId(int taskId) {' | indent + 4;
+                	'this.taskId = taskId;' | indent + 8;
+                '}' | indent + 4;
+                
+                '@Override' | indent + 4;
+                'public int getTaskId() {' | indent + 4;
+                	'return taskId;' | indent + 8;
+                '}' | indent + 4;
+                'private transient int taskId;' | indent + 4;
+    	    }   
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String ftype = fieldTypeName(f);
+    			//collect the specific types for registering serialization class.
+    			serializerClass(f, specificTypes);
+    			
+    			'private ${ftype} ${fname};' | indent + 4;
+    		}
+    		''
+    		
+    		for (Field f : t.fields) {
+    			String fname = toIdentifier("${f.name}");
+    			String mname = firstToUpperCase(fname);
+    			String ftype = fieldTypeName(f);
+				'@Override' | indent + 4;
+	    		'public ${ftype} get${mname}(){' | indent + 4;
+	    			'return ${fname};' | indent + 8;
+	    		'}' | indent + 4;	    			
+	    		''
+	    		
+				'@Override' | indent + 4;
+	    		'public void set${mname}(${ftype} ${fname}){' | indent + 4;
+	    			   'this.${fname} = ${fname};' | indent + 8;
+	    		'}' | indent + 4;
+    		}
+    		//register the seriliazers.
+    		String fserializer = fName.substring(1, fName.length()) + "Serializers";
+    		registerSerializer(fserializer, type, specificTypes, indent);
+    	'}' | indent;
+    	''	   	       	
+      }
+    }    
+		
+    def main(Configuration config, FileArtifact target, Family family) {
+    	'package eu.qualimaster.families.imp;'
+    	''
+    	//'import java.io.Serializable;'
+    	'import eu.qualimaster.families.inf.*;'
+        'import eu.qualimaster.data.helper.*;'
+    	'import eu.qualimaster.observables.IObservable;'
+    	'import eu.qualimaster.dataManagement.serialization.SerializerRegistry;'
+    	''
+    	String ifName = "I" + fName;
+    	'/**'
+    	' * The implementation for the algorithm family "${ifName}" (GEN).'
+    	' */'
+    	'public class $fName implements $ifName {'
+    	''
+    	produceForTuples(family.input, false, true, ifName, 4);
+    	produceForTuples(family.output, true, true, ifName, 4);
+    	
+    	//produce the calculate method based on multiple input and output string
+        produceForCalculate(family, false); 
+             	
+        if (family.byName("parameters").variables().size()>0) {
+	        ''
+	        for (Parameter p : family.byName("parameters")) {
+	        	String paramName = p.name;
+    			String mname = firstToUpperCase(toIdentifier(paramName));
+	        	'    /**'
+	        	'     * Sets the algorithm parameter "${paramName}".'
+	        	'     *'
+	        	'     * @param value the new value of the algorithm parameter'
+	        	'     */'
+	        	'    public void setParameter${mname}(${parameterTypeName(p)} value) {'
+	        	'    }'
+	        	''      	
+	    	}
+    	}
+				'    @Override'
+				'    public void switchState(State arg0) {'					
+				'    }'
+				''
+				'    @Override'
+				'    public Double getMeasurement(IObservable arg0) {'
+				'	    return null;'
+				'    }'     	
+    '}'
+    }
+    
+}

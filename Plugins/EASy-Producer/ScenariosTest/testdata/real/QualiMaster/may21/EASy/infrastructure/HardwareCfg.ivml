@@ -1,0 +1,709 @@
+project HardwareCfg {
+
+	import Hardware;
+	Machine machine1;
+	Machine machine2;
+	Machine machine3;
+	Machine machine4;
+	Machine machine5;
+	Machine machine6;
+	Machine machine7;
+	Machine machine8;
+	Machine machine9;
+	Machine machine10;
+	Machine machine11;
+	Machine machine12;
+	Machine machine13;
+	Machine machine14;
+	Machine machine15;
+	Machine machine16;
+	Machine machine17;
+	Machine machine18;
+	Machine machine19;
+	Machine machine20;
+	Machine machine21;
+	Machine machine22;
+	Machine machine23;
+	Machine machine24;
+	Machine machine25;
+	Machine machine26;
+	Machine machine27;
+	Machine machine28;
+	Machine machine29;
+	Machine machine30;
+	Machine machine31;
+	Machine machine32;
+	Machine machine33;
+	Machine machine34;
+	Machine machine35;
+	Machine machine36;
+	Machine machine37;
+	Machine machine38;
+	Machine machine39;
+	Machine machine40;
+	Machine machine41;
+	Machine machine42;
+	Machine machine43;
+	Machine machine44;
+	Machine machine45;
+	Machine machine46;
+	Machine machine47;
+	Machine machine48;
+	Machine machine49;
+	Machine machine50;
+    Machine machine51;
+    Machine machine52;
+    Machine machine53;
+    Machine machine54;
+	machines = {
+		refBy(machine1), refBy(machine2), refBy(machine3), refBy(machine4), refBy(machine5), refBy(machine6), refBy(machine7), refBy(machine8), refBy(machine9), refBy(machine10), refBy(machine11), refBy(machine12), refBy(machine13), refBy(machine14), refBy(machine15), refBy(machine16), refBy(machine17), refBy(machine18), refBy(machine19), refBy(machine20), refBy(machine21), refBy(machine22), refBy(machine23), refBy(machine24), refBy(machine25), refBy(machine26), refBy(machine27), refBy(machine28), refBy(machine29), refBy(machine30), refBy(machine31), refBy(machine32), refBy(machine33), refBy(machine34), refBy(machine35), refBy(machine36), refBy(machine37), refBy(machine38), refBy(machine39), refBy(machine40), refBy(machine41), refBy(machine42), refBy(machine43), refBy(machine44), refBy(machine45), refBy(machine46), refBy(machine47), refBy(machine48), refBy(machine49), refBy(machine50), refBy(machine51), refBy(machine52), refBy(machine53), refBy(machine54)
+	};
+	machines.bindingTime = BindingTime.compile;
+	usedMachines.bindingTime = BindingTime.runtimeMon;
+	availableMachines.bindingTime = BindingTime.runtimeMon;
+	machine1 = Machine {
+		name = "snf-618466.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {}, 
+		role = MachineRole.Manager
+	};
+	machine2 = Machine {
+		name = "snf-618463.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine3 = Machine {
+		name = "snf-618464.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine4 = Machine {
+		name = "snf-618465.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine5 = Machine {
+		name = "snf-625826.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine6 = Machine {
+		name = "snf-625827.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine7 = Machine {
+		name = "snf-625828.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine8 = Machine {
+		name = "snf-625829.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine9 = Machine {
+		name = "snf-626254.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine10 = Machine {
+		name = "snf-618454.vm.okeanos.grnet.gr", 
+		memory = 8178512, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2100, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine11 = Machine {
+		name = "nimbus1.ssecluster.local", 
+		memory = 7918000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1860, 
+		ports = {}, 
+		role = MachineRole.Manager
+	};
+	machine12 = Machine {
+		name = "host4.ssecluster.local", 
+		memory = 7919000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1860, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine13 = Machine {
+		name = "host-11.ssecluster.local", 
+		memory = 7984000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 2200, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine14 = Machine {
+		name = "server1.ssecluster.local", 
+		memory = 5902000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1860, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine15 = Machine {
+		name = "host-16.ssecluster.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine16 = Machine {
+		name = "host-12.ssecluster.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine17 = Machine {
+		name = "host-10.ssecluster.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine18 = Machine {
+		name = "host-13.ssecluster.local", 
+		memory = 7910000, 
+		processors = 2, 
+		executors = 4, 
+		frequency = 1862, 
+		ports = {
+			6700, 6701, 6702, 6703
+		}, 
+		role = MachineRole.Worker
+	};
+	machine19 = Machine {
+		name = "clu01.softnet.tuc.gr", 
+		memory = 32900100, 
+		processors = 12, 
+		executors = 0, 
+		frequency = 2500, 
+		ports = {}, 
+		role = MachineRole.Manager
+	};
+	machine20 = Machine {
+		name = "clu02.softnet.tuc.gr", 
+		memory = 32900100, 
+		processors = 8, 
+		executors = 20, 
+		frequency = 2500, 
+		ports = {
+			6700, 6701, 6702, 6703, 6704
+		}, 
+		role = MachineRole.Worker
+	};
+	machine21 = Machine {
+		name = "clu03.softnet.tuc.gr", 
+		memory = 32900100, 
+		processors = 8, 
+		executors = 20, 
+		frequency = 2500, 
+		ports = {
+			6700, 6701, 6702, 6703, 6704
+		}, 
+		role = MachineRole.Worker
+	};
+	machine22 = Machine {
+		name = "clu04.softnet.tuc.gr", 
+		memory = 32900100, 
+		processors = 8, 
+		executors = 20, 
+		frequency = 2500, 
+		ports = {
+			6700, 6701, 6702, 6703, 6704
+		}, 
+		role = MachineRole.Worker
+	};
+	machine23 = Machine {
+		name = "clu05.softnet.tuc.gr", 
+		memory = 16423240, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700, 6701
+		}, 
+		role = MachineRole.Worker
+	};
+	machine24 = Machine {
+		name = "clu06.softnet.tuc.gr", 
+		memory = 16423240, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700, 6701
+		}, 
+		role = MachineRole.Worker
+	};
+	machine25 = Machine {
+		name = "clu07.softnet.tuc.gr", 
+		memory = 16423240, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700, 6701
+		}, 
+		role = MachineRole.Worker
+	};
+	machine26 = Machine {
+		name = "clu08.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine27 = Machine {
+		name = "clu09.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine28 = Machine {
+		name = "clu10.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine29 = Machine {
+		name = "clu14.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine30 = Machine {
+		name = "clu16.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine31 = Machine {
+		name = "clu17.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine32 = Machine {
+		name = "clu18.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine33 = Machine {
+		name = "clu19.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine34 = Machine {
+		name = "clu20.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine35 = Machine {
+		name = "clu24.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine36 = Machine {
+		name = "clu25.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine37 = Machine {
+		name = "clu26.softnet.tuc.gr", 
+		memory = 8165740, 
+		processors = 8, 
+		executors = 8, 
+		frequency = 2500, 
+		ports = {
+			6700
+		}, 
+		role = MachineRole.Worker
+	};
+	machine38 = Machine {
+        name = "node09.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine39 = Machine {
+        name = "node10.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine40 = Machine {
+        name = "node11.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine41 = Machine {
+        name = "node12.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine42 = Machine {
+        name = "node13.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine43 = Machine {
+        name = "node14.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine44 = Machine {
+        name = "node15.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine45 = Machine {
+        name = "node16.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine46 = Machine {
+        name = "node17.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine47 = Machine {
+        name = "node18.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine48 = Machine {
+        name = "node19.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine49 = Machine {
+        name = "node20.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine50 = Machine {
+        name = "node21.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine51 = Machine {
+        name = "node22.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine52 = Machine {
+        name = "node23.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine53 = Machine {
+        name = "node24.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+    machine54 = Machine {
+        name = "node25.ib", 
+        memory = 134217728, 
+        processors = 12, 
+        executors = 12, 
+        frequency = 2100, 
+        ports = {
+            6700, 6701, 6702, 6703, 6704, 6705, 6706, 6708, 6709, 6710, 6711, 6712, 6713, 6714, 6715
+        }, 
+        role = MachineRole.Worker
+    };
+	freeze {
+		machines;
+		machine1;
+		machine2;
+		machine3;
+		machine4;
+		machine5;
+		machine6;
+		machine7;
+		machine8;
+		machine9;
+		machine10;
+		machine11;
+		machine12;
+		machine13;
+		machine14;
+		machine15;
+		machine16;
+		machine17;
+		machine18;
+		machine19;
+		machine20;
+		machine21;
+		machine22;
+		machine23;
+		machine24;
+		machine25;
+		machine26;
+		machine27;
+		machine28;
+		machine29;
+		machine30;
+		machine31;
+		machine32;
+		machine33;
+		machine34;
+		machine35;
+		machine36;
+		machine37;
+        machine38;
+        machine39;
+        machine40;
+        machine41;
+        machine42;
+        machine43;
+        machine44;
+        machine45;
+        machine46;
+        machine47;
+        machine48;
+        machine49;
+        machine50;
+        machine51;
+        machine52;
+        machine53;
+        machine54;
+	} but (f|f.bindingTime >= BindingTime.runtimeMon)
+}

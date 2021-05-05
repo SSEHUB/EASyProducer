@@ -1,0 +1,62 @@
+import commonVTLMethods;
+@advice(QM)
+@indent(indentation = 4, additional = 0)
+template dataRecordFieldType(Configuration config, FileArtifact target, RecordFieldType type, String pkg) {
+
+    def produceFieldAttributes(sequenceOf(Field) fields) {
+        for (Field f : fields) {
+            String fname = toIdentifier("${f.name}");
+            String mname = firstToUpperCase(fname);
+            String ftype = fieldTypeName(f);
+            'private ${ftype} ${fname};
+            '
+        }        
+    }
+
+	/**
+	 * Produces the tuple type classes.
+	 */
+	def produceFieldMethods(sequenceOf(Field) fields) {
+        for (Field f : fields) {
+            String fname = toIdentifier("${f.name}");
+            String mname = firstToUpperCase(fname);
+            String ftype = fieldTypeName(f);
+            '/**
+            * Returns the input value for tuple field "${f.name}".
+            * @return the tuple value
+            */
+            public ${ftype} get${mname}() {
+                return ${fname};
+            }
+            
+            /**
+             * Sets the output value for tuple field "${f.name}".
+             * @param ${fname} the field value
+             */
+            public void set${mname}(${ftype} ${fname}) {
+                this.${fname} = ${fname};
+            }
+
+            '
+		}
+	}
+	
+	def main(Configuration config, FileArtifact target, RecordFieldType type, String pkg){
+		String srcName = type.name;
+		//srcName = srcName.toIdentifier();
+		//srcName = srcName.firstToUpperCase();
+        'package ${pkg}.helper;
+         import java.io.Serializable;
+
+        /**
+         * Define the helper type ${srcName} (GEN).
+         **/
+         public class ${srcName} implements Serializable {
+
+             ${produceFieldAttributes(type.fields)}
+
+             ${produceFieldMethods(type.fields)}
+        }'
+    }
+ 
+}
