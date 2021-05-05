@@ -80,7 +80,7 @@
             <!--fileset dir="${home.instantiator.copy.core.dir}/src" includes="**/*.java"/>
             <fileset dir="${home.instantiator.copy.java.dir}/src" includes="**/*.java"/-->
             <fileset dir="${home.instantiator.xvcl.dir}/src" includes="**/*.java"/>
-            <!--fileset dir="${home.instantiator.velocityLib.dir}/src" includes="**/*.java"/-->
+            <fileset dir="${home.base.dir}/${projects.instantiation.dir}/XVCL" includes="xvcl*.jar"/>
             <fileset dir="${home.instantiator.velocity.dir}/src" includes="**/*.java"/>
             <fileset dir="${home.vil.expressions.core.dir}/src" includes="**/*.java"/>
             <fileset dir="${home.vil.expressions.ui.dir}/src" includes="**/*.java"/>           
