@@ -46,13 +46,13 @@ public abstract class AbstractLoader {
     protected static void initializeRegistry() {
         BundleRegistry.getInstance().setEmitIgoredWarnings(false);
         // core emulated by the loader, required classes are loaded as libraries rather than bundles
-        BundleRegistry.addGlobalIgnore("org.eclipse.osgi");
+        //BundleRegistry.addGlobalIgnore("org.eclipse.osgi");
         BundleRegistry.addGlobalIgnore("org.eclipse.equinox.ds");
         BundleRegistry.addGlobalIgnore("org.eclipse.equinox.launcher");
-        BundleRegistry.addGlobalIgnore("org.eclipse.osgi.services");
-        BundleRegistry.addGlobalIgnore("org.eclipse.equinox.common");
-        BundleRegistry.addGlobalIgnore("org.eclipse.equinox.preferences");
-        BundleRegistry.addGlobalIgnore("org.eclipse.equinox.registry");
+        //BundleRegistry.addGlobalIgnore("org.eclipse.osgi.services");
+        //BundleRegistry.addGlobalIgnore("org.eclipse.equinox.common");
+        //BundleRegistry.addGlobalIgnore("org.eclipse.equinox.preferences");
+        //BundleRegistry.addGlobalIgnore("org.eclipse.equinox.registry");
         // not needed for running the languages
         BundleRegistry.addGlobalIgnore("org.eclipse.emf.mwe2.launch");
         BundleRegistry.addGlobalIgnore("org.eclipse.emf.mwe2.lib");
