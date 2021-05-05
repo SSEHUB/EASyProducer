@@ -114,6 +114,7 @@
     <target name="javadoc" depends="gather.sources">
     	<easyJavadoc sourcepath="${src.all.files}" destdir="${doc.dir}" source="11">
             <classpath refid="includes"/>
+            <arg value="--allow-script-in-comments"> <!-- JDK 11 -->
             <!-- JavaDoc Annotations used by Xtext -->
             <!--tag name="generated" scope="all" description="Generated via Xtext"/>
             <tag name="model" scope="all" description="model"/>
