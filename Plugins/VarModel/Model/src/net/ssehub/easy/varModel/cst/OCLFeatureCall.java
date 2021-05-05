@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.model.datatypes.BaseTypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.Container;
+import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.MetaType;
@@ -445,11 +446,7 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                         boolean eq = true;
                         for (int p = 0; eq && p < paramTypes.length; p++) {
                             IDatatype pType = getParameterType(tmp, p, tmpParamCount, opInc);
-                            boolean ok = null == pType ? true : pType.isAssignableFrom(paramTypes[p]);
-                            if (!ok) {
-                                ok = pType.isAssignableFrom(Reference.dereference(paramTypes[p]));
-                            }
-                            eq = ok;
+                            eq = isParameterAssignable(pType, paramTypes[p]);
                         }
                         if (eq) {
                             op = tmp;
@@ -459,6 +456,26 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             }
         }
         return op;
+    }
+    
+    /**
+     * Returns whether the {@code argument} type is assignable to the {@code declared} type.
+     * 
+     * @param declared the declared type
+     * @param argument the argument type
+     * @return {@code true} for assignable, {@code false} else
+     */
+    private static boolean isParameterAssignable(IDatatype declared, IDatatype argument) {
+        boolean ok = null == declared ? true : declared.isAssignableFrom(argument);
+        if (!ok) {
+            IDatatype arg = Reference.dereference(argument);
+            ok = declared.isAssignableFrom(arg);
+            if (!ok) {
+                arg = DerivedDatatype.resolveToBasis(arg);
+                ok = declared.isAssignableFrom(arg);
+            }
+        }
+        return ok;
     }
     
     /**
