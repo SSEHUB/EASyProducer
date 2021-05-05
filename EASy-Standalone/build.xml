@@ -62,6 +62,7 @@
             basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
             libsPath="${home.easyLoader.dir}/libs">
             
+        	<basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.eclipseBase.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
@@ -103,6 +104,7 @@
             basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
             libsPath="${home.easyLoader.dir}/libs">
             
+        	<basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.eclipseBase.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.ivml.core_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.vil.core_feature"/>
@@ -137,6 +139,7 @@
             basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
             libsPath="${home.easyLoader.dir}/libs">
             
+        	<basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.eclipseBase.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.runtime_feature_noXtext"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.reasoning.reasoner_feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy.instantiator.java.feature"/>
@@ -167,6 +170,7 @@
             basedir="${basedir}" eclipsepath="${eclipse.plugins.dir}" classesPath="${home.easyLoader.dir}/build/classes"
             libsPath="${home.easyLoader.dir}/libs">
             
+        	<basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.eclipseBase.feature"/>
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.runtime_feature"/>
             <!-- is this one really required, as no_eclipse indirectly requires full EASy -->
             <basefeature path="${projects.features.dir}/de.uni_hildesheim.sse.easy_producer.core.no_eclipse_feature"/>
