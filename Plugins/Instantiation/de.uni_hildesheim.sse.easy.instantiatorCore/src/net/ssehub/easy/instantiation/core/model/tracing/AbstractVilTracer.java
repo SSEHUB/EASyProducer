@@ -267,7 +267,8 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
         if (null != info) {
             location = " @ " + info.getLocation();
         }
-        write("executing script " + script.getName() + ver + location);
+        write("executing script " + script.getName() + " (" + script.getLanguageName() + ") " 
+            + ver + location);
         increaseIndentation();
     }
     

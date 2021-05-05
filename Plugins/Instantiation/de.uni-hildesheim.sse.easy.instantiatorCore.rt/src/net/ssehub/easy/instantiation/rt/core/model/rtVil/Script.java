@@ -376,4 +376,9 @@ public class Script extends net.ssehub.easy.instantiation.core.model.buildlangMo
         return result;
     }
 
+    @Override
+    public String getLanguageName() {
+        return "rt-VIL";
+    }
+
 }

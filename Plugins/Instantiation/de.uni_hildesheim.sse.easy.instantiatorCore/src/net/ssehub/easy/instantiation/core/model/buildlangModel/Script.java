@@ -789,4 +789,13 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
         return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
     }
 
+    /**
+     * Returns the name of the language represented.
+     * 
+     * @return the name of the language
+     */
+    public String getLanguageName() {
+        return "VIL";
+    }
+
 }
