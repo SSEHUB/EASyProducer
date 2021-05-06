@@ -44,7 +44,7 @@ public abstract class AbstractLoader {
      * Initializes the {@link BundleRegistry}.
      */
     protected static void initializeRegistry() {
-        BundleRegistry.getInstance().setEmitIgoredWarnings(false);
+        //BundleRegistry.getInstance().setEmitIgoredWarnings(false);
         // core emulated by the loader, required classes are loaded as libraries rather than bundles
         //BundleRegistry.addGlobalIgnore("org.eclipse.osgi");
         BundleRegistry.addGlobalIgnore("org.eclipse.equinox.ds");
@@ -61,6 +61,8 @@ public abstract class AbstractLoader {
         BundleRegistry.addGlobalIgnore("org.eclipse.xtext.generator");
         BundleRegistry.addGlobalIgnore("org.eclipse.emf.codegen");
         BundleRegistry.addGlobalIgnore("org.eclipse.emf.codegen.ecore");
+        //will be bundled anyway
+        BundleRegistry.addGlobalIgnore("net.ssehub.easy.loader");
     }
 
     /**

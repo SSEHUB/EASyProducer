@@ -1093,6 +1093,9 @@ public class Generator extends AbstractLoader {
      */
     public static void setVerbose(boolean verb) {
         verbose = verb;
+        if (verb) {
+            BundleRegistry.getInstance().setEmitIgoredWarnings(true);
+        }
     }
     
 }
