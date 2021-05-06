@@ -22,14 +22,12 @@ public class LoaderLog {
      * @param path Target for the log file.
      */
     public static void init(String path) {
-        
         try {
             writer = new BufferedWriter(new OutputStreamWriter(
                   new FileOutputStream(path), "utf-8"));
         } catch (IOException ex) {
             reportException(ex);
         }
-        
     }
     
     /**
@@ -37,14 +35,12 @@ public class LoaderLog {
      * @param text The text for the log.
      */
     public static void writeLn(String text) {
-        
         try {
             writer.write(text);
             skipLine();
         } catch (IOException ex) {
             reportException(ex);
         }
-        
     }
     
     /**
@@ -52,18 +48,28 @@ public class LoaderLog {
      * @param text Text along the error.
      */
     public static void warn(String text) {
-        
         stars();
-        
         try {
             writer.write(text);
             skipLine();
         } catch (IOException ex) {
             reportException(ex);
         }
-        
         stars();
-        
+    }
+    
+    /**
+     * Writes an information text.
+     * 
+     * @param text the text
+     */
+    public static void info(String text) {
+        try {
+            writer.write(text);
+            skipLine();
+        } catch (IOException ex) {
+            reportException(ex);
+        }
     }
     
     /**
@@ -81,9 +87,7 @@ public class LoaderLog {
      * @param error The exception that caused the error.
      */
     public static void warn(String text, Exception error) {
-        
         stars();
-        
         try {
             writer.write(text);
             skipLine();
@@ -92,23 +96,47 @@ public class LoaderLog {
         } catch (IOException ex) {
             reportException(ex);
         }
-        
         stars();
-        
+    }
+
+    /**
+     * Writes an error into the log file.
+     * @param text Text along the error.
+     */
+    public static void error(String text) {
+        error(text, null);
+    }
+    
+    /**
+     * Writes an error into the log file.
+     * @param text Text along the error.
+     * @param cause The exception that caused the error.
+     */
+    public static void error(String text, Exception cause) {
+        stars();
+        try {
+            writer.write(text);
+            skipLine();
+            if (null != cause) {
+                writer.write(cause.getMessage());
+                skipLine();
+            }
+        } catch (IOException ex) {
+            reportException(ex);
+        }
+        stars();
     }
     
     /**
      * Writes a line of stars.
      */
     public static void stars() {
-        
         try {
             writer.write("*************************************************************************");
             skipLine();
         } catch (IOException ex) {
             reportException(ex);
         }
-        
     }
     
     /**
@@ -117,7 +145,6 @@ public class LoaderLog {
      * @param indent The indent depth (steps of 4 are recommended).
      */
     public static void writeLn(String text, int indent) {
-        
         String sIndent = "";
         for (int i = 1; i <= indent; i++) {
             sIndent =  sIndent + " ";
@@ -129,7 +156,6 @@ public class LoaderLog {
         } catch (IOException ex) {
             reportException(ex);
         }
-        
     }
     
     /**
@@ -148,13 +174,11 @@ public class LoaderLog {
      * Writes a line separator into the log file.
      */
     public static void skipLine() {
-        
         try {
             writer.write(System.getProperty("line.separator"));
         } catch (IOException ex) {
             reportException(ex);
         }
-        
     }
     
     /**
@@ -162,7 +186,6 @@ public class LoaderLog {
      * Use this to create visual lines in the log.
      */
     public static void line() {
-        
         try {
             skipLine();
             writer.write("----------------------------------------------------------------");
@@ -171,7 +194,6 @@ public class LoaderLog {
         } catch (IOException ex) {
             reportException(ex);
         }
-        
     }
     
     /**

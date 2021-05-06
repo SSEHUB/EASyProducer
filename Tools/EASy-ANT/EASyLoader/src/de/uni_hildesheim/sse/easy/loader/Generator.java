@@ -44,6 +44,7 @@ public class Generator extends AbstractLoader {
     
     private static final Class<?>[] RUNTIME_CLASSES;
     private static IExclusionSelector exclusionSelector;
+    private static boolean verbose = true;
     private List<BundleInfo> data;
     private List<URL> urls;
     private Map<URL, BundleInfo> urlBundleMapping = new HashMap<URL, BundleInfo>();
@@ -144,25 +145,18 @@ public class Generator extends AbstractLoader {
      * @return A list of all files.
      */
     public static List<File> getFeatureFilesFromDir(File file) {
-    
         List<File> files = new ArrayList<File>();
-    
         File[] sub = file.listFiles();
-    
         if (null != sub) {
             for (File subFile : sub) {
-    
                 if (subFile.isDirectory()) {
                     files.addAll(getFeatureFilesFromDir(subFile));
                 } else if (subFile.isFile() && subFile.getName().equalsIgnoreCase("feature.xml")) {
                     files.add(subFile);
                 }
-    
             }
         }
-
         return files;
-    
     }
     
     /**
@@ -171,18 +165,12 @@ public class Generator extends AbstractLoader {
      * @return A list of features. Can be empty if no (valid) files were given.
      */
     public static List<Feature> filesToFeature(List<File> files) {
-    
         List<Feature> features = new ArrayList<Feature>();
-    
         for (int i = 0; i < files.size(); i++) {
-        
             Feature feat = new Feature(files.get(i));
             features.add(feat);
-        
         }
-        
         return features;
-        
     }
     
     /**
@@ -192,9 +180,7 @@ public class Generator extends AbstractLoader {
      * @return The feature (or null).
      */
     public static Feature getFeatureFromListByName(List<Feature> features, String name) {
-    
         Feature found = null;
-    
         for (int i = 0; i < features.size(); i++) {
             if (features.get(i).getId().equals(name)) {
                 found = features.get(i);
@@ -202,7 +188,6 @@ public class Generator extends AbstractLoader {
             }
         }
         return found;
-    
     }
     // checkstyle: stop parameter number check
     
@@ -242,7 +227,6 @@ public class Generator extends AbstractLoader {
                 libsFolder);
         
         return bundles;
-    
     }
    
     /**
@@ -411,9 +395,7 @@ public class Generator extends AbstractLoader {
                 LoaderLog.writeLn("Requires Bundle: " + bundles.get(i).getRequiredBundle(k).getName(), 4);
                 for (BundleInfo check : bundles) {
                     if (check.getName().equalsIgnoreCase(bundles.get(i).getRequiredBundle(k).getName())) {
-                        
                         found = true;
-                        
                         if (bundles.get(i).getRequiredBundle(k).getVersion() != null 
                                 && check.getVersion() != null ) {
                             if (check.getVersion().compareTo(bundles.get(i).getRequiredBundle(k).getVersion()) == -1) {
@@ -425,7 +407,6 @@ public class Generator extends AbstractLoader {
                                 toAdd = nB;
                             }
                         } 
-                        
                     } 
                 }
                 
@@ -876,7 +857,7 @@ public class Generator extends AbstractLoader {
      * @param os the output JAR as stream
      * @param done already processed entries to avoid duplicates
      * @param exclude JAR entries not to be added (in addition to {@link #irrelevantInJar(String)})
-     * @param unbundle information about unbunding the current stream <code>is</code>
+     * @param unbundle information about unbundling the current stream <code>is</code>
      * @throws IOException in case that reading from or writing to a JAR stream fails
      */
     private void handleJar(InputStream is, JarOutputStream os, Set<String> done, Set<String> exclude, 
@@ -889,10 +870,15 @@ public class Generator extends AbstractLoader {
             copy = false;
         }
         if (include) {
-            JarEntry osEntry = new JarEntry(unbundle.getName());
-            os.putNextEntry(osEntry);
-            Utils.copy(is, os);
-            os.closeEntry();
+            try {
+                logEntryName(unbundle.getName());
+                JarEntry osEntry = new JarEntry(unbundle.getName());
+                os.putNextEntry(osEntry);
+                Utils.copy(is, os);
+                os.closeEntry();
+            } catch (IOException e) {
+                handleJarWritingException(unbundle.getName(), e, null);
+            }
         } else if (copy) {
             FileOutputStream fos = new FileOutputStream(unbundle.getTarget());
             Utils.copy(is, fos);
@@ -907,11 +893,16 @@ public class Generator extends AbstractLoader {
                     String key = name.toLowerCase();
                     if (!done.contains(key) && !irrelevantInJar(name) && !exclude.contains(name) 
                         && !unbundle.excludeFromJar(name)) {
+                        logEntryName(name);                        
                         done.add(key);
-                        JarEntry osEntry = new JarEntry(name);
-                        os.putNextEntry(osEntry);
-                        Utils.copy(jis, os);
-                        os.closeEntry();
+                        try {
+                            JarEntry osEntry = new JarEntry(name);
+                            os.putNextEntry(osEntry);
+                            Utils.copy(jis, os);
+                            os.closeEntry();
+                        } catch (IOException e) {
+                            handleJarWritingException(name, e, null);            
+                        }
                     }
                 }
             } while (null != isEntry);
@@ -965,13 +956,9 @@ public class Generator extends AbstractLoader {
             }            
             
             for (int i = 0; i < this.checkedBundles.size(); i++) {
-                
                 if (null != info && this.checkedBundles.get(i) != null) {
-                    
                     for (int j = 0; j < this.checkedBundles.get(i).getDsClassesCount(); j++) {
-                        
                         for (int c = 0; c < info.getDsClassesCount(); c++) {
-                            
                             if (!processedDS.contains(info.getDsClass(c))
                                     && info.getDsClass(c).equals(this.checkedBundles.get(i).getDsClass(c))) {
                                 out.print(InitType.DS.name());
@@ -979,15 +966,10 @@ public class Generator extends AbstractLoader {
                                 out.println(info.getDsClass(c));
                                 processedDS.add(info.getDsClass(c));
                             }
-        
                         }
-                    
                     }
-                    
                 }
-                
             }
-
         }
         out.flush();
         os.closeEntry();
@@ -1002,6 +984,7 @@ public class Generator extends AbstractLoader {
     private void addRuntimeLoaderClasses(JarOutputStream os) throws IOException {
         for (Class<?> rtClass : RUNTIME_CLASSES) {
             String name = rtClass.getName().replace('.', '/') + Utils.CLASS_SUFFIX;
+            logEntryName(name);
             if (binFolder.exists()) {
                 File file = new File(binFolder, name);
                 if (file.exists()) {
@@ -1014,15 +997,10 @@ public class Generator extends AbstractLoader {
                         os.closeEntry();
                         Utils.closeQuietly(is);
                     } catch (IOException e) {
-                        Utils.closeQuietly(is);
-                        if (!e.getMessage().startsWith("duplicate entry:")) { // not nice, so far no tracking
-                            throw e;
-                        }
+                        handleJarWritingException(name, e, is);
                     }
                 } else {
-                    
                     InputStream is = null;
-                    
                     try {
                         JarEntry entry = new JarEntry(name);
                         os.putNextEntry(entry);
@@ -1032,22 +1010,14 @@ public class Generator extends AbstractLoader {
                             os.closeEntry();
                             Utils.closeQuietly(is);
                         } else {
-                            System.err.println(name);
-                            LoaderLog.warn("Class file " + name + " does not exist. Generation incomplete.");
+                            LoaderLog.error("Class file " + name + " does not exist. Generation incomplete.");
                         }
                     } catch (IOException e) {
-                        Utils.closeQuietly(is);
-                        if (!e.getMessage().startsWith("duplicate entry:")) { // not nice, so far no tracking
-                            LoaderLog.warn("Could not read stream from class: " + name + " " + e.getMessage(), e);
-                            throw e;
-                        }
+                        handleJarWritingException(name, e, is);
                     }
-                    
                 }
             } else {               
-                
                 InputStream is = null;
-                
                 try {
                     JarEntry entry = new JarEntry(name);
                     os.putNextEntry(entry);
@@ -1057,16 +1027,30 @@ public class Generator extends AbstractLoader {
                         os.closeEntry();
                         Utils.closeQuietly(is);
                     } else {
-                        System.err.println(name);
-                        LoaderLog.warn("Class file " + name + " does not exist. Generation incomplete.");
+                        LoaderLog.error("Class file " + name + " does not exist. Generation incomplete.");
                     }
                 } catch (IOException e) {
-                    Utils.closeQuietly(is);
-                    LoaderLog.warn("Could not read stream from class: " + name, e);
-                    throw e;
+                    handleJarWritingException(name, e, is);
                 }
-                
             }
+        }
+    }
+
+    /**
+     * Handles an exception thrown while writing to a Jar file.
+     * 
+     * @param name the name of the entry being written
+     * @param ex the exception thrown
+     * @param is the input stream the program is reading from (may be <b>null</b>)
+     * @throws IOException {@code ex} if ex is not just logged as a warning
+     */
+    private void handleJarWritingException(String name, IOException ex, InputStream is) throws IOException {
+        Utils.closeQuietly(is);
+        if (ex.getMessage().startsWith("duplicate entry:")) { // not nice, so far no access/entry tracking
+            LoaderLog.warn("While packaging " + name + " " + ex.getMessage() + " Ignoring.", ex);
+        } else {
+            LoaderLog.error("Could not read " + name + " " + ex.getMessage(), ex);
+            throw ex;
         }
     }
 
@@ -1087,6 +1071,28 @@ public class Generator extends AbstractLoader {
             irrelevant = exclusionSelector.isExcluded(name);
         }
         return irrelevant;
+    }
+    
+    
+    
+    /**
+     * Logs a JAR entry name.
+     *  
+     * @param name the entry name
+     */
+    private void logEntryName(String name) {
+        if (verbose) {
+            LoaderLog.info("Handling " + name);
+        }
+    }
+    
+    /**
+     * Sets the verbose flag.
+     * 
+     * @param verb the verbose flag
+     */
+    public static void setVerbose(boolean verb) {
+        verbose = verb;
     }
     
 }
