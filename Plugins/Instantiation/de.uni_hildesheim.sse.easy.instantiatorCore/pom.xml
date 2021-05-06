@@ -117,8 +117,8 @@
 	  <version>2.7.1</version>
 	</dependency>
 	<dependency>
-	    <groupId>org.apache</groupId>
-	    <artifactId>xerces</artifactId>
+		<groupId>xerces</groupId>
+		<artifactId>xercesImpl</artifactId>
 	    <version>2.9.0</version>
 	</dependency>
   </dependencies>  
