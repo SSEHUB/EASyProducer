@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,18 +24,19 @@ public class ListLoader implements ILoader {
     private boolean verbose = false;
 
     /**
-     * Creates a list loader which reads the startup sequence from the current class loader.
+     * Creates a list loader that reads the startup sequence from the current class loader, i.e., 
+     * from {@link #EASY_STARTUP_FILE_NAME}.
      * 
      * @throws IOException in case of loading the startup sequence fails
      */
     public ListLoader() throws IOException {
-        this(null);
+        this((File) null);
     }
     
     /**
-     * Creates a list loader which reads the startup sequence from the given file.
+     * Creates a list loader that reads the startup sequence from the given file.
      * 
-     * @param listFile the file to consider (may be <b>null</b> for reading information from a
+     * @param listFile the file to consider (may be <b>null</b> for reading information from the defailt
      *   classloader resource)
      * @throws IOException in case of loading the startup sequence fails
      */
@@ -45,7 +47,50 @@ public class ListLoader implements ILoader {
         } else {
             is = new FileInputStream(listFile);
         }
-        LineNumberReader lnr = new LineNumberReader(new InputStreamReader(is));
+        load(is);
+        Utils.closeQuietly(is);
+    }
+
+    /**
+     * Creates a list loader that reads the startup sequence from an input stream. {@code is} will
+     * not be closed by this constructor.
+     * 
+     * @param is the input stream containing the startup sequence
+     * @throws IOException in case of loading the startup sequence fails
+     */
+    public ListLoader(InputStream is) throws IOException {
+        load(is);
+    }
+
+    /**
+     * Creates a list loader that reads the startup sequence from a reader. {@code reader} will
+     * not be closed by this constructor.
+     * 
+     * @param reader the reader providing access to the startup sequence
+     * @throws IOException in case of loading the startup sequence fails
+     */
+    public ListLoader(Reader reader) throws IOException {
+        load(reader);
+    }
+
+    /**
+     * Loads the startup sequence from an input stream. {@code is} will not be closed by this method.
+     * 
+     * @param is the input stream containing the startup sequence
+     * @throws IOException in case of loading the startup sequence fails
+     */
+    private void load(InputStream is) throws IOException {
+        load(new InputStreamReader(is));
+    }
+
+    /**
+     * Loads the startup sequence from a reader. {@code reader} will not be closed by this method.
+     * 
+     * @param reader the reader providing access to the startup sequence
+     * @throws IOException in case of loading the startup sequence fails
+     */
+    private void load(Reader reader) throws IOException {
+        LineNumberReader lnr = new LineNumberReader(reader);
         String line = null;
         do {
             line = lnr.readLine();
@@ -53,7 +98,6 @@ public class ListLoader implements ILoader {
                 processLine(line);
             }
         } while (null != line);
-        Utils.closeQuietly(is);
     }
     
     @Override
