@@ -132,6 +132,11 @@
 	          <artifactId>CommandLine</artifactId>
 	          <version>${project.version}</version>
 	      </dependency>
+          <dependency>
+	          <groupId>net.ssehub.easy</groupId>
+			  <artifactId>core.eclipse</artifactId>
+              <version>${project.version}</version>
+          </dependency>
     </dependencies>
   </dependencyManagement>
   
