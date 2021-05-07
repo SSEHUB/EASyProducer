@@ -225,6 +225,8 @@
     </target>
 	
 	<target name="deploy">
+	    <mvnDeployPom folderName="${ant.project.name}-deps" pomFile="poms/pom-deps.xml" />
+		
         <!-- deploy without experimental stuff -->
 		<local name="srcFolder"/>
         <property name="srcFolder" value="${basedir}/build/generatedLibs/unbundled"/>
