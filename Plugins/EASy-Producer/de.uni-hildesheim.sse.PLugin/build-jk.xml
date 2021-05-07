@@ -2,6 +2,7 @@
 <project name="net.ssehub.easy.producer.eclipse" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
