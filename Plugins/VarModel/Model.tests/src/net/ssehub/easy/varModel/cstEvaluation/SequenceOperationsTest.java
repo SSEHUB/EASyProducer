@@ -547,29 +547,29 @@ public class SequenceOperationsTest {
         IDatatype seqIntType = new Sequence("intSeq", IntegerType.TYPE, null);
         ArrayList<Integer> data = new ArrayList<Integer>();
         Collections.addAll(data, 1, 7, 9, 10, 4);
-        int sum = 0;
+        int prod = 1;
         for (int d : data) {
-            sum *= d;
+            prod *= d;
         }
         EvaluationAccessor set = Utils.createValue(seqIntType, context, data.toArray());
-        Utils.assertEquals(sum, Utils.evaluate(Sequence.PRODUCT, set));
+        Utils.assertEquals(prod, Utils.evaluate(Sequence.PRODUCT, set));
         set.release();
         set = Utils.createValue(seqIntType, context, new Object[]{});
-        Utils.assertEquals(0, Utils.evaluate(Sequence.PRODUCT, set));
+        Utils.assertEquals(1, Utils.evaluate(Sequence.PRODUCT, set));
         set.release();
         
         IDatatype seqRealType = new Sequence("realSeq", RealType.TYPE, null);
         ArrayList<Double> dataD = new ArrayList<Double>();
         Collections.addAll(dataD, 1.7, 7.2, 9.3, 10.4, 4.1);
-        double sumD = 0;
+        double prodD = 1;
         for (double d : dataD) {
-            sumD *= d;
+            prodD *= d;
         }
         EvaluationAccessor setD = Utils.createValue(seqRealType, context, dataD.toArray());
-        Utils.assertEquals(sumD, Utils.evaluate(Sequence.PRODUCT, setD));
+        Utils.assertEquals(prodD, Utils.evaluate(Sequence.PRODUCT, setD));
         setD.release();
         setD = Utils.createValue(seqRealType, context, new Object[]{});
-        Utils.assertEquals(0.0, Utils.evaluate(Sequence.PRODUCT, setD));
+        Utils.assertEquals(1.0, Utils.evaluate(Sequence.PRODUCT, setD));
         setD.release();
     }
     
@@ -586,14 +586,14 @@ public class SequenceOperationsTest {
         Collections.addAll(data, 1, 7, 9, 10, 4);
         int sum = 0;
         for (int d : data) {
-            sum *= d;
+            sum += d;
         }
         sum /= data.size();
         EvaluationAccessor set = Utils.createValue(seqIntType, context, data.toArray());
-        Utils.assertEquals(sum, Utils.evaluate(Sequence.PRODUCT, set));
+        Utils.assertEquals(sum, Utils.evaluate(Sequence.AVG, set));
         set.release();
         set = Utils.createValue(seqIntType, context, new Object[]{});
-        Utils.assertEquals(0, Utils.evaluate(Sequence.PRODUCT, set));
+        Utils.assertEquals(0, Utils.evaluate(Sequence.AVG, set));
         set.release();
         
         IDatatype seqRealType = new Sequence("realSeq", RealType.TYPE, null);
@@ -601,14 +601,14 @@ public class SequenceOperationsTest {
         Collections.addAll(dataD, 1.7, 7.2, 9.3, 10.4, 4.1);
         double sumD = 0;
         for (double d : dataD) {
-            sumD *= d;
+            sumD += d;
         }
         sumD /= dataD.size();
         EvaluationAccessor setD = Utils.createValue(seqRealType, context, dataD.toArray());
-        Utils.assertEquals(sumD, Utils.evaluate(Sequence.PRODUCT, setD));
+        Utils.assertEquals(sumD, Utils.evaluate(Sequence.AVG, setD));
         setD.release();
         setD = Utils.createValue(seqRealType, context, new Object[]{});
-        Utils.assertEquals(0.0, Utils.evaluate(Sequence.PRODUCT, setD));
+        Utils.assertEquals(0.0, Utils.evaluate(Sequence.AVG, setD));
         setD.release();
     }
 

@@ -316,29 +316,29 @@ public class ContainerOperations {
                     int size = cont.getElementSize();
                     try {
                         if (isInt) {
-                            int sum = 0; // may exceed range!
+                            int res = mult ? 1 : 0; // may exceed range!
                             for (int i = 0; i < size; i++) {
                                 Value elt = cont.getElement(i);
                                 int tmp = ((IntValue) elt).getValue();
                                 if (mult) {
-                                    sum *= tmp;
+                                    res *= tmp;
                                 } else {
-                                    sum += tmp;
+                                    res += tmp;
                                 }
                             }
-                            rValue = ValueFactory.createValue(IntegerType.TYPE, sum);
+                            rValue = ValueFactory.createValue(IntegerType.TYPE, res);
                         } else {
-                            double sum = 0;
+                            double res = mult ? 1 : 0;
                             for (int i = 0; i < size; i++) {
                                 Value elt = cont.getElement(i);
                                 double tmp = ((RealValue) elt).getValue();
                                 if (mult) {
-                                    sum *= tmp;
+                                    res *= tmp;
                                 } else {
-                                    sum += tmp;
+                                    res += tmp;
                                 }
                             }
-                            rValue = ValueFactory.createValue(RealType.TYPE, sum);
+                            rValue = ValueFactory.createValue(RealType.TYPE, res);
                         }
                         result = ConstantAccessor.POOL.getInstance().bind(rValue, true, operand.getContext());
                     } catch (ValueDoesNotMatchTypeException e) {

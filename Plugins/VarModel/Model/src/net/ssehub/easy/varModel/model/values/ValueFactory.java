@@ -139,7 +139,7 @@ public class ValueFactory {
                 if (null == value) {
                     ret = new IntValue();
                 } else {
-                    assert 1 == value.length;
+                    assert value.length >= 1;
                     ret = new IntValue(value[0].toString());
                 }
                 return ret;
