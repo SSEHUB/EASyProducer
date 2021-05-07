@@ -225,14 +225,17 @@
     </target>
 	
 	<target name="deploy">
-	    <mvnDeployPom folderName="${ant.project.name}-deps" pomFile="poms/pom-deps.xml" />
-		
         <!-- deploy without experimental stuff -->
 		<local name="srcFolder"/>
         <property name="srcFolder" value="${basedir}/build/generatedLibs/unbundled"/>
         <property name="tgtFolder" value="${basedir}/build/mvn"/>
 		<mkdir dir="${tgtFolder}"/>
 
+		<!-- deploy the easy dependences for standalone use/import as POM -->
+	    <copy file="poms/pom-deps.xml" tofile="${tgtFolder}/pom.xml"/>
+        <mvnDeployPom folderName="${ant.project.name}-deps" pomFile="${tgtFolder}/pom.xml" />
+        <delete file="${tgtFolder}/pom.xml"/>
+		
         <!-- deploy the specific eclipse libraries for the runtime version of EASy (not experimental) -->
         <copy file="poms/pomEclipse.xml" tofile="${tgtFolder}/pom.xml"/>
 		<copy file="${srcFolder}/eclipse-part.jar" todir="${tgtFolder}"/>
