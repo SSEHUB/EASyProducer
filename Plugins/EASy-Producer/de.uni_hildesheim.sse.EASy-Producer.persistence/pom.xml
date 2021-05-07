@@ -71,13 +71,13 @@
 		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
-		  <groupId>net.ssehub.easy</groupId>
-		  <artifactId>vil.buildlang</artifactId>
+		  <groupId>net.ssehub.easy.vil</groupId>
+		  <artifactId>buildlang</artifactId>
 		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
-		  <groupId>net.ssehub.easy</groupId>
-		  <artifactId>vil.templateLang</artifactId>
+		  <groupId>net.ssehub.easy.vil</groupId>
+		  <artifactId>templateLang</artifactId>
 		  <version>${project.version}</version>
 	  </dependency>
 	  <dependency>
