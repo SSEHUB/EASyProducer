@@ -85,7 +85,7 @@
        <artifactId>org.eclipse.xtext.ui.codetemplates.ui</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.eclipse.ui</groupId>
+       <groupId>org.eclipse.platform</groupId>
        <artifactId>org.eclipse.ui.ide</artifactId>
     </dependency>
     <dependency>
