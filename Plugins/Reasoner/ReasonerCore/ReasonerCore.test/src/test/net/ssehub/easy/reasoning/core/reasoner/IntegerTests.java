@@ -1,6 +1,11 @@
 package test.net.ssehub.easy.reasoning.core.reasoner;
 
+import org.junit.Assert;
 import org.junit.Test;
+
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 
 /**
  * Configures the integer tests for SSE reasoner.
@@ -96,6 +101,25 @@ public class IntegerTests extends AbstractTest {
     @Test
     public void variableFailTest() {
         reasoningTest("VariableFailTest.ivml", 1);
+    }
+    
+    /**
+     * Product test. [Ke Liu]
+     * 
+     * @throws ModelQueryException shall not happen
+     */
+    @Test
+    public void productTest() throws ModelQueryException {
+        Configuration cfg = reasoningTest("Product.ivml", 0);
+        IDecisionVariable var = cfg.getDecision("i_product1", false);
+        Assert.assertNotNull(var);
+        Assert.assertNotNull(var.getValue());
+        Assert.assertEquals(120, var.getValue().getValue());
+        
+        var = cfg.getDecision("i_product2", false);
+        Assert.assertNotNull(var);
+        Assert.assertNotNull(var.getValue());
+        Assert.assertEquals(5040, var.getValue().getValue());
     }
 
 }

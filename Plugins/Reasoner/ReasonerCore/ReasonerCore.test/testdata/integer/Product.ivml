@@ -1,0 +1,9 @@
+project Product {
+    
+    sequenceOf(Integer) seq_integers = {1, 2, 3, 4, 5};
+    Integer i_product1 = seq_integers.product();
+    
+    setOf(Integer) set_integers = {1, 2, 3, 4, 5, 6, 7};
+    Integer i_product2 = set_integers.product();
+    
+}
