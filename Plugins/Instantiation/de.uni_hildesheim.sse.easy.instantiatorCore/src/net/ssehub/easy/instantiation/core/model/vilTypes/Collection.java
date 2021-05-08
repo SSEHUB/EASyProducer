@@ -123,6 +123,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the selected elements
      * @throws VilException in case that evaluation fails
      */
+    @OperationMeta(useGenericParameter = 0)
     public Collection<T> select(ExpressionEvaluator evaluator) throws VilException;
     
     /**
@@ -132,6 +133,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the rejected elements
      * @throws VilException in case that evaluation fails
      */
+    @OperationMeta(useGenericParameter = 0)
     public Collection<T> reject(ExpressionEvaluator evaluator) throws VilException;
     
     /**

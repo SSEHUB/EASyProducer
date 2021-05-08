@@ -39,7 +39,7 @@ public abstract class TypeDescriptor <T> implements IMetaType {
     /**
      * Returns whether this descriptor was initialized.
      * 
-     * @return <code>true</code> if it was initialized, <code>false</code> slese
+     * @return <code>true</code> if it was initialized, <code>false</code> else
      */
     protected boolean isInitialized() {
         return null != operations;

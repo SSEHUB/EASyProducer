@@ -101,9 +101,11 @@ public interface Set<T> extends Collection<T> {
     public boolean remove(T element);
     
     @Override
+    @OperationMeta(useGenericParameter = 0)
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
+    @OperationMeta(useGenericParameter = 0)
     public Set<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override

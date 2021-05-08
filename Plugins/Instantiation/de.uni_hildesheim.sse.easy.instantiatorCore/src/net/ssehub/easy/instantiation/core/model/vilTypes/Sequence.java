@@ -109,9 +109,11 @@ public interface Sequence<T> extends Collection<T> {
     public boolean remove(T element);
     
     @Override
+    @OperationMeta(useGenericParameter = 0)
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
+    @OperationMeta(useGenericParameter = 0)
     public Sequence<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
