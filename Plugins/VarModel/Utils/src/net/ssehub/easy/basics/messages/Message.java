@@ -37,21 +37,18 @@ public class Message implements IMessage {
         this.description = description;
         this.status = status;
     }
-    
-    /**
-     * Returns the message description.
-     * 
-     * @return the message description
-     */
+
+    @Override
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String getDetailedDescription() {
+        return description;
+    }
     
-    /**
-     * Returns the status of this message.
-     * 
-     * @return the status of this message
-     */
+    @Override
     public Status getStatus() {
         return status;
     }

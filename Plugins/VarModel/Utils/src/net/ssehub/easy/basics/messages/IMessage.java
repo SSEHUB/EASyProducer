@@ -28,7 +28,17 @@ public interface IMessage {
      * @return the message description
      */
     public String getDescription();
-    
+
+    /**
+     * Returns a detailed message description (if available) or {@link #getDescription()}. Details may
+     * e.g., include file position or line number. As e.g. xText cares for location and position itself, 
+     * this information would be superfluous there, but helpful in a command line context, where this
+     * method shall be used instead.
+     * 
+     * @return the (detailed) message description
+     */
+    public String getDetailedDescription();
+
     /**
      * Returns the status of this message.
      * 

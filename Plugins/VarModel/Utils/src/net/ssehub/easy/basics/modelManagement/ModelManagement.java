@@ -988,7 +988,7 @@ public abstract class ModelManagement <M extends IModel> {
                         if (builder.length() > 0) {
                             builder.append("\n");
                         }
-                        builder.append(message.getDescription());
+                        builder.append(message.getDetailedDescription());
                         if (Status.ERROR == message.getStatus() 
                             || Status.UNSUPPORTED == message.getStatus()) {
                             errorCount++;
