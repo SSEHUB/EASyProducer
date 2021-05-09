@@ -41,11 +41,20 @@ public @interface OperationMeta {
     /**
      * The generic parameters of the return type. This is required as the type parameters
      * of Java generics cannot be accessed. Generics of complex types are just given in 
-     * linear sequence. Empty by default. Might be replaced by new reflection functions in Java 8.
+     * linear sequence. Empty by default. 
      * 
      * @return the generic parameter types
      */
     Class<?>[] returnGenerics() default { };
+    
+    /**
+     * Allows overriding the actual return type, e.g., to nail down covariant return types that may be resolved in
+     * reflection to the type of the overridden base method. Must be compliant to the method declaration. Default
+     * value is the {@code void.class}.
+     *  
+     * @return the actual return type
+     */
+    Class<?> returnType() default void.class;
     
     /**
      * Whether a generic parameter (index) of the operand shall be used as return type. 
