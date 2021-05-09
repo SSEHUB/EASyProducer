@@ -109,23 +109,23 @@ public interface Sequence<T> extends Collection<T> {
     public boolean remove(T element);
     
     @Override
-    @OperationMeta(useGenericParameter = 0, returnGenerics = Sequence.class)
+    @OperationMeta(useGenericParameter = 0, returnType = Sequence.class)
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useGenericParameter = 0, returnGenerics = Sequence.class)
+    @OperationMeta(useGenericParameter = 0, returnType = Sequence.class)
     public Sequence<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useParameter = 0, flatten = true, returnGenerics = Set.class)
+    @OperationMeta(useParameter = 0, flatten = true, returnType = Set.class)
     public Set<?> closure(ExpressionEvaluator evaluator) throws VilException; // always set
     
     @Override
-    @OperationMeta(useParameter = 0, flatten = true, returnGenerics = Sequence.class)
+    @OperationMeta(useParameter = 0, flatten = true, returnType = Sequence.class)
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = Integer.MAX_VALUE, returnGenerics = Sequence.class)
+    @OperationMeta(useParameter = Integer.MAX_VALUE, returnType = Sequence.class)
     public Sequence<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
     
     /**

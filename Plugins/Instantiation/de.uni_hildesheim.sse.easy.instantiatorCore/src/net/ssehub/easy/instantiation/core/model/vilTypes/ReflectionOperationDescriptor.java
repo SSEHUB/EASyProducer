@@ -298,7 +298,12 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
     
     @Override
     protected void initializeReturnType() {
-        setReturnType(ReflectionResolver.resolveType(method.getReturnType(), getReturnGenerics()));
+        Class<?> returnType = method.getReturnType();
+        OperationMeta meta = method.getAnnotation(OperationMeta.class);
+        if (null != meta && meta.returnType() != void.class && returnType.isAssignableFrom(meta.returnType())) {
+            returnType = meta.returnType();
+        }
+        setReturnType(ReflectionResolver.resolveType(returnType, getReturnGenerics()));
     }
     
     @Override
