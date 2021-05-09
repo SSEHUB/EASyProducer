@@ -101,23 +101,23 @@ public interface Set<T> extends Collection<T> {
     public boolean remove(T element);
     
     @Override
-    @OperationMeta(useGenericParameter = 0)
+    @OperationMeta(useGenericParameter = 0, returnGenerics = Set.class)
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useGenericParameter = 0)
+    @OperationMeta(useGenericParameter = 0, returnGenerics = Set.class)
     public Set<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useParameter = 0, flatten = true)
+    @OperationMeta(useParameter = 0, flatten = true, returnGenerics = Set.class)
     public Set<?> closure(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = 0, flatten = true)
+    @OperationMeta(useParameter = 0, flatten = true, returnGenerics = Set.class)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = Integer.MAX_VALUE)
+    @OperationMeta(useParameter = Integer.MAX_VALUE, returnGenerics = Set.class)
     public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
     
     /**
