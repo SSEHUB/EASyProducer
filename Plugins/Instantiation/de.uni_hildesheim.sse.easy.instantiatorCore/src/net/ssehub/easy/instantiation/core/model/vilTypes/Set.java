@@ -37,15 +37,15 @@ public interface Set<T> extends Collection<T> {
     public static final java.util.Set<?> DEFAULT = new java.util.HashSet<Object>();
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(returnGenerics = IVilType.class, returnType = Set.class)
     public Set<T> selectByType(TypeDescriptor<?> type);
 
     @Override
-    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class, returnType = Set.class)
     public Set<T> selectByKind(TypeDescriptor<?> type);
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(returnGenerics = IVilType.class, returnType = Set.class)
     public Set<T> typeReject(TypeDescriptor<?> type);
 
     /**
@@ -142,7 +142,7 @@ public interface Set<T> extends Collection<T> {
     @Invisible
     public java.util.Set<T> toMappedSet();
 
-    @OperationMeta(useGenericParameter = 0, flatten = true)
+    @OperationMeta(useGenericParameter = 0, flatten = true, returnType = Set.class)
     @Override
     public Set<?> flatten() throws VilException;
 
@@ -164,7 +164,7 @@ public interface Set<T> extends Collection<T> {
     public Set<T> symmetricDifference(Set<T> set);
 
     @Override
-    @OperationMeta(name = "clone")
+    @OperationMeta(name = "clone", returnType = Set.class)
     public Set<T> cloneCollection();
     
 }

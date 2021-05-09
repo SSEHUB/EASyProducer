@@ -56,15 +56,15 @@ public interface Sequence<T> extends Collection<T> {
     public T get(int index);
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(returnGenerics = IVilType.class, returnType = Sequence.class)
     public Sequence<T> selectByType(TypeDescriptor<?> type);
 
     @Override
-    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class, returnType = Sequence.class)
     public Sequence<T> selectByKind(TypeDescriptor<?> type);
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @OperationMeta(returnGenerics = IVilType.class, returnType = Sequence.class)
     public Sequence<T> typeReject(TypeDescriptor<?> type);
 
     /**
@@ -214,7 +214,7 @@ public interface Sequence<T> extends Collection<T> {
     @Invisible
     public java.util.List<T> toMappedList();
 
-    @OperationMeta(useGenericParameter = 0, flatten = true)
+    @OperationMeta(useGenericParameter = 0, flatten = true, returnType = Sequence.class)
     @Override
     public Sequence<?> flatten() throws VilException;
 
@@ -321,7 +321,7 @@ public interface Sequence<T> extends Collection<T> {
     public T removeLast();
 
     @Override
-    @OperationMeta(name = "clone")
+    @OperationMeta(name = "clone", returnType = Sequence.class)
     public Sequence<T> cloneCollection();
 
 }
