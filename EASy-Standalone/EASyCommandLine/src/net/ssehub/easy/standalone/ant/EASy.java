@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
 
 import net.ssehub.easy.basics.messages.Message;
 import net.ssehub.easy.basics.progress.ProgressObserver;
@@ -34,38 +33,16 @@ import net.ssehub.easy.standalone.cmd.InstantiationCommands;
 import net.ssehub.easy.standalone.cmd.LowlevelCommands;
 import net.ssehub.easy.standalone.cmd.ProjectNameMapper;
 import net.ssehub.easy.varModel.confModel.Configuration;
-import net.ssehub.easy.varModel.model.Project;
 
 /**
- * A simple ANT task for EASy.
+ * A simple ANT task for EASy based on the EASy core, the PLP project and also the EASy settings.
  * 
  * @author Holger Eichelberger
  */
-public class EASy extends Task {
+public class EASy extends AbstractEASyTask {
     
-    private File source;
-    private File target;
     private String reasoner;
-    private String projectName;
     
-    /**
-     * Defines the source folder.
-     * 
-     * @param source the source folder
-     */
-    public void setSource(File source) {
-        this.source = source;
-    }
-    
-    /**
-     * Defines the target folder.
-     * 
-     * @param target the target folder
-     */
-    public void setTarget(File target) {
-        this.target = target;
-    }
-
     /**
      * Defines the reasoner in terms of name:version.
      * 
@@ -75,35 +52,14 @@ public class EASy extends Task {
         this.reasoner = reasoner;
     }
     
-    /**
-     * Returns the project name. Typically EASy assumes the name of the folder
-     * to be the name of the project. However, this is not always the case.
-     * 
-     * @param projectName the project name
-     */
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-    
-    /**
-     * Defines the optional installation location of Maven.
-     * 
-     * @param mavenHome as absolute path
-     */
-    public void setMavenHome(String mavenHome) {
-        if (mavenHome.length() > 0) {
-            System.setProperty("easy.maven.home", mavenHome);
-        }
-    }
-    
     @Override
     public void execute() throws BuildException {
-        if (null != projectName) {
+        if (null != getProjectName()) {
             ProjectNameMapper.setInstance(new ProjectNameMapper() {
                 
                 @Override
                 public String getName(File project) {
-                    return projectName;
+                    return getProjectName();
                 }
             });
         }
@@ -120,10 +76,9 @@ public class EASy extends Task {
                     throw new BuildException("reasoner not found: " + reasoner);
                 }
                 frontend.setReasonerHint(reasoner.getDescriptor());
-                LowlevelCommands.loadProject(source);
-                String projectName = ProjectNameMapper.getInstance().getName(source);
+                LowlevelCommands.loadProject(getSource());
+                String projectName = ProjectNameMapper.getInstance().getName(getSource());
                 PLPInfo plpPre = LowlevelCommands.getProject(projectName);
-                Project project = plpPre.getProject();
                 Configuration config = plpPre.getConfiguration();
                 ReasonerConfiguration rConfig = new ReasonerConfiguration();
                 ReasoningResult result = ReasonerFrontend.getInstance().check(config, rConfig, 
@@ -137,7 +92,7 @@ public class EASy extends Task {
                     throw new BuildException(msg);
                 }
             }
-            InstantiationCommands.instantiate(source, target);
+            InstantiationCommands.instantiate(getSource(), getTarget());
         } catch (IOException e) {
             throw new BuildException(e.getMessage(), e);
         } catch (VilException e) {
