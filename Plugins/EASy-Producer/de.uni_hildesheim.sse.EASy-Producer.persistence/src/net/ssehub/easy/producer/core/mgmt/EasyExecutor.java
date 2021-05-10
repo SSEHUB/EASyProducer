@@ -18,6 +18,8 @@ package net.ssehub.easy.producer.core.mgmt;
 import java.io.File;
 import java.util.List;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
@@ -28,6 +30,7 @@ import net.ssehub.easy.instantiation.core.model.execution.Executor;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
+import net.ssehub.easy.producer.core.persistence.internal.Activator;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
@@ -48,6 +51,9 @@ import net.ssehub.easy.varModel.model.Project;
  * You may call these methods individually and handle the exceptions or you may call {@link #execute()} instead, which
  * performs exactly this sequence. In particular, configuration methods are stated in builder style, while the calls
  * mentioned above may return the specific results.
+ * 
+ * This class requires that EASy-Producer is loaded and initialized, either through an EASy-Loader, e.g., the 
+ * ListLoader, through Eclipse plugins or, directly, through manually calling the required registration classes.
  *  
  * @author Holger Eichelberger
  */
@@ -66,10 +72,61 @@ public class EasyExecutor {
     private ProgressObserver observer = ProgressObserver.NO_OBSERVER;
     private ReasonerConfiguration rCfg;
     private TracerFactory tracerFactory = ConsoleTracerFactory.INSTANCE;
+    private Logger logger = new Logger() {
+
+        private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(EasyExecutor.class, Activator.PLUGIN_ID);
+        
+        @Override
+        public void warn(String text) {
+            logger.warn(text);
+        }
+
+        @Override
+        public void error(String text) {
+            logger.error(text);
+        }
+        
+        @Override
+        public void info(String text) {
+            logger.info(text);
+        }
+        
+    };
+    
+    /**
+     * Defines a simple logger frontend interface.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface Logger {
+
+        /**
+         * Logs a warning.
+         * 
+         * @param text the warning text
+         */
+        public void warn(String text);
+        
+        /**
+         * Logs an error.
+         * 
+         * @param text the error text
+         */
+        public void error(String text);
+        
+        /**
+         * Logs an information.
+         * 
+         * @param text the information text
+         */
+        public void info(String text);
+        
+    }
 
     /**
      * Creates an instance of the executor with no folders/model names set. Only the progress observer (set to 
-     * {@link ProgressObserver#NO_OBSERVER}) and the reasoner configuration are assigned.
+     * {@link ProgressObserver#NO_OBSERVER}), a default reasoner configuration, the 
+     * {@link ConsoleTracerFactory#INSTANCE console tracer factory} and an {@link EASyLogger} are assigned.
      */
     public EasyExecutor() {
         rCfg = new ReasonerConfiguration();
@@ -77,8 +134,8 @@ public class EasyExecutor {
     
     /**
      * Creates an instance of the executor with basic information absolutely required to execute EASy-Producer. The 
-     * progress observer is set to {@link ProgressObserver#NO_OBSERVER} and the reasoner configuration to a default 
-     * setup.
+     * progress observer is set to {@link ProgressObserver#NO_OBSERVER}, a default reasoner configuration, the 
+     * {@link ConsoleTracerFactory#INSTANCE console tracer factory} and an {@link EASyLogger} are assigned.
      * 
      * @param project the basic project folder to which paths in VIL are assumed to be relative. Also used as project 
      *   folders for VIL for a self-instantiation (acts as {@link #setProjectBase(File)}, {@link #setVilSource(File)} 
@@ -227,13 +284,27 @@ public class EasyExecutor {
     }
     
     /**
+     * Sets the logger instance. Initially, the logger delegates to an {@link EASyLogger}. 
+     *  
+     * @param logger the logger instance
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor setLogger(Logger logger) {
+        this.logger = logger;
+        return this;
+    }
+    
+    /**
      * Sets up the EASy-Producer locations containing the model files.
      * 
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
      */
     public void setupLocations() throws ModelManagementException {
+        logger.info("Setting IVML location " + ivmlFolder);
         VarModel.INSTANCE.locations().addLocation(ivmlFolder, observer);
+        logger.info("Setting VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
+        logger.info("Setting VTL location " + vtlFolder);
         TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
     }
 
@@ -244,11 +315,15 @@ public class EasyExecutor {
      * @throws ModelManagementException if loading the IVML model fails
      */
     public Configuration loadIvmlModel() throws ModelManagementException {
+        logger.info("Loading model: " + ivmlModelName);
         List<ModelInfo<Project>> models = VarModel.INSTANCE.availableModels().getModelInfo(ivmlModelName);
         if (null != models && !models.isEmpty()) {
             ModelInfo<Project> prjInfo = models.get(0);
             prj = VarModel.INSTANCE.load(prjInfo);
+            logger.info("Creating configuration instance: " + ivmlModelName);
             cfg = new Configuration(prj);
+        } else {
+            logger.error("No model found: " + ivmlModelName);
         }
         return cfg;
     }
@@ -262,6 +337,7 @@ public class EasyExecutor {
      */
     public ReasoningResult propagateOnIvmlModel() {
         if (null != cfg) {
+            logger.info("Reasoning by propagation on model " + ivmlModelName);
             return ReasonerFrontend.getInstance().propagate(cfg, rCfg, observer);
         }  else {
             throw new IllegalStateException("No IVML model loaded / configuration available.");
@@ -277,6 +353,7 @@ public class EasyExecutor {
      */
     public void executeVil() throws ModelManagementException, VilException {
         if (null != cfg) {
+            logger.info("Loading VIL script: " + vilModelName);
             List<ModelInfo<Script>> vil = BuildModel.INSTANCE.availableModels().getModelInfo(vilModelName);
             if (null != vil && !vil.isEmpty()) {
                 ModelInfo<Script> vilInfo = vil.get(0);
@@ -285,12 +362,15 @@ public class EasyExecutor {
                 if (null != tracerFactory) {
                     TracerFactory.setInstance(tracerFactory);
                 }
+                logger.info("Executing VIL script: " + vilModelName);
                 new Executor(script)
                     .addBase(base)
                     .addSource(vilSource)
                     .addConfiguration(cfg)
                     .addTarget(vilTarget)
                     .execute();
+            } else {
+                logger.info("No VIL script found: " + vilModelName);
             }
         } else {
             throw new IllegalStateException("No IVML model loaded / configuration available.");
@@ -303,8 +383,11 @@ public class EasyExecutor {
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
      */
     public void discardLocations() throws ModelManagementException {
+        logger.info("Discarding VTL location " + vtlFolder);
         TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+        logger.info("Discarding VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
+        logger.info("Discarding IVML location " + ivmlFolder);
         VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
     }
 
@@ -323,5 +406,5 @@ public class EasyExecutor {
         discardLocations();
         return this;
     }
-
+    
 }
