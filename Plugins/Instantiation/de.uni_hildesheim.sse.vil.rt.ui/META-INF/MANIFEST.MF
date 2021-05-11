@@ -7,7 +7,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.rt.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.rt;visibility:=reexport,
- org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui;bundle-version="2.12.0",
  org.eclipse.ui.editors;bundle-version="3.5.0",
  org.eclipse.ui.ide;bundle-version="3.5.0",
  net.ssehub.easy.dslCore.ui,
@@ -29,7 +29,7 @@ Require-Bundle: de.uni_hildesheim.sse.vil.rt;visibility:=reexport,
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Service-Component: OSGI-INF/rtvilFactory.xml
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: de.uni_hildesheim.sse.vil.rt.ui.contentassist,
  de.uni_hildesheim.sse.vil.rt.ui.contentassist.antlr,
  de.uni_hildesheim.sse.vil.rt.ui.embed,

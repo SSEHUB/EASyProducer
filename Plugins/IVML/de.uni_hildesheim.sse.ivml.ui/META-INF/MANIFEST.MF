@@ -7,7 +7,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.ivml.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.ivml.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.ivml;visibility:=reexport,
- org.eclipse.xtext.ui;visibility:=reexport,
+ org.eclipse.xtext.ui;bundle-version="2.12.0";visibility:=reexport,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
  org.eclipse.xtext.ui.shared,
@@ -25,7 +25,7 @@ Require-Bundle: de.uni_hildesheim.sse.ivml;visibility:=reexport,
 Import-Package: org.apache.commons.logging,
  org.apache.log4j
 aService-Component: OSGI-INF/contribution.xml
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.contentassist.antlr,
  de.uni_hildesheim.sse.ui.embed,

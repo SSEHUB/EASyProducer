@@ -7,7 +7,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.vil.expressions.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.expressions.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
- org.eclipse.xtext.ui,
+ org.eclipse.xtext.ui;bundle-version="2.12.0",
  org.eclipse.ui.editors;bundle-version="3.5.0",
  org.eclipse.ui.ide;bundle-version="3.5.0",
  org.eclipse.xtext.ui.shared,
