@@ -15,15 +15,16 @@ Installation
 -------------
 EASy-Producer can be installed from the [official update site](http://projects.sse.uni-hildesheim.de/easy/ "EASy-Producer update site") hosted at the University of Hildesheim, Germany. 
 
-We also provide a snapshot of the most recent developments in terms of a [nightly update site](https://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/ "EASy-Producer nightly update site") also hosted at the University of Hildesheim, Germany. From there (but also [doc](/doc/ "doc")) previews of the upcoming documentation can be obtained. Please note that Eclipse Help plugin of the nightly version contains the same documentation as the latest release.
+We also provide a snapshot of the most recent developments in terms of a [nightly update site](https://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/ "EASy-Producer nightly update site") also hosted at the University of Hildesheim, Germany. However, currently this update site is not up to date due to problems running the required Eclipse tasks in our Continuous Integration Environment.
+
+From there (but also [doc](/doc/ "doc")) previews of the upcoming documentation can be obtained. Please note that Eclipse Help plugin of the nightly version contains the same documentation as the latest release.
 
 Support for Eclipse/JDK
 -----------------------
-Since Spring 2021, EASy-Producer is compatible with Eclipse 2021-03 (4.19.0)/JDK 13. This requires that the UI layer of EASy-Producer must be compiled with JDK 11, while the lower layer can stay on JDK 8.
+Since Spring 2021, EASy-Producer is compatible with Eclipse 2021-03 (4.19.0)/JDK 13. This requires that the UI layer of EASy-Producer must be compiled with JDK 11, while the lower layers can still be compiled with JDK 8 (for standalone use as library/via Maven).
 
-Moreover, since Eclipse 4.9, a different bundle for Descriptive Services is required, which does not exist on older Eclipse version. For now, we decided to include both, the old and the new bundle, as optional as suggested by some Eclipse page, i.e., as long as this does not clash with product installation, EASy-Producer shall still work well with Eclipse 4.5 and JDK 8, Eclipse 4.7 and JDK 11. 
+Moreover, since Eclipse 4.9, a different bundle for Descriptive Services is required, which does not exist on older Eclipse version. For now, we decided to include both, the old and the new bundle, as optional as suggested by some Eclipse page, i.e., as long as this does not clash with product installation, at least the lower EASy-Producer layers shall still work with Eclipse 4.5 and JDK 8, Eclipse 4.7 and JDK 11. However, the UI requires JDK 11 and at least xText 2.21.
 
-The specification of execution environments still targets JDK 8 (or - to be incrementally upgraded - JDK 6).
 
 Running EASy-Producer/tests within Eclipse
 ------------------------------------------
@@ -34,8 +35,6 @@ Source code setup/plugins
 Please install the Eclipse Checkstyle plugin. The configurations are compatible with Checkstyle 8.35. Setup a global checkstyle configuration named "SSE Checkstyle Configuration" as a project local configuration pointing to the checkstyle file in the project "EASy-Producer.Eclipse".
 
 Please install also xText 2.25 (at least xText 2.12). 
-
-For reducing local execution plugin dependency issues and to ease debugging, we installed also Java XML Streaming API 1.0.1 and Apache Geronimo Activation Plug-in 1.1.0 from Eclipse Orbit, but this may not be needed in your setup.
 
 Build Status
 ------------------
