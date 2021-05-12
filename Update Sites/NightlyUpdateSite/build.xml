@@ -31,11 +31,13 @@
         <antcall target="replacePlugins"/>
         <antcall target="createFeature"/>
         <antcall target="createSiteXML"/>
-        <antcall target="createArtifactJars"/>
-        <!--<touch file="gen/final/empty.txt"/> something so that Jenkins does not fail -->
+		<!-- fails with Eclipse 4.19
+        <antcall target="createArtifactJars"/> -->
+        <touch file="gen/final/empty.txt"/> <!-- something so that Jenkins does not fail -->
 		<antcall target="zip.Site"/>
+		<!--
 		<antcall target="publish"/>
-		<antcall target="createProducts"/>
+		<antcall target="createProducts"/>-->
     </target>
     
     <target name="replacePlugins">
@@ -65,7 +67,6 @@
     
     <target name="createArtifactJars">
         <eclipseLauncher application="org.eclipse.equinox.p2.publisher.UpdateSitePublisher">
-        	<jvmarg value="-Dosgi.startLevel=4"/>
             <arg value="-metadataRepository" />
             <arg value="file:${basedir}/gen/final" />
             <arg value="-artifactRepository" />
