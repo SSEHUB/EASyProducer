@@ -387,7 +387,7 @@ public class EasyExecutor {
                     .addTarget(vilTarget)
                     .execute();
             } else {
-                logger.info("No VIL script found: " + vilModelName);
+                logger.error("No VIL script found: " + vilModelName);
             }
         } else {
             throw new IllegalStateException("No IVML model loaded / configuration available.");
