@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -170,7 +171,7 @@ public class VilTemplateProcessor implements IVilType {
         URI baseURI = inAbsFile.toURI();
         String templateContents;
         try {
-            templateContents = FileUtils.readFileToString(inAbsFile);
+            templateContents = FileUtils.readFileToString(inAbsFile, Charset.defaultCharset());
         } catch (IOException e) {
             throw new VilException(e.getMessage(), VilException.ID_IO);
         }
@@ -563,7 +564,7 @@ public class VilTemplateProcessor implements IVilType {
                 restriction = null;
             }
             model = TemplateModel.INSTANCE.resolve(templateName, restriction, baseURI, context);
-            if (model.isDirty()) {
+            if (null != model && model.isDirty()) {
                 Template old = model;
                 model = TemplateModel.INSTANCE.reload(model);
                 EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).info("Reloading model " 
