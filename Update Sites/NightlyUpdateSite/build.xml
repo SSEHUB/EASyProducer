@@ -65,6 +65,7 @@
     
     <target name="createArtifactJars">
         <eclipseLauncher application="org.eclipse.equinox.p2.publisher.UpdateSitePublisher">
+        	<jvmarg value="-Dosgi.startLevel=4"/>
             <arg value="-metadataRepository" />
             <arg value="file:${basedir}/gen/final" />
             <arg value="-artifactRepository" />
