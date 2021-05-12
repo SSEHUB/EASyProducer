@@ -16,6 +16,7 @@
 package net.ssehub.easy.producer.core.mgmt;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -60,14 +61,13 @@ import net.ssehub.easy.varModel.model.Project;
 public class EasyExecutor {
 
     private File base;
-    private File ivmlFolder;
+    private List<File> ivmlFolder = new ArrayList<File>();
     private File vilFolder;
     private File vtlFolder;
     private File vilSource;
     private File vilTarget;
     private String ivmlModelName;
     private String vilModelName;
-    private Project prj;
     private Configuration cfg;
     private ProgressObserver observer = ProgressObserver.NO_OBSERVER;
     private ReasonerConfiguration rCfg;
@@ -148,7 +148,7 @@ public class EasyExecutor {
      */
     public EasyExecutor(File project, File modelFolder, String modelName) {
         base = project;
-        ivmlFolder = modelFolder;
+        ivmlFolder.add(modelFolder);
         ivmlModelName = modelName;
         vilFolder = modelFolder;
         vilModelName = modelName;
@@ -176,7 +176,22 @@ public class EasyExecutor {
      * @return <b>this</b> (builder style)
      */
     public EasyExecutor setIvmlFolder(File ivmlFolder) {
-        this.ivmlFolder = ivmlFolder;
+        if (this.ivmlFolder.size() > 0) {
+            this.ivmlFolder.set(0, ivmlFolder);
+        } else {
+            this.ivmlFolder.add(ivmlFolder);
+        }
+        return this;
+    }
+    
+    /**
+     * Adds an additional IVML folder.
+     * 
+     * @param ivmlFolder the additional IVML folder
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor addIvmlFolder(File ivmlFolder) {
+        this.ivmlFolder.add(ivmlFolder);
         return this;
     }
 
@@ -300,8 +315,10 @@ public class EasyExecutor {
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
      */
     public void setupLocations() throws ModelManagementException {
-        logger.info("Setting IVML location " + ivmlFolder);
-        VarModel.INSTANCE.locations().addLocation(ivmlFolder, observer);
+        for (File f : ivmlFolder) {
+            logger.info("Setting IVML location " + f);
+            VarModel.INSTANCE.locations().addLocation(f, observer);
+        }
         logger.info("Setting VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
         logger.info("Setting VTL location " + vtlFolder);
@@ -319,7 +336,7 @@ public class EasyExecutor {
         List<ModelInfo<Project>> models = VarModel.INSTANCE.availableModels().getModelInfo(ivmlModelName);
         if (null != models && !models.isEmpty()) {
             ModelInfo<Project> prjInfo = models.get(0);
-            prj = VarModel.INSTANCE.load(prjInfo);
+            Project prj = VarModel.INSTANCE.load(prjInfo);
             logger.info("Creating configuration instance: " + ivmlModelName);
             cfg = new Configuration(prj);
         } else {
@@ -387,8 +404,10 @@ public class EasyExecutor {
         TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
         logger.info("Discarding VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-        logger.info("Discarding IVML location " + ivmlFolder);
-        VarModel.INSTANCE.locations().removeLocation(ivmlFolder, observer);
+        for (File f : ivmlFolder) {
+            logger.info("Discarding IVML location " + f);
+            VarModel.INSTANCE.locations().removeLocation(f, observer);
+        }
     }
 
     /**
@@ -405,6 +424,25 @@ public class EasyExecutor {
         executeVil();
         discardLocations();
         return this;
+    }
+    
+    /**
+     * Returns the configuration used by this executor.
+     * 
+     * @return the configuration
+     */
+    public Configuration getConfiguration() {
+        return cfg;
+    }
+    
+    /**
+     * Replaces the configuration stored in this class. 
+     * 
+     * @param cfg the configuration (if <b>null</b> further processing is disabled and {@link IllegalStateException} 
+     * may be thrown)
+     */
+    public void setConfiguration(Configuration cfg) {
+        this.cfg = cfg;
     }
     
 }
