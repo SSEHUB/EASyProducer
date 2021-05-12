@@ -64,6 +64,9 @@
     
     <target name="createArtifactJars">
         <java jar="${eclipse.launcher}" classpath="${eclipse.launcher.classpath}" fork="true" failonerror="true" maxmemory="128m">
+        	<jvmarg value="-Dosgi.os=linux"/>
+        	<jvmarg value="-Dosgi.ws=gtk"/>
+        	<jvmarg value="-Dosgi.arch=x86_64"/>
             <arg value="-application" />
             <arg value="org.eclipse.equinox.p2.publisher.UpdateSitePublisher" />
             <arg value="-metadataRepository" />
