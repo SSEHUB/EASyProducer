@@ -223,12 +223,15 @@
    	<attribute name="maxmemory" default="128m"/>
    	<attribute name="fork" default="true"/>
    	<attribute name="classpath" default="${eclipse.launcher.classpath}"/>
+   	<attribute name="application" default="NOT_SET"/>
     <element name="elements" implicit="true" optional="true" />
    	<sequential>
         <java jar="${eclipse.launcher}" classpath="@{classpath}" fork="@{fork}" failonerror="@{failonerror}" maxmemory="@{maxmemory}">
-            <jvmarg value="-Dosgi.os=linux"/>
-            <jvmarg value="-Dosgi.ws=gtk"/>
-            <jvmarg value="-Dosgi.arch=x86_64"/>
+            <jvmarg value="-Dosgi.os=linux" />
+            <jvmarg value="-Dosgi.ws=gtk" />
+            <jvmarg value="-Dosgi.arch=x86_64" />
+            <arg value="-application" />
+            <arg value="@{application}" />        	
         	<elements/>
         </java>
     </sequential>
