@@ -217,5 +217,21 @@
           <delete dir="__tmp__"/>
       </sequential>
    </macrodef>
+	
+   <macrodef name="eclipseLauncher">
+    <attribute name="failonerror" default="true"/>
+   	<attribute name="maxmemory" default="128m"/>
+   	<attribute name="fork" default="true"/>
+   	<attribute name="classpath" default="${eclipse.launcher.classpath}"/>
+    <element name="elements" implicit="true" optional="true" />
+   	<sequential>
+        <java jar="${eclipse.launcher}" classpath="@{classpath}" fork="@{fork}" failonerror="@{failonerror}" maxmemory="@{maxmemory}">
+            <jvmarg value="-Dosgi.os=linux"/>
+            <jvmarg value="-Dosgi.ws=gtk"/>
+            <jvmarg value="-Dosgi.arch=x86_64"/>
+        	<elements/>
+        </java>
+    </sequential>
+   </macrodef>
       
 </project>
