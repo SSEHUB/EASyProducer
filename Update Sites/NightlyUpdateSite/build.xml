@@ -94,7 +94,7 @@
             <arg value="-configs"/>
             <arg value="ANY"/>
             <arg value="-source" />
-            <arg value="${user.home}/Eclipse/qmRepository" />
+            <arg value="${eclipse.launcher.repo}" />
             <arg value="-compress" />
             <arg value="-publishArtifacts" />
         </java>
@@ -137,7 +137,7 @@
             <arg value="-artifactRepository" />
             <arg value="file:${basedir}/gen/final" />
             <arg value="-executables"/>
-            <arg value="${user.home}/Eclipse/qmRepository/org.eclipse.equinox.executable_3.6.200.v20150602-1417.jar" />
+            <arg value="${eclipse.executable.jar}" />
             <arg value="-productFile" />
             <arg value="${basedir}/gen/intermediate/EasyProducer.product" />
             <arg value="-flavor" />
@@ -176,8 +176,8 @@
             <arg value="x86_64" />
         </java>
         <!-- copying is a hack -> product configuration based on features using org.eclipse.equinox.executable -->
-        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/EasyProducer.exe" file="${user.home}/Eclipse/qmRepository/binary/bin/win32/win32/x86_64/launcher.exe"/>
-        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/eclipsec.exe" file="${user.home}/Eclipse/qmRepository/binary/bin/win32/win32/x86_64/eclipsec.exe"/>
+        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/EasyProducer.exe" file="${eclipse.launcher.repo}/binary/bin/win32/win32/x86_64/launcher.exe"/>
+        <copy tofile="${basedir}/gen/final/win32.win32.x86_64/eclipsec.exe" file="${eclipse.launcher.repo}/binary/bin/win32/win32/x86_64/eclipsec.exe"/>
         <!-- copy readme -->
         <copy tofile="${basedir}/gen/final/win32.win32.x86_64/README.txt" file="EASy/README.txt"/>
         <!-- patch OSGi for Java9 and 10 -->
@@ -218,7 +218,7 @@
                 <arg value="x86_64" />
         </java>
         <!-- copying is a hack -> product configuration based on features using org.eclipse.equinox.executable -->
-        <copy tofile="${basedir}/gen/final/gtk.linux.x86_64/EasyProducer" file="${user.home}/Eclipse/qmRepository/binary/bin/gtk/linux/x86_64/launcher"/>
+        <copy tofile="${basedir}/gen/final/gtk.linux.x86_64/EasyProducer" file="${eclipse.launcher.repo}/binary/bin/gtk/linux/x86_64/launcher"/>
         <chmod file="${basedir}/gen/final/gtk.linux.x86_64/EasyProducer" perm="a+x"/>
         <!-- copy readme -->
         <copy tofile="${basedir}/gen/final/gtk.linux.x86_64/README.txt" file="EASy/README.txt"/>
@@ -262,7 +262,7 @@
         <!-- copying is a hack -> product configuration based on features using org.eclipse.equinox.executable -->
         <mkdir dir="${basedir}/gen/final/cocoa.macosx.x86_64/EasyProducer.app"/>
         <copy todir="${basedir}/gen/final/cocoa.macosx.x86_64/EasyProducer.app">
-            <fileset dir="${user.home}/Eclipse/qmRepository/binary/bin/cocoa/macosx/x86_64/Eclipse.app" includes="**"/>
+            <fileset dir="${eclipse.launcher.repo}/binary/bin/cocoa/macosx/x86_64/Eclipse.app" includes="**"/>
         </copy>
         <!-- copy readme -->
         <copy tofile="${basedir}/gen/final/cocoa.macosx.x86_64/README.txt" file="EASy/README.txt"/>
