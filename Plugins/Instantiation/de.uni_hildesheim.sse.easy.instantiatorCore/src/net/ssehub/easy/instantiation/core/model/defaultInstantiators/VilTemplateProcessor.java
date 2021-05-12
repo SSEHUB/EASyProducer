@@ -530,6 +530,7 @@ public class VilTemplateProcessor implements IVilType {
         Script caller) throws VilException {
         Template model = null;
         try {
+            Template tpl = null;
             URI baseURI = null;
             IRestrictionEvaluationContext context;
             if (null != caller) { // shall always be the case from VIL
@@ -551,7 +552,7 @@ public class VilTemplateProcessor implements IVilType {
                 }
                 ModelInfo<Template> info = infos.get(0);
                 baseURI = info.getLocation();
-                Template tpl = info.getResolved();
+                tpl = info.getResolved();
                 if (null == tpl) {
                     tpl = TemplateModel.INSTANCE.load(info);
                 }
@@ -564,7 +565,13 @@ public class VilTemplateProcessor implements IVilType {
                 restriction = null;
             }
             model = TemplateModel.INSTANCE.resolve(templateName, restriction, baseURI, context);
-            if (null != model && model.isDirty()) {
+            if (null == model) {
+                model = tpl;
+            }
+            if (null == model) {
+                throw new VilException("Cannot find VIL template " + templateName + " with resolution URI " + baseURI, 
+                    VilException.ID_NOT_FOUND);
+            } else if (model.isDirty()) {
                 Template old = model;
                 model = TemplateModel.INSTANCE.reload(model);
                 EASyLoggerFactory.INSTANCE.getLogger(VilTemplateProcessor.class, Bundle.ID).info("Reloading model " 
