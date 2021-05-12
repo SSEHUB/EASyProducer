@@ -231,7 +231,9 @@
             <jvmarg value="-Dosgi.ws=gtk" />
             <jvmarg value="-Dosgi.arch=x86_64" />
             <arg value="-application" />
-            <arg value="@{application}" />        	
+            <arg value="@{application}" />
+            <arg value="-console"/>
+            <arg value="-consolelog"/>
         	<elements/>
         </java>
     </sequential>
