@@ -111,7 +111,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
         String result = super.getDetailedDescription();
         IssueLocation iLoc = getLocationData(cause, causingFeature, 0);
         if (null != iLoc) {
-            result += " in line " + iLoc.toString();
+            result += iLoc;
         }
         return result;
     }
@@ -166,7 +166,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
         public String toString() {
             String result = "";
             if (lineNumber >= 0) {
-                result += lineNumber + ":" + column + " - " + lineNumberEnd + ":" + columnEnd;
+                result += " in line " + lineNumber + ":" + column + " - " + lineNumberEnd + ":" + columnEnd;
             }
             if (null != location) {
                 if (result.length() > 0) {
