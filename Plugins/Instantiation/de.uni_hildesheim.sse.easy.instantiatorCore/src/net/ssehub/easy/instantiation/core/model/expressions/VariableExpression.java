@@ -78,4 +78,16 @@ public class VariableExpression extends Expression {
         return variable;
     }
 
+    /**
+     * Composes a warning message for a missing/unknown variable.
+     * 
+     * @param name the name of the variable
+     * @return the warning message
+     */
+    public static String composeUnkownVariableWarning(String name) {
+        return "'" + name + "' is unknown, shall be a VIL variable, a VIL type or an IVML variable " 
+            + "/ annotation - may lead to a runtime error";
+    }
+
+    
 }

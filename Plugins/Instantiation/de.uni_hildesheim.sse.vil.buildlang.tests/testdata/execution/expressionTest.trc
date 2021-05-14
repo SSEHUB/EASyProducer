@@ -1,0 +1,23 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    cfg <- <config>
+    -> myFunc(String) with (test)
+    s0 <- test
+    -> myFunc(String) with (here)
+    s <- here
+    t <- expressionTest::var
+    -> myFunc(String) with (test)
+    s <- test
+    -> myFunc(String) with (test)
+    s1 <- test
+    for {
+        -> allInstances(Type) with (TestType) = {expressionTest::var}
+        for: r <- expressionTest::var
+        -> myFunc(String) with (test)
+        s <- test
+        -> myFunc(String) with (test)
+        s2 <- test
+    }
+    -> myFunc(String) with (test)
+    s <- test
+    -> myFunc(String) with (test)
+    s3 <- test

@@ -1,0 +1,17 @@
+project expressionTest {
+
+    compound TestType {
+        String name;
+    }
+    
+    TestType var = {
+        name = "test"
+    };
+    String var1 = "here";
+    
+    freeze {
+        var;
+        var1;
+    };
+
+}

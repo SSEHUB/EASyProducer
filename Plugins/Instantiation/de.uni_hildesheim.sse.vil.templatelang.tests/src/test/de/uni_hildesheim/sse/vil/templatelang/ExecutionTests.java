@@ -561,15 +561,14 @@ public class ExecutionTests extends AbstractExecutionTest {
     }*/
 
     /**
-     * Tests simple content with expression mixing.
+     * Tests simple content with failing expression.
      * 
      * @throws IOException should not occur
      */
-    /*@Test
-    public void testContent3() throws IOException {
-        // xtext inline parsing problem
-        assertEqual("content3");
-    }*/
+    @Test
+    public void testContent20() throws IOException {
+        assertEqual("content20");
+    }
 
     /**
      * Tests simple content with multi-line expression mixing but no indentation hint.

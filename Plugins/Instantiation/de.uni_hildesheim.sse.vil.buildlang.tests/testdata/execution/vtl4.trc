@@ -1,3 +1,8 @@
 -> main(Project, Project, Configuration) with (<project>, <project>, <config>)
 -> doSomething()
     val <- true
+    cfg <- <config>
+-> asName(String) with (a)
+    s <- a
+-> asName(String) with (test)
+    s2 <- test    

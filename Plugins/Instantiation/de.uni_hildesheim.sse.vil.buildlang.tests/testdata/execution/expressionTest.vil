@@ -1,0 +1,23 @@
+@advice(expressionTest)
+vilScript expressionTest (Project source, Configuration config, Project target) {
+
+    String myFunc(String s) = : {
+        s;
+    }
+
+    main(Project source, Configuration config, Project target) = : {
+        expressionTest cfg = config;
+        String s0 = myFunc(cfg.var.name);
+        String s = myFunc(cfg.var1);
+        TestType t = cfg.var;
+        s = myFunc(t.name);
+        String s1 = myFunc(t.name);
+        for(TestType r:allInstances(TestType)) {
+            s = myFunc(r.name);
+            String s2 = myFunc(r.name);
+        };
+        s = myFunc(cfg.var.name);
+        String s3 = myFunc(cfg.var.name);
+    }
+
+}

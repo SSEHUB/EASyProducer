@@ -782,7 +782,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
      * @param rule the rule to register the parameter for
      * @throws VilException in case of any execution error
      */
-    private void registerParameter(Rule rule) throws VilException {
+    private void registerParameter(AbstractRule rule) throws VilException {
         for (int p = 0; p < rule.getParameterCount(); p++) {
             VariableDeclaration var = rule.getParameter(p);
             IResolvable res = environment.get(var.getName());
@@ -1035,8 +1035,23 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         TemplateLangExecution exec = new TemplateLangExecution(tracer, writer, localParam);
         Def def = rule.getDef();
         Template template = (Template) def.getParent();
-        exec.getRuntimeEnvironment().switchContext(template);
+        net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment<
+            net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration, Template> tEnv 
+            = exec.getRuntimeEnvironment();
+        tEnv.switchContext(template);
         exec.visitModelHeader(template);
+        // transfer and set argment values to template def parameter
+        for (int p = 0; p < rule.getParameterCount(); p++) {
+            VariableDeclaration var = rule.getParameter(p);
+            net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration defP = def.getParameter(p);
+            IResolvable res = environment.get(var.getName());
+            if (null == res) {
+                throw new VilException("parameter " + var.getName() + " is not defined in rule " + rule.getSignature(), 
+                    VilException.ID_RUNTIME_PARAMETER);
+            } else {
+                tEnv.addValue(defP, environment.getValue(res));
+            }
+        }
         Object result = def.accept(exec);
         TracerFactory.unregisterTemplateLanguageTracer(tracer);
         return result;

@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.PrimaryExpression;
+import de.uni_hildesheim.sse.vil.expressions.translation.IvmlMessageAdapter;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
@@ -44,6 +45,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.CallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.CompositeExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringResolver;
+import net.ssehub.easy.instantiation.core.model.expressions.VariableExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.AlternativeStatement;
 import net.ssehub.easy.instantiation.core.model.templateModel.Compound;
 import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement;
@@ -779,8 +781,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             String terminal = text.substring(0, 1);
             text = StringUtils.convertString(text);
             StringBuilder warnings = new StringBuilder();
+            IvmlMessageAdapter localRcv = new IvmlMessageAdapter();
+            IvmlMessageAdapter oldRcv = expressionTranslator.setIvmlMessageAdapter(localRcv);
             CompositeExpression tmp = (CompositeExpression) StringResolver.substitute(text, resolver, 
                 expressionTranslator, warnings, StringResolverFactory.INSTANCE);
+            expressionTranslator.setIvmlMessageAdapter(oldRcv);
+            localRcv.processAndClear(e -> StringResolver.appendWarning(warnings, 
+                VariableExpression.composeUnkownVariableWarning(e.getKey().getIdentifier())));
             if (warnings.length() > 0) {
                 warning(warnings.toString(), content, TemplateLangPackage.Literals.CONTENT__CTN, 0);
             }

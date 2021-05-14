@@ -3,9 +3,7 @@ package de.uni_hildesheim.sse.vil.expressions.translation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -102,16 +100,36 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     E extends ExpressionStatement> extends net.ssehub.easy.dslCore.translation.ExpressionTranslator 
     implements ResolutionListener, IExpressionTranslator<I, R> {
 
-    private java.util.Map<VarModelIdentifierExpression, EObject> ivmlWarnings 
-        = new HashMap<VarModelIdentifierExpression, EObject>();
     private VarModelIdentifierExpression lastVarModelIdentifierEx;
+    private IvmlMessageAdapter ivmlMessageAdapter = new IvmlMessageAdapter();
     
     /**
      * Creates an expression translator (to be used within this package only).
      */
     public ExpressionTranslator() {
     }
+
+    /**
+     * Allows for (temporary) exchange of the IVML message adapter, e.g., to handle warnings differently.
+     * 
+     * @param adapter the new message adapter
+     * @return the old message adapter
+     */
+    public IvmlMessageAdapter setIvmlMessageAdapter(IvmlMessageAdapter adapter) {
+        IvmlMessageAdapter old = this.ivmlMessageAdapter;
+        this.ivmlMessageAdapter = adapter;
+        return old;
+    }
     
+    /**
+     * Returns the IVML message adapter.
+     * 
+     * @return the adapter instance
+     */
+    public IvmlMessageAdapter getIvmlMessageAdapter() {
+        return ivmlMessageAdapter;
+    }
+
     /**
      * Creates the expression tree for a given expression.
      * 
@@ -139,13 +157,8 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * Enacts the IVML warnings not resolved by "function pointers" so far.
      */
     public void enactIvmlWarnings() {
-        for (Map.Entry<VarModelIdentifierExpression, EObject> ent : ivmlWarnings.entrySet()) {
-            VarModelIdentifierExpression ex = ent.getKey();
-            if (!ex.isMarkedAsResolved()) {
-                ivmlWarning(ex.getIdentifier(), ent.getValue(), ExpressionDslPackage.Literals.CONSTANT__QVALUE);
-            }
-        }
-        ivmlWarnings.clear();
+        ivmlMessageAdapter.processAndClear(e -> ivmlWarning(e.getKey().getIdentifier(), e.getValue(), 
+            ExpressionDslPackage.Literals.CONSTANT__QVALUE));
     }
     
     /**
@@ -156,8 +169,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
      * @param causingFeature the causing ECore feature
      */
     private void ivmlWarning(String name, EObject cause, EStructuralFeature causingFeature) {
-        warning("'" + name + "' is unknown, shall be a VIL variable, a VIL type or an IVML variable " 
-            + "/ annotation - may lead to a runtime error", cause, causingFeature, VilException.ID_UNKNOWN);
+        warning(VariableExpression.composeUnkownVariableWarning(name), cause, causingFeature, VilException.ID_UNKNOWN);
     }
     
     /**
@@ -1054,7 +1066,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         Expression result = null;
         int pos = name.indexOf('.');
         IResolvable res = null;
-        if (pos > 0 && pos < name.length()) { // grammar: there may by at maximum one "." in a qualified name
+        if (pos > 0 && pos < name.length()) { // grammar: there may be at maximum one "." in a qualified name
             String head = name.substring(0, pos);
             String tail = name.substring(pos + 1);
             res = resolver.resolve(head, false, arg, feature, this);
@@ -1127,7 +1139,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                     lastVarModelIdentifierEx = vmie;
                     result = vmie;
                     if (null == ivmlElement) {
-                        ivmlWarnings.put(vmie, arg);
+                        ivmlMessageAdapter.notify(vmie, arg);
                     } 
                 }
             } else {
@@ -1632,7 +1644,7 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
 
     @Override
     public void resolved(VarModelIdentifierExpression ex) {
-        ivmlWarnings.remove(ex);
+        ivmlMessageAdapter.resolve(ex);
     }
 
     /**

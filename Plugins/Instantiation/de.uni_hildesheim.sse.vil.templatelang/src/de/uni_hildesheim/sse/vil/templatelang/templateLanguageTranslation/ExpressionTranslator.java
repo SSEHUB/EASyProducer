@@ -133,7 +133,8 @@ public class ExpressionTranslator
 
     @Override
     public Expression parseExpression(String expression, Resolver resolver, StringBuilder warnings) throws VilException {
-        return TemplateLangModelUtility.INSTANCE.createExpression(expression, resolver, warnings);
+        return TemplateLangModelUtility.INSTANCE.createExpression(expression, resolver, warnings, 
+            getIvmlMessageAdapter());
     }
 
     @Override

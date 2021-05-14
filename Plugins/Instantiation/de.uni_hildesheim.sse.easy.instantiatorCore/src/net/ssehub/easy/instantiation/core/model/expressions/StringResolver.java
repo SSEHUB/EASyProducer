@@ -229,6 +229,8 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
         VariableExpression varExpr = null;
         if (var != null) {
             varExpr = new VariableExpression(var);
+        } else {
+            appendWarning(VariableExpression.composeUnkownVariableWarning(variableName));
         }
         addExpression(varExpr, expressions);
         return pos;
@@ -241,17 +243,36 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
 
     @Override
     public void warning(String message, EObject cause, EStructuralFeature causeFeature, int code) {
-        if (null != warnings) {
-            if (warnings.length() > 0) {
-                warnings.append(", ");
-            }
-            warnings.append(message);
-        }
+        appendWarning(message);
     }
 
     @Override
     public void collect(IMessage message, EObject cause, EStructuralFeature causeFeature, int code) {
         if (Status.WARNING == message.getStatus()) {
+            appendWarning(message.getDescription());
+        }
+    }
+
+    /**
+     * Appends message as a warning.
+     * 
+     * @param message the message to append
+     */
+    private void appendWarning(String message) {
+        appendWarning(warnings, message);
+    }
+
+    /**
+     * Appends message as a warning.
+     * 
+     * @param warnings the warnings collected so far, nothing will happen if <b>null</b>
+     * @param message the message to append
+     */
+    public static void appendWarning(StringBuilder warnings, String message) {
+        if (null != warnings) {
+            if (warnings.length() > 0) {
+                warnings.append(", ");
+            }
             warnings.append(message);
         }
     }

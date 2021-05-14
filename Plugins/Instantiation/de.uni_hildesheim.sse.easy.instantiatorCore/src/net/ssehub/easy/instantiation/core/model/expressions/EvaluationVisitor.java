@@ -271,6 +271,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
             } catch (VilException e1) {
                 if (e1.getId() == VilException.ID_NOT_FOUND) {
                     result = null;
+                    tracer.failedAt(expression);
                     break;
                 } else {
                     throw e1;

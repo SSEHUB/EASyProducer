@@ -1,9 +1,13 @@
 import vtlLib;
 
+@advice(expressionTest)
 vilScript vtl4 (Project source, Project target, Configuration config) {
 
     main(Project source, Project target, Configuration config) = : {
         Boolean val = doSomething();
+        expressionTest cfg = config;
+        String s = asName("a");
+        String s2 = asName(cfg.var.name);
     }
 
 }

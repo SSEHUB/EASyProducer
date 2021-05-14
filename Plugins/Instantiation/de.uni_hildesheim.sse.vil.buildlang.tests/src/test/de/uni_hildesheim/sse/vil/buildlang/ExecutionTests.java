@@ -955,7 +955,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testVtl4() throws IOException {
-        assertSelfInstantiate("vtl4", MAIN_RULE, "vtl3", null);
+        assertSelfInstantiate("vtl4", MAIN_RULE, "expressionTest", null);
     }
 
     /**
@@ -1177,9 +1177,19 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testEnum() throws IOException {
         assertSelfInstantiate("enumTest", MAIN_RULE, "enumTest", null);
     }
-    
+
     /**
-     * Tests enums and enum types.
+     * Tests chained expressions against IVML.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testExpression() throws IOException {
+        assertSelfInstantiate("expressionTest", MAIN_RULE, "expressionTest", null);
+    }
+
+    /**
+     * Tests sorting.
      * 
      * @throws IOException should not occur
      */

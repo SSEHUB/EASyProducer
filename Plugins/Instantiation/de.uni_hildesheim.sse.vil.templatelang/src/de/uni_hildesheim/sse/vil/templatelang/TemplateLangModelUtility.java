@@ -13,6 +13,7 @@ import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
+import de.uni_hildesheim.sse.vil.expressions.translation.IvmlMessageAdapter;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ExpressionTranslator;
 import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ModelTranslator;
@@ -129,7 +130,7 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
     protected ClassLoader getLanguageClassLoader() {
         return TemplateLangModelUtility.class.getClassLoader();
     }
-
+    
     /**
      * Parses <code>text</code> into an expression.
      * 
@@ -140,6 +141,21 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
      * @throws VilException in case that parsing fails
      */
     public Expression createExpression(String text, Resolver resolver, StringBuilder warnings) throws VilException {
+        return createExpression(text, resolver, warnings, null);
+    }
+
+    /**
+     * Parses <code>text</code> into an expression.
+     * 
+     * @param text the text to be parsed
+     * @param environment the runtime environment for resolving variables
+     * @param an optional buffer to collect warnings
+     * @param adapter optional message adapter (may be <b>null</b> for default)
+     * @return the resulting expression
+     * @throws VilException in case that parsing fails
+     */
+    public Expression createExpression(String text, Resolver resolver, StringBuilder warnings, 
+        IvmlMessageAdapter adapter) throws VilException {
         Expression result = null;
         IParseResult parseResult = parseFragment("Expression", text);
         if (null != parseResult) {
@@ -154,6 +170,9 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
             }
             if (0 == errors.length()) {
                 ExpressionTranslator translator = new ExpressionTranslator();
+                if (null != adapter) {
+                    translator.setIvmlMessageAdapter(adapter);
+                }
                 de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression expr = 
                     (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression) parseResult.getRootASTElement();
                 try {

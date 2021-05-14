@@ -16,6 +16,7 @@ import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
+import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractTracerBase;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
@@ -243,6 +244,13 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void failedAt(Expression expression) {
+        StringWriter out = new StringWriter();
+        ExpressionWriter writer = new BuildlangWriter(out);
+        try {
+            expression.accept(writer);
+        } catch (VilException e) {
+        }
+        write("failed expression: " + out);
     }
 
     @Override
@@ -253,7 +261,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
             element.accept(writer);
         } catch (VilException e) {
         }
-        write("failed at: " + out.toString());
+        write("failed at: " + out);
     }
 
     @Override

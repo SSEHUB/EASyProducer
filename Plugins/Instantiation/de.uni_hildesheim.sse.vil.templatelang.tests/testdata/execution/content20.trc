@@ -1,0 +1,2 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+failed expression: b
