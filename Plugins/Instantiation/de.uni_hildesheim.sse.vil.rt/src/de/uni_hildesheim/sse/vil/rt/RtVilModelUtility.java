@@ -176,6 +176,8 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
                 } catch (TranslatorException e) {
                     throw new VilException(e, e.getId());
                 }
+            } else {
+                throw new VilException(errors.toString() + " in expression '" + text + "'", VilException.ID_INVALID);
             }
         }
         return result;

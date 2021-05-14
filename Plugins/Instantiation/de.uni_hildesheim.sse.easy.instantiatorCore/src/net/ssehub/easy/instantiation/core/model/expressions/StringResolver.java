@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.dslCore.ModelUtility;
 import net.ssehub.easy.dslCore.translation.IMessageReceiver;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
@@ -270,10 +271,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      */
     public static void appendWarning(StringBuilder warnings, String message) {
         if (null != warnings) {
-            if (warnings.length() > 0) {
-                warnings.append(", ");
-            }
-            warnings.append(message);
+            ModelUtility.appendWithNewLine(warnings, message);
         }
     }
 

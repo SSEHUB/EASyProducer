@@ -193,6 +193,8 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
                 } catch (TranslatorException e) {
                     throw new VilException(e, e.getId());
                 }
+            } else {
+                throw new VilException(errors.toString() + " in expression '" + text + "'", VilException.ID_INVALID);
             }
         }
         return result;

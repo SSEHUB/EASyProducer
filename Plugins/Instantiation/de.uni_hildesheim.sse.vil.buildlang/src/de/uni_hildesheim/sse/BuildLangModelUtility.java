@@ -169,6 +169,8 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
                 } catch (TranslatorException e) {
                     throw new VilException(e, e.getId());
                 }
+            } else {
+                throw new VilException(errors.toString() + " in expression '" + text + "'", VilException.ID_INVALID);
             }
         }
         return result;
