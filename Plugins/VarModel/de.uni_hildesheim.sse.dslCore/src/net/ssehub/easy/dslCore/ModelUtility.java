@@ -314,7 +314,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @param separator the separator to be considered
      * @return <code>builder</code>
      */
-    protected static StringBuilder append(StringBuilder builder, String text, String separator) {
+    public static StringBuilder append(StringBuilder builder, String text, String separator) {
         if (builder.length() > 0) {
             builder.append(separator);
         }
@@ -330,7 +330,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @param text the text to append
      * @return <code>builder</code>
      */
-    protected static StringBuilder appendWithNewLine(StringBuilder builder, String text) {
+    public static StringBuilder appendWithNewLine(StringBuilder builder, String text) {
         return append(builder, text, "\n");
     }
 
