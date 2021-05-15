@@ -233,7 +233,6 @@
             <arg value="-application" />
             <arg value="@{application}" />
             <arg value="-console"/>
-            <arg value="-consolelog"/>
         	<elements/>
         </java>
     </sequential>
