@@ -31,8 +31,8 @@
         <antcall target="replacePlugins"/>
         <antcall target="createFeature"/>
         <antcall target="createSiteXML"/>
-		<!-- fails with Eclipse 4.19
-        <antcall target="createArtifactJars"/> -->
+		<!-- fails with Eclipse 4.19 -->
+        <antcall target="createArtifactJars"/>
         <touch file="gen/final/empty.txt"/> <!-- something so that Jenkins does not fail -->
 		<antcall target="zip.Site"/>
 		<!--
@@ -91,7 +91,7 @@
             <arg value="-configs"/>
             <arg value="ANY"/>
             <arg value="-source" />
-            <arg value="${eclipse.launcher.repo}" />
+            <arg value="${eclipse.home}" />
             <arg value="-compress" />
             <arg value="-publishArtifacts" />
         </eclipseLauncher>
