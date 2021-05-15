@@ -35,9 +35,8 @@
         <antcall target="createArtifactJars"/>
         <touch file="gen/final/empty.txt"/> <!-- something so that Jenkins does not fail -->
 		<antcall target="zip.Site"/>
-		<!--
 		<antcall target="publish"/>
-		<antcall target="createProducts"/>-->
+		<antcall target="createProducts"/>
     </target>
     
     <target name="replacePlugins">
