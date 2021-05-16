@@ -33,7 +33,7 @@
         <antcall target="createSiteXML"/>
 		<!-- fails with Eclipse 4.19 -->
         <antcall target="createArtifactJars"/>
-        <touch file="gen/final/empty.txt"/> <!-- something so that Jenkins does not fail -->
+        <!--<touch file="gen/final/empty.txt"/>  something so that Jenkins does not fail -->
 		<antcall target="zip.Site"/>
 		<antcall target="publish"/>
 		<antcall target="createProducts"/>
@@ -43,16 +43,14 @@
         <delete dir="gen/tmp"/>
         <mkdir dir="gen/tmp"/>
     	<mkdir dir="gen/tmpBundles"/>
-        <!--
-        May be required for createProducts
         <copy toDir="gen/tmpBundles">
-            <fileset dir="${user.home}/Eclipse/EASyProduct">
+            <!--<fileset dir="${eclipse.home}/native">
               <filename name="*.jar"/>
-            </fileset>
+            </fileset>-->
             <fileset dir="${user.home}/Eclipse/EASyPlugins">
               <filename name="*.jar"/>
             </fileset>        	
-        </copy>-->
+        </copy>
         <plugins TempFolder="gen/tmp" SourceFolder="gen/tmpBundles" Version="${version}" DestinationFolder="gen/intermediate/plugins" ExclusionPattern="^.*(instantiator.copy.*.jar|(test|tests|drools).jar)$"/>
     </target>
     
