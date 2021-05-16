@@ -37,6 +37,7 @@
 		<antcall target="zip.Site"/>
 		<antcall target="publish"/>
 		<antcall target="createProducts"/>
+        <delete dir="gen"/>
     </target>
     
     <target name="replacePlugins">
