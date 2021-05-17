@@ -124,6 +124,6 @@
     </target>
 	
 	<!--target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/-->
-	<target name="all" depends="init, compile, test, storeJars"/>
+	<target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/>
 	<target name="compile.only" depends="init, compile"/>
 </project>
