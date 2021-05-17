@@ -171,12 +171,16 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
             if (null != location) {
                 if (result.length() > 0) {
                     result += " ";
+                } else {
+                    result = " ";
                 }
                 result += "in " + location;
             }
             if (null != details) {
                 if (result.length() > 0) {
                     result += " ";
+                } else {
+                    result = " ";
                 }
                 result += details;
             }
