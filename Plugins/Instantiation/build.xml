@@ -445,8 +445,12 @@
 				<include name="**/build/jar/*.jar" />
 			</fileset>
 		</copy>
-	</target>	
+	</target>
+	
+    <target name="remove.testeclipse.instance">
+        <delete dir="${basedir}/${test.eclipse.name}"/>
+    </target>
 		
-	<target name="all" depends="init, compile, test, storeJars"/>
+	<target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/>
 	<target name="only.compile" depends="init, compile"/>
 </project>
