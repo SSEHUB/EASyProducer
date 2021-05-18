@@ -5,7 +5,7 @@ EASy-Producer is a Product Line Engineering toolset, initially developed by the 
 
 Release History
 ---------------
-Please see [release history](http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/EASyBuildProperties/changelog.html "release history") for details.
+Please see [release history](http://htmlpreview.github.io/?https://github.com/SSEHUB/EASyProducer/blob/master/doc/changelog.html "release history") for details.
 
 Documentation
 -------------

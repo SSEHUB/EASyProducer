@@ -28,6 +28,7 @@ import java.util.regex.PatternSyntaxException;
 
 import net.ssehub.easy.basics.Environment;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
@@ -224,7 +225,7 @@ public class Maven extends AbstractFileInstantiator {
                 String[] args = new String[arguments.size()];
                 cliResult = prg.prepare().execute(arguments.toArray(args), buildFilePath, System.out, System.out);
             } else {
-                EASyLoggerFactory.INSTANCE.getLogger(Maven.class, Activator.BUNDLE_ID).warn(
+                getLogger().warn(
                     "Cannot obtain Maven command line instance. Trying to run Maven as process (fallback).");
                 asProcess = true;
             }
@@ -390,7 +391,8 @@ public class Maven extends AbstractFileInstantiator {
         }
         for (String target : targets) {
             params.add(target);
-        } 
+        }
+        getLogger().debug("Maven command line: " + params);        
         ProcessBuilder builder = new ProcessBuilder(params);
         if (null == System.getenv("JAVA_HOME") && null != JavaUtilities.JDK_PATH) {
             File jdkFolder = new File(JavaUtilities.JDK_PATH);
@@ -403,6 +405,15 @@ public class Maven extends AbstractFileInstantiator {
         Process proc = builder.start();
         StreamGobbler.gobble(proc, manipulator);
         return proc.waitFor();
+    }
+    
+    /**
+     * Returns the logger instance.
+     * 
+     * @return the logger instance
+     */
+    private static EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(Maven.class, Activator.BUNDLE_ID);        
     }
     
     /**
