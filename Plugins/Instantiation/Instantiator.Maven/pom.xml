@@ -60,11 +60,22 @@
         <artifactId>dslCore</artifactId>
         <version>${project.version}</version>
      </dependency>
+    <!-- strange: on the command line it's not working without that    
+ 	<dependency>
+	   <groupId>com.google.guava</groupId>
+	   <artifactId>guava</artifactId>
+	   <version>30.1-jre</version>
+ 	</dependency> -->
      <!-- requires unpacking lib for process-based execution -->
      <dependency>
 	    <groupId>org.apache.maven</groupId>
 	    <artifactId>maven-core</artifactId>
 	    <version>3.2.3</version>
      </dependency>
+ 	 <dependency>
+	    <groupId>org.apache.maven</groupId>
+	    <artifactId>maven-embedder</artifactId>
+	    <version>3.2.3</version>
+	 </dependency>     
   </dependencies>  
  </project>
