@@ -115,6 +115,12 @@
 	  <groupId>xalan</groupId>
 	  <artifactId>serializer</artifactId>
 	  <version>2.7.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+      </exclusions>	  
 	</dependency>
     <dependency>
       <groupId>xerces</groupId>
