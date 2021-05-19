@@ -17,10 +17,15 @@ package net.ssehub.easy.instantiation.maven;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -55,9 +60,11 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @Instantiator("maven")
 public class Maven extends AbstractFileInstantiator {
 
+    private static final String TMP_FOLDER = "easy-maven323";
     // folder without /lib!
     private static final boolean AS_PROCESS = Boolean.valueOf(System.getProperty("easy.maven.asProcess", "true"));
     private static final String MAVEN_HOME = System.getProperty("easy.maven.home", null);
+    private static final String CLASSPATH = System.getProperty("easy.maven.classpath", null);
     // running the instantiator as a JUnit test from Eclipse may carry unsigned dependencies - exclude Eclipse path
     private static final String CLASSPATH_EXCLUDE = System.getProperty("easy.maven.classpathExclude", null);
 
@@ -291,7 +298,7 @@ public class Maven extends AbstractFileInstantiator {
     private static String rewriteIfUnbundled(String classpath) {
         // runsInEclipse() method did not work for RCP
         if (null != classpath && null == System.getProperty("eclipse.home.location", null)) {
-            int pos = classpath.indexOf("maven-"); // do we have any maven library on the classpath?
+            int pos = classpath.indexOf("maven-embedder-"); // do we have any maven library on the classpath?
             if (pos < 0) {
                 pos = Math.max(0, classpath.indexOf("easy-headless.jar")); // assume easy-headless or take the first one
                 int start = pos;
@@ -309,16 +316,87 @@ public class Maven extends AbstractFileInstantiator {
                 }
                 if (start < pos) {
                     classpath = classpath.substring(start, pos);
-                    File mavenHome = null == MAVEN_HOME ? new File(classpath).getParentFile() : new File(MAVEN_HOME);
-                    classpath = addFilesToClasspath("", new File(mavenHome, "lib"));
+                    if (null != CLASSPATH) {
+                        classpath = addToClasspath(classpath, CLASSPATH);
+                    } else {
+                        File mavenHome = null == MAVEN_HOME ? tryUnpack(classpath) : new File(MAVEN_HOME);
+                        classpath = addFilesToClasspath("", new File(mavenHome, "lib"));
+                    }
                 }
             }
         }
         return classpath;
     }
+    
+    /**
+     * Tries to unpack the Maven libraries to <i>tmpDir</i>{@link #TMP_FOLDER} by reading <code>lib/dir.list</code>.
+     * 
+     * @param classpath the classpath (assuming a single entry) as fallback result
+     * @return the folder with the unpacked libraries or the fallback folder based on <code>classpath</code>
+     */
+    private static File tryUnpack(String classpath) {
+        File result = new File(classpath).getParentFile();
+        InputStream list = Maven.class.getResourceAsStream("/lib/dir.list");
+        if (list != null) {
+            result = new File(FileUtils.getTempDirectory(), TMP_FOLDER);
+            File target = new File(result, "lib");
+            target.mkdirs();
+            try (LineNumberReader files = new LineNumberReader(new InputStreamReader(list))) {
+                String line;
+                do {
+                    line = files.readLine();
+                    if (null != line) {
+                        line = line.trim();
+                        if (line.length() > 0) {
+                            File f = new File(target, line);
+                            if (!f.exists()) {
+                                copyResourceToFile("/lib/" + line, f);
+                            }
+                        }
+                    }
+                } while (null != line);
+            } catch (IOException e) {
+                getLogger().warn("Maven: Cannot read lib/dir.list: " + e.getMessage());
+            }
+        }
+        return result;
+    }
 
     /**
-     * Adds files in <code>base</code> to classpath.
+     * Copies a resource to a target file.
+     * 
+     * @param resource the resource
+     * @param target the target file
+     */
+    private static void copyResourceToFile(String resource, File target) {
+        InputStream fIn = Maven.class.getResourceAsStream(resource);
+        if (fIn != null) {
+            try {
+                Files.copy(fIn, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                fIn.close();
+            } catch (IOException e) {
+                getLogger().error("Maven: Cannot write library " + target + ": " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Adds <code>path</code> to <code>classpath</code>.
+     * 
+     * @param classpath the classpath the <code>path</code> shall be added to
+     * @param path the file be added
+     * @return the augmented classpath
+     */
+    private static String addToClasspath(String classpath, String path) {
+        if (classpath.length() > 0) {
+            classpath += File.pathSeparator;
+        }
+        classpath += path;
+        return classpath;
+    }
+
+    /**
+     * Adds files in <code>base</code> to <code>classpath</code>.
      * 
      * @param classpath the classpath the file names shall be added to
      * @param base the base file/folder to list the file names from
@@ -329,10 +407,7 @@ public class Maven extends AbstractFileInstantiator {
         if (null != mavenLib) {
             for (File f: mavenLib) {
                 if (f.getName().endsWith(".jar")) {
-                    if (classpath.length() > 0) {
-                        classpath += File.pathSeparator;
-                    }
-                    classpath += f.getAbsolutePath();
+                    classpath = addToClasspath(classpath, f.getAbsolutePath());
                 }
             }
         }
@@ -368,17 +443,12 @@ public class Maven extends AbstractFileInstantiator {
         IMsgManipulator manipulator = null;
         URL m2Conf = Activator.resolve(contextClassLoader.getResource("conf/m2.conf"));
         if (Activator.isFileProtocol(m2Conf)) { // available if unpacked, not in Standalone
-//            try {
             File confFile = Environment.toFile(m2Conf);
-//                File confFile = new File(m2Conf.toURI());
             File mavenHome = confFile.getParentFile().getParentFile();
             params.add("-Dmaven.home=" + mavenHome.getAbsolutePath());
             params.add("-Dclassworlds.conf=" + confFile.getAbsolutePath());
             params.add("org.codehaus.plexus.classworlds.launcher.Launcher");
             manipulator = new PlexusMessageManipulator();
-//            } catch (URISyntaxException e) {
-//                m2Conf = null; // enable fallback
-//            }
         } else {
             m2Conf = null; // enable fallback
         }
@@ -441,15 +511,11 @@ public class Maven extends AbstractFileInstantiator {
             classpath = "";
             for (URL u : urls) {
                 if (null == classpathExclude || !classpathExclude.matcher(u.toString()).matches()) {
-//                    try {
-//                        File f = new File(u.toURI());
                     File f = Environment.toFile(u);
                     if (classpath.length() > 0) {
                         classpath += File.pathSeparator;
                     }
                     classpath += f.getAbsolutePath();
-//                    } catch (URISyntaxException e) {
-//                    }
                 }
             }
         }
