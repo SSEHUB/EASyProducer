@@ -41,7 +41,149 @@ The \texttt{/trunk} folder contains also a \texttt{global-build.properties} file
 
 \subsection{Preparation of Eclipse for compilation and testing}
 \label{sec:Preparation of Eclipse}
-For compilation and testing an Eclipse\footnote{\url{http://www.eclipse.org/}} instance is needed, which contains needed plug-ins like Xtext\footnote{\url{http://www.eclipse.org/Xtext/}}. We provide an already packed Eclipse instance, which can be used for this purpose, at \url{https://projects.sse.uni-hildesheim.de/eclipse/releases/EclipseTest.zip}. We suggest to use 2 instances:
+For compilation and testing an Eclipse\footnote{\url{http://www.eclipse.org/}} instance is needed, which provides the plug-ins required by \EASy. The following steps describe the installation process as well as some clean-up to minimize the size of the resulting Eclipse instance:
+\begin{description}
+	\item[Step 1: Download Eclipse] $ $\\
+		Eclipse offers an installer for obtaining a specific Eclipse instance. However, this results in an Eclipse plug-ins directory separated from the main Eclipse directory. Hence, it is required to download a packaged (stand-alone) \textit{Eclipse IDE for Java Developers}. A list of all packages can be found at the Eclipse packages release page\footnote{\url{https://www.eclipse.org/downloads/packages/release}}. Download the desired version as an archive file and extract the included \texttt{eclipse} directory to your preferred location.
+	\item[Step 2: Install required plug-ins] $ $\\
+		The \textit{Eclipse IDE for Java Developers} already provides basic plug-ins required by \EASy. This basic list of plug-ins is accessible after starting Eclipse and navigating to the installation details via \texttt{Help > About Eclipse IDE > Installation Details}. In this way, one can check, if the additional plug-ins listed below are installed successfully. Further, installing additional plug-ins may require adding new \texttt{Eclipse update sites}. Information about how to add new update sites to an Eclipse instance can be found at the Eclipse help page\footnote{\url{https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.platform.doc.user/tasks/tasks-127.htm}}. The following plug-ins must be installed\footnote{The versions of the added plug-ins are included here for completeness; they may change due to updates in future}:
+		\begin{description}
+			\item[Xtext] $ $\\
+			Update Site: \url{https://download.eclipse.org/modeling/tmf/xtext/updates/composite/releases/} \\
+			Selected Feature(s): Xtext > Xtext Complete SDK \\
+			Added Plug-in(s): Xtext Complete SDK [2.25.0.v20210301-1429]
+			\item[Checkstyle] $ $\\
+			Update Site: \url{https://checkstyle.org/eclipse-cs-update-site} \\
+			Selected Feature(s): Checkstyle > Eclipse Checkstyle Plug-in \\
+			Added Plug-in(s): Eclipse Checkstyle Plug-in [8.40.0.202104250427]
+			\item[Eclipse Epsilon] $ $\\
+			Update Site: \url{http://download.eclipse.org/epsilon/updates/2.3/} \\
+			Selected Feature(s): All, except for category \texttt{Epsilon HTML Integration} \\
+			Added Plug-in(s):
+			\begin{itemize}
+				\item EMC Abstract Spreadsheet Driver [2.3.0.202104221823]
+				\item EMC Google Spreadsheet Driver [2.3.0.202104221823]
+				\item EMC Google Spreadsheet Driver Development Tools [2.3.0.202104221823]
+				\item EMC Microsoft Excel Spreadsheet Driver [2.3.0.202104221823]
+				\item EMC Microsoft Excel Spreadsheet Driver Development Tools [2.3.0.202104221823]
+				\item EMF Model Comparison for EUnit (EMF Compare 3.x / Kepler and after) [2.3.0.202104221823]
+				\item Epsilon Core [2.3.0.202104221823]
+				\item Epsilon Core Development Tools [2.3.0.202104221823]
+				\item Epsilon CSV Driver [2.3.0.202104221823]
+				\item Epsilon CSV Driver Development Tools [2.3.0.202104221823]
+				\item Epsilon Development Tools for EMF [2.3.0.202104221823]
+				\item Epsilon Development Tools for Simulink [2.3.0.202104221823]
+				\item Epsilon Development Tools for UML [2.3.0.202104221823]
+				\item Epsilon EMF Integration [2.3.0.202104221823]
+				\item Epsilon GraphML Integration [2.3.0.202104221823]
+				\item Epsilon Simulink Integration [2.3.0.202104221823]
+				\item Epsilon UML Integration [2.3.0.202104221823]
+				\item Epsilon Validation Language EMF Integration [2.3.0.202104221823]
+				\item Epsilon Wizard Language EMF Integration [2.3.0.202104221823]
+				\item Epsilon Wizard Language GMF Integration [2.3.0.202104221823]
+				\item Eugenia [2.3.0.202104221823]
+				\item Flexmi [2.3.0.202104221823]
+				\item Flexmi Development Tools [2.3.0.202104221823]
+				\item Human Usable Textual Notation Core [2.3.0.202104221823]
+				\item Human Usable Textual Notation Development Tools [2.3.0.202104221823]
+				\item Picto [2.3.0.202104221823]
+			\end{itemize}
+			\item[FindBugs] $ $\\
+			Update Site: \url{http://findbugs.cs.umd.edu/eclipse} \\
+			Selected Feature(s): FindBugs > FindBugs Feature \\
+			Added Plug-in(s): FindBugs Feature [3.0.1.20150306-5afe4d1]
+			\item[Graphical Modeling Framework (GMF)] $ $\\
+			Update Site: \url{http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases} \\
+			Selected Feature(s): GMF Tooling > Graphical Modeling Framework (GMF) Tooling SDK \\
+			Added Plug-in(s): Graphical Modeling Framework (GMF) Tooling SDK [3.2.1.201409171321]
+			\item[Subclipse] $ $\\
+			Update Site: \url{https://subclipse.github.io/updates/} \\
+			Selected Feature(s): All in category \texttt{Subclipse} and category \texttt{Subclipse - JavaHL for SVN 1.12-1.14+} \\
+			Added Plug-in(s):
+			\begin{itemize}
+				\item Subclipse [4.3.3.202012181204]
+				\item Subclipse Integration for Mylyn (Optional) [4.2.0.1]
+				\item Subversion 1.14 JavaHL [1.14.0.202005311413]
+				\item Subversion Revision Graph [4.2.0.1]
+				\item SVNKit Client Adapter [1.8.12.3]
+			\end{itemize}
+			\item[XML Streaming API] $ $\\
+			Update Site: \url{http://download.eclipse.org/tools/orbit/downloads/drops/R20210223232630/repository} \\
+			Selected Feature(s): Orbit Bundles By Name javax.* > Java XML Streaming API \\
+			Added Plug-in(s): Java XML Streaming API [1.0.1.v201004272200]
+			\item[Eclipse Plug-in Development Environment (PDE)] $ $\\
+			Update Site: \url{http://download.eclipse.org/eclipse/updates/4.19} \\
+			Selected Feature(s): Eclipse Plug-in Development Tools > Eclipse Plug-in Development Environment \\
+			Added Plug-in(s): Eclipse Plug-in Development Environment [3.14.700.v20210303-1800]
+			\item[Eclipse Test Framework] $ $\\
+			Update Site: \url{http://download.eclipse.org/eclipse/updates/4.19} \\
+			Selected Feature(s): Eclipse Tests, Tools, Examples, and Extras > Eclipse Test Framework \\
+			Added Plug-in(s): Eclipse Test Framework [3.7.1400.v20210222-1948]
+		\end{description}
+	\item[Step 3: Delete sources] $ $\\
+		While this is an optional step, deleting source plug-ins can significantly reduce the size of the Eclipse instance and avoid potential errors when used at the server. For this purpose, all plug-ins (\texttt{*.jar}-files) in the Eclipse plug-in directory (for example, \texttt{eclipse/plugins}) and its sub-directories can be deleted, which have a name that matches the pattern \texttt{".source\_"}. In particular, one must enuure that no \texttt{resource} plug-ins will be deleted as well. Best practice is to cope the plug-ins directory as a backup before starting the deletion and copy that backup into the Eclipse instance again, if after the deletion Eclipse does not work as expected.
+\end{description}
+
+The result of the steps above is an Eclipse instance for use at Jenkins, which contains the following installed plug-ins:
+\begin{itemize}
+	\item Apache Geronimo Activation Source Plug-in
+  \item Buildship: Eclipse Plug-ins for Gradle
+  \item EclEmma Java Code Coverage
+  \item Eclipse Checkstyle Plug-in
+  \item Eclipse IDE for Java Developers
+  \item Eclipse Java Development Tools
+  \item Eclipse Plug-in Development Environment
+  \item Eclipse Test Framework
+  \item EMC Abstract Spreadsheet Driver
+  \item EMC Google Spreadsheet Driver
+  \item EMC Google Spreadsheet Driver Development Tools
+  \item EMC Microsoft Excel Spreadsheet Driver
+  \item EMC Microsoft Excel Spreadsheet Driver Development Tools
+  \item EMF Model Comparison for EUnit (EMF Compare 3.x / Kepler and after)
+  \item Epsilon Core
+  \item Epsilon Core Development Tools
+  \item Epsilon CSV Driver
+  \item Epsilon CSV Driver Development Tools
+  \item Epsilon Development Tools for EMF
+  \item Epsilon Development Tools for Simulink
+  \item Epsilon Development Tools for UML
+  \item Epsilon EMF Integration
+  \item Epsilon GraphML Integration
+  \item Epsilon Simulink Integration
+  \item Epsilon UML Integration
+  \item Epsilon Validation Language EMF Integration
+  \item Epsilon Wizard Language EMF Integration
+  \item Epsilon Wizard Language GMF Integration
+  \item Eugenia
+  \item FindBugs Feature
+  \item Flexmi
+  \item Flexmi Development Tools
+  \item Git integration for Eclipse
+  \item Graphical Modeling Framework (GMF) Tooling SDK
+  \item Human Usable Textual Notation Core
+  \item Human Usable Textual Notation Development Tools
+  \item Java implementation of Git
+  \item Java XML Streaming API
+  \item JustJ OpenJDK Hotspot JRE Complete
+  \item m2e - Maven Integration for Eclipse (includes Incubating components)
+  \item m2e - slf4j over logback logging (Optional)
+  \item Marketplace Client
+  \item Mylyn WikiText Editors
+  \item Oomph Setup
+  \item Picto
+  \item POM Editor using LemMinX language server (includes Incubating components)
+  \item Subclipse
+  \item Subclipse Integration for Mylyn (Optional)
+  \item Subversion 1.14 JavaHL
+  \item Subversion Revision Graph
+  \item SVNKit Client Adapter
+  \item Tip of the Day UI Feature
+  \item TM Terminal
+  \item Wild Web Developer XML tools
+  \item Xtext Complete SDK
+\end{itemize}
+
+We suggest to use two instances of such an Eclipse instance at Jenkins:
 \begin{itemize}
 	\item One unpacked instance for compilation. This Eclipse installation should not contain already compiled \EASy\ plug-ins.
 	\item One packed instance for testing. This Eclipse instance will be unpacked, before the test plug-ins will be installed into this instance. This procedure ensures a clean Eclipse installation for testing, which will also contain only needed \EASy plug-ins.
