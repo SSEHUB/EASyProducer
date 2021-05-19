@@ -10,6 +10,10 @@
 	<property name="javacTarget" value="1.8"/>
 	
 	<path id ="includes">
+		<!-- to be on the safe side -->
+        <fileset dir="./lib">
+            <include name="**/xml-apis-*.jar" />
+        </fileset>
 		<!-- Model -->
 		<pathelement path="${libs.utils}"/>
         <pathelement path="${libs.libs.common.io}"/>
@@ -28,9 +32,10 @@
 			<include name="**/*.jar" />
 			<exclude name="**/commons-io-*.jar"/>
 		</fileset>
-		<!-- local xalan, xerces --> 
+		<!-- local xalan, xerces -->
 	    <fileset dir="./lib">
 	    	<include name="**/*.jar" />
+	    	<exclude name="**/xml-apis-*.jar"/>
 	    </fileset>
 	</path>
 	

@@ -35,6 +35,7 @@ Export-Package: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.instantiation.core.model.vilTypes,
  net.ssehub.easy.instantiation.core.model.vilTypes.configuration
 Bundle-ClassPath: .,
+ lib/xml-apis-1.4.01.jar,
  lib/xercesImpl-2.12.1.jar,
  lib/serializer-2.7.1.jar,
  lib/xalan-2.7.1.jar

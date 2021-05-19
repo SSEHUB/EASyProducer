@@ -110,7 +110,8 @@
 	  <groupId>xalan</groupId>
 	  <artifactId>xalan</artifactId>
 	  <version>2.7.1</version>
-	</dependency>    
+	</dependency>
+	<!-- the serializer ships with an older xml-apis dependency which downgrades the one required by xerces... --> 
 	<dependency>
 	  <groupId>xalan</groupId>
 	  <artifactId>serializer</artifactId>
