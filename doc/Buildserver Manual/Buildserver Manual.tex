@@ -15,14 +15,18 @@
 
 % Header and Footer
 \pagestyle{fancy}
-\lhead[\fancyplain{}{\rm\thepage}]{\fancyplain{}{\sl\rightmark}}
+\lhead[\fancyplain{}{\thepage}]{\fancyplain{}{\rightmark}}
 \chead{}
-\rhead[\fancyplain{}{\leftmark}]{\fancyplain{}{\rm\thepage}}
+\rhead[\fancyplain{}{\leftmark}]{\fancyplain{}{\thepage}}
 
 \newcommand{\EASy}{EASy-Producer}
-\newcommand{\EASyURL}{\url{https://projects.sse.uni-hildesheim.de/svn/EASy/}}
-\newcommand{\Jenkins}{\url{http://jenkins.sse.uni-hildesheim.de/}}
-\newcommand{\trunkDir}{../../EASy}
+\newcommand{\EASyURL}{\url{https://github.com/SSEHUB/EASyProducer}}
+\newcommand{\Jenkins}{\url{https://jenkins-2.sse.uni-hildesheim.de/}}
+\newcommand{\EASyHome}{../../../EASyProducer}
+\newcommand{\EASyBuildProperties}{\EASyHome/EASyBuildProperties}
+\newcommand{\EASyPlugins}{\EASyHome/Plugins}
+\newcommand{\IvmlHome}{\EASyPlugins/IVML}
+\newcommand{\InstantiationHome}{\EASyPlugins/Instantiation}
 
 \begin{document}
 \bibliographystyle{alphadin} 

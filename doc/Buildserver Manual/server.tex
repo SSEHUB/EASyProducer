@@ -1,5 +1,5 @@
 \section{Configuration of the Build Server}
-\label{sec:Build Server}
+\label{sec:BuildServer}
 This section explains how to configure the build server. First, we explain how to write and edit build scripts before we show how to configure Jenkins (\Jenkins).
 
 \subsection{Editing Build Scripts}
@@ -12,7 +12,7 @@ When the dependencies between plug-ins (OSGI Manfests) and/or projects change, m
 
 \begin{nofloat}{figure}
 	\centering
-	\lstinputlisting[language=Manifest, firstline=1, lastline=28]{\trunkDir/IVML/de.uni_hildesheim.sse.ivml.ui/META-INF/MANIFEST.MF}
+	\lstinputlisting[language=Manifest, firstline=1, lastline=28]{\IvmlHome/de.uni_hildesheim.sse.ivml.ui/META-INF/MANIFEST.MF}
 	\caption[Manifest of the IVML editor]{Manifest of the IVML editor plug-in (excerpt).}
 	\label{lst:Manifest a plug-in}
 \end{nofloat}
@@ -44,14 +44,14 @@ Figure \vref{lst:Ant home and libs definition} shows an excerpt of the \texttt{g
 
 \begin{nofloat}{figure}
 	\centering
-	\lstinputlisting[language=Properties, firstline=39, lastline=45]{\trunkDir/global-build.properties}
+	\lstinputlisting[language=Properties, firstline=39, lastline=45]{\EASyBuildProperties/global-build.properties}
 	\caption[Settings of the VarModel project inside the \texttt{global-build.properties}]{Settings of the VarModel project inside the \texttt{global-build.properties} (excerpt).}
 	\label{lst:Ant home and libs definition}
 \end{nofloat}
 
 \begin{nofloat}{figure}
 	\centering
-	\lstinputlisting[language=Ant, firstline=1, lastline=23]{\trunkDir/IVML/de.uni_hildesheim.sse.ivml.ui/build-jk.xml}
+	\lstinputlisting[language=Ant, firstline=1, lastline=23]{\IvmlHome/de.uni_hildesheim.sse.ivml.ui/build-jk.xml}
 	\caption[Build script of the IVML Editor]{Build script (\texttt{build-jk.xml}) of the IVML Editor (excerpt). \texttt{path ="includes"} must be changed to import all needed plug-ins.}
 	\label{lst:Build script of the IVML Editor}
 \end{nofloat}
@@ -59,7 +59,7 @@ Whenever new plug-in dependencies occur (or old dependencies are removed) the bu
 
 \begin{figure}[ht]
 	\centering
-	\lstinputlisting[language=Ant, linerange={63 - 63, 72 - 78}]{\trunkDir/IVML/build.xml}
+	\lstinputlisting[language=Ant, linerange={63 - 63, 72 - 78}]{\IvmlHome/build.xml}
 	\caption[Build script of the IVML project]{Build script (\texttt{build.xml}) of the IVML project (excerpt). \texttt{target name="copy.to.eclipse"} must be changed to copy all needed plug-ins for testing the plug-ins of the project.}
 	\label{lst:Build script of the IVML project}
 \end{figure}
@@ -88,7 +88,7 @@ After the properties for the new plug-in were created, a new \texttt{build-jk.xm
 
 \begin{nofloat}{figure}
 	\centering
-	\lstinputlisting[language=Ant, firstline=36, lastline=42]{\trunkDir/IVML/de.uni_hildesheim.sse.ivml.ui/build-jk.xml}
+	\lstinputlisting[language=Ant, firstline=36, lastline=42]{\IvmlHome/de.uni_hildesheim.sse.ivml.ui/build-jk.xml}
 	\caption[Build script of the IVML Editor (compilation target)]{Build script (\texttt{build-jk.xml}) of the IVML Editor (excerpt). In line 4, the additional source folder \texttt{src.gen.dir} was included.}
 	\label{lst:Adaption of build-jk part 2}
 \end{nofloat}
@@ -106,7 +106,7 @@ Finally, a \texttt{build.xml} must be created for the project. Also for this fil
 \newpage
 \begin{nofloat}{figure}
 	\centering
-	\lstinputlisting[language=Ant, linerange={24 - 43, 47 - 55, 62 - 63, 72 - 78}]{\trunkDir/IVML/build.xml}
+	\lstinputlisting[language=Ant, linerange={24 - 43, 47 - 55, 62 - 63, 72 - 78}]{\IvmlHome/build.xml}
 	\caption[Build script of the IVML project (compile, instrument, copy targets)]{Build script (\texttt{build.xml}) of the IVML project (excerpt).}
 	\label{lst:Adaption of build part 2}
 \end{nofloat}

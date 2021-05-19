@@ -133,7 +133,7 @@ This sections explains how build script errors can be resolved, which may appear
 		\item In case a Java file contains longer \texttt{static final String[]} definitions, exclude this file from instrumentation. For this purpose, you have to add an exclusion filter to the \texttt{instrument} target (cf. Figure \vref{lst:Added exclusion filter}).
 		\begin{nofloat}{figure}
 			\centering
-			\lstinputlisting[style=Plain, language=Ant, linerange={109 - 111, 115 - 115, 117 - 117, 133 - 136}]{\trunkDir/Instantiation/build.xml}
+			\lstinputlisting[style=Plain, language=Ant, linerange={109 - 111, 115 - 115, 117 - 117, 133 - 136}]{\InstantiationHome/build.xml}
 			\caption[Added exclusion filter to solve a com.vladium.emma.rt.RT.S error]{Modified Build script (\texttt{build.xml}) of the Instantiation project (excerpt). A new exclusion filter was specified in line 4 to exclude all Java classes of the \texttt{de.uni\_hildesheim.sse.parser.antlr.internal} package to avoid \texttt{java.lang.NoSuchMethodError: com.vladium.emma.rt.RT.S} error.}
 			\label{lst:Added exclusion filter}
 \end{nofloat}
@@ -162,7 +162,7 @@ This sections explains how build script errors can be resolved, which may appear
 		\item Edit the \texttt{build-jk} file of the plug-in and add the \texttt{copy} task of Figure \vref{lst:Added necessary libraries} to the \texttt{jar} target.
 		\begin{nofloat}{figure}
 			\centering
-			\lstinputlisting[style=Plain, language=Ant, linerange={49 -57}] {\trunkDir/Instantiation/de.uni_hildesheim.sse.vil.buildlang.tests/build-jk.xml}
+			\lstinputlisting[style=Plain, language=Ant, linerange={49 -57}] {\InstantiationHome/de.uni_hildesheim.sse.vil.buildlang.tests/build-jk.xml}
 			\caption[Creation of a jar, including referenced libraries]{Modified Build script (\texttt{build-jk.xml}) of \texttt{de.uni\_hildesheim.sse.vil.build\-lang.tests} plug-in (excerpt). The lines 3 -- 7 are added to include necessary libraries.}
 			\label{lst:Added necessary libraries}
 \end{nofloat}
