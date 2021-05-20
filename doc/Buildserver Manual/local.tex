@@ -44,7 +44,9 @@ The \texttt{/trunk} folder contains also a \texttt{global-build.properties} file
 For compilation and testing an Eclipse\footnote{\url{http://www.eclipse.org/}} instance is needed, which provides the plug-ins required by \EASy. The following steps describe the installation process as well as some clean-up to minimize the size of the resulting Eclipse instance:
 \begin{description}
 	\item[Step 1: Download Eclipse] $ $\\
-		Eclipse offers an installer for obtaining a specific Eclipse instance. However, this results in an Eclipse plug-ins directory separated from the main Eclipse directory. Hence, it is required to download a packaged (stand-alone) \textit{Eclipse IDE for Java Developers}. A list of all packages can be found at the Eclipse packages release page\footnote{\url{https://www.eclipse.org/downloads/packages/release}}. Download the desired version as an archive file and extract the included \texttt{eclipse} directory to your preferred location.
+		Eclipse offers an installer for obtaining a specific Eclipse instance. However, this results in an Eclipse plug-ins directory separated from the main Eclipse directory. Hence, it is required to download a packaged (stand-alone) \textit{Eclipse IDE for Java Developers}. A list of all packages can be found at the Eclipse packages release page\footnote{\url{https://www.eclipse.org/downloads/packages/release}}. Download the desired version as an archive file and extract the included \texttt{eclipse} directory to your preferred location. 
+		
+		An Eclipse for your operating system is fine although Jenkins runs on Linux. Therefore, Linux specific bundles will have to be added later. For an automatic cross-operating system installation of your Eclipse app, also Mac OS bundles will be required. Thus, it makes sense to download the same Eclipse version for all target operating systems.
 	\item[Step 2: Install required plug-ins] $ $\\
 		The \textit{Eclipse IDE for Java Developers} already provides basic plug-ins required by \EASy. This basic list of plug-ins is accessible after starting Eclipse and navigating to the installation details via \texttt{Help > About Eclipse IDE > Installation Details}. In this way, one can check, if the additional plug-ins listed below are installed successfully. Further, installing additional plug-ins may require adding new \texttt{Eclipse update sites}. Information about how to add new update sites to an Eclipse instance can be found at the Eclipse help page\footnote{\url{https://help.eclipse.org/2021-03/index.jsp?topic=/org.eclipse.platform.doc.user/tasks/tasks-127.htm}}. The following plug-ins must be installed\footnote{The versions of the added plug-ins are included here for completeness; they may change due to updates in future}:
 		\begin{description}
@@ -189,9 +191,45 @@ We suggest to use two instances of such an Eclipse instance at Jenkins:
 	\item One packed instance for testing. This Eclipse instance will be unpacked, before the test plug-ins will be installed into this instance. This procedure ensures a clean Eclipse installation for testing, which will also contain only needed \EASy plug-ins.
 \end{itemize}
 
+\begin{description}
+	\item[Step 4: Add the Eclipse test specification files] $ $\\
+	
+We use \texttt{org.eclipse.test} to run the EASy-Producer unit tests within an Eclipse OSGi environment based on the respective required specified bundles. However, the installation usually misses two files, namely \texttt{library.xml} and \texttt{JUNIT.XLS}. You can obtain both from the actual installation or from\\
+\texttt{https://wiki.eclipse.org/Platform-releng/Eclipse\_Test\_Framework}.\\
+\texttt{org.eclipse.test} is unpacked during the installation. Copy the two files into the \texttt{org.eclipse.test} folder \texttt{plugins/org.eclipse.test\_...}. 
+
+	\item[Step 5: Archive the test Eclipse] $ $\\
+
+As only Java classes are executed during testing, the installation is now ready for performing the unit tests on Jenkins. The testing Eclipse now contains more bundles than actually required during testing, as currently no UI tests are executed. However, as soon as UI tests are needed, many of the currently unused bundles may be required and it makes sense to have them archived and installed at the point of time when the Eclipse is prepared (as finding the matching bundles later can be a nightmare). Zip the installation so that the archive directly contains the contents of the root folder of Eclipse (not the typical folder \texttt{eclipse}).	
+
+	\item[Step 6: Add cross-operating system bundles] $ $\\
+	
+Also for compiling EASy-Producer, the test Eclipse from the last step can be used. However, for building installed instances via the Eclipse director application, we use this Eclipse version as repository and then also all operating system specific files required for building the cross-platform bundles are needed. Copy the cross-operating system bundles from the other Eclipse versions downloaded in Step 1 into the plugins folder. You can easily identify them by looking for the substrings ``win'', ``linux'', ``gtj'' or ``cocoa''. A duplication of bundles does not lead to problems as OSGi only selects those relevant for the actual operating system. 
+
+Moreover, for building executable instances, we need the bundle\\
+\texttt{org.eclipse.equinox.executable}. If this is not available for your actual Eclipse version, you may try it with the already installed one. Please copy it into the main directory of your Eclipse (not the \texttt{plugins} directory) and also unpack it into a folder named \texttt{binary} in the root folder of your Eclipse so that the starter binaries for the different operating systems are in subfolders of \texttt{binary/bin} (with respective folders for the operating system name, window system etc., e.g., for 64 bit Windows in the subfolder \texttt{win32/win32/x86\_64} (for recent Windows versions still \texttt{win32} is used).
+
+	\item[Step 7: Archive the compile Eclipse] $ $\\
+
+Zip also the installation from step 6.	
+
+	\item[Step 8: Install the Eclipse versions] $ $\\
+
+Copy both archives to Jenkins into the folder \texttt{/var/lib/jenkins/Eclipse}. The test Eclipse from Step 5 remains zipped, the compile Eclipse from Step 7 must be unpacked (so that the unpackt folder directly contains the contents of the root folder of Eclipse, not the typical folder \texttt{eclipse}). 
+
+	\item[Step 9: Test-drive the installation] $ $\\
+
+We recommend to install the compile eclipse first and to review/change the respective settings discussed in Section \vref{sec:global-build.properties}. Potentially it is required to disable the nightly update sites until the compilation and in a second step the tests run stable. As soon as all compile problems (see also Section \vref{sec:FAQ}) are solved, install also the test eclipse, adjust the settings in Section \vref{sec:global-build.properties} and re-run the entire build. If this run is stable, re-activate the nightly update sites (see also Section \vref{sec:FAQ}). 
+
+When the entire build process is running, update the Maven \texttt{EasyDependencies}. All lower-level EASy-Producer components (below the UI) ship with Maven build specifications. However, it is important to understand that typically these build specifications (execpt for some hybrid components) are not used for building rather than the ANT-based approach described here. All those Maven build specifications just declare dependencies, but no build plugins. These Maven specifications are required for the deployment of the lower-level EASy-Producer components and for a flexible component-based integration of EASy-Producer as a library into other projects. As discussed in the developer guidelines, we also offer pre-build EASy-Producer libraries (more or less FAT jars), which may be useful in some settings but not for flexible use of individual EASy-Producer components. 
+
+After an Eclipse update it is important to also update the POM in \texttt{EasyDependencies}, which declares the artifact version of all utilized external artifacts, e.g., those provided by Eclipse (fortunately, this is the case at least since our update to Eclipse 4.19). Typically, it is sufficient to take over the main version numbers from the bundles in the \texttt{plugin} directory. However, if Eclipse bundles are renamed or new artifacts are required, all POM files must be adjusted (not just the one in \texttt{EasyDependencies} that declares the artifact versions).
+
+\end{description}	
+
 \subsection{Editing \texttt{global-build.properties}}
 \label{sec:global-build.properties}
-The copied \texttt{global-build.properties} (cf. Section \vref{Copying global-build.properties}) must be edited to facilitate local builds. Figure \vref{lst:localSettingOfbuil.properties} shows the relevant entries, which must be configured.
+The copied \texttt{global-build.properties} (cf. Section \vref{Copying global-build.properties}) must be edited to facilitate local builds. Figure \vref{lst:localSettingOfbuil.properties} shows the relevant entries, which must be configured or at least reviewed/updated when installing a new Eclipse version on Jenkins.
 
 \begin{nofloat}{figure}
 	\centering
@@ -210,7 +248,8 @@ The entries should be configured as explained below:
 		These entries must point to the \textbf{relative paths} of the sub folders of the related \texttt{<project>}s inside the \texttt{/trunk} folder.
 	\item[emma.path] $ $\\
 		This entry must point to the \textbf{absolute path} of the EMMA libraries\footnote{\url{http://emma.sourceforge.net/}}. The development of Emma has been discontinued. As a consequence, we recommend to use the latest release for building \EASy\ plug-ins.
-	\newpage
+      \item[jacoco.path] $ $\\
+             This entry must point to the \textbf{absolute path} of the Jacoco ANT libraries fitting to the JDKs used for testing. There is also a so far undocumented \texttt{jacoco8.path} that pointed for some times to a more recent version - please leave this as it is.
 	\item[unzipNewEclipse] $ $\\
 		Specification whether a fresh Eclipse instance should be unpacked for each test (\texttt{true}) or not (\texttt{false}).	
 	\begin{description}
@@ -218,7 +257,19 @@ The entries should be configured as explained below:
 			\textbf{Absolute path} of an unpacked Eclipse instance, which should be used for testing. Only relevant if \texttt{unzipNewEclipse} was set to \texttt{false}.
 	\item[test.eclipse.zip] $ $\\
 			\textbf{Absolute path} of an packed Eclipse instance, which should be used for testing. Only relevant if \texttt{unzipNewEclipse} was set to \texttt{true}.
+      \item[test.eclipse.testFW.dir] $ $\\
+                   \textbf{Relative path} to the unpacked \texttt{org.eclipse.test} bundle installed above in Step 4.
 	\end{description}
+	\item[eclipse.launcher] $ $\\
+	    \textbf{Absolute path} to the Eclipse launcher bundle in the compile Eclipse \texttt{plugins} folder. 
+      \item[eclipse.launcher.classpath] $ $\\
+           \textbf{Absolute path} to the Eclipse OSGi compatibility state bundle in the compile Eclipse \texttt{plugins} folder. \textit{May be removed in the future}.
+      \item[eclipse.executable.jar] $ $\\
+           \textbf{Absolute path} to the Eclipse equinox executable installed above in Step 6.
+      \item[eclipse.launcher.repo] $ $\\
+           \textbf{Absolute path} to the parent folder of the \texttt{native} folder containing unpacked Eclipse executables installed above in Step 6. \textit{May be redirected in the future, e.g., directly to the \texttt{binaries} folder}.
+      \item[eclipse.repository] $ $\\
+           \textbf{URL} to the Eclipse bundles repository for the headless installation of Eclipse applications using the Eclipse director app. You may add here an official public Eclipse repository, but please be aware that the build process then downloads new bundles upon every build which may lead to unstable and incompatible builds. In contrast, this is set to \textbf{eclipse.home}, which contains all required bundles also for UI-based installations.
 \end{description}
 
 \subsection{Building the Projects}
