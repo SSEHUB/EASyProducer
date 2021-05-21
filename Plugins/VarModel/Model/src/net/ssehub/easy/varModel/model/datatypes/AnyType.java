@@ -52,7 +52,7 @@ public class AnyType extends BasisDatatype {
         STRING_TYPE, OclKeyWords.LOCALE, TYPE);
     // actual result type is defined at runtime, use unchanged and accept potential runtime undefinedness
     public static final Operation AS_TYPE = new Operation(
-        TYPE, ReturnTypeMode.UNCHANGED, OclKeyWords.AS_TYPE, TYPE, META_TYPE);
+        TYPE, ReturnTypeMode.TYPED_META_1, OclKeyWords.AS_TYPE, TYPE, META_TYPE);
     public static final Operation ASSIGNMENT = Operation.createInfixOperator(
         BOOLEAN_TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     // equals is re-defined by some operations, resolve only as ultimate fallback

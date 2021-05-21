@@ -215,11 +215,11 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
                 LOGGER.exception(exc);
             }
         }
-        Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(getDeclaration().getType());
+        Compound cmpType = (Compound) DerivedDatatype.resolveToBasis(value.getType());
         for (int i = 0; i < cmpType.getInheritedElementCount(); i++) {
             String slotName = cmpType.getInheritedElement(i).getName();
             CompoundVariable cmpVar = (CompoundVariable) relatedVariable;
-            Value nestedValue = newValue.getNestedValue(slotName);
+            Value nestedValue = value.getNestedValue(slotName);
             IDecisionVariable var = cmpVar.getNestedVariable(slotName);
             if (null != var) { // in case of nested recursive types
                 IAssignmentState nestedState = var.getState();
@@ -233,7 +233,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
                     } else {
                         var.setValue(nestedValue, nestedState);
                     }
-                } else if (null != nestedValue && null != var) {
+                } else if (null != nestedValue && null != var && nestedState != AssignmentState.USER_ASSIGNED) {
                     var.setValue(nestedValue, nestedState);
                 }
             }

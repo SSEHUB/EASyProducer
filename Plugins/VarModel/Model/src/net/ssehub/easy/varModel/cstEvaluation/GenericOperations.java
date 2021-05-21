@@ -228,7 +228,11 @@ public class GenericOperations {
                 IDatatype oType = toType(oValue);
                 IDatatype aType = toType(arguments[0].getValue());
                 if (aType.isAssignableFrom(oType)) {
-                    result = ConstantAccessor.POOL.getInstance().bind(oValue, false, operand.getContext());
+                    if (null != operand.getVariable()) {
+                        result = VariableAccessor.POOL.getInstance().bind(operand.getVariable(), operand.getContext());
+                    } else {
+                        result = ConstantAccessor.POOL.getInstance().bind(oValue, false, operand.getContext());
+                    }
                 }
             }
             return result;

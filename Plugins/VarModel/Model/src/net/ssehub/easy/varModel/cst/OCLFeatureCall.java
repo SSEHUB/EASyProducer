@@ -37,6 +37,8 @@ import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
+import net.ssehub.easy.varModel.model.values.MetaTypeValue;
+import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
 
 /**
@@ -305,6 +307,14 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                 result = new Sequence("", param.getContainedType(), sequence.getParent());
             } else {
                 result = param.getContainedType();
+            }
+        } else if (ReturnTypeMode.TYPED_META_1 == mode && mode.getParameterIndex() < parameters.length) {
+            ConstraintSyntaxTree cst = getParameter(mode.getParameterIndex());
+            if (cst instanceof ConstantValue) {
+                Value val = ((ConstantValue) cst).getConstantValue();
+                if (val instanceof MetaTypeValue) {
+                    result = ((MetaTypeValue) val).getValue();
+                }
             }
         }
         return result;

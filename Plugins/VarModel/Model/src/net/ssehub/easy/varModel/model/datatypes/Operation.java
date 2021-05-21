@@ -78,6 +78,12 @@ public class Operation {
          * parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
          */
         TYPED_PARAM_1(-1, 0, false, false),
+        
+        /**
+         * Change the return type to the value of the operand (first parameter), here required to be a constant 
+         * type value. If no parameter is available, {@link #IMMEDIATE_OPERAND} is applied.
+         */        
+        TYPED_META_1(-1, 0, false, false),
 
         /**
          * Use the return value of the first operation parameter. If not
