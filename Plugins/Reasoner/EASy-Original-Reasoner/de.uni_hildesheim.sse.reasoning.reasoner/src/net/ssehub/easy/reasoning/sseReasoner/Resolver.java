@@ -585,9 +585,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         if (null != defaultValue) { // considering the actual type rather than base
             actType = inferTypeSafe(defaultValue, actType);
         }
-/*        if (null != var && null != var.getValue()) {
-            actType = var.getValue().getType();
-        }*/
         int compoundMode = MODE_COMPOUND_NONE;
         boolean isCompound = TypeQueries.isCompound(actType);
         TypeCache.Entry tcEntry = null;
@@ -640,10 +637,32 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             contexts.setInConstruction(tcEntry);
-            translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, compoundMode); 
+            translateCompoundDeclaration(decl, var, checkTypeCast(declType, actType, decl, cAcc), (Compound) actType, 
+                compoundMode); 
         } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, actType, cAcc);
         }
+    }
+
+    /**
+     * Inserts a type cast if needed.
+     * 
+     * @param declType the declared type 
+     * @param actType the actual type
+     * @param decl the variable declaration (for the access if <code>cAcc</code> is <b>null</b>)
+     * @param cAcc the actual access expression
+     * @return <code>cAcc</code> if no cast is needed, a cast to <code>actType</code> based on <code>cAcc</code> or 
+     *      <code>decl</code> if <code>cAcc</code> is <b>null</b>
+     */
+    private static ConstraintSyntaxTree checkTypeCast(IDatatype declType, IDatatype actType, AbstractVariable decl, 
+        ConstraintSyntaxTree cAcc) {
+        if (!TypeQueries.sameTypes(declType, actType)) { // not documented -> type cast in polymorphic initialization 
+            if (cAcc == null) {
+                cAcc = new Variable(decl);
+            }
+            cAcc = ReasoningUtils.createAsTypeCast(cAcc, declType, actType);
+        }
+        return cAcc;
     }
 
     /**
@@ -904,14 +923,14 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 IDecisionVariable nestedVar = variable.getNestedElement(i);
                 AbstractVariable nestedDecl = nestedVar.getDeclaration();
                 if (!contexts.isElementTypeExcluded(nestedDecl.getParent())) {
-                    translateDeclaration(nestedDecl, nestedVar, contexts.getMapping(nestedDecl));
+                    translateDeclaration(nestedDecl, nestedVar, getNestedAccessor(nestedDecl, cAcc));
                 }
             }
         } else {
             for (int i = 0, n = type.getInheritedElementCount(); i < n; i++) {
                 AbstractVariable nestedDecl = type.getInheritedElement(i);
                 if (!contexts.isElementTypeExcluded(nestedDecl.getParent())) {
-                    translateDeclaration(nestedDecl, null, contexts.getMapping(nestedDecl));
+                    translateDeclaration(nestedDecl, null, getNestedAccessor(nestedDecl, cAcc));
                 }
             }
         }
@@ -925,6 +944,19 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         otherConstraintsProc.setParameter(cAcc, self, variable);
         allCompoundConstraints(type, otherConstraintsProc, false, false, decl);
         otherConstraintsProc.clear();
+    }
+
+    /**
+     * Returns the accessor for a nested variable declaration. Prefer a <code>cAcc</code> based accessor if given,
+     * else use a cached one from {@link #contexts}. In particukar, this is required to have type cast in the accessor 
+     * if given from outside.
+     * 
+     * @param nestedDecl the nested declaration
+     * @param cAcc the actual compound accessor
+     * @return the accessor to <code>nesteDecl</code>
+     */
+    private ConstraintSyntaxTree getNestedAccessor(AbstractVariable nestedDecl, ConstraintSyntaxTree cAcc) {
+        return null == cAcc ? contexts.getMapping(nestedDecl) : new CompoundAccess(cAcc, nestedDecl.getName());
     }
 
     /**
