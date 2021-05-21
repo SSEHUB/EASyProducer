@@ -1,0 +1,9 @@
+project ConfiguredDevices {
+    version v0;
+
+    import Devices;
+
+    freeze {
+        containerManager;
+    };    
+}

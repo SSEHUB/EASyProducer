@@ -52,8 +52,20 @@ public class ApplicationsTests extends AbstractTest {
      * @throws ModelQueryException shall not occur
      */
     @Test
-    public void devicesTest() throws IOException, ModelQueryException {
-        Configuration cfg = reasoningTest("Devices", 0);
+    public void configuredDevicesTest() throws IOException, ModelQueryException {
+        testDevices("ConfiguredDevices");
+    }
+
+    /**
+     * Tests the devices staged in-project configuration.
+     * 
+     * @param model the model to load
+     * @throws ModelQueryException shall not occur
+     * @throws IOException shall not occur
+     */
+    private void testDevices(String model) throws ModelQueryException, IOException {
+        Project p = loadCompleteProject("", model);
+        Configuration cfg = resultHandler(0, 0, p);        
         IDecisionVariable var = cfg.getDecision("containerManager", false);
         Assert.assertNotNull(var);
         Assert.assertNotNull(var.getNestedElement("dockerHost").getValue());
