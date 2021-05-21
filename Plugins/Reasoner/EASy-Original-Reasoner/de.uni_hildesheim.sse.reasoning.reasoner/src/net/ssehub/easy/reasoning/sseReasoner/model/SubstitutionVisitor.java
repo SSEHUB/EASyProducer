@@ -105,7 +105,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     }
     
     /**
-     * Adds a variable mapping to be considered during copying. Takes precedence over {@link #setMappings(Map)}.
+     * Adds a variable mapping to be considered during substitution. Takes precedence over {@link #setMappings(Map)}.
      * If a variable mapping is defined by {@link #setMappings(Map)}, potential transitive mappings of <code>dest</code>
      * are considered and instead of <code>orig</code>-<code>dest</code>, a mapping from <code>orig</code> to the 
      * transitive value is registered.
@@ -137,14 +137,26 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
             }
         }
         if (null != orig) {
-            if (null == mapping) {
-                mapping = new HashMap<AbstractVariable, ConstraintSyntaxTree>();
-            }
             for (int d = 1; d <= derefCount; d++) {
                 destEx = new OCLFeatureCall(destEx, IvmlKeyWords.REFBY);
             }
-            mapping.put(orig, destEx);
+            addVariableMapping(orig, destEx);
         }
+        return this;
+    }
+    
+    /**
+     * Adds a variable mapping to be considered during substitution. Takes precedence over {@link #setMappings(Map)}.
+     * 
+     * @param orig the original variable to be replaced (may be <b>null</b>, ignored)
+     * @param ex the expression to replace <code>orig</code>
+     * @return <b>this</b>
+     */
+    public SubstitutionVisitor addVariableMapping(AbstractVariable orig, ConstraintSyntaxTree ex) {
+        if (null == mapping) {
+            mapping = new HashMap<AbstractVariable, ConstraintSyntaxTree>();
+        }
+        mapping.put(orig, ex);
         return this;
     }
 

@@ -489,9 +489,10 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * @param parent the parent model element for creating constraint instances
      * @param refCounter the number of intermediary reference types on the path from the top-most call (call with 
      *     <code>0</code>)
+     * @param cAcc compound access to be used instead of <code>decl</code>, may be <b>null</b>
      */
     private void translateDerivedDatatypeConstraints(AbstractVariable decl, IDatatype type, 
-        DecisionVariableDeclaration localDecl, IModelElement parent, int refCounter) {
+        DecisionVariableDeclaration localDecl, IModelElement parent, int refCounter, ConstraintSyntaxTree cAcc) {
         if (type instanceof DerivedDatatype) {
             DerivedDatatype dType = (DerivedDatatype) type;
             int count = dType.getConstraintCount();
@@ -499,7 +500,11 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             AbstractVariable declaration = null == localDecl ? decl : localDecl;
             if (count > 0 && dVar != declaration) {
                 substVisitor.setMappings(contexts);
-                substVisitor.addVariableMapping(dVar, declaration, refCounter);
+                if (null != cAcc) { // undocumented, required for polymorphic types
+                    substVisitor.addVariableMapping(dVar, cAcc);
+                } else {
+                    substVisitor.addVariableMapping(dVar, declaration, refCounter);
+                }
                 //Copy and replace each instance of the internal declaration with the given instance
                 for (int i = 0; i < count; i++) {
                     ConstraintSyntaxTree cst = dType.getConstraint(i).getConsSyntax();
@@ -516,9 +521,10 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 }
                 substVisitor.clear();
             }
-            translateDerivedDatatypeConstraints(decl, dType.getBasisType(), localDecl, parent, refCounter);
+            translateDerivedDatatypeConstraints(decl, dType.getBasisType(), localDecl, parent, refCounter, null);
         } else if (type instanceof Reference) { // dereference
-            translateDerivedDatatypeConstraints(decl, ((Reference) type).getType(), localDecl, parent, refCounter + 1);
+            translateDerivedDatatypeConstraints(decl, ((Reference) type).getType(), 
+                localDecl, parent, refCounter + 1, null);
         }
     }
     
@@ -634,11 +640,11 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         if (!incremental) {
             translateAnnotationDeclarations(decl, var, cAcc);
         }
-        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0);
+        translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0, cAcc);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             contexts.setInConstruction(tcEntry);
-            translateCompoundDeclaration(decl, var, checkTypeCast(declType, actType, decl, cAcc), (Compound) actType, 
-                compoundMode); 
+            translateCompoundDeclaration(decl, var, checkTypeCast(declType, actType, decl, cAcc), 
+                (Compound) actType, compoundMode); 
         } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, actType, cAcc);
         }
@@ -705,7 +711,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         // in any case
         if (dContainedType instanceof DerivedDatatype || dContainedType instanceof Reference) {
             translateDerivedDatatypeConstraints(decl, dContainedType,  
-                new DecisionVariableDeclaration("derivedType", dContainedType, null), project, 0);
+                new DecisionVariableDeclaration("derivedType", dContainedType, null), project, 0, null);
         }
         contexts.popContext();
     }
