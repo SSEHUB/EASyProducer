@@ -1,0 +1,20 @@
+project Devices {
+
+    abstract compound ContainerManager {
+    };
+    
+    compound DockerContainerManager refines ContainerManager {
+        String dockerHost;
+        String dockerImageYamlFilename = "image-info.yml";
+        Boolean deleteWhenUndeployed = false;
+    };
+    
+    ContainerManager containerManager = DockerContainerManager {
+        dockerHost = "unix:///var/run/docker.sock"
+    };
+    
+    freeze {
+        containerManager;
+    };
+    
+}

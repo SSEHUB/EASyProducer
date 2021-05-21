@@ -2,8 +2,12 @@ package test.net.ssehub.easy.reasoning.core.reasoner;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
@@ -39,6 +43,25 @@ public class ApplicationsTests extends AbstractTest {
     public void plSimElevatorTest() throws IOException {
         Project p = loadCompleteProject("applications", "PL_SimElevator_frozen");
         resultHandler(0, 0, p);
+    }
+    
+    /**
+     * Tests staged in-project configuration.
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void devicesTest() throws IOException, ModelQueryException {
+        Configuration cfg = reasoningTest("Devices", 0);
+        IDecisionVariable var = cfg.getDecision("containerManager", false);
+        Assert.assertNotNull(var);
+        Assert.assertNotNull(var.getNestedElement("dockerHost").getValue());
+        Assert.assertEquals("unix:///var/run/docker.sock", var.getNestedElement("dockerHost").getValue().getValue());
+        Assert.assertNotNull(var.getNestedElement("dockerImageYamlFilename").getValue());
+        Assert.assertEquals("image-info.yml", var.getNestedElement("dockerImageYamlFilename").getValue().getValue());
+        Assert.assertNotNull(var.getNestedElement("deleteWhenUndeployed").getValue());
+        Assert.assertEquals(false, var.getNestedElement("deleteWhenUndeployed").getValue().getValue());        
     }
     
 }
