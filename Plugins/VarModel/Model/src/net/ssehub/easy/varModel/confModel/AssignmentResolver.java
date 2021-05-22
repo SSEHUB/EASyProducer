@@ -53,11 +53,13 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.filter.AnnotationAssignmentFinder;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder;
 import net.ssehub.easy.varModel.model.filter.FilterType;
 import net.ssehub.easy.varModel.model.filter.DeclarationFinder.VisibilityType;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
@@ -495,7 +497,7 @@ public class AssignmentResolver {
     protected static boolean resolveDefaultValueForDeclaration(AbstractVariable decl, IDecisionVariable variable, 
         EvaluationVisitor evaluator, IConfiguration config, AssignmentResolver conflictHandler) {
         boolean valueResolved = false;
-        
+
         IDatatype type = decl.getType();
         if (Compound.TYPE.isAssignableFrom(type)) {
             Compound cmpType = (Compound) type;
@@ -525,9 +527,12 @@ public class AssignmentResolver {
                     if (null != conflictHandler) {
                         conflictHandler.conflictingDefault(decl);
                     }
+                    evaluator.clear();
                 } else {
                     Value value = evaluator.getResult();
+                    evaluator.clear();
                     if (null != value) {
+                        value = augmentValue(value, variable, evaluator, config, conflictHandler);
                         try {
                             variable.setValue(value, AssignmentState.DEFAULT);
                             valueResolved = true;
@@ -536,7 +541,6 @@ public class AssignmentResolver {
                         }
                     }
                 }
-                evaluator.clear();
             }
             if (decl.isConstant()) {
                 variable.freeze(AllFreezeSelector.INSTANCE);
@@ -544,6 +548,61 @@ public class AssignmentResolver {
         }
         
         return valueResolved;
+    }
+    
+    /**
+     * If a value of a refined compound shall the first time be assigned to a variable of a super compound (polymorphic
+     * values), then also the default values of the refined compounds shall be taken into account and augment the value.
+     * Otherwise, an inconsistent configuration structure may later lead to invalid values.
+     * 
+     * @param value the value to be checked
+     * @param variable the variable to assign the value to
+     * @param evaluator the (re-usable) expression evaluator to utilize
+     * @param config the configuration to rely on (shall be consistent with <code>variable</code>)
+     * @param conflictHandler optional instance to call {@link #conflictingDefault(AbstractVariable)} on, may be 
+     *     <b>null</b> 
+     * @return the (augmented) <code>value</code>
+     */
+    private static Value augmentValue(Value value, IDecisionVariable variable, EvaluationVisitor evaluator, 
+        IConfiguration config, AssignmentResolver conflictHandler) {
+        // only in polymorphic situations, value carries refined type from compound initializer
+        if (value instanceof CompoundValue && !TypeQueries.sameTypes(value.getType(), 
+            variable.getDeclaration().getType())) {
+            Map<String, Value> values = new HashMap<String, Value>();
+            CompoundValue cValue = (CompoundValue) value;
+            // save slots of value
+            for (String slot : cValue.getSlotNames()) {
+                values.put(slot, cValue.getNestedValue(slot));
+            }
+            Compound cType = (Compound) value.getType();
+            // check whether slots of refined types are there, resolve them if needed, take over their initial values
+            for (int e = 0; e < cType.getElementCount(); e++) {
+                AbstractVariable slotDecl = cType.getElement(e);
+                if (null == values.get(slotDecl.getName())) {
+                    IDecisionVariable slotVar = variable.getNestedElement(slotDecl.getName());
+                    if (null == slotVar.getValue()) {
+                        resolveDefaultValueForDeclaration(slotVar.getDeclaration(), slotVar, 
+                            evaluator, config, conflictHandler);
+                    }
+                    if (null != slotVar && null != slotVar.getValue()) {
+                        values.put(slotDecl.getName(), slotVar.getValue());
+                    }
+                }
+            }
+            // compose new value
+            Object[] tmp = new Object[values.size() * 2];
+            int pos = 0;
+            for (Map.Entry<String, Value> ent : values.entrySet()) {
+                tmp[pos++] = ent.getKey();
+                tmp[pos++] = ent.getValue();
+            }
+            try {
+                value = ValueFactory.createValue(value.getType(), tmp);
+            } catch (ValueDoesNotMatchTypeException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(AssignmentResolver.class, null).exception(e);
+            }
+        }
+        return value;
     }
     
     /**
