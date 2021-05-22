@@ -1,0 +1,20 @@
+project compounds4Base {
+
+    version v0;
+
+    typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
+
+    abstract compound ContainerManager {
+    };
+    
+    compound DockerContainerManager refines ContainerManager {
+        NonEmptyString dockerHost;
+        NonEmptyString dockerImageYamlFilename = "image-info.yml";
+        Boolean deleteWhenUndeployed = false;
+    };
+    
+    ContainerManager containerManager = DockerContainerManager {
+        dockerHost = "unix:///var/run/docker.sock"
+    };
+
+}

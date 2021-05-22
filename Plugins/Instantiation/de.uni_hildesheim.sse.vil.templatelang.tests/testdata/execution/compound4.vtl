@@ -1,0 +1,20 @@
+@advice(compounds4)
+template compoundTest4(Configuration config, FileArtifact target) {
+
+    def String containerManagerModule(compounds4 cfg) {
+        containerManagerModule(cfg.containerManager);
+    }
+
+    def String containerManagerModule(ContainerManager mgr) {
+        "";
+    }
+
+    def String containerManagerModule(DockerContainerManager mgr) {
+        "ecsRuntime.docker";
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        '${containerManagerModule(config)}'
+    }
+
+}

@@ -496,6 +496,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
 
     /**
+     * Tests compounds with direct field accessor call.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompound4() throws IOException {
+        assertEqualWithIvml("compound4", "compounds4");
+    }
+
+    /**
      * Tests a switch statement with default in an untyped def.
      * 
      * @throws IOException should not occur

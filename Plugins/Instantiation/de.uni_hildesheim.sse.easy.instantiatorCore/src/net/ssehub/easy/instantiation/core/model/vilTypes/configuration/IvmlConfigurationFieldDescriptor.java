@@ -112,7 +112,12 @@ public class IvmlConfigurationFieldDescriptor extends AbstractIvmlFieldDescripto
         if (Utils.isCompatible(owner, Configuration.class) != CompatibilityResult.COMPATIBLE) {
             throw new VilException("incompatible arguments", VilException.ID_TYPE_INCOMPATIBILITY);
         }
-        return ((Configuration) owner).getByName(getName());
+        Configuration cfg = (Configuration) owner;
+        Object result = cfg.getByName(getName());
+        if (null == result) { // fallback via qualified name for imported elements
+            result = cfg.getByName(getVariable().getQualifiedName());
+        }
+        return result;
     }
 
 }

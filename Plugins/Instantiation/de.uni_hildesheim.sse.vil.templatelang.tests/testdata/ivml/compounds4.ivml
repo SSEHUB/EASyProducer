@@ -1,0 +1,9 @@
+project compounds4 {
+
+    version v0;
+    import compounds4Base;
+
+    freeze {
+        containerManager;
+    }
+}
