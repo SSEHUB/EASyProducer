@@ -304,7 +304,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                     EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).error(
                         "No configuration initializer available");
                 } else {
-                    EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).error(
+                    EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).info(
                         "Initializing configuration with: " + init.getClass().getName());
                     String msg = Message.toString(
                         init.initializeConfiguration(this, ProgressObserver.NO_OBSERVER), Status.ERROR);
@@ -317,7 +317,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
                 // Assign frozen state to already frozen variables
                 freezeValues(project, FilterType.ALL);*/
             } else {
-                EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).error(
+                EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, Bundle.ID).info(
                     "Not initializing configuration");
             }
             
