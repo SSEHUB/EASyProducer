@@ -4,8 +4,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.reasoning.core.Bundle;
 import net.ssehub.easy.reasoning.core.impl.ReasonerHelper;
 import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
@@ -37,7 +39,7 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  * The main interface to the reasoner core infrastructure. Models and configurations will be transparently passed to
  * matching reasoners.
  * 
- * @author Patrick Jähne
+ * @author Patrick Jï¿½hne
  * @author Sascha El-Sharkawy
  * @author Holger Eichelberger
  */
@@ -106,6 +108,8 @@ public class ReasonerFrontend {
                 if (null != reasoner) {
                     // default reasoner configuration
                     ReasonerConfiguration initCfg = new ReasonerConfiguration();
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info(
+                        "Initializing configuration with reasoner: " + reasoner.getDescriptor().getName());
                     ReasoningResult tmp = reasoner.initialize(config, initCfg, observer); 
                     useFallback = tmp.reasoningUnsupported();
                     if (tmp.getMessageCount() > 0) {
@@ -118,6 +122,8 @@ public class ReasonerFrontend {
                     useFallback = true;
                 }
                 if (useFallback) {
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info(
+                        "Initializing configuration with fallback: " + fallback.getClass().getName());
                     result = fallback.initializeConfiguration(config, observer);
                 }
                 return result;
