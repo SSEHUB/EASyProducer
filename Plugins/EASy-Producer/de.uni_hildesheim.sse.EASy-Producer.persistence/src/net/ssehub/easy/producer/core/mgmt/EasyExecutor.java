@@ -16,6 +16,7 @@
 package net.ssehub.easy.producer.core.mgmt;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
 import net.ssehub.easy.producer.core.persistence.internal.Activator;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -443,6 +445,46 @@ public class EasyExecutor {
      */
     public void setConfiguration(Configuration cfg) {
         this.cfg = cfg;
+    }
+    
+    /**
+     * Convenience method to print the configuration.
+     * 
+     * @param out the target output stream
+     */
+    public void printConfiguration(PrintStream out) {
+        Configuration.printConfig(out, cfg);
+    }
+
+    /**
+     * Convenience method to print the configuration to {@code System.out}.
+     */
+    public void printConfiguration() {
+        printConfiguration(System.out);
+    }
+
+    /**
+     * Convenience method to print the relevant information from reasoning messages.
+     * 
+     * @param rRes the reasoning result to print
+     * @param out the target output stream
+     */
+    public void printReasoningMessages(ReasoningResult rRes, PrintStream out) {
+        for (int m = 0; m < rRes.getMessageCount(); m++) {
+            Message msg = rRes.getMessage(m);
+            out.println(msg.getDescription());
+            out.println(msg.getConflictComments());
+            out.println(msg.getConflictSuggestions());
+        }
+    }
+
+    /**
+     * Convenience method to print the relevant information from reasoning messages to {@code System.out}.
+     * 
+     * @param rRes the reasoning result to print
+     */
+    public void printReasoningMessages(ReasoningResult rRes) {
+        printReasoningMessages(rRes, System.out);
     }
     
 }
