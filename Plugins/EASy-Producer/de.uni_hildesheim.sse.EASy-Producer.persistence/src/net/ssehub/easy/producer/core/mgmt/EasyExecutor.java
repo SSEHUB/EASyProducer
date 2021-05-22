@@ -446,18 +446,37 @@ public class EasyExecutor {
     public void setConfiguration(Configuration cfg) {
         this.cfg = cfg;
     }
-    
+
+    /**
+     * Convenience method to print the given configuration to {@code System.out}.
+     * 
+     * @param cfg the configuration to print
+     */
+    public static void printConfiguration(Configuration cfg) {
+        printConfiguration(System.out, cfg);
+    }
+
     /**
      * Convenience method to print the configuration.
      * 
+     * @param cfg the configuration to print
      * @param out the target output stream
      */
-    public void printConfiguration(PrintStream out) {
+    public static void printConfiguration(PrintStream out, Configuration cfg) {
         Configuration.printConfig(out, cfg);
     }
 
     /**
-     * Convenience method to print the configuration to {@code System.out}.
+     * Convenience method to print the contained configuration.
+     * 
+     * @param out the target output stream
+     */
+    public void printConfiguration(PrintStream out) {
+        printConfiguration(out, cfg);
+    }
+
+    /**
+     * Convenience method to print the contained configuration to {@code System.out}.
      */
     public void printConfiguration() {
         printConfiguration(System.out);
@@ -469,7 +488,7 @@ public class EasyExecutor {
      * @param rRes the reasoning result to print
      * @param out the target output stream
      */
-    public void printReasoningMessages(ReasoningResult rRes, PrintStream out) {
+    public static void printReasoningMessages(ReasoningResult rRes, PrintStream out) {
         for (int m = 0; m < rRes.getMessageCount(); m++) {
             Message msg = rRes.getMessage(m);
             out.println(msg.getDescription());
@@ -483,7 +502,7 @@ public class EasyExecutor {
      * 
      * @param rRes the reasoning result to print
      */
-    public void printReasoningMessages(ReasoningResult rRes) {
+    public static void printReasoningMessages(ReasoningResult rRes) {
         printReasoningMessages(rRes, System.out);
     }
     
