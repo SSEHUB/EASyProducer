@@ -15,15 +15,24 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 
 /**
- * Class for presenting and testing the EASy command line functionalities.
+ * Class for presenting and testing the EASy command line functionalities. System return values: {@link #SYSTEM_OK} if
+ * the execution is ok, {@link #SYSTEM_IO_EXC} if an I/O problem occurred, {@link #SYSTEM_MODELMGT_EXC} if a model
+ * management problem occurred, {@link #SYSTEM_PERSISTENCE_EXC} if a high-level EASy problem (persistence layer) 
+ * occurred, {@link #SYSTEM_VIL_EXC} if a VIL execution problem occurred.
+ * 
  * @author El-Sharkawy
- *
  */
 public final class EASyExec {
+    public static final int SYSTEM_OK = 0;
+    public static final int SYSTEM_IO_EXC = 1;
+    public static final int SYSTEM_MODELMGT_EXC = 2;
+    public static final int SYSTEM_PERSISTENCE_EXC = 3;
+    public static final int SYSTEM_VIL_EXC = 4;
+
     private static final String WS_PATH = "C:/Elscha/Eclipse/runtime-EclipseApplication2";
     private static final File WS_FILE = new File(WS_PATH);
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(EASyExec.class, "EASyCommandLine");
-   
+    
     /**
      * Main method for testing.
      * @param args Will be ignored.
@@ -33,6 +42,7 @@ public final class EASyExec {
             LowlevelCommands.startEASy();
         } catch (IOException e1) {
             LOGGER.exception(e1);
+            System.exit(SYSTEM_IO_EXC);
         }
         
         
@@ -45,6 +55,7 @@ public final class EASyExec {
         } else {
             runDemo();
         }
+        System.exit(SYSTEM_OK);
     }
 
     /**
@@ -73,10 +84,13 @@ public final class EASyExec {
             }
         } catch (ModelManagementException e) {
             LOGGER.exception(e);
+            System.exit(SYSTEM_MODELMGT_EXC);
         } catch (VilException e) {
             LOGGER.exception(e);
+            System.exit(SYSTEM_VIL_EXC);
         } catch (PersistenceException e) {
             LOGGER.exception(e);
+            System.exit(SYSTEM_PERSISTENCE_EXC);
         }
     }
     
@@ -98,10 +112,13 @@ public final class EASyExec {
             }
         } catch (VilException e) {
             LOGGER.exception(e);
+            System.exit(SYSTEM_VIL_EXC);
         } catch (PersistenceException e) {
             LOGGER.exception(e);
+            System.exit(SYSTEM_PERSISTENCE_EXC);
         } catch (IOException e) {
             LOGGER.exception(e);
+            System.exit(SYSTEM_IO_EXC);
         }
     }
 
@@ -118,7 +135,7 @@ public final class EASyExec {
         // Output the configuration of the project
         if (null != plp) {
             Configuration config = plp.getConfiguration();
-            System.out.println("Anzahl Variablen: " + config.getDecisionCount());
+            System.out.println("Number of variables: " + config.getDecisionCount());
             Iterator<IDecisionVariable> itr = config.iterator();
             while (itr.hasNext()) {
                 IDecisionVariable var = itr.next();
