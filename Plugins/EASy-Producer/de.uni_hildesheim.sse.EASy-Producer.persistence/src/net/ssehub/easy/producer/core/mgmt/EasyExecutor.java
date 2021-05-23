@@ -18,7 +18,9 @@ package net.ssehub.easy.producer.core.mgmt;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -70,6 +72,8 @@ public class EasyExecutor {
     private File vilTarget;
     private String ivmlModelName;
     private String vilModelName;
+    private String vilStartRuleName;
+    private Map<String, Object> vilArguments;
     private Configuration cfg;
     private ProgressObserver observer = ProgressObserver.NO_OBSERVER;
     private ReasonerConfiguration rCfg;
@@ -265,6 +269,34 @@ public class EasyExecutor {
         this.vilModelName = vilModelName;
         return this;
     }
+    
+    /**
+     * Adds a custom VIL start rule argument. If not called, no (additional) arguments will be passed to VIL (except for
+     * the default VIL arguments of source, target and configuration) - don't try to specify those arguments here. 
+     * Custom arguments must be declared in the VIL script.
+     * 
+     * @param name the name of the custom argument
+     * @param value the value of the custom argument
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor addVilArgument(String name, Object value) {
+        if (null == vilArguments) {
+            vilArguments = new HashMap<String, Object>();
+        }
+        vilArguments.put(name, value);
+        return this;
+    }
+    
+    /**
+     * Sets the VIL start rule name. If not called, the default start rule name {@code main} is used.
+     *   
+     * @param vilStartRuleName the VIL start rule name (must be a non-empty string)
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor setVilStartRuleName(String vilStartRuleName) {
+        this.vilStartRuleName = vilStartRuleName;
+        return this;
+    }
 
     /**
      * Sets the progress observer instance. This is initially set to {@link ProgressObserver#NO_OBSERVER}. 
@@ -382,12 +414,20 @@ public class EasyExecutor {
                     TracerFactory.setInstance(tracerFactory);
                 }
                 logger.info("Executing VIL script: " + vilModelName);
-                new Executor(script)
+                Executor exec = new Executor(script)
                     .addBase(base)
                     .addSource(vilSource)
                     .addConfiguration(cfg)
-                    .addTarget(vilTarget)
-                    .execute();
+                    .addTarget(vilTarget);
+                if (null != vilArguments) {
+                    for (Map.Entry<String, Object> ent : vilArguments.entrySet()) {
+                        exec.addCustomArgument(ent.getKey(), ent.getValue());
+                    }
+                }
+                if (null != vilStartRuleName) {
+                    exec.addStartRuleName(vilStartRuleName);
+                }
+                exec.execute();
             } else {
                 logger.error("No VIL script found: " + vilModelName);
             }
