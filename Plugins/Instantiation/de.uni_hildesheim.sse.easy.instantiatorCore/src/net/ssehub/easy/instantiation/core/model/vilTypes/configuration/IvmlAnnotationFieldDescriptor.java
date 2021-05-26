@@ -92,7 +92,7 @@ public class IvmlAnnotationFieldDescriptor extends AbstractIvmlFieldDescriptor {
                 ((AbstractIvmlVariable) elt).setValue(value);
             } else {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
-                    + " not accessible via byName");
+                    + " not accessible by name (omitted frozen?)");
             }
         }
     }

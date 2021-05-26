@@ -77,7 +77,7 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
             if (null == tmp) {
                 result = null;
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
-                    + " not accessible via byName");
+                    + " not accessible by name (omitted frozen?)");
             } else {
                 if (getType().isCollection()) {
                     IDatatype type = tmp.getDecisionVariable().getDeclaration().getType();
@@ -107,7 +107,7 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
             DecisionVariable tmp = ((DecisionVariable) owner).getByName(getName());
             if (null == tmp) {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
-                    + " not accessible via byName");
+                    + " not accessible by name (omitted frozen?)");
             } else {
                 tmp.setValue(value);
             }

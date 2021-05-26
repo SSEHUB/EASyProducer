@@ -70,7 +70,7 @@ public class IvmlConfigurationFieldDescriptor extends AbstractIvmlFieldDescripto
             if (null == tmp) {
                 result = null;
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
-                    + " not accessible via byName");
+                    + " not accessible via by name (omitted frozen?)");
             } else {
                 if (getType().isCollection()) {
                     IDatatype type = tmp.getDecisionVariable().getDeclaration().getType();
@@ -102,7 +102,7 @@ public class IvmlConfigurationFieldDescriptor extends AbstractIvmlFieldDescripto
                 tmp.setValue(value);
             } else {
                 EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
-                    + " not accessible via byName");
+                    + " not accessible via by name (omitted frozen?)");
             }
         }
     }
