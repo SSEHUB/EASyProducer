@@ -15,8 +15,6 @@
  */
 package net.ssehub.easy.varModel.model;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -185,20 +183,6 @@ public abstract class AbstractVariable extends ContainableModelElement implement
     
     @Override
     public void constraintsChanged() {
-        //TODO SE: Remove old constraints if necessary
-        if (null != type) { // just preventing a NPE in some cases - constraints shall be removed here anyway
-            try {
-                InternalConstraint[] constraints = type.createConstraints(this);
-                if (null != constraints) {
-                    Project project = (Project) getTopLevelParent();
-                    if (null != project) {
-                        project.addInternalConstraints(constraints);                        
-                    }
-                }
-            } catch (CSTSemanticException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(AbstractVariable.class, Bundle.ID).exception(e);
-            }
-        }
     }
     
     /**

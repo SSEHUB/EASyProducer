@@ -15,10 +15,6 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
-import net.ssehub.easy.varModel.cst.CSTSemanticException;
-import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.InternalConstraint;
-
 /** 
  * Abstract class, implements some methods for all existing data types.
  * Note that a datatype may be generic, i.e. parameterized (see {@link #getGenericType(int)}.
@@ -107,18 +103,6 @@ public interface IDatatype extends IDatatypeVisitable {
      * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getGenericTypeCount()}</code>
      */
     public IDatatype getGenericType(int index);
-    
-    /**
-     * Creates constraints related to this declaration. This method is needed for <code>DerivedDatatypes</code>. 
-     * @param declaration VariableDeclaration of <code>DerivedDatatype</code>
-     * @return <code>null</code> if this datatype is not <code>DerivedDatatype</code> or if this 
-     * <code>DerivedDatatype</code> has no constraints, otherwise the adapted constraints of the 
-     * <code>DerivedDatatype</code> for this VariableDeclaration
-     * @throws CSTSemanticException This Exception must not occur as only valid constraints are adapted with
-     * instances of this datatype.
-     * 
-     */
-    public InternalConstraint[] createConstraints(AbstractVariable declaration) throws CSTSemanticException;
     
     /**
      * Returns the number of generic types.

@@ -29,7 +29,6 @@ import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.varModel.cstEvaluation.LocalConfiguration;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
-import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.ICustomOperationAccessor;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IResolutionScope;
@@ -59,12 +58,6 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     private DecisionVariableDeclaration variable;
 
     /**
-     * List of internally created constraints, which are not modeled explicitly, e.g. constraints for instances of a
-     * <code>DerivedDatatype</code>. This list must not be saved.
-     */
-    private List<InternalConstraint> internalConstraints;
-
-    /**
      * Comments directly attached to this project (lazy initialization).
      */
     private StructuredComment comment;
@@ -87,7 +80,6 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         modelElements = new ArrayList<ContainableModelElement>();
         imports = new ArrayList<ProjectImport>();
         version = null;
-        internalConstraints = new ArrayList<InternalConstraint>();
         variable = new ProjectDecisionVariableDeclaration(name, type, this);
     }
 
@@ -149,58 +141,6 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     }
 
     /**
-     * Method for adding Constraints of a VariableDeclaration of a DerivedDatatype.
-     * 
-     * @param constraints
-     *            the constraints related to the concrete VariableDeclaration
-     */
-    void addInternalConstraints(InternalConstraint[] constraints) {
-        for (int i = 0; i < constraints.length; i++) {
-            internalConstraints.add(constraints[i]);
-        }
-    }
-
-    /**
-     * Returns the internalConstraints of the project, needed for derivedDatatypes.
-     * 
-     * @return the number of internalConstraints stored in this project.
-     */
-    public int getInternalConstraintCount() {
-        return internalConstraints.size();
-    }
-
-    /**
-     * Returns the internal constraints specified by <code>index</code>. <br/>
-     * This list of internally created constraints are not modeled explicitly. For instance, these constraints are
-     * constraints for instances of a <code>DerivedDatatype</code>. This list must not be saved.
-     * 
-     * @param index
-     *            a 0-based index specifying internal constraint to be returned
-     * @return all existing constraints of the project
-     * @throws IndexOutOfBoundsException
-     *             if the index is out of range (<tt>index &lt; 0 || index &gt;= size()</tt>)
-     */
-    public InternalConstraint getInternalConstraint(int index) {
-        return internalConstraints.get(index);
-    }
-
-    /**
-     * Removes all internal constraints of a given {@link DerivedDatatype}. <br>
-     * This must be done in case a constraint for an existing {@link DerivedDatatype} changes. Since the whole project
-     * is reparsed after an change, this should not occur.
-     * 
-     * @param originType
-     *            The {@link DerivedDatatype} where the change occurred.
-     */
-    public void removeInternalConstraints(DerivedDatatype originType) {
-        for (int i = 0; i < internalConstraints.size(); i++) {
-            if (internalConstraints.get(i).getDerivedDatatype() == originType) {
-                internalConstraints.remove(i);
-            }
-        }
-    }
-
-    /**
      * Removes all specified elements from this project.
      * 
      * @param elementsToRemove
@@ -242,7 +182,6 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
         modelElements = new ArrayList<ContainableModelElement>();
         names.clear();
         imports = new ArrayList<ProjectImport>();
-        internalConstraints = new ArrayList<InternalConstraint>();
         for (int i = type.getOperationCount() - 1; i >= 0; i--) {
             type.removeOperation(type.getOperation(i));
         }

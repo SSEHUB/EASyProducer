@@ -18,7 +18,6 @@ package net.ssehub.easy.varModel.model.datatypes;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 
 /**
@@ -49,13 +48,6 @@ public class BasisDatatypeTest {
         }
         
         Assert.assertEquals(0, dec.getType().getGenericTypeCount());
-        
-        try {
-            Assert.assertArrayEquals(null, dec.getType().createConstraints(
-                    new DecisionVariableDeclaration("dec2", StringType.TYPE, null)));
-        } catch (CSTSemanticException e) {
-            Assert.assertTrue(false);
-        }
         
         Assert.assertTrue(!dec.getType().isPseudoType());
     }

@@ -18,9 +18,6 @@ package net.ssehub.easy.varModel.model.datatypes;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.InternalConstraint;
-
 /**
  * An internal delegating type to resolve cyclic class dependencies. A delegating type
  * represents (common) singleton type instances.
@@ -209,11 +206,6 @@ class DelegatingType implements IDatatype {
     @Override
     public void accept(IDatatypeVisitor visitor) {
         delegate.accept(visitor);
-    }
-    
-    @Override
-    public final InternalConstraint[] createConstraints(AbstractVariable declaration) {
-        return null;
     }
     
     @Override

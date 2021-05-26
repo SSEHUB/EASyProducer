@@ -124,11 +124,6 @@ public class ProjectType implements IDatatype {
     }
     
     @Override
-    public final InternalConstraint[] createConstraints(AbstractVariable declaration) {
-        return null;
-    }
-    
-    @Override
     public boolean isPseudoType() {
         return true;
     }

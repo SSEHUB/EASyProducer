@@ -15,10 +15,6 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
-import net.ssehub.easy.varModel.model.AbstractVariable;
-import net.ssehub.easy.varModel.model.InternalConstraint;
-
-
 /**
  * Represents the basic data types of the IVML.
  * 
@@ -118,11 +114,6 @@ public abstract class BasisDatatype implements IDatatype {
     
     @Override
     public abstract void accept(IDatatypeVisitor visitor);
-    
-    @Override
-    public final InternalConstraint[] createConstraints(AbstractVariable declaration) {
-        return null;
-    }
     
     @Override
     public boolean isPseudoType() {

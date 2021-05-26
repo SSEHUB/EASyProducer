@@ -23,7 +23,6 @@ import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.model.Constraint;
-import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IvmlException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -38,7 +37,6 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
 public class DerivedDatatypeTest {
 
     private Project project;
-    private int countInternalConstraints;
     
     /**
      * Creates a project, which is needed as toplevel element.
@@ -69,43 +67,6 @@ public class DerivedDatatypeTest {
         Assert.assertTrue(cons.isBooleanConstraint());
         Constraint[] constraints = {cons};
         bitrate.setConstraints(constraints);
-        
-        //The current project must not have any internal constraints
-        countInternalConstraints = 0;
-        Assert.assertEquals(countInternalConstraints, project.getInternalConstraintCount());
-        
-        //Now, with the creation of this declaration exactly one internalConstraint must be generated.
-        DecisionVariableDeclaration videoBitrate = new DecisionVariableDeclaration("videoBitrate", bitrate, project);
-        countInternalConstraints++;
-        Assert.assertEquals(countInternalConstraints, project.getInternalConstraintCount());      
-        testInternalConstraint(constraint, videoBitrate);
-        
-        //Now, with the creation of this declaration exactly one internalConstraint must be generated.
-        DecisionVariableDeclaration audioBitrate = new DecisionVariableDeclaration("audioBitrate", bitrate, project);
-        countInternalConstraints++;
-        Assert.assertEquals(countInternalConstraints, project.getInternalConstraintCount());
-        testInternalConstraint(constraint, audioBitrate);
-    }
-
-    /**
-     * Test whether the given <code>DecsionVariableDeclaration</code> (instance of a <code>DerivedDatatype</code>
-     * is embedded into the last created internal constraint. For this test, the <code>DerivedDatatype</code>
-     * must have only one <code>OCLFeatureCall</code> constraint with itself as operand.
-     * 
-     * @param constraint The origin constraint of the <code>DerivedDatatype</code>.
-     * This test checks also whether the newly created constraint has the same structure.
-     * @param derivedTypeInstance The instance of a <code>DerivedDatatype</code>,
-     * which should occur inside the internal constraint.
-     */
-    private void testInternalConstraint(OCLFeatureCall constraint, DecisionVariableDeclaration derivedTypeInstance) {
-        Constraint internalConstraint = project.getInternalConstraint(countInternalConstraints - 1);
-        OCLFeatureCall testCST = (OCLFeatureCall) internalConstraint.getConsSyntax();
-        
-        //Test correct behavior of the internal cosntraint
-        Assert.assertNotNull(testCST);
-        Variable variable = (Variable) testCST.getOperand();
-        Assert.assertEquals(derivedTypeInstance, variable.getVariable());
-        Assert.assertEquals(constraint.getOperation(), testCST.getOperation());
     }
 
 }

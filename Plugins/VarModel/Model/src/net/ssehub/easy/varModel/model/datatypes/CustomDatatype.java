@@ -15,11 +15,8 @@
  */
 package net.ssehub.easy.varModel.model.datatypes;
 
-import net.ssehub.easy.varModel.cst.CSTSemanticException;
-import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.IModelElement;
-import net.ssehub.easy.varModel.model.InternalConstraint;
 
 /**
  * Abstract class, implements the setName method for the custom data types.
@@ -94,11 +91,6 @@ public abstract class CustomDatatype extends ContainableModelElement implements 
     @Override
     public int getGenericTypeCount() {
         return 0;
-    }
-
-    @Override
-    public InternalConstraint[] createConstraints(AbstractVariable declaration) throws CSTSemanticException {
-        return null;
     }
     
     @Override
