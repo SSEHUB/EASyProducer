@@ -109,7 +109,7 @@ public class DroolsEvaluation implements IConstraintTreeVisitor {
 
         for (int i = 0; i < project.getElementCount(); i++) {
             droolsVisitor.setRuleCount(key);
-            this.ruleMapper.put(new Integer(key), project.getElement(i));
+            this.ruleMapper.put(key, project.getElement(i));
             key++;
             if (project.getElement(i) instanceof Constraint) {
                 Constraint cons = (Constraint) project.getElement(i);
@@ -123,19 +123,13 @@ public class DroolsEvaluation implements IConstraintTreeVisitor {
             }
         }
 
-        for (int j = 0; j < project.getInternalConstraintCount(); j++) {
-            droolsVisitor.setRuleCount(key);
-            this.ruleMapper.put(new Integer(key), project.getElement(j));
-            key++;
-            project.getInternalConstraint(j).accept((IModelVisitor) droolsVisitor);
-        }
         evaluationStartIndex = key;
         droolsVisitor.setEvaluationCalls(true);
         if (null != constraints) {
             logger.info("evaluation constraints are " + constraints.size());
             for (int j = 0; j < constraints.size(); j++) {
                 droolsVisitor.setRuleCount(key);
-                this.ruleMapper.put(new Integer(key), constraints.get(j));
+                this.ruleMapper.put(key, constraints.get(j));
                 key++;
                 constraints.get(j).accept((IModelVisitor) droolsVisitor);
             }

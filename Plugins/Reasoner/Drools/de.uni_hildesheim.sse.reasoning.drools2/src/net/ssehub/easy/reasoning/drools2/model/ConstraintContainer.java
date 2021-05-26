@@ -11,11 +11,8 @@ import net.ssehub.easy.reasoning.drools2.model.variables.ReasonerVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
-import net.ssehub.easy.varModel.model.InternalConstraint;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.filter.ConstraintFinder;
-
-
 
 /**
  * Part of the {@link ReasonerModel}, which holds all constraints in a structured way.
@@ -28,8 +25,6 @@ class ConstraintContainer implements IConstraintContainer {
     private ReasonerModel parent;
     // All normal constraints from the model
     private List<Constraint> normalConstraints;
-    // All internal constraints
-    private List<InternalConstraint> internalConstraints;
     // Variables of each normal constraint
     private List<Set<ReasonerVariable>> variablesOfNormalConstraint;
     // Variables of each internal constraint
@@ -47,28 +42,12 @@ class ConstraintContainer implements IConstraintContainer {
         ConstraintFinder consFinder = new ConstraintFinder(parent.getProject());
         normalConstraints = consFinder.getConstraints();
         
-        // Internal constraints (only for value validation)
-        internalConstraints = 
-                new ArrayList<InternalConstraint>(parent.getProject().getInternalConstraintCount());
-        for (int i = 0; i < parent.getProject().getInternalConstraintCount(); i++) {
-            InternalConstraint constraint = parent.getProject().getInternalConstraint(i);
-            internalConstraints.add(constraint);
-        }
-        
         // Determine for each normal constraint, which (toplevel) variables are used
         variablesOfNormalConstraint =
                 new ArrayList<Set<ReasonerVariable>>(getNormalConstraintCount());
         for (int i = 0; i < getNormalConstraintCount(); i++) {
             ConstraintSyntaxTree syntax = getNormalConstraint(i);            
             variablesOfNormalConstraint.add(findVariablesUsedInConstraint(syntax));
-        }
-        
-        // Determine for each internal constraint, which (toplevel) variables are used
-        variablesOfInternalConstraint =
-                new ArrayList<Set<ReasonerVariable>>(getInternalConstraintCount());
-        for (int i = 0; i < getInternalConstraintCount(); i++) {
-            ConstraintSyntaxTree syntax = getInternalConstraint(i);            
-            variablesOfInternalConstraint.add(findVariablesUsedInConstraint(syntax));
         }
         
     }
@@ -84,16 +63,6 @@ class ConstraintContainer implements IConstraintContainer {
     }
     
     @Override
-    public int getInternalConstraintCount() {
-        return internalConstraints.size();
-    }
-    
-    @Override
-    public ConstraintSyntaxTree getInternalConstraint(int index) {
-        return internalConstraints.get(index).getConsSyntax();
-    }
-    
-    @Override
     public Set<ReasonerVariable> getVariablesOfNormalConstraint(int index) {
         return variablesOfNormalConstraint.get(index);
     }  
@@ -105,7 +74,7 @@ class ConstraintContainer implements IConstraintContainer {
     
     @Override
     public int getConstraintCount() {
-        return normalConstraints.size() + internalConstraints.size();
+        return normalConstraints.size();
     }
     
     @Override
@@ -115,7 +84,7 @@ class ConstraintContainer implements IConstraintContainer {
             result = getVariablesOfNormalConstraint(index);
         } else {
             index = getConstraintCount() - index;
-            result = getVariablesOfInternalConstraint(getInternalConstraintCount() - index);                    
+            result = getVariablesOfInternalConstraint(index);                    
         }
         return result;
     }
@@ -125,9 +94,6 @@ class ConstraintContainer implements IConstraintContainer {
         ConstraintSyntaxTree result = null;
         if (index < getNormalConstraintCount()) {
             result = getNormalConstraint(index);
-        } else {
-            index = getConstraintCount() - index;
-            result = getInternalConstraint(getInternalConstraintCount() - index);              
         }
         return result;
     }
@@ -137,9 +103,6 @@ class ConstraintContainer implements IConstraintContainer {
         ModelElement result = null;
         if (index < getNormalConstraintCount()) {
             result = normalConstraints.get(index);
-        } else {
-            index = getConstraintCount() - index;
-            result = internalConstraints.get(getInternalConstraintCount() - index).getDerivedDatatype();
         }
         return result;
     }

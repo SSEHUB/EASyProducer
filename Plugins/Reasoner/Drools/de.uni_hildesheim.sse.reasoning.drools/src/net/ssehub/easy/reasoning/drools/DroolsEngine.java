@@ -355,13 +355,6 @@ public class DroolsEngine {
             }
         }
         
-        if (optimizationType.equals(OptimizationType.INTERMEDIATE)) {
-            for (int i = 0; i < project.getInternalConstraintCount(); i++) {
-                project.getInternalConstraint(i).getConsSyntax().accept(processor);
-            }
-            
-        }
-        
     }
 
     /**To check if the assignments have already defaults (for variables of non-compound types).
@@ -425,7 +418,7 @@ public class DroolsEngine {
 //        logger.info("total inter " + project.getInternalConstraintCount());
         for (int i = 0; i < project.getElementCount(); i++) {
             droolsVisitor.setRuleCount(key);
-            this.ruleMapper.put(new Integer(key), project.getElement(i));
+            this.ruleMapper.put(key, project.getElement(i));
             key++;
             if (project.getElement(i) instanceof DecisionVariableDeclaration) {
                 DecisionVariableDeclaration decl = (DecisionVariableDeclaration) project.getElement(i);
@@ -436,12 +429,6 @@ public class DroolsEngine {
                 constraintList.add(constraint);
             } 
             project.getElement(i).accept((IModelVisitor) droolsVisitor);
-        }
-        for (int j = 0; j < project.getInternalConstraintCount(); j++) {
-            droolsVisitor.setRuleCount(key);
-            this.ruleMapper.put(new Integer(key), project.getInternalConstraint(j));
-            key++;
-            project.getInternalConstraint(j).accept((IModelVisitor) droolsVisitor);
         }
         long outInt = System.currentTimeMillis();
         logger.info("Time to parse all elements " + (outInt - inInt) / 1000.0);

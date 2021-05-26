@@ -847,18 +847,12 @@ public class DroolsVisitor implements IModelVisitor,
         importedProjectName = pImport.getProjectName();
         int count = ruleCount;
         for (int i = 0; i < importedProject.getElementCount(); i++) { 
-            this.ruleMapper.put(new Integer(ruleCount), importedProject.getElement(i));
+            this.ruleMapper.put(ruleCount, importedProject.getElement(i));
             importedProject.getElement(i).accept((IModelVisitor) this);
             ruleCount++;
             count++;
         }
         
-        for (int j = 0; j < importedProject.getInternalConstraintCount(); j++) {
-            this.ruleMapper.put(new Integer(ruleCount), importedProject.getInternalConstraint(j));
-            importedProject.getInternalConstraint(j).accept((IModelVisitor) this); 
-            this.ruleCount++;
-            count++;
-        } 
         importedProjectMap.put(importedProjectName, count);
         variablesAssigned.removeAll(variablesAssigned);
         importedProjectName = "";

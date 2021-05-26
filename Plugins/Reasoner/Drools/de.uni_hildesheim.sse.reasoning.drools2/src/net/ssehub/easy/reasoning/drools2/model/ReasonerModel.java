@@ -428,16 +428,6 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
         return variables.get(name);
     }
     
-    @Override
-    public int getInternalConstraintCount() {
-        return constraints.getInternalConstraintCount();
-    }
-    
-    @Override
-    public ConstraintSyntaxTree getInternalConstraint(int index) {
-        return constraints.getInternalConstraint(index);
-    }
-    
     /**
      * Method to return all variables that are used constraints.
      * @return Set of {@link ReasonerVariable}.
@@ -445,7 +435,6 @@ public class ReasonerModel implements IConstraintContainer, Iterable<ReasonerVar
     public Set<ReasonerVariable> getVariablesUsedInConstraints() {
         return variablesInConstraints;
     } 
-    
     
     /**
      * Checks whether all variables has been assigned. <br />

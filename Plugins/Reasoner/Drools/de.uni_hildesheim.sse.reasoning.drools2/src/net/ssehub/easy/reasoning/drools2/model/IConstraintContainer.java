@@ -27,19 +27,6 @@ public interface IConstraintContainer {
     public ConstraintSyntaxTree getNormalConstraint(int index);
     
     /**
-     * Method to return the number of internal constraints.
-     * @return Number of constraints.
-     */
-    public int getInternalConstraintCount();
-    
-    /**
-     * Method to return a specific internal constraint.
-     * @param index Numeric index of the normal constraint.
-     * @return Normal constraint definition.
-     */
-    public ConstraintSyntaxTree getInternalConstraint(int index);
-    
-    /**
      * Getter for all constraints.
      * Returns first the normal constraints and afterwards the internal constraints.
      * @param index a 0 based index to specify which constraint shall be returned.
