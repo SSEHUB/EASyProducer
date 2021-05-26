@@ -32,13 +32,8 @@ import net.ssehub.easy.reasoning.drools2.model.variables.ReasonerVariable;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
-import net.ssehub.easy.varModel.cst.OCLFeatureCall;
-import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.management.VarModel;
-import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Project;
-import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
-import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -193,26 +188,6 @@ public class ReasonerModelTest extends AbstractTest<Project> {
         // Test normal constraints
         System.out.println("Normal constraint count: " + normalConstaintList.size());
         Assert.assertEquals("Number of normal constraints", 9, normalConstaintList.size());
-
-        //Internal Constraints
-        List<ConstraintSyntaxTree> internalConstaintList
-            = new ArrayList<ConstraintSyntaxTree>(rModel.getInternalConstraintCount());
-        for (int i = 0; i < rModel.getInternalConstraintCount(); i++) {
-            internalConstaintList.add(rModel.getInternalConstraint(i));
-        }
-        printConstraints(internalConstaintList);
-        
-        
-        // Test internal constraints
-        System.out.println("Internal constraint count: " + internalConstaintList.size());
-        Assert.assertEquals("Number of internal constraints", 3, internalConstaintList.size());
-        for (int i = 0; i < internalConstaintList.size(); i++) {            
-            OCLFeatureCall constraint = (OCLFeatureCall) internalConstaintList.get(i);
-            Variable variable = (Variable) constraint.getOperand();
-            AbstractVariable decl = variable.getVariable();
-            IDatatype type = decl.getType();
-            Assert.assertEquals(DerivedDatatype.class, type.getClass());
-        }
         
         // Test ReasonerDatatypes
         int nDatatypes = 0;
