@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Supplier;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
@@ -393,6 +394,18 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     private TypeRegistry typeRegistry;
     private Class<V> cls;
     private Set<IArtifact> noAutoStore = new HashSet<IArtifact>();
+    private Supplier<String> modelNameSupplier = new Supplier<String>() {
+        
+        @Override
+        public String get() {
+            String modelName = null;
+            if (null != currentContext && currentContext.getModel() != null && contexts.size() > 0) {
+                modelName = currentContext.getModel().getName();
+            }
+            return modelName;
+        }
+        
+    };
     
     /**
      * Creates a new runtime environment using the default type registry.
@@ -681,7 +694,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
      * @throws VilException in case of type incompatibilities
      */
     private Object checkType(V var, Object object) throws VilException {
-        return checkType(var.getName(), var.getType(), object, getTypeRegistry());
+        return checkType(var.getName(), var.getType(), object, getTypeRegistry(), modelNameSupplier);
     }
 
     /**
@@ -692,11 +705,13 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
      * @param type the type of the variable/field to assign <code>object</code> to
      * @param object the object to be assigned (may be <b>null</b>)
      * @param registry the type registry to use
+     * @param modelName optional model name supplier called in error cases, may be <b>null</b> for none, may 
+     *     return <b>null</b>
      * @return <code>object</code> or <b>null</b> if object is {@link NullValue}.
      * @throws VilException in case of type incompatibilities
      */
-    public static Object checkType(String name, TypeDescriptor<?> type, Object object, TypeRegistry registry) 
-        throws VilException {
+    public static Object checkType(String name, TypeDescriptor<?> type, Object object, TypeRegistry registry, 
+        Supplier<String> modelName) throws VilException {
         if (type instanceof IActualValueProvider) {
             object = ((IActualValueProvider) type).determineActualValue(object);
         } else {
@@ -754,13 +769,30 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                     }
                     oTypeName += " (" + typeName + ")";
                 }
-                String msg = "cannot assign value of type \"" + oTypeName + "\" to \"" + name
-                    + "\" of type \"" + type.getVilName() + "\"";
+                String msg = appendModelName("cannot assign value of type \"" + oTypeName + "\" to \"" + name
+                    + "\" of type \"" + type.getVilName() + "\"", modelName);
                 Bundle.getLogger(RuntimeEnvironment.class).debug(msg);
                 throw new VilException(msg, VilException.ID_RUNTIME_TYPE);
             }
         }
         return object;
+    }
+
+    /**
+     * Appends the model name from {@link modelName} supplier if feasible.
+     * 
+     * @param msg the message to append
+     * @param modelName the model name supplier, may be <b>null</b> or return <b>null</b> (ignored then)
+     * @return the message (with appended) model name 
+     */
+    private static String appendModelName(String msg, Supplier<String> modelName) {
+        if (null != modelName) {
+            String mName = modelName.get();
+            if (null != mName) {
+                msg += " called in '" + mName + "'";
+            }
+        }
+        return msg;
     }
 
     /**

@@ -631,7 +631,7 @@ public class VilTemplateProcessor implements IVilType {
             exec.release(false);
         } catch (VilException e) {
             unregisterTerminatable(terminator, exec);
-            
+
             // Create more specific exception
             StringBuffer errMsg = new StringBuffer(e.getMessage());
             errMsg.append(" in template \"");

@@ -126,7 +126,7 @@ public class CompoundInstance implements IInitializableValue, IStringValueProvid
     public void setSlotValue(String name, Object value) throws VilException {
         FieldDescriptor field = checkSlot(name);
         slotValues.put(name, RuntimeEnvironment.checkType(field.getName(), field.getType(), 
-            value, type.getTypeRegistry()));
+            value, type.getTypeRegistry(), null));
     }
 
     @Override
