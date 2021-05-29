@@ -186,7 +186,7 @@ public class CodedTests extends AbstractTest {
         prj.add(freeze);
         
         // debugging
-        //System.out.println(StringProvider.toIvmlString(prj));
+        //System.out.println(net.ssehub.easy.varModel.persistency.StringProvider.toIvmlString(prj));
         
         Configuration cfg = new Configuration(prj);
         IDecisionVariable myParamVar = cfg.getDecision(myParam);

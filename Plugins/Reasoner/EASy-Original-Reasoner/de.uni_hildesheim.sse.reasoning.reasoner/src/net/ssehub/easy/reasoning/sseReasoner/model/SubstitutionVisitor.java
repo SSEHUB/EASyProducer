@@ -21,6 +21,7 @@ import java.util.Map;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
 import net.ssehub.easy.varModel.cst.BasicCopyVisitor;
 import net.ssehub.easy.varModel.cst.Comment;
+import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Self;
@@ -46,6 +47,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     private ConstraintSyntaxTree selfEx;
     private AbstractVariable self;
     private boolean containsSelf;
+    private ConstraintSyntaxTree excludeFromMapping;
 
     /**
      * Creates a copy visitor without mapping.
@@ -101,6 +103,7 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
         globalMapping = null;
         selfEx = null;
         self = null;
+        excludeFromMapping = null;        
         clearVariableMapping();
     }
     
@@ -234,7 +237,12 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
-        ConstraintSyntaxTree result = map(variable);
+        ConstraintSyntaxTree result;
+        if (variable.getQualifier() != null) {
+            result = variable;
+        } else {
+            result = map(variable);
+        }
         if (null == result || result == variable) {
             // nothing happened, it might be a deep translation
             super.visitAnnotationVariable(variable);
@@ -256,13 +264,16 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
      */
     private ConstraintSyntaxTree map(Variable variable) {
         ConstraintSyntaxTree res = null;
-        if (null != mapping) {
-            res = mapping.get(variable.getVariable());
-        }
-        if (null == res) {
-            ConstraintSyntaxTree tmp = null == globalMapping ? null : globalMapping.getMapping(variable.getVariable());
-            if (null != tmp) {
-                res = inferDatatype(tmp);
+        if (variable != excludeFromMapping) {
+            if (null != mapping) {
+                res = mapping.get(variable.getVariable());
+            }
+            if (null == res) {
+                ConstraintSyntaxTree tmp = 
+                    null == globalMapping ? null : globalMapping.getMapping(variable.getVariable());
+                if (null != tmp) {
+                    res = inferDatatype(tmp);
+                }
             }
         }
         if (null == res) {
@@ -271,6 +282,21 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
         return res;
     }
 
+    /**
+     * Excludes the given expression from mapping, e.g., if the expression is an already complete accessor expression
+     * and a mapping would be based on a previously registered (incorrect) mapping.
+     * Comparison is done by reference.
+     * 
+     * @param cst the expression to exclude, may be <b>null</b> for no exclude
+     */
+    public void excludeFromMapping(ConstraintSyntaxTree cst) {
+        this.excludeFromMapping = cst;
+    }
+
+    @Override
+    public void visitCompoundAccess(CompoundAccess access) {
+        super.visitCompoundAccess(access);
+    }
 
     @Override
     public void visitComment(Comment comment) {

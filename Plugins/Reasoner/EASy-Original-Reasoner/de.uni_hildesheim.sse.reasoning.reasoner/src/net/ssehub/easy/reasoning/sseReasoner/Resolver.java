@@ -546,7 +546,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         if (null != variable) {
             for (int i = 0; i < variable.getAttributesCount(); i++) {
                 IDecisionVariable att = variable.getAttribute(i);
-                translateAnnotationDeclaration((Attribute) att.getDeclaration(), att, acc, isNested);
+                if (!contexts.isKnownAnnotationAssignment(att.getDeclaration().getName())) { // not documented
+                    translateAnnotationDeclaration((Attribute) att.getDeclaration(), att, acc, isNested);
+                }
             }
         } else {
             for (int i = 0; i < decl.getAttributesCount(); i++) {
@@ -599,7 +601,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, MODE_COMPOUND_REGISTER); 
             tcEntry = contexts.getInConstruction(true);
         }
-        // next if: implicit overriding of default values through AttributeAssignment - leave out her
+        // next if: implicit overriding of default values through AttributeAssignment - leave out here
         if (null != defaultValue && !(decl.isAttribute() && decl.getParent() instanceof AttributeAssignment)) {
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
@@ -625,7 +627,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                         acc = null != selfEx ? cAcc : new Variable(decl);
                     }
                     defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultValue = substituteVariables(defaultValue, selfEx, self);
+                    defaultValue = substituteVariables(defaultValue, selfEx, self, acc);
                     ConstraintList targetCons = defaultConstraints; 
                     if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
                         targetCons = deferredDefaultConstraints;
@@ -786,6 +788,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 // type cache not completely removed on condition for consistency
                 ContextStack.TranslateMode tMode = contexts.getMappingMode(type);
                 contexts.pushContext(decl, null == variable);
+                contexts.recordAnnotationAssignments(type);
                 if (tMode != ContextStack.TranslateMode.NOTHING) {
                     if ((!decl.isAttribute() && tMode != ContextStack.TranslateMode.TRANSFER)) {
                         contexts.registerForTypeCache(type, decl);
@@ -1006,7 +1009,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         @Override
         public ConstraintSyntaxTree process(ConstraintSyntaxTree cst, ExpressionType type, String slot, 
             IModelElement parent) {
-            cst = substituteVariables(cst, selfEx, self);
+            cst = substituteVariables(cst, selfEx, self, null);
             try { // compoundConstraints
                 Constraint constraint = new AttachedConstraint(cst, contexts.getCurrentType(), parent);
                 addConstraint(otherConstraints, constraint, true, variable, 
@@ -1066,7 +1069,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             if (evalBlock.getEvaluable(i) instanceof Constraint) {
                 Constraint evalConstraint = (Constraint) evalBlock.getEvaluable(i);
                 ConstraintSyntaxTree evalCst = evalConstraint.getConsSyntax();
-                ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self);
+                ConstraintSyntaxTree cst = substituteVariables(evalCst, selfEx, self, null);
                 try {
                     Constraint constraint = new Constraint(cst, project);
                     addConstraint(otherConstraints, constraint, true, null, variable);
@@ -1171,19 +1174,22 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         if (null != attrib) {
             ConstraintSyntaxTree cst;
             //handle annotations in compounds
+            ConstraintSyntaxTree origCompound = compound;
             if (null == compound) {
                 compound = contexts.getMapping(element);
             }
             if (compound == null) {
                 cst = new AttributeVariable(new Variable(element), attrib);
-            } else {
+            } else if (null != origCompound) { // origCompound is the compound accessor, add also element
+                cst = new AttributeVariable(new CompoundAccess(compound, element.getName()), attrib); // not documented
+            } else { // compound now directly maps to element
                 cst = new AttributeVariable(compound, attrib);
             }
             if (TypeCache.ENABLED) {
                 contexts.notifyCashMapping();
             }
             cst = new OCLFeatureCall(cst, OclKeyWords.ASSIGNMENT, assignment.getExpression());
-            cst = substituteVariables(cst, compound, null);
+            cst = substituteVariables(cst, compound, null, null);
             try {
                 addConstraint(otherConstraints, new AnnotationAssignmentConstraint(cst, project), false, null, null); 
             } catch (CSTSemanticException e) {
@@ -1295,7 +1301,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     Constraint createConstraintVariableConstraint(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
         AbstractVariable self, IModelElement parent, IDecisionVariable variable) {
         boolean cvo = contexts.constraintVarOnly(true);
-        cst = substituteVariables(cst, selfEx, self);
+        cst = substituteVariables(cst, selfEx, self, null);
         Constraint result = createConstraintVariableConstraint(cst, self, 
             !(cst instanceof ConstantValue), parent, variable);
         contexts.setConstraintVarOnly(cvo);
@@ -1402,11 +1408,15 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
      *     <code>selfEx</code> shall never both be specified/not <b>null</b>).
      * @param self an variable declaration representing <i>self</i> (ignored if <b>null</b>).
+     * @param acc optional accessor expression that shall be excluded from mapping (ignored if <b>null</b>)
      * @return Transformed constraint.
      */
     ConstraintSyntaxTree substituteVariables(ConstraintSyntaxTree cst, ConstraintSyntaxTree selfEx, 
-        AbstractVariable self) {
+        AbstractVariable self, ConstraintSyntaxTree acc) { // acc is not documented
         substVisitor.setMappings(contexts);
+        if (null != acc) {
+            substVisitor.excludeFromMapping(acc);
+        }
         if (selfEx != null) {
             substVisitor.setSelf(selfEx);            
         }

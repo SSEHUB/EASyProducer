@@ -75,7 +75,13 @@ public class Engine {
         this.resolver.setIncremental(isRuntimeMode);
         this.result = new ReasoningResult();
         if (!isRuntimeMode) {
-            cfg.unfreeze(AssignmentState.DERIVED); // TODO: is this really needed? unclear why?
+            // in runtime mode, we keep frozen variables frozen and operate only on unfrozen.
+            // else, the configuration initialization freezes whatever it can freeze although constraints
+            // may not fully be evaluated. We have to totally unfreeze such a (reused/copied) configuration
+            // here to be able to do our job. We unfreeze to undefined so that assignment states are set
+            // correctly starting with default values (just storing the state before freezing does not work
+            // as then easily erroneous reassignments may occur.            
+            cfg.unfreeze(AssignmentState.ASSIGNED); // TODO UNDEFINED
         }
     } 
     

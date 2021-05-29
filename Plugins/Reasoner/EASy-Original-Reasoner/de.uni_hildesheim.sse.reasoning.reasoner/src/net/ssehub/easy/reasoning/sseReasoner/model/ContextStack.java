@@ -30,6 +30,7 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.AbstractVariable;
+import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -162,6 +163,8 @@ public final class ContextStack {
          */
         private AbstractVariable self;
         
+        private Set<String> annotationAssignments;
+        
         /**
          * Clears this context.
          */
@@ -178,6 +181,7 @@ public final class ContextStack {
             inConstruction = null;
             cashMapping = false;
             fallback = null;
+            annotationAssignments = null;
         }
         
     }
@@ -227,6 +231,46 @@ public final class ContextStack {
      */
     public void pushContext(AbstractVariable decl, boolean recordProcessedTypes) {
         pushContext(decl, null, null, false);
+    }
+    
+    /**
+     * Records annotation assignments for the given compound {@code type} for this context.
+     * 
+     * @param type the compound type
+     */
+    public void recordAnnotationAssignments(Compound type) {
+        Compound cType = (Compound) type;
+        if (cType.getAssignmentCount() > 0) {
+            currentContext.annotationAssignments = new HashSet<String>();
+            for (int a = 0; a < cType.getAssignmentCount(); a++) {
+                collectAnnotationAssignments(cType.getAssignment(a));
+            }
+        }
+    }
+    
+    /**
+     * Collects annotation assignment names in this context.
+     * 
+     * @param assng the assignment to collect for
+     */
+    void collectAnnotationAssignments(AttributeAssignment assng) {
+        for (int a = 0; a < assng.getAssignmentDataCount(); a++) {
+            currentContext.annotationAssignments.add(assng.getAssignmentData(a).getName());
+        }
+        for (int a = 0; a < assng.getAssignmentCount(); a++) {
+            collectAnnotationAssignments(assng.getAssignment(a));
+        }
+    }
+    
+    /**
+     * Returns whether {@code name} is a known annotation assignment (annotation variable) in this context.
+     * 
+     * @param name the variable name
+     * @return {@code true} if the annotation variable is known, {@code false} else
+     */
+    public boolean isKnownAnnotationAssignment(String name) {
+        Set<String> assng = currentContext.annotationAssignments;
+        return null != assng ? assng.contains(name) : false; 
     }
 
     /**

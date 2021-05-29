@@ -204,7 +204,7 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
     private void checkForConstraint(IDatatype type, ConstraintSyntaxTree cst) {
         if (TypeQueries.isConstraint(type)) {
             if (substituteVars) {
-                cst = resolver.substituteVariables(cst, null, null);
+                cst = resolver.substituteVariables(cst, null, null, null);
             }
             resolver.createConstraintVariableConstraint(cst, null, false, parent, variable);
         }

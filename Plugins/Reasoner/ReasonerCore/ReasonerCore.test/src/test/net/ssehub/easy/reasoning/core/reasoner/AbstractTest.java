@@ -475,9 +475,12 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         // Test whether reasoning detected correct result  
         int failedConstraints = 0;
         for (int i = 0; i < result.getMessageCount(); i++) {
-            if (result.getMessage(i).getStatus() == Status.ERROR) {
-                failedConstraints = failedConstraints + result.getMessage(i).getConflicts().size();
+            net.ssehub.easy.reasoning.core.reasoner.Message msg = result.getMessage(i);
+            if (msg.getStatus() == Status.ERROR) {
+                failedConstraints = failedConstraints + msg.getConflicts().size();
             }
+            System.out.println(msg.getStatus() + " " + msg.getDescription());
+            System.out.println(" " + msg.getConflictComments());
         }
         Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
 

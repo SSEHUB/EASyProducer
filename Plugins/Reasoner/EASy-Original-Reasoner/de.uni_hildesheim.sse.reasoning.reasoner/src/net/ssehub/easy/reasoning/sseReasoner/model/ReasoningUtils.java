@@ -107,6 +107,7 @@ public class ReasoningUtils {
         try {
             result = cst.inferDatatype();
         } catch (CSTSemanticException e) {
+            LOGGER.error(StringProvider.toIvmlString(cst));
             LOGGER.exception(e); // should not occur, ok to log
         }
         return result;
