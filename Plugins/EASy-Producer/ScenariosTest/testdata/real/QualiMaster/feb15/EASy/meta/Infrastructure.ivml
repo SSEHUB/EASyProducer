@@ -18,7 +18,7 @@ project Infrastructure {
     
     // function calculating the (different) configured worker ports
     def Integer workerMachinesPortsCount() =
-      machines->select(m|m.role==MachineRole.Worker)->apply(Machine machine; setOf(Integer) usedPorts = {} | usedPorts = usedPorts.union(machine.ports)).size();
+      machines->select(m|m.role==MachineRole.Worker)->apply(refTo(Machine) machine; Integer usedPorts = 0 | usedPorts = usedPorts + machine.ports.size());
 	
 	// Constraint for checking if the number of workers for the active pipelines is less then reserved ports for machines	
 	Constraint workerportCheck = activePipelinesNumWorkers() <= workerMachinesPortsCount();	
