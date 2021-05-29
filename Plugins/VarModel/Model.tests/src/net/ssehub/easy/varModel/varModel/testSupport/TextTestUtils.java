@@ -2,6 +2,7 @@ package net.ssehub.easy.varModel.varModel.testSupport;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -42,14 +43,14 @@ public class TextTestUtils {
      */
     public static void assertFileEquality(File producedFile, File expectedFile) throws IOException {
         Assert.assertTrue(producedFile + " does not exist (produced)", producedFile.exists());
-        String produced = FileUtils.readFileToString(producedFile);
+        String produced = FileUtils.readFileToString(producedFile, Charset.defaultCharset()); // NIO fails in scenario
         produced = normalizeText(produced);
         boolean isXml = producedFile.getName().endsWith(".xml");
         if (isXml) {
             produced = normalizeXmlEncoding(produced);
         }
         Assert.assertTrue(expectedFile + " does not exist (expected)", expectedFile.exists());
-        String expected = FileUtils.readFileToString(expectedFile);
+        String expected = FileUtils.readFileToString(expectedFile, Charset.defaultCharset()); // NIO fails in scenario
         expected = normalizeText(expected);
         if (isXml) {
             expected = normalizeXmlEncoding(expected);
