@@ -358,6 +358,21 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
         public void notifyCreated() {
         }
 
+        @Override
+        public boolean notifyWasAssigned(Value value) {
+            return false; // not relevant here, disabled see #enableWasAssignedForIsDefined
+        }
+
+        @Override
+        public boolean wasAssigned() {
+            return true;
+        }
+
+        @Override
+        public boolean enableWasAssignedForIsDefined() {
+            return false;
+        }    
+
     }
     
     /**
