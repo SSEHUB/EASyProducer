@@ -333,6 +333,7 @@ public class CompoundVariable extends StructuredVariable {
                         if (nestedState != AssignmentState.USER_ASSIGNED || state == AssignmentState.USER_ASSIGNED) {
                             nestedVar.setValue(nestedValue, state);
                         }
+                        nestedVar.notifyWasAssigned(nestedValue);
                     }
                 }
             }
@@ -444,4 +445,25 @@ public class CompoundVariable extends StructuredVariable {
         return created;
     }
     
+    @Override
+    public boolean enableWasAssignedForIsDefined() {
+        return true;
+    }
+    
+    @Override    
+    public boolean notifyWasAssigned(Value value) {
+        boolean old = wasAssigned();
+        super.notifyWasAssigned(value);
+        if (value instanceof CompoundValue) {
+            CompoundValue cValue = (CompoundValue) value;
+            for (String n : cValue.getSlotNames()) {
+                IDecisionVariable var = getNestedElement(n);
+                if (null != var) {
+                    var.notifyWasAssigned(cValue.getNestedValue(n));
+                }
+            }
+        }
+        return old;
+    }
+
 }

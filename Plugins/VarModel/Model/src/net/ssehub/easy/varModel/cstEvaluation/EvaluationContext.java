@@ -25,6 +25,7 @@ import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.values.ReferenceValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -79,8 +80,11 @@ public abstract class EvaluationContext implements IConfiguration {
      * 
      * @param variable the changed variable
      * @param oldValue the value of <code>variable</code> before the change (may be <b>null</b>)
+     * @param oldState the old state of <code>variable</code> before the change
+     * @param kind the change kind
      */
-    public abstract void notifyChangeListener(IDecisionVariable variable, Value oldValue);
+    public abstract void notifyChangeListener(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, 
+        ChangeKind kind);
 
     /**
      * Adds an evaluation message.

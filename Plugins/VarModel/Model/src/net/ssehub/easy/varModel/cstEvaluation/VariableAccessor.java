@@ -23,6 +23,7 @@ import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -132,15 +133,16 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                 context.addErrorMessage("variable does not exist (attribute access failure)?", Message.CODE_RESOLUTION);
             } else {
                 Value oldValue = variable.getValue();
+                IAssignmentState oldState = variable.getState();
                 if (!Value.equalsPartially(oldValue, value)
-                        && variable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
+                        && oldState != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
                     IAssignmentState targetState = isLocal() ? AssignmentState.ASSIGNED 
                         : context.getTargetState(variable);
                     if (null != targetState) {
                         try {
                             dereferenceIfNeeded(variable, value).setValue(value, targetState, asAssignment);
                             successful = true;
-                            notifyVariableChange(oldValue);
+                            notifyVariableChange(oldValue, oldState, ChangeKind.FULL);
                         } catch (ConfigurationException e) {
                             context.addErrorMessage(e);
                         }
@@ -151,6 +153,12 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
                 } else {
                     successful = true;
                     variable.notifyCreated();
+                }
+                // if the variable was changed, was is false. If not, pretend that it was changed and cause a change 
+                // notification 
+                boolean was = variable.notifyWasAssigned(value);
+                if (!was && variable.enableWasAssignedForIsDefined()) { 
+                    notifyVariableChange(oldValue, oldState, ChangeKind.VARIABLE_ONLY);
                 }
             }
         }

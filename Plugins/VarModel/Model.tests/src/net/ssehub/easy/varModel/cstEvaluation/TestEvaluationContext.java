@@ -19,6 +19,7 @@ import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -61,7 +62,8 @@ public class TestEvaluationContext extends EvaluationContext {
     }
 
     @Override
-    public void notifyChangeListener(IDecisionVariable variable, Value value) {
+    public void notifyChangeListener(IDecisionVariable variable, Value value, IAssignmentState oldState, 
+        ChangeKind kind) {
     }
 
     @Override

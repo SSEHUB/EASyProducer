@@ -4,7 +4,9 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.varModel.Bundle;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.datatypes.Container;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
@@ -78,14 +80,17 @@ class IndexAccessor extends AbstractDecisionVariableEvaluationAccessor {
             if (null != val) {
                 Value oldValue = val.getElement(index);
                 if (!Value.equals(oldValue, value)) {
+                    IAssignmentState oldState = variable.getState();
                     try {
                         val.setValue(index, value);
-                        getContext().notifyChangeListener(getVariable().getNestedElement(index), oldValue);
+                        getContext().notifyChangeListener(variable.getNestedElement(index), oldValue, 
+                            oldState, ChangeKind.FULL);
                         done = true;
                     } catch (ValueDoesNotMatchTypeException e) {
                         EASyLoggerFactory.INSTANCE.getLogger(IndexAccessor.class, Bundle.ID).exception(e);
                     }
                 }
+                variable.notifyWasAssigned(val);
             }
         }
         return done;

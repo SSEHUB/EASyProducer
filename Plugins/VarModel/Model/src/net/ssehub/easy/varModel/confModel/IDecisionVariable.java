@@ -177,5 +177,32 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      * Notifies this variable that it was created.
      */
     public void notifyCreated();
+    
+    // this is a hack for getting isDefined running on compounds
+
+    /**
+     * Shall we take the local {@link #wasAssigned()} over {@link #getState()} in the implementation of IVML 
+     * "isDefined".
+     *  
+     * @return {@code true} take {@link #wasAssigned()}, {@code false} for {@link #getState()}.
+     */
+    public boolean enableWasAssignedForIsDefined();
+    
+    /**
+     * Inform the variable independent of its own tracking that we believe that a value was assigned (although we
+     * did not due to equal values/performance reasons), in particular after resetting the track through 
+     * {@link CommandAssignmentState#compareTo(CommandAssignmentState)}.
+     * 
+     * @param value the new value
+     * @return {@code true} whether this variable was defined before, {@code false} else
+     */
+    public boolean notifyWasAssigned(Value value);
+
+    /**
+     * Returns whether a value was assigned (correlated, but independent of {@link #getState()}).
+     * 
+     * @return {@code true} if a value was assigned, {@code false} else
+     */
+    public boolean wasAssigned();
 
 }

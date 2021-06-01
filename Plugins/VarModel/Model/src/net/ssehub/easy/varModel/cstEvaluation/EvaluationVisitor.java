@@ -53,6 +53,7 @@ import net.ssehub.easy.varModel.cst.Parenthesis;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.UnresolvedExpression;
 import net.ssehub.easy.varModel.cst.Variable;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
@@ -189,9 +190,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         }
 
         @Override
-        public void notifyChangeListener(IDecisionVariable variable, Value value) {
+        public void notifyChangeListener(IDecisionVariable variable, Value value, IAssignmentState oldState, 
+            ChangeKind kind) {
             if (null != listener && null != variable) {
-                listener.notifyChanged(variable, value);
+                listener.notifyChanged(variable, value, oldState, kind);
             }
         }
 

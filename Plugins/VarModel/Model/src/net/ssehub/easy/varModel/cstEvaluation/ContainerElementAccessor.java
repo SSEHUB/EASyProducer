@@ -23,6 +23,7 @@ import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -92,14 +93,15 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
                 context.addErrorMessage("assignable value is not defined", Message.CODE_RESOLUTION);
             } else {
                 Value oldValue = elementVariable.getValue();
+                IAssignmentState oldState = elementVariable.getState();
                 if (!Value.equalsPartially(oldValue, value)
-                        && elementVariable.getState() != AssignmentState.USER_ASSIGNED) { //don't reassign/send message
+                        && oldState != AssignmentState.USER_ASSIGNED) { //don't reassign/send message
                     IAssignmentState targetState = context.getTargetState(elementVariable);
                     if (null != targetState) {
                         try {
                             elementVariable.setValue(value, targetState, asAssignment);
                             successful = true;
-                            notifyVariableChange(oldValue);
+                            notifyVariableChange(oldValue, oldState, ChangeKind.FULL);
                         } catch (ConfigurationException e) {
                             context.addErrorMessage(e);
                         }
@@ -110,6 +112,7 @@ class ContainerElementAccessor extends AbstractDecisionVariableEvaluationAccesso
                 } else {
                     successful = true;
                 }
+                elementVariable.notifyWasAssigned(value);
             }
         }
         return successful;

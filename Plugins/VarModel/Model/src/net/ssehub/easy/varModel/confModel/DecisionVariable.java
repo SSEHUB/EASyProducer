@@ -54,6 +54,7 @@ abstract class DecisionVariable implements IDecisionVariable {
     private IDecisionVariable[] attributes;
     private boolean isVisible;
     private boolean isAttribute;
+    private boolean wasAssigned;
     
     /**
      * Creates a new decision variable representing a specific decision.
@@ -207,6 +208,7 @@ abstract class DecisionVariable implements IDecisionVariable {
 
     @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
+        wasAssigned = true;        
         configProvider.setValue(value, state);
     }
     
@@ -242,6 +244,10 @@ abstract class DecisionVariable implements IDecisionVariable {
 
     @Override
     public void unfreeze(IAssignmentState state) {
+        if (CommandAssignmentState.ASSIGNED_CLEAR == state) {
+            wasAssigned = false;
+            state = AssignmentState.ASSIGNED;
+        }
         configProvider.unfreeze(state);
         for (int a = 0; a < getAttributesCount(); a++) {
             getAttribute(a).unfreeze(state);
@@ -413,5 +419,25 @@ abstract class DecisionVariable implements IDecisionVariable {
     @Override
     public void notifyCreated() {
     }
+
+    // not really nice stuff, but the getState is too inconsistent/coarse grained to correctly answer isDefined for 
+    // compounds
     
+    @Override    
+    public boolean notifyWasAssigned(Value value) {
+        boolean old = wasAssigned;
+        wasAssigned = true;
+        return old;
+    }
+
+    @Override
+    public boolean wasAssigned() {
+        return wasAssigned;
+    }
+
+    @Override
+    public boolean enableWasAssignedForIsDefined() {
+        return false; // disable in general, used by IVML isDefined operation
+    }
+
 }

@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.confModel.IFreezeSelector;
 import net.ssehub.easy.varModel.confModel.paths.IResolutionPathElement;
 import net.ssehub.easy.varModel.confModel.paths.StartPathElement;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
@@ -95,10 +96,12 @@ public class LocalDecisionVariable implements IDecisionVariable {
      * Notifies the change listener if defined.
      * 
      * @param oldValue the old value before the change, may be <b>null</b>
+     * @param oldState the old state of <code>variable</code> before the change
+     * @param kind the change kind
      */
-    private void notifyValueChanged(Value oldValue) {
+    private void notifyValueChanged(Value oldValue, IAssignmentState oldState, ChangeKind kind) {
         if (null != listener) {
-            listener.notifyChanged(this, oldValue);
+            listener.notifyChanged(this, oldValue, oldState, kind);
         }
     }
 
@@ -106,6 +109,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
     public void setValue(Value value, IAssignmentState state, boolean asAssignment) throws ConfigurationException {
         IValueParent vParent = asAssignment ? obtainValueParent(value) : null;
         Value oldValue = this.value;
+        IAssignmentState oldState = this.state;
         this.value = value;
         this.state = state;
         // we try to set a slot value on a compound, "call-by-ref"
@@ -118,24 +122,26 @@ public class LocalDecisionVariable implements IDecisionVariable {
                 }
             }
         }
-        notifyValueChanged(oldValue);
+        notifyValueChanged(oldValue, oldState, ChangeKind.FULL);
     }
 
     @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
         Value oldValue = this.value;
+        IAssignmentState oldState = this.state;
         this.value = value;
         this.state = state;
-        notifyValueChanged(oldValue);
+        notifyValueChanged(oldValue, oldState, ChangeKind.FULL);
     }
 
     @Override
     public void setValue(Value value, IAssignmentState state, IConfigurationElement nested)
         throws ConfigurationException {
+        IAssignmentState oldState = this.state;
         Value oldValue = this.value;
         this.value = value;
         this.state = state;
-        notifyValueChanged(oldValue);
+        notifyValueChanged(oldValue, oldState, ChangeKind.FULL);
     }
     
     /**
@@ -389,6 +395,21 @@ public class LocalDecisionVariable implements IDecisionVariable {
 
     @Override
     public void notifyCreated() {
+    }
+    
+    @Override
+    public boolean notifyWasAssigned(Value value) {
+        return false; // not relevant here, disabled see #enableWasAssignedForIsDefined
+    }
+
+    @Override
+    public boolean wasAssigned() {
+        return true;
+    }
+
+    @Override
+    public boolean enableWasAssignedForIsDefined() {
+        return false;
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -37,9 +38,9 @@ abstract class ValueChangeListener implements IValueChangeListener {
     }
 
     @Override
-    public void notifyChanged(IDecisionVariable variable, Value oldValue) {
+    public void notifyChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, ChangeKind kind) {
         wasCalled = true;
-        valueChanged(variable, oldValue);
+        valueChanged(variable, oldValue, oldState, kind);
     }
     
     /**
@@ -47,8 +48,10 @@ abstract class ValueChangeListener implements IValueChangeListener {
      * 
      * @param variable the modified variable
      * @param oldValue the old value of the variable before the change
+     * @param oldState the old state of <code>variable</code> before the change
+     * @param kind the change kind
      */
-    abstract void valueChanged(IDecisionVariable variable, Value oldValue);
+    abstract void valueChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, ChangeKind kind);
 
     @Override
     public void notifyUnresolved(IDecisionVariable variable) {

@@ -159,7 +159,7 @@ public class EvaluationVisitorTest {
         ValueChangeListener listener = new ValueChangeListener() {
             
             @Override
-            void valueChanged(IDecisionVariable variable, Value oldValue) {
+            void valueChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, ChangeKind kind) {
                 Assert.assertNotNull(var.getValue());
                 Assert.assertEquals(oValue, var.getValue().getValue());
                 Assert.assertSame(var, variable);
@@ -361,7 +361,7 @@ public class EvaluationVisitorTest {
         ValueChangeListener listener = new ValueChangeListener() {
             
             @Override
-            void valueChanged(IDecisionVariable variable, Value oldValue) {
+            void valueChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, ChangeKind kind) {
                 IAssignmentState state = variable.getState();
                 Value val = variable.getValue();
                 

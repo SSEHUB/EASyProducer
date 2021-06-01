@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.values.Value;
 
@@ -26,12 +27,34 @@ import net.ssehub.easy.varModel.model.values.Value;
 public interface IValueChangeListener {
     
     /**
+     * Indicates the kind of the change.
+     * 
+     * @author Holger Eichelberger
+     */
+    public enum ChangeKind {
+        
+        /**
+         * The default mode, the change affects the variable, its nested elements, its parents and its context 
+         * (regarding constraints).
+         */
+        FULL,
+        
+        /**
+         * The change focuses on the variable itself, so constraint context selection shall be focused on that.
+         */
+        VARIABLE_ONLY;
+        
+    }
+    
+    /**
      * Called if the value of a variable has been modified.
      * 
      * @param variable the modified variable
      * @param oldValue the value of <code>variable</code> before the change (may be <b>null</b>)
+     * @param oldState the old state of the variable before the change
+     * @param kind the change kind
      */
-    public void notifyChanged(IDecisionVariable variable, Value oldValue);
+    public void notifyChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, ChangeKind kind);
     
     /**
      * Called if an assignment to the given <code>variable</code> failed as the defining

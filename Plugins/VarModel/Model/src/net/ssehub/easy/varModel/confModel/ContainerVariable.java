@@ -407,7 +407,22 @@ public abstract class ContainerVariable extends StructuredVariable {
                 changed &= nestedElements.get(i).removeDerivedValues();
             }
         }
-        
         return changed;
     }
+    
+    // enableWasAssignedForIsDefined() does not completely work for now here
+
+    @Override    
+    public boolean notifyWasAssigned(Value value) {
+        boolean old = wasAssigned();
+        super.notifyWasAssigned(value);
+        if (value instanceof ContainerValue) {
+            ContainerValue cValue = (ContainerValue) value;
+            for (int n = 0; n < Math.min(getNestedElementsCount(), cValue.getElementSize()); n++) {
+                getNestedElement(n).notifyWasAssigned(cValue.getElement(n));
+            }
+        }
+        return old;
+    }
+
 }

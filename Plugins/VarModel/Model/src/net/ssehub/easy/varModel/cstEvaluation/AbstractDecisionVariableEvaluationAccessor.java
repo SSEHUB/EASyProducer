@@ -15,7 +15,9 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -59,9 +61,11 @@ abstract class AbstractDecisionVariableEvaluationAccessor extends EvaluationAcce
      * Notifies the underlying variable about a change.
      * 
      * @param oldValue the value before the change (may be <b>null</b>)
+     * @param oldState the old state of <code>variable</code> before the change
+     * @param kind the change kind
      */
-    protected void notifyVariableChange(Value oldValue) {
-        getContext().notifyChangeListener(getVariable(), oldValue);
+    protected void notifyVariableChange(Value oldValue, IAssignmentState oldState, ChangeKind kind) {
+        getContext().notifyChangeListener(getVariable(), oldValue, oldState, kind);
     }
 
     @Override

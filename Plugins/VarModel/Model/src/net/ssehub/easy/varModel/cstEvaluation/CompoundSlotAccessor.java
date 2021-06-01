@@ -24,6 +24,7 @@ import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
+import net.ssehub.easy.varModel.cstEvaluation.IValueChangeListener.ChangeKind;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -147,15 +148,16 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
     private final boolean assignValue(Value value, boolean asAssignment) {
         boolean successful = false;
         Value oldValue = slotVariable.getValue();
+        IAssignmentState oldState = slotVariable.getState();
         if (!Value.equalsPartially(oldValue, value) 
-            && slotVariable.getState() != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
+            && oldState != AssignmentState.USER_ASSIGNED) { // don't reassign / send message
             EvaluationContext context = getContext();
             IAssignmentState targetState = context.getTargetState(slotVariable);
             if (null != targetState) {
                 try {
                     dereferenceIfNeeded(slotVariable, value).setValue(value, targetState, asAssignment);
                     successful = true;
-                    notifyVariableChange(oldValue);
+                    notifyVariableChange(oldValue, oldState, ChangeKind.FULL);
                 } catch (ConfigurationException e) {
                     context.addErrorMessage(e);
                 }

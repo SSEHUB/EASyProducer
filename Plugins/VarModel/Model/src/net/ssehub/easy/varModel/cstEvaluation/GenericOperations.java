@@ -118,9 +118,15 @@ public class GenericOperations {
                 eval = false;
                 context = null; // replaced by caller
             } else {
-                Value val = operand.getValue();
-                eval = !(null == val || NullValue.INSTANCE == val);
-                context = operand.getContext();
+                IDecisionVariable var = operand.getVariable();                
+                if (var != null && var.enableWasAssignedForIsDefined()) { // the isDefined workaround/hack for compounds
+                    eval = operand.getVariable().wasAssigned();
+                    context = operand.getContext();
+                } else {
+                    Value val = operand.getValue();
+                    eval = !(null == val || NullValue.INSTANCE == val);
+                    context = operand.getContext();
+                }
             }
             BooleanValue result = BooleanValue.toBooleanValue(eval);
             return ConstantAccessor.POOL.getInstance().bind(result, true, context);
