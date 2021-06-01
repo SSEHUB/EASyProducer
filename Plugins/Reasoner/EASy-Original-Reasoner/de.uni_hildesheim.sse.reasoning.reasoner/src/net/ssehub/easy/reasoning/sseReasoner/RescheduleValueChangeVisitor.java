@@ -19,6 +19,7 @@ import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -133,7 +134,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
     }
 
     @Override
-    public void notifyChanged(IDecisionVariable variable, Value oldValue) {
+    public void notifyChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, ChangeKind kind) {
         AbstractVariable decl = variable.getDeclaration();
         if (!variable.isLocal()) {
             resolver.notifyRescheduling(true);
@@ -143,15 +144,19 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
             }
             resolver.addAssignedVariableToScope(variable);
             Value newValue = variable.getValue();
-            if (!Value.equals(newValue, oldValue)) {
-                rescheduleValueChange(variable, variable, oldValue, true);
-                if (isValueTypeChange(variable, newValue, oldValue)) {
-                    resolver.translateValueTypeChange(variable, newValue, oldValue);
+            if (ChangeKind.VARIABLE_ONLY == kind) {
+                rescheduleConstraintsForChilds(variable, false);
+            } else {
+                if (!Value.equals(newValue, oldValue)) {
+                    rescheduleValueChange(variable, variable, oldValue, true);
+                    if (isValueTypeChange(variable, newValue, oldValue)) {
+                        resolver.translateValueTypeChange(variable, newValue, oldValue);
+                    }
                 }
-            }
-            rescheduleConstraintsForChilds(variable);
-            // All constraints for the parent (as this was also changed)
-            rescheduleConstraintsForParent(variable);
+                rescheduleConstraintsForChilds(variable, true);
+                // All constraints for the parent (as this was also changed)
+                rescheduleConstraintsForParent(variable);
+            }            
             resolver.notifyRescheduling(false);
         } else if (resolver.contextContainsMapping(decl)) {
             IDecisionVariable var = ((LocalDecisionVariable) variable).getVariable();
@@ -193,8 +198,7 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
         IConfigurationElement parent = variable.getParent();
         if (parent instanceof IDecisionVariable) {
             IDecisionVariable pVar = (IDecisionVariable) parent;
-            AbstractVariable declaration = pVar.getDeclaration();
-            resolver.reschedule(declaration);
+            resolver.reschedule(pVar.getDeclaration());
             rescheduleConstraintsForParent(pVar);
         }
     }
@@ -203,13 +207,17 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
      * Determines the constraints needed for <code>variable</code> and its (transitive) child slots.
      * 
      * @param variable the variable to analyze
+     * @param decl reschedule on the declaration of {@code variable} or on {@code variable} itself
      */
-    private void rescheduleConstraintsForChilds(IDecisionVariable variable) {
-        AbstractVariable declaration = variable.getDeclaration();
-        resolver.reschedule(declaration);
+    private void rescheduleConstraintsForChilds(IDecisionVariable variable, boolean decl) {
+        if (decl) {
+            resolver.reschedule(variable.getDeclaration());
+        } else {
+            resolver.reschedule(variable);
+        }
         // All constraints for childs (as they may also changed)
         for (int j = 0, nChilds = variable.getNestedElementsCount(); j < nChilds; j++) {
-            rescheduleConstraintsForChilds(variable.getNestedElement(j));
+            rescheduleConstraintsForChilds(variable.getNestedElement(j), decl);
         }
     }
 

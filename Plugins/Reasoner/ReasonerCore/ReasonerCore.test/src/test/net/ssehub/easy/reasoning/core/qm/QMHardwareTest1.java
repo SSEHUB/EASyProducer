@@ -41,7 +41,7 @@ public class QMHardwareTest1 extends AbstractQualiMasterTest {
      */
     @Test    
     public void coreTest() {
-        reasoningTest(2);
+        reasoningTest(0);
     } 
     
 }

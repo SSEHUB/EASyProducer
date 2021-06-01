@@ -125,7 +125,7 @@ public class CollectionConstraintsTests extends AbstractTest {
      */
     @Test
     public void containerAnnotationTest() {
-        reasoningTest("ContainerAnnotationTest.ivml", 10);
+        reasoningTest("ContainerAnnotationTest.ivml", 9);
     } 
 
     /**

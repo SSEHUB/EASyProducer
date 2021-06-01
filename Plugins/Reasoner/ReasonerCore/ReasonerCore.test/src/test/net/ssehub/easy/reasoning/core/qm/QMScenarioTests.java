@@ -42,7 +42,7 @@ public class QMScenarioTests extends AbstractTest {
      */
     @Test    
     public void qmHardwareTest() {
-        reasoningTest("QMHardwareTest.ivml", 2);
+        reasoningTest("QMHardwareTest.ivml", 1);
     }
     
     /**

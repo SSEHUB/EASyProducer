@@ -196,6 +196,22 @@ public class VariablesMap {
         constraints.add(constraint);
     }
     
+    // TODO can we somehow integrate both sides, e.g., register also the abstractvariable via the declaration of 
+    // a decision variable?
+    
+    /**
+     * Unregisters a constraint from a decision variable.
+     * 
+     * @param variable the variable
+     * @param constraint the constraint
+     */
+    public void unregisterConstraint(IDecisionVariable variable, Constraint constraint) {
+        List<Constraint> constraints = getConstraintsForVariable(variable);
+        if (null != constraints) {
+            constraints.remove(constraint);
+        }
+    }
+    
     /**
      * Returns the constraints registered for <code>variable</code>.
      * 

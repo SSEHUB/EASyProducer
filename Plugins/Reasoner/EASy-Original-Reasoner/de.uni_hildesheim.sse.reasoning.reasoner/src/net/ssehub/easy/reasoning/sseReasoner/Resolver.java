@@ -1,6 +1,7 @@
 package net.ssehub.easy.reasoning.sseReasoner;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -273,7 +274,26 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * @param declaration the variable declaration to reschedule
      */
     void reschedule(AbstractVariable declaration) {
-        Set<Constraint> constraints = variablesMap.getRelevantConstraints(declaration);
+        reschedule(variablesMap.getRelevantConstraints(declaration));
+    }
+
+    /**
+     * Tries rescheduling the given constraints. Does not add a constraint to the constraint base if already
+     * scheduled.
+     * 
+     * @param var the variable to reschedule
+     */
+    void reschedule(IDecisionVariable var) {
+        reschedule(variablesMap.getConstraintsForVariable(var));
+    }
+
+    /**
+     * Tries rescheduling the given constraints. Does not add a constraint to the constraint base if already
+     * scheduled.
+     * 
+     * @param constraints the constraints to reschedule (may be <b>null</b>)
+     */
+    private void reschedule(Collection<Constraint> constraints) {
         if (null != constraints) {
             for (Constraint varConstraint : constraints) {
                 if (!constraintBase.contains(varConstraint)) {

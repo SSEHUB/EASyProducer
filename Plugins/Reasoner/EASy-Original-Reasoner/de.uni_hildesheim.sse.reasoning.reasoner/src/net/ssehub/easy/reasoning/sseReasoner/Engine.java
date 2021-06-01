@@ -17,6 +17,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
+import net.ssehub.easy.varModel.confModel.CommandAssignmentState;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
@@ -77,16 +78,17 @@ public class Engine {
         if (!isRuntimeMode) {
             // in runtime mode, we keep frozen variables frozen and operate only on unfrozen.
             // else, the configuration initialization freezes whatever it can freeze although constraints
-            // may not fully be evaluated. We have to totally unfreeze such a (reused/copied) configuration
-            // here to be able to do our job. We unfreeze to undefined so that assignment states are set
-            // correctly starting with default values (just storing the state before freezing does not work
-            // as then easily erroneous reassignments may occur.            
-            cfg.unfreeze(AssignmentState.ASSIGNED); // TODO UNDEFINED
+            // may not fully be evaluated. We have to unfreeze such a (reused/copied) configuration
+            // here to be able to do our job. We unfreeze to assigned and reset wasAssigned, but for performance
+            // reasons rely on the existing configuration but overwrite values where needed (storing the state before 
+            // freezing does not work as then easily erroneous reassignments may occur.            
+            cfg.unfreeze(CommandAssignmentState.ASSIGNED_CLEAR);
         }
     } 
     
     /**
-     * Method for lunching reasoning.     * 
+     * Method for launching the reasoner.
+     *  
      * @return {@link ReasoningResult} failed constraints and assignments, if exist.
      */
     public ReasoningResult reason() {

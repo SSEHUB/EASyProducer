@@ -67,7 +67,7 @@ public class CaseStudyStats extends AbstractTest {
      */
     @Test    
     public void compoundConstraintsInCollectionWithConstraintVars() {
-        reasoningTest("CompoundConstraintsInCollectionWithConstraintVars.ivml", 2, 15);       
+        reasoningTest("CompoundConstraintsInCollectionWithConstraintVars.ivml", 1, 8);       
     }  
     
     /**

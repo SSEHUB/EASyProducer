@@ -97,7 +97,7 @@ public class CompoundTests extends AbstractTest {
      */
     @Test
     public void compoundAnnotationTest() {
-        reasoningTest("CompoundAnnotationTest.ivml", 10);
+        reasoningTest("CompoundAnnotationTest.ivml", 9);
     } 
 
     /**
@@ -105,7 +105,7 @@ public class CompoundTests extends AbstractTest {
      */
     @Test
     public void derivedCompoundAnnotationTest() {
-        reasoningTest("DerivedCompoundAnnotationTest.ivml", 10);
+        reasoningTest("DerivedCompoundAnnotationTest.ivml", 9);
     } 
 
     /**
@@ -113,7 +113,7 @@ public class CompoundTests extends AbstractTest {
      */
     @Test
     public void referenceCompoundAnnotationTest() {
-        reasoningTest("ReferenceCompoundAnnotationTest.ivml", 10);
+        reasoningTest("ReferenceCompoundAnnotationTest.ivml", 9);
     }
     
     /**
@@ -196,5 +196,30 @@ public class CompoundTests extends AbstractTest {
         IDecisionVariable isAc = cfg.getDecision("is_Ac", false);
         Assert.assertEquals(BooleanValue.FALSE, isAc.getValue());
     }     
+
+    /**
+     * Staged compound initialization test with isDefined [contributed by IIP-Ecosphere].
+     */
+    @Test
+    public void compoundInit1Test() {
+        reasoningTest("CompoundInit1.ivml", 0);
+    } 
+
+    /**
+     * Staged compound initialization test missing the variable initialization with !isDefined 
+     * [contributed by IIP-Ecosphere].
+     */
+    @Test
+    public void compoundInit2Test() {
+        reasoningTest("CompoundInit2.ivml", 0);
+    } 
+
+    /**
+     * Assignment-based compound initialization with isDefined [contributed by IIP-Ecosphere].
+     */
+    @Test
+    public void compoundInit3Test() {
+        reasoningTest("CompoundInit3.ivml", 0);
+    } 
 
 }

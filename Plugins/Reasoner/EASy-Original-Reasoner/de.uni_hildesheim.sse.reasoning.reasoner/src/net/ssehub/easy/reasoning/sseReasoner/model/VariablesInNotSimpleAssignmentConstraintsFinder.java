@@ -1,5 +1,7 @@
 package net.ssehub.easy.reasoning.sseReasoner.model;
 
+import java.util.List;
+
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.varModel.confModel.Configuration;
@@ -40,6 +42,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  */
 public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstraintTreeVisitor {
 
+    private Configuration config;
     private VariablesMap constraintMap;
     private Constraint constraint;
     private boolean add = true;
@@ -62,6 +65,7 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      * @param config the configuration used to resolve expressions
      */
     public void accept(Constraint constraint, Configuration config) {
+        this.config = config;
         this.constraint = constraint;
         evaluator.init(config, null, false, null);
         constraint.getConsSyntax().accept(this);
@@ -97,12 +101,13 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      * @param config the configuration used to resolve expressions
      * @param add add {@code true} or remove {@code false}
      */
-    public void acceptAndClear(Iterable<Constraint> constraints, Configuration config, boolean add) {
+    public void acceptAndClear(List<Constraint> constraints, Configuration config, boolean add) {
         this.add = add;
+        this.config = config;
         evaluator.init(config, null, false, null);
-        for (Constraint c : constraints) {
-            this.constraint = c;
-            c.getConsSyntax().accept(this);
+        for (int c = 0; c < constraints.size(); c++) {
+            this.constraint = constraints.get(c);
+            this.constraint.getConsSyntax().accept(this);
         }
         clear();
     }
@@ -111,6 +116,7 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      * Clears this visitor for reuse.
      */
     public void clear() {
+        config = null;
         constraint = null;
         add = true;
         evaluator.clear();
@@ -148,6 +154,14 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
      */
     private void modifyRelation(AbstractVariable variable, Constraint constraint) {
         if (null != variable) {
+            IDecisionVariable var = config.getDecision(variable);
+            if (null != var) {
+                if (add) {
+                    constraintMap.registerConstraint(var, constraint);
+                } else {
+                    constraintMap.unregisterConstraint(var, constraint);
+                }
+            }
             if (add) {
                 constraintMap.add(variable, constraint);
             } else {

@@ -29,6 +29,7 @@ import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.ConstraintEvalua
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult.EvaluationPair;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
@@ -213,7 +214,8 @@ public class Reasoner implements IReasoner {
             }
             
             @Override
-            public void notifyChanged(IDecisionVariable variable, Value oldValue) {
+            public void notifyChanged(IDecisionVariable variable, Value oldValue, IAssignmentState oldState, 
+                ChangeKind kind) {
                 result.addAffected(variable);
             }
         });

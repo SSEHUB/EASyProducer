@@ -1,0 +1,19 @@
+project CompoundInit3 {
+
+    abstract compound ContainerMgr {
+    };
+    
+    compound DockerContainerMgr refines ContainerMgr {
+        String dockerFile = "unix://var/docker";
+        Boolean delete;
+        isDefined(delete);
+    };
+    
+    ContainerMgr mgr;
+    mgr = DockerContainerMgr {
+        delete = false
+    };
+    
+    isDefined(mgr);
+    
+}
