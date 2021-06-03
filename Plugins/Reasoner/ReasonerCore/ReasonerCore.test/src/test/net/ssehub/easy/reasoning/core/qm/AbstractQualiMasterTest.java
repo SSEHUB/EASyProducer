@@ -140,7 +140,7 @@ public abstract class AbstractQualiMasterTest extends AbstractTest {
     
     /**
      * Method to create QM model(import projects) and validate it. 
-     * @param expectedFailedConstraints Number of constraints that are expected to fail.
+     * @param expectedFailedConstraints Number of constraints that are expected to fail (ignored if negative).
      */        
     public final void reasoningTest(int expectedFailedConstraints) {
         loadAllProjects();

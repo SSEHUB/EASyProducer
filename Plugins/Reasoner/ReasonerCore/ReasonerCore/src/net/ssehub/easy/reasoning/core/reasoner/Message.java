@@ -1,5 +1,6 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +9,8 @@ import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.varModel.confModel.DisplayNameProvider;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.management.CommentResource;
+import net.ssehub.easy.varModel.management.ModelCommentsPersistencer;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ModelElement;
@@ -193,7 +196,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
      * @return the string representation
      */
     private String toString(Constraint constraint, IDecisionVariable namedVariable) {
-        String result;
+        String result = "";
         if (namedVariable != null) {
             AbstractVariable decl = namedVariable.getDeclaration();
             String comment = decl.getComment();
@@ -202,10 +205,27 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
             } else {
                 result = decl.getComment();
             } 
-        } else {
-            result = StringProvider.toIvmlString(constraint.getConsSyntax());
+        } 
+        if (noResult(result)) {
+            result = constraint.getComment();
+            if (noResult(result)) {
+                try {
+                    CommentResource cr = ModelCommentsPersistencer.getComments(constraint.getProject());
+                    if (null != cr) {
+                        result = cr.get(ModelCommentsPersistencer.getKey(constraint));
+                    }
+                } catch (IOException e) {
+                }
+                if ((noResult(result))) {
+                    result = StringProvider.toIvmlString(constraint.getConsSyntax());
+                }
+            }
         }
         return result;
+    }
+    
+    private static boolean noResult(String result) {
+        return null == result || result.length() == 0;
     }
 
     /**

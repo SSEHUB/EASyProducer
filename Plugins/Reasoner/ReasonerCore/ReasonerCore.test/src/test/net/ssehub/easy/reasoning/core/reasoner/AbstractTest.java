@@ -184,7 +184,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     /**
      * Method for handling reasoning result, actually performing a propagation by default (due to legacy reasons).
      * 
-     * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedFailedConstraints Number of constraints that are expected to fail (ignored if negative)
      * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param projectP1 Project to reason on.
      * @return configuration (for further specific tests)
@@ -197,7 +197,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     /**
      * Method for asserting a propagation.
      * 
-     * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedFailedConstraints Number of constraints that are expected to fail (ignored if negative)
      * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param projectP1 Project to reason on.
      * @return configuration (for further specific tests)
@@ -213,7 +213,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     /**
      * Method for asserting a propagation.
      * 
-     * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedFailedConstraints Number of constraints that are expected to fail (ignored if negative)
      * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param config the configuration to reason on.
      * @return <code>config</code> (for further specific tests)
@@ -466,7 +466,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     
     /**
      * Method for handling a reasoning result.
-     * @param expectedFailedConstraints Number of constraints that are expected to fail
+     * @param expectedFailedConstraints Number of constraints that are expected to fail (ignored if negative)
      * @param expectedReevaluationCount expected number of constraint re-evaluations (ignored if negative)
      * @param result the reasoning result
      */
@@ -482,7 +482,9 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             System.out.println(msg.getStatus() + " " + msg.getDescription());
             System.out.println(" " + msg.getConflictComments());
         }
-        Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
+        if (expectedFailedConstraints >= 0) {
+            Assert.assertEquals("Failed constraints: ", expectedFailedConstraints, failedConstraints);
+        }
 
         if (expectedReevaluationCount > 0) {
             Number measure = result.getMeasure(GeneralMeasures.REEVALUATION_COUNT);
