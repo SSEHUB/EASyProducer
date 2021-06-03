@@ -15,6 +15,7 @@ import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
@@ -199,26 +200,24 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
         String result = "";
         if (namedVariable != null) {
             AbstractVariable decl = namedVariable.getDeclaration();
-            String comment = decl.getComment();
-            if (null == comment) {
-                result = decl.getName();  
-            } else {
-                result = decl.getComment();
-            } 
+            if (TypeQueries.isConstraint(decl.getType())) {
+                String comment = decl.getComment();
+                if (null == comment) {
+                    result = decl.getName();  
+                } else {
+                    result = decl.getComment();
+                } 
+            }
         } 
         if (noResult(result)) {
             result = constraint.getComment();
             if (noResult(result)) {
+                CommentResource cr = null;
                 try {
-                    CommentResource cr = ModelCommentsPersistencer.getComments(constraint.getProject());
-                    if (null != cr) {
-                        result = cr.get(ModelCommentsPersistencer.getKey(constraint));
-                    }
+                    cr = ModelCommentsPersistencer.getComments(constraint.getProject());
                 } catch (IOException e) {
                 }
-                if ((noResult(result))) {
-                    result = StringProvider.toIvmlString(constraint.getConsSyntax());
-                }
+                result = CommentResourceVisitor.visit(constraint, cr);
             }
         }
         return result;
