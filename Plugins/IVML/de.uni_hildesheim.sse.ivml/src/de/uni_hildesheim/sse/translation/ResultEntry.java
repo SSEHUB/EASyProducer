@@ -121,6 +121,7 @@ class ResultEntry {
             VarModel.INSTANCE.updateModel(project, uri, ModelUtility.INSTANCE, false);
             registered = true;
         }
+        VarModel.INSTANCE.notifyLoadingCompleted(project, uri);
         return registered;
     }
 
