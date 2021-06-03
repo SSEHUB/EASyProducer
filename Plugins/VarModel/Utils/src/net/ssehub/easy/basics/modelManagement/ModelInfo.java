@@ -402,7 +402,7 @@ public class ModelInfo <M extends IModel> implements IModelData {
      *   does not point to a file
      */
     public URI getCommentsResource() {
-        return getCommentsResource(getLocale());
+        return composeCommentsURI(getLocale(), false);
     }
     
     /**
@@ -416,22 +416,44 @@ public class ModelInfo <M extends IModel> implements IModelData {
      *   does not point to a file
      */
     public URI getDefaultCommentsResource() {
-        return getCommentsResource(null);
+        return composeCommentsURI(null, false);
     }
-    
+
     /**
-     * Returns the URI to the actual comments text resource. The URI is derived
-     * using the {@linkplain #getLocation() location} of the model by adding the
-     * country of the {@linkplain #getLocale() locale} used while loading and 
+     * Returns the URI to the actual base comments text resource. The URI is derived
+     * by adding the country of the {@linkplain #getLocale() locale} used while loading and 
      * changing the extension to ".text".
-     * 
-     * @param locale the locale to use, may be <b>null</b> for the default locale
-     * @return the URI of the associated comments text resource (the existence of
+     *   
+     * @return the URI of the base comments text resource (the existence of
      *   the related resource is not ensured), <b>null</b> if the resource cannot
      *   be composed, e.g., as the location is not known or the location
      *   does not point to a file
      */
-    private URI getCommentsResource(Locale locale) {
+    public URI getBaseCommentsResource() {
+        return composeCommentsURI(getLocale(), true);
+    }
+
+    /**
+     * Returns the URI to the actual base default comments text resource. The URI is derived
+     * by adding the extension ".text".
+     *   
+     * @return the URI of the default base comments text resource (the existence of
+     *   the related resource is not ensured), <b>null</b> if the resource cannot
+     *   be composed, e.g., as the location is not known or the location
+     *   does not point to a file
+     */
+    public URI getDefaultBaseCommentsResource() {
+        return composeCommentsURI(null, true);
+    }
+    
+    /**
+     * Composes an URI for the comments locale.
+     * 
+     * @param locale the locale (may be <b>null</b>)
+     * @param base return the base comments URL (with fixed name "easy-base") or use the model name
+     * @return the URI or <b>null</b>
+     */
+    private URI composeCommentsURI(Locale locale, boolean base) {
         URI result = null;
         if (null != location) {
             String path = location.getPath();
@@ -440,15 +462,15 @@ public class ModelInfo <M extends IModel> implements IModelData {
                 pos++; // first character of "file"
                 String name = path.substring(pos);
                 path = path.substring(0, pos);
-                pos = name.lastIndexOf('.'); // find separator
-                if (pos >= 0 && pos < path.length()) {
-                    String fName = name.substring(0, pos);
-                    if (null != locale) {
-                        fName += "_" + locale.getLanguage();
-                    }
-                    path += fName + ".text"; 
+                if (base) {
+                    path += composeLocaleCommentsName("easy-base", locale);
                 } else {
-                    path = null;
+                    pos = name.lastIndexOf('.'); // find separator
+                    if (pos >= 0 && pos < path.length()) {
+                        path += composeLocaleCommentsName(name.substring(0, pos), locale); 
+                    } else {
+                        path = null;
+                    }
                 }
             } else {
                 path = null;
@@ -462,6 +484,20 @@ public class ModelInfo <M extends IModel> implements IModelData {
             }
         }
         return result;
+    }
+    
+    /**
+     * Composes a comments file name based on a given locale.
+     * 
+     * @param name the name
+     * @param locale the locale (may be <b>null</b>)
+     * @return the composed name with default extension
+     */
+    private String composeLocaleCommentsName(String name, Locale locale) {
+        if (null != locale) {
+            name += "_" + locale.getLanguage();
+        }
+        return name + ".text";
     }
     
     /**

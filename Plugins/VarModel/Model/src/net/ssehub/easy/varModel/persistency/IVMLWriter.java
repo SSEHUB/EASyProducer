@@ -1074,6 +1074,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
         parenthesis.getExpr().accept(this);
         appendOutput(ENDING_PARENTHESIS);
     }
+    
 
     @Override
     public void visitOclFeatureCall(OCLFeatureCall call) {
@@ -1085,6 +1086,17 @@ public class IVMLWriter extends AbstractVarModelWriter {
         } else {
             hint = FormattingHint.FUNCTION_CALL;
         }            
+        appendOCLFeatureCall(call, hint);
+        callStack.pop();
+    }
+    
+    /**
+     * Does the formatting of an OCL feature call and allows for overwriting.
+     * 
+     * @param call the call
+     * @param hint the formatting hint for the call
+     */
+    protected void appendOCLFeatureCall(OCLFeatureCall call, FormattingHint hint) {
         String name = call.getOperation();
         switch (hint) {
         case FUNCTION_CALL:
@@ -1143,7 +1155,6 @@ public class IVMLWriter extends AbstractVarModelWriter {
             // should not occur
             break;
         }
-        callStack.pop();
     }
     
     @Override

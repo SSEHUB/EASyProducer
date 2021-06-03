@@ -33,7 +33,8 @@ import java.util.Map;
  */
 public class CommentResource {
 
-    private static final String SEPARATOR = "=";
+    private static final char ESCAPE = '\\';
+    private static final char SEPARATOR = '=';
 
     private Map<String, String> mapping = new HashMap<String, String>();
  
@@ -44,7 +45,7 @@ public class CommentResource {
     }
     
     /**
-     * Loads the resource from a given <code>reader</code>.
+     * Loads the resource from a given <code>reader</code>. Mappings are added/overwritten, not cleared before.
      * 
      * @param reader the reader to load the resource from
      * @throws IOException in case of I/O errors
@@ -55,10 +56,19 @@ public class CommentResource {
         do {
             line = lnr.readLine();
             if (null != line) {
-                int pos = line.indexOf(SEPARATOR);
-                if (pos > 0) {
-                    String key = line.substring(0, pos).trim();
-                    String value = line.substring(pos + SEPARATOR.length()).trim();
+                int pos = 0;
+                int sepPos = -1;
+                boolean lastIsEscape = false;
+                while (pos < line.length() && sepPos < 0) {
+                    char c = line.charAt(pos++);
+                    if (SEPARATOR == c && !lastIsEscape) {
+                        sepPos = pos - 1;
+                    }
+                    lastIsEscape = c == ESCAPE;
+                }
+                if (sepPos > 0) {
+                    String key = line.substring(0, sepPos).trim();
+                    String value = line.substring(sepPos + 1).trim();
                     mapping.put(key, value);
                 }
             }

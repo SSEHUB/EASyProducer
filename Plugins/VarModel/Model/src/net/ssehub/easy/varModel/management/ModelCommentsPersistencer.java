@@ -140,6 +140,13 @@ public class ModelCommentsPersistencer {
         }
     }
     
+    /**
+     * Returns the comment resource for the given project.
+     * 
+     * @param project the project
+     * @return the comment resource, may be <b>null</b>
+     * @throws IOException in case of I/O problems
+     */
     public static CommentResource getComments(Project project) throws IOException {
         CommentResource props = null;
         if (null != project) {
@@ -151,17 +158,43 @@ public class ModelCommentsPersistencer {
         return props;
     }
     
+    /**
+     * Determines the comment resource for the specified model information object/project.
+     * 
+     * @param info the model information object
+     * @return the comment resource, may be <b>null</b>
+     * @throws IOException in case of I/O problems
+     */
     private static CommentResource getComments(ModelInfo<Project> info) throws IOException {
         CommentResource props = null;
         File resourceFile = Utils.toExistingFile(info.getCommentsResource());
         if (null == resourceFile) {
             resourceFile = Utils.toExistingFile(info.getDefaultCommentsResource());
         }
-        if (null != resourceFile) {
+        File baseFile = Utils.toExistingFile(info.getBaseCommentsResource());
+        if (null == baseFile) {
+            baseFile = Utils.toExistingFile(info.getDefaultBaseCommentsResource());
+        }
+        if (null != resourceFile || null != baseFile) {
             props = new CommentResource();
-            FileReader fr = new FileReader(resourceFile);
+            readResourceFromFile(props, baseFile);
+            readResourceFromFile(props, resourceFile);
+        }
+        return props;
+    }
+    
+    /**
+     * Reads the comment resource from the given file.
+     * 
+     * @param resource the resource to be modified
+     * @param file the file
+     * @throws IOException in case of I/O problems
+     */
+    private static void readResourceFromFile(CommentResource resource, File file) throws IOException {
+        if (null != file) {
+            FileReader fr = new FileReader(file);
             try {
-                props.load(fr);
+                resource.load(fr);
             } catch (IOException e) {
                 try {
                     fr.close();
@@ -171,7 +204,6 @@ public class ModelCommentsPersistencer {
             }
             fr.close();
         }
-        return props;
     }
     
     /**
@@ -231,12 +263,20 @@ public class ModelCommentsPersistencer {
         elt.setComment(comment);
     }
     
+    /**
+     * Returns the key for a constraint.
+     * 
+     * @param cons the key
+     * @return the constraint key, may be empty for none, e.g., if {@code cons} is <b>null</b> 
+     */
     public static String getKey(Constraint cons) {
-        String key = null;
+        String key = "";
         if (null != cons) {
             ConstraintSyntaxTree cst = cons.getConsSyntax();
             if (null != cst) {
-                key = StringProvider.toIvmlString(cst).replace(" ", "").replace("=", "~");
+                key = StringProvider.toIvmlString(cst)
+                    .replace(" ", "")
+                    .replace("=", "\\="); // escape see CommentResource
             }
         }
         return key;
