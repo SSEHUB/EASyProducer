@@ -24,10 +24,13 @@ import java.net.URI;
 import net.ssehub.easy.basics.modelManagement.IModelManagementRepository;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Utils;
+import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
+import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
  * Implements (internationalized) comment persistence mechanisms on model level.
@@ -130,26 +133,45 @@ public class ModelCommentsPersistencer {
     void loadComments(ModelInfo<Project> info) throws IOException {
         Project project = info.getResolved();
         if (null != project) {
-            File resourceFile = Utils.toExistingFile(info.getCommentsResource());
-            if (null == resourceFile) {
-                resourceFile = Utils.toExistingFile(info.getDefaultCommentsResource());
-            }
-            if (null != resourceFile) {
-                CommentResource props = new CommentResource();
-                FileReader fr = new FileReader(resourceFile);
-                try {
-                    props.load(fr);
-                } catch (IOException e) {
-                    try {
-                        fr.close();
-                    } catch (IOException e1) {
-                    }
-                    throw e;
-                }
-                fr.close();
+            CommentResource props = getComments(info);
+            if (null != props) {
                 assignCommentsToProject(project, props);
             }
         }
+    }
+    
+    public static CommentResource getComments(Project project) throws IOException {
+        CommentResource props = null;
+        if (null != project) {
+            ModelInfo<Project> info = VarModel.INSTANCE.availableModels().getModelInfo(project);
+            if (null != info) {
+                props = getComments(info);
+            }
+        }
+        return props;
+    }
+    
+    private static CommentResource getComments(ModelInfo<Project> info) throws IOException {
+        CommentResource props = null;
+        File resourceFile = Utils.toExistingFile(info.getCommentsResource());
+        if (null == resourceFile) {
+            resourceFile = Utils.toExistingFile(info.getDefaultCommentsResource());
+        }
+        if (null != resourceFile) {
+            props = new CommentResource();
+            FileReader fr = new FileReader(resourceFile);
+            try {
+                props.load(fr);
+            } catch (IOException e) {
+                try {
+                    fr.close();
+                } catch (IOException e1) {
+                }
+                throw e;
+            }
+            fr.close();
+        }
+        return props;
     }
     
     /**
@@ -197,6 +219,9 @@ public class ModelCommentsPersistencer {
     private void assignComment(ContainableModelElement elt, CommentResource props) {
         String comment = "";
         String qName = elt.getQualifiedName();
+        if (elt instanceof Constraint) {
+            qName = getKey((Constraint) elt);
+        }
         if (null != qName) {
             String tmp = props.get(qName);
             if (null != tmp) {
@@ -204,6 +229,17 @@ public class ModelCommentsPersistencer {
             }
         }
         elt.setComment(comment);
+    }
+    
+    public static String getKey(Constraint cons) {
+        String key = null;
+        if (null != cons) {
+            ConstraintSyntaxTree cst = cons.getConsSyntax();
+            if (null != cst) {
+                key = StringProvider.toIvmlString(cst).replace(" ", "").replace("=", "~");
+            }
+        }
+        return key;
     }
 
 }

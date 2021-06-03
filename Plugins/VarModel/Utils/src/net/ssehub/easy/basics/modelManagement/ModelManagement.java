@@ -206,6 +206,27 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
+     * Notifies that loading the given model is completed. Calls {@link #postLoadModel(ModelInfo)}.
+     * 
+     * @param model the model to be added
+     * @param uri the URI of the model (used for unique identification)
+     */
+    public synchronized void notifyLoadingCompleted(M model, URI uri) {
+        List<VersionedModelInfos<M>> vList = availableModels.getAvailable(model.getName());
+        VersionedModelInfos<M> vInfos = VersionedModelInfos.find(vList, model.getVersion());
+        if (null != vInfos) {
+            ModelInfo<M> info = vInfos.find(uri);
+            if (null != info) {
+                try {
+                    postLoadModel(info);
+                } catch (IOException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID).exception(e);
+                }
+            }
+        }
+    }
+    
+    /**
      * Add a model to this management instance. Existing models are overwritten
      * in case of same name and version.
      * 
@@ -228,11 +249,6 @@ public abstract class ModelManagement <M extends IModel> {
                 oldModel = setResolved(info, model);
                 if (null == info.getLocale()) {
                     info.setLocale(locale.getActualLocale());
-                }
-                try {
-                    postLoadModel(info);
-                } catch (IOException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID).exception(e);
                 }
                 done = true;
             }
@@ -604,11 +620,6 @@ public abstract class ModelManagement <M extends IModel> {
                     M model = loadResult.getModel(i);
                     // load and assign descriptive texts
                     info.setLocale(locale.getActualLocale());
-                    try {
-                        postLoadModel(info);
-                    } catch (IOException e) {
-                        messages.add(new Message("while post loading model: " + e.getMessage(), Status.WARNING));
-                    }
                     if (null == result && Utils.matches(model, info)) {
                         setResolved(info, model);
                         result = model;
