@@ -1,0 +1,13 @@
+project compounds5 {
+
+    version v0;
+    
+    abstract compound Type {
+    }
+    
+    compound SpecialType { // refinement forgotten
+    }
+    
+    Type t = SpecialType{};
+
+}
