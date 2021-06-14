@@ -1,3 +1,5 @@
 -> main(Configuration, FileArtifact) with (<config>, test.texts)
     -> containerManagerModule(compounds4) with (<config>)
         -> containerManagerModule(DockerContainerManager) with (compounds4Base::containerManager)
+    -> protocolName(compounds4) with (<config>)
+        -> protocolName(HttpProtocol) with (compounds4Base::protocol)

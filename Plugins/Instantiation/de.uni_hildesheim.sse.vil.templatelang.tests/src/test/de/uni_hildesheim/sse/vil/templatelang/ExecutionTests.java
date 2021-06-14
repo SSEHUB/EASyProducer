@@ -129,7 +129,9 @@ public class ExecutionTests extends AbstractExecutionTest {
             Assert.fail("unexpected exception: " + e.getMessage());
         }
         Assert.assertNotNull("IVML model '" + varModelName + "' not loaded", varModel);
-        Configuration cfg = new Configuration(new net.ssehub.easy.varModel.confModel.Configuration(varModel));
+        net.ssehub.easy.varModel.confModel.Configuration ivmlCfg 
+            = new net.ssehub.easy.varModel.confModel.Configuration(varModel);
+        Configuration cfg = new Configuration(ivmlCfg);
         return assertEqual(vtlModelName, "main", cfg, expectedExceptions);
     }
 

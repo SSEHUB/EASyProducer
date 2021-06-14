@@ -16,5 +16,14 @@ project compounds4Base {
     ContainerManager containerManager = DockerContainerManager {
         dockerHost = "unix:///var/run/docker.sock"
     };
+    
+    abstract compound Protocol {
+    };
+    
+    compound HttpProtocol refines Protocol {
+    };
+    
+    Protocol protocol = HttpProtocol {
+    };
 
 }

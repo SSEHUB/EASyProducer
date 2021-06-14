@@ -13,8 +13,21 @@ template compoundTest4(Configuration config, FileArtifact target) {
         "ecsRuntime.docker";
     }
 
+    def String protocolName(compounds4 cfg) {
+        protocolName(cfg.protocol);
+    }
+
+    def String protocolName(Protocol proto) {
+        "";
+    }
+
+    def String protocolName(HttpProtocol proto) {
+        "HTTP";
+    }
+
     def main(Configuration config, FileArtifact target) {
         '${containerManagerModule(config)}'
+        '${protocolName(config)}'
     }
 
 }
