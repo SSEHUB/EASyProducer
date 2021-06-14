@@ -222,4 +222,18 @@ public class CompoundTests extends AbstractTest {
         reasoningTest("CompoundInit3.ivml", 0);
     } 
 
+    /**
+     * Assignment-based compound initialization with isDefined [contributed by IIP-Ecosphere].
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void compoundInit4Test() throws ModelQueryException {
+        Configuration cfg = reasoningTest("CompoundInit4.ivml", 0);
+        IDecisionVariable var = cfg.getDecision("mgr", false);
+        Assert.assertNotNull(var);
+        Assert.assertNotNull(var.getValue());
+        Assert.assertEquals("DockerContainerMgr", var.getValue().getType().getName());
+    } 
+
 }

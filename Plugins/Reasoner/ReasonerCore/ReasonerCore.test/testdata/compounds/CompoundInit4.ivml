@@ -1,0 +1,13 @@
+project CompoundInit4 {
+
+    abstract compound ContainerMgr {
+    };
+    
+    compound DockerContainerMgr refines ContainerMgr {
+    };
+    
+    ContainerMgr mgr = DockerContainerMgr {};
+    
+    isDefined(mgr);
+    
+}
