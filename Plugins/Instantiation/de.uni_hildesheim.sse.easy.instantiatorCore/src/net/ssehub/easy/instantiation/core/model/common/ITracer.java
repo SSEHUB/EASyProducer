@@ -17,6 +17,20 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.expres
     public void trace(String text);
 
     /**
+     * Emits a warning trace string.
+     * 
+     * @param text the text to be emitted
+     */
+    public void traceWarning(String text);
+
+    /**
+     * Emits an error trace string.
+     * 
+     * @param text the text to be emitted
+     */
+    public void traceError(String text);
+
+    /**
      * Is called when a value of a variable is defined.
      * 
      * @param var the modified variable

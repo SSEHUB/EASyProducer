@@ -259,4 +259,14 @@ public class DelegatingTracer implements ITracer {
         return delegate.getRuntimeEnvironment();
     }
 
+    @Override
+    public void traceWarning(String text) {
+        delegate.traceWarning(text);
+    }
+
+    @Override
+    public void traceError(String text) {
+        delegate.traceError(text);
+    }
+
 }

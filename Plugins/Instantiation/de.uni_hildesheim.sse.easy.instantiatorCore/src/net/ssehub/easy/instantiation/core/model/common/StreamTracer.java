@@ -35,6 +35,18 @@ public abstract class StreamTracer
     }
 
     @Override
+    public void traceError(String text) {
+        printIndentation();
+        println(text);
+    }
+
+    @Override
+    public void traceWarning(String text) {
+        printIndentation();
+        println("Warning: " + text);
+    }
+
+    @Override
     public void valueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
         if (enabled) {
             printIndentation();

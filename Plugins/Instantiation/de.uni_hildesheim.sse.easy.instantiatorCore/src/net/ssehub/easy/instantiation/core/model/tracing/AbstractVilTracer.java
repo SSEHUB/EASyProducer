@@ -369,13 +369,14 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
         write(message);
     }
 
-    /**
-     * Trace an error (usually going to System.err in an instantiator).
-     * 
-     * @param message the message to be traced
-     */
+    @Override
     public void traceError(String message) {
         write(message);
+    }
+
+    @Override
+    public void traceWarning(String message) {
+        write("Warning: " + message);
     }
 
     @Override

@@ -32,4 +32,12 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.expressio
     public void enable(boolean enable) {
     }
 
+    @Override
+    public void traceWarning(String text) {
+    }
+
+    @Override
+    public void traceError(String text) {
+    }
+
 }

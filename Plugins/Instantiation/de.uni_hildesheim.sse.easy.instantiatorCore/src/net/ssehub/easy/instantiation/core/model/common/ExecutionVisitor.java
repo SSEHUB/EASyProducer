@@ -599,6 +599,9 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
                     VilException.ID_RUNTIME_TYPE);
             }
             args[p] = new CallArgument(new VariableExpression(model.getParameter(p)));
+            if (!environment.isDefined(modelPar)) {
+                tracer.traceWarning("Model parameter '" + modelPar.getName() + "' has no value assigned");
+            }
         }
         ModelCallExpression<V, M, O> call = createModelCall(model, operation, args);
         result = call.accept(this);
