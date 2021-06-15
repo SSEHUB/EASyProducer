@@ -117,6 +117,10 @@ public class LocalExperimentsTests extends ExperimentsTests {
         }
 
         @Override
+        public void traceWarning(String text) {
+        }
+
+        @Override
         public void valueDefined(VariableDeclaration var, FieldDescriptor field, Object value) {
         }
 
