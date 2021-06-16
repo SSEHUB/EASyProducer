@@ -711,9 +711,10 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     }
 
     @Override
-    protected Def dynamicDispatch(Def operation, Object[] args, IArgumentProvider argumentProvider) {
+    protected Def dynamicDispatch(Def operation, Object[] args, IArgumentProvider argumentProvider, 
+        boolean enableParentScope) {
         return AbstractCallExpression.dynamicDispatch(operation, args, Def.class, environment.getTypeRegistry(), 
-            argumentProvider);
+            argumentProvider, enableParentScope ? environment.getMostSpecificContextModel() : null);
     }
 
     @Override
@@ -761,8 +762,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         environment.setIndentationSteps(1); // reset to template level
         if (val instanceof Def) {
             Def def = (Def) val;
-            result = proceedModelCall(def, def.getName(), (Template) environment.getContextModel(), ex, 
-                ex.isPlaceholder());
+            result = proceedModelCall(def, (Template) environment.getContextModel(), ex, 
+                ex.isPlaceholder(), false);
         } else {
             result = super.visitResolvableOperationCallExpression(ex);
         }

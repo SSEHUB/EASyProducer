@@ -891,7 +891,7 @@ private static final String toString(CallArgument[] args) {
         }
         return tmp;
     }
-    
+
     /**
      * Aims at re-resolving the given operation according to the dynamic types of <code>args</code>.
      * Argument-less operations are not dispatched dynamically.
@@ -903,17 +903,19 @@ private static final String toString(CallArgument[] args) {
      * @param cls the type of operation
      * @param registry the (local) type registry
      * @param arguments access to the declared arguments
+     * @param operandOverride type to replace the operand if in same type hierarchy, may be <b>null</b>
      * @return <code>operation</code> or the one determined dynamically
      */
     public static <O extends IMetaOperation> O dynamicDispatch(O operation, Object[] args, Class<O> cls, 
-        TypeRegistry registry, IArgumentProvider arguments) {
+        TypeRegistry registry, IArgumentProvider arguments, IMetaType operandOverride) {
         O result = operation;
         int offset = 0;
         if (operation.isFirstParameterOperand()) {
             offset = 1;
         }
         if (args.length >= offset) { // do only try to dispatch if there is at least one parameter
-            IMetaType operand = operation.getDeclaringType();
+            IMetaType operand = getOperand(operation, operandOverride);
+            boolean forceResolve = operation.getDeclaringType() != operand;
             if (null != operand && operand.enableDynamicDispatch()) {
                 CallArgument[] types = new CallArgument[args.length - offset];
                 boolean allSame = true;
@@ -956,12 +958,11 @@ private static final String toString(CallArgument[] args) {
                         a++;
                     }
                 }
-                // fill named/optional
-                while (!failure && a < types.length) {
+                while (!failure && a < types.length) { // fill named/optional
                     types[a] = new CallArgument("name", (Expression) null);
                     a++;
                 }
-                if (!allSame && !failure) {
+                if ((!allSame || forceResolve) && !failure) {
                     try {
                         // no additional conversion while dynamic dispatch
                         IMetaOperation op = resolveOperation(operand, operation.getName(), types, false, true);
@@ -975,6 +976,14 @@ private static final String toString(CallArgument[] args) {
             }
         }
         return result;
+    }
+    
+    private static <O extends IMetaOperation> IMetaType getOperand(O operation, IMetaType operandOverride) {
+        IMetaType operand = operation.getDeclaringType();
+        if (null != operandOverride && operand.isAssignableFrom(operandOverride)) {
+            operand = operandOverride;
+        }
+        return operand;
     }
     
     /**

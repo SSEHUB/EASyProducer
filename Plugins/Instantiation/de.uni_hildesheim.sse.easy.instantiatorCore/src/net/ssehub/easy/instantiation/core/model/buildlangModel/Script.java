@@ -466,7 +466,16 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
 
     @Override
     public boolean isAssignableFrom(IMetaType type) {
-        return false; // not a visible type, i.e., not assignable at all
+        boolean assignable = false;
+        if (type instanceof Script) {
+            Script iter = (Script) type;
+            while (iter != null && !assignable) {
+                Script parent = null == iter.parent ? null : iter.parent.getResolved();
+                assignable = parent == this;
+                iter = parent;
+            }
+        }
+        return assignable;
     }
 
     @Override

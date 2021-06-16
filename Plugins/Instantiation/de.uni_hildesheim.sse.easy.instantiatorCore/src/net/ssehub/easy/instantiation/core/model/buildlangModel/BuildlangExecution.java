@@ -1507,9 +1507,11 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     }
 
     @Override
-    protected AbstractRule dynamicDispatch(AbstractRule operation, Object[] args, IArgumentProvider argumentProvider) {
+    protected AbstractRule dynamicDispatch(AbstractRule operation, Object[] args, IArgumentProvider argumentProvider, 
+        boolean enableParentScope) {
         return AbstractCallExpression.dynamicDispatch(operation, args, AbstractRule.class, 
-            environment.getTypeRegistry(), argumentProvider);
+            environment.getTypeRegistry(), argumentProvider, 
+            enableParentScope ? environment.getMostSpecificContextModel() : null);
     }
     
     @Override
@@ -1647,7 +1649,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         Object val = environment.getValue(ex.getVariable());
         if (val instanceof Rule) {
             Rule rule = (Rule) val;
-            result = proceedModelCall(rule, rule.getName(), rule.getParent(), ex, false);
+            result = proceedModelCall(rule, rule.getParent(), ex, false, false);
             //result = ((IBuildlangElement) val).accept(this);
         } else {
             result = super.visitResolvableOperationCallExpression(ex);

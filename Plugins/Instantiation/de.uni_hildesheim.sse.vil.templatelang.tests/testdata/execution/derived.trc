@@ -3,3 +3,5 @@ switchVal <- true
     -> produceContent()
         -> produceContent()
     -> produceContent2()
+    -> produceContent3()
+        -> subContent()

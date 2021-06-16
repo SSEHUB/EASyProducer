@@ -9,5 +9,13 @@ template generic() {
     def produceContent2() {
         'content2'
     }
+    
+    def produceContent3() {
+        subContent();
+    }
+    
+    def subContent() {
+        'generic subContent'
+    }
 
 }

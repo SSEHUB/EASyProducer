@@ -391,6 +391,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     
     private Map<IModel, Context<V, M>> contexts = new HashMap<IModel, Context<V, M>>();
     private Context<V, M> currentContext;
+    private IResolvableModel<V, M> mostSpecificModel;
     private TypeRegistry typeRegistry;
     private Class<V> cls;
     private Set<IArtifact> noAutoStore = new HashSet<IArtifact>();
@@ -455,6 +456,16 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
             currentContext = new Context<V, M>(model);
             contexts.put(model, currentContext);
         }
+
+        if (null != oldContext && currentContext.getModel().isAssignableFrom(oldContext)) {
+            mostSpecificModel = oldContext; 
+        } else {
+            // keep different most specific even if the context does not change as the decision to have an upstream
+            // model was taken before
+            if (null == mostSpecificModel || oldContext != currentContext.getModel()) {
+                mostSpecificModel = currentContext.getModel();
+            }
+        }
         return oldContext;
     }
     
@@ -511,6 +522,10 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
             model = currentContext.getModel();
         }
         return model;
+    }
+    
+    public IResolvableModel<?, M> getMostSpecificContextModel() {
+        return mostSpecificModel;
     }
 
     @Override

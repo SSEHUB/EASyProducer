@@ -55,7 +55,7 @@ public class TestTracerFactory extends TracerFactory {
                 println("exit template " + makeRelative(info.getLocation()));
             }
         }
-
+        
     }
     
     /**
@@ -66,12 +66,24 @@ public class TestTracerFactory extends TracerFactory {
      */
     public TestTracerFactory(Writer trace, String[] baseFolders) {
         buildTracer = new net.ssehub.easy.instantiation.core.model.buildlangModel.StreamTracer(
-            trace, baseFolders);
+            trace, baseFolders) {
+
+            @Override
+            public void traceWarning(String text) { // no warnings here
+            }
+
+        };
         if (DEBUG) {
             templateTracer = new TemplateTracer(trace, baseFolders);
         } else {
             templateTracer = new net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer(
-                trace, baseFolders);
+                trace, baseFolders) {
+
+                @Override
+                public void traceWarning(String text) { // no warnings here
+                }
+                
+            };
         }
     }
     

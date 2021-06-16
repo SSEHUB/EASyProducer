@@ -404,8 +404,8 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
      * @throws VilException in case that the execution fails
      */
     protected Object visitModelCallExpression(ModelCallExpression<V, M, O> call) throws VilException {
-        return proceedModelCall(call.getResolved(), call.getQualifiedName(), call.getModel(), call, 
-            call.isPlaceholder());
+        return proceedModelCall(call.getResolved(), call.getModel(), call, 
+            call.isPlaceholder(), !call.isSuper());
     }
     
     /**
@@ -414,15 +414,16 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
      * {@link #executeModelCall(IResolvableOperation)}.
      * 
      * @param resolved the resolved operation
-     * @param qName the (qualified) name to be used with the tracer
      * @param model the containing model
      * @param arguments the call arguments
-     * @param isPlaceholder whether <code>resolved</code> shall be treated as a placeholder operatio
+     * @param isPlaceholder whether <code>resolved</code> shall be treated as a placeholder operation
+     * @param enableParentScope enable the parent declaration scopes for dynamic dispatch, shall not be done in 
+     *   case of explicit super calls due to potential endless recursion
      * @return the result of the execution
      * @throws VilException in case that the execution fails
      */
-    protected Object proceedModelCall(O resolved, String qName, M model, IArgumentProvider arguments, 
-        boolean isPlaceholder) throws VilException {
+    protected Object proceedModelCall(O resolved, M model, IArgumentProvider arguments, 
+        boolean isPlaceholder, boolean enableParentScope) throws VilException {
         Object result;
         if (isPlaceholder) {
             result = null;
@@ -451,11 +452,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
                 IResolvableModel<V, M> oldContext = environment.switchContext(model);
                 environment.pushLevel();
                 assignModelParameter(model, oldContext);
-                if (null == resolved) {
-                    throw new VilException("call " + qName + " is not resolved", 
-                        VilException.ID_RUNTIME);
-                }
-                O operation = dynamicDispatch(resolved, args, arguments);
+                O operation = dynamicDispatch(resolved, args, arguments, enableParentScope);
                 int reqParamCount = operation.getRequiredParameterCount();
                 for (int p = 0; p < operation.getParameterCount(); p++) {
                     V param = operation.getParameter(p);
@@ -555,9 +552,12 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
      * @param operation the operation to be dispatched
      * @param args the actual arguments
      * @param argumentProvider access to the argument expressions
+     * @param enableParentScope enable the parent declaration scopes for dynamic dispatch, shall not be done in 
+     *   case of explicit super calls due to potential endless recursion
      * @return <code>operation</code> or the more actual operation
      */
-    protected abstract O dynamicDispatch(O operation, Object[] args, IArgumentProvider argumentProvider);
+    protected abstract O dynamicDispatch(O operation, Object[] args, IArgumentProvider argumentProvider, 
+        boolean enableParentScope);
     
     /**
      * Actually executes a model call. Basically, a subclassing visitor shall

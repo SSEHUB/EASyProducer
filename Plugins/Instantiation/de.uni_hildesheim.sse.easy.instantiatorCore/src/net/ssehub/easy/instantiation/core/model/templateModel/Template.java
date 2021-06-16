@@ -257,7 +257,16 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
 
     @Override
     public boolean isAssignableFrom(IMetaType type) {
-        return false; // not a visible type, i.e., not assignable at all
+        boolean assignable = false;
+        if (type instanceof Template) {
+            Template iter = (Template) type;
+            while (iter != null && !assignable) {
+                Template parent = null == iter.extension ? null : iter.extension.getResolved();
+                assignable = parent == this;
+                iter = parent;
+            }
+        }
+        return assignable;
     }
 
     @Override
