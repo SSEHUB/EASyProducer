@@ -107,4 +107,9 @@ public abstract class AbstractRule extends RuleBlock implements IResolvableOpera
      */
     public abstract Script getParent();
 
+    @Override
+    public boolean isConstructor() {
+        return false;
+    }
+
 }

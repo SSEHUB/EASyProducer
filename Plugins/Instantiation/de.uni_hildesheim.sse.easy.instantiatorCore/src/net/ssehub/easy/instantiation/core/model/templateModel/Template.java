@@ -366,7 +366,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
 
     @Override
     public IMetaType getSuperType() {
-        return null;
+        return null != extension ? extension.getResolved() : null;
     }
 
     @Override

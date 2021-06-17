@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -619,25 +620,41 @@ public abstract class TypeDescriptor <T> implements IMetaType {
      * @return <code>true</code> if <code>desc</code> is a candidate, <code>false</code> else
      */
     public static List<IMetaOperation> getCandidates(IMetaType type, String name, int argCount) {
-        List<IMetaOperation> result = new ArrayList<IMetaOperation>(5); 
-        for (int o = 0; o < type.getOperationsCount(); o++) {
-            IMetaOperation op = type.getOperation(o);
-            boolean ok;
-            if (null != op && op.getName().equals(name)) {
-                // in case of default parameters, the actual number of required params may be less than the given ones
-                int reqParam = op.getRequiredParameterCount();
-                if (argCount > 0) {
-                    ok = reqParam > 0 && reqParam <= argCount && argCount <= op.getParameterCount();
+        List<IMetaOperation> result = new ArrayList<IMetaOperation>(5);
+        java.util.Set<String> known = type.getSuperType() != null ? new HashSet<String>() : null;
+        IMetaType iter = type;
+        do {
+            for (int o = 0; o < iter.getOperationsCount(); o++) {
+                IMetaOperation op = iter.getOperation(o);
+                boolean ok;
+                if (null != op && op.getName().equals(name)) {
+                    // in case of default parameters, the act. number of required params may be less than the given ones
+                    int reqParam = op.getRequiredParameterCount();
+                    if (argCount > 0) {
+                        ok = reqParam > 0 && reqParam <= argCount && argCount <= op.getParameterCount();
+                    } else {
+                        ok = reqParam == 0;
+                    }
+                    if (ok && op.isConstructor()) { // prevent "accidental" overriding, constuctors must fit type
+                        ok = op.getDeclaringType() == type;
+                    }
                 } else {
-                    ok = reqParam == 0;
+                    ok = false;
                 }
-            } else {
-                ok = false;
+                if (ok) {
+                    if (null == known) {
+                        result.add(op);
+                    } else {
+                        String sig = op.getSignature();
+                        if (!known.contains(sig)) {
+                            result.add(op);
+                            known.add(sig);
+                        }
+                    }
+                }
             }
-            if (ok) {
-                result.add(op);
-            }
-        }
+            iter = iter.getSuperType();
+        } while (iter != null);
         return result;
     }
 

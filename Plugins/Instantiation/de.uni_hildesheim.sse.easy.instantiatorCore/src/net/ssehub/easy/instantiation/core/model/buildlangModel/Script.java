@@ -775,7 +775,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
 
     @Override
     public IMetaType getSuperType() {
-        return null;
+        return null != parent ? parent.getResolved() : null;
     }
     
     @Override

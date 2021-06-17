@@ -132,6 +132,15 @@ public interface IMetaOperation {
     public boolean isPlaceholder();
     
     /**
+     * Returns whether this operation represents a constructor. Basically, for VIL a 
+     * constructor is a public static method named "create" which returns an instance
+     * of the underlying type. Declared constructors are used for internal purposes.
+     * 
+     * @return <code>true</code> if this operation is a "constructor", <code>false</code> else
+     */
+    public boolean isConstructor();
+    
+    /**
      * Returns whether the operation represented by this instance is compatible to
      * the given return type and parameters. This method does not consider possible
      * unnamed parameter rather than the underlying Java parameter.

@@ -263,14 +263,8 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * @return the Java signature of the method
      */
     public abstract String getJavaSignature();
-    
-    /**
-     * Returns whether this operation represents a constructor. Basically, for VIL a 
-     * constructor is a public static method named "create" which returns an instance
-     * of the underlying type. Declared constructors are used for internal purposes.
-     * 
-     * @return <code>true</code> if this operation is a "constructor", <code>false</code> else
-     */
+
+    @Override
     public boolean isConstructor() {
         return isConstructor;
     }

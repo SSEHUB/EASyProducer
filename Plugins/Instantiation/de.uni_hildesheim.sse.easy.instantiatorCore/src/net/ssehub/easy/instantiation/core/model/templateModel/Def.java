@@ -256,4 +256,9 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
         return null; // not implemented, done by visitor
     }
     
+    @Override
+    public boolean isConstructor() {
+        return false;
+    }
+    
 }
