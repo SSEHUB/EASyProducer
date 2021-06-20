@@ -615,10 +615,12 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         }
         int compoundMode = MODE_COMPOUND_NONE;
         boolean isCompound = TypeQueries.isCompound(actType);
+        ConstraintSyntaxTree tCAcc = null; // typed compound accessor, only for compounds
         TypeCache.Entry tcEntry = null;
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             self = decl;
-            compoundMode = translateCompoundDeclaration(decl, var, cAcc, (Compound) actType, MODE_COMPOUND_REGISTER); 
+            tCAcc = checkTypeCast(declType, actType, decl, cAcc);
+            compoundMode = translateCompoundDeclaration(decl, var, tCAcc, (Compound) actType, MODE_COMPOUND_REGISTER); 
             tcEntry = contexts.getInConstruction(true);
         }
         // next if: implicit overriding of default values through AttributeAssignment - leave out here
@@ -665,8 +667,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         translateDerivedDatatypeConstraints(decl, declType, null, decl.getTopLevelParent(), 0, cAcc);
         if (isCompound) { // this is a compound value -> default constraints, do not defer
             contexts.setInConstruction(tcEntry);
-            translateCompoundDeclaration(decl, var, checkTypeCast(declType, actType, decl, cAcc), 
-                (Compound) actType, compoundMode); 
+            translateCompoundDeclaration(decl, var, tCAcc, (Compound) actType, compoundMode); 
         } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, actType, cAcc);
         }
@@ -977,7 +978,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
 
     /**
      * Returns the accessor for a nested variable declaration. Prefer a <code>cAcc</code> based accessor if given,
-     * else use a cached one from {@link #contexts}. In particukar, this is required to have type cast in the accessor 
+     * else use a cached one from {@link #contexts}. In particular, this is required to have type cast in the accessor 
      * if given from outside.
      * 
      * @param nestedDecl the nested declaration
