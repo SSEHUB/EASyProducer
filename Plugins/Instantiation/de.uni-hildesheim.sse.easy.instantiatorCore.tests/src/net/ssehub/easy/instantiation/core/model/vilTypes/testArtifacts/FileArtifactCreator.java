@@ -14,8 +14,8 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 public class FileArtifactCreator extends DefaultFileArtifactCreator {
 
     @Override
-    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
-        return new FileArtifact((File) real, model);
+    public TestFileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
+        return new TestFileArtifact((File) real, model);
     }
 
 }

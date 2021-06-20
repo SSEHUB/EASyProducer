@@ -131,6 +131,26 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     }
 
     /**
+     * Returns the value assigned to <code>key</code>, if there is none it associates <code>key</code> 
+     * with <code>deflt</code>, i.e., adds <code>deflt</code>.
+     * 
+     * @param key the key to search the value for
+     * @param deflt the default value if <code>key</code> does not exist, a key-value mapping will be added
+     * @return the value for key (<code>deflt</code> if no key-value mapping is defined)
+     */
+    @OperationMeta(useGenericParameter = 1)
+    public V getOrAdd(Object key, V deflt) {
+        V result;
+        if (containsKey(key)) {
+            result = at(key);
+        } else {
+            result = deflt;
+            add(key, result);
+        }
+        return result;
+    }
+
+    /**
      * Returns the keys of this map.
      * 
      * @return the keys

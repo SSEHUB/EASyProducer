@@ -212,6 +212,10 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
             setOperations(tmp.values());
             setConversions(convs);
             superType = getTypeRegistry().findType(cls.getSuperclass());
+            if (superType == this) {
+                LOGGER.error("TypeDescriptor " + getName() + " has same type as super descriptor. This leads to "
+                    + "a direct inheritance cycle. Please fix the names!");
+            }
         }
         return this;
     }

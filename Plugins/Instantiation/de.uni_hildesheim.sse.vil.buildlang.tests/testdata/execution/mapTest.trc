@@ -25,3 +25,5 @@ b2 <- true
     s6 <- y
     -> clone(Map) with ({{here, there}, {x, y}}) = {{here, there}, {x, y}}
     m2 <- {{here, there}, {x, y}}
+    -> getOrAdd(Map, Any, Any) with ({{here, there}, {x, y}}, b, c) = c
+    -> containsKey(Map, Any) with ({{b, c}, {here, there}, {x, y}}, b) = true    

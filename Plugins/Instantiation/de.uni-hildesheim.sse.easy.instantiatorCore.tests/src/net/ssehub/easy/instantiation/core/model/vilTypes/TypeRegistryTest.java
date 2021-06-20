@@ -65,7 +65,7 @@ public class TypeRegistryTest extends AbstractTest {
         }
         try {
             TypeRegistry.DEFAULT.registerType(
-                net.ssehub.easy.instantiation.core.model.vilTypes.testArtifacts.FileArtifact.class);
+                net.ssehub.easy.instantiation.core.model.vilTypes.testArtifacts.TestFileArtifact.class);
         } catch (VilException e) {
             Assert.fail("overriding a default artifact with same name in same hierarchy shall work");
         }

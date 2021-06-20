@@ -17,6 +17,8 @@ vilScript mapTest () {
         String s5 = m.defaultget("x", "z");
         String s6 = m1.defaultget("x", "z");
         mapOf(String, String) m2 = m1.clone();
+        m1.getOrAdd("b", "c");
+        m1.containsKey("b");
     }
 
 }

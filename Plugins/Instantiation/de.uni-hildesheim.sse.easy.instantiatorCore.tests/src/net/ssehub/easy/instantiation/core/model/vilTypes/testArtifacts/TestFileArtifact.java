@@ -9,7 +9,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
  * A new file artifact that does not conflict with an existing artifact.
  */
 @ArtifactCreator(FileArtifactCreator.class)
-public class FileArtifact extends net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact {
+public class TestFileArtifact extends net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact {
 
     /**
      * Creates a new file artifact from <code>file</code>.
@@ -17,7 +17,7 @@ public class FileArtifact extends net.ssehub.easy.instantiation.core.model.artif
      * @param file the file to derive the artifact from
      * @param model the artifact model to create this folder artifact within
      */
-    protected FileArtifact(File file, ArtifactModel model) {
+    protected TestFileArtifact(File file, ArtifactModel model) {
         super(file, model);
     }
 

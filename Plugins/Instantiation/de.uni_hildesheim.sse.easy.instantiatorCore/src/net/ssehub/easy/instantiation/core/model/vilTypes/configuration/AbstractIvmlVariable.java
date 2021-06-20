@@ -1025,8 +1025,15 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
         IDatatype type;
         IDatatype declType = getDecisionVariable().getDeclaration().getType();
         IDatatype actType = getActualType();
+        // this is a rather strange part - shall depend on variable, but does not seem to work in all cases
         if (TypeQueries.isCompound(declType) && !TypeQueries.isReference(actType)) {
             type = actType;
+        } else if (TypeQueries.isCompound(declType) && TypeQueries.isReference(actType)) {
+            type = declType;
+            if (null != variable && null != variable.getValue() 
+                && type.isAssignableFrom(variable.getValue().getType())) {
+                type = variable.getValue().getType();
+            }
         } else {
             type = declType;
         }

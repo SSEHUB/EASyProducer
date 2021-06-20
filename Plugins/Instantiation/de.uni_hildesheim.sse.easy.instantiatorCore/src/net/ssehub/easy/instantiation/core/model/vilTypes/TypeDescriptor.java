@@ -623,7 +623,9 @@ public abstract class TypeDescriptor <T> implements IMetaType {
         List<IMetaOperation> result = new ArrayList<IMetaOperation>(5);
         java.util.Set<String> known = type.getSuperType() != null ? new HashSet<String>() : null;
         IMetaType iter = type;
+        IMetaType iterAtLoopStart;
         do {
+            iterAtLoopStart = iter;
             for (int o = 0; o < iter.getOperationsCount(); o++) {
                 IMetaOperation op = iter.getOperation(o);
                 boolean ok;
@@ -654,7 +656,9 @@ public abstract class TypeDescriptor <T> implements IMetaType {
                 }
             }
             iter = iter.getSuperType();
-        } while (iter != null);
+            // TypeDescriptor are found by simple names. Direct loop may accidentally occur and is reported as error.
+            // However, it may lead to an endless loop. Prevention only needed in accidental cases.
+        } while (iter != null && iter != iterAtLoopStart);
         return result;
     }
 
