@@ -455,6 +455,9 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         if (null == currentContext) {
             currentContext = new Context<V, M>(model);
             contexts.put(model, currentContext);
+            if (contexts.size() > 0) { // we jump into another model and continue there, set baseline indentation
+                currentContext.increaseIndentation();
+            }
         }
 
         if (null != oldContext && currentContext.getModel().isAssignableFrom(oldContext)) {

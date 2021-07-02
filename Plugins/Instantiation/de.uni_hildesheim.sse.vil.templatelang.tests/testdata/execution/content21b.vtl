@@ -1,0 +1,11 @@
+import content21;
+
+@indent(indentation = 4, additional = 0)
+template content21b(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        String add = "add";
+        '${produceYaml(config, add, false)}'
+    }
+
+}

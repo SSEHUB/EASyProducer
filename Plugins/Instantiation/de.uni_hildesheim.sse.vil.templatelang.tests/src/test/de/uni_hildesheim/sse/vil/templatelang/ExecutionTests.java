@@ -583,6 +583,26 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
 
     /**
+     * Tests content produced by nested defs [contributed by IIP-Ecosphere].
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent21() throws IOException {
+        assertEqual("content21");
+    }
+
+    /**
+     * Tests content produced by nested import defs [contributed by IIP-Ecosphere].
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent21b() throws IOException {
+        assertEqual("content21b");
+    }
+
+    /**
      * Tests simple content with multi-line expression mixing but no indentation hint.
      * 
      * @throws IOException should not occur

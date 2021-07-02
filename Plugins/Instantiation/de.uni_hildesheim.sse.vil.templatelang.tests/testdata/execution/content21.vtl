@@ -1,0 +1,36 @@
+@indent(indentation = 4, additional = 0)
+template content21(Configuration config, Artifact target) {
+
+    def produceYaml(Configuration config, String addition="", Boolean withOther=true) {
+        String value1 = "val1";
+        String value2 = "val2";
+        '${produceOther(config, withOther)}
+        yaml:
+            value1: ${value1}
+            value2: ${value2}
+            ${produceAddition(addition)}'
+    }
+
+    def produceOther(Configuration config, Boolean enable) {
+        String otherVal = "xxx";
+        if (enable) {
+            'other:
+                otherVal: ${otherVal}'
+        } else {
+            '' !<CR>;
+        }
+    }
+
+    def produceAddition(String addition) {
+        if (addition.length() > 0) {
+            'addition: ${addition}'
+        } else {
+            ''
+        }
+    }
+
+    def main(Configuration config, Artifact target) {
+        '${produceYaml(config)}'
+    }
+
+}

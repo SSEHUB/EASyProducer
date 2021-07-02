@@ -1,0 +1,12 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    add <- add
+    -> produceYaml(Configuration, String, Boolean) with (<config>, add, false)
+        value1 <- val1
+        value2 <- val2
+        -> produceOther(Configuration, Boolean) with (<config>, false)
+            otherVal <- xxx
+            visit else-branch
+        -> produceAddition(String) with (add)
+            -> length(String) with (add) = 3
+            -> >(Integer, Integer) with (3, 0) = true
+            visit if-branch

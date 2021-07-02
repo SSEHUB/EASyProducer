@@ -263,6 +263,7 @@ public class EvaluationVisitor implements IExpressionVisitor {
         String result = "";
         Expression lastEx = null;
         Object lastValue = null;
+        boolean replaceEmptyLine = false;
         for (int e = 0; e < iter.getExpressionsCount(); e++) {
             Expression expression = iter.getExpression(e);
             Object value;
@@ -278,16 +279,40 @@ public class EvaluationVisitor implements IExpressionVisitor {
                 }
             }
             if (value != null) {
-                result = appendInCompositeExpression(result, lastEx, lastValue,
-                    StringValueHelper.getStringValueInReplacement(value, null), expression);
+                String sValue = StringValueHelper.getStringValueInReplacement(value, null);
+                if (replaceEmptyLine) { // if we shall check this, remove all directly following newlines
+                    int i = 0;
+                    do {
+                        char c = sValue.charAt(i);
+                        if (c == '\r' || c == '\n') {
+                            i++;
+                        } else {
+                            break;
+                        }
+                    } while (i < sValue.length());
+                    if (i > sValue.length()) {
+                        sValue = null;
+                    } else if (i > 0) {
+                        sValue = sValue.substring(i);
+                    }
+                }
+                if (null != sValue) {
+                    result = appendInCompositeExpression(result, lastEx, lastValue, sValue, expression);
+                }
             } else {
                 result = null;
                 break;
             }
             lastEx = expression;
             lastValue = value;
+            // replace empty/newline line start if requested by last content statement and its own value is empty
+            replaceEmptyLine = lastContentReplaceEmptyLine() && lastValue != null && lastValue.toString().length() == 0;
         }
         return result;
+    }
+    
+    protected boolean lastContentReplaceEmptyLine() {
+        return false;
     }
     
     /**

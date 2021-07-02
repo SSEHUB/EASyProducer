@@ -37,6 +37,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegi
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentStatement.LineEndType;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry.ILanguage;
 import net.ssehub.easy.instantiation.core.model.expressions.IArgumentProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
@@ -110,6 +111,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private boolean lastContentFormatted = false;
     private Stack<String> defContentStack = new Stack<String>();
     private ContentStatement lastContent = null;
+    private LineEndType lastContentLineEndType = LineEndType.DEFAULT;
 
     /**
      * Creates a new evaluation visitor.
@@ -564,7 +566,15 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         lastContentNestingLevel = contentNestingLevel;
         contentNestingLevel--;
         lastContent = cnt;
+        lastContentLineEndType = cnt.getLineEndType();
         return content;
+    }
+    
+    @Override
+    protected boolean lastContentReplaceEmptyLine() {
+        boolean result = lastContentLineEndType == LineEndType.NO_LINE_END;
+        lastContentLineEndType = null;
+        return result;
     }
     
     /**
