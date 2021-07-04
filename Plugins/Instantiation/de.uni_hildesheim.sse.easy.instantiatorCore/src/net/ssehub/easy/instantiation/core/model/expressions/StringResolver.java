@@ -192,11 +192,7 @@ public class StringResolver<I extends VariableDeclaration, R extends Resolver<I>
      */
     private List<Expression> handleConstant(String text) throws VilException {
         List<Expression> list = new ArrayList<Expression>();
-        // Split the string into words but keep the spaces
-        String[] textArray = text.split("(?<=\\s)|(?=\\s)");
-        for (String string : textArray) {
-            list.add(createConstantStringExpression(string));
-        }
+        list.add(createConstantStringExpression(text));
         return list;
     }
 

@@ -311,6 +311,12 @@ public class EvaluationVisitor implements IExpressionVisitor {
         return result;
     }
     
+    /**
+     * Returns whether the last content commands that empty lines (itself empty, following line breaks) shall
+     * be removed.
+     * 
+     * @return {@code true} for remove, {@code false} else
+     */
     protected boolean lastContentReplaceEmptyLine() {
         return false;
     }
