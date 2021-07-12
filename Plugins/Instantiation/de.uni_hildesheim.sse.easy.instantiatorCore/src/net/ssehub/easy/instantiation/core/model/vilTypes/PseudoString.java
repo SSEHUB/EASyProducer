@@ -467,7 +467,7 @@ public class PseudoString implements IVilType {
     }
 
     /**
-     * Turns the given <code>string</code> into a typical (Java) programming language identifier by removing all
+     * Turns the given <code>string</code> into a (Java) programming language identifier by removing all
      * non identifier characters.
      * 
      * @param string the string to be turned into an identifier
@@ -478,11 +478,46 @@ public class PseudoString implements IVilType {
     public static String toIdentifier(String string) {
         // see matchIdentifier
         StringBuilder tmp = new StringBuilder(string);
-        for (int i = tmp.length() - 1; i >= 0; i--) {
-            if (!Character.isJavaIdentifierPart(tmp.charAt(i))) {
-                tmp.deleteCharAt(i);
+        deleteNonJavaIdentifierParts(tmp);
+        return tmp.toString();
+    }
+
+    /**
+     * Deletes non-Java identifier parts from <code>name</code>.
+     * 
+     * @param name the name to clean
+     */
+    private static void deleteNonJavaIdentifierParts(StringBuilder name) {
+        for (int i = name.length() - 1; i >= 0; i--) {
+            if (!Character.isJavaIdentifierPart(name.charAt(i))) {
+                name.deleteCharAt(i);
             }
         }
+    }
+
+    /**
+     * Turns the given <code>string</code> into a typical (Java) camel-case programming language identifier by 
+     * turning all lower case characters after whitespaces into upper case characters and removing all non-Java
+     * identifier parts (akin to {@link #toIdentifier(String)}.
+     * 
+     * @param string the string to be turned into an identifier
+     * @return the identifier (may be empty in the extreme case)
+     * 
+     * @see #matchIdentifier(String)
+     */
+    public static String toCamelCaseIdentifier(String string) {
+        // see matchIdentifier
+        StringBuilder tmp = new StringBuilder(string);
+        for (int i = tmp.length() - 1; i >= 0; i--) {
+            char c = tmp.charAt(i);
+            if (Character.isWhitespace(c) && i + 1 < tmp.length()) {
+                char cNext = tmp.charAt(i + 1);
+                if (Character.isLowerCase(cNext)) {
+                    tmp.setCharAt(i + 1, Character.toUpperCase(cNext));
+                }
+            }
+        }
+        deleteNonJavaIdentifierParts(tmp);
         return tmp.toString();
     }
     
