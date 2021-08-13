@@ -5,11 +5,12 @@ REM install maven into PATH
 REM install GnuPGP, define default secret key (or change script)
 REM add your account settings for ossrh into maven setup (use authentication token)
 REM copy this script into an empty directory or run it in original directory (tmp directory is in gitignore)
+REM adjust release version number
 REM run this script
 REM goto https://oss.sonatype.org/#welcome, staging repositories, netssehub-...*, "close" for check/deploy, if successful go for "release"
 
 SET LOCALREPO=http://projects.sse.uni-hildesheim.de/qm/maven/net/ssehub/easy
-SET EASY_VERSION=1.2.0
+SET EASY_VERSION=1.3.0
 SET DIR=.\tmp
 SET TARGET=https://oss.sonatype.org/service/local/staging/deploy/maven2
 SET REPO=ossrh
@@ -22,6 +23,7 @@ call :DeployArtifact %EMPTY% dependencies %EASY_VERSION% true
 call :DeployArtifact %EMPTY% basics %EASY_VERSION% false
 call :DeployArtifact %EMPTY% varModel %EASY_VERSION% false
 call :DeployArtifact %EMPTY% dslCore %EASY_VERSION% false
+call :DeployArtifact %EMPTY% dslCore.ui %EASY_VERSION% false
 call :DeployArtifact %EMPTY% instantiatorCore %EASY_VERSION% false
 call :DeployArtifact %EMPTY% instantiatorCore-rt %EASY_VERSION% false
 call :DeployArtifact %EMPTY% ivml %EASY_VERSION% false
@@ -31,6 +33,18 @@ call :DeployArtifact vil expressions %EASY_VERSION% false
 call :DeployArtifact vil buildlang %EASY_VERSION% false
 call :DeployArtifact vil templateLang %EASY_VERSION% false
 call :DeployArtifact vil rtvil %EASY_VERSION% false
+call :DeployArtifact %EMPTY% core %EASY_VERSION% false
+call :DeployArtifact %EMPTY% core.eclipse %EASY_VERSION% false
+call :DeployArtifact instantiation ant %EASY_VERSION% false
+call :DeployArtifact instantiation aspectj %EASY_VERSION% false
+call :DeployArtifact instantiation java %EASY_VERSION% false
+call :DeployArtifact instantiation maven %EASY_VERSION% false
+call :DeployArtifact instantiation serializer.xml %EASY_VERSION% false
+call :DeployArtifact instantiation velocity %EASY_VERSION% false
+call :DeployArtifact instantiation xvcl %EASY_VERSION% false
+call :DeployArtifact runtime EASy-Dependencies %EASY_VERSION% true
+call :DeployArtifact runtime loader %EASY_VERSION% false
+call :DeployArtifact producer CommandLine %EASY_VERSION% false
 REM currently no bundled versions as sources/javadoc for Eclipse part are missing
 REM call :DeployArtifact runtime EASy %EASY_VERSION% false
 REM call :DeployArtifact runtime Eclipse %EASY_VERSION% false

@@ -2,6 +2,7 @@
 <project name="EASyCommandLine" default="all" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
@@ -74,6 +75,12 @@
                 <attribute name="Class-Path" value="${manifest_cp}"/>
             </manifest>
         </jar>
+    	<jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
+            <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
+                <classpath refid="includes"/>
+        </easyJavadoc>
+    	<jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
+    	<mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
         <zip destfile="${build.base.dir}/EASyCommandLine.zip" basedir="${build.base.dir}/bundle" />
     </target>
 	
