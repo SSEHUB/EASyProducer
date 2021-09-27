@@ -167,8 +167,9 @@
         <!--<zip update="true" destfile="${basedir}/gen/final/win32.win32.x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" basedir="EASy/osgi" includes="JavaSE-1.9.profile JavaSE-10.profile profile.list"/>-->
         <!-- package for Java8 -->
         <!--<zip destfile="${basedir}/archive/EASy-Producer.win32.win32.x86_64-${NOW}-java8.zip" basedir="${basedir}/gen/final/win32.win32.x86_64"/>-->
-        <!-- replace ini for Java9 and 10  -->
-        <!--<copy todir="${basedir}/gen/final/win32.win32.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
+        <!-- add ini -->
+        <copy todir="${basedir}/gen/final/win32.win32.x86_64/" file="EASy/eclipse419/EasyProducer.ini" overwrite="true"/>
+    	<delete failonerror="false" file="${basedir}/gen/final/win32.win32.x86_64/null.ini"/>
         <!-- package for Java9 and 10 -->
         <!--<zip destfile="${basedir}/archive/EASy-Producer.win32.win32.x86_64-${NOW}-java9-10.zip" basedir="${basedir}/gen/final/win32.win32.x86_64"/>-->
         <zip destfile="${basedir}/archive/EASy-Producer.win32.win32.x86_64-${NOW}.zip" basedir="${basedir}/gen/final/win32.win32.x86_64"/>
@@ -205,7 +206,9 @@
         <!--<zip update="true" destfile="${basedir}/gen/final/gtk.linux.x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" basedir="EASy/osgi" includes="JavaSE-1.9.profile JavaSE-10.profile profile.list"/>-->
         <!-- package for Java8 -->
         <!--<tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}-java8.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>-->
-        <!-- replace ini for Java9 and 10  -->
+        <!-- add ini -->
+        <copy todir="${basedir}/gen/final/gtk.linux.x86_64/" file="EASy/eclipse419/EasyProducer.ini" overwrite="true"/>
+        <delete failonerror="false" file="${basedir}/gen/final/gtk.linux.x86_64/null.ini"/>
         <!--<copy todir="${basedir}/gen/final/gtk.linux.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
         <!-- package for Java9 and 10 -->
         <!--<tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}-java9-10.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>-->
@@ -247,7 +250,9 @@
     	<!--<zip update="true" destfile="${basedir}/gen/final/cocoa.macosx.x86_64/plugins/org.eclipse.osgi_3.10.101.v20150820-1432.jar" basedir="EASy/osgi" includes="JavaSE-1.9.profile JavaSE-10.profile profile.list"/>-->
         <!-- package for Java8 -->
     	<!--<zip destfile="${basedir}/archive/EASy-Producer.cocoa.macosx.x86_64-${NOW}-java8.zip" basedir="${basedir}/gen/final/cocoa.macosx.x86_64"/>-->
-        <!-- replace ini for Java9 and 10  -->
+        <!-- add ini -->
+        <copy todir="${basedir}/gen/final/cocoa.macosx.x86_64/" file="EASy/eclipse419/EasyProducer.ini" overwrite="true"/>
+        <delete failonerror="false" file="${basedir}/gen/final/cocoa.macosx.x86_64/null.ini"/>
     	<!--<copy todir="${basedir}/gen/final/cocoa.macosx.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
         <!-- package for Java9 and 10 -->
         <!--<zip destfile="${basedir}/archive/EASy-Producer.cocoa.macosx.x86_64-${NOW}-java9-10.zip" basedir="${basedir}/gen/final/cocoa.macosx.x86_64"/>-->
