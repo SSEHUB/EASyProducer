@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="%productName" uid="net.ssehub.easy.producer.ui.EasyProducer" id="net.ssehub.easy.producer.ui.EASyProducer" application="org.eclipse.ui.ide.workbench" version="1.2.0" useFeatures="false" includeLaunchers="true">
+<product name="EASy-Producer" uid="net.ssehub.easy.producer.ui.EasyProducer" id="net.ssehub.easy.producer.ui.EASyProducer" application="org.eclipse.ui.ide.workbench" version="1.2.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="icons/EASy_Logo_02.png"/>
@@ -37,6 +37,7 @@ Germany
          <bmp/>
       </win>
    </launcher>
+
 
    <vm>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-13</windows>
