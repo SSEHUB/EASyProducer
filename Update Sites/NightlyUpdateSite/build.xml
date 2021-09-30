@@ -212,7 +212,7 @@
         <!--<copy todir="${basedir}/gen/final/gtk.linux.x86_64/" file="EASy/java9/EASy.ini" overwrite="true"/>-->
         <!-- package for Java9 and 10 -->
         <!--<tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}-java9-10.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>-->
-        <tar destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>
+        <tar longfile="gnu" destfile="${basedir}/archive/EASy-Producer.gtk.linux.x86_64-${NOW}.tar.gz" compression="gzip" basedir="${basedir}/gen/final/gtk.linux.x86_64"/>
         
         <mkdir dir="${basedir}/gen/final/cocoa.macosx.x86_64"/>
     	<eclipseLauncher application="org.eclipse.equinox.p2.director">
