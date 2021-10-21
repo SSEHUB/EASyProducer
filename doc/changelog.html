@@ -18,20 +18,58 @@
     </ul>
   <li>release 1.2.0 (June 4, 2018)</li>
     <ul>
-	  <li>explict for/while in VIL/VTL (<a href="https://github.com/SSEHUB/EASyProducer/issues/47">#47</a>)</li>
-      <li>Abortion of VIL/VTL scripts (<a href="https://github.com/SSEHUB/EASyProducer/issues/53">#53</a>)</li>
-      <li>Cleanup of internal constraints/reasoner (<a href="https://github.com/SSEHUB/EASyProducer/issues/12">#12</a>)</li>
-      <li>VTL warnings and errors in execution and editors</li>
-	  <li>Selection of basis Eclipse project type while creating an EASy-Producer project(<a href="https://github.com/SSEHUB/EASyProducer/issues/43">#43</a>), supported types:</li>
+      <li>IVML
+        <ul>
+          <li>multi inheritance and slot shadowing</li>
+          <li>default parameter values</li>
+          <li>Constant values(<a href="https://github.com/SSEHUB/EASyProducer/issues/50">#50</a>)</li>
+          <li>IVML constraint syntax alignment to OCL 2.4.1, editor compliance mode</li>
+          <li>UI improvements for refined compound values (<a href="https://github.com/SSEHUB/EASyProducer/issues/82">#82</a>)</li>
+          <li>Compound initialization clarification (<a href="https://github.com/SSEHUB/EASyProducer/issues/32">#32</a>)</li>
+          <li>Constant variable declarations</li>
+          <li>Reasoner
+            <ul>
+               <li>Full implementation of eval-Blocks, slightly relaxed syntax for simplified application</li>
+               <li>Consideration of refined compound values</li>
+               <li>Consideration of compound collection defaults</li>
+               <li>Complex and dependent compound value initialization addressing re-assignment problems (<a href="https://github.com/SSEHUB/EASyProducer/issues/76">#76</a>)</li>
+               <li>Support for constraint variables, i.e., changing constraints during reasoning (<a href="https://github.com/SSEHUB/EASyProducer/issues/68">#68</a>)</li>
+               <li>Support for refined compound values, leading to changing constraints during reasoning</li>
+               <li>Support for configuration initialization</li>
+               <li>Auto-selection of default reasoner upon first start (<a href="https://github.com/SSEHUB/EASyProducer/issues/80">#80</a>)</li>
+               <li>Memory usage and reasoning speed improvements</li>
+               <li>Re-usable reasoner instances introduced, e.g., for faster runtime reasoning</li>
+               <li>More detailed and faster error messages (<a href="https://github.com/SSEHUB/EASyProducer/issues/46">#46</a>)</li>
+               <li>Drools-based reasoner discontinued</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>VIL/VTL
+        <ul>
+          <li>Expression syntax alignment to OCL 2.4.1, editor compliance mode</li>
+          <li>default parameter values</li>
+          <li>explicit for/while (<a href="https://github.com/SSEHUB/EASyProducer/issues/47">#47</a>)</li>
+          <li>Abortion of VIL/VTL scripts (<a href="https://github.com/SSEHUB/EASyProducer/issues/53">#53</a>)</li>
+          <li>More XML header meta access and output control. Explicit synchronization of XML attribute sequence to 
+              keep original document formatting.</li>
+        </ul>
+      </li>
+      <li>Selection of basis Eclipse project type while creating an EASy-Producer project(<a href="https://github.com/SSEHUB/EASyProducer/issues/43">#43</a>), supported types:</li>
         <ul>
           <li>Java projects</li>
           <li>Eclipse projects (without Java, C, or other programming language specific settings)</li>
         </ul>
-      <li>Full implementation of eval-Blocks, slighly relaxed syntax for simplified application</li>
-	  <li>Constants in IVML</li>
-	  <li>Self-unpacking Maven libraries in Maven instantiator</li>
-	  <li>Support for Eclipse 4.19, xText &gt;= 2.12, Java 11</li>
-	</ul>
+      <li>Standalone deployment to Maven, deployment of individual core components to Maven, standalone composition 
+        of core components based on Maven (as now documented in the user guide).</li>
+      <li>Documentation improvements along all changes, including <a href="https://github.com/SSEHUB/EASyProducer/issues/81">#81</a></li>
+      <li>Uptake of Java 9: Explicit integration of Apache Xerces 2.9.0 and Xalan 2.7.1 in VIL/VTL XML 
+          processing to resolve Java 9 module issue w.r.t. enforcing attribute output sequences.</li>
+      <li>Uptake of Eclipse 4.7: More explicit bundles for integrated libs requiring dynamic classloading as enforced 
+          by changes in Eclipse/Equinox class loading. EASy-Producer nightly works with Eclipse 4.7.3 and shall still 
+          works with Eclipse 4.5. However, EASy-Producer 1.1.0 probably does not work with more recent Eclipse versions 
+          than 4.5.</li>
+    </ul>
   </li>
   <li>release 1.1.0 (March 16, 2016)</li>
     <ul>
