@@ -98,6 +98,7 @@ public class IvmlTypeResolver implements ITypeResolver {
     
     @Override
     public TypeDescriptor<?> resolveType(String name, boolean addIfMissing) {
+        Exception exception = null;
         TypeDescriptor<?> result = access.get(name);
         if (null == result) {
             try {
@@ -112,9 +113,9 @@ public class IvmlTypeResolver implements ITypeResolver {
                     }
                 }
             } catch (ModelQueryException e) {
-                LOGGER.warn(e.getMessage());
+                exception = e;
             } catch (VilException e) {
-                LOGGER.warn(e.getMessage());
+                exception = e;
             }
         }
         if (null == result && addIfMissing) {
@@ -126,8 +127,11 @@ public class IvmlTypeResolver implements ITypeResolver {
                     addType(name, result);
                 }
             } catch (VilException e) {
-                LOGGER.warn(e.getMessage()); // shall not occur
+                exception = e;
             }
+        }
+        if (null == result && null != exception) {
+            LOGGER.debug(exception.getMessage()); // shall not occur; if it's for an enum literal, it's ok
         }
         return result;
     }
