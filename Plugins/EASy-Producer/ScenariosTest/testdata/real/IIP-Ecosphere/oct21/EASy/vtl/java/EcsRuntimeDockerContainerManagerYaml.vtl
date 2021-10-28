@@ -1,0 +1,86 @@
+import JavaMapping;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template EcsRuntimeDockerContainerManagerYaml(IIPEcosphere config, FileArtifact target) {
+
+    def produceAas(IIPEcosphere config, String aasPersistence="", Boolean withDocker=true, Boolean implLocalEphemerial=false) {
+        EndpointAddress aasServer = config.aasServer;
+        EndpointAddress aasRegistryServer = config.aasRegistryServer;
+        ImplAddress aasImplServer = config.aasImplServer;
+        DockerContainerManager containerManager = config.containerManager; // prerequisite for this template
+        Integer aasImplServerPort = aasImplServer.port;
+        String aasImplServerHost = aasImplServer.host;
+        String aasImplNetmask = aasImplServer.netmask;
+        if (implLocalEphemerial) {
+            aasImplServerPort = -1;
+            aasImplServerHost = "127.0.0.1";
+        }
+        if (withDocker) {
+        '${produceDocker(config)}'
+        }
+        'aas:
+            server:
+                port: ${aasServer.port}
+                host: ${aasServer.host}
+                schema: ${aasServer.schema}
+                path: ${aasServer.path}
+            registry:
+                port: ${aasRegistryServer.port}
+                host: ${aasRegistryServer.host}
+                schema: ${aasRegistryServer.schema}
+                path: ${aasRegistryServer.path}
+            implementation:
+                port: ${aasImplServerPort}
+                host: ${aasImplServerHost}
+                netmask: ${aasImplNetmask}
+                schema: ${aasImplServer.schema}
+                protocol: ${aasProtocolName(aasImplServer.protocol)}
+            ${produceAasPersistence(aasPersistence)}'
+    }
+    
+    def produceDocker(IIPEcosphere config) {
+        DockerContainerManager containerManager = config.containerManager; // prerequisite for this template
+        'docker:
+            dockerHost: ${containerManager.dockerHost}
+            dockerImageYamlFilename: ${containerManager.dockerImageYamlFilename}
+            deleteWhenUndeployed: ${containerManager.deleteWhenUndeployed}'
+    }
+    
+    def produceAasPersistence(String aasPersistence) {
+        if (aasPersistence.length() > 0) {
+            'persistence: ${aasPersistence}'
+        } else {
+            ''
+        }
+    }
+    
+    def produceTransport(IIPEcosphere config) {
+       TransportProtocol tp = config.transportProtocol;
+       'transport:
+            host: ${tp.globalHost}
+            port: ${tp.port}
+            user: ${tp.user}
+            password: ${tp.password}'
+    }
+    
+    def produceNetMgr(IIPEcosphere config) {
+       // take over the AAS netmask for consistency
+       ImplAddress aasImplServer = config.aasImplServer;
+       String aasImplNetmask = aasImplServer.netmask;
+       // we leave out port range for now
+       'netMgr:
+          netmask: ${aasImplNetmask}'
+    }
+    
+    def produceEcsRuntimeCfg(IIPEcosphere config, FileArtifact target) {
+        '${produceTransport(config)}'
+        '${produceAas(config, implLocalEphemerial=true)}'
+        '${produceNetMgr(config)}'
+    }    
+
+    def main(IIPEcosphere config, FileArtifact target) {
+        produceEcsRuntimeCfg(config, target);
+    }
+
+}

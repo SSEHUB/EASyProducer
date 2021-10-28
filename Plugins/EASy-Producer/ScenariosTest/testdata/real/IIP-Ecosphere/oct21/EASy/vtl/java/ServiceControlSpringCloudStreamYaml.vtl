@@ -1,0 +1,38 @@
+import JavaMapping;
+import EcsRuntimeDockerContainerManagerYaml;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template ServiceControlSpringCloudStreamYaml(IIPEcosphere config, FileArtifact target) {
+
+    def produceServiceControlCfg(IIPEcosphere config, FileArtifact target) {
+        SpringCloudStream mgr = config.serviceManager;
+        'logging:
+        level:
+            root: INFO
+        spring:
+            main:
+                banner-mode: off
+                web-application-type: none
+            cloud:
+                deployer:
+                    local:
+                        deleteFilesOnExit: ${mgr.deleteFilesOnExit}
+        service-mgr:
+            deleteArtifacts: ${mgr.deleteArtifacts}
+            waitingTime: ${mgr.waitingTime}
+            brokerHost: ${mgr.brokerHost}
+            brokerPort: ${mgr.brokerPort}
+            availabilityRetryDelay: ${mgr.availabilityRetryDelay}
+            serviceProtocol: ${aasProtocolName(config)}
+            ${produceTransport(config)}
+            ${produceAas(config, implLocalEphemerial=true)}
+            ${produceNetMgr(config)}'
+        // executables based on target device
+    }
+
+    def main(IIPEcosphere config, FileArtifact target) {
+        produceServiceControlCfg(config, target);
+    }
+
+}

@@ -1,0 +1,254 @@
+import JavaBasics;
+import SpringCloudStreamBasics;
+import MeshBasics;
+import JavaConnector;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaSpringCloudStreamMeshElement(Configuration config, FileArtifact target, MeshElement elt, String pkg, Application app) extends MeshBasics {
+
+    Boolean isConnector = false;
+
+    // -------------- special case no service allowed for convenience when building up a configuration ------------------
+
+    def fallbackToNull(MeshElement elt, String text, Boolean func) {
+        fallbackToNull(elt.impl, text, func);
+    }
+
+    def fallbackToNull(ServiceBase service, String text, Boolean func) {
+        text;
+    }
+
+    def fallbackToNull(JavaService service, String text, Boolean func) {
+        if (service.class.length() == 0) {
+            if (func) {
+                'null';
+            } else {
+                '{}';
+            }
+        } else {
+            '${text}';
+        }
+    }
+
+    // ----------------------------- MeshBasics refinement/use ----------------------------
+    
+    def attachIngestors() {
+         for (String methodSuffix : ingestors.getKeys()) {
+             // automatic serialization fails (sometimes) in spring cloud stream 3.1.1 when connected to consumer
+             if (asyncIngestors.containsKey(methodSuffix)) {
+                 if (asyncIngestors.get(methodSuffix)) { // if it is asynchronous
+                     'service.attach${methodSuffix}Ingestor(data -> SerializerMessageConverter.serializeAndSend(streamBridge, "${methodSuffix}-in-0", data));'
+                 }
+             } 
+             // no-hack code
+             //'service.attach${methodSuffix}Ingestor(data -> streamBridge.send("${methodSuffix}-in-0", data));'
+         }
+    }
+    
+    // called via MeshBasics.generateDataMethods for MeshSource
+    def generateSourceMethod(MeshSource src, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        generateSourceMethod(src, src.impl, type, methodSuffix, methodSuffixWithServiceId);
+    }
+    
+    def generateSourceMethod(MeshSource src, ServiceBase service, String type, String methodSuffix, String methodSuffixWithServiceId) {
+    }
+    
+    def generateSourceMethod(MeshSource src, Service service, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        if (!service.asynchronous) {
+            '/**
+            * Creates data to be ingested.
+            *
+            * @return the data supplier functor
+            */
+            @Bean
+            public Supplier<${type}> ${methodSuffixWithServiceId}() {
+                return () -> ${fallbackToNull(src, "service.${methodSuffix}()", true)}; 
+            }'
+        }
+    }
+
+    def generateSourceMethod(MeshSource src, Connector conn, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        '/**
+        * Called when data arrived that shall be passed on to the connector.
+        *
+        * @return the data consumer functor
+        */
+        @Bean
+        public Consumer<${type}> ${methodSuffixWithServiceId}() {
+            return data -> ${fallbackToNull(src, "service.send(data)", false)};
+        }'    
+    }
+    
+    def Boolean recordSourceIngestor(MeshSource elt, IOType type) {
+        not(isConnector); // type(elt.impl) <> Connector
+    }
+
+    // called via MeshBasics.generateDataMethods for asynch MeshProcessor
+    def generateAsyncProcessorInMethod(MeshProcessor proc, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        '/**
+        * Called when data arrived that shall be processed (asynchronously).
+        *
+        * @return the data consumer functor
+        */
+        @Bean
+        public Consumer<${type}> ${methodSuffixWithServiceId}() {
+            return data -> ${fallbackToNull(proc, "service.${methodSuffix}(data)", false)};
+        }'
+    } 
+
+    // called via MeshBasics.generateDataMethods for synch MeshProcessor
+    def generateSyncProcessorMethod(MeshProcessor proc, String inType, String outType, String methodSuffix, String methodSuffixWithServiceId) {
+        '/**
+        * Called when data arrived that shall be processed (synchronously).
+        *
+        * @return the data transformation functor
+        */
+        @Bean
+        public Function<${inType}, ${outType}> ${methodSuffixWithServiceId}() {
+            return data -> ${fallbackToNull(proc, "service.${methodSuffix}(data)", true)};
+        }'
+    } 
+    
+    // called via MeshBasics.generateDataMethods for MeshSink
+    def generateSinkMethod(MeshSink snk, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        '/**
+        * Called when data arrived that shall be received (data sink).
+        *
+        * @return the data consumer functor
+        */
+        @Bean
+        public Consumer<${type}> ${methodSuffixWithServiceId}() {
+            return data -> ${fallbackToNull(snk, "service.${methodSuffix}(data)", false)};
+        }'
+    } 
+    
+    // --------------- initial service to obtain a service instance to run with -------------------------
+    
+    def initialService(MeshElement elt, ServiceBase service, String serviceType) {
+        ''
+    }
+
+    def initialService(MeshElement elt, Service service, String serviceType) {
+        ''
+    }
+
+    def initialService(MeshElement elt, JavaService service, String serviceType) {
+        if (service.class.length() > 0) {
+            'service = AbstractService.createInstance("${service.class}", ${serviceType}.class, "${service.id}", "${getDeploymentDescriptorPath()}");
+            Starter.mapService(service);'
+        } else {
+            '// NO service defined, no initialization possible'
+        }
+    }
+    
+    // TODO connector connect
+    // TODO connector protocol adapter
+    
+    def initialService(MeshElement elt, Connector conn, String serviceType) {
+        String connGen = getConnectorGenerics(conn, false);
+        String clsName = getClsName(elt);
+        '${adapterCreationFragment(conn, "adapter")};
+        ${conn.class}${connGen} conn = new ${conn.class}<>(adapter);
+        ${getYamlServiceFragment("serviceData", clsName, conn.id)}; 
+        service = new ConnectorServiceWrapper${getConnectorGenerics(conn, true)}(serviceData, conn, 
+            () -> createConnectorParameter());
+        service.setReceptionCallback(new ConnectorReceptionCallback());
+        Starter.mapService(service);'
+    }
+
+    // TODO family
+
+    /*def initialService(MeshElement elt, ServiceFamily family, String serviceType) {
+       initialService(family.members.toSequence().first(), serviceType);
+    }*/
+
+    def initialService(MeshElement elt, PythonService service, String serviceType) {
+        '// TODO create ServiceStub'
+    }
+
+    // --------------- service type -------------------------
+    
+    def String getClsName(MeshElement elt) {
+        asTypeName(elt.name);
+    }
+    
+    def getServiceType(MeshElement elt, ServiceBase base) {
+        "${getClsName(elt)}Service";
+    }
+
+    def getServiceType(MeshElement elt, Connector conn) {
+        isConnector = true;
+        "ConnectorServiceWrapper" + getConnectorGenerics(conn, true);
+    }
+    
+    // --------------------- main ---------------------------
+
+    // method attachIngestors() is not needed from Java side but allows for MeshBasics script reuse
+    def main(Configuration config, FileArtifact target, MeshElement elt, String pkg, Application app) {
+        String clsName = getClsName(elt);
+        String serviceType = getServiceType(elt, elt.impl);
+        ServiceBase impl = elt.impl;
+        'package ${pkg};
+        
+        import java.io.IOException;
+        import java.util.function.*;
+        import javax.annotation.PostConstruct;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.cloud.stream.function.StreamBridge;
+        import org.springframework.stereotype.Component;
+        import org.springframework.context.annotation.ComponentScan;
+        import org.springframework.context.annotation.Import;
+        import org.springframework.scheduling.annotation.EnableScheduling;
+        import de.iip_ecosphere.platform.transport.serialization.*;
+        import de.iip_ecosphere.platform.transport.connectors.ReceptionCallback;
+        import de.iip_ecosphere.platform.transport.spring.SerializerMessageConverter;
+        import de.iip_ecosphere.platform.services.environment.*;
+        import de.iip_ecosphere.platform.services.environment.spring.Starter;
+        import de.iip_ecosphere.platform.services.environment.spring.metricsProvider.MetricsProvider;
+        import de.iip_ecosphere.platform.connectors.ConnectorParameter;
+        import de.iip_ecosphere.platform.connectors.types.*;
+        import iip.datatypes.*;
+        import iip.interfaces.*;
+        import iip.stubs.*;
+
+        /**
+         * Spring Cloud Stream service frame for net node \'${elt.name}\'.
+         * Generated by: EASy-Producer.
+         */
+        @Component
+        @EnableScheduling
+        public class ${clsName} {
+        
+            @Autowired
+            private StreamBridge streamBridge;
+            private ${serviceType} service;
+            // so far plain delegation, preparation but so far no support for service switching
+            @Autowired
+            @SuppressWarnings("unused")
+            private MetricsProvider metrics;
+        
+            /**
+             * Creates an instance.
+             */
+            public ${clsName}() {
+                ${initialService(elt, elt.impl, serviceType)}
+            }
+        
+            ${generateDataMethods(elt)}
+            ${generateConnectorParameter(elt, app)}
+
+            /**
+             * Attaches the ingestors.
+             */
+            @PostConstruct 
+            public void attachIngestors() {
+                ${attachIngestors()}
+            }
+            ${generateAdapterTranslators(elt)}
+            ${generateReceptionCallback(elt)}
+        }'
+    }
+    
+}

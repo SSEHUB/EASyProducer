@@ -1,0 +1,1 @@
+java -cp "ecsSvcJars/*" --add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -Dio.netty.tryReflectionSetAccessible=true de.iip_ecosphere.platform.support.LifecycleHandler$WaitingStarter %*

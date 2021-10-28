@@ -1,0 +1,8 @@
+[Unit]
+Description=IIP-Ecosphere ECSRuntime
+
+[Service]
+Type=forking
+PIDFile=/run/iip-ecsRuntime.pid
+ExecStart=java -cp "$IIP_HOME/ecsJars/*" --add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -Dio.netty.tryReflectionSetAccessible=true -Diip.pid.dir=/run "de.iip_ecosphere.platform.support.LifecycleHandler\$WaitingStarter" $*
+

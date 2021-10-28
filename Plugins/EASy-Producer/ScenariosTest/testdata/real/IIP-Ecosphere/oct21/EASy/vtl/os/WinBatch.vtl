@@ -1,0 +1,9 @@
+@advice(IIPEcosphere)
+template WinBatch(Configuration config, FileArtifact target, String dir, String main) {
+	
+    def main(Configuration config, FileArtifact target, String dir, String main) {
+        IIPEcosphere cfg = config;
+        'java -cp "${dir}/*" ${cfg.javaOpts} ${main} %*'
+    }
+	
+}

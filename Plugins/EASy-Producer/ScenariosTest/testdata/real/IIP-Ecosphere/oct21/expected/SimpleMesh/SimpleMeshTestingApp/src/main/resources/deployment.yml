@@ -1,0 +1,48 @@
+id: SimpleMeshApp
+name: Simple Mesh Testing App
+version: 0.1.0
+types:
+    - name: Rec1
+      fields:
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+    
+    
+    
+services:
+   - id: SimpleReceiver
+     name: Simple Data Receiver
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SINK_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+   - id: SimpleSource
+     name: Simple Data Source
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}
+       - channel: createRec1_SimpleSource-out-0
+         direction: OUT
+         type: Rec1
+       - channel: receiveRec1_SimpleReceiver-in-0
+         id: Source->Receiver
+         direction: IN
+         type: Rec1
+

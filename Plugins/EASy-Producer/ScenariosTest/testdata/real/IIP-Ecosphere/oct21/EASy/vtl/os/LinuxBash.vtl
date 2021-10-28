@@ -1,0 +1,13 @@
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template LinuxBash(Configuration config, FileArtifact target, String dir, String main) {
+	
+    def main(Configuration config, FileArtifact target, String dir, String main) {
+        IIPEcosphere cfg = config;
+        String m = replace(main, "$", "\\$"); // prevent Linux shell expansion
+        '#!/bin/bash
+        PID_DIR=${cfg.pidDir}
+        java -cp "${dir}/*" ${cfg.javaOpts} -Diip.pid.dir=\\$PID_DIR "${m}" \\$*'
+    }
+	
+}

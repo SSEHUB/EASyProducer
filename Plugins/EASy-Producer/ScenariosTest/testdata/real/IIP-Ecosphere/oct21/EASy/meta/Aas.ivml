@@ -1,0 +1,68 @@
+project Aas {
+
+    import DataTypes;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    // enum for now
+    enum AasImpl { BaSyx };
+    AasImpl aas = AasImpl::BaSyx;
+    isDefined(aas);
+
+    // AAS implementation protocols - extensible in code, enum not sufficient here
+
+    abstract compound AasProtocol {
+    }
+    
+    compound AasProtocolDefault refines AasProtocol {
+    }
+    
+    compound AasProtocolVabTcp refines AasProtocol {
+    }
+    
+    compound AasProtocolVabHttp refines AasProtocol {
+    }
+    
+    // missing VAB-HTTPS
+    
+    AasProtocol aasProtocol = AasProtocolVabTcp{}; // the global default protocol
+    isDefined(aasProtocol);
+    
+    enum AasSchema {HTTP, HTTPS, TCP};
+    enum Persistency {INMEMORY, MONGO};
+    
+    // global AAS network addresses, so far no discovery protocol available 
+
+    compound EphemeralServerAddress {
+    	AasSchema schema = AasSchema::HTTPS;
+        NonEmptyString host;
+        NonEmptyEphemeralPort port;
+    }
+
+    compound ServerAddress refines EphemeralServerAddress {
+        NonEmptyPort port;
+    }
+
+    compound EndpointAddress refines ServerAddress {
+        String path = "";
+    }
+
+    // host "127.0.0.1" replaced by host IP if possible
+    compound ImplAddress refines EphemeralServerAddress {
+        AasProtocol protocol = aasProtocol;
+        AasSchema schema = AasSchema::HTTP; // TODO link to protocol
+        NonEmptyString host = "127.0.0.1";
+        String netmask = "";
+    	isDefined(protocol);
+    }
+    
+    EndpointAddress aasServer;
+    isDefined(aasServer);
+    EndpointAddress aasRegistryServer;
+    isDefined(aasRegistryServer);
+    ImplAddress aasImplServer;
+    isDefined(aasImplServer);
+    Persistency aasPersistency = Persistency::INMEMORY;
+    isDefined(aasPersistency);
+    
+}

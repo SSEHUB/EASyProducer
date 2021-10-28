@@ -539,5 +539,62 @@ public class RealTests extends AbstractRealTests {
         executeCase(names, versions, "QualiMaster/", null, Mode.REASON_INSTANTIATE);
         // no comparison here
     }
+    
+    private static class IipTestModifier implements ITestModifier {
 
+        private String vilFolderName;
+        
+        private IipTestModifier(String vilFolderName) {
+            this.vilFolderName = vilFolderName;
+        }
+        
+        @Override
+        public void postCopy(File target) {
+        }
+
+        @Override
+        public String getTempFolderName(String projectName) {
+            return projectName;
+        }
+
+        @Override
+        public File getVilOutputFolder(File temp) {
+            File result = new File(temp, vilFolderName);
+            if (!result.exists()) {
+                result.mkdirs();
+            }
+            return result;
+        }
+        
+    }
+
+    /**
+     * Tests the IIP-Ecosphere model / instantiation (October 21).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testIipEcosphereOct21() throws IOException {
+        final String folder = "oct21";
+        executeIipCase(folder, "SerializerConfig1");
+        executeIipCase(folder, "SimpleMesh");
+        executeIipCase(folder, "SimpleMesh3");
+    }
+
+    /**
+     * Executes an IIP-Ecosphere case.
+     * 
+     * @param folder the case folder
+     * @param modelName the name of the model to load and execute (expected files/created files in folder of same name)
+     * @throws IOException if execution/comparison fails
+     */
+    private void executeIipCase(String folder, String modelName) throws IOException {
+        String vilFolderName = modelName; // assumed same in expected
+        String[] versions = null;
+        String[] names = {folder, modelName, "IIPEcosphere"};
+        File base = executeCase(names, versions, "IIP-Ecosphere/", null, Mode.REASON_INSTANTIATE, 
+            new IipTestModifier(vilFolderName));
+        assertFileEqualityRec(new File(new File(base, "expected"), vilFolderName), new File(base, vilFolderName));
+    }
+    
 }

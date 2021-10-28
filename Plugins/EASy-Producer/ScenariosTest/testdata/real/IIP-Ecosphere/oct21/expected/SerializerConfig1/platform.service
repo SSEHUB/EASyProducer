@@ -1,0 +1,8 @@
+[Unit]
+Description=IIP-Ecosphere Platform Services
+
+[Service]
+Type=forking
+PIDFile=/run/iip-platform.pid
+ExecStart=java -cp "$IIP_HOME/plJars/*" --add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -Dio.netty.tryReflectionSetAccessible=true -Diip.pid.dir=/run "de.iip_ecosphere.platform.support.LifecycleHandler\$WaitingStarter" $*
+

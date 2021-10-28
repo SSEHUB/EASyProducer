@@ -1,0 +1,55 @@
+@advice(IIPEcosphere)
+template JavaBasics(Configuration config, FileArtifact target) {
+
+    def String asIdentifier(String s) {
+        s;
+    }
+
+    def String asMethodNameSuffix(String s) {
+        s.firstToUpperCase().toIdentifier();
+    }
+    
+    def String asTypeName(String s) {
+        s.firstToUpperCase().toCamelCaseIdentifier();
+    }
+    
+    def String test(String s) {
+        s;
+    }
+    
+    def String toTypeName(DataType type) {
+        type.name;
+    }
+    
+    def String toTypeName(PrimitiveType type) {
+        switch(type.name) {
+            "Integer" : "int",
+            "Long" : "long",
+            "String" : "String",
+            "Boolean" : "boolean",
+            "Float" : "float",
+            "Double" : "double"
+        }
+    }
+    
+    def String getArtifact(MeshElement elt) {
+        getArtifact(elt.impl);
+    }
+    
+    def String getArtifact(ServiceBase service) {
+        "";
+    }
+
+    def String getArtifact(JavaService service) {
+        service.artifact;
+    }
+
+    def String getArtifact(Connector conn) {
+        conn.artifact;
+    }
+
+    def String toPath(String pkg) {
+        pkg.replace(".", "/");
+    }
+
+}

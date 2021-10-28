@@ -1,0 +1,170 @@
+import JavaBasics;
+import SpringCloudStreamBasics;
+import MeshBasics;
+import EcsRuntimeDockerContainerManagerYaml;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaSpringCloudStreamYaml(Configuration config, FileArtifact target, mapOf(MeshElement, setOf(MeshConnector)) mappedMesh, sequenceOf(MeshElement) nodes) extends MeshBasics {
+
+    def function(sequenceOf(MeshElement) nodes) {
+        println(nodes);
+        String result = "";
+        for (MeshElement elt: nodes) {
+            if (result.length() > 0) {
+                result = result + ";";
+            }
+            result = result + generateDataMethods(elt);
+        }        
+        result;
+    }
+    
+    def sources() {
+        if (ingestors.size() > 0) {
+            String sources = "";
+            for (String i: ingestors.keys().toSequence()->sortedBy(s|s)) {
+                if (sources.length() > 0) {
+                    sources = sources + ";";
+                }
+                sources = sources + i;
+            }
+            "source: ${sources}"
+        } 
+    }
+    
+    def nativeEnc() {
+        'producer: 
+            useNativeEncoding: true'
+    }
+    
+    def bindings(mapOf(MeshElement, setOf(MeshConnector)) mappedMesh) {
+        for (MeshElement elt: mappedMesh.keys().toSequence()->sortedBy(e|e.name)) {
+            String eltMet = generateDataMethods(elt);
+            Boolean doOut;
+            if (!asyncIngestors.containsKey(eltMet)) {
+                doOut = true;
+            } else {
+                doOut = !asyncIngestors.get(eltMet); // out for synchronous, in for asynchronous
+            }
+            if (doOut) {
+            '${eltMet}-out-0:
+                    destination: ${eltMet}'
+            ''
+            } else { // automatic serialization fails (sometimes) in spring cloud stream 3.1.1 when connected to consumer
+            '${eltMet}-in-0:
+                    producer:
+                        useNativeEncoding: true'
+            ''
+            }
+            for (MeshConnector conn: mappedMesh.get(elt)) {
+                MeshInnerElement next = conn.next;
+                String nextMeth = generateDataMethods(next);
+                '${nextMeth}-in-0:
+                    destination: ${eltMet}
+                '
+            }
+        }
+    }
+    
+    def generateSourceMethod(MeshSource src, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        methodSuffixWithServiceId;
+    } 
+
+    def generateAsyncProcessorInMethod(MeshProcessor proc, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        methodSuffixWithServiceId;
+    } 
+
+    def generateSyncProcessorMethod(MeshProcessor proc, String inType, String outType, String methodSuffix, String methodSuffixWithServiceId) {
+        methodSuffixWithServiceId;
+    } 
+    
+    def generateSinkMethod(MeshSink sink, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        methodSuffixWithServiceId;
+    } 
+
+    def protocolConfig(IIPEcosphere config) {
+        protocolConfig(config.transportProtocol);
+    }
+
+    def protocolConfig(TransportProtocol protocol) {
+        ''
+    }
+
+    def protocolConfig(TransportProtocolAMQP protocol) {
+        'amqp:
+            port: ${protocol.port}
+            user: ${protocol.user}
+            password: ${protocol.password}'
+    }
+
+    def protocolConfig(TransportProtocolMQTTv3 protocol) {
+        'mqtt:
+            port: ${protocol.port}'
+    }
+
+    def protocolConfig(TransportProtocolMQTTv5 protocol) {
+        'mqtt:
+            port: ${protocol.port}'
+    }
+    
+    def poller(sequenceOf(MeshElement) nodes) {
+        // until Spring Cloud Streams 3.1.1 there is no individual poll setting per source
+        // might be solved with code, but unsure if needed at all as connectors are anyway asynchronous
+        Integer pollInterval = -1;
+        for (MeshElement elt : nodes) {
+            Integer pi = getPollInterval(elt);
+            if (pi > 0) {
+                if (pollInterval < 0 or pi < pollInterval) { // set or minimize
+                    pollInterval = pi;
+                }
+            }
+        }
+        if (pollInterval > 0) {
+            'poller:
+                fixedDelay: ${pollInterval}'
+        }
+    }
+    
+    def Integer getPollInterval(MeshElement elt) {
+        -1;
+    }
+
+    def Integer getPollInterval(MeshSource src) {
+        if (src.impl.asynchronous) {
+            -1;
+        } else {
+            src.pollInterval;
+        }
+    }
+ 
+    def main(Configuration config, FileArtifact target, mapOf(MeshElement, setOf(MeshConnector)) mappedMesh, sequenceOf(MeshElement) nodes) {
+        '${protocolConfig(config)}'
+        '${produceTransport(config)}'
+        'metricsprovider:
+            schedulerrate: 3000
+            memorybaseunit: kilobytes
+            diskbaseunit: megabytes
+        management:
+            health:
+                binders:
+                    enabled: true
+            endpoints:
+                web:
+                    exposure:
+                        include: "metrics"
+        spring:
+            main:
+                banner-mode: off
+            cloud:
+                function:
+                    definition: ${function(nodes)}
+                ${sources()}
+                stream:
+                    ${poller(nodes)}
+                    default:
+                        contentType: application/iip
+                    bindings:
+                        ${bindings(mappedMesh)}'
+    }
+
+}

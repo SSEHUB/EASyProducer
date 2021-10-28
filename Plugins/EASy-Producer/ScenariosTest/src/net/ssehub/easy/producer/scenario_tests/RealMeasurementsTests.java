@@ -131,6 +131,11 @@ public class RealMeasurementsTests extends AbstractRealTests {
         public String getTempFolderName(String projectName) {
             return String.format("%02d_sv_%s", variantNr, projectName);
         }
+
+        @Override
+        public File getVilOutputFolder(File tmp) {
+            return null;
+        }
         
     }
 

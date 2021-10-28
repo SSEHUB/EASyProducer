@@ -1,0 +1,7 @@
+project Connectors {
+
+    import Transport;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+}

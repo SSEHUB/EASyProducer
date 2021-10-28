@@ -1,0 +1,31 @@
+import MavenBasics;
+import JavaMapping;
+
+@advice(IIPEcosphere)
+template PlatformMvn(IIPEcosphere config, XmlFileArtifact target, String dir, String main) {
+
+    def main(IIPEcosphere config, XmlFileArtifact target, String dir, String main) {
+        String iipGroup = "de.iip-ecosphere.platform";
+        String springGroup = "org.springframework.boot";
+        String projectVersion = "\\${project.version}";
+        
+        XmlElement project = createMavenRoot(target);
+        createMavenProjectAttributes(project, "platform.exec", "ConfiguredPlatformInstance", "Configured platform instance");
+        createMavenParent(project, iipGroup, "platformDependencies", "${config.iipVer}");
+        
+        XmlElement dep = createDependencies(project);
+        appendDependency(dep, iipGroup, aasClientModule(config), projectVersion);
+        appendDependency(dep, iipGroup, aasServerModule(config), projectVersion);
+        appendDependency(dep, iipGroup, transportProtocolModule(config), projectVersion);
+        appendDependency(dep, iipGroup, "configuration.configuration", projectVersion);
+        appendDependency(dep, iipGroup, "platform", projectVersion);
+        appendDependency(dep, "junit", "junit", "4.12", scope="test");
+        
+        XmlElement plugins = createMavenBuildElement(project, "", true);
+        appendMavenJarPlugin(plugins, "2.3", false, main);
+        appendMavenDependencyPluginCopyDeps(plugins, jarDir="../${dir}", copyOwn=true);
+        appendCompilerPlugin(plugins);
+        appendSurefirePlugin(plugins);
+    }
+
+}

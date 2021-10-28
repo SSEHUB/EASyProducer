@@ -258,6 +258,14 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
          */
         public String getTempFolderName(String projectName);
         
+        /**
+         * Returns the VIL output folder to use.
+         * 
+         * @param temp the (temporary) folder where the model to test is located
+         * @return the VIL output folder, may be <b>null</b> for none
+         */
+        public File getVilOutputFolder(File temp);
+        
     }
 
     /**
@@ -295,9 +303,13 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         public String getTempFolderName(String projectName) {
             return projectName; // ok
         }
+
+        @Override
+        public File getVilOutputFolder(File temp) {
+            return null;
+        }
         
     }
-
     
     /**
      * Executes a "real-world" case.
@@ -339,11 +351,13 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         String vModelName = names.length > 2 ? names[2] : iModelName;
         File temp = createTempDir(null != modifier ? modifier.getTempFolderName(projectName) : projectName);
         File base = new File(getTestFolder(), caseFolder + projectName);
+        System.out.println("Copying " + base + " to " + temp);
         FileUtils.copyDirectory(base, temp);
         File sourceProjectFolder = null;
         if (null != sourceProjectName) {
             sourceProjectFolder = createTempDir(sourceProjectName);
             File sBase = new File(getTestFolder(), caseFolder + sourceProjectName);
+            System.out.println("Copying " + sBase + " to " + sourceProjectFolder);
             FileUtils.copyDirectory(sBase, sourceProjectFolder);
         }
         if (null != modifier) {
@@ -366,6 +380,9 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             Project target = source; // adjust base below if changed
             if (null != sourceProjectFolder) {
                 source = createProjectInstance(sourceProjectFolder.getAbsoluteFile());
+            }
+            if (null != modifier && null != modifier.getVilOutputFolder(temp)) {
+                target = createProjectInstance(modifier.getVilOutputFolder(temp));
             }
             Map<String, Object> param = new HashMap<String, Object>();
             Project[] tmp = new Project[1]; // the EASy way to call it
