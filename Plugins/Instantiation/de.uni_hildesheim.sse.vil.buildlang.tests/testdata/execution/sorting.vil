@@ -8,6 +8,7 @@ vilScript sorting (Project source, Project target, Configuration config) {
         for(Entry e:sTmp) {
             println(e.name);
         };
+        tmp = tmp->sortedBy(e | e.name);
     }
 
 }

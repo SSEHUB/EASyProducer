@@ -14,3 +14,5 @@
         for: e <- sorting::eSet {2}
         -> println(Any) with (z)
     }
+    -> sortedBy(Sequence, ExpressionEvaluator) with ({sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}, <evaluator>) = {sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}
+    tmp <- {sorting::eSet {0}, sorting::eSet {1}, sorting::eSet {2}, sorting::eSet {3}}    
