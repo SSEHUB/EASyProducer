@@ -168,6 +168,71 @@ public interface TemplateLangPackage extends EPackage
   int LANGUAGE_UNIT_FEATURE_COUNT = ExpressionDslPackage.LANGUAGE_UNIT_FEATURE_COUNT + 6;
 
   /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TopImpl <em>Top</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TopImpl
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getTop()
+   * @generated
+   */
+  int TOP = 1;
+
+  /**
+   * The feature id for the '<em><b>Ex</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TOP__EX = 0;
+
+  /**
+   * The number of structural features of the '<em>Top</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int TOP_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.HintedExpressionImpl <em>Hinted Expression</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.HintedExpressionImpl
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getHintedExpression()
+   * @generated
+   */
+  int HINTED_EXPRESSION = 2;
+
+  /**
+   * The feature id for the '<em><b>Ex</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HINTED_EXPRESSION__EX = 0;
+
+  /**
+   * The feature id for the '<em><b>Hint</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HINTED_EXPRESSION__HINT = 1;
+
+  /**
+   * The number of structural features of the '<em>Hinted Expression</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int HINTED_EXPRESSION_FEATURE_COUNT = 2;
+
+  /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.IndentationHintImpl <em>Indentation Hint</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -175,7 +240,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getIndentationHint()
    * @generated
    */
-  int INDENTATION_HINT = 1;
+  int INDENTATION_HINT = 3;
 
   /**
    * The feature id for the '<em><b>Parts</b></em>' containment reference list.
@@ -203,7 +268,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getIndentationHintPart()
    * @generated
    */
-  int INDENTATION_HINT_PART = 2;
+  int INDENTATION_HINT_PART = 4;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -240,7 +305,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getFormattingHint()
    * @generated
    */
-  int FORMATTING_HINT = 3;
+  int FORMATTING_HINT = 5;
 
   /**
    * The feature id for the '<em><b>Parts</b></em>' containment reference list.
@@ -268,7 +333,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getFormattingHintPart()
    * @generated
    */
-  int FORMATTING_HINT_PART = 4;
+  int FORMATTING_HINT_PART = 6;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -305,7 +370,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getVilDef()
    * @generated
    */
-  int VIL_DEF = 5;
+  int VIL_DEF = 7;
 
   /**
    * The feature id for the '<em><b>Protected</b></em>' attribute.
@@ -369,7 +434,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getStmtBlock()
    * @generated
    */
-  int STMT_BLOCK = 6;
+  int STMT_BLOCK = 8;
 
   /**
    * The feature id for the '<em><b>Stmts</b></em>' containment reference list.
@@ -397,7 +462,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getStmt()
    * @generated
    */
-  int STMT = 7;
+  int STMT = 9;
 
   /**
    * The feature id for the '<em><b>Var</b></em>' containment reference.
@@ -497,7 +562,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getAlternative()
    * @generated
    */
-  int ALTERNATIVE = 8;
+  int ALTERNATIVE = 10;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -561,7 +626,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getContent()
    * @generated
    */
-  int CONTENT = 9;
+  int CONTENT = 11;
 
   /**
    * The feature id for the '<em><b>Ctn</b></em>' attribute.
@@ -616,7 +681,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getSwitch()
    * @generated
    */
-  int SWITCH = 10;
+  int SWITCH = 12;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -662,7 +727,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getSwitchPart()
    * @generated
    */
-  int SWITCH_PART = 11;
+  int SWITCH_PART = 13;
 
   /**
    * The feature id for the '<em><b>Left</b></em>' containment reference.
@@ -699,7 +764,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getLoop()
    * @generated
    */
-  int LOOP = 12;
+  int LOOP = 14;
 
   /**
    * The feature id for the '<em><b>Type</b></em>' containment reference.
@@ -781,7 +846,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getWhile()
    * @generated
    */
-  int WHILE = 13;
+  int WHILE = 15;
 
   /**
    * The feature id for the '<em><b>Expr</b></em>' containment reference.
@@ -827,7 +892,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getmultiselect()
    * @generated
    */
-  int MULTISELECT = 14;
+  int MULTISELECT = 16;
 
   /**
    * The feature id for the '<em><b>Gen</b></em>' containment reference.
@@ -864,7 +929,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getgenericMultiselect()
    * @generated
    */
-  int GENERIC_MULTISELECT = 15;
+  int GENERIC_MULTISELECT = 17;
 
   /**
    * The feature id for the '<em><b>Preamble</b></em>' containment reference.
@@ -919,7 +984,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getmultiSelectPart()
    * @generated
    */
-  int MULTI_SELECT_PART = 16;
+  int MULTI_SELECT_PART = 18;
 
   /**
    * The feature id for the '<em><b>Case</b></em>' containment reference.
@@ -965,7 +1030,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getuserMultiselect()
    * @generated
    */
-  int USER_MULTISELECT = 17;
+  int USER_MULTISELECT = 19;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -1002,7 +1067,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getExtension()
    * @generated
    */
-  int EXTENSION = 18;
+  int EXTENSION = 20;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' containment reference.
@@ -1030,7 +1095,7 @@ public interface TemplateLangPackage extends EPackage
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getJavaQualifiedName()
    * @generated
    */
-  int JAVA_QUALIFIED_NAME = 19;
+  int JAVA_QUALIFIED_NAME = 21;
 
   /**
    * The feature id for the '<em><b>Qname</b></em>' attribute list.
@@ -1126,6 +1191,59 @@ public interface TemplateLangPackage extends EPackage
    * @generated
    */
   EReference getLanguageUnit_Elements();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Top <em>Top</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Top</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Top
+   * @generated
+   */
+  EClass getTop();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Top#getEx <em>Ex</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ex</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Top#getEx()
+   * @see #getTop()
+   * @generated
+   */
+  EReference getTop_Ex();
+
+  /**
+   * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression <em>Hinted Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Hinted Expression</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression
+   * @generated
+   */
+  EClass getHintedExpression();
+
+  /**
+   * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression#getEx <em>Ex</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Ex</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression#getEx()
+   * @see #getHintedExpression()
+   * @generated
+   */
+  EReference getHintedExpression_Ex();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression#getHint <em>Hint</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Hint</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression#getHint()
+   * @see #getHintedExpression()
+   * @generated
+   */
+  EAttribute getHintedExpression_Hint();
 
   /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint <em>Indentation Hint</em>}'.
@@ -2035,6 +2153,50 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EReference LANGUAGE_UNIT__ELEMENTS = eINSTANCE.getLanguageUnit_Elements();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TopImpl <em>Top</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TopImpl
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getTop()
+     * @generated
+     */
+    EClass TOP = eINSTANCE.getTop();
+
+    /**
+     * The meta object literal for the '<em><b>Ex</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference TOP__EX = eINSTANCE.getTop_Ex();
+
+    /**
+     * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.HintedExpressionImpl <em>Hinted Expression</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.HintedExpressionImpl
+     * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.TemplateLangPackageImpl#getHintedExpression()
+     * @generated
+     */
+    EClass HINTED_EXPRESSION = eINSTANCE.getHintedExpression();
+
+    /**
+     * The meta object literal for the '<em><b>Ex</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference HINTED_EXPRESSION__EX = eINSTANCE.getHintedExpression_Ex();
+
+    /**
+     * The meta object literal for the '<em><b>Hint</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute HINTED_EXPRESSION__HINT = eINSTANCE.getHintedExpression_Hint();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.IndentationHintImpl <em>Indentation Hint</em>}' class.

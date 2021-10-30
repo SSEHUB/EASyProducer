@@ -35,10 +35,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
    * Returns the value of the '<em><b>Java Exts</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Java Exts</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Java Exts</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit_JavaExts()
@@ -50,10 +46,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Indent</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Indent</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Indent</em>' containment reference.
    * @see #setIndent(IndentationHint)
@@ -76,10 +68,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Formatting</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Formatting</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Formatting</em>' containment reference.
    * @see #setFormatting(FormattingHint)
@@ -102,10 +90,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Param</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Param</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Param</em>' containment reference.
    * @see #setParam(ParameterList)
@@ -128,10 +112,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
   /**
    * Returns the value of the '<em><b>Ext</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ext</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ext</em>' attribute.
    * @see #setExt(String)
@@ -155,10 +135,6 @@ public interface LanguageUnit extends de.uni_hildesheim.sse.vil.expressions.expr
    * Returns the value of the '<em><b>Elements</b></em>' containment reference list.
    * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Elements</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Elements</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getLanguageUnit_Elements()

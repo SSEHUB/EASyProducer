@@ -71,6 +71,7 @@ public class StmtBlockImpl extends MinimalEObjectImpl.Container implements StmtB
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Stmt> getStmts()
   {
     if (stmts == null)

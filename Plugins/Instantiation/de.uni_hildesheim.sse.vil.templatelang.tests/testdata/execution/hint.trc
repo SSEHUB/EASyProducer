@@ -1,0 +1,4 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    empty <- 
+    -> sub()
+        val <- 5

@@ -351,6 +351,84 @@ ruleLanguageUnit returns [EObject current=null]
 
 
 
+
+
+// Entry rule entryRuleHintedExpression
+entryRuleHintedExpression returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getHintedExpressionRule()); }
+	 iv_ruleHintedExpression=ruleHintedExpression 
+	 { $current=$iv_ruleHintedExpression.current; } 
+	 EOF 
+;
+
+// Rule HintedExpression
+ruleHintedExpression returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+(
+		{ 
+	        newCompositeNode(grammarAccess.getHintedExpressionAccess().getExExpressionParserRuleCall_0_0()); 
+	    }
+		lv_ex_0_0=ruleExpression		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getHintedExpressionRule());
+	        }
+       		set(
+       			$current, 
+       			"ex",
+        		lv_ex_0_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Expression");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)(	otherlv_1='|' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getHintedExpressionAccess().getVerticalLineKeyword_1_0());
+    }
+(
+(
+(
+		lv_hint_2_1=RULE_ID
+		{
+			newLeafNode(lv_hint_2_1, grammarAccess.getHintedExpressionAccess().getHintIDTerminalRuleCall_1_1_0_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getHintedExpressionRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"hint",
+        		lv_hint_2_1, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.ID");
+	    }
+
+    |		lv_hint_2_2=	'<' 
+    {
+        newLeafNode(lv_hint_2_2, grammarAccess.getHintedExpressionAccess().getHintLessThanSignKeyword_1_1_0_1());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getHintedExpressionRule());
+	        }
+       		setWithLastConsumed($current, "hint", lv_hint_2_2, null);
+	    }
+
+)
+
+)
+))?)
+;
+
+
+
+
+
 // Entry rule entryRuleIndentationHint
 entryRuleIndentationHint returns [EObject current=null] 
 	:

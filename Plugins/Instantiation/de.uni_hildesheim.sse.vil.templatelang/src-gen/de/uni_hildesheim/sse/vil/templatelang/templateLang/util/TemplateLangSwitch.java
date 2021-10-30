@@ -80,6 +80,20 @@ public class TemplateLangSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case TemplateLangPackage.TOP:
+      {
+        Top top = (Top)theEObject;
+        T result = caseTop(top);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case TemplateLangPackage.HINTED_EXPRESSION:
+      {
+        HintedExpression hintedExpression = (HintedExpression)theEObject;
+        T result = caseHintedExpression(hintedExpression);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case TemplateLangPackage.INDENTATION_HINT:
       {
         IndentationHint indentationHint = (IndentationHint)theEObject;
@@ -229,6 +243,38 @@ public class TemplateLangSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseLanguageUnit(LanguageUnit object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Top</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Top</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseTop(Top object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Hinted Expression</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Hinted Expression</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseHintedExpression(HintedExpression object)
   {
     return null;
   }

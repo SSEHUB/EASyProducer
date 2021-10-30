@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Content;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.JavaQualifiedName;
@@ -20,6 +21,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.SwitchPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangFactory;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.Top;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect;
@@ -48,6 +50,20 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * @generated
    */
   private EClass languageUnitEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass topEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass hintedExpressionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -211,7 +227,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
 
   /**
    * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-   * 
+   *
    * <p>This method is used to initialize {@link TemplateLangPackage#eINSTANCE} when that field is accessed.
    * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
    * <!-- begin-user-doc -->
@@ -226,7 +242,8 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     if (isInited) return (TemplateLangPackage)EPackage.Registry.INSTANCE.getEPackage(TemplateLangPackage.eNS_URI);
 
     // Obtain or create and register package
-    TemplateLangPackageImpl theTemplateLangPackage = (TemplateLangPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof TemplateLangPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new TemplateLangPackageImpl());
+    Object registeredTemplateLangPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+    TemplateLangPackageImpl theTemplateLangPackage = registeredTemplateLangPackage instanceof TemplateLangPackageImpl ? (TemplateLangPackageImpl)registeredTemplateLangPackage : new TemplateLangPackageImpl();
 
     isInited = true;
 
@@ -242,7 +259,6 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     // Mark meta-data to indicate it can't be changed
     theTemplateLangPackage.freeze();
 
-  
     // Update the registry and return the package
     EPackage.Registry.INSTANCE.put(TemplateLangPackage.eNS_URI, theTemplateLangPackage);
     return theTemplateLangPackage;
@@ -253,6 +269,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLanguageUnit()
   {
     return languageUnitEClass;
@@ -263,6 +280,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_JavaExts()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(0);
@@ -273,6 +291,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Indent()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(1);
@@ -283,6 +302,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Formatting()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(2);
@@ -293,6 +313,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Param()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(3);
@@ -303,6 +324,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLanguageUnit_Ext()
   {
     return (EAttribute)languageUnitEClass.getEStructuralFeatures().get(4);
@@ -313,6 +335,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLanguageUnit_Elements()
   {
     return (EReference)languageUnitEClass.getEStructuralFeatures().get(5);
@@ -323,6 +346,62 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
+  public EClass getTop()
+  {
+    return topEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getTop_Ex()
+  {
+    return (EReference)topEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getHintedExpression()
+  {
+    return hintedExpressionEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EReference getHintedExpression_Ex()
+  {
+    return (EReference)hintedExpressionEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getHintedExpression_Hint()
+  {
+    return (EAttribute)hintedExpressionEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getIndentationHint()
   {
     return indentationHintEClass;
@@ -333,6 +412,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getIndentationHint_Parts()
   {
     return (EReference)indentationHintEClass.getEStructuralFeatures().get(0);
@@ -343,6 +423,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getIndentationHintPart()
   {
     return indentationHintPartEClass;
@@ -353,6 +434,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getIndentationHintPart_Name()
   {
     return (EAttribute)indentationHintPartEClass.getEStructuralFeatures().get(0);
@@ -363,6 +445,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getIndentationHintPart_Value()
   {
     return (EAttribute)indentationHintPartEClass.getEStructuralFeatures().get(1);
@@ -373,6 +456,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFormattingHint()
   {
     return formattingHintEClass;
@@ -383,6 +467,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getFormattingHint_Parts()
   {
     return (EReference)formattingHintEClass.getEStructuralFeatures().get(0);
@@ -393,6 +478,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getFormattingHintPart()
   {
     return formattingHintPartEClass;
@@ -403,6 +489,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFormattingHintPart_Name()
   {
     return (EAttribute)formattingHintPartEClass.getEStructuralFeatures().get(0);
@@ -413,6 +500,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getFormattingHintPart_Value()
   {
     return (EAttribute)formattingHintPartEClass.getEStructuralFeatures().get(1);
@@ -423,6 +511,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getVilDef()
   {
     return vilDefEClass;
@@ -433,6 +522,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVilDef_Protected()
   {
     return (EAttribute)vilDefEClass.getEStructuralFeatures().get(0);
@@ -443,6 +533,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVilDef_Type()
   {
     return (EReference)vilDefEClass.getEStructuralFeatures().get(1);
@@ -453,6 +544,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getVilDef_Id()
   {
     return (EAttribute)vilDefEClass.getEStructuralFeatures().get(2);
@@ -463,6 +555,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVilDef_Param()
   {
     return (EReference)vilDefEClass.getEStructuralFeatures().get(3);
@@ -473,6 +566,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getVilDef_Stmts()
   {
     return (EReference)vilDefEClass.getEStructuralFeatures().get(4);
@@ -483,6 +577,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStmtBlock()
   {
     return stmtBlockEClass;
@@ -493,6 +588,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmtBlock_Stmts()
   {
     return (EReference)stmtBlockEClass.getEStructuralFeatures().get(0);
@@ -503,6 +599,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getStmt()
   {
     return stmtEClass;
@@ -513,6 +610,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_Var()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(0);
@@ -523,6 +621,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_Alt()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(1);
@@ -533,6 +632,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_Switch()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(2);
@@ -543,6 +643,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_Multi()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(3);
@@ -553,6 +654,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_Loop()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(4);
@@ -563,6 +665,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_While()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(5);
@@ -573,6 +676,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_ExprStmt()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(6);
@@ -583,6 +687,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getStmt_Ctn()
   {
     return (EReference)stmtEClass.getEStructuralFeatures().get(7);
@@ -593,6 +698,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getStmt_Flush()
   {
     return (EAttribute)stmtEClass.getEStructuralFeatures().get(8);
@@ -603,6 +709,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getAlternative()
   {
     return alternativeEClass;
@@ -613,6 +720,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_Expr()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(0);
@@ -623,6 +731,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_If()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(1);
@@ -633,6 +742,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_IfBlock()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(2);
@@ -643,6 +753,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_Else()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(3);
@@ -653,6 +764,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getAlternative_ElseBlock()
   {
     return (EReference)alternativeEClass.getEStructuralFeatures().get(4);
@@ -663,6 +775,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getContent()
   {
     return contentEClass;
@@ -673,6 +786,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getContent_Ctn()
   {
     return (EAttribute)contentEClass.getEStructuralFeatures().get(0);
@@ -683,6 +797,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getContent_NoCR()
   {
     return (EAttribute)contentEClass.getEStructuralFeatures().get(1);
@@ -693,6 +808,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getContent_CR()
   {
     return (EAttribute)contentEClass.getEStructuralFeatures().get(2);
@@ -703,6 +819,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getContent_Indent()
   {
     return (EReference)contentEClass.getEStructuralFeatures().get(3);
@@ -713,6 +830,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSwitch()
   {
     return switchEClass;
@@ -723,6 +841,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSwitch_Expr()
   {
     return (EReference)switchEClass.getEStructuralFeatures().get(0);
@@ -733,6 +852,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSwitch_Parts()
   {
     return (EReference)switchEClass.getEStructuralFeatures().get(1);
@@ -743,6 +863,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSwitch_Dflt()
   {
     return (EReference)switchEClass.getEStructuralFeatures().get(2);
@@ -753,6 +874,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getSwitchPart()
   {
     return switchPartEClass;
@@ -763,6 +885,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSwitchPart_Left()
   {
     return (EReference)switchPartEClass.getEStructuralFeatures().get(0);
@@ -773,6 +896,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getSwitchPart_Right()
   {
     return (EReference)switchPartEClass.getEStructuralFeatures().get(1);
@@ -783,6 +907,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getLoop()
   {
     return loopEClass;
@@ -793,6 +918,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoop_Type()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(0);
@@ -803,6 +929,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getLoop_Id()
   {
     return (EAttribute)loopEClass.getEStructuralFeatures().get(1);
@@ -813,6 +940,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoop_Expr()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(2);
@@ -823,6 +951,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoop_Separator()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(3);
@@ -833,6 +962,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoop_FinalSeparator()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(4);
@@ -843,6 +973,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoop_Stmt()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(5);
@@ -853,6 +984,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getLoop_Block()
   {
     return (EReference)loopEClass.getEStructuralFeatures().get(6);
@@ -863,6 +995,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getWhile()
   {
     return whileEClass;
@@ -873,6 +1006,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWhile_Expr()
   {
     return (EReference)whileEClass.getEStructuralFeatures().get(0);
@@ -883,6 +1017,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWhile_Stmt()
   {
     return (EReference)whileEClass.getEStructuralFeatures().get(1);
@@ -893,6 +1028,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getWhile_Block()
   {
     return (EReference)whileEClass.getEStructuralFeatures().get(2);
@@ -903,6 +1039,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getmultiselect()
   {
     return multiselectEClass;
@@ -913,6 +1050,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getmultiselect_Gen()
   {
     return (EReference)multiselectEClass.getEStructuralFeatures().get(0);
@@ -923,6 +1061,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getmultiselect_User()
   {
     return (EReference)multiselectEClass.getEStructuralFeatures().get(1);
@@ -933,6 +1072,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getgenericMultiselect()
   {
     return genericMultiselectEClass;
@@ -943,6 +1083,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getgenericMultiselect_Preamble()
   {
     return (EReference)genericMultiselectEClass.getEStructuralFeatures().get(0);
@@ -953,6 +1094,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getgenericMultiselect_Selector()
   {
     return (EReference)genericMultiselectEClass.getEStructuralFeatures().get(1);
@@ -963,6 +1105,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getgenericMultiselect_Part()
   {
     return (EReference)genericMultiselectEClass.getEStructuralFeatures().get(2);
@@ -973,6 +1116,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getgenericMultiselect_Trailer()
   {
     return (EReference)genericMultiselectEClass.getEStructuralFeatures().get(3);
@@ -983,6 +1127,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getmultiSelectPart()
   {
     return multiSelectPartEClass;
@@ -993,6 +1138,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getmultiSelectPart_Case()
   {
     return (EReference)multiSelectPartEClass.getEStructuralFeatures().get(0);
@@ -1003,6 +1149,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getmultiSelectPart_Code()
   {
     return (EReference)multiSelectPartEClass.getEStructuralFeatures().get(1);
@@ -1013,6 +1160,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getmultiSelectPart_Selector()
   {
     return (EReference)multiSelectPartEClass.getEStructuralFeatures().get(2);
@@ -1023,6 +1171,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getuserMultiselect()
   {
     return userMultiselectEClass;
@@ -1033,6 +1182,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getuserMultiselect_Id()
   {
     return (EAttribute)userMultiselectEClass.getEStructuralFeatures().get(0);
@@ -1043,6 +1193,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getuserMultiselect_Stmt()
   {
     return (EReference)userMultiselectEClass.getEStructuralFeatures().get(1);
@@ -1053,6 +1204,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getExtension()
   {
     return extensionEClass;
@@ -1063,6 +1215,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EReference getExtension_Name()
   {
     return (EReference)extensionEClass.getEStructuralFeatures().get(0);
@@ -1073,6 +1226,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EClass getJavaQualifiedName()
   {
     return javaQualifiedNameEClass;
@@ -1083,6 +1237,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EAttribute getJavaQualifiedName_Qname()
   {
     return (EAttribute)javaQualifiedNameEClass.getEStructuralFeatures().get(0);
@@ -1093,6 +1248,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TemplateLangFactory getTemplateLangFactory()
   {
     return (TemplateLangFactory)getEFactoryInstance();
@@ -1125,6 +1281,13 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     createEReference(languageUnitEClass, LANGUAGE_UNIT__PARAM);
     createEAttribute(languageUnitEClass, LANGUAGE_UNIT__EXT);
     createEReference(languageUnitEClass, LANGUAGE_UNIT__ELEMENTS);
+
+    topEClass = createEClass(TOP);
+    createEReference(topEClass, TOP__EX);
+
+    hintedExpressionEClass = createEClass(HINTED_EXPRESSION);
+    createEReference(hintedExpressionEClass, HINTED_EXPRESSION__EX);
+    createEAttribute(hintedExpressionEClass, HINTED_EXPRESSION__HINT);
 
     indentationHintEClass = createEClass(INDENTATION_HINT);
     createEReference(indentationHintEClass, INDENTATION_HINT__PARTS);
@@ -1265,6 +1428,13 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEReference(getLanguageUnit_Param(), theExpressionDslPackage.getParameterList(), null, "param", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getLanguageUnit_Ext(), ecorePackage.getEString(), "ext", null, 0, 1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getLanguageUnit_Elements(), ecorePackage.getEObject(), null, "elements", null, 0, -1, LanguageUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(topEClass, Top.class, "Top", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getTop_Ex(), this.getHintedExpression(), null, "ex", null, 0, 1, Top.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(hintedExpressionEClass, HintedExpression.class, "HintedExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getHintedExpression_Ex(), theExpressionDslPackage.getExpression(), null, "ex", null, 0, 1, HintedExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getHintedExpression_Hint(), ecorePackage.getEString(), "hint", null, 0, 1, HintedExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(indentationHintEClass, IndentationHint.class, "IndentationHint", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getIndentationHint_Parts(), this.getIndentationHintPart(), null, "parts", null, 0, -1, IndentationHint.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -66,6 +66,7 @@ public class ExtensionImpl extends MinimalEObjectImpl.Container implements Exten
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JavaQualifiedName getName()
   {
     return name;
@@ -93,6 +94,7 @@ public class ExtensionImpl extends MinimalEObjectImpl.Container implements Exten
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setName(JavaQualifiedName newName)
   {
     if (newName != name)

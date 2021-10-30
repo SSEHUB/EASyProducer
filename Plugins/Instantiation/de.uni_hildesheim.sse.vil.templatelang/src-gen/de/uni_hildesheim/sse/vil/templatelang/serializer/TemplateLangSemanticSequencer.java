@@ -54,6 +54,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.Content;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Extension;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHint;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.IndentationHintPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.JavaQualifiedName;
@@ -64,6 +65,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Switch;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.SwitchPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.Top;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.While;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.genericMultiselect;
@@ -241,6 +243,9 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 			case TemplateLangPackage.FORMATTING_HINT_PART:
 				sequence_FormattingHintPart(context, (FormattingHintPart) semanticObject); 
 				return; 
+			case TemplateLangPackage.HINTED_EXPRESSION:
+				sequence_HintedExpression(context, (HintedExpression) semanticObject); 
+				return; 
 			case TemplateLangPackage.INDENTATION_HINT:
 				sequence_IndentationHint(context, (IndentationHint) semanticObject); 
 				return; 
@@ -267,6 +272,9 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 				return; 
 			case TemplateLangPackage.SWITCH_PART:
 				sequence_SwitchPart(context, (SwitchPart) semanticObject); 
+				return; 
+			case TemplateLangPackage.TOP:
+				sequence_Top(context, (Top) semanticObject); 
 				return; 
 			case TemplateLangPackage.VIL_DEF:
 				sequence_VilDef(context, (VilDef) semanticObject); 
@@ -362,6 +370,18 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     (parts+=FormattingHintPart parts+=FormattingHintPart*)
 	 */
 	protected void sequence_FormattingHint(ISerializationContext context, FormattingHint semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     HintedExpression returns HintedExpression
+	 *
+	 * Constraint:
+	 *     (ex=Expression (hint=ID | hint='<')?)
+	 */
+	protected void sequence_HintedExpression(ISerializationContext context, HintedExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -510,6 +530,24 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 */
 	protected void sequence_Switch(ISerializationContext context, Switch semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     Top returns Top
+	 *
+	 * Constraint:
+	 *     ex=HintedExpression
+	 */
+	protected void sequence_Top(ISerializationContext context, Top semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.TOP__EX) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.TOP__EX));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getTopAccess().getExHintedExpressionParserRuleCall_0(), semanticObject.getEx());
+		feeder.finish();
 	}
 	
 	

@@ -432,6 +432,10 @@ public class ExpressionWriter extends AbstractWriter implements IExpressionVisit
                     print("${");
                 }
                 expression.accept(this);
+                if (null != expression.getFormattingHint()) {
+                    print("|");
+                    print(expression.getFormattingHint());
+                }
                 if (quote) {
                     print("}");
                 }

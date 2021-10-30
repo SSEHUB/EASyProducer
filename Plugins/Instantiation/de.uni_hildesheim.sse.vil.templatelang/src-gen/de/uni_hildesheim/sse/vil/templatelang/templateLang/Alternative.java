@@ -31,10 +31,6 @@ public interface Alternative extends EObject
   /**
    * Returns the value of the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr</em>' containment reference.
    * @see #setExpr(Expression)
@@ -57,10 +53,6 @@ public interface Alternative extends EObject
   /**
    * Returns the value of the '<em><b>If</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>If</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>If</em>' containment reference.
    * @see #setIf(Stmt)
@@ -83,10 +75,6 @@ public interface Alternative extends EObject
   /**
    * Returns the value of the '<em><b>If Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>If Block</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>If Block</em>' containment reference.
    * @see #setIfBlock(StmtBlock)
@@ -109,10 +97,6 @@ public interface Alternative extends EObject
   /**
    * Returns the value of the '<em><b>Else</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Else</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Else</em>' containment reference.
    * @see #setElse(Stmt)
@@ -135,10 +119,6 @@ public interface Alternative extends EObject
   /**
    * Returns the value of the '<em><b>Else Block</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Else Block</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Else Block</em>' containment reference.
    * @see #setElseBlock(StmtBlock)

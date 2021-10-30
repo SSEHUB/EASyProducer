@@ -603,6 +603,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
 
     /**
+     * Tests content with formatting hints [contributed by IIP-Ecosphere].
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testHint() throws IOException {
+        assertEqual("hint");
+    }
+    
+    /**
      * Tests simple content with multi-line expression mixing but no indentation hint.
      * 
      * @throws IOException should not occur

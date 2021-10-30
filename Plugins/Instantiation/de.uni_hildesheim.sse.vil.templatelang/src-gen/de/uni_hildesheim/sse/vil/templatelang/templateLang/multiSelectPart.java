@@ -29,10 +29,6 @@ public interface multiSelectPart extends EObject
   /**
    * Returns the value of the '<em><b>Case</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Case</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Case</em>' containment reference.
    * @see #setCase(Expression)
@@ -55,10 +51,6 @@ public interface multiSelectPart extends EObject
   /**
    * Returns the value of the '<em><b>Code</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Code</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Code</em>' containment reference.
    * @see #setCode(StmtBlock)
@@ -81,10 +73,6 @@ public interface multiSelectPart extends EObject
   /**
    * Returns the value of the '<em><b>Selector</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Selector</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Selector</em>' containment reference.
    * @see #setSelector(StmtBlock)

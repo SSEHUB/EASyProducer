@@ -66,6 +66,7 @@ Workflow {
                 fragment = parser.antlr.XtextAntlrGeneratorFragment {
                   options = {
                       backtrack = true
+                      skipUnusedRules = false
                   }
                 }
     

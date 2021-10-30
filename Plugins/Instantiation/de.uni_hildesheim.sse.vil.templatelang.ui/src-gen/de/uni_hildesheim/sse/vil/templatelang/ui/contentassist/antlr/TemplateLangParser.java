@@ -38,6 +38,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 				private static final long serialVersionUID = 1L;
 				{
 					put(grammarAccess.getLanguageUnitAccess().getAlternatives_13(), "rule__LanguageUnit__Alternatives_13");
+					put(grammarAccess.getHintedExpressionAccess().getHintAlternatives_1_1_0(), "rule__HintedExpression__HintAlternatives_1_1_0");
 					put(grammarAccess.getStmtAccess().getAlternatives(), "rule__Stmt__Alternatives");
 					put(grammarAccess.getAlternativeAccess().getAlternatives_4(), "rule__Alternative__Alternatives_4");
 					put(grammarAccess.getAlternativeAccess().getAlternatives_5_1(), "rule__Alternative__Alternatives_5_1");
@@ -62,6 +63,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getContainerInitializerExpressionAccess().getAlternatives(), "rule__ContainerInitializerExpression__Alternatives");
 					put(grammarAccess.getLanguageUnitAccess().getGroup(), "rule__LanguageUnit__Group__0");
 					put(grammarAccess.getLanguageUnitAccess().getGroup_10(), "rule__LanguageUnit__Group_10__0");
+					put(grammarAccess.getHintedExpressionAccess().getGroup(), "rule__HintedExpression__Group__0");
+					put(grammarAccess.getHintedExpressionAccess().getGroup_1(), "rule__HintedExpression__Group_1__0");
 					put(grammarAccess.getIndentationHintAccess().getGroup(), "rule__IndentationHint__Group__0");
 					put(grammarAccess.getIndentationHintAccess().getGroup_3(), "rule__IndentationHint__Group_3__0");
 					put(grammarAccess.getIndentationHintPartAccess().getGroup(), "rule__IndentationHintPart__Group__0");
@@ -164,6 +167,9 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getLanguageUnitAccess().getElementsAssignment_13_1(), "rule__LanguageUnit__ElementsAssignment_13_1");
 					put(grammarAccess.getLanguageUnitAccess().getElementsAssignment_13_2(), "rule__LanguageUnit__ElementsAssignment_13_2");
 					put(grammarAccess.getLanguageUnitAccess().getElementsAssignment_13_3(), "rule__LanguageUnit__ElementsAssignment_13_3");
+					put(grammarAccess.getTopAccess().getExAssignment(), "rule__Top__ExAssignment");
+					put(grammarAccess.getHintedExpressionAccess().getExAssignment_0(), "rule__HintedExpression__ExAssignment_0");
+					put(grammarAccess.getHintedExpressionAccess().getHintAssignment_1_1(), "rule__HintedExpression__HintAssignment_1_1");
 					put(grammarAccess.getIndentationHintAccess().getPartsAssignment_2(), "rule__IndentationHint__PartsAssignment_2");
 					put(grammarAccess.getIndentationHintAccess().getPartsAssignment_3_1(), "rule__IndentationHint__PartsAssignment_3_1");
 					put(grammarAccess.getIndentationHintPartAccess().getNameAssignment_0(), "rule__IndentationHintPart__NameAssignment_0");

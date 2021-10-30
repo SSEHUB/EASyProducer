@@ -4,8 +4,8 @@
     editDirectory="/de.uni_hildesheim.sse.vil.templatelang.edit/src" editorDirectory="/de.uni_hildesheim.sse.vil.templatelang.editor/src"
     modelPluginID="de.uni_hildesheim.sse.vil.templatelang" forceOverwrite="true" modelName="TemplateLang"
     updateClasspath="false" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
-    complianceLevel="6.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.templatelang.edit"
-    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.11"
+    complianceLevel="8.0" copyrightFields="false" editPluginID="de.uni_hildesheim.sse.vil.templatelang.edit"
+    editorPluginID="de.uni_hildesheim.sse.vil.templatelang.editor" runtimeVersion="2.20"
     usedGenPackages="platform:/resource/de.uni_hildesheim.sse.vil.expressions/src-gen/de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel#//expressionDsl">
   <genPackages prefix="TemplateLang" basePackage="de.uni_hildesheim.sse.vil.templatelang"
       disposableProviderFactory="true" ecorePackage="TemplateLang.ecore#/">
@@ -16,6 +16,13 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/param"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//LanguageUnit/ext"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//LanguageUnit/elements"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//Top">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//Top/ex"/>
+    </genClasses>
+    <genClasses ecoreClass="TemplateLang.ecore#//HintedExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//HintedExpression/ex"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//HintedExpression/hint"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//IndentationHint">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//IndentationHint/parts"/>

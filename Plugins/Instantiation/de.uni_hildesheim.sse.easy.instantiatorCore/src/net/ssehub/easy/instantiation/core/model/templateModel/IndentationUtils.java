@@ -308,9 +308,10 @@ public class IndentationUtils {
      * end characters and indentation characters, but no further characters.  
      * 
      * @param text the text to remove the last indentation for
+     * @param includingLineEnd whether the preceing line end(s) shall also be removed
      * @return the text without last indentation
      */
-    public static String removeLastIndentation(String text) {
+    public static String removeLastIndentation(String text, boolean includingLineEnd) {
         String result = text;
         int pos = result.length() - 1;
         int initPos = pos;
@@ -319,6 +320,11 @@ public class IndentationUtils {
         }
         while (pos > 0 && isIndentationChar(result.charAt(pos))) {
             pos--;
+        }
+        if (includingLineEnd) {
+            while (pos > 0 && isLineEnd(result.charAt(pos))) {
+                pos--;
+            }
         }
         if (pos > 0 && pos < initPos) {
             result = result.substring(0, pos + 1);

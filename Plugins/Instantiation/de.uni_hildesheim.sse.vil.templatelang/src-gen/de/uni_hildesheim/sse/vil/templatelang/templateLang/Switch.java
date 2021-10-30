@@ -31,10 +31,6 @@ public interface Switch extends EObject
   /**
    * Returns the value of the '<em><b>Expr</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr</em>' containment reference.
    * @see #setExpr(Expression)
@@ -58,10 +54,6 @@ public interface Switch extends EObject
    * Returns the value of the '<em><b>Parts</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.templatelang.templateLang.SwitchPart}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Parts</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Parts</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getSwitch_Parts()
@@ -73,10 +65,6 @@ public interface Switch extends EObject
   /**
    * Returns the value of the '<em><b>Dflt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Dflt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Dflt</em>' containment reference.
    * @see #setDflt(Expression)

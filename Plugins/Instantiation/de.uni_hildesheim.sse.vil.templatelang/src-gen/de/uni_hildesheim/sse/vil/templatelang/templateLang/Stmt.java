@@ -36,10 +36,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Var</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Var</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Var</em>' containment reference.
    * @see #setVar(VariableDeclaration)
@@ -62,10 +58,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Alt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Alt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Alt</em>' containment reference.
    * @see #setAlt(Alternative)
@@ -88,10 +80,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Switch</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Switch</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Switch</em>' containment reference.
    * @see #setSwitch(Switch)
@@ -114,10 +102,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Multi</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Multi</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Multi</em>' containment reference.
    * @see #setMulti(multiselect)
@@ -140,10 +124,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Loop</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Loop</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Loop</em>' containment reference.
    * @see #setLoop(Loop)
@@ -166,10 +146,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>While</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>While</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>While</em>' containment reference.
    * @see #setWhile(While)
@@ -192,10 +168,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Expr Stmt</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Expr Stmt</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Expr Stmt</em>' containment reference.
    * @see #setExprStmt(ExpressionStatement)
@@ -218,10 +190,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Ctn</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ctn</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ctn</em>' containment reference.
    * @see #setCtn(Content)
@@ -244,10 +212,6 @@ public interface Stmt extends EObject
   /**
    * Returns the value of the '<em><b>Flush</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Flush</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Flush</em>' attribute.
    * @see #setFlush(String)

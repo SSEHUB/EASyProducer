@@ -30,10 +30,6 @@ public interface Content extends EObject
   /**
    * Returns the value of the '<em><b>Ctn</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Ctn</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Ctn</em>' attribute.
    * @see #setCtn(String)
@@ -56,10 +52,6 @@ public interface Content extends EObject
   /**
    * Returns the value of the '<em><b>No CR</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>No CR</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>No CR</em>' attribute.
    * @see #setNoCR(String)
@@ -82,10 +74,6 @@ public interface Content extends EObject
   /**
    * Returns the value of the '<em><b>CR</b></em>' attribute.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>CR</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>CR</em>' attribute.
    * @see #setCR(String)
@@ -108,10 +96,6 @@ public interface Content extends EObject
   /**
    * Returns the value of the '<em><b>Indent</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Indent</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Indent</em>' containment reference.
    * @see #setIndent(Expression)

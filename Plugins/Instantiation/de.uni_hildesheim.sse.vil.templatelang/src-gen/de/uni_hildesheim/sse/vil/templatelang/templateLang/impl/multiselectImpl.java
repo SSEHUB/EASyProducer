@@ -78,6 +78,7 @@ public class multiselectImpl extends MinimalEObjectImpl.Container implements mul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public genericMultiselect getGen()
   {
     return gen;
@@ -105,6 +106,7 @@ public class multiselectImpl extends MinimalEObjectImpl.Container implements mul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setGen(genericMultiselect newGen)
   {
     if (newGen != gen)
@@ -126,6 +128,7 @@ public class multiselectImpl extends MinimalEObjectImpl.Container implements mul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public userMultiselect getUser()
   {
     return user;
@@ -153,6 +156,7 @@ public class multiselectImpl extends MinimalEObjectImpl.Container implements mul
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setUser(userMultiselect newUser)
   {
     if (newUser != user)

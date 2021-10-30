@@ -65,6 +65,8 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
     switch (eClass.getClassifierID())
     {
       case TemplateLangPackage.LANGUAGE_UNIT: return createLanguageUnit();
+      case TemplateLangPackage.TOP: return createTop();
+      case TemplateLangPackage.HINTED_EXPRESSION: return createHintedExpression();
       case TemplateLangPackage.INDENTATION_HINT: return createIndentationHint();
       case TemplateLangPackage.INDENTATION_HINT_PART: return createIndentationHintPart();
       case TemplateLangPackage.FORMATTING_HINT: return createFormattingHint();
@@ -94,6 +96,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public LanguageUnit createLanguageUnit()
   {
     LanguageUnitImpl languageUnit = new LanguageUnitImpl();
@@ -105,6 +108,31 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
+  public Top createTop()
+  {
+    TopImpl top = new TopImpl();
+    return top;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public HintedExpression createHintedExpression()
+  {
+    HintedExpressionImpl hintedExpression = new HintedExpressionImpl();
+    return hintedExpression;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public IndentationHint createIndentationHint()
   {
     IndentationHintImpl indentationHint = new IndentationHintImpl();
@@ -116,6 +144,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IndentationHintPart createIndentationHintPart()
   {
     IndentationHintPartImpl indentationHintPart = new IndentationHintPartImpl();
@@ -127,6 +156,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FormattingHint createFormattingHint()
   {
     FormattingHintImpl formattingHint = new FormattingHintImpl();
@@ -138,6 +168,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FormattingHintPart createFormattingHintPart()
   {
     FormattingHintPartImpl formattingHintPart = new FormattingHintPartImpl();
@@ -149,6 +180,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VilDef createVilDef()
   {
     VilDefImpl vilDef = new VilDefImpl();
@@ -160,6 +192,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock createStmtBlock()
   {
     StmtBlockImpl stmtBlock = new StmtBlockImpl();
@@ -171,6 +204,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stmt createStmt()
   {
     StmtImpl stmt = new StmtImpl();
@@ -182,6 +216,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Alternative createAlternative()
   {
     AlternativeImpl alternative = new AlternativeImpl();
@@ -193,6 +228,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Content createContent()
   {
     ContentImpl content = new ContentImpl();
@@ -204,6 +240,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Switch createSwitch()
   {
     SwitchImpl switch_ = new SwitchImpl();
@@ -215,6 +252,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public SwitchPart createSwitchPart()
   {
     SwitchPartImpl switchPart = new SwitchPartImpl();
@@ -226,6 +264,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Loop createLoop()
   {
     LoopImpl loop = new LoopImpl();
@@ -237,6 +276,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public While createWhile()
   {
     WhileImpl while_ = new WhileImpl();
@@ -248,6 +288,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public multiselect createmultiselect()
   {
     multiselectImpl multiselect = new multiselectImpl();
@@ -259,6 +300,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public genericMultiselect creategenericMultiselect()
   {
     genericMultiselectImpl genericMultiselect = new genericMultiselectImpl();
@@ -270,6 +312,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public multiSelectPart createmultiSelectPart()
   {
     multiSelectPartImpl multiSelectPart = new multiSelectPartImpl();
@@ -281,6 +324,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public userMultiselect createuserMultiselect()
   {
     userMultiselectImpl userMultiselect = new userMultiselectImpl();
@@ -292,6 +336,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Extension createExtension()
   {
     ExtensionImpl extension = new ExtensionImpl();
@@ -303,6 +348,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public JavaQualifiedName createJavaQualifiedName()
   {
     JavaQualifiedNameImpl javaQualifiedName = new JavaQualifiedNameImpl();
@@ -314,6 +360,7 @@ public class TemplateLangFactoryImpl extends EFactoryImpl implements TemplateLan
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public TemplateLangPackage getTemplateLangPackage()
   {
     return (TemplateLangPackage)getEPackage();

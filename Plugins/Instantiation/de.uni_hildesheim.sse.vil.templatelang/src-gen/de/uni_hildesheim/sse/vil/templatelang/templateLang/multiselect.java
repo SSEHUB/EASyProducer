@@ -26,10 +26,6 @@ public interface multiselect extends EObject
   /**
    * Returns the value of the '<em><b>Gen</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Gen</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Gen</em>' containment reference.
    * @see #setGen(genericMultiselect)
@@ -52,10 +48,6 @@ public interface multiselect extends EObject
   /**
    * Returns the value of the '<em><b>User</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>User</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>User</em>' containment reference.
    * @see #setUser(userMultiselect)

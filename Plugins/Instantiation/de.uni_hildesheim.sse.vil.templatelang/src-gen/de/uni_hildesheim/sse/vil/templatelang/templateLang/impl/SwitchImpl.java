@@ -97,6 +97,7 @@ public class SwitchImpl extends MinimalEObjectImpl.Container implements Switch
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -124,6 +125,7 @@ public class SwitchImpl extends MinimalEObjectImpl.Container implements Switch
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -145,6 +147,7 @@ public class SwitchImpl extends MinimalEObjectImpl.Container implements Switch
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<SwitchPart> getParts()
   {
     if (parts == null)
@@ -159,6 +162,7 @@ public class SwitchImpl extends MinimalEObjectImpl.Container implements Switch
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getDflt()
   {
     return dflt;
@@ -186,6 +190,7 @@ public class SwitchImpl extends MinimalEObjectImpl.Container implements Switch
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setDflt(Expression newDflt)
   {
     if (newDflt != dflt)

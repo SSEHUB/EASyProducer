@@ -71,6 +71,7 @@ public class IndentationHintImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<IndentationHintPart> getParts()
   {
     if (parts == null)

@@ -30,10 +30,6 @@ public interface genericMultiselect extends EObject
   /**
    * Returns the value of the '<em><b>Preamble</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Preamble</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Preamble</em>' containment reference.
    * @see #setPreamble(StmtBlock)
@@ -56,10 +52,6 @@ public interface genericMultiselect extends EObject
   /**
    * Returns the value of the '<em><b>Selector</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Selector</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Selector</em>' containment reference.
    * @see #setSelector(StmtBlock)
@@ -83,10 +75,6 @@ public interface genericMultiselect extends EObject
    * Returns the value of the '<em><b>Part</b></em>' containment reference list.
    * The list contents are of type {@link de.uni_hildesheim.sse.vil.templatelang.templateLang.multiSelectPart}.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Part</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Part</em>' containment reference list.
    * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getgenericMultiselect_Part()
@@ -98,10 +86,6 @@ public interface genericMultiselect extends EObject
   /**
    * Returns the value of the '<em><b>Trailer</b></em>' containment reference.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Trailer</em>' containment reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Trailer</em>' containment reference.
    * @see #setTrailer(StmtBlock)

@@ -4,6 +4,7 @@ generate templateLang "http://www.uni_hildesheim.de/sse/vil/templatelang/Templat
 
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
+@Override
 LanguageUnit: // do not rename - required for reuse
     imports+=Import* 
     javaExts+=Extension* 
@@ -21,6 +22,16 @@ LanguageUnit: // do not rename - required for reuse
          | elements+=VilDef)* 
     '}' 
     ;
+
+// fake rule, needed that HintedExpression is generated
+Top:
+    ex=HintedExpression
+;
+
+// Alternative entry, expressions with hint
+HintedExpression:
+    ex=Expression ('|' hint=(ID|'<'))?
+;
     
 IndentationHint:
     '@indent' '(' parts+=IndentationHintPart (',' parts+=IndentationHintPart)* ')' 

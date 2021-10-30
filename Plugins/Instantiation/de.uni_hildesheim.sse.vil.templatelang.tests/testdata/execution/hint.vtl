@@ -1,0 +1,17 @@
+@indent(indentation = 4, additional = 0)
+template hint(Configuration config, Artifact target) {
+
+    def sub() {
+        Integer val = 5;
+        'val: ${val}'
+    }
+
+    def main(Configuration config, Artifact target) {
+        String empty = "";
+        'here:
+            ${sub()|<}
+            ${empty|e}
+        always: true'
+    }
+
+}

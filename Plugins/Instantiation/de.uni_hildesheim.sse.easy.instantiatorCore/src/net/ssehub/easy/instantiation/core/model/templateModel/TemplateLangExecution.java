@@ -641,6 +641,19 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 isS1 = true;
             }
         }
+        String hint = e2.getFormattingHint();
+        boolean clearLE = false;
+        if (null != hint) {
+            if ("e".equals(hint) && s2.length() == 0) {
+                clear = true;
+                clearLE = true;
+            } else if ("<".equals(hint)) {
+                s1 = IndentationUtils.removeLastIndentation(s1, false);
+                clear = false;
+                format = false;
+                isS1 = false;
+            }
+        }
         if (format) {
             int indentation = environment.getIndentation();
             if (null != config) { // we are within/among expressions, one step out
@@ -654,7 +667,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             }
             result = IndentationUtils.appendWithLastIndentation(s1, s2, false);
         } else if (clear) {
-            result = IndentationUtils.removeLastIndentation(s1);
+            result = IndentationUtils.removeLastIndentation(s1, clearLE);
         } else if (isS1) {
             result = s1;
         } else {

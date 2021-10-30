@@ -37,4 +37,13 @@ public abstract class Expression {
         return false;
     }
     
+    /**
+     * Returns the formatting hint assigned to this expression.
+     * 
+     * @return the formatting hint, <b>null</b> for none
+     */
+    public String getFormattingHint() {
+        return null;
+    }
+    
 }

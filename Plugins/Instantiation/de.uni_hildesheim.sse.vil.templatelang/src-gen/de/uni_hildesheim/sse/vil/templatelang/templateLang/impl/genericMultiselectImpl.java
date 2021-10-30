@@ -107,6 +107,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getPreamble()
   {
     return preamble;
@@ -134,6 +135,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setPreamble(StmtBlock newPreamble)
   {
     if (newPreamble != preamble)
@@ -155,6 +157,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getSelector()
   {
     return selector;
@@ -182,6 +185,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSelector(StmtBlock newSelector)
   {
     if (newSelector != selector)
@@ -203,6 +207,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<multiSelectPart> getPart()
   {
     if (part == null)
@@ -217,6 +222,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getTrailer()
   {
     return trailer;
@@ -244,6 +250,7 @@ public class genericMultiselectImpl extends MinimalEObjectImpl.Container impleme
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setTrailer(StmtBlock newTrailer)
   {
     if (newTrailer != trailer)

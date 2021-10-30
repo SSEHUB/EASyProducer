@@ -32,6 +32,24 @@ public interface TemplateLangFactory extends EFactory
   LanguageUnit createLanguageUnit();
 
   /**
+   * Returns a new object of class '<em>Top</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Top</em>'.
+   * @generated
+   */
+  Top createTop();
+
+  /**
+   * Returns a new object of class '<em>Hinted Expression</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Hinted Expression</em>'.
+   * @generated
+   */
+  HintedExpression createHintedExpression();
+
+  /**
    * Returns a new object of class '<em>Indentation Hint</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

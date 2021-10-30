@@ -71,6 +71,7 @@ public class FormattingHintImpl extends MinimalEObjectImpl.Container implements 
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<FormattingHintPart> getParts()
   {
     if (parts == null)

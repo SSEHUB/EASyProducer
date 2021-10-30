@@ -130,6 +130,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getCtn()
   {
     return ctn;
@@ -140,6 +141,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCtn(String newCtn)
   {
     String oldCtn = ctn;
@@ -153,6 +155,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getNoCR()
   {
     return noCR;
@@ -163,6 +166,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setNoCR(String newNoCR)
   {
     String oldNoCR = noCR;
@@ -176,6 +180,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getCR()
   {
     return cr;
@@ -186,6 +191,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCR(String newCR)
   {
     String oldCR = cr;
@@ -199,6 +205,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getIndent()
   {
     return indent;
@@ -226,6 +233,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIndent(Expression newIndent)
   {
     if (newIndent != indent)
@@ -364,7 +372,7 @@ public class ContentImpl extends MinimalEObjectImpl.Container implements Content
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (ctn: ");
     result.append(ctn);
     result.append(", noCR: ");

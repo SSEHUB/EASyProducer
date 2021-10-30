@@ -113,6 +113,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -140,6 +141,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -161,6 +163,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stmt getIf()
   {
     return if_;
@@ -188,6 +191,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIf(Stmt newIf)
   {
     if (newIf != if_)
@@ -209,6 +213,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getIfBlock()
   {
     return ifBlock;
@@ -236,6 +241,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIfBlock(StmtBlock newIfBlock)
   {
     if (newIfBlock != ifBlock)
@@ -257,6 +263,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stmt getElse()
   {
     return else_;
@@ -284,6 +291,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setElse(Stmt newElse)
   {
     if (newElse != else_)
@@ -305,6 +313,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getElseBlock()
   {
     return elseBlock;
@@ -332,6 +341,7 @@ public class AlternativeImpl extends MinimalEObjectImpl.Container implements Alt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setElseBlock(StmtBlock newElseBlock)
   {
     if (newElseBlock != elseBlock)

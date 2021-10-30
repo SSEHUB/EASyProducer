@@ -80,6 +80,16 @@ public class TemplateLangAdapterFactory extends AdapterFactoryImpl
         return createLanguageUnitAdapter();
       }
       @Override
+      public Adapter caseTop(Top object)
+      {
+        return createTopAdapter();
+      }
+      @Override
+      public Adapter caseHintedExpression(HintedExpression object)
+      {
+        return createHintedExpressionAdapter();
+      }
+      @Override
       public Adapter caseIndentationHint(IndentationHint object)
       {
         return createIndentationHintAdapter();
@@ -212,6 +222,36 @@ public class TemplateLangAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createLanguageUnitAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.Top <em>Top</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.Top
+   * @generated
+   */
+  public Adapter createTopAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression <em>Hinted Expression</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression
+   * @generated
+   */
+  public Adapter createHintedExpressionAdapter()
   {
     return null;
   }

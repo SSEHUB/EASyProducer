@@ -14,6 +14,7 @@ import org.eclipse.xtext.parser.IParseResult;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.translation.IvmlMessageAdapter;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.HintedExpression;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ExpressionTranslator;
 import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ModelTranslator;
@@ -157,7 +158,7 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
     public Expression createExpression(String text, Resolver resolver, StringBuilder warnings, 
         IvmlMessageAdapter adapter) throws VilException {
         Expression result = null;
-        IParseResult parseResult = parseFragment("Expression", text);
+        IParseResult parseResult = parseFragment("HintedExpression", text);
         if (null != parseResult) {
             StringBuilder errors = new StringBuilder();
             for (INode error : parseResult.getSyntaxErrors()) {
@@ -173,10 +174,13 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
                 if (null != adapter) {
                     translator.setIvmlMessageAdapter(adapter);
                 }
-                de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression expr = 
-                    (de.uni_hildesheim.sse.vil.expressions.expressionDsl.Expression) parseResult.getRootASTElement();
+                HintedExpression expr = (HintedExpression) parseResult.getRootASTElement();
                 try {
-                    result = translator.processExpression(expr, resolver);
+                    result = translator.processExpression(expr.getEx(), resolver);
+                    if (null != expr.getHint()) {
+                        result = new net.ssehub.easy.instantiation.core.model.templateModel.HintedExpression(
+                            result, expr.getHint());
+                    }
                     for (int i = 0; i < translator.getMessageCount(); i++) {
                         Message msg = translator.getMessage(i);
                         if (Status.ERROR == msg.getStatus()) {

@@ -172,6 +172,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public VariableDeclaration getVar()
   {
     return var;
@@ -199,6 +200,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setVar(VariableDeclaration newVar)
   {
     if (newVar != var)
@@ -220,6 +222,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Alternative getAlt()
   {
     return alt;
@@ -247,6 +250,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setAlt(Alternative newAlt)
   {
     if (newAlt != alt)
@@ -268,6 +272,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Switch getSwitch()
   {
     return switch_;
@@ -295,6 +300,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSwitch(Switch newSwitch)
   {
     if (newSwitch != switch_)
@@ -316,6 +322,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public multiselect getMulti()
   {
     return multi;
@@ -343,6 +350,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setMulti(multiselect newMulti)
   {
     if (newMulti != multi)
@@ -364,6 +372,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Loop getLoop()
   {
     return loop;
@@ -391,6 +400,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setLoop(Loop newLoop)
   {
     if (newLoop != loop)
@@ -412,6 +422,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public While getWhile()
   {
     return while_;
@@ -439,6 +450,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setWhile(While newWhile)
   {
     if (newWhile != while_)
@@ -460,6 +472,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ExpressionStatement getExprStmt()
   {
     return exprStmt;
@@ -487,6 +500,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExprStmt(ExpressionStatement newExprStmt)
   {
     if (newExprStmt != exprStmt)
@@ -508,6 +522,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Content getCtn()
   {
     return ctn;
@@ -535,6 +550,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCtn(Content newCtn)
   {
     if (newCtn != ctn)
@@ -556,6 +572,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getFlush()
   {
     return flush;
@@ -566,6 +583,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFlush(String newFlush)
   {
     String oldFlush = flush;
@@ -760,7 +778,7 @@ public class StmtImpl extends MinimalEObjectImpl.Container implements Stmt
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (flush: ");
     result.append(flush);
     result.append(')');

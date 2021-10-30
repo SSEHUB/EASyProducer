@@ -147,6 +147,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Type getType()
   {
     return type;
@@ -174,6 +175,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setType(Type newType)
   {
     if (newType != type)
@@ -195,6 +197,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getId()
   {
     return id;
@@ -205,6 +208,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setId(String newId)
   {
     String oldId = id;
@@ -218,6 +222,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getExpr()
   {
     return expr;
@@ -245,6 +250,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExpr(Expression newExpr)
   {
     if (newExpr != expr)
@@ -266,6 +272,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PrimaryExpression getSeparator()
   {
     return separator;
@@ -293,6 +300,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSeparator(PrimaryExpression newSeparator)
   {
     if (newSeparator != separator)
@@ -314,6 +322,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public PrimaryExpression getFinalSeparator()
   {
     return finalSeparator;
@@ -341,6 +350,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFinalSeparator(PrimaryExpression newFinalSeparator)
   {
     if (newFinalSeparator != finalSeparator)
@@ -362,6 +372,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Stmt getStmt()
   {
     return stmt;
@@ -389,6 +400,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setStmt(Stmt newStmt)
   {
     if (newStmt != stmt)
@@ -410,6 +422,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getBlock()
   {
     return block;
@@ -437,6 +450,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setBlock(StmtBlock newBlock)
   {
     if (newBlock != block)
@@ -615,7 +629,7 @@ public class LoopImpl extends MinimalEObjectImpl.Container implements Loop
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (id: ");
     result.append(id);
     result.append(')');

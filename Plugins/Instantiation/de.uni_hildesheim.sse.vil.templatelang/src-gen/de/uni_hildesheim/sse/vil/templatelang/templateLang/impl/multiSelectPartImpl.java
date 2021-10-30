@@ -90,6 +90,7 @@ public class multiSelectPartImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public Expression getCase()
   {
     return case_;
@@ -117,6 +118,7 @@ public class multiSelectPartImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCase(Expression newCase)
   {
     if (newCase != case_)
@@ -138,6 +140,7 @@ public class multiSelectPartImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getCode()
   {
     return code;
@@ -165,6 +168,7 @@ public class multiSelectPartImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setCode(StmtBlock newCode)
   {
     if (newCode != code)
@@ -186,6 +190,7 @@ public class multiSelectPartImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public StmtBlock getSelector()
   {
     return selector;
@@ -213,6 +218,7 @@ public class multiSelectPartImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setSelector(StmtBlock newSelector)
   {
     if (newSelector != selector)

@@ -142,6 +142,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<Extension> getJavaExts()
   {
     if (javaExts == null)
@@ -156,6 +157,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public IndentationHint getIndent()
   {
     return indent;
@@ -183,6 +185,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setIndent(IndentationHint newIndent)
   {
     if (newIndent != indent)
@@ -204,6 +207,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public FormattingHint getFormatting()
   {
     return formatting;
@@ -231,6 +235,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setFormatting(FormattingHint newFormatting)
   {
     if (newFormatting != formatting)
@@ -252,6 +257,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public ParameterList getParam()
   {
     return param;
@@ -279,6 +285,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setParam(ParameterList newParam)
   {
     if (newParam != param)
@@ -300,6 +307,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public String getExt()
   {
     return ext;
@@ -310,6 +318,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public void setExt(String newExt)
   {
     String oldExt = ext;
@@ -323,6 +332,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
    * <!-- end-user-doc -->
    * @generated
    */
+  @Override
   public EList<EObject> getElements()
   {
     if (elements == null)
@@ -485,7 +495,7 @@ public class LanguageUnitImpl extends de.uni_hildesheim.sse.vil.expressions.expr
   {
     if (eIsProxy()) return super.toString();
 
-    StringBuffer result = new StringBuffer(super.toString());
+    StringBuilder result = new StringBuilder(super.toString());
     result.append(" (ext: ");
     result.append(ext);
     result.append(')');
