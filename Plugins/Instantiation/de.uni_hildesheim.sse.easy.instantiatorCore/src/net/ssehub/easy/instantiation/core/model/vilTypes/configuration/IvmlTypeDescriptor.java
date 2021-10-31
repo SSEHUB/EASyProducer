@@ -122,12 +122,13 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
             TypeRegistry registry = getTypeRegistry();
             Compound comp = (Compound) ivmlType;
             addElements(comp, registry, fields);
+            AbstractIvmlTypeDescriptor[] refs = new AbstractIvmlTypeDescriptor[comp.getRefinesCount()];
             for (int r = 0; r < comp.getRefinesCount(); r++) {
                 Compound refines = comp.getRefines(r);
                 TypeDescriptor<?> tmp = registry.getType(refines);
                 if (tmp instanceof IvmlTypeDescriptor) { // just to be sure
                     IvmlTypeDescriptor refinesDesc = (IvmlTypeDescriptor) tmp;
-                    setRefines(refinesDesc);
+                    refs[r] = refinesDesc;
                     for (int f = 0; f < refinesDesc.getFieldCount(); f++) {
                         FieldDescriptor fi = refinesDesc.getField(f);
                         if (fi instanceof IvmlAccessorFieldDescriptor) {
@@ -136,6 +137,7 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
                     }
                 }
             }
+            setRefines(refs);
         }        
     }
     
@@ -212,19 +214,25 @@ public class IvmlTypeDescriptor extends AbstractIvmlTypeDescriptor implements IA
         boolean assignable = (desc == this || IvmlTypes.decisionVariableType() == desc);
         if (!assignable && desc instanceof AbstractIvmlTypeDescriptor) {
             // check refines hierarchy on desc
-            AbstractIvmlTypeDescriptor iter = (AbstractIvmlTypeDescriptor) desc;
-            assignable = isEqual(iter, this);
-            while (!assignable && null != iter) {
-                if (iter instanceof AbstractIvmlTypeDescriptor) {
-                    iter = ((AbstractIvmlTypeDescriptor) iter).getRefines();
-                    assignable = isEqual(iter, this);
-                } else {
-                    iter = null;
-                }
-            }
+            assignable = isAssignableFrom((AbstractIvmlTypeDescriptor) desc);
         }
         if (!assignable && null != baseType) {
             assignable = baseType.isAssignableFrom(desc);
+        }
+        return assignable;
+    }
+
+    /**
+     * Returns if this instance is the same type or a supertype of {@code other} considering all declared IVML 
+     * parent/refined types.
+     * 
+     * @param other the other type to compare with
+     * @return {@code true} for assignable, {@code false} else
+     */
+    private boolean isAssignableFrom(AbstractIvmlTypeDescriptor other) {
+        boolean assignable = isEqual(other, this);
+        for (int r = 0; !assignable && r < other.getRefinesCount(); r++) {
+            assignable = isAssignableFrom(other.getRefines(r));
         }
         return assignable;
     }

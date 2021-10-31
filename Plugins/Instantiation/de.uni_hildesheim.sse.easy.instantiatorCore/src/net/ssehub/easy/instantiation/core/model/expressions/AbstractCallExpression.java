@@ -810,9 +810,9 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         return resolved;
     }
 
-/*    
-private static final String toString(CallArgument[] args) {
+/*private static final String toString(CallArgument[] args) {
     String res = "";
+    ExpressionWriter w = new ExpressionWriter(new OutputStreamWriter(System.out));
     for (int a = 0; a < args.length; a++) {
         if (a > 0) {
             res += ", ";
@@ -821,7 +821,14 @@ private static final String toString(CallArgument[] args) {
             res += args[a].getName();
             res += " ";
         }
-        res += args[a].getExpression();
+        try {
+            if (null != args[a].getExpression()) {
+                res += args[a].getExpression().accept(w);
+            }
+            res += " " + args[a].inferType();
+        } catch (VilException e) {
+            res += "?";
+        }
     }
     return res;
 }*/

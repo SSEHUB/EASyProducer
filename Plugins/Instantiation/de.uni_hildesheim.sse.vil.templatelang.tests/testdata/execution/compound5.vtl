@@ -1,0 +1,27 @@
+@advice(compounds5)
+template compoundTest5(Configuration config, FileArtifact target) {
+
+    def String toName(DataType t) {
+        t.name;
+    }
+
+    def String toName(PrimitiveType t) {
+        "prim " + t.name;
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        compounds5 cfg = config;
+        DataType p = cfg.p;
+        DataType r = cfg.r;
+        DataType r1 = cfg.r1;
+        '${toName(p)}'
+        '${toName(r)}'
+        '${toName(r1)}'
+        '${toName(cfg.ref_p)}'
+        '${toName(cfg.ref_r)}'
+        '${toName(cfg.ref_r1)}'
+        IOType t = cfg.test;
+        '${toName(t.type)}'
+    }
+
+}

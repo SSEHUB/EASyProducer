@@ -1,0 +1,57 @@
+project compounds5 {
+
+    version v0;
+    import compounds5Base;
+
+    abstract compound DataType {
+        NonEmptyString name;
+    }
+
+    compound PrimitiveType refines DataType {
+        NonEmptyString name;
+    }
+    
+    compound RecordType refines CDataProperty, DataType {
+        Integer i;
+    }
+    
+    compound RecordType1 refines DataType, CDataProperty {
+        Integer j;
+    }
+    
+    PrimitiveType p = PrimitiveType {
+        name = "primitive"
+    };
+
+    RecordType r = RecordType {
+        name = "r",
+        i = 1
+    };
+
+    RecordType1 r1 = RecordType1 {
+        name = "r1",
+        j = 2
+    };
+    
+    refTo(DataType) ref_p = refBy(p);
+    refTo(DataType) ref_r = refBy(r);
+    refTo(DataType) ref_r1 = refBy(r1);
+
+    compound IOType {
+        refTo(DataType) type;
+    }
+    
+    IOType test = {
+        type = refBy(r1)
+    };
+
+    freeze {
+        p;
+        r;
+        r1;
+        ref_p;
+        ref_r;
+        ref_r1;
+        test;
+    }
+}

@@ -508,6 +508,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
 
     /**
+     * Tests compounds with multi-refinements [contributed by IIP-Ecosphere].
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCompound5() throws IOException {
+        assertEqualWithIvml("compound5", "compounds5");
+    }
+
+    /**
      * Tests a switch statement with default in an untyped def.
      * 
      * @throws IOException should not occur

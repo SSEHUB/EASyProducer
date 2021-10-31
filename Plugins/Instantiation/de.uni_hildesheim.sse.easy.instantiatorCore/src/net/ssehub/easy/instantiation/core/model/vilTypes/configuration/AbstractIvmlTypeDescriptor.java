@@ -34,7 +34,7 @@ import net.ssehub.easy.varModel.model.values.NullValue;
 abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariable> {
 
     private TypeRegistry typeRegistry;
-    private AbstractIvmlTypeDescriptor refines;
+    private AbstractIvmlTypeDescriptor[] refines;
     
     /**
      * For serialization.
@@ -232,16 +232,27 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
 
     @Override
     public IMetaType getSuperType() {
-        return refines;
+        // TODO initial for VIL/VTL, extend VIL/VTL to multiple? unify with getRefinesCount then
+        return null != refines && refines.length > 0 ? refines[0] : null; 
     }
 
     /**
      * Returns the type descriptor which is refined by this descriptor.
      * 
+     * @param index the 0-based index of refines to return, see {@link #getRefinesCount()}
      * @return the refined type (may be <b>null</b> if there is none)
      */
-    AbstractIvmlTypeDescriptor getRefines() {
-        return refines;
+    AbstractIvmlTypeDescriptor getRefines(int index) {
+        return refines[index];
+    }
+    
+    /**
+     * Returns the number of refines.
+     * 
+     * @return the number of refines
+     */
+    int getRefinesCount() {
+        return null == refines ? 0 : refines.length;
     }
 
     /**
@@ -249,7 +260,7 @@ abstract class AbstractIvmlTypeDescriptor extends TypeDescriptor<DecisionVariabl
      * 
      * @param refines the refined type descriptor (may be <b>null</b> if there is none)
      */
-    protected void setRefines(AbstractIvmlTypeDescriptor refines) {
+    protected void setRefines(AbstractIvmlTypeDescriptor[] refines) {
         this.refines = refines;
     }
     

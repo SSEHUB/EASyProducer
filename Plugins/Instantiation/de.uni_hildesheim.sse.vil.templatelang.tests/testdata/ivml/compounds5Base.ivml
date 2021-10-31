@@ -1,0 +1,13 @@
+project compounds5Base {
+
+    version v0;
+    
+    typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
+
+    abstract compound CStructuralProperty {
+        NonEmptyString name;
+    }
+
+    compound CDataProperty refines CStructuralProperty {
+    }
+}

@@ -1,0 +1,15 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    p <- compounds5::p
+    r <- compounds5::r
+    r1 <- compounds5::r1
+    -> toName(PrimitiveType) with (compounds5::p)
+        -> +(String, Any) with (prim , primitive) = prim primitive
+    -> toName(DataType) with (compounds5::r)
+    -> toName(DataType) with (compounds5::r1)
+    -> toName(PrimitiveType) with (compounds5::ref_p)
+        -> +(String, Any) with (prim , primitive) = prim primitive
+    -> toName(DataType) with (compounds5::ref_r)
+    -> toName(DataType) with (compounds5::ref_r1)
+    t <- compounds5::test
+    -> toName(DataType) with (compounds5::IOType::type)
