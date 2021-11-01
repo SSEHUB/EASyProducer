@@ -612,7 +612,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         } while (pos >= 0);
         return content;
     }
-    
+
     @Override
     protected String appendInCompositeExpression(String s1, Expression e1, Object v1, String s2, Expression e2) {
         String result;
@@ -641,12 +641,17 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 isS1 = true;
             }
         }
+        
         String hint = e2.getFormattingHint();
         boolean clearLE = false;
         if (null != hint) {
-            if ("e".equals(hint) && s2.length() == 0) {
-                clear = true;
-                clearLE = true;
+            if ("e".equals(hint)) {
+                if (s2.length() == 0) {
+                    clear = true;
+                    clearLE = true;
+                } else {
+                    format = true;
+                }
             } else if ("<".equals(hint)) {
                 s1 = IndentationUtils.removeLastIndentation(s1, false);
                 clear = false;

@@ -8,9 +8,11 @@ template hint(Configuration config, Artifact target) {
 
     def main(Configuration config, Artifact target) {
         String empty = "";
+        String nonEmpty = "yyy";
         'here:
             ${sub()|<}
             ${empty|e}
+            ${nonEmpty|e}
         always: true'
     }
 
