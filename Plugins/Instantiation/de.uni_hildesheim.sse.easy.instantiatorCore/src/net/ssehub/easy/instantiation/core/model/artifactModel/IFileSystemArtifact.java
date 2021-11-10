@@ -50,6 +50,14 @@ public interface IFileSystemArtifact extends IArtifact, IStringValueProvider {
     public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws VilException;
     
     /**
+     * Enables the (operation system specific) execution flag for this artifact.
+     * 
+     * @param ownerOnly whether all users or just the owner shall be allowed to exectue this artifact
+     * @throws VilException if the executable flag cannot be set.
+     */
+    public void setExecutable(boolean ownerOnly) throws VilException;
+    
+    /**
      * Returns whether this artifact is (considered to be) a temporary artifact.
      * 
      * @return <code>true</code> if it is temporary, <code>false</code> else

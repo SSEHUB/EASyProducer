@@ -233,5 +233,10 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
         }
         return result;
     }
+
+    @Override
+    public void setExecutable(boolean ownerOnly) throws VilException {
+        FileSystemArtifactOperations.setExecutable(this, ownerOnly);
+    }
     
 }

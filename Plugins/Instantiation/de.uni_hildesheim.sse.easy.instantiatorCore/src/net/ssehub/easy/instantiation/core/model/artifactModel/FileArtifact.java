@@ -324,5 +324,10 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         }
         return result;
     }
+    
+    @Override
+    public void setExecutable(boolean ownerOnly) throws VilException {
+        FileSystemArtifactOperations.setExecutable(this, ownerOnly);
+    }
 
 }
