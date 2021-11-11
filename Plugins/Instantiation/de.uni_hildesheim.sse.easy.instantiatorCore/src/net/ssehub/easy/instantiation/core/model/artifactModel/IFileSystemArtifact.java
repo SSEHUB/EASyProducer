@@ -55,6 +55,7 @@ public interface IFileSystemArtifact extends IArtifact, IStringValueProvider {
      * @param ownerOnly whether all users or just the owner shall be allowed to exectue this artifact
      * @throws VilException if the executable flag cannot be set.
      */
+    @OperationMeta(storeArtifactsBefore = true)
     public void setExecutable(boolean ownerOnly) throws VilException;
     
     /**
