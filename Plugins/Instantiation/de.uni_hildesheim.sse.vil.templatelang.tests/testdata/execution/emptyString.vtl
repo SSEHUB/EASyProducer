@@ -1,0 +1,10 @@
+
+@advice(emptyString)
+template emptyString(Configuration config, Artifact target) {
+
+    def main(Configuration config, Artifact target) {
+        emptyString cfg = config;
+        'GLOBAL #${cfg.val}# in c #${cfg.c.val}#'
+    }
+
+}

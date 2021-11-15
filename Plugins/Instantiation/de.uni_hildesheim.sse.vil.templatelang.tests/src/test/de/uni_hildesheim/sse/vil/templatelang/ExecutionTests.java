@@ -315,6 +315,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testContent1() throws IOException {
         assertEqual("content1");
     }
+    
+    /**
+     * Tests empty string values [contributed by IIP-Ecosphere].
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testEmptyString() throws IOException {
+        assertEqualWithIvml("emptyString", "emptyString");
+    }
 
     /**
      * Tests a simple alternative with text output (two-sided, if).

@@ -1,0 +1,17 @@
+project emptyString {
+  version v0;
+
+  String val = "";
+  compound P {
+      String val = "";
+  }
+  compound C refines P{
+  }
+  C c = C{};
+  
+  freeze {
+      val;
+      c;
+  }
+  
+}
