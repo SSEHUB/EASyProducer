@@ -29,6 +29,9 @@ import net.ssehub.easy.varModel.model.Constraint.Type;
  */
 public class DefaultConstraint extends Constraint {
 
+    private ConstraintList defaultConstraints;
+    private ConstraintList deferredDefaultConstraints;
+    
     /**
      * Creates a new constraint from an already parsed syntax tree.
      * 
@@ -40,6 +43,62 @@ public class DefaultConstraint extends Constraint {
     public DefaultConstraint(ConstraintSyntaxTree consSyntax, IModelElement parent) 
         throws CSTSemanticException {
         super(consSyntax, parent);
+    }
+
+    /**
+     * Sets the default constraint list explicitly. Default constraints can be evaluated directly without further 
+     * constraint/variable dependencies. The attached constraints are temporary.
+     * 
+     * @param defaultConstraints the default constraints, may be <b>null</b> for none
+     */
+    public void setDefaultConstraints(ConstraintList defaultConstraints) {
+        this.defaultConstraints = defaultConstraints;
+    }
+    
+    /**
+     * Sets the deferred default constraint list explicitly. Default constraints have dependencies and shall be 
+     * evaluated (initially) after the default constraints. The attached constraints are temporary.
+     * 
+     * @param deferredDefaultConstraints the deferred default constraints, may be <b>null</b> for none
+     */
+    public void setDeferredDefaultConstraints(ConstraintList deferredDefaultConstraints) {
+        this.deferredDefaultConstraints = deferredDefaultConstraints;
+    }
+
+    /**
+     * Returns the default constraint list explicitly. Default constraints can be evaluated directly without further 
+     * constraint/variable dependencies. The attached constraints are temporary.
+     * 
+     * @return the default constraints, may be <b>null</b> for none
+     */
+    public ConstraintList getDefaultConstraints() {
+        return defaultConstraints;
+    }
+
+    /**
+     * Returns the deferred default constraint list explicitly. Default constraints have dependencies and shall be 
+     * evaluated (initially) after the default constraints. The attached constraints are temporary.
+     * 
+     * @return the deferred default constraints, may be <b>null</b> for none
+     */
+    public ConstraintList getDeferredDefaultConstraints() {
+        return deferredDefaultConstraints;
+    }
+    
+    /**
+     * Returns the number of attached constraints. The attached constraints are temporary. 
+     * 
+     * @return the number of attached constraints
+     */
+    public int getAttachedConstraintsSize() {
+        int result = 0;
+        if (defaultConstraints != null) {
+            result += defaultConstraints.size();
+        }
+        if (deferredDefaultConstraints != null) {
+            result += deferredDefaultConstraints.size();
+        }
+        return result;
     }
 
     /**

@@ -2,8 +2,13 @@ package test.net.ssehub.easy.reasoning.core.reasoner;
 
 import org.junit.Test;
 
+import org.junit.Assert;
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.ModelQueryException;
+
 /**
- * Configures the String tests for SSE reasoner.
+ * Configures the String tests.
  * 
  * @author Eichelberger
  */
@@ -66,6 +71,32 @@ public class StringTests extends AbstractTest {
         reasoningTest("StringInCollectionAssignTest.ivml", 2);
     } 
 
+    /**
+     * Empty default string assignment test.
+     */
+    @Test
+    public void emptyStringTest() throws ModelQueryException {
+        Configuration cfg = reasoningTest("EmptyString.ivml", 0);
+        IDecisionVariable var = cfg.getDecision("val", false);
+        Assert.assertNotNull(var);
+        Assert.assertNotNull(var.getValue());
+        Assert.assertEquals("", var.getValue().getValue());
+        
+        var = cfg.getDecision("c", false);
+        Assert.assertNotNull(var);
+        IDecisionVariable n = var.getNestedElement("val");
+        Assert.assertNotNull(n);
+        Assert.assertNotNull(n.getValue());
+        Assert.assertEquals("", n.getValue().getValue());
+        
+        n = var.getNestedElement("inner");
+        Assert.assertNotNull(n);
+        IDecisionVariable n1 = var.getNestedElement("val");
+        Assert.assertNotNull(n1);
+        Assert.assertNotNull(n1.getValue());
+        Assert.assertEquals("", n1.getValue().getValue());
+    } 
+    
     /**
      * String reference assign test.
      */
