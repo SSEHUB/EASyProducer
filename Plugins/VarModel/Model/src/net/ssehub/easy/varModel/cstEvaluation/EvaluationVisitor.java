@@ -101,7 +101,8 @@ import static net.ssehub.easy.varModel.cstEvaluation.EvaluationUtils.*;
  * Please do not forget to call {@link #clear()}! {@link #clearResult()} allows to reuse a visitor including the
  * settings made in {@link #init(IConfiguration, IAssignmentState, boolean, IValueChangeListener)}. <br/>
  * Personally, I would handle evaluation problems with exceptions, but the visitor interface and the classes to be 
- * visited are not defined to support this adequately.
+ * visited are not defined to support this adequately. An {@link IEvaluationInterceptor} may be given to 
+ * collect/influence values before setting them, in particular in case of default values.
  * 
  * @author Holger Eichelberger
  */
@@ -164,6 +165,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
          * Clears this instance for reuse.
          */
         void clear() {
+            super.clear();
             configStack.clear();
             allowPropagation = true;
         }
@@ -488,6 +490,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     }
     
     // ------------------------------- result handling -------------------------------
+    
+    /**
+     * Sets/resets the optional evaluation interceptor.
+     * 
+     * @param interceptor the interceptor instance, <b>null</b> for none
+     */
+    public void setEvaluationInterceptor(IEvaluationInterceptor interceptor) {
+        context.setEvaluationInterceptor(interceptor);
+    }
 
     @Override
     public Value getResult() {

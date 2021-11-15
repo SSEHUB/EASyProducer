@@ -38,6 +38,14 @@ import net.ssehub.easy.varModel.model.values.Value;
 public abstract class EvaluationContext implements IConfiguration {
         
     private Locale locale = DefaultLocale.getDefaultLocale();
+    private IEvaluationInterceptor interceptor;
+    
+    /**
+     * Clears this instance for reuse.
+     */
+    void clear() {
+        interceptor = null;
+    }
     
     /**
      * Returns the actual locale for evaluation.
@@ -178,5 +186,26 @@ public abstract class EvaluationContext implements IConfiguration {
      * @return the assignment state
      */
     public abstract IAssignmentState getAssignmentState();
+    
+    /**
+     * Returns the optional evaluation interceptor.
+     * 
+     * @return the evaluation interceptor, may be <b>null</b> for none
+     */
+    public IEvaluationInterceptor getEvaluationInterceptor() {
+        return interceptor;
+    }
+
+    /**
+     * Defines the optional evaluation interceptor.
+     * 
+     * @param interceptor the evaluation interceptor, may be <b>null</b> for none
+     * @return the interceptor instance before this call
+     */
+    public IEvaluationInterceptor setEvaluationInterceptor(IEvaluationInterceptor interceptor) {
+        IEvaluationInterceptor old = interceptor;
+        this.interceptor = interceptor;
+        return old;
+    }
 
 }
