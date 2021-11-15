@@ -22,6 +22,7 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
+import net.ssehub.easy.reasoning.sseReasoner.functions.DefaultEvaluationInterceptor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils;
@@ -109,8 +110,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     private VariablesMap variablesMap = new VariablesMap();
     private ReasonerState copiedState;
     private ConstraintBase constraintBase = new ConstraintBase();
-    private ConstraintList defaultConstraints = new ConstraintList();
-    private ConstraintList deferredDefaultConstraints = new ConstraintList();
+    private DefaultConstraints defaultConstraints = new DefaultConstraints().initialize();
     private ConstraintList topLevelConstraints = new ConstraintList();
     private ConstraintList otherConstraints = new ConstraintList();
     private List<Project> projects;
@@ -397,31 +397,8 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         scopeAssignments.clearScopeAssignments(project);
         evaluator.setDispatchScope(project);
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
-            usedVariables.clear();
             // .getFirst here and .removeFirst at end works for most, but not all test cases -> propagation
-            Constraint constraint = constraintBase.removeFirst();
-            scopeAssignments.setCurrentScope(constraint);
-            ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
-                ? AssignmentState.DEFAULT : assignmentState);
-            reevaluationCounter++;
-            if (cst != null) {
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Resolving: " + reevaluationCounter + ": " + toIvmlString(cst) 
-                        + " : " + constraint.getTopLevelParent());                    
-                }
-                evaluator.visit(cst);
-                //printConstraintEvaluationResult(constraint, evaluator); // debugging only
-                analyzeEvaluationResult(constraint);
-                if (null != interceptor) {
-                    interceptor.notifyEvaluation(constraint, evaluator);
-                }
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Result: " + evaluator.getResult());
-                    LOGGER.debug("------");                     
-                }
-                evaluator.clearIntermediary();
-            }
+            evaluateConstraint(constraintBase.removeFirst());
             if (endTimestamp > 0 && System.currentTimeMillis() > endTimestamp) {
                 hasTimeout = true;
                 break;
@@ -429,6 +406,79 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         }
     }
 
+    /**
+     * Evaluates {@code constraint} and if available, in case of default constraints, also all related initializing 
+     * default constraints as one block. This combination allows to have an initializing value assignment, to consider 
+     * the default constraints, e.g., in refined compounds, and to allow the default constraints to consist of 
+     * dependent, complex expressions, that can only be evaluated by a reasoner. 
+     *  
+     * @param constraint the constraint to be evaluated
+     * @see #evaluateConstraint(Constraint, ConstraintSyntaxTree)
+     * @see DefaultEvaluationInterceptor
+     */
+    private void evaluateConstraint(Constraint constraint) {
+        ConstraintSyntaxTree cst = constraint.getConsSyntax();
+        if (cst != null) {
+            boolean evaluated = false;
+            if (constraint instanceof DefaultConstraint) {
+                DefaultConstraint dCst = (DefaultConstraint) constraint;
+                if (dCst.getAttachedConstraintsSize() > 0) {
+                    DefaultEvaluationInterceptor interceptor = new DefaultEvaluationInterceptor();
+                    evaluator.setEvaluationInterceptor(interceptor); // TODO reuse instance
+                    ConstraintBase dflt = new ConstraintBase();
+                    dflt.addAll(dCst.getDefaultConstraints(), true);
+                    dflt.addAll(dCst.getDeferredDefaultConstraints(), true);
+                    ConstraintBase tmpCBase = constraintBase;
+                    constraintBase = dflt;
+                    while (!dflt.isEmpty() && !wasStopped) {
+                        evaluateConstraint(dflt.removeFirst());
+                        if (endTimestamp > 0 && System.currentTimeMillis() > endTimestamp) {
+                            hasTimeout = true;
+                            break;
+                        }
+                    }
+                    interceptor.markFinal();
+                    constraintBase = tmpCBase;
+                    evaluateConstraint(constraint, cst);
+                    evaluator.setEvaluationInterceptor(null);
+                    evaluated = true;
+                } 
+            }
+            if (!evaluated) {
+                evaluateConstraint(constraint, cst);
+            }
+        }        
+    }
+    
+    /**
+     * Evaluates a single constraint.
+     * 
+     * @param constraint the constraint
+     * @param cst the constraint syntax tree already extracted from {@code constraint}
+     */
+    private void evaluateConstraint(Constraint constraint, ConstraintSyntaxTree cst) {
+        usedVariables.clear();
+        scopeAssignments.setCurrentScope(constraint);
+        evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
+            ? AssignmentState.DEFAULT : assignmentState);
+        reevaluationCounter++;
+        if (Descriptor.LOGGING) {
+            LOGGER.debug("Resolving: " + reevaluationCounter + ": " + toIvmlString(cst) 
+                + " : " + constraint.getTopLevelParent());                    
+        }
+        evaluator.visit(cst);
+        //printConstraintEvaluationResult(constraint, evaluator); // debugging only
+        analyzeEvaluationResult(constraint);
+        if (null != interceptor) {
+            interceptor.notifyEvaluation(constraint, evaluator);
+        }
+        if (Descriptor.LOGGING) {
+            LOGGER.debug("Result: " + evaluator.getResult());
+            LOGGER.debug("------");                     
+        }
+        evaluator.clearIntermediary();
+    }
+    
     /**
      * Visits the contents of a project for translation. Do not store stateful information in this class.
      * 
@@ -597,6 +647,55 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     }
 
     /**
+     * Storage for two sub-types of default constraints, namely primary default constraints that can be evaluated 
+     * directly, e.g., constants ({@link DefaultConstraints#defaultConstraints}) and more complex constraints with 
+     * dependencies ({@link DefaultConstraints#deferredDefaultConstraints}). This structure is used to store the 
+     * global lists in {@link Resolver}, but also their temporary redirections for collecting all default initialization
+     * constraints of refined compounds.
+     * 
+     * This structure is by default not initialized, i.e., the lists are intentionally <b>null</b>. Use 
+     * {@link #initialize()} to initialize the lists.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class DefaultConstraints {
+        
+        private ConstraintList defaultConstraints;
+        private ConstraintList deferredDefaultConstraints;
+        
+        /**
+         * Initializes this instance with defaults, i.e., new constraint lists.
+         * 
+         * @return {@code this}
+         */
+        private DefaultConstraints initialize() {
+            defaultConstraints = new ConstraintList();
+            deferredDefaultConstraints = new ConstraintList();
+            return this;
+        }
+        
+        /**
+         * Clears the constraint lists.
+         */
+        private void clear() {
+            defaultConstraints.clear();
+            deferredDefaultConstraints.clear();
+        }
+        
+        /**
+         * Transfers the constraint lists to {@code target}.
+         * 
+         * @param target the target list, e.g., the global constraint base
+         * @param clear clears <code>constraints</code> by taking over all internal nodes
+         */
+        private void transfer(ConstraintList target, boolean clear) {
+            target.addAll(defaultConstraints, clear);
+            target.addAll(deferredDefaultConstraints, clear);
+        }
+        
+    }
+
+    /**
      * Translates the (transitive) defaults and type constraints for a declaration. 
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
@@ -610,6 +709,8 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         ConstraintSyntaxTree defaultValue = incremental ? null : decl.getDefaultValue();
         AbstractVariable self = null;
         ConstraintSyntaxTree selfEx = null;
+        DefaultConstraints tmpDflt = null;
+
         if (null != defaultValue) { // considering the actual type rather than base
             actType = inferTypeSafe(defaultValue, actType);
         }
@@ -628,38 +729,31 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             if (cAcc instanceof CompoundAccess) { // defer init constraints to prevent accidental init override
                 selfEx = ((CompoundAccess) cAcc).getCompoundExpression();
             }
-            try {
-                if (TypeQueries.isConstraint(declType)) { // handle and register constraint variables
-                    variablesCounter--;
-                    // use closest parent instead of project -> runtime analysis
-                    createConstraintVariableConstraint(defaultValue, selfEx, self, decl, var);
-                } 
-                if (!contexts.constraintVarOnly(false)) {
-                    ConstraintSyntaxTree acc;
-                    if (decl instanceof Attribute) {
-                        Attribute attribute = (Attribute) decl;
-                        if (cAcc == null) {
-                            acc = new Variable(attribute); // shall not occur
-                        } else if (cAcc instanceof AttributeVariable) { // do not double qualify
-                            acc = cAcc;
-                        } else {
-                            acc = new AttributeVariable(cAcc, attribute);
-                        }
+            if (TypeQueries.isConstraint(declType)) { // handle and register constraint variables
+                variablesCounter--;
+                // use closest parent instead of project -> runtime analysis
+                createConstraintVariableConstraint(defaultValue, selfEx, self, decl, var);
+            } 
+            if (!contexts.constraintVarOnly(false)) {
+                ConstraintSyntaxTree acc;
+                if (decl instanceof Attribute) {
+                    Attribute attribute = (Attribute) decl;
+                    if (cAcc == null) {
+                        acc = new Variable(attribute); // shall not occur
+                    } else if (cAcc instanceof AttributeVariable) { // do not double qualify
+                        acc = cAcc;
                     } else {
-                        acc = null != selfEx ? cAcc : new Variable(decl);
+                        acc = new AttributeVariable(cAcc, attribute);
                     }
-                    defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
-                    defaultValue = substituteVariables(defaultValue, selfEx, self, acc);
-                    ConstraintList targetCons = defaultConstraints; 
-                    if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
-                        targetCons = deferredDefaultConstraints;
-                    }
-                    addConstraint(targetCons, new DefaultConstraint(defaultValue, project), true, var, null);
+                } else {
+                    acc = null != selfEx ? cAcc : new Variable(decl);
                 }
-                substVisitor.clear(); // clear false above 
-            } catch (CSTSemanticException e) {
-                LOGGER.exception(e); // should not occur, ok to log
-            }            
+                defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
+                defaultValue = substituteVariables(defaultValue, selfEx, self, acc);
+                tmpDflt = new DefaultConstraints();
+                addDefaultConstraint(decl, defaultValue, tmpDflt, isCompound, var);
+            }
+            substVisitor.clear(); // clear false above 
         }
         if (!incremental) {
             translateAnnotationDeclarations(decl, var, cAcc);
@@ -671,6 +765,66 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         } else if (TypeQueries.isContainer(actType)) { // this is a container value -> default constraints, do not defer
             translateContainerDeclaration(decl, var, actType, cAcc);
         }
+        transfer(null, tmpDflt, isCompound);
+    }
+    
+    /**
+     * Adds a default constraint.
+     * 
+     * @param decl The {@link AbstractVariable} for which the default value should be resolved.
+     * @param defaultValue the default value expression
+     * @param tmp temporary storage structure for default value constraints (usually given, may be <b>null</b>) if no 
+     *   transfer (default constraints to block evaluation) shall happen
+     * @param enable whether transfer (default constraints to block evaluation) shall happen at all
+     * @param var the instance of <tt>decl</tt> (may be <b>null</b> for type-based translation).
+     */
+    private void addDefaultConstraint(AbstractVariable decl, ConstraintSyntaxTree defaultValue, DefaultConstraints tmp, 
+        boolean enable, IDecisionVariable var) {
+        try {
+            ConstraintList targetCons = defaultConstraints.defaultConstraints; 
+            if (substVisitor.containsSelf() || isOverriddenSlot(decl)) {
+                targetCons = defaultConstraints.deferredDefaultConstraints;
+            }
+            DefaultConstraint c = transfer(new DefaultConstraint(defaultValue, project), tmp, enable);
+            addConstraint(targetCons, c, true, var, null);
+        } catch (CSTSemanticException e) {
+            LOGGER.exception(e); // should not occur, ok to log
+        }           
+    }
+    
+    /**
+     * Temporarily transfers the default constraint lists between {@link #defaultConstraints} and {@code tmp}. After
+     * transferring the lists to {@code constraint} (and {@link #defaultConstraints temporarily into {@code tmp}) 
+     * default constraints to be registered afterwards will be collected in {@link constraint} (rather than in 
+     * {@link #defaultConstraints}) be evaluated as a batch before {@constraint}, e.g., in case of a (refined) compound.
+     * If {@code constraint} is <b>null</b>, {@link #defaultConstraints} will set with the lists in {@code tmp} and 
+     * become active again for collecting further default constraints. If {@code enable} is {@code} false, no transfer
+     * will happen at all.  
+     * 
+     * @param constraint the constraint to hold/holding the actual default constraints lists. If given, the transfer 
+     *   to {@code tmp} may happen (dependent on {@code enable}), if not, backward-transfer to 
+     *   {@link #defaultConstraints} will happen if {@code tmp} is not <b>null</b>
+     * @param tmp a temporary structure for storing {@link #defaultConstraints}, may be <b>null</b>
+     * @param enable generally enables or disable the transfer
+     * @return {@code constraint}
+     */
+    private DefaultConstraint transfer(DefaultConstraint constraint, DefaultConstraints tmp, boolean enable) {
+        if (enable) {
+            if (null != constraint) {
+                tmp.defaultConstraints = defaultConstraints.defaultConstraints;
+                tmp.deferredDefaultConstraints = defaultConstraints.deferredDefaultConstraints;
+                
+                defaultConstraints.initialize();
+                constraint.setDefaultConstraints(defaultConstraints.defaultConstraints);
+                constraint.setDeferredDefaultConstraints(defaultConstraints.deferredDefaultConstraints);
+            } else {
+                if (null != tmp && null != tmp.defaultConstraints) { // was it transferred at all
+                    defaultConstraints.defaultConstraints = tmp.defaultConstraints;
+                    defaultConstraints.deferredDefaultConstraints = tmp.deferredDefaultConstraints;
+                }
+            }
+        }
+        return constraint;
     }
 
     /**
@@ -1228,8 +1382,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      */
     private void translateConstraints(Project project) {
         project.accept(projectVisitor);
-        constraintBase.addAll(defaultConstraints, true); // true = clear take over nodes
-        constraintBase.addAll(deferredDefaultConstraints, true);
+        defaultConstraints.transfer(constraintBase, true); // true = clear take over nodes
         constraintBase.addAll(topLevelConstraints, true);
         constraintBase.addAll(otherConstraints, true);
         constraintCounter += constraintBase.size();
@@ -1598,7 +1751,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      */
     void clear() {
         defaultConstraints.clear();
-        deferredDefaultConstraints.clear();
         topLevelConstraints.clear();
         otherConstraints.clear();
         failedElements.clear();
