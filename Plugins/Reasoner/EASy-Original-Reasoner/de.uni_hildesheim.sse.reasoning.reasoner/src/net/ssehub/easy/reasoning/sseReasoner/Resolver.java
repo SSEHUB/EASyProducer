@@ -398,7 +398,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         evaluator.setDispatchScope(project);
         while (!constraintBase.isEmpty() && !wasStopped) { // reasoner.tex -> hasTimeout see end of loop
             // .getFirst here and .removeFirst at end works for most, but not all test cases -> propagation
-            evaluateConstraint(constraintBase.removeFirst());
+            evaluateConstraint(constraintBase.removeFirst(), true);
             if (endTimestamp > 0 && System.currentTimeMillis() > endTimestamp) {
                 hasTimeout = true;
                 break;
@@ -413,34 +413,44 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * dependent, complex expressions, that can only be evaluated by a reasoner. 
      *  
      * @param constraint the constraint to be evaluated
+     * @param top is this a top-level or a nested call
      * @see #evaluateConstraint(Constraint, ConstraintSyntaxTree)
      * @see DefaultEvaluationInterceptor
      */
-    private void evaluateConstraint(Constraint constraint) {
+    private void evaluateConstraint(Constraint constraint, boolean top) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         if (cst != null) {
             boolean evaluated = false;
             if (constraint instanceof DefaultConstraint) {
                 DefaultConstraint dCst = (DefaultConstraint) constraint;
                 if (dCst.getAttachedConstraintsSize() > 0) {
-                    DefaultEvaluationInterceptor interceptor = new DefaultEvaluationInterceptor();
-                    evaluator.setEvaluationInterceptor(interceptor); // TODO reuse instance
+                    DefaultEvaluationInterceptor interceptor;
+                    if (top) {
+                        interceptor = new DefaultEvaluationInterceptor();
+                        evaluator.setEvaluationInterceptor(interceptor);
+                    } else {
+                        interceptor = null;
+                    }
                     ConstraintBase dflt = new ConstraintBase();
                     dflt.addAll(dCst.getDefaultConstraints(), true);
                     dflt.addAll(dCst.getDeferredDefaultConstraints(), true);
                     ConstraintBase tmpCBase = constraintBase;
                     constraintBase = dflt;
                     while (!dflt.isEmpty() && !wasStopped) {
-                        evaluateConstraint(dflt.removeFirst());
+                        evaluateConstraint(dflt.removeFirst(), false);
                         if (endTimestamp > 0 && System.currentTimeMillis() > endTimestamp) {
                             hasTimeout = true;
                             break;
                         }
                     }
-                    interceptor.markFinal();
+                    if (null != interceptor) {
+                        interceptor.markFinal();
+                    }
                     constraintBase = tmpCBase;
                     evaluateConstraint(constraint, cst);
-                    evaluator.setEvaluationInterceptor(null);
+                    if (top) {
+                        evaluator.setEvaluationInterceptor(null);
+                    }
                     evaluated = true;
                 } 
             }
