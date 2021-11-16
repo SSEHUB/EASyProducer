@@ -97,7 +97,7 @@ public class CompoundTests extends AbstractTest {
      */
     @Test
     public void compoundAnnotationTest() {
-        reasoningTest("CompoundAnnotationTest.ivml", 9);
+        reasoningTest("CompoundAnnotationTest.ivml", 1);
     } 
 
     /**
@@ -105,7 +105,7 @@ public class CompoundTests extends AbstractTest {
      */
     @Test
     public void derivedCompoundAnnotationTest() {
-        reasoningTest("DerivedCompoundAnnotationTest.ivml", 9);
+        reasoningTest("DerivedCompoundAnnotationTest.ivml", 1);
     } 
 
     /**
