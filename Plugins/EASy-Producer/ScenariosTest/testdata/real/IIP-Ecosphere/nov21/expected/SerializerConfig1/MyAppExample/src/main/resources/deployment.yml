@@ -1,0 +1,91 @@
+id: myApp
+name: myApp example
+version: 0.1.0
+types:
+    - name: Rec1
+      fields:
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+services:
+   - id: myAnonymizer
+     name: myAnonymizer example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}
+       - channel: processString_myAnonymizer-out-0
+         direction: OUT
+         type: String
+       - channel: transformRec1String_myKi-in-0
+         id: MyAnonymizer->MyKi
+         direction: IN
+         type: Rec1
+   - id: myKi
+     name: myKi example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+   - id: myMqttConn
+     name: myMqttConnExample
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+   - id: myOpcConn
+     name: myOpcConn example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+   - id: mySource
+     name: mySource example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+         portArg: --mqtt.port=${port} --amqp.port=${port}
+         hostArg: --mqtt.host=${host} --amqp.host=${host}
+       - channel: createString_mySource-out-0
+         direction: OUT
+         type: String
+       - channel: processString_myAnonymizer-in-0
+         id: MySource->MyAnonymizer
+         direction: IN
+         type: String
+

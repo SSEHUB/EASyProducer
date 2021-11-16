@@ -582,6 +582,19 @@ public class RealTests extends AbstractRealTests {
     }
 
     /**
+     * Tests the IIP-Ecosphere model / instantiation (November 21).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testIipEcosphereNov21() throws IOException {
+        final String folder = "nov21";
+        executeIipCase(folder, "SerializerConfig1");
+        executeIipCase(folder, "SimpleMesh");
+        executeIipCase(folder, "SimpleMesh3");
+    }
+    
+    /**
      * Executes an IIP-Ecosphere case.
      * 
      * @param folder the case folder

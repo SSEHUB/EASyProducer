@@ -1,0 +1,28 @@
+transport:
+    host: localhost
+    port: 8883
+    user: user
+    password: pwd
+docker:
+    dockerHost: unix:///var/run/docker.sock
+    dockerImageYamlFilename: image-info.yml
+    deleteWhenUndeployed: false
+aas:
+    server:
+        port: 9001
+        host: 127.0.0.1
+        schema: HTTP
+        path: 
+    registry:
+        port: 9002
+        host: 127.0.0.1
+        schema: HTTP
+        path: registry
+    implementation:
+        port: -1
+        host: 127.0.0.1
+        netmask: 
+        schema: HTTP
+        protocol: VAB-TCP
+netMgr:
+    netmask: 

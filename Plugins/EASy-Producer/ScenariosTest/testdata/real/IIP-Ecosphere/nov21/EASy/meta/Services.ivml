@@ -1,0 +1,170 @@
+project Services {
+
+   import Connectors;
+   import MetaConcepts;
+   import DataTypes;
+   import Resources;
+   
+   annotate BindingTime bindingTime = BindingTime::compile to .;
+   
+   // -------------------- service manager ------------------
+   
+   abstract compound ServiceManager { 
+   };
+   
+   compound SpringCloudStream refines ServiceManager {
+       // logging.level.root: INFO
+       Boolean deleteFilesOnExit = true;
+       Boolean deleteArtifacts = true;
+       Integer waitingTime = 30000;
+       String brokerHost = "localhost";
+       Integer brokerPort = 8883;
+       Integer availabilityRetryDelay = 500;
+   };
+   
+   ServiceManager serviceManager = SpringCloudStream {};
+   
+   isDefined(serviceManager);
+   // TODO service manager requires corresponding broker
+
+   // -------------------- service protocol ------------------
+ 
+   abstract compound ServiceProtocol {
+   	   ProtocolType type;
+   };
+   
+   compound ServiceProtocolAMQP refines ServiceProtocol {
+   	   ProtocolType type = ProtocolType::Amqp;
+   };
+   
+   compound ServiceProtocolMQTTv3 refines ServiceProtocol {
+   	   ProtocolType type = ProtocolType::Mqttv3;
+   }
+   
+   compound ServiceProtocolMQTTv5 refines ServiceProtocol {
+   	   ProtocolType type = ProtocolType::Mqttv5;
+   }
+   
+   compound ServiceProtocolMQTTv3hive refines ServiceProtocol {
+   	   ProtocolType type = ProtocolType::Mqttv3;
+   }
+   
+   compound ServiceProtocolMQTTv5hive refines ServiceProtocol {
+   	   ProtocolType type = ProtocolType::Mqttv5;
+   };
+   
+   ServiceProtocol serviceProtocol = ServiceProtocolAMQP {};
+   
+   // might be too strict, but its ok for now
+   //serviceProtocol.type == transportProtocol.type;
+   
+   isDefined(serviceProtocol);
+
+   // -------------------- services ------------------
+
+   // required by meta concepts, direct ref would be alternative but conflit with QM   
+   compound IOType refines CDataProperty {
+       refTo(DataType) type;
+   }
+   
+   // aligned to services.environment
+   enum ServiceKind {SOURCE_SERVICE, TRANSFORMATION_SERVICE, SINK_SERVICE, PROBE_SERVICE};
+   
+   // service base is the parent type of Service and ServiceFamily. They may be used in interchangable manner
+   // in some situations while in others it is important to have a service not being a family avoiding potential
+   // instance recursions
+   abstract compound ServiceBase refines CDataComponent {
+       Id id; // forward declaration
+       NonEmptyString name; // forward declaration
+       ServiceKind kind;
+       Boolean asynchronous = true;
+       sequenceOf(IOType) input;
+       sequenceOf(IOType) output;
+       // TODO refine parameter
+       //sequenceOf(CReversibleProperty) parameters;
+
+       kind == ServiceKind.SOURCE_SERVICE implies isDefined(output) and output.size() > 0;
+       kind == ServiceKind.SINK_SERVICE implies isDefined(input) and input.size() > 0;
+       kind == ServiceKind.TRANSFORMATION_SERVICE or kind == ServiceKind.PROBE_SERVICE implies isDefined(input) and input.size() > 0 and isDefined(output) and output.size() > 0;
+       not(asynchronous) and kind <> ServiceKind.SOURCE_SERVICE implies isDefined(input) and isDefined(output) and input.size() == output.size();
+   }
+   
+   abstract compound Service refines ServiceBase {
+       String description;
+       IipVersion ver;
+       Boolean deployable;
+   }
+   
+   compound JavaService refines Service {
+       String class; // optional class name, if not given do not generate service binding
+       String artifact; // optional maven artifact
+       
+       isDefined(class); // must be defined, not necessarily with a value
+       isDefined(artifact); // must be defined, not necessarily with a value
+   }
+   
+   compound PythonService refines Service {
+   }
+   
+   // IIP-Ecosphere provided connectors
+   compound Connector refines Service {
+       IOType machineInput; // initial only one, connector not machine representation
+       IOType machineOutput; // initial only one, connector not machine representation
+       
+       String class;
+       String artifact;
+       String inAdapterClass = ""; // if given, use adapter
+       String outAdapterClass = ""; // if given, use adapter
+       // may collapse into one, to be supported by configurable mapping
+       refTo(DataType) inInterface; // provided data input to be mapped into adapter, alternative to adapterClass
+       refTo(DataType) outInterface; // provided data output to be mapped into adapter, alternative to adapterClass
+       
+       NonEmptyString host = "localhost";
+       Port port;
+
+       output.size() < 2;
+       input.size() < 2;
+       kind == ServiceKind.SOURCE_SERVICE;
+       deployable == true;
+   }
+   
+   compound ChannelConnector refines Connector {
+       String inSerializerClass = ""; // if not given, use registry
+       String outSerializerClass = ""; // if not given, use registry
+       String inChannel = "";
+       String outChannel = "";
+       IOType machineInput = {type = refBy(ByteArrayType)};
+       IOType machineOutput = {type = refBy(ByteArrayType)};
+   }
+   
+   compound OpcUaV1Connector refines Connector {
+        String class = "de.iip_ecosphere.platform.connectors.opcuav1.OpcUaConnector";
+        String artifact ="de.iip-ecosphere.platform:connectors.opcuav1:";
+        IOType machineInput = {type = refBy(ObjectType)};
+        IOType machineOutput = {type = refBy(OpcUaV1DataItemType)};
+   }
+   
+   compound MqttV3Connector refines ChannelConnector {
+        String class = "de.iip_ecosphere.platform.connectors.mqttv3.PahoMqttv3Connector";
+        String artifact ="de.iip-ecosphere.platform:connectors.mqttv3:";
+   }
+
+   PrimitiveType OpcUaV1DataItemType = {
+       name = "de.iip_ecosphere.platform.connectors.opcuav1.DataItem"
+   };
+   
+   // TODO remaining connectors
+   
+   // ------------------------ families -----------------
+   
+   abstract compound ServiceFamily refines ServiceBase, CFamily {
+        setOf(refTo(Service)) members; // refinement
+        Constraint typeCheck = members->collect(refTo(Service) s | s.kind).toSet().size() < 2;
+        kind == members.asSequence().first().kind; // propagate
+   }
+   
+   freeze {
+       OpcUaV1DataItemType;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon);
+   
+}

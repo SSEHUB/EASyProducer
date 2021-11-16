@@ -1,0 +1,110 @@
+import JavaBasics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template MeshBasics(Configuration config, FileArtifact target) {
+
+    mapOf(String, Boolean) asyncIngestors = {};
+    mapOf(String, String) ingestors = {};
+    
+    def String getDeploymentDescriptorPath() {
+        "/deployment.yml";
+    }
+    
+    def String getYamlServiceFragment(String varName, String clsName, String serviceId) {
+        'YamlService ${varName} = YamlArtifact.readFromYamlSafe(${clsName}.class
+            .getResourceAsStream("${getDeploymentDescriptorPath()}")).getServiceSafe("${serviceId}")'
+    }
+
+    def getServiceIdSuffix(MeshElement elt) {
+        "";
+    }
+
+    def generateDataMethods(MeshElement elt) {
+    }
+    
+    def Boolean recordSourceIngestor(MeshSource elt, IOType type) {
+        true;
+    }
+
+    def generateDataMethods(MeshSource elt) {
+        String serviceId = "_" + toIdentifier(elt.impl.id);
+        for (IOType out : elt.output) {
+            String type = toTypeName(out.type);
+            String methodSuffix = "create" + type.firstToUpperCase();
+            String methodSuffixId = methodSuffix + serviceId;
+            if (recordSourceIngestor(elt, out)) {
+                ingestors.add(methodSuffixId, type);
+                asyncIngestors.add(methodSuffixId, elt.impl.asynchronous);
+            }
+            generateSourceMethod(elt, type, methodSuffix, methodSuffixId);
+        }
+    }
+
+    def Boolean recordAsyncProcessorIngestor(MeshProcessor elt, IOType type) {
+        true;
+    }
+
+    def Boolean recordSyncProcessorIngestor(MeshProcessor elt, IOType type) {
+        true;
+    }
+
+    def generateDataMethods(MeshProcessor elt) {
+        String serviceId = "_" + toIdentifier(elt.impl.id);
+        if (elt.impl.asynchronous) {
+            for (IOType in : elt.input) {
+                String type = toTypeName(in.type);
+                String methodSuffix = "process" + type.firstToUpperCase();
+                String methodSuffixId = methodSuffix + serviceId;
+                if (recordAsyncProcessorIngestor(elt, in)) {
+                    ingestors.add(methodSuffixId, type);
+                    asyncIngestors.add(methodSuffixId, true);
+                }
+                generateAsyncProcessorInMethod(elt, type, methodSuffix, methodSuffixId);
+            }
+        } else {
+            Integer p = 0;
+            while (p < elt.input.size()) {
+                IOType in = elt.input[p];
+                IOType out = elt.output[p];
+                p = p + 1;
+                String inType = toTypeName(in.type);
+                String outType = toTypeName(out.type);
+                String methodSuffix = "transform" + inType.firstToUpperCase() + outType.firstToUpperCase();
+                String methodSuffixId = methodSuffix + serviceId;
+                if (recordSyncProcessorIngestor(elt, out)) {
+                    ingestors.add(methodSuffixId, outType);
+                    asyncIngestors.add(methodSuffixId, false);
+                }
+                generateSyncProcessorMethod(elt, inType, outType, methodSuffix, methodSuffixId);
+            }
+        }
+    }
+    
+    def generateDataMethods(MeshSink elt) {
+        String serviceId = "_" + toIdentifier(elt.impl.id);
+        for (IOType in : elt.input) {
+            String type = toTypeName(in.type);
+            String methodSuffix = "receive" + type.firstToUpperCase();
+            String methodSuffixId = methodSuffix + serviceId;
+            generateSinkMethod(elt, type, methodSuffix, methodSuffixId);
+        }
+    }
+
+    def generateSourceMethod(MeshSource src, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        ''
+    } 
+
+    def generateAsyncProcessorInMethod(MeshProcessor proc, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        ''
+    } 
+
+    def generateSyncProcessorMethod(MeshProcessor proc, String inType, String outType, String methodSuffix, String methodSuffixWithServiceId) {
+        ''
+    } 
+    
+    def generateSinkMethod(MeshSink sink, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        ''
+    } 
+    
+}

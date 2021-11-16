@@ -1,0 +1,72 @@
+project DataTypes {
+
+    import MetaConcepts;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    typedef EphemeralPort Integer with (EphemeralPort >= -1 and EphemeralPort <= 65535);
+    typedef NonEmptyEphemeralPort EphemeralPort with (isDefined(NonEmptyEphemeralPort));
+    typedef Port EphemeralPort with (Port >= 0);
+    typedef NonEmptyPort Port with (isDefined(NonEmptyPort));
+    typedef IipVersion NonEmptyString with (matches(IipVersion, "^\\d+(\\.\\d+)*$"));
+    typedef Id NonEmptyString with (matches(Id, "^\\S+$")); // non whitespace
+    
+    abstract compound DataType {
+        NonEmptyString name;
+    }
+    
+    compound PrimitiveType refines DataType {
+        NonEmptyString name;
+    }
+    
+    compound RecordType refines CDataProperty, DataType {
+        Fields fields;      
+    }
+    
+    compound Field {
+        NonEmptyString name;
+        refTo(DataType) type;
+    }
+
+    typedef Fields sequenceOf(Field) with (Fields->collect(f|f.name).hasDuplicates() == false);
+
+    // defining the basic type; if further ones are added, adjust the basic vtls in the generation
+    // do not change the names!
+    PrimitiveType IntegerType = {
+        name = "Integer"
+    };
+    PrimitiveType LongType = {
+        name = "Long"
+    };
+    PrimitiveType StringType = {
+        name = "String"
+    };
+    PrimitiveType BooleanType = {
+        name = "Boolean"
+    };
+    PrimitiveType FloatType = {
+        name = "Float"
+    };
+    PrimitiveType DoubleType = {
+        name = "Double"
+    };
+    PrimitiveType ObjectType = {
+        name = "Object"
+    };
+    PrimitiveType ByteArrayType = {
+        name = "byte[]"
+    };    
+    
+    // freeze all primitives
+    freeze {
+        IntegerType;
+        LongType;
+        StringType;
+        BooleanType;
+        FloatType;
+        DoubleType;
+        ObjectType;
+        ByteArrayType;
+    };
+    
+}

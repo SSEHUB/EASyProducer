@@ -1,0 +1,58 @@
+import JavaMapping;
+import EcsRuntimeDockerContainerManagerYaml;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template PlatformYaml(IIPEcosphere config, FileArtifact target) {
+
+    // some string values may appear as not configured
+    def String getString(DecisionVariable elt) {
+        if (!elt.isConfigured()) {
+            "";
+        } else if (elt.isNull()) {
+            "";
+        } else {
+            elt.getStringValue();
+        }
+    }
+
+    def produceDevMgtServer(IIPEcosphere config) {
+        DeviceMgtStorageServer s = config.deviceMgtStorageServer; 
+        if (s.port > 0) {
+            'storageServer:
+                port: ${s.port}
+                path: "${getString(s.path)}"
+                accessKey: ${getString(s.accessKey)}
+                secretAccessKey: ${getString(s.secretAccessKey)}'
+        } else {
+            ''
+        }
+    }
+    
+    def produceDeviceMgtStorage(String topKey, DeviceMgtStorage s, PackageStore p) {
+        '${topKey}:
+            endpoint: "http://${s.host}:${s.port}"
+            region: ${s.region}
+            accessKey: ${getString(s.accessKey)}
+            secretAccessKey: ${getString(s.secretAccessKey)}
+            bucket: ${getString(p.bucket)}
+            prefix: ${getString(p.prefix)}
+            packageDescriptor: ${getString(p.packageDescriptor)}
+            packageFilename: ${getString(p.packageFilename)}'
+    }
+
+    def produceDevMgt(IIPEcosphere config) {
+        produceDeviceMgtStorage("runtimeStorage", config.deviceMgtStorage, config.deviceMgtStorage.runtimeStorage);
+        produceDeviceMgtStorage("configStorage", config.deviceMgtStorage, config.deviceMgtStorage.configStorage);
+        produceDevMgtServer(config);
+    }
+
+    def main(IIPEcosphere config, FileArtifact target) {
+        String pers = "${config.aasPersistency}";
+        produceTransport(config);
+        produceAas(config, pers, false);
+        produceNetMgr(config);
+        produceDevMgt(config);
+    }
+
+}

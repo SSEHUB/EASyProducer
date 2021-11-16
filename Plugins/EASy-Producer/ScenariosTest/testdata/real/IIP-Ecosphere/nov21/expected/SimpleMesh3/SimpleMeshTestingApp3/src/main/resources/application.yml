@@ -1,0 +1,43 @@
+amqp:
+    port: 8883
+    user: user
+    password: pwd
+transport:
+    host: localhost
+    port: 8883
+    user: user
+    password: pwd
+metricsprovider:
+    schedulerrate: 3000
+    memorybaseunit: kilobytes
+    diskbaseunit: megabytes
+management:
+    health:
+        binders:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: "metrics"
+spring:
+    main:
+        banner-mode: off
+    cloud:
+        function:
+            definition: receiveRec13_SimpleReceiver3;createRec13_SimpleSource3;transformRec13Rec13_SimpleTransformer3
+        source: createRec13_SimpleSource3;transformRec13Rec13_SimpleTransformer3
+        stream:
+            poller:
+                fixedDelay: 800
+            default:
+                contentType: application/iip
+            bindings:
+                createRec13_SimpleSource3-out-0:
+                    destination: createRec13_SimpleSource3
+                transformRec13Rec13_SimpleTransformer3-in-0:
+                    destination: createRec13_SimpleSource3
+                transformRec13Rec13_SimpleTransformer3-out-0:
+                    destination: transformRec13Rec13_SimpleTransformer3
+                receiveRec13_SimpleReceiver3-in-0:
+                    destination: transformRec13Rec13_SimpleTransformer3
+                

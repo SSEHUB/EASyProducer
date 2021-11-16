@@ -1,0 +1,10 @@
+[Unit]
+Description=IIP-Ecosphere Service Manager
+
+[Service]
+Type=forking
+PIDFile=/run/iip-serviceMgr.pid
+ExecStart=java -cp "$IIP_HOME/svcJars/*:$IIP_HOME/common/*" -Dio.netty.tryReflectionSetAccessible=true -Diip.pid.dir=/run "de.iip_ecosphere.platform.support.LifecycleHandler\$WaitingStarter" $*
+
+[Install]
+Requires=ecs.service

@@ -1,0 +1,48 @@
+transport:
+    host: localhost
+    port: 8883
+    user: user
+    password: pwd
+aas:
+    server:
+        port: 9001
+        host: 127.0.0.1
+        schema: HTTP
+        path: 
+    registry:
+        port: 9002
+        host: 127.0.0.1
+        schema: HTTP
+        path: registry
+    implementation:
+        port: 9003
+        host: 127.0.0.1
+        netmask: 
+        schema: HTTP
+        protocol: VAB-TCP
+    persistence: INMEMORY
+netMgr:
+    netmask: 
+runtimeStorage:
+    endpoint: "http://localhost:8884"
+    region: local
+    accessKey: 
+    secretAccessKey: 
+    bucket: iip
+    prefix: ecs
+    packageDescriptor: runtime.yml
+    packageFilename: runtime.zip
+configStorage:
+    endpoint: "http://localhost:8884"
+    region: local
+    accessKey: 
+    secretAccessKey: 
+    bucket: iip
+    prefix: config
+    packageDescriptor: config.yml
+    packageFilename: config.zip
+storageServer:
+    port: 8884
+    path: ""
+    accessKey: 
+    secretAccessKey: 

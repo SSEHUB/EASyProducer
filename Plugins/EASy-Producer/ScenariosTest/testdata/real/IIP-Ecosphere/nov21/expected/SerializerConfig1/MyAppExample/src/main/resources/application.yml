@@ -1,0 +1,43 @@
+amqp:
+    port: 8883
+    user: user
+    password: pwd
+transport:
+    host: localhost
+    port: 8883
+    user: user
+    password: pwd
+metricsprovider:
+    schedulerrate: 3000
+    memorybaseunit: kilobytes
+    diskbaseunit: megabytes
+management:
+    health:
+        binders:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: "metrics"
+spring:
+    main:
+        banner-mode: off
+    cloud:
+        function:
+            definition: processString_myAnonymizer;transformRec1String_myKi;createString_myMqttConn;createString_myOpcConn;createString_mySource
+        source: createString_myMqttConn;createString_myOpcConn;createString_mySource;processString_myAnonymizer;transformRec1String_myKi
+        stream:
+            default:
+                contentType: application/iip
+            bindings:
+                processString_myAnonymizer-in-0:
+                    producer:
+                        useNativeEncoding: true
+                transformRec1String_myKi-in-0:
+                    destination: processString_myAnonymizer
+                createString_mySource-in-0:
+                    producer:
+                        useNativeEncoding: true
+                processString_myAnonymizer-in-0:
+                    destination: createString_mySource
+                

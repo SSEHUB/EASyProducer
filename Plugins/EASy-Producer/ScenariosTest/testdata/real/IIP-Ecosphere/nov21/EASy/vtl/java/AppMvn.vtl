@@ -1,0 +1,62 @@
+import MavenBasics;
+import JavaMapping;
+
+@advice(IIPEcosphere)
+template AppMvn(IIPEcosphere config, XmlFileArtifact target, setOf(String) artifacts, String starterCls, Application app, String appName, Boolean tests) {
+
+    def XmlElement appendSpringBootPlugin(XmlElement plugins, String version="2.4.2", String mainClass="") {
+        XmlElement plugin = appendPlugin(plugins, "org.springframework.boot", "spring-boot-maven-plugin", version, false);
+        XmlElement config = appendConfiguration(plugin);
+        new XmlElement(config, "addResources", "false");
+        XmlElement exec = appendExecutions(plugin);
+        appendGoal(exec, "repackage");
+
+        if (mainClass.length() > 0) {
+            XmlElement cfg = appendConfiguration(exec);
+            new XmlElement(cfg, "mainClass", mainClass);
+        }
+    }
+
+    def main(IIPEcosphere config, XmlFileArtifact target, setOf(String) artifacts, String starterCls, Application app, String appName, Boolean tests) {
+        String iipGroup = "de.iip-ecosphere.platform";
+        String projectVersion = config.iipVer;
+        String appVersion = "${app.ver}";
+        if (app.snapshot) {
+            appVersion = appVersion + "-SNAPSHOT";
+        }
+        
+        XmlElement project = createMavenRoot(target);
+        createMavenProjectAttributes(project, "${appName}", "${appName}", "${app.description}");
+        new XmlElement(project, "groupId", "${iipGroup}.apps");
+        new XmlElement(project, "version", "${appVersion}");
+        // app version cannot be used with maven parent, use import??
+        createMavenParent(project, iipGroup, "platformDependencies", "${config.iipVer}");
+        XmlElement properties = new XmlElement(project, "properties");
+        new XmlElement(properties, "maven.jar.forceCreation", "true"); // spring-boot-plugin result grows if not re-built, clean plugin prevents creating the result jar
+        
+        XmlElement dep = new XmlElement(project, "dependencies");
+        appendDependency(dep, iipGroup, "transport", projectVersion);
+        appendDependency(dep, iipGroup, "services.environment", projectVersion);
+        // TURN THIS INTO XML
+        appendDependency(dep, iipGroup, serviceEnvironmentModule(config), projectVersion);
+        appendDependency(dep, "org.springframework.boot", "spring-boot-starter-web");
+        appendDependency(dep, "org.springframework.boot", "spring-boot-starter-actuator");
+        appendDependency(dep, iipGroup, transportProtocolModule(config), projectVersion);
+        appendDependency(dep, iipGroup, serviceProtocolModule(config), projectVersion);
+        XmlElement d = appendDependency(dep, iipGroup, aasClientModule(config), projectVersion);
+        XmlElement ex = new XmlElement(new XmlElement(d, "exclusions"), "exclusion");
+        new XmlElement(ex, "groupId", "javax.el");
+        new XmlElement(ex, "artifactId", "el-api");
+        for (String art : artifacts.toSequence()->sortedBy(a|a)) { // sortedBy for testing
+            appendArtifact(dep, art, projectVersion);
+        }
+        
+        XmlElement plugins = createMavenBuildElement(project, "", true);
+        XmlElement assemblyPlugin = appendAssemblyPlugin(plugins);
+        appendAssemblyDescriptor(assemblyPlugin, "appPython", "src/main/assembly/python.xml", outputDir="\\${project.build.directory}/classes", phase="test", finalName="python");
+        appendAssemblyDescriptor(assemblyPlugin, "interfaces", "src/main/assembly/javaInterfaces.xml", attach=true);
+        appendSpringBootPlugin(plugins, "2.4.2", "${starterCls}");
+        appendMavenDependencyPluginUnpackArtifact(plugins, "${iipGroup}:services.environment:${projectVersion}", "python", "\\${project.basedir}/src/main/python", "pythonEnv.zip", type="zip");
+    }
+
+}

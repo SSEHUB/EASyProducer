@@ -1,0 +1,222 @@
+@advice(IIPEcosphere)
+
+// defines the mappings of types/constants to java. we rely here on compounds rather than enums so that the individual
+// elements become configurable. We also rely here on dynamic dispatch rather than switch case so that components added
+// later can define the respective mapping functions directly along with their type/instance 
+template JavaMapping(Configuration config, FileArtifact target) {
+
+    def String serviceManagerModule(IIPEcosphere cfg) {
+        serviceManagerModule(cfg.serviceManager);
+    }
+    
+    // dispatch basis
+    def String serviceManagerModule(ServiceManager mgr) {
+        "";
+    }
+    
+    def String serviceManagerModule(SpringCloudStream mgr) {
+        "services.spring";
+    }
+
+
+
+    def String serviceEnvironmentModule(IIPEcosphere cfg) {
+        serviceEnvironmentModule(cfg.serviceManager);
+    }
+    
+    // dispatch basis
+    def String serviceEnvironmentModule(ServiceManager mgr) {
+        "";
+    }
+    
+    def String serviceEnvironmentModule(SpringCloudStream mgr) {
+        "services.environment.spring";
+    }
+    
+    // --------------------------------------------------------------
+    
+    def String containerManagerModule(IIPEcosphere cfg) {
+        containerManagerModule(cfg.containerManager);
+    }
+    
+    // dispatch basis
+    def String containerManagerModule(ContainerManager mgr) {
+        "";
+    }
+
+    def String containerManagerModule(DockerContainerManager mgr) {
+        "ecsRuntime.docker";
+    }
+    
+    def String containerManagerCfgClass(IIPEcosphere cfg) {
+        containerManagerCfgClass(cfg.containerManager);
+    }
+    
+    // dispatch basis
+    def String containerManagerCfgClass(ContainerManager mgr) {
+        "de.iip_ecosphere.platform.ecsRuntime.Configuration";
+    }
+
+    def String containerManagerCfgClass(DockerContainerManager mgr) {
+        "de.iip_ecosphere.platform.ecsRuntime.docker.DockerConfiguration";
+    }
+    
+    // --------------------------------------------------------------
+
+    def String transportProtocolModule(IIPEcosphere cfg) {
+        transportProtocolModule(cfg.transportProtocol);
+    }
+    
+    // dispatch basis
+    def String transportProtocolModule(TransportProtocol proto) {
+        "";
+    }
+
+    def String transportProtocolModule(TransportProtocolAMQP proto) {
+        "transport.amqp";
+    }
+
+    def String transportProtocolModule(TransportProtocolMQTTv3 proto) {
+        "transport.mqttv3";
+    }
+
+    def String transportProtocolModule(TransportProtocolMQTTv5 proto) {
+        "transport.mqttv5";
+    }
+    
+    // --------------------------------------------------------------
+    
+    def String serviceProtocolModulePrefix(IIPEcosphere cfg) {
+        serviceProtocolModulePrefix(cfg.serviceManager);
+    }
+    
+    // dispatch basis
+    def String serviceProtocolModulePrefix(ServiceManager mgr) {
+        "";
+    }
+    
+    def String serviceProtocolModulePrefix(SpringCloudStream mgr) {
+        "transport.spring.";
+    }
+    
+    // --------------------------------------------------------------
+    
+    def String serviceProtocolModuleName(IIPEcosphere cfg) {
+        serviceProtocolModuleName(cfg.serviceProtocol);
+    }
+    
+    // dispatch basis
+    def String serviceProtocolModuleName(ServiceProtocol cfg) {
+        "";
+    }
+    
+    def String serviceProtocolModuleName(ServiceProtocolAMQP cfg) {
+        "amqp";
+    }
+    
+    def String serviceProtocolModuleName(ServiceProtocolMQTTv3 cfg) {
+        "mqttv3";
+    }
+    
+    def String serviceProtocolModuleName(ServiceProtocolMQTTv5 cfg) {
+        "mqttv5";
+    }
+    
+    def String serviceProtocolModuleName(ServiceProtocolMQTTv3hive cfg) {
+        "hivemqv3";
+    }
+
+    def String serviceProtocolModuleName(ServiceProtocolMQTTv5hive cfg) {
+        "hivemqv5";
+    }
+    
+    // --------------------------------------------------------------
+
+    def String serviceProtocolModule(IIPEcosphere cfg) {
+        serviceProtocolModulePrefix(cfg)+ serviceProtocolModuleName(cfg);
+    }
+    
+    // ---------------------------------------------------------------
+    
+    def String aasClientModule(IIPEcosphere cfg) {
+        switch (cfg.aas) {
+            AasImpl::BaSyx : "support.aas.basyx",
+            default: ""
+        }
+    }
+
+    def String aasServerModule(IIPEcosphere cfg) {
+        switch (cfg.aas) {
+            AasImpl::BaSyx : "support.aas.basyx.server",
+            default: ""
+        }
+    }
+
+    def String aasProtocolName(IIPEcosphere cfg) {
+        aasProtocolName(cfg.aasProtocol);
+    }
+
+    def String aasProtocolName(AasProtocol proto) {
+        "";
+    }
+    
+    def String aasProtocolName(AasProtocolDefault proto) {
+        "";
+    }
+
+    def String aasProtocolName(AasProtocolVabTcp proto) {
+        "VAB-TCP";
+    }
+
+    def String aasProtocolName(AasProtocolVabHttp proto) {
+        "VAB-HTTP";
+    }
+    
+    // ---------------------------------------------------------------
+    
+    def String deviceRegistryModule(IIPEcosphere config) {
+        deviceRegistryModule(config.deviceRegistry);
+    }
+    
+    // dispatch basis
+    def String deviceRegistryModule(DeviceRegistry registry) {
+        "";
+    }
+
+    def String deviceRegistryModule(BasicDeviceRegistry registry) {
+        "deviceMgt.basicRegistry";
+    }
+    
+    def String deviceRegistryModule(ThingsBoardDeviceRegistry registry) {
+        "deviceMgt.thingsboard";
+    }
+    
+    def String deviceMgtStorageModule(IIPEcosphere config) {
+        deviceMgtStorageModule(config.deviceMgtStorage);
+    }
+    
+    // dispatch basis
+    def String deviceMgtStorageModule(DeviceMgtStorage storage) {
+        "";
+    }
+    
+    def String deviceMgtStorageModule(MinIoDeviceMgtStorage storage) {
+        "deviceMgt.minio";
+    }
+    
+    def String deviceMgtStorageModule(S3MockDeviceMgtStorage storage) {
+        "deviceMgt.s3mock";
+    }
+    
+    def String deviceMgtStorageServerModule(IIPEcosphere config) {
+        deviceMgtStorageServerModule(config.deviceMgtStorageServer);
+    }
+    
+    // dispatch basis
+    def String deviceMgtStorageServerModule(DeviceMgtStorageServer server) {
+        "";
+    }
+    
+    // none for S3Mock, comes with S3MockDeviceMgt, requires dependency
+    
+}
