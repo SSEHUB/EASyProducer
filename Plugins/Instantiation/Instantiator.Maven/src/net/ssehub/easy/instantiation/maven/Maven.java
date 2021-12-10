@@ -65,6 +65,8 @@ public class Maven extends AbstractFileInstantiator {
     private static final boolean AS_PROCESS = Boolean.valueOf(System.getProperty("easy.maven.asProcess", "true"));
     private static final String MAVEN_HOME = System.getProperty("easy.maven.home", null);
     private static final String CLASSPATH = System.getProperty("easy.maven.classpath", null);
+    private static final String SETTINGS = System.getProperty("easy.maven.settings", null);
+    private static final String REPO_LOCAL = System.getProperty("easy.maven.repo.local", null);
     // running the instantiator as a JUnit test from Eclipse may carry unsigned dependencies - exclude Eclipse path
     private static final String CLASSPATH_EXCLUDE = System.getProperty("easy.maven.classpathExclude", null);
 
@@ -459,6 +461,14 @@ public class Maven extends AbstractFileInstantiator {
         if (updateSnapshots) {
             params.add("-U");
         }
+        if (null != SETTINGS) {
+            params.add("-s");
+            params.add(SETTINGS);
+        }
+        if (null != REPO_LOCAL) {
+            params.add("-Dmaven.repo.local=" + REPO_LOCAL);
+        }
+        
         for (String target : targets) {
             params.add(target);
         }
