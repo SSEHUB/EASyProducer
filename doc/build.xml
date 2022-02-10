@@ -1,11 +1,12 @@
 <project name="EASy-Nightly-UpdateSite" default="publish" basedir=".">
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<target name="publish">
-		<scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs-git" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+		<oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs-git" trust="true" keyfile="${user.home}/.ssh/id_rsa">
 			     <fileset dir="${basedir}/web">
 			         <include name="**/*"/>
 			     </fileset>
-		</scp>
+		</oscp>
 	</target>
 </project>
