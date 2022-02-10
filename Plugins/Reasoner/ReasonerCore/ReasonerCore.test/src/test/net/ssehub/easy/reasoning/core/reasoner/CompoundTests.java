@@ -11,6 +11,7 @@ import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.Value;
 
 /**
  * Configures the compound tests for reasoners.
@@ -150,11 +151,21 @@ public class CompoundTests extends AbstractTest {
      * Tests a slot reassignment.
      * 
      * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
      */
     @Test
-    public void slotReassignmentTest() throws IOException {
+    public void slotReassignmentTest() throws IOException, ModelQueryException {
         Project prj = loadCompleteProject("slotReassignment", "Cfg");
-        resultHandler(0, 0, prj);
+        Configuration cfg = resultHandler(0, 0, prj);
+ 
+        IDecisionVariable compoundVar = cfg.getDecision("c", false);
+        Assert.assertNotNull(compoundVar);
+        IDecisionVariable paramsVar = compoundVar.getNestedElement("params");
+        Assert.assertNotNull(paramsVar);
+        Value val = paramsVar.getValue();
+        Assert.assertTrue(val instanceof ContainerValue);
+        ContainerValue cVal = (ContainerValue) val;
+        Assert.assertTrue(cVal.getElementSize() > 0);
     }
 
     /**

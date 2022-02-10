@@ -2,5 +2,5 @@ project Cfg {
     version v0;
     import Base;
     annotate Binding bind = Binding.compile to Cfg;
-    ACmp c = {parallelism = 14, algTopologyClass = "TSCF"};
+    ACmp c = {parallelism = 14, algTopologyClass = "TSCF", params={StringParameter{name="p", deflt="X"}}};
 }

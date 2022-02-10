@@ -2,15 +2,22 @@ project Base {
     version v0;
     enum Binding {compile = 0, runtime = 1};
     annotate Binding bind = Binding.compile to Base;
+    compound Parameter {
+        String name;
+        Any deflt;
+    };
+    compound StringParameter refines Parameter {
+        String deflt;
+    };
+    typedef Parameters sequenceOf(Parameter) with (Parameters->collect(p|p.name).size() == Parameters.size());
     compound ACmp {
         String algTopologyClass = null;
         Integer parallelism = 1;
+        Parameters params = {};
         assign(bind = Binding.runtime) to {
             Integer executors = parallelism;
             Integer initialExecutors = parallelism;
         }
         algTopologyClass == null implies parallelism == 1;
-        algTopologyClass == null implies numtasks == 1;
-        algTopologyClass == null implies scalable == false;
     };
 }
