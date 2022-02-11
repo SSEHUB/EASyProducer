@@ -34,6 +34,7 @@
          <sysproperty key="classworlds.conf" value="${maven.bin.dir}/bin/m2.conf" />
          <sysproperty key="maven.home" value="${maven.bin.dir}" />
          <arg line="--batch-mode @{options} @{goal}" />
+         <args/>
        </java>
      </sequential>
    </macrodef>
@@ -49,16 +50,17 @@
         <property name="folder" value="${maven.repository.uploadDir}/@{folderName}"/>
         <local name="connectString"/>
         <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
-        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="mkdir -p ${folder}"/>
-        <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}" file="@{pomFile}"/>
-        <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+        <!--<scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}" file="@{pomFile}"/>-->
+        <oscp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+            <fileset file="@{pomFile}"/>
             <fileset dir="@{jarFolder}">
                 <include name="*.jar"/>
                 <include name="*.zip"/>
             </fileset>
-        </scp>
-        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+        </oscp>
+        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="./deployMvnQm.sh ${folder} @{jarFile}"/>         
      </sequential>
    </macrodef>
@@ -92,10 +94,12 @@
         <property name="folder" value="${maven.repository.uploadDir}/@{folderName}"/>
         <local name="connectString"/>
         <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
-        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="mkdir -p ${folder}"/>
-        <scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}" file="@{pomFile}"/>
-        <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+        <oscp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+            <fileset file="@{pomFile}"/>
+        </oscp>
+        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="./deployMvnQm.sh ${folder} pom.xml"/>         
      </sequential>
    </macrodef>
@@ -117,10 +121,13 @@
    <macrodef name="maven">
       <attribute name="pomFile" default="NOT_SET"/>
       <attribute name="goal" default="install"/>
+      <element name="args" implicit="true" optional="true" />
       <sequential>  
         <local name="pomDir"/>
         <dirname file="@{pomFile}" property="pomDir"/>
-        <mvnPlain options="-U" goal="@{goal}" basedir="${pomDir}"/>
+        <mvnPlain options="-U" goal="@{goal}" basedir="${pomDir}">
+          <args/>
+        </mvnPlain>
         <!--  <mavenUpdate pomFile="@{pomFile}"/>
         <artifact:mvn mavenHome="${maven.bin.dir}" pom="@{pomFile}" fork="true" failonerror="true">
             <arg value="@{goal}"/>
@@ -155,7 +162,7 @@
     
    <macrodef name="clearMavenRepo">
     <sequential>
-      <sshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+      <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
         command="./cleanMvnQm.sh"/>         
     </sequential>
    </macrodef>
@@ -236,6 +243,43 @@
         	<elements/>
         </java>
     </sequential>
+   </macrodef>
+
+   <macrodef name="oscp">
+       <attribute name="todir" default="NOT_SET"/> 
+       <attribute name="trust" default="true"/>
+       <attribute name="keyfile" default="NOT_SET"/>
+       <element name="files" implicit="true" optional="true" />
+       <sequential>
+         <local name="files"/>
+         <pathconvert pathsep=" " property="files">
+            <files/>
+         </pathconvert>
+         <exec executable="scp" failonerror="true">
+           <arg value="-i"/>
+           <arg file="@{keyfile}"/>
+           <arg line="${files}"/>
+           <arg value="@{todir}/"/>
+         </exec>
+      </sequential>
+   </macrodef>
+
+   <macrodef name="osshexec">
+      <attribute name="host" default="NOT_SET"/>
+      <attribute name="username" default="NOT_SET"/>
+      <attribute name="trust" default="true"/>
+      <attribute name="keyfile" default="NOT_SET"/>
+      <attribute name="command" default="NOT_SET"/>
+      <sequential>
+         <exec executable="ssh" failonerror="true">
+           <arg value="-l"/> 
+           <arg value="@{username}"/>
+           <arg value="-i"/>
+           <arg file="@{keyfile}"/>
+           <arg value="@{host}"/>
+           <arg value="@{command}"/>
+         </exec>
+      </sequential>
    </macrodef>
       
 </project>
