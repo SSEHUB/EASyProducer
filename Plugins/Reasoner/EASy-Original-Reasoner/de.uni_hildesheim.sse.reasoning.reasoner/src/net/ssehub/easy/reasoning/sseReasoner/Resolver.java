@@ -1113,6 +1113,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     private void translateCompoundContent(AbstractVariable decl, IDecisionVariable variable, Compound type, 
         ConstraintSyntaxTree cAcc) {
         if (null != variable) {
+            if (null != variable.getValue()) { // dynamic/assigned type may differ
+                cAcc = checkTypeCast(decl.getType(), variable.getValue().getType(), decl, cAcc);
+            }
             for (int i = 0, n = variable.getNestedElementsCount(); i < n; i++) {
                 IDecisionVariable nestedVar = variable.getNestedElement(i);
                 AbstractVariable nestedDecl = nestedVar.getDeclaration();

@@ -15,6 +15,7 @@
  */
 package test.net.ssehub.easy.reasoning.core.qm;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
@@ -40,6 +41,7 @@ public class QMScenarioTests extends AbstractTest {
     /**
      * Tests QM Hardware collections.
      */
+    @Ignore("fluctuating")
     @Test    
     public void qmHardwareTest() {
         reasoningTest("QMHardwareTest.ivml", 1);

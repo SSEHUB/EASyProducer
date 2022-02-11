@@ -1,0 +1,11 @@
+project MyBase {
+
+    version v0;
+    enum CType{T1, T2};
+    
+    compound C0 {
+        CType type;
+        type == CType::T1;
+    }
+    
+}

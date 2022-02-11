@@ -1,6 +1,11 @@
 package test.net.ssehub.easy.reasoning.core.reasoner;
 
+import java.io.IOException;
+
 import org.junit.Test;
+
+import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Configures the enum tests for SSE reasoner.
@@ -155,5 +160,17 @@ public class EnumTests extends AbstractTest {
     public void referenceDerivedEnumTest() {
         reasoningTest("ReferenceDerivedEnumTest.ivml", 3);
     } 
+    
+    /**
+     * Tests an imported enum constraint.
+     * 
+     * @throws IOException shall not occur
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void importedEnumTest() throws IOException, ModelQueryException {
+        Project prj = loadCompleteProject("importedEnum", "Extended");
+        resultHandler(0, 0, prj);
+    }
 
 }

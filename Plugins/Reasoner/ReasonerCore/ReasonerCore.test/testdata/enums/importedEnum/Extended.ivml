@@ -1,0 +1,12 @@
+project Extended {
+
+    version v0;
+    import MyBase;
+
+    compound C1 refines C0 {
+        type = CType::T1;
+    }
+    
+    C1 c = {};
+    
+}
