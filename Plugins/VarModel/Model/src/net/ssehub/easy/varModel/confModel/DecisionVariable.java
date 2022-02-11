@@ -208,7 +208,7 @@ abstract class DecisionVariable implements IDecisionVariable {
 
     @Override
     public void setValue(Value value, IAssignmentState state) throws ConfigurationException {
-        wasAssigned = true;        
+        wasAssigned = state != AssignmentState.UNDEFINED;        
         configProvider.setValue(value, state);
     }
     
