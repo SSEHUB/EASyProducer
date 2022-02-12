@@ -25,6 +25,7 @@ import java.util.Map;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
@@ -177,6 +178,7 @@ public class EasyExecutor {
 
     /**
      * Sets the IVML model folder where to load the IVML model from. This is initially set to the common model folder.
+     * Further folders are added as dependent locations.
      *  
      * @param ivmlFolder the folder 
      * @return <b>this</b> (builder style)
@@ -191,7 +193,18 @@ public class EasyExecutor {
     }
     
     /**
-     * Adds an additional IVML folder.
+     * Adds this folder as main IVML model folder and turns all known folders to dependent locations.
+     * 
+     * @param ivmlFolder the new main IVML model folder
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor prependIvmlFolder(File ivmlFolder) {
+        this.ivmlFolder.add(0, ivmlFolder);
+        return this;
+    }
+    
+    /**
+     * Adds an additional IVML folder. Additional folders are added as dependent locations.
      * 
      * @param ivmlFolder the additional IVML folder
      * @return <b>this</b> (builder style)
@@ -349,9 +362,15 @@ public class EasyExecutor {
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
      */
     public void setupLocations() throws ModelManagementException {
+        Location primary = null;
         for (File f : ivmlFolder) {
             logger.info("Setting IVML location " + f);
-            VarModel.INSTANCE.locations().addLocation(f, observer);
+            Location loc = VarModel.INSTANCE.locations().addLocation(f, observer);
+            if (null == primary) {
+                primary = loc;
+            } else {
+                primary.addDependentLocation(loc);
+            }
         }
         logger.info("Setting VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
@@ -446,9 +465,10 @@ public class EasyExecutor {
         TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
         logger.info("Discarding VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-        for (File f : ivmlFolder) {
-            logger.info("Discarding IVML location " + f);
-            VarModel.INSTANCE.locations().removeLocation(f, observer);
+        for (int f = ivmlFolder.size(); f >= 0; f--) {
+            File folder = ivmlFolder.get(f);
+            logger.info("Discarding IVML location " + folder);
+            VarModel.INSTANCE.locations().removeLocation(folder, observer);
         }
     }
 
