@@ -465,7 +465,7 @@ public class EasyExecutor {
         TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
         logger.info("Discarding VIL location " + vilFolder);
         BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-        for (int f = ivmlFolder.size(); f >= 0; f--) {
+        for (int f = ivmlFolder.size() - 1; f >= 0; f--) {
             File folder = ivmlFolder.get(f);
             logger.info("Discarding IVML location " + folder);
             VarModel.INSTANCE.locations().removeLocation(folder, observer);
