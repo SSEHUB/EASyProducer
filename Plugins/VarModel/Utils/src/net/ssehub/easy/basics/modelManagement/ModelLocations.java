@@ -171,7 +171,7 @@ public class ModelLocations <M extends IModel> {
          * 
          * @param location the location to be searched for
          * @param processed the already processed locations (in order to avoid loops)
-         * @return <code>true</code> if <code>locatoin</code> is a dependent location, <code>false</code> else
+         * @return <code>true</code> if <code>location</code> is a dependent location, <code>false</code> else
          */
         private boolean isDependentLocation(Location location, Set<Location> processed) {
             boolean found = false;
@@ -309,7 +309,7 @@ public class ModelLocations <M extends IModel> {
 
     /**
      * Adds a file location to the end of the list of locations, i.e., a location from where models can be loaded. 
-     * Please not that <code>file</code> is considered recursively, i.e., nested folders will be considered 
+     * Please note that <code>file</code> is considered recursively, i.e., nested folders will be considered 
      * automatically and do not need to be added separately.
      * 
      * @param file the file location (<b>null</b> is ignored)
