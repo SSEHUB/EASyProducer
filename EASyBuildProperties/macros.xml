@@ -253,6 +253,10 @@
        <sequential>
          <local name="files"/>
          <pathconvert pathsep=" " property="files">
+            <firstmatchmapper>
+     	      <regexpmapper from='^([^ ]*)( .*)$$' to='"\1\2"'/>
+     	      <identitymapper/>
+     	    </firstmatchmapper>         	
             <files/>
          </pathconvert>
          <exec executable="scp" failonerror="true">
