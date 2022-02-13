@@ -74,8 +74,7 @@ public class EnumLiteral extends ModelElement {
         boolean result;
         if (object instanceof EnumLiteral) {
             EnumLiteral lit = (EnumLiteral) object;
-            result = getName().equals(lit.getName()) && ordinal == lit.getOrdinal() 
-                && (parent == lit.getParent() || parent.getQualifiedName().equals(lit.getParent().getQualifiedName()));
+            result = getName().equals(lit.getName()) && ordinal == lit.getOrdinal() && parent == lit.getParent();
         } else {
             result = false;
         }

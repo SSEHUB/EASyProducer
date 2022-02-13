@@ -301,9 +301,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     public boolean isRefinedFrom(Compound cmp, boolean transitive) {
         boolean refined = false;
         for (int r = 0; !refined && r < getRefinesCount(); r++) {
-            // quick with == if resolved within same project, qualified name if resolved across projects
-            refined = (getRefines(r) == cmp || getRefines(r).getQualifiedName().equals(cmp.getQualifiedName())) 
-                || (transitive && getRefines(r).isRefinedFrom(cmp, true));
+            refined = getRefines(r) == cmp || (transitive && getRefines(r).isRefinedFrom(cmp, true));
         }
         return refined;
     }
