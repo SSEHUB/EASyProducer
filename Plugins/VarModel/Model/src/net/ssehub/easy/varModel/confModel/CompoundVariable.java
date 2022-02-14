@@ -38,6 +38,7 @@ import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.Value;
@@ -82,8 +83,11 @@ public class CompoundVariable extends StructuredVariable {
             if (null != varDeclaration.getDefaultValue()) {
                 // preference to the default value as a value of that type will be assigned anyway
                 try {
-                    instantiatableType = (Compound) varDeclaration.getDefaultValue().inferDatatype();
-                    done = true;
+                    IDatatype dfltValType = varDeclaration.getDefaultValue().inferDatatype();
+                    if (!TypeQueries.isAnyType(dfltValType)) { // may be any if null was assigned
+                        instantiatableType = (Compound) dfltValType;
+                        done = true;
+                    }
                 } catch (CSTSemanticException ex) {
                 }
             }
