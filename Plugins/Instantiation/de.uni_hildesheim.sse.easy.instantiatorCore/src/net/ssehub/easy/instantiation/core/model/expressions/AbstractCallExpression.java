@@ -746,7 +746,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         }
         return op;
     }
-    
+
     /**
      * Actually aims at resolving the operation.
      * 

@@ -81,6 +81,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     private class Context<D extends VariableDeclaration, O extends IModel> {
         private Stack<Level<D>> levels = new Stack<Level<D>>();
         private IResolvableModel<D, O> model;
+        private IResolvableModel<D, O> specificModel;
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
         private String[] paths;
@@ -92,6 +93,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
          */
         public Context(IResolvableModel<D, O> model) {
             this.model = model;
+            this.specificModel = model;
             if (null != model.getIndentationConfiguration() 
                 && model.getIndentationConfiguration().isIndentationEnabled()) {
                 indentationConfiguration = model.getIndentationConfiguration();
@@ -106,6 +108,24 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
          */
         public IResolvableModel<D, O> getModel() {
             return model;
+        }
+
+        /**
+         * Returns the actual (potentially more specific runtime model than in {@link #getModel()).
+         * 
+         * @return {@link #getModel()} or a more specific model determined at runtime
+         */
+        public IResolvableModel<D, O> getMostSpecificModel() {
+            return specificModel;
+        }
+
+        /**
+         * Sets the more specific runtime model.
+         * 
+         * @param model the more specific runtime model than {@link #getModel()}
+         */
+        public void setMostSpecificModel(IResolvableModel<D, O> model) {
+            specificModel = model;
         }
 
         /**
@@ -462,11 +482,12 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
 
         if (null != oldContext && currentContext.getModel().isAssignableFrom(oldContext)) {
             mostSpecificModel = oldContext; 
+            currentContext.setMostSpecificModel(oldContext);
         } else {
             // keep different most specific even if the context does not change as the decision to have an upstream
             // model was taken before
             if (null == mostSpecificModel || oldContext != currentContext.getModel()) {
-                mostSpecificModel = currentContext.getModel();
+                mostSpecificModel = currentContext.getMostSpecificModel();
             }
         }
         return oldContext;
