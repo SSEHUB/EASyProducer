@@ -74,7 +74,7 @@ public class LocalDecisionVariable implements IDecisionVariable {
 
     @Override
     public IConfigurationElement getParent() {
-        return null;
+        return parent;
     }
 
     @Override
