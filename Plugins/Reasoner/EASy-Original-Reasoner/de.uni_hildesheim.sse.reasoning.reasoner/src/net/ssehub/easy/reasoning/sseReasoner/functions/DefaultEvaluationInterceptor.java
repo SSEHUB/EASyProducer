@@ -355,7 +355,7 @@ class ValueMap implements IValueEntry {
                     }
                 }
             }
-        } else {
+        } else if (value != NullValue.INSTANCE) { // don't complain about any, always compatible
             getLogger().error("setValue: value shall be CompoundValue, not " 
                 + (null == value ? null : value.getType()));
         }
