@@ -1032,6 +1032,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         Map<String, Object> localParam = new HashMap<String, Object>(); // by default
         localParam.put(PARAM_CONFIG, environment.getTopLevelConfiguration());
         localParam.put(PARAM_TARGET, null); // for now
+        net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment<?, ?> oldEnv 
+            = tracer.getRuntimeEnvironment(); // keep to reset, changed in TemplateLangExecution
         TemplateLangExecution exec = new TemplateLangExecution(tracer, writer, localParam);
         Def def = rule.getDef();
         Template template = (Template) def.getParent();
@@ -1054,6 +1056,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         }
         Object result = def.accept(exec);
         TracerFactory.unregisterTemplateLanguageTracer(tracer);
+        tracer.setRuntimeEnvironment(oldEnv); // reset, changed in TemplateLangExecution
         return result;
     }
 
