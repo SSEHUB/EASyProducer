@@ -46,14 +46,14 @@ project Basics {
 	compound Tuple { // this conception is based on how the Storm describes the stream
 		NonEmptyString name;
 		Fields fields;
-		Constraint fieldsCheck = fields.size() > 0; 
+		fields.size() > 0; 
 	} 
 	
 	compound Field { // in order to fit the data structure in the Storm
 		NonEmptyString name;
 		refTo(FieldType) type;
 		Boolean keyPart = false; //TODO: need to add constraint if the keypart is used in the instantiation
-		Constraint typeCheck = isDefined(type);
+		isDefined(type);
 	}
 	
 	// parameters are different than fields as they may have a configured default value for startup

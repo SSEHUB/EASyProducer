@@ -32,7 +32,7 @@ project Basics {
 	Constraint typeNamesUnique = size(types->collect(t|t.name)) == size(types);
 	compound Tuple {
 		NonEmptyString name;
-		Constraint fieldsCheck = size(fields) > 0;
+		size(fields) > 0;
 		Fields fields;
 	}
 

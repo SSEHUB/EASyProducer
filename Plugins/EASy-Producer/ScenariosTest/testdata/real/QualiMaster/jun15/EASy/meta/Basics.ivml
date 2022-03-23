@@ -38,7 +38,7 @@ project Basics {
 	compound Tuple { // this conception is based on how the Storm describes the stream
 		NonEmptyString name;
 		Fields fields;
-		Constraint fieldsCheck = fields.size() > 0; 
+		fields.size() > 0; 
 	} 
 	
 	compound Field { // in order to fit the data structure in the Storm

@@ -24,7 +24,7 @@ project Basics {
 	// for the moment we assume that we will not have nested Tuples
 	compound Tuple { // this conception is based on how the Storm describes the stream
 		Fields fields;
-		Constraint fieldsCheck = fields.size() > 0; 
+		fields.size() > 0; 
 	} 
 	
 	compound Field { // in order to fit the data structure in the Storm

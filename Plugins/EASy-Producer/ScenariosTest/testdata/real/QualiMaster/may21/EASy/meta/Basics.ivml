@@ -47,8 +47,8 @@ project Basics {
 		NonEmptyString name;
 		refTo(FieldType) type;
 		Boolean keyPart = false; //TODO: need to add constraint if the keypart is used in the instantiation
-        PositiveInteger nameSuffix = 0;
-		Constraint typeCheck = isDefined(type);
+        Integer nameSuffix = 0;
+		isDefined(type);
 	}
 	typedef Fields sequenceOf(Field) with (Fields->collect(f|f.name).hasDuplicates() == false/* and isDefined(Fields)*/);
 
@@ -56,7 +56,7 @@ project Basics {
 	compound Tuple refines CDataProperty { // this conception is based on how the Storm describes the stream
 		NonEmptyString name;
 		Fields fields;
-		Constraint fieldsCheck = size(fields) > 0; 
+		size(fields) > 0; 
 	} 
 	typedef Tuples sequenceOf(Tuple) /*with (isDefined(Tuples))*/;
 	
