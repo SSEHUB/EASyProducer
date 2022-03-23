@@ -54,6 +54,7 @@ import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.AttributeAssignment.Assignment;
 import net.ssehub.easy.varModel.model.Constraint;
+import net.ssehub.easy.varModel.model.Constraint.IConstraintType;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IvmlException;
@@ -129,6 +130,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     // global temporary variables avoiding parameter passing (performance)
     
     private Project project;
+    private transient Set<Project> doneProjects = new HashSet<Project>(20);
     private transient Set<IDecisionVariable> usedVariables = new HashSet<IDecisionVariable>(100);
     private transient SubstitutionVisitor substVisitor = new SubstitutionVisitor();
     private transient ContextStack contexts = new ContextStack();
@@ -382,6 +384,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         evaluationTime += end - mid;
         // Freezes values after each scope
         config.freezeValues(project, FilterType.NO_IMPORTS);
+        doneProjects.add(project);
         if (Descriptor.LOGGING) {
             printFailedElements(failedElements);                                
         }
@@ -421,7 +424,13 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
         if (cst != null) {
             boolean evaluated = false;
-            if (constraint instanceof DefaultConstraint) {
+            IConstraintType type = constraint.getType();
+            if (type == Constraint.Type.DEFAULT || type == Constraint.Type.ANNOTATION_ASSIGNMENT) {
+                if (doneProjects.contains(constraint.getProject())) {
+                    evaluated = true; // don't evaluate default (alike) constraints in other projects
+                } // projects are "default complete" with freezeing
+            }
+            if (!evaluated && constraint instanceof DefaultConstraint) {
                 DefaultConstraint dCst = (DefaultConstraint) constraint;
                 if (dCst.getAttachedConstraintsSize() > 0) {
                     DefaultEvaluationInterceptor interceptor;
@@ -470,6 +479,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         usedVariables.clear();
         scopeAssignments.setCurrentScope(constraint);
         evaluator.setAssignmentState(Constraint.Type.DEFAULT == constraint.getType() 
+            || Constraint.Type.ANNOTATION_ASSIGNMENT == constraint.getType()
             ? AssignmentState.DEFAULT : assignmentState);
         reevaluationCounter++;
         if (Descriptor.LOGGING) {
@@ -724,6 +734,11 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         if (null != defaultValue) { // considering the actual type rather than base
             actType = inferTypeSafe(defaultValue, actType);
         }
+        actType = DerivedDatatype.resolveToBasis(actType);
+/*    IDatatype bType = DerivedDatatype.resolveToBasis(actType);        
+    if (TypeQueries.isContainer(bType) && actType != bType) { 
+        actType = bType;
+    }*/
         int compoundMode = MODE_COMPOUND_NONE;
         boolean isCompound = TypeQueries.isCompound(actType);
         ConstraintSyntaxTree tCAcc = null; // typed compound accessor, only for compounds
@@ -1779,6 +1794,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         wasStopped = false;
         inRescheduling = false;
         usedVariables.clear();
+        doneProjects.clear();
         substVisitor.clear();
         contexts.clear();
         simpleAssignmentFinder.clear();

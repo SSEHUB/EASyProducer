@@ -79,9 +79,10 @@ public class EvalVisitor extends EvaluationVisitor {
     private boolean isAssignable(IDecisionVariable var, IDecisionVariable compound) {
         boolean isAssignable = false;
         IAssignmentState state = var.getState();
-        if ((state == AssignmentState.UNDEFINED
-            || !wasAssignedInThisScope(var, compound))
-            && state != AssignmentState.FROZEN) {
+        boolean altStates = (state == AssignmentState.UNDEFINED
+            || (state == AssignmentState.DEFAULT && getTargetState() == AssignmentState.DEFAULT)
+            || !wasAssignedInThisScope(var, compound));
+        if (altStates && state != AssignmentState.FROZEN) {
             isAssignable = true;
         }   
         return isAssignable;        

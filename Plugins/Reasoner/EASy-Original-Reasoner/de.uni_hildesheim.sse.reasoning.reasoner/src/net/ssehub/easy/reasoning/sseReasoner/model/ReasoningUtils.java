@@ -554,7 +554,7 @@ public class ReasoningUtils {
     public static void printConstraintEvaluationResult(Constraint constraint, EvaluationVisitor evaluator) {
         if (DEBUG) {
             ConstraintSyntaxTree cst = constraint.getConsSyntax();
-            System.out.println("EVAL " + StringProvider.toIvmlString(cst) + " " + System.identityHashCode(cst)
+            System.out.println("EVAL " + StringProvider.toIvmlString(cst) 
                 + " " + constraint.getType() + " fulfilled " + evaluator.constraintFulfilled() 
                 + " failed " + evaluator.constraintFailed());
             for (int m = 0; m < evaluator.getMessageCount(); m++) {
