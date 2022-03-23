@@ -1873,6 +1873,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     protected IAssignmentState getTargetState(IDecisionVariable var) {
         return assignmentState;
     }
+    
+    /**
+     * Returns the target assignment state assigned to this visitor.
+     * 
+     * @return the target state
+     */
+    protected IAssignmentState getTargetState() {
+        return assignmentState;
+    }
 
     @Override
     public void visitAnnotationVariable(AttributeVariable variable) {
