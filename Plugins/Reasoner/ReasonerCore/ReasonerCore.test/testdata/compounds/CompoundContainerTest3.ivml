@@ -1,0 +1,31 @@
+project CompoundContainerTest3 {
+
+    compound Record {
+        Fields fields;
+    }
+
+    typedef Fields sequenceOf(Field);
+
+    compound Field {
+        String name;
+        String description = "";
+        Integer cacheTime = 1;
+    }
+
+    Record rec = Record {
+        fields = {
+            Field {
+                name = "field1"
+            }, Field {
+                name = "field2",
+                description = "desc",
+                cacheTime = 2
+            }
+        }
+    };
+    
+    freeze {
+       .;
+    };
+
+}
