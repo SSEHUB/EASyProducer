@@ -41,7 +41,7 @@ public class QMHardwareTest3 extends AbstractQualiMasterTest {
      */
     @Test    
     public void coreTest() {
-        reasoningTest(0);
+        reasoningTest(1); // one machine with double name
     } 
     
 }

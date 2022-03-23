@@ -41,7 +41,7 @@ public class QMHardwareTest2 extends AbstractQualiMasterTest {
      */
     @Test    
     public void coreTest() {
-        reasoningTest(0);
+        reasoningTest(1); // no manager role assigned
     } 
     
 }

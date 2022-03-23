@@ -9,7 +9,7 @@ project QMFamilyAlgorithmsFieldsTest {
 	compound Tuple { 
 		String name;
 		Fields fields;
-		Constraint fieldsCheck = fields.size() > 0; 
+		fields.size() > 0; 
 	} 
 	
 	compound Field { 

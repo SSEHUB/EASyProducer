@@ -94,6 +94,58 @@ public class CompoundTests extends AbstractTest {
     } 
 
     /**
+     * Compound constraint test for recursive nested containers.
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void compoundContainerTest3() throws ModelQueryException {
+        Configuration cfg = reasoningTest("CompoundContainerTest3.ivml", 0);
+        IDecisionVariable rec = cfg.getDecision("rec", false);
+        Assert.assertNotNull(rec);
+        IDecisionVariable fields = rec.getNestedElement("fields");
+        Assert.assertNotNull(fields);
+        Assert.assertEquals(2, fields.getNestedElementsCount());
+        assertField(fields.getNestedElement(0), "field1", "", 1);
+        assertField(fields.getNestedElement(1), "field2", "desc", 2);
+    } 
+
+    /**
+     * Asserts slots of a "Field".
+     * 
+     * @param field the field (variable)
+     * @param name the expected name
+     * @param description the expected description
+     * @param cacheTime the expected caching time
+     */
+    private static void assertField(IDecisionVariable field, String name, String description, int cacheTime) {
+        Assert.assertNotNull(field);
+        IDecisionVariable nameSlot = field.getNestedElement("name");
+        Assert.assertNotNull(nameSlot);
+        Value v = nameSlot.getValue();
+        Assert.assertNotNull(v);
+        Object value = v.getValue();
+        Assert.assertNotNull(value);
+        Assert.assertEquals(name, value);
+
+        IDecisionVariable descSlot = field.getNestedElement("description");
+        Assert.assertNotNull(descSlot);
+        v = descSlot.getValue();
+        Assert.assertNotNull(v);
+        value = v.getValue();
+        Assert.assertNotNull(value);
+        Assert.assertEquals(description, value);
+
+        IDecisionVariable cacheTimeSlot = field.getNestedElement("cacheTime");
+        Assert.assertNotNull(cacheTimeSlot);
+        v = cacheTimeSlot.getValue();
+        Assert.assertNotNull(v);
+        value = v.getValue();
+        Assert.assertNotNull(value);
+        Assert.assertEquals(cacheTime, value);
+    }
+
+    /**
      * Compound annotation test.
      */
     @Test
