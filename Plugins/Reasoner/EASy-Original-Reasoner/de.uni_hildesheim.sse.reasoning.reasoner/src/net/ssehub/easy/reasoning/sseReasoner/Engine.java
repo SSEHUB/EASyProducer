@@ -71,7 +71,6 @@ public class Engine {
     public Engine(Configuration cfg, ReasonerConfiguration reasonerConfig,
         ProgressObserver observer, IReasonerInterceptor interceptor) {
         this.resolver = new Resolver(cfg, reasonerConfig);
-        this.resolver.setInterceptor(interceptor);
         boolean isRuntimeMode = reasonerConfig.isRuntimeMode();
         this.resolver.setIncremental(isRuntimeMode);
         this.result = new ReasoningResult();

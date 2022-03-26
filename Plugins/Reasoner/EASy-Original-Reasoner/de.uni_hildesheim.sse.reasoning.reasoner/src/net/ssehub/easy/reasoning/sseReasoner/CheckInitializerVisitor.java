@@ -179,7 +179,8 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
             ConstraintSyntaxTree initEx = compoundInit.getExpression(i);
             initEx.accept(this);
             if (process) {
-                checkForConstraint(compoundInit.getSlotDeclaration(i).getType(), initEx);
+                checkForConstraint(compoundInit.getSlotDeclaration(i).getType(), initEx, 
+                    null != variable ? variable.getNestedElement(compoundInit.getSlot(i)) : null);
             }
         }
     }
@@ -190,7 +191,7 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
             ConstraintSyntaxTree cst = containerInit.getExpression(i);
             cst.accept(this);
             if (process) {
-                checkForConstraint(containerInit.getType().getContainedType(), cst);
+                checkForConstraint(containerInit.getType().getContainedType(), cst, variable);
             }
         }
     }
@@ -200,13 +201,14 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
      * 
      * @param type the actual data type
      * @param cst the constraint expression
+     * @param register the variable to register new constraints for, may be <b>null</b>
      */
-    private void checkForConstraint(IDatatype type, ConstraintSyntaxTree cst) {
+    private void checkForConstraint(IDatatype type, ConstraintSyntaxTree cst, IDecisionVariable register) {
         if (TypeQueries.isConstraint(type)) {
             if (substituteVars) {
                 cst = resolver.substituteVariables(cst, null, null, null);
             }
-            resolver.createConstraintVariableConstraint(cst, null, false, parent, variable);
+            resolver.createConstraintVariableConstraint(cst, null, false, parent, register);
         }
     }
 

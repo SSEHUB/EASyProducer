@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -16,13 +17,12 @@ import net.ssehub.easy.reasoning.core.reasoner.ConstraintBase;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintList;
 import net.ssehub.easy.reasoning.core.reasoner.ConstraintVariableConstraint;
 import net.ssehub.easy.reasoning.core.reasoner.DefaultConstraint;
-import net.ssehub.easy.reasoning.core.reasoner.IReasonerInterceptor;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningErrorCodes;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElementDetails;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.reasoning.sseReasoner.functions.AbstractConstraintProcessor;
-import net.ssehub.easy.reasoning.sseReasoner.functions.DefaultEvaluationInterceptor;
+import net.ssehub.easy.reasoning.sseReasoner.functions.DefaultValueTranslator;
 import net.ssehub.easy.reasoning.sseReasoner.functions.ScopeAssignments;
 import net.ssehub.easy.reasoning.sseReasoner.model.ContextStack;
 import net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils;
@@ -101,7 +101,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     private boolean incremental = false;
     private boolean reuseInstance = false;
     private IAssignmentState assignmentState = AssignmentState.DERIVED;
-    private IReasonerInterceptor interceptor;
     private boolean inRescheduling = false;
 
     private EvalVisitor evaluator = new EvalVisitor();
@@ -110,6 +109,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
 
     private VariablesMap variablesMap = new VariablesMap();
     private ReasonerState copiedState;
+    private Stack<ConstraintBase> tmpBase = new Stack<ConstraintBase>();
     private ConstraintBase constraintBase = new ConstraintBase();
     private DefaultConstraints defaultConstraints = new DefaultConstraints().initialize();
     private ConstraintList topLevelConstraints = new ConstraintList();
@@ -248,6 +248,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 constraints = toRemove;
             }
             constraintBase.removeAll(constraints);
+            for (int i = 0; i < tmpBase.size(); i++) {
+                tmpBase.get(i).removeAll(constraints);
+            }
             failedElements.removeProblemConstraints(constraints);
             // clear dependent
             simpleAssignmentFinder.acceptAndClear(constraints, config, false);
@@ -418,7 +421,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * @param constraint the constraint to be evaluated
      * @param top is this a top-level or a nested call
      * @see #evaluateConstraint(Constraint, ConstraintSyntaxTree)
-     * @see DefaultEvaluationInterceptor
      */
     private void evaluateConstraint(Constraint constraint, boolean top) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
@@ -433,17 +435,10 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             if (!evaluated && constraint instanceof DefaultConstraint) {
                 DefaultConstraint dCst = (DefaultConstraint) constraint;
                 if (dCst.getAttachedConstraintsSize() > 0) {
-                    DefaultEvaluationInterceptor interceptor;
-                    if (top) {
-                        interceptor = new DefaultEvaluationInterceptor();
-                        evaluator.setEvaluationInterceptor(interceptor);
-                    } else {
-                        interceptor = null;
-                    }
                     ConstraintBase dflt = new ConstraintBase();
                     dflt.addAll(dCst.getDefaultConstraints(), true);
                     dflt.addAll(dCst.getDeferredDefaultConstraints(), true);
-                    ConstraintBase tmpCBase = constraintBase;
+                    tmpBase.push(constraintBase);
                     constraintBase = dflt;
                     while (!dflt.isEmpty() && !wasStopped) {
                         evaluateConstraint(dflt.removeFirst(), false);
@@ -452,10 +447,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                             break;
                         }
                     }
-                    if (null != interceptor) {
-                        interceptor.markFinal();
-                    }
-                    constraintBase = tmpCBase;
+                    constraintBase = tmpBase.pop();
                     evaluateConstraint(constraint, cst);
                     if (top) {
                         evaluator.setEvaluationInterceptor(null);
@@ -489,9 +481,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         evaluator.visit(cst);
         //printConstraintEvaluationResult(constraint, evaluator); // debugging only
         analyzeEvaluationResult(constraint);
-        if (null != interceptor) {
-            interceptor.notifyEvaluation(constraint, evaluator);
-        }
         if (Descriptor.LOGGING) {
             LOGGER.debug("Result: " + evaluator.getResult());
             LOGGER.debug("------");                     
@@ -735,10 +724,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             actType = inferTypeSafe(defaultValue, actType);
         }
         actType = DerivedDatatype.resolveToBasis(actType);
-/*    IDatatype bType = DerivedDatatype.resolveToBasis(actType);        
-    if (TypeQueries.isContainer(bType) && actType != bType) { 
-        actType = bType;
-    }*/
         int compoundMode = MODE_COMPOUND_NONE;
         boolean isCompound = TypeQueries.isCompound(actType);
         ConstraintSyntaxTree tCAcc = null; // typed compound accessor, only for compounds
@@ -773,7 +758,8 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 } else {
                     acc = null != selfEx ? cAcc : new Variable(decl);
                 }
-                defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, defaultValue);
+                defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, 
+                    DefaultValueTranslator.translateDefaultValueSafe(defaultValue));
                 defaultValue = substituteVariables(defaultValue, selfEx, self, acc);
                 tmpDflt = new DefaultConstraints();
                 addDefaultConstraint(decl, defaultValue, tmpDflt, isCompound, var);
@@ -792,7 +778,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         }
         transfer(null, tmpDflt, isCompound);
     }
-    
+
     /**
      * Adds a default constraint.
      * 
@@ -1778,6 +1764,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * @see #reInit()
      */
     void clear() {
+        tmpBase.clear();
         defaultConstraints.clear();
         topLevelConstraints.clear();
         otherConstraints.clear();
@@ -1848,15 +1835,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         if (null != state) {
             this.assignmentState = state;
         }
-    }
-
-    /**
-     * Defines the optional interceptor instance.
-     * 
-     * @param interceptor the interceptor
-     */
-    void setInterceptor(IReasonerInterceptor interceptor) {
-        this.interceptor = interceptor;
     }
     
     /**
