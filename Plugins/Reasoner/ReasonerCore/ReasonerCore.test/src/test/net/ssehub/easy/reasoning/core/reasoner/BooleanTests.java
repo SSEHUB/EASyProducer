@@ -49,7 +49,7 @@ public class BooleanTests extends AbstractTest {
      */
     @Test
     public void booleanInCompoundDefaultsTest() {
-        reasoningTest("BooleanInCompoundDefaultsTest.ivml", 2);
+        reasoningTest("BooleanInCompoundDefaultsTest.ivml", 1);
     } 
     
     /**

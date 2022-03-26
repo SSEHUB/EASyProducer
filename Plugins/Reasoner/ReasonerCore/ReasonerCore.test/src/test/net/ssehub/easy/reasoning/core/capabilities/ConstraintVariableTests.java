@@ -38,7 +38,7 @@ public class ConstraintVariableTests extends AbstractTest {
      */
     @Test
     public void setOfConstraintsInCompoundWithNoDefaultValue() {
-        reasoningTest("setOfConstraintsInCompoundWithNoDefaultValue.ivml", 1);
+        reasoningTest("setOfConstraintsInCompoundWithNoDefaultValue.ivml", 0);
     }
     
     /**
@@ -46,7 +46,7 @@ public class ConstraintVariableTests extends AbstractTest {
      */
     @Test
     public void setOfConstraintsInCompoundWithEmptyDefaultValue() {
-        reasoningTest("setOfConstraintsInCompoundWithEmptyDefaultValue.ivml", 1);
+        reasoningTest("setOfConstraintsInCompoundWithEmptyDefaultValue.ivml", 0);
     }
     
     /**

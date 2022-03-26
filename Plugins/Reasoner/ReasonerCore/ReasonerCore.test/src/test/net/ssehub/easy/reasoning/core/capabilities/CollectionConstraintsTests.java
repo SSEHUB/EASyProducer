@@ -77,7 +77,7 @@ public class CollectionConstraintsTests extends AbstractTest {
      */
     @Test
     public void constraintSetDefaultInCompoundTest() {
-        reasoningTest("constraintSetDefaultInCompound.ivml", 1);
+        reasoningTest("constraintSetDefaultInCompound.ivml", 2);
     }
     
     /**

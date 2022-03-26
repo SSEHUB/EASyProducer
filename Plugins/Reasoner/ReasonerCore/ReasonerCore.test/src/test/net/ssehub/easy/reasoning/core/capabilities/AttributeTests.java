@@ -142,7 +142,7 @@ public class AttributeTests extends AbstractTest {
      */
     @Test    
     public void constraintAnnotationTest() {
-        reasoningTest("ConstraintAnnotationTest.ivml", 7);
+        reasoningTest("ConstraintAnnotationTest.ivml", 9);
     }    
 
 }
