@@ -44,6 +44,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.CopyVisitor;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
@@ -1729,6 +1730,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                 } catch (ValueDoesNotMatchTypeException e) {
                     exception(e);
                 }
+            } else if (initializer.getExpression(s) instanceof DeferInitExpression) {
+                // e.g., operation used as initializer, may come from decomposed/recomposed compound/container values
+                values[pos++] = ((DeferInitExpression) initializer.getExpression(s)).getExpression();
             } else {
                 initializer.getExpression(s).accept(this);
                 if (null == result) {
