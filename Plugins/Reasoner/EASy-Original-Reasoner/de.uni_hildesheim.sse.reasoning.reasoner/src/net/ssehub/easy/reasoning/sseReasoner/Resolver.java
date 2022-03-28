@@ -449,9 +449,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                     }
                     constraintBase = tmpBase.pop();
                     evaluateConstraint(constraint, cst);
-                    if (top) {
-                        evaluator.setEvaluationInterceptor(null);
-                    }
                     evaluated = true;
                 } 
             }
