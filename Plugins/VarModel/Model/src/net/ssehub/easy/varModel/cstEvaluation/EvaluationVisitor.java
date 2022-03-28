@@ -491,15 +491,6 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     }
     
     // ------------------------------- result handling -------------------------------
-    
-    /**
-     * Sets/resets the optional evaluation interceptor.
-     * 
-     * @param interceptor the interceptor instance, <b>null</b> for none
-     */
-    public void setEvaluationInterceptor(IEvaluationInterceptor interceptor) {
-        context.setEvaluationInterceptor(interceptor);
-    }
 
     @Override
     public Value getResult() {

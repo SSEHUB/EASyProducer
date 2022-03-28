@@ -99,15 +99,10 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
     public Value getValue() {
         Value result;
         IDecisionVariable var = getVariable();
-        EvaluationContext context = getContext();
-        if (null != context.getEvaluationInterceptor()) {
-            result = context.getEvaluationInterceptor().getValue(var);
+        if (null != var) {
+            result = var.getValue();
         } else {
-            if (null != var) {
-                result = var.getValue();
-            } else {
-                result = null;
-            }
+            result = null;
         }
         return result;
     }
@@ -116,12 +111,8 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
     public boolean setValue(Value value, boolean asAssignment) {
         boolean successful = false;
         EvaluationContext context = getContext();
-        if (null != context.getEvaluationInterceptor()) {
-            successful = context.getEvaluationInterceptor().setValue(getVariable(), value, asAssignment, this);
-        } else {
-            if (context.allowAssignValues()) {
-                successful = setValue(context, value, asAssignment);
-            }
+        if (context.allowAssignValues()) {
+            successful = setValue(context, value, asAssignment);
         }
         return successful;
     }
@@ -184,14 +175,7 @@ class VariableAccessor extends AbstractDecisionVariableEvaluationAccessor {
         EvaluationAccessor result = null;
         IDecisionVariable variable = getVariable();
         if (Container.TYPE.isAssignableFrom(DerivedDatatype.resolveToBasis(variable.getDeclaration().getType()))) {
-            EvaluationContext context = getContext();
             Value uncastedValue = variable.getValue();
-            if (null != context.getEvaluationInterceptor()) {
-                Value v = context.getEvaluationInterceptor().getValue(variable);
-                if (v != null) {
-                    uncastedValue = v;
-                }
-            }
             if (null != uncastedValue) {
                 if (uncastedValue instanceof ContainerValue) {
                     ContainerValue value = (ContainerValue) uncastedValue;

@@ -93,15 +93,10 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
     @Override
     public Value getValue() {
         Value result;
-        EvaluationContext context = getContext();
-        if (null != context.getEvaluationInterceptor()) {
-            result = context.getEvaluationInterceptor().getValue(slotVariable);
+        if (null != slotVariable) {
+            result = slotVariable.getValue();
         } else {
-            if (null != slotVariable) {
-                result = slotVariable.getValue();
-            } else {
-                result = null;
-            }
+            result = null;
         }
         return result;
     }
@@ -121,26 +116,22 @@ class CompoundSlotAccessor extends AbstractDecisionVariableEvaluationAccessor {
     public boolean setValue(Value value, boolean asAssignment) {
         boolean successful = false;
         EvaluationContext context = getContext();
-        if (null != context.getEvaluationInterceptor()) {
-            successful = context.getEvaluationInterceptor().setValue(slotVariable, value, asAssignment, this);
-        } else {
-            if (context.allowAssignValues() && null != slotVariable) {
-                if (null != value) {
-                    boolean assign = true;
-                    IAssignmentState slotState = slotVariable.getState();
-                    if (AssignmentState.DEFAULT == context.getAssignmentState()) {
-                        if (!slotVariable.getParent().wasCreated()) {
-                            // no parent value, defer until initialized
-                            successful = false; // defer
-                            assign = false;
-                        } else if (slotState != AssignmentState.UNDEFINED && slotState != AssignmentState.FROZEN) {
-                            // there is a value and it is not frozen, ignore and pretend that successful
-                            assign = false;
-                        }
+        if (context.allowAssignValues() && null != slotVariable) {
+            if (null != value) {
+                boolean assign = true;
+                IAssignmentState slotState = slotVariable.getState();
+                if (AssignmentState.DEFAULT == context.getAssignmentState()) {
+                    if (!slotVariable.getParent().wasCreated()) {
+                        // no parent value, defer until initialized
+                        successful = false; // defer
+                        assign = false;
+                    } else if (slotState != AssignmentState.UNDEFINED && slotState != AssignmentState.FROZEN) {
+                        // there is a value and it is not frozen, ignore and pretend that successful
+                        assign = false;
                     }
-                    if (assign) {
-                        successful = assignValue(value, asAssignment);
-                    }
+                }
+                if (assign) {
+                    successful = assignValue(value, asAssignment);
                 }
             }
         }
