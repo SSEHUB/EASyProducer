@@ -341,7 +341,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                 this.indentation = indentation;
             }
         }
-        
+
         /**
          * Increases the indentation by one step.
          */
@@ -462,6 +462,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
      */
     public IResolvableModel<V, M> switchContext(IResolvableModel<V, M> model) {
         IResolvableModel<V, M> oldContext;
+        Context<V, M> oldC = currentContext;
         if (null != currentContext) {
             oldContext = currentContext.getModel();
         } else {
@@ -475,8 +476,12 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         if (null == currentContext) {
             currentContext = new Context<V, M>(model);
             contexts.put(model, currentContext);
-            if (contexts.size() > 0) { // we jump into another model and continue there, set baseline indentation
+            if (contexts.size() > 1) { // we jump into another model and continue there, set baseline indentation
                 currentContext.increaseIndentation();
+            }
+        } else {
+            if (oldC != null) {
+                currentContext.setIndentation(oldC.getIndentation());
             }
         }
 

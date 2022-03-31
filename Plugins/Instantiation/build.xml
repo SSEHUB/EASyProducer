@@ -109,6 +109,16 @@
         <echo>###  Compiling XVCL  ###</echo>
         <echo>########################</echo>
         <ant dir="de.uni_hildesheim.sse.easy.instantiator.xvcl" antfile="${build.script.name}" />
+		
+        <echo>################################</echo>
+        <echo>###  Assembling Docker-Lib   ###</echo>
+        <echo>################################</echo>
+        <ant dir="libs.Docker" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Docker Instantiator    ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="Instantiator.Docker" antfile="${build.script.name}" />
  
         <echo>####################################</echo>
         <echo>###  Compiling Expressions Core  ###</echo>

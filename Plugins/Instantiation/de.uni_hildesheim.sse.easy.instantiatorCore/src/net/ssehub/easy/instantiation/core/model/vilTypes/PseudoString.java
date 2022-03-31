@@ -678,6 +678,26 @@ public class PseudoString implements IVilType {
     }
     
     /**
+     * Returns the name/version of the operating system.
+     * 
+     * @return the name of the operating system
+     */
+    public static String osName() {
+        return System.getProperty("os.name");
+    }
+    
+    /**
+     * Returns the value of a JVM property.
+     * 
+     * @param key the property key
+     * @param dflt the default value to be returned if the key is not defined
+     * @return the value of the property, {@code dflt} if the property is not defined
+     */
+    public static String getProperty(String key, String dflt) {
+        return System.getProperty(key, dflt);
+    }
+    
+    /**
      * Returns whether two strings are equal ignoring cases for the current locale.
      * 
      * @param string1 the first string
