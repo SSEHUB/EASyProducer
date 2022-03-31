@@ -102,7 +102,12 @@
 	          <artifactId>maven</artifactId>
 	          <version>${project.version}</version>
 	      </dependency>
-	      <dependency>
+          <dependency>
+              <groupId>net.ssehub.easy.instantiation</groupId>
+              <artifactId>docker</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+          <dependency>
 	          <groupId>net.ssehub.easy.instantiation</groupId>
 	          <artifactId>xvcl</artifactId>
 	          <version>${project.version}</version>
