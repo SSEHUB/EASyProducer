@@ -22,7 +22,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerBuildImage;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerImageName;
+import net.ssehub.easy.instantiation.docker.instantiators.DockerLoadImage;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerRemoveImage;
+import net.ssehub.easy.instantiation.docker.instantiators.DockerSaveImage;
 
 /**
  * Registers the Docker additions to VIL.
@@ -42,6 +44,8 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(DockerBuildImage.class);
             TypeRegistry.DEFAULT.register(DockerImageName.class);
             TypeRegistry.DEFAULT.register(DockerRemoveImage.class);
+            TypeRegistry.DEFAULT.register(DockerSaveImage.class);
+            TypeRegistry.DEFAULT.register(DockerLoadImage.class);
         }
     }
     
