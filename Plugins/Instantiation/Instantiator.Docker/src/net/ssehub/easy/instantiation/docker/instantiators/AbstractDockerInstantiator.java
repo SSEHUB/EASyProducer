@@ -33,8 +33,11 @@ import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFil
  * @author Monika Staciwa
  */
 public abstract class AbstractDockerInstantiator extends AbstractFileInstantiator {
-    
-    private static String dockerHost = System.getProperty("easy.docker.host", 
+
+    protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(
+        System.getProperty("easy.docker.failOnError", "true"));
+
+    private static final String DOCKER_HOST = System.getProperty("easy.docker.host", 
         SystemUtils.IS_OS_WINDOWS ? "http://localhost:2375" : "unix:///var/run/docker.sock");
 
     /**
@@ -45,7 +48,7 @@ public abstract class AbstractDockerInstantiator extends AbstractFileInstantiato
     protected static DockerClient createClient() {
         // Setting the docker client
         DockerClientConfig standardConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost(dockerHost).build(); 
+            .withDockerHost(DOCKER_HOST).build(); 
         DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
             .dockerHost(standardConfig.getDockerHost())
             .sslConfig((SSLConfig) standardConfig.getSSLConfig())

@@ -41,7 +41,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
      * @param baseDirectory the base directory for the build context
      * @param dockerFile the docker file for the container to create
      * @param name name of the image with following schema (repository:tag)
-     * @return the container id
+     * @return the container id, may be <b>null</b>/undefined
      * @throws VilException in case of artifact / parameter problems
      */
     public static String dockerBuildImage(Path baseDirectory, Path dockerFile, String name) throws VilException {
@@ -65,7 +65,11 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
                 .awaitImageId();
             return imageId;        
         } catch (Exception e) {
-            throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
+            if (FAIL_ON_ERROR) {
+                throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
+            } else {
+                return null;
+            }
         }
     }
     

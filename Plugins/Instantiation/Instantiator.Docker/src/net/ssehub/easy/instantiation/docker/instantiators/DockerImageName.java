@@ -22,6 +22,11 @@ import com.github.dockerjava.api.model.Image;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
+/**
+ * Instantiator to obtain the name of a docker image.
+ * 
+ * @author Monika Staciwa
+ */
 @Instantiator("dockerRemoveImage")
 public class DockerImageName extends AbstractDockerInstantiator {
 
@@ -49,7 +54,9 @@ public class DockerImageName extends AbstractDockerInstantiator {
                 }
             }
         } catch (Exception e) {
-            throw new VilException(e, VilException.ID_RUNTIME);
+            if (FAIL_ON_ERROR) {
+                throw new VilException(e, VilException.ID_RUNTIME);
+            }
         }
         return name;
     }

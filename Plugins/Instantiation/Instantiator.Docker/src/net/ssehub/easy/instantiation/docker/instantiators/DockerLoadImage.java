@@ -15,37 +15,46 @@
  */
 package net.ssehub.easy.instantiation.docker.instantiators;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
- * Instantiator to remove a Docker image.
+ * Instantiator to obtain the name of a docker image.
  * 
  * @author Monika Staciwa
  */
-@Instantiator("dockerRemoveImage")
-public class DockerRemoveImage extends AbstractDockerInstantiator {
+@Instantiator("dockerLoadImage")
+public class DockerLoadImage extends AbstractDockerInstantiator {
 
     // checkstyle: stop exception type check
     
     /**
      * Returns the name of a Docker image.
      * 
-     * @param id the id of the image to return the name for
-     * @return {@code true} if removed
+     * @param archive the image archive to load
+     * @return {@code true} if successful, {@code false} 
      * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean dockerRemoveImage(String id) throws VilException {
+    public static boolean dockerLoadName(Path archive) throws VilException {
+        boolean ok = false;
+        File tarFile = archive.getAbsolutePath();
         try {
-            createClient().removeImageCmd(id).withForce(true).exec();
-            return true;
-        } catch (Exception e) {
+            InputStream imageStream = new FileInputStream(tarFile);
+            createClient().loadImageCmd(imageStream).exec();
+            imageStream.close();
+            ok = true;
+        } catch (IOException e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
-            } else {
-                return false;
             }
-        }
+        }            
+        return ok;
     }
     
     // checkstyle: resume exception type check
