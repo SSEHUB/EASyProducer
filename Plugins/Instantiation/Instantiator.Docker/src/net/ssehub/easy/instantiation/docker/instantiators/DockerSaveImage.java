@@ -35,7 +35,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
  * 
  * @author Monika Staciwa
  */
-@Instantiator("dockerRemoveImage")
+@Instantiator("dockerSaveImage")
 public class DockerSaveImage extends AbstractDockerInstantiator {
 
     // checkstyle: stop exception type check
@@ -48,7 +48,7 @@ public class DockerSaveImage extends AbstractDockerInstantiator {
      * @return {@code true} if removed
      * @throws VilException in case of artifact / parameter problems
      */
-    public static Set<FileArtifact> dockerRemoveImage(String imageName, Path target) throws VilException {
+    public static Set<FileArtifact> dockerSaveImage(String imageName, Path target) throws VilException {
         long timestamp = PathUtils.normalizedTime();
         File targetPath = determineTargetPath(target);
         

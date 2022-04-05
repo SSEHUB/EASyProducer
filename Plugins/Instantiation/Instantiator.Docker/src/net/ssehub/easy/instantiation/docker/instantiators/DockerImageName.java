@@ -27,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
  * 
  * @author Monika Staciwa
  */
-@Instantiator("dockerRemoveImage")
+@Instantiator("dockerImageName")
 public class DockerImageName extends AbstractDockerInstantiator {
 
     // checkstyle: stop exception type check

@@ -45,13 +45,8 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static String dockerBuildImage(Path baseDirectory, Path dockerFile, String name) throws VilException {
-        String[] tmp = name.split(":");
-        if (tmp.length != 2) {
-            throw new VilException("Name not given in format <repository:tag>", VilException.ID_RUNTIME);
-        }
         HashSet<String> tags = new HashSet<String>();
-        tags.add(tmp[0]);
-        tags.add(tmp[1]);
+        tags.add(name);
         
         try {
             File dockerfile = dockerFile.getAbsolutePath();
