@@ -536,9 +536,8 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         if (null != content) {
             int indentation = environment.getIndentation();
             if (indentation > 0) {
-                IndentationConfiguration config = environment.getIndentationConfiguration();
-                int indent = indentation + environment.getIndentationConfiguration().getAdditional();
-                content = IndentationUtils.removeIndentation(content, indent, config.getTabEmulation());
+                int indent = indentation + getAdditionalIndentation();
+                content = IndentationUtils.removeIndentation(content, indent, getTabEmulation());
             }
             int forced = 0;
             if (null != cnt.getIndentExpression()) {
@@ -661,13 +660,11 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         }
         if (format) {
             int indentation = environment.getIndentation();
-            if (null != config) { // we are within/among expressions, one step out
-                indentation -= config.getIndentationStep();
-            }
+            indentation -= getIndentationStep(); // we are within/among expressions, one step out
             if (indentation > 0) {
-                int indent = indentation + environment.getIndentationConfiguration().getAdditional();
+                int indent = indentation + getAdditionalIndentation();
                 if (IndentationUtils.allLinesStartWith(s2, indent)) {
-                    s2 = IndentationUtils.removeIndentation(s2, indent, config.getTabEmulation());
+                    s2 = IndentationUtils.removeIndentation(s2, indent, getTabEmulation());
                 }
             }
             result = IndentationUtils.appendWithLastIndentation(s1, s2, false);
@@ -679,6 +676,26 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             result = super.appendInCompositeExpression(s1, e1, v1, s2, e2);
         }
         return result;
+    }
+    
+    /**
+     * Returns the additional indentation as configured.
+     * 
+     * @return the additional indentation or {@code 0} if no configuration is present
+     */
+    private int getAdditionalIndentation() {
+        IndentationConfiguration icfg = environment.getIndentationConfiguration();
+        return null == icfg ? 0 : icfg.getAdditional();
+    }
+    
+    private int getTabEmulation() {
+        IndentationConfiguration icfg = environment.getIndentationConfiguration();
+        return null == icfg ? 0 : icfg.getTabEmulation();
+    }
+
+    private int getIndentationStep() {
+        IndentationConfiguration icfg = environment.getIndentationConfiguration();
+        return null == icfg ? 0 : icfg.getIndentationStep();
     }
 
     /**
