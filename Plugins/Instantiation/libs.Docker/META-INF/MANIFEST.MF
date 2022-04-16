@@ -13,7 +13,8 @@ Bundle-ClassPath: com.fasterxml.jackson.core.jackson-annotations-2.11.4.jar,
  com.fasterxml.jackson.core.jackson-databind-2.11.4.jar,
  org.apache.httpcomponents.client5.httpclient5-5.0.jar,
  org.apache.httpcomponents.core5.httpcore5-5.0.jar,
- org.bouncycastle.bcpkix-jdk15on-1.64.jar
+ org.bouncycastle.bcpkix-jdk15on-1.64.jar,
+ commons-compress-1.19.jar
 Export-Package: com.github.dockerjava.api,
  com.github.dockerjava.api.async,
  com.github.dockerjava.api.command,
@@ -32,7 +33,6 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: SSE, University of Hildesheim
 Require-Bundle: org.slf4j.api;bundle-version="1.7.30",
  org.apache.commons.io;bundle-version="2.6.0",
- org.apache.commons.compress;bundle-version="1.19.0",
  org.apache.commons.lang;bundle-version="2.6.0",
  com.google.guava;bundle-version="27.1.0",
  org.apache.commons.codec;bundle-version="1.14.0",

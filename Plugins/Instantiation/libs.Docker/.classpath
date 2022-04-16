@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="commons-compress-1.19.jar"/>
 	<classpathentry exported="true" kind="lib" path="com.fasterxml.jackson.core.jackson-core-2.11.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="com.fasterxml.jackson.core.jackson-databind-2.11.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="org.apache.httpcomponents.client5.httpclient5-5.0.jar"/>
