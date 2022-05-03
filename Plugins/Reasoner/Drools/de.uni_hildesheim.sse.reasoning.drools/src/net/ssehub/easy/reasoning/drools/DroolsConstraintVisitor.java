@@ -13,6 +13,7 @@ import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
@@ -563,6 +564,11 @@ public class DroolsConstraintVisitor implements
             logger.info("");
             break;
         }
+    }
+    
+    @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this); // transparent
     }
     
     @Override
@@ -1394,6 +1400,11 @@ public class DroolsConstraintVisitor implements
         private String slot = "";
         
 //        $l : java.util.ArrayList() from collect ( Number(this > 4) from p1.seq1)
+        
+        @Override
+        public void visitDeferInitExpression(DeferInitExpression expression) {
+            expression.getExpression().accept(this); // transparent
+        }
         
         @Override
         public void visitConstantValue(ConstantValue value) {

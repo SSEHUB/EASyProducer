@@ -31,6 +31,7 @@ import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
@@ -362,6 +363,11 @@ public class ConstraintFunctions {
             for (int e = 0; e < block.getExpressionCount(); e++) {
                 block.getExpression(e).accept(this);
             }
+        }
+        
+        @Override
+        public void visitDeferInitExpression(DeferInitExpression expression) {
+            expression.getExpression().accept(this);
         }
 
         @Override

@@ -13,6 +13,7 @@ import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
@@ -549,6 +550,11 @@ public class DroolsEqualityEvaluator implements IConstraintTreeVisitor, IValueVi
     }
     
     @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this); // transparent
+    }
+    
+    @Override
     public void visitMultiAndExpression(MultiAndExpression expression) {
         for (int e = 0; e < expression.getExpressionCount(); e++) {
             expression.getExpression(e).accept(this);
@@ -1055,6 +1061,11 @@ public class DroolsEqualityEvaluator implements IConstraintTreeVisitor, IValueVi
         private String slot = "";
         
 //        $l : java.util.ArrayList() from collect ( Number(this > 4) from p1.seq1)
+        
+        @Override
+        public void visitDeferInitExpression(DeferInitExpression expression) {
+            expression.getExpression().accept(this); // transparent
+        }
         
         @Override
         public void visitConstantValue(ConstantValue value) {

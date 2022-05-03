@@ -21,6 +21,7 @@ import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.IConstraintTreeVisitor;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
@@ -1001,6 +1002,11 @@ public class AdvancedTests extends AbstractTest {
             for (int p = 0; p < call.getParameterCount(); p++) {
                 call.getParameter(p).accept(this);
             }
+        }
+        
+        @Override
+        public void visitDeferInitExpression(DeferInitExpression expression) {
+            expression.getExpression().accept(this);
         }
         
         @Override
