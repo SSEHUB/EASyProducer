@@ -23,6 +23,7 @@ import net.ssehub.easy.varModel.cst.BasicCopyVisitor;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.cst.Self;
 import net.ssehub.easy.varModel.cst.Variable;
@@ -314,6 +315,15 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
             setResult(self); // no replacement needed            
         }
         containsSelf = true;
+    }
+    
+    /**
+     * Visits a default init expression.
+     * 
+     * @param expression the expression
+     */
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this); // force evaluation
     }
 
 }
