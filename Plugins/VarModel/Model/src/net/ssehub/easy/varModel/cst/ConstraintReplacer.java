@@ -99,6 +99,13 @@ public class ConstraintReplacer implements IConstraintTreeVisitor {
     }
     
     @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this);
+        copiedConstraint = new DeferInitExpression(copiedConstraint);
+        resolve();
+    }
+    
+    @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
         int count = initializer.getExpressionCount();
         String[] slots = new String[count];

@@ -137,4 +137,11 @@ public interface IConstraintTreeVisitor {
      */
     public void visitMultiAndExpression(MultiAndExpression expression);
     
+    /**
+     * Visits a default init expression.
+     * 
+     * @param expression the expression
+     */
+    public void visitDeferInitExpression(DeferInitExpression expression);
+    
 }

@@ -222,6 +222,16 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
             result = expression;
         }
     }
+    
+    /**
+     * Visits a default init expression.
+     * 
+     * @param expression the expression
+     */
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this);
+        result = inferDatatype(new DeferInitExpression(result));
+    }
 
     @Override
     public void visitLet(Let let) {

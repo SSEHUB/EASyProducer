@@ -84,6 +84,7 @@ import net.ssehub.easy.varModel.cst.CompoundInitializer;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerInitializer;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
+import net.ssehub.easy.varModel.cst.DeferInitExpression;
 import net.ssehub.easy.varModel.cst.IfThen;
 import net.ssehub.easy.varModel.cst.Let;
 import net.ssehub.easy.varModel.cst.MultiAndExpression;
@@ -1155,6 +1156,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
             // should not occur
             break;
         }
+    }
+    
+    @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this); // transparent
     }
     
     @Override

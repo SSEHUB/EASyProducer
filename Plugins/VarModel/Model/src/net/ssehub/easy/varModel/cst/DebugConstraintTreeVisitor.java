@@ -123,6 +123,11 @@ public class DebugConstraintTreeVisitor implements IConstraintTreeVisitor {
         decreaseIndentation();
     }
     
+    @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        println("deferred");
+        expression.getExpression().accept(this);
+    }
 
     @Override
     public void visitMultiAndExpression(MultiAndExpression expression) {

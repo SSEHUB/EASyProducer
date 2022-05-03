@@ -51,6 +51,7 @@ public class DeferInitExpression extends ConstraintSyntaxTree {
     
     @Override
     public void accept(IConstraintTreeVisitor visitor) {
+        visitor.visitDeferInitExpression(this);
     }
 
     @Override

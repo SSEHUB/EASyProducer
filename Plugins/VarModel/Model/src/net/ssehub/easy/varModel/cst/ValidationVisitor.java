@@ -157,6 +157,11 @@ public class ValidationVisitor implements IConstraintTreeVisitor {
     }
     
     @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this);
+    }
+    
+    @Override
     public void visitMultiAndExpression(MultiAndExpression expression) {
         for (int e = 0; e < expression.getExpressionCount(); e++) {
             expression.getExpression(e).accept(this);

@@ -810,6 +810,11 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     public void visitParenthesis(Parenthesis parenthesis) {
         parenthesis.getExpr().accept(this);
     }
+    
+    @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this); // unsure, handled explicitly
+    }
 
     @Override
     public void visitComment(Comment comment) {

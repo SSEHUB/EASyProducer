@@ -52,6 +52,11 @@ public class AbstractConstraintTreeVisitor implements IConstraintTreeVisitor {
             call.getParameter(p).accept(this);
         }
     }
+    
+    @Override
+    public void visitDeferInitExpression(DeferInitExpression expression) {
+        expression.getExpression().accept(this);
+    }
 
     @Override
     public void visitMultiAndExpression(MultiAndExpression expression) {
