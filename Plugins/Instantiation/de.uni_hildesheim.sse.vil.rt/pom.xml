@@ -1,15 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.ssehub.easy.vil</groupId>
-  <artifactId>rtvil</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion xmlns="">4.0.0</modelVersion>
+  <groupId xmlns="">net.ssehub.easy.vil</groupId>
+  <artifactId xmlns="">rtvil</artifactId>
+  <version xmlns="">1.3.2</version>
+  <packaging xmlns="">jar</packaging>
   
-  <name>EASy-Producer rt-VIL parser</name>
-  <description>The rt-VIL parser of EASy-Producer.</description>
-  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+  <name xmlns="">EASy-Producer rt-VIL parser</name>
+  <description xmlns="">The rt-VIL parser of EASy-Producer.</description>
+  <url xmlns="">https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
  
-  <licenses>
+  <licenses xmlns="">
     <license>
       <name>Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   
-  <developers>
+  <developers xmlns="">
     <developer>
       <id>eichelbe</id>
       <name>Holger Eichelberger</name>
@@ -33,11 +33,11 @@
     </developer>
   </developers>
     
-  <scm>
+  <scm xmlns="">
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
   
-  <dependencyManagement>
+  <dependencyManagement xmlns="">
     <dependencies>
         <dependency>
             <groupId>net.ssehub.easy</groupId>
@@ -49,7 +49,7 @@
     </dependencies>
   </dependencyManagement>
   
-  <dependencies>
+  <dependencies xmlns="">
       <dependency>
           <groupId>net.ssehub.easy.vil</groupId>
           <artifactId>expressions</artifactId>
