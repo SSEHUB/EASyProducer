@@ -1,15 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.ssehub.easy</groupId>
-  <artifactId>Standalone.prebuilt</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion xmlns="">4.0.0</modelVersion>
+  <groupId xmlns="">net.ssehub.easy</groupId>
+  <artifactId xmlns="">Standalone.prebuilt</artifactId>
+  <version xmlns="">1.3.2</version>
+  <packaging xmlns="">jar</packaging>
   
-  <name>EASy standalone (pre-built)</name>
-  <description>EASy-Producer standalone example composed from pre-built dependencies.</description>
-  <url>https://github.com/SSEHUB/EASyProducer</url>
+  <name xmlns="">EASy standalone (pre-built)</name>
+  <description xmlns="">EASy-Producer standalone example composed from pre-built dependencies.</description>
+  <url xmlns="">https://github.com/SSEHUB/EASyProducer</url>
 
-  <licenses>
+  <licenses xmlns="">
     <license>
       <name>Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   
-  <developers>
+  <developers xmlns="">
     <developer>
       <id>eichelbe</id>
       <name>Holger Eichelberger</name>
@@ -46,11 +46,11 @@
     </developer>
   </developers>
     
-  <scm>
+  <scm xmlns="">
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
   
-  <build>
+  <build xmlns="">
       <sourceDirectory>${basedir}/src</sourceDirectory>
         <plugins>
       <plugin>
@@ -86,7 +86,7 @@
         </plugins>
   </build>
     
-  <repositories>       
+  <repositories xmlns="">       
     <repository>
       <id>sse</id>
       <name>sse</name>
@@ -97,7 +97,7 @@
   
   <!-- Dependency Management -->  
  
-<dependencies>
+<dependencies xmlns="">
    <dependency>
  	   <groupId>net.ssehub.easy.runtime</groupId>
 	   <artifactId>EASy</artifactId>

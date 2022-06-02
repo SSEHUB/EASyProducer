@@ -1,14 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.ssehub.easy.runtime</groupId>
-  <artifactId>EASy-dependencies</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion xmlns="">4.0.0</modelVersion>
+  <groupId xmlns="">net.ssehub.easy.runtime</groupId>
+  <artifactId xmlns="">EASy-dependencies</artifactId>
+  <version xmlns="">1.3.2</version>
+  <packaging xmlns="">pom</packaging>
 
   <!-- declares all EASy parts available via POM as dependencies for importing them into a using POM 
        without declaring the version. -->
   
-  <dependencyManagement>
+  <dependencyManagement xmlns="">
     <dependencies>
         <dependency>
             <groupId>net.ssehub.easy</groupId>

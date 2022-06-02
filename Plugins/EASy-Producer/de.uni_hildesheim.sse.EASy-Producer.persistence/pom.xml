@@ -1,15 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.ssehub.easy</groupId>
-  <artifactId>core</artifactId>
-  <version>1.3.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion xmlns="">4.0.0</modelVersion>
+  <groupId xmlns="">net.ssehub.easy</groupId>
+  <artifactId xmlns="">core</artifactId>
+  <version xmlns="">1.3.2</version>
+  <packaging xmlns="">jar</packaging>
 
-  <name>EASy-Producer core library</name>
-  <description>The functional core of EASy-Producer utilizing IVML, VIL and VTL.</description>
-  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+  <name xmlns="">EASy-Producer core library</name>
+  <description xmlns="">The functional core of EASy-Producer utilizing IVML, VIL and VTL.</description>
+  <url xmlns="">https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
  
-  <licenses>
+  <licenses xmlns="">
     <license>
       <name>Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   
-  <developers>
+  <developers xmlns="">
     <developer>
       <id>elscha</id>
       <name>Sascha El-Sharkawy</name>
@@ -33,11 +33,11 @@
     </developer>
   </developers>
     
-  <scm>
+  <scm xmlns="">
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
   
-  <dependencyManagement>
+  <dependencyManagement xmlns="">
     <dependencies>
         <dependency>
             <groupId>net.ssehub.easy</groupId>
@@ -49,7 +49,7 @@
     </dependencies>
   </dependencyManagement>
   
-  <dependencies>
+  <dependencies xmlns="">
 	  <dependency>
 		  <groupId>net.ssehub.easy</groupId>
 		  <artifactId>varModel</artifactId>
