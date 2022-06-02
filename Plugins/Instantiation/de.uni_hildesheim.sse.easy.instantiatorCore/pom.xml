@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion xmlns="">4.0.0</modelVersion>
-  <groupId xmlns="">net.ssehub.easy</groupId>
-  <artifactId xmlns="">instantiatorCore</artifactId>
-  <version xmlns="">1.3.2</version>
-  <packaging xmlns="">jar</packaging>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.ssehub.easy</groupId>
+  <artifactId>instantiatorCore</artifactId>
+  <version>1.3.2</version>
+  <packaging>jar</packaging>
 
-  <name xmlns="">EASy-Producer Instantiator core</name>
-  <description xmlns="">The Instantiator core library of EASy-Producer.</description>
-  <url xmlns="">https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+  <name>EASy-Producer Instantiator core</name>
+  <description>The Instantiator core library of EASy-Producer.</description>
+  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
  
-  <licenses xmlns="">
+  <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -17,7 +17,7 @@
     </license>
   </licenses>
   
-  <developers xmlns="">
+  <developers>
     <developer>
       <id>eichelbe</id>
       <name>Holger Eichelberger</name>
@@ -59,11 +59,11 @@
     </developer>
   </developers>
     
-  <scm xmlns="">
+  <scm>
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
 
-  <dependencyManagement xmlns="">
+  <dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>net.ssehub.easy</groupId>
@@ -75,7 +75,7 @@
     </dependencies>
   </dependencyManagement>
   
-  <dependencies xmlns="">
+  <dependencies>
     <dependency>
        <groupId>net.ssehub.easy</groupId>
        <artifactId>varModel</artifactId>

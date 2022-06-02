@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion xmlns="">4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-  <groupId xmlns="">net.ssehub.easy</groupId>
-  <artifactId xmlns="">dependencies</artifactId>
-  <version xmlns="">1.3.2</version>
-  <packaging xmlns="">pom</packaging>
+  <groupId>net.ssehub.easy</groupId>
+  <artifactId>dependencies</artifactId>
+  <version>1.3.2</version>
+  <packaging>pom</packaging>
 
-  <name xmlns="">EASyDependencies</name>
-  <description xmlns="">The basic dependencies of EASy-Producer.</description>
-  <url xmlns="">https://github.com/SSEHUB/EASyProducer</url>
+  <name>EASyDependencies</name>
+  <description>The basic dependencies of EASy-Producer.</description>
+  <url>https://github.com/SSEHUB/EASyProducer</url>
 
-  <licenses xmlns="">
+  <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
       <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -18,7 +18,7 @@
     </license>
   </licenses>
   
-  <developers xmlns="">
+  <developers>
     <developer>
       <id>eichelbe</id>
       <name>Holger Eichelberger</name>
@@ -47,12 +47,12 @@
     </developer>
   </developers>
     
-  <scm xmlns="">
+  <scm>
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
 
 
-  <properties xmlns="">
+  <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -60,7 +60,7 @@
 
   <!-- Versions are basically determined by the underlying Eclipse version. Be as restrictive as you can 
        and validate the setup against QM and IIP-Ecosphere. Take dependencies as far as possible from Maven central.  -->
-  <dependencyManagement xmlns="">
+  <dependencyManagement>
     <dependencies>
         <dependency>
           <groupId>org.apache.ant</groupId>
