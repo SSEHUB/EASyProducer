@@ -10,7 +10,7 @@ REM run this script
 REM goto https://oss.sonatype.org/#welcome, staging repositories, netssehub-...*, "close" for check/deploy, if successful go for "release"
 
 SET LOCALREPO=http://projects.sse.uni-hildesheim.de/qm/maven/net/ssehub/easy
-SET EASY_VERSION=1.3.0
+SET EASY_VERSION=1.3.2
 SET DIR=.\tmp
 SET TARGET=https://oss.sonatype.org/service/local/staging/deploy/maven2
 SET REPO=ossrh
@@ -42,6 +42,7 @@ call :DeployArtifact instantiation maven %EASY_VERSION% false
 call :DeployArtifact instantiation serializer.xml %EASY_VERSION% false
 call :DeployArtifact instantiation velocity %EASY_VERSION% false
 call :DeployArtifact instantiation xvcl %EASY_VERSION% false
+call :DeployArtifact instantiation docker %EASY_VERSION% false
 call :DeployArtifact runtime EASy-Dependencies %EASY_VERSION% true
 call :DeployArtifact runtime loader %EASY_VERSION% false
 call :DeployArtifact producer CommandLine %EASY_VERSION% false
