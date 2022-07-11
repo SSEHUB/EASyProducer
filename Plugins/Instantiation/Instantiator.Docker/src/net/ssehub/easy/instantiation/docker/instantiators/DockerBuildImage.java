@@ -19,7 +19,9 @@ package net.ssehub.easy.instantiation.docker.instantiators;
 import java.io.File;
 import java.util.HashSet;
 
+import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
+import com.github.dockerjava.api.model.AuthConfigurations;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -50,12 +52,17 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
         
         try {
             File dockerfile = dockerFile.getAbsolutePath();
-            String imageId = createClient().buildImageCmd()
+            BuildImageCmd cmd = createClient().buildImageCmd()
                 .withDockerfile(dockerfile)
                 .withPull(true)
                 .withNoCache(true)      // false - building multiply images from one build context not possible
                 .withBaseDirectory(baseDirectory.getAbsolutePath())
-                .withTags(tags)
+                .withTags(tags);
+            AuthConfigurations aCfgs = DockerLogin.getAuthConfigs();
+            if (null != aCfgs) {
+                cmd.withBuildAuthConfigs(aCfgs);
+            }
+            String imageId = cmd
                 .exec(new BuildImageResultCallback())
                 .awaitImageId();
             return imageId;        

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.AuthResponse;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -33,11 +34,40 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 public class DockerLogin extends AbstractDockerInstantiator {
 
     private static Map<String, AuthConfig> authConfig = new HashMap<String, AuthConfig>();
-        
+ 
+    /**
+     * Returns the known/validated auth configs.
+     * 
+     * @return the known/validated auth configs, <b>null</b> for none
+     */
+    static AuthConfigurations getAuthConfigs() {
+        AuthConfigurations result;
+        if (authConfig.size() > 0) {
+            result = new AuthConfigurations();
+            for (AuthConfig c: authConfig.values()) {
+                result.addConfig(c);
+            }
+        } else {
+            result = null;
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the auth configuration for the given registry address.
+     * 
+     * @param registryAddress the address
+     * @return the auth configuration or <b>null</b> for none
+     */
     static AuthConfig getAuthConfig(String registryAddress) {
         return authConfig.get(registryAddress);
     }
     
+    /**
+     * Adds an auth config.
+     * 
+     * @param config the config to add
+     */
     static void addConfig(AuthConfig config) {
         authConfig.put(config.getRegistryAddress(), config);
     }
