@@ -23,6 +23,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerBuildImage;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerImageName;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerLoadImage;
+import net.ssehub.easy.instantiation.docker.instantiators.DockerLogin;
+import net.ssehub.easy.instantiation.docker.instantiators.DockerLoginByToken;
+import net.ssehub.easy.instantiation.docker.instantiators.DockerLogout;
+import net.ssehub.easy.instantiation.docker.instantiators.DockerPushImage;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerRemoveImage;
 import net.ssehub.easy.instantiation.docker.instantiators.DockerSaveImage;
 
@@ -46,6 +50,10 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(DockerRemoveImage.class);
             TypeRegistry.DEFAULT.register(DockerSaveImage.class);
             TypeRegistry.DEFAULT.register(DockerLoadImage.class);
+            TypeRegistry.DEFAULT.register(DockerLogin.class);
+            TypeRegistry.DEFAULT.register(DockerLoginByToken.class);
+            TypeRegistry.DEFAULT.register(DockerLogout.class);
+            TypeRegistry.DEFAULT.register(DockerPushImage.class);
         }
     }
     

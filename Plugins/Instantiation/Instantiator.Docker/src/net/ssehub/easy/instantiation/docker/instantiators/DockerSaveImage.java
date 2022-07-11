@@ -17,6 +17,8 @@ package net.ssehub.easy.instantiation.docker.instantiators;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +39,6 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
  */
 @Instantiator("dockerSaveImage")
 public class DockerSaveImage extends AbstractDockerInstantiator {
-
-    // checkstyle: stop exception type check
     
     /**
      * Returns the name of a Docker image.
@@ -51,21 +51,18 @@ public class DockerSaveImage extends AbstractDockerInstantiator {
     public static Set<FileArtifact> dockerSaveImage(String imageName, Path target) throws VilException {
         long timestamp = PathUtils.normalizedTime();
         File targetPath = determineTargetPath(target);
-        
+       
         try {
-            String[] cmd = new String[] {"docker", "save", "-o", target.getAbsolutePath().toString(), imageName};
-            Process proc = new ProcessBuilder(cmd).start();
-            int consoleResult = proc.waitFor();
-            // status so far unclear, e.g. just for ps: 
-            // https://betterprogramming.pub/understanding-docker-container-exit-codes-5ee79a1d58f6
-            if (consoleResult > 0) {
-                throw new VilException("Stopped with status " + consoleResult, VilException.ID_RUNTIME);
+            InputStream in = createClient().saveImageCmd(imageName).exec();
+            if (null != in) {
+                java.nio.file.Files.copy(
+                    in, 
+                    targetPath.toPath(), 
+                    StandardCopyOption.REPLACE_EXISTING);                
+            } else {
+                throw new VilException("No image found, stream=null", VilException.ID_RUNTIME);
             }
         } catch (IOException e) {
-            if (FAIL_ON_ERROR) {
-                throw new VilException(e, VilException.ID_RUNTIME);
-            }
-        } catch (InterruptedException e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }
@@ -78,7 +75,5 @@ public class DockerSaveImage extends AbstractDockerInstantiator {
         scanResult.checkForException();
         return new ListSet<FileArtifact>(result, FileArtifact.class);        
     }
-    
-    // checkstyle: resume exception type check
     
 }
