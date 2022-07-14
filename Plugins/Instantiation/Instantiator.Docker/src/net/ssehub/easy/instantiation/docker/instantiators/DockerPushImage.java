@@ -33,10 +33,6 @@ public class DockerPushImage extends AbstractDockerInstantiator {
 
     // checkstyle: stop exception type check
 
-    public static boolean dockerPushImage(String imageName, String registry) throws VilException {
-        return dockerPushImage(imageName, registry, "");
-    }
-    
     /**
      * Returns the name of a Docker image.
      * 
@@ -48,16 +44,20 @@ public class DockerPushImage extends AbstractDockerInstantiator {
      */
     public static boolean dockerPushImage(String imageName, String registry, String tag) throws VilException {
         try {
-            PushImageCmd cmd = createClient().pushImageCmd(imageName);
+            if (!imageName.equals(registry)) {
+                createClient().tagImageCmd(imageName, registry, tag).exec();
+            }
+            
+            PushImageCmd cmd = createClient().pushImageCmd(registry + ":" + tag);
+
             AuthConfig cfg = DockerLogin.getAuthConfig(registry);
             if (null != cfg) {
                 cmd.withAuthConfig(cfg);
             }
-            if (null != tag && tag.length() > 0) {
-                cmd.withTag(tag);
-            }
+            
             cmd.exec(new PushImageResultCallback())
                 .awaitCompletion();
+            
             return true;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
