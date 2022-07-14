@@ -17,6 +17,7 @@ package net.ssehub.easy.producer.core.mgmt;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Map;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.IModelLoader;
+import net.ssehub.easy.basics.modelManagement.IModelLoader.IModelInfoHolder;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -394,6 +397,26 @@ public class EasyExecutor {
             cfg = new Configuration(prj);
         } else {
             logger.error("No model found: " + ivmlModelName);
+            // there might be no file, there may be erroneous IVML files for which we do not get error information
+            for (File folder : ivmlFolder) {
+                IModelLoader<Project> loader = VarModel.INSTANCE.loaders().getDefaultLoader();
+                loader.scan(folder, new IModelInfoHolder<Project>() {
+                    
+                    @Override
+                    public boolean isKnown(URI uri, IModelLoader<Project> loader) {
+                        return false;
+                    }
+                    
+                    @Override
+                    public void error(String message) {
+                        logger.error(message);
+                    }
+                    
+                    @Override
+                    public void addResult(ModelInfo<Project> toAdd) {
+                    }
+                });
+            }
         }
         return cfg;
     }
