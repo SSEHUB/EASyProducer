@@ -22,9 +22,11 @@ import java.util.HashSet;
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
 import com.github.dockerjava.api.model.AuthConfigurations;
+import com.github.dockerjava.api.model.BuildResponseItem;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
@@ -63,7 +65,15 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
                 cmd.withBuildAuthConfigs(aCfgs);
             }
             String imageId = cmd
-                .exec(new BuildImageResultCallback())
+                .exec(new BuildImageResultCallback() {
+                    
+                    @Override
+                    public void onNext(BuildResponseItem item) {
+                        super.onNext(item);
+                        TracerFactory.progressSubTask(1, 1, "Docker push: " + item.getId() + " " + item.getStatus());
+                    }
+
+                })
                 .awaitImageId();
             return imageId;        
         } catch (Exception e) {

@@ -15,11 +15,13 @@
  */
 package net.ssehub.easy.instantiation.docker.instantiators;
 
+import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.command.PushImageResultCallback;
+import com.github.dockerjava.api.model.PushResponseItem;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
@@ -27,7 +29,6 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
  * 
  * @author Monika Staciwa
  */
-@SuppressWarnings("deprecation")
 @Instantiator("dockerPushImage")
 public class DockerPushImage extends AbstractDockerInstantiator {
 
@@ -55,8 +56,15 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 cmd.withAuthConfig(cfg);
             }
             
-            cmd.exec(new PushImageResultCallback())
-                .awaitCompletion();
+            cmd.exec(new ResultCallback.Adapter<PushResponseItem>() {
+                
+                @Override
+                public void onNext(PushResponseItem item) {
+                    super.onNext(item);
+                    TracerFactory.progressSubTask(1, 1, "Docker push: " + item.getId() + " " + item.getStatus());
+                }
+                
+            }).awaitCompletion();
             
             return true;
         } catch (Exception e) {

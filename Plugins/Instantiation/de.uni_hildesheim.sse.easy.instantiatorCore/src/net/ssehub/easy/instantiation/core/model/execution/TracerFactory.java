@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver.ISubtask;
 import net.ssehub.easy.basics.progress.ProgressObserver.ITask;
 
 /**
@@ -268,6 +269,7 @@ public abstract class TracerFactory {
     private static class TaskData {
         private ITask task;
         private String taskDescription;
+        private Map<String, ISubtask> subtasks = new HashMap<String, ISubtask>();
         // can be extended to subtasks if needed
     }
     
@@ -299,6 +301,29 @@ public abstract class TracerFactory {
             }
             obs.notifyProgress(task.task, actual, max);
         }
+    }
+    
+    /**
+     * Notifies about creation/progress of a subtask (just grabbing the actual task in all registered observers).
+     * 
+     * @param actual the actual number of steps in the sub task
+     * @param max the maximum number of steps
+     * @param taskName the name of the sub task
+     */
+    public static void progressSubTask(int actual, int max, String taskName) {
+        for (Map.Entry<ProgressObserver, TaskData> entry : PROGRESS_OBSERVERS.entrySet()) {
+            ProgressObserver obs = entry.getKey();
+            TaskData task = entry.getValue();
+            ISubtask sub = task.subtasks.get(taskName);
+            if (null == sub) {
+                sub = obs.registerSubtask(taskName);
+                task.subtasks.put(taskName, sub);
+            }
+            obs.notifyProgress(task.task, sub, actual, max);
+            if (actual == max) {
+                obs.notifyEnd(task.task, sub);
+            }
+        }        
     }
     
     /**
