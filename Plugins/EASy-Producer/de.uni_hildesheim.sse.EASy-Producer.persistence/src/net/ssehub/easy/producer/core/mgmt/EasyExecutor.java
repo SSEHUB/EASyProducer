@@ -455,6 +455,7 @@ public class EasyExecutor {
                 if (null != tracerFactory) {
                     TracerFactory.setInstance(tracerFactory);
                 }
+                TracerFactory.registerProgressObserver(observer);
                 logger.info("Executing VIL script: " + vilModelName);
                 Executor exec = new Executor(script)
                     .addBase(base)
@@ -469,7 +470,11 @@ public class EasyExecutor {
                 if (null != vilStartRuleName) {
                     exec.addStartRuleName(vilStartRuleName);
                 }
-                exec.execute();
+                try {
+                    exec.execute();
+                } catch (VilException e) {
+                    TracerFactory.unregisterProgressObserver(observer);
+                }
             } else {
                 logger.error("No VIL script found: " + vilModelName);
             }
