@@ -39,17 +39,19 @@ public class DockerPushImage extends AbstractDockerInstantiator {
      * 
      * @param imageName name of the image, "repository:tag"
      * @param registry the target registry
+     * @param repository the repository within registry to use
      * @param tag optional tag, may be empty
      * @return {@code true} if removed
      * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean dockerPushImage(String imageName, String registry, String tag) throws VilException {
+    public static boolean dockerPushImage(String imageName, String registry, String repository, String tag) 
+        throws VilException {
         try {
-            if (!imageName.equals(registry)) {
-                createClient().tagImageCmd(imageName, registry, tag).exec();
+            if (!imageName.equals(registry + "/" + repository)) {
+                createClient().tagImageCmd(imageName, registry + "/" + repository, tag).exec();
             }
             
-            PushImageCmd cmd = createClient().pushImageCmd(registry + ":" + tag);
+            PushImageCmd cmd = createClient().pushImageCmd(registry + "/" + repository + ":" + tag);
 
             AuthConfig cfg = DockerLogin.getAuthConfig(registry);
             if (null != cfg) {
