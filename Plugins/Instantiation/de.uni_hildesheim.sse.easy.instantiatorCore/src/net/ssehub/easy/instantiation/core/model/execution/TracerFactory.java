@@ -314,14 +314,52 @@ public abstract class TracerFactory {
         for (Map.Entry<ProgressObserver, TaskData> entry : PROGRESS_OBSERVERS.entrySet()) {
             ProgressObserver obs = entry.getKey();
             TaskData task = entry.getValue();
-            ISubtask sub = task.subtasks.get(taskName);
-            if (null == sub) {
-                sub = obs.registerSubtask(taskName);
-                task.subtasks.put(taskName, sub);
+            if (null != task) {
+                ISubtask sub = task.subtasks.get(taskName);
+                if (null == sub) {
+                    sub = obs.registerSubtask(taskName);
+                    task.subtasks.put(taskName, sub);
+                }
+                obs.notifyProgress(task.task, sub, actual, max);
+                if (actual == max) {
+                    obs.notifyEnd(task.task, sub);
+                }
             }
-            obs.notifyProgress(task.task, sub, actual, max);
-            if (actual == max) {
-                obs.notifyEnd(task.task, sub);
+        }        
+    }
+    
+    /**
+     * Ensures that there is a task with the given {@code description} on all registered observers. Existing tasks will 
+     * be kept.
+     * 
+     * @param description the task description
+     */
+    public static void ensureTasks(String description) {
+        for (Map.Entry<ProgressObserver, TaskData> entry : PROGRESS_OBSERVERS.entrySet()) {
+            ProgressObserver obs = entry.getKey();
+            TaskData task = entry.getValue();
+            if (null == task) {
+                task = new TaskData();
+                task.taskDescription = null == description ? "..." : description;
+                task.task = obs.registerTask(task.taskDescription);
+                entry.setValue(task);
+            }
+        }
+    }
+    
+    /**
+     * Closes existing tasks with the given {@code description} on all registered observers. Closed tasks will be set
+     * to <b>null</b> on the respective observers.
+     * 
+     * @param description the description to look for
+     */
+    public static void closeTasks(String description) {
+        for (Map.Entry<ProgressObserver, TaskData> entry : PROGRESS_OBSERVERS.entrySet()) {
+            ProgressObserver obs = entry.getKey();
+            TaskData task = entry.getValue();
+            if (null != description && !task.taskDescription.equals(description)) {
+                obs.notifyEnd(task.task);
+                entry.setValue(null);
             }
         }        
     }

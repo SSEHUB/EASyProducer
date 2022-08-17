@@ -58,6 +58,8 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 cmd.withAuthConfig(cfg);
             }
             
+            final String fallbackTaskDescription = "Docker activity";
+            TracerFactory.ensureTasks(fallbackTaskDescription);
             cmd.exec(new ResultCallback.Adapter<PushResponseItem>() {
                 
                 @Override
@@ -67,6 +69,7 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 }
                 
             }).awaitCompletion();
+            TracerFactory.closeTasks(fallbackTaskDescription);
             
             return true;
         } catch (Exception e) {
