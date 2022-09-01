@@ -52,7 +52,7 @@ public final class NullValue extends Value {
     public static final Object VALUE = new NullValueType();
     
     /**
-     * Creates a null value. Not visible due to singlton constant character.
+     * Creates a null value. Not visible due to singleton constant character.
      */
     private NullValue() {
         super(AnyType.TYPE);
