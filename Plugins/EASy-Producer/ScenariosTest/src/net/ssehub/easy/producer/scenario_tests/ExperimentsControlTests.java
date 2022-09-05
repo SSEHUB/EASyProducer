@@ -7,6 +7,7 @@ import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
@@ -247,6 +248,7 @@ public class ExperimentsControlTests extends AbstractTest {
      * @throws ModelQueryException shall not occur
      * @throws IvmlException shall not occur
      */
+    @Ignore
     @Test
     public void testControlDefaults3() throws IOException, ModelQueryException, IvmlException {
         testDefaults("defaults3");
