@@ -574,6 +574,17 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
     }
     
     /**
+     * Explicitly setting the resolved operation. Usually, this shall be accomplished via 
+     * {@link #inferDatatype()}, but if, e.g., this happens out of context, such a fallback
+     * may be needed. Use with care!
+     * 
+     * @param op the resolved operation
+     */
+    public void setResolvedOperation(Operation op) {
+        resolvedOperation = op;
+    }
+    
+    /**
      * Returns the custom operation accessor.
      * 
      * @return the accessor (may be <b>null</b>)

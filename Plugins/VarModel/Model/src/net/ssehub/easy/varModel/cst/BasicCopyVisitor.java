@@ -195,7 +195,12 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
         }
 
         if (doCopy) {
-            result = inferDatatype(new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args));
+            OCLFeatureCall ofc = new OCLFeatureCall(operand, call.getOperation(), call.getAccessor(), args);
+            result = inferDatatype(ofc);
+            if (null == ofc.getResolvedOperation()) {
+                // fallback if not resolvable, e.g., out of context
+                ofc.setResolvedOperation(call.getResolvedOperation());
+            }
         } else {
             result = call;
         }
