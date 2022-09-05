@@ -185,6 +185,7 @@ public class VilTemplateProcessor implements IVilType {
             Resolver resolver = new Resolver(evaluationVisitor.getRuntimeEnvironment());
             instantiatedContent = StringReplacer.substitute(templateContents, resolver, expressionParser, 
                 evaluationVisitor, StringReplacerFactory.INSTANCE);
+            evaluationVisitor.release(false);
         } catch (VilException e) {
             throw e;
         } finally {

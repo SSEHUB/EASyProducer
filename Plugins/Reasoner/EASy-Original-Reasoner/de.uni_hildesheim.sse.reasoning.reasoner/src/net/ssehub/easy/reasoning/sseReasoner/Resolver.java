@@ -757,6 +757,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 }
                 defaultValue = new OCLFeatureCall(acc, OclKeyWords.ASSIGNMENT, 
                     DefaultValueTranslator.translateDefaultValueSafe(defaultValue));
+                ReasoningUtils.inferTypeSafe(defaultValue, null);
                 defaultValue = substituteVariables(defaultValue, selfEx, self, acc);
                 tmpDflt = new DefaultConstraints();
                 addDefaultConstraint(decl, defaultValue, tmpDflt, isCompound, var);

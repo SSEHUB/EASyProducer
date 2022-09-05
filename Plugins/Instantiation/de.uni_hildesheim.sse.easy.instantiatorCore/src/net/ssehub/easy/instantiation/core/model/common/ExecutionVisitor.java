@@ -41,6 +41,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O extends IResolvableOperation<V>, 
     V extends VariableDeclaration, R extends Resolver<M, O, ?, V>> extends EvaluationVisitor implements IVisitor {
 
+    private RuntimeEnvironment<?, ?> origEnvironment;
     private RuntimeEnvironment<V, M> environment;
     private ITracer tracer;
     private Map<String, Object> parameter;
@@ -56,6 +57,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
         super(environment, tracer);
         this.environment = environment;
         this.tracer = tracer;
+        origEnvironment = tracer.getRuntimeEnvironment();
         tracer.setRuntimeEnvironment(environment);
         this.parameter = parameter;
     }
@@ -118,6 +120,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
      *   artifact model be released? May affect execution of other VIL models.
      */
     public void release(boolean releaseDefault) {
+        tracer.setRuntimeEnvironment(origEnvironment);
     }
     
     /**
