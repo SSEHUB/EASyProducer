@@ -106,7 +106,8 @@ public class TextTestUtils {
             default:
                 break;
             }
-        } 
+        }
+        text = text.replace("> </", "></").replace("> <", "><");
         return text;
     }
     
