@@ -11,6 +11,8 @@ template maps(Configuration config, FileArtifact target) {
         k = m.keys();
         setOf(Integer) v = test.getValues();
         v = test.values();
+        Integer i = test.get("x", -1);
+        i = test.defaultget("y", -2);
     }
 
 }

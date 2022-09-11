@@ -192,7 +192,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
     @OperationMeta(useGenericParameter = 1)
     public Set<V> getValues() {
         Set<V> result = new SetSet<V>(new HashSet<V>());
-        for (Object o : map.keySet()) {
+        for (Object o : map.values()) {
             result.add((V) o);
         }
         return new UnmodifiableSet<V>(result);
