@@ -24,7 +24,10 @@ services:
      relations:
        - endpoint:
          portArg: --mqtt.port=${port} --amqp.port=${port}
-         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+         hostArg: --mqtt.host=${host} --amqp.host=${host}
+       - channel: receiveRec1_SimpleReceiver-out-0 
+         direction: OUT 
+         type: Rec1    
    - id: SimpleSource
      name: Simple Data Source
      version: 0.1.0

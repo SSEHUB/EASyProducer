@@ -41,7 +41,10 @@ services:
      relations:
        - endpoint:
          portArg: --mqtt.port=${port} --amqp.port=${port}
-         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+         hostArg: --mqtt.host=${host} --amqp.host=${host}       - channel: transformRec1String_myKi-out-0 
+         direction: OUT 
+         type: Rec1
+         
    - id: myMqttConn
      name: myMqttConnExample
      version: 0.1.0
@@ -54,7 +57,10 @@ services:
      relations:
        - endpoint:
          portArg: --mqtt.port=${port} --amqp.port=${port}
-         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+         hostArg: --mqtt.host=${host} --amqp.host=${host}
+       - channel: createString_myMqttConn-out-0 
+         direction: OUT 
+         type: String    
    - id: myOpcConn
      name: myOpcConn example
      version: 0.1.0
@@ -67,7 +73,10 @@ services:
      relations:
        - endpoint:
          portArg: --mqtt.port=${port} --amqp.port=${port}
-         hostArg: --mqtt.host=${host} --amqp.host=${host}   
+         hostArg: --mqtt.host=${host} --amqp.host=${host}
+       - channel: createString_myOpcConn-out-0 
+         direction: OUT 
+         type: String   
    - id: mySource
      name: mySource example
      version: 0.1.0
