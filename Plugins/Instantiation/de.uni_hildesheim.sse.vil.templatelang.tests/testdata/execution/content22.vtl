@@ -1,0 +1,21 @@
+@indent(indentation = 4, additional = 0)
+template content22(Configuration config, Artifact target) {
+
+    def gen() {
+        sequenceOf(String) seq1 = {};
+        'base1:'
+        for (String s : seq1) {
+            ' - value: ${s}'
+        }
+    }
+
+    def main(Configuration config, Artifact target) {
+        sequenceOf(String) seq = {};
+        'base:'
+        for (String s : seq) {
+            ' - value: ${s}'
+        }
+        '${gen()}'
+    }
+
+}

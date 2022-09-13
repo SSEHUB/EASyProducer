@@ -621,6 +621,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testContent21b() throws IOException {
         assertEqual("content21b");
     }
+    
+    /**
+     * Tests content produced by a loop over an empty sequence [contributed by IIP-Ecosphere].
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testContent22() throws IOException {
+        assertEqual("content22");
+    }
 
     /**
      * Tests content with formatting hints [contributed by IIP-Ecosphere].

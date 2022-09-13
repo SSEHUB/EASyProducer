@@ -125,4 +125,9 @@ public class LoopStatement extends AbstractTemplateElement {
         return statement.endsWithContentStatement();
     }
 
+    @Override
+    public boolean isLoop() {
+        return true;
+    }
+
 }

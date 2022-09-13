@@ -299,11 +299,17 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         boolean ok = true;
         boolean returns = !TypeRegistry.voidType().isSame(block.inferType());
         Object value = null;
+        Object lastValue = null;
         environment.increaseIndentation();
         int count = block.getBodyElementCount();
         for (int e = 0; ok && !stop && e < count; e++) {
             ITemplateElement elt = block.getBodyElement(e);
             value = elt.accept(this);
+            if (elt.isLoop() && elt.endsWithContentStatement() && value == EMPTY_CONTENT 
+                && lastValue instanceof String ) {
+                // loop does not append, "eats up" result
+                value = lastValue;
+            }
             if ((!returns || (returns && e + 1 < count)) && mayFail(elt)) {
                 ok = checkConditionResult(value, block, ConditionTest.DONT_CARE);
             }
@@ -311,6 +317,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
                 tracer.failedAt(block.getBodyElement(e));
                 value = null;
             }
+            lastValue = value;
         }
         environment.decreaseIndentation();
         return value;

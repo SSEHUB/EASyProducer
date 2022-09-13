@@ -1,0 +1,8 @@
+-> main(Configuration, Artifact) with (<config>, test.texts)
+    seq <- {}
+    for s {
+    }
+    -> gen()
+        seq1 <- {}
+        for s {
+        }

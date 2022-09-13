@@ -18,6 +18,13 @@ public interface ITemplateElement extends ITemplateLangElement {
     public boolean isBlock();
     
     /**
+     * Returns whether this element is a loop.
+     * 
+     * @return <code>true</code> if it is a loop, <code>false</code> else
+     */
+    public boolean isLoop();
+    
+    /**
      * Infers the type of this language element.
      * 
      * @return the type of this language element

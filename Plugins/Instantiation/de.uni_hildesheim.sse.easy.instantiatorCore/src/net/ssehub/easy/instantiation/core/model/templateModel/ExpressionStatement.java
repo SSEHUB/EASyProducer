@@ -45,6 +45,11 @@ public class ExpressionStatement
     }
 
     @Override
+    public boolean isLoop() {
+        return false;
+    }
+
+    @Override
     public TypeDescriptor<?> inferType() throws VilException {
         return getExpression().inferType();
     }

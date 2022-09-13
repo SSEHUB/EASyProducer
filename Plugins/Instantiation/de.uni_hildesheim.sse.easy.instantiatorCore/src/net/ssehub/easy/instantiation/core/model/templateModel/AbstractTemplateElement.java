@@ -41,4 +41,9 @@ public abstract class AbstractTemplateElement implements ITemplateElement {
         this.parent = parent;
     }
     
+    @Override
+    public boolean isLoop() {
+        return false;
+    }
+    
 }

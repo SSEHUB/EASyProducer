@@ -9,7 +9,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 /**
  * Represents a variable declaration.
  * 
- * @author Christian Kröher
+ * @author Christian Krï¿½her
  * @author Holger Eichelberger
  */
 public class VariableDeclaration extends 
@@ -51,6 +51,11 @@ public class VariableDeclaration extends
     @Override
     public Object accept(IVisitor visitor) throws VilException {
         return accept((net.ssehub.easy.instantiation.core.model.common.IVisitor) visitor);
+    }
+    
+    @Override
+    public boolean isLoop() {
+        return false;
     }
     
     @Override
