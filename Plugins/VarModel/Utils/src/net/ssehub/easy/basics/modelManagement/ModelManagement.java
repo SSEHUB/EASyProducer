@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2022 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,11 +96,18 @@ public abstract class ModelManagement <M extends IModel> {
             }
             
         });
-        repository = new ModelRepository<M>(this);
+        repository = createRepository();
         availableModels = new AvailableModels<M>(repository);
         locations = new ModelLocations<M>(repository);
         loaders = new ModelLoaders<M>(repository);
     }
+    
+    /**
+     * Creates a model repository instance.
+     * 
+     * @return the instance
+     */
+    protected abstract ModelRepository<M> createRepository();
 
     /**
      * Creates a resolver instance.

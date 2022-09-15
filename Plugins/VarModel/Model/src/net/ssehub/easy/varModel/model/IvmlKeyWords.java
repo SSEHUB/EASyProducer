@@ -45,6 +45,11 @@ public class IvmlKeyWords extends OclKeyWords {
     public static final String IMPORT = "import";
 
     /**
+     * <b>IVML Keyword:</b> Keyword for insert.
+     */
+    public static final String INSERT = "insert";
+
+    /**
      * <b>IVML Keyword:</b> Keyword for conflicts.
      */
     public static final String CONFLICTS = "conflicts";

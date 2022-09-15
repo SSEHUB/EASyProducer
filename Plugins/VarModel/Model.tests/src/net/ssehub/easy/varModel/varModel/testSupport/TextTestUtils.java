@@ -1,6 +1,7 @@
 package net.ssehub.easy.varModel.varModel.testSupport;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -167,7 +168,7 @@ public class TextTestUtils {
         }
         return tmp.toString();
     }
-    
+
     /**
      * Asserts file equality on a set of files or directories. Starting from <code>expected</code>
      * the same relative files and directories are assumed in <code>generated</code> and asserted
@@ -178,20 +179,36 @@ public class TextTestUtils {
      * @throws IOException in case that reading and comparing a file does not work
      */
     public static void assertFileEqualityRec(File expected, File generated) throws IOException {
+        assertFileEqualityRec(expected, generated, null);
+    }
+    
+    /**
+     * Asserts file equality on a set of files or directories. Starting from <code>expected</code>
+     * the same relative files and directories are assumed in <code>generated</code> and asserted
+     * using {@link #assertFileEquality(File, File)}.
+     * 
+     * @param expected the expected file or directory
+     * @param generated the generated file or directory
+     * @param filter file filter to exclude files
+     * @throws IOException in case that reading and comparing a file does not work
+     */
+    public static void assertFileEqualityRec(File expected, File generated, FileFilter filter) throws IOException {
         boolean exclude = false;
         for (String postfix : ASSERT_EQUALITY_REC_POSTFIX_EXCLUDE) {
             exclude |= expected.getName().endsWith(postfix);
         }
         if (!exclude) {
             if (expected.isFile()) {
-                assertFileEquality(generated, expected);
+                if (null == filter || filter.accept(expected)) {
+                    assertFileEquality(generated, expected);
+                }
             } else {
-                File[] files = expected.listFiles();
+                File[] files = expected.listFiles(filter);
                 if (null != files) {
                     for (File f: files) {
                         File gen = new File(generated, f.getName());
                         if (f.isDirectory()) {
-                            assertFileEqualityRec(f, gen);
+                            assertFileEqualityRec(f, gen, filter);
                         } else {
                             assertFileEquality(gen, f);
                         }

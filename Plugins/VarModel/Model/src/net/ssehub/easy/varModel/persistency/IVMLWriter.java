@@ -39,6 +39,7 @@ import static net.ssehub.easy.varModel.model.IvmlKeyWords.EVAL;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.EXPORT;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.FREEZE;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.IF;
+import static net.ssehub.easy.varModel.model.IvmlKeyWords.INSERT;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.IMPORT;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.IN;
 import static net.ssehub.easy.varModel.model.IvmlKeyWords.INTERFACE;
@@ -312,7 +313,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
         if (pImport.isConflict()) {
             appendOutput(CONFLICTS);
         } else {
-            appendOutput(IMPORT);
+            if (pImport.isInsert()) {
+                appendOutput(INSERT);
+            } else {
+                appendOutput(IMPORT);
+            }
         }
         appendOutput(WHITESPACE);
         appendOutput(pImport.getProjectName());

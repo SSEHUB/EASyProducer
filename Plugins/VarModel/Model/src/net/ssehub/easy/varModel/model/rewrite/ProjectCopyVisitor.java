@@ -224,7 +224,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     @Override
     public void visitProjectImport(ProjectImport pImport) {
         ProjectImport copiedImport = new ProjectImport(pImport.getName(), pImport.getInterfaceName(),
-            pImport.isConflict(), pImport.isCopied(), null);
+            pImport.isConflict(), pImport.isCopied(), null, pImport.isInsert());
         
         // Copy the created project
         super.visitProjectImport(pImport);

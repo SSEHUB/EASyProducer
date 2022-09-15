@@ -145,7 +145,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
                 ValidationMessage.MISSING_CUSTOM_DATATYPE);
         }
     }
-    
+
     /**
      * Checks for a valid (name) identifier and stores an error message if required.
      * 
@@ -153,7 +153,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
      * @param cause the cause for the error (may be <b>null</b>)
      */
     private void checkNameIdentifier(String identifier, Object cause) {
-        checkIdentifier(identifier, "name", cause);
+        checkIdentifier(identifier, "name", cause, false);
     }
     
     /**
@@ -162,9 +162,14 @@ public class IvmlValidationVisitor extends AbstractVisitor
      * @param identifier the identifier to check for
      * @param info optional information denoting the specific part with invalid identifier
      * @param cause the cause for the error (may be <b>null</b>)
+     * @param allowWildcard allows for wildcard characters
      */
-    private void checkIdentifier(String identifier, String info, Object cause) {
-        if (!IvmlIdentifierCheck.isValidIdentifier(identifier)) {
+    private void checkIdentifier(String identifier, String info, Object cause, boolean allowWildcard) {
+        String id = identifier;
+        if (allowWildcard && id.endsWith("*")) {
+            id = id.substring(0, id.length() - 1);
+        }
+        if (!IvmlIdentifierCheck.isValidIdentifier(id)) {
             if (null != info && info.length() > 0) {
                 info = " at " + info;
             }
@@ -399,9 +404,9 @@ public class IvmlValidationVisitor extends AbstractVisitor
     @Override
     public void visitProjectImport(ProjectImport pImport) {
         if (null != pImport.getInterfaceName()) {
-            checkIdentifier(pImport.getInterfaceName(), "interface", pImport);
+            checkIdentifier(pImport.getInterfaceName(), "interface", pImport, false);
         }
-        checkIdentifier(pImport.getProjectName(), "project", pImport);
+        checkIdentifier(pImport.getProjectName(), "project", pImport, pImport.isWildcard());
     }
 
     @Override
@@ -450,7 +455,7 @@ public class IvmlValidationVisitor extends AbstractVisitor
             } else {
                 if (!(freezable instanceof CompoundAccessStatement)) {
                     // no parent test as references are reused
-                    checkIdentifier(freezable.getName(), "freezable " + f, freeze);
+                    checkIdentifier(freezable.getName(), "freezable " + f, freeze, false);
                 }
             }
         }

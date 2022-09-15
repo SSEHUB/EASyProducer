@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2022 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,18 +42,20 @@ public class ProjectImport extends ModelImport<Project> {
     }    
     
     /**
-     * Simplified constructor for an unrestricted import of a project.
+     * Simplified constructor for an unrestricted (non-inserting) import of a project.
      * 
-     * @param projectName the name of the project to be import
+     * @param projectName the name of the project to be import, becomes a wildcard import if {@code name} ends 
+     * with {@link ModelImport#WILDCARD_POSTFIX}
      */
     public ProjectImport(String projectName) {
         this(projectName, null);
     }
     
     /**
-     * Simplified constructor for an unrestricted import.
+     * Simplified constructor for an unrestricted (non-inserting) import.
      * 
-     * @param projectName the name of the project to be import
+     * @param projectName the name of the project to be import, becomes a wildcard import if {@code name} ends 
+     * with {@link ModelImport#WILDCARD_POSTFIX}
      * @param interfaceName the name of the interface to be imported (may 
      *   be <b>null</b> in case that an entire project
      *   without interfaces is being imported)
@@ -61,11 +63,12 @@ public class ProjectImport extends ModelImport<Project> {
     public ProjectImport(String projectName, String interfaceName) {
         this(projectName, interfaceName, false, false, (IVersionRestriction) null);
     }
-    
+
     /**
-     * Explicit Constructor.
+     * Creates a (non-inserting) project import.
      * 
-     * @param projectName the name of the project to be import
+     * @param projectName the name of the project to be import, becomes a wildcard import if {@code name} ends 
+     * with {@link ModelImport#WILDCARD_POSTFIX}
      * @param interfaceName the name of the interface to be imported (may be <b>null</b>)
      * @param isConflict does this object represent a conflict or an import
      * @param isCopied true if the project should be copied / false if it should be referenced
@@ -73,7 +76,24 @@ public class ProjectImport extends ModelImport<Project> {
      */
     public ProjectImport(String projectName, String interfaceName, boolean isConflict, boolean isCopied, 
         IVersionRestriction restriction) {
-        super(projectName, isConflict, restriction);
+        this(projectName, interfaceName, isConflict, isCopied, restriction, false);
+    }
+
+    /**
+     * Creates a project import.
+     * 
+     * @param projectName the name of the project to be import, becomes a wildcard import if {@code name} ends 
+     * with {@link ModelImport#WILDCARD_POSTFIX}
+     * @param interfaceName the name of the interface to be imported (may be <b>null</b>)
+     * @param isConflict does this object represent a conflict or an import
+     * @param isCopied true if the project should be copied / false if it should be referenced
+     * @param restriction the version restrictions (may be <b>null</b> if absent)
+     * @param isInsert whether model elements of the resolved model shall be (virtually) insert 
+     *     at the end of the importing model
+     */
+    public ProjectImport(String projectName, String interfaceName, boolean isConflict, boolean isCopied, 
+        IVersionRestriction restriction, boolean isInsert) {
+        super(projectName, isConflict, restriction, isInsert);
         this.interfaceName = interfaceName;
     }
 
@@ -177,6 +197,12 @@ public class ProjectImport extends ModelImport<Project> {
      */
     public boolean isCopied() {
         return isCopied;
+    }
+    
+    @Override
+    public ProjectImport copy(String modelName) {
+        return new ProjectImport(null == modelName ? getName() : modelName, interfaceName, isConflict(), isCopied, 
+            getVersionRestriction(), isInsert());
     }
 
 }

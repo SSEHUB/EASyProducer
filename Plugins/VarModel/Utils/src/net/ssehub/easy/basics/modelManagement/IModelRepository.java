@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2022 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,4 +84,21 @@ public interface IModelRepository <M extends IModel> {
      */
     public Location getLocationFor(URI uri);
     
+    /**
+     * Returns the matching model names for a potential wildcard name.
+     * 
+     * @param name the name to return the matches for
+     * @return if name is a wildcard name, all known matching names; else, {@code name}
+     */
+    public List<String> getMatchingModelNames(String name);
+    
+    /**
+     * Creates an ad-hoc model with given models as imports.
+     * 
+     * @param modelName the model name
+     * @param imports the imports
+     * @return the model instance
+     */
+    public M createModel(String modelName, List<M> imports);
+
 }

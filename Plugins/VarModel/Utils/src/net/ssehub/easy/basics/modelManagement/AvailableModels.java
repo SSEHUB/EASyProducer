@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2022 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -63,6 +64,15 @@ public class AvailableModels<M extends IModel> {
      */
     Collection<List<VersionedModelInfos<M>>> versionedModelInfos() {
         return availableModels.values();
+    }
+    
+    /**
+     * Returns the known model names.
+     * 
+     * @return the model names
+     */
+    Set<String> modelNames() {
+        return availableModels.keySet();
     }
     
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2012 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,13 @@ package net.ssehub.easy.basics.modelManagement;
  */
 public class ModelImport <M extends IModel> {
 
+    public static final String WILDCARD_POSTFIX = "*";
+    
     private M resolved;
     private String name;
     private IVersionRestriction restriction;
     private boolean isConflict;
+    private boolean isInsert;
 
     /**
      * Constructor for serialization.
@@ -37,25 +40,43 @@ public class ModelImport <M extends IModel> {
     }
     
     /**
-     * Creates an unrestricted script import.
+     * Creates an unrestricted (non-inserting) model import.
      * 
-     * @param name The name of the project to be imported.
+     * @param name The name of the project to be imported, becomes a wildcard import if {@code name} ends 
+     * with {@link #WILDCARD_POSTFIX}
      */
     public ModelImport(String name) {
         this(name, false, null);
+    }
+
+    /**
+     * Creates a (non-inserting) model import instance.
+     * 
+     * @param name the name of the model to be import, becomes a wildcard import if {@code name} ends 
+     * with {@link #WILDCARD_POSTFIX}
+     * @param isConflict does this object represent a conflict or an import
+     * @param restriction the version restriction (or <b>null</b> if absent)
+     */
+    public ModelImport(String name, boolean isConflict, IVersionRestriction restriction) {
+        this(name, isConflict, restriction, false);
     }
     
     /**
      * Creates a model import instance.
      * 
-     * @param name the name of the model to be import
+     * @param name the name of the model to be import, becomes a wildcard import if {@code name} ends 
+     * with {@link #WILDCARD_POSTFIX}
      * @param isConflict does this object represent a conflict or an import
      * @param restriction the version restriction (or <b>null</b> if absent)
+     * @param isInsert whether model elements of the resolved model shall be (virtually) insert 
+     *     at the end of the importing model
      */
-    public ModelImport(String name, boolean isConflict, IVersionRestriction restriction) {
+    public ModelImport(String name, boolean isConflict, IVersionRestriction restriction, 
+        boolean isInsert) {
         this.name = name;
         this.restriction = restriction;
         this.isConflict = isConflict;
+        this.isInsert = isInsert;
     }
     
     /**
@@ -105,6 +126,34 @@ public class ModelImport <M extends IModel> {
     }
 
     /**
+     * Returns whether the import targets multiple models to be imported.
+     * 
+     * @return <code>true</code> in case of a wildcard import, <code>false</code> else
+     */
+    public boolean isWildcard() {
+        return isWildcard(name);
+    }
+
+    /**
+     * Returns whether the given name targets multiple models to be imported.
+     * 
+     * @param name the name of the model(s) to be imported
+     * @return <code>true</code> in case of a wildcard import, <code>false</code> else
+     */
+    public static boolean isWildcard(String name) {
+        return name != null && name.endsWith(WILDCARD_POSTFIX);
+    }
+
+    /**
+     * Returns whether the import aims at inserting elements at the end of the importing model.
+     * 
+     * @return <code>true</code> in case of an inserting import, <code>false</code> else
+     */
+    public boolean isInsert() {
+        return isInsert;
+    }
+
+    /**
      * Defines the resolved model instance.
      * 
      * @param resolved the resolved instance or <b>null</b>
@@ -149,6 +198,16 @@ public class ModelImport <M extends IModel> {
      */
     public IVersionRestriction copyVersionRestriction(M model) throws RestrictionEvaluationException {
         return null != restriction ? restriction.copy(model) : null;
+    }
+    
+    /**
+     * Creates a copy of this import.
+     * 
+     * @param modelName a new model name, may be <b>null</b> for the original
+     * @return the copied instance
+     */
+    public ModelImport<M> copy(String modelName) {
+        return new ModelImport<M>(null == modelName ? name : modelName, isConflict, restriction, isInsert);
     }
  
 }

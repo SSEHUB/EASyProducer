@@ -16,11 +16,17 @@
 package net.ssehub.easy.varModel.management;
 
 import java.io.IOException;
+import java.util.List;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.ModelRepository;
+import net.ssehub.easy.varModel.Bundle;
 import net.ssehub.easy.varModel.model.Project;
+import net.ssehub.easy.varModel.model.ProjectImport;
 
 /**
  * The variability model, the central class holding all project instances and being
@@ -52,6 +58,45 @@ public class VarModel extends ModelManagement<Project> {
      */
     private VarModel() {
         comments = new ModelCommentsPersistencer(repository());
+    }
+
+    /**
+     * Refined model repository for IVML.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class IvmlModelRepository extends ModelRepository<Project> {
+
+        /**
+         * Creates a model repository.
+         * 
+         * @param modelMgmt the model management instance to delegate to
+         */
+        protected IvmlModelRepository(ModelManagement<Project> modelMgmt) {
+            super(modelMgmt);
+        }
+        
+        @Override
+        public Project createModel(String modelName, List<Project> imports) {
+            Project result = new Project(modelName);
+            for (Project p : imports) {
+                try {
+                    ProjectImport imp = new ProjectImport(p.getName(), null, false, false, null, false);
+                    imp.setResolved(p);
+                    result.addImport(imp);
+                } catch (ModelManagementException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(VarModel.class, Bundle.ID).error(
+                        "While creating ad-hoc model " + modelName + ": " + e.getMessage());
+                }
+            }
+            return result;
+        }
+        
+    }
+
+    @Override
+    protected ModelRepository<Project> createRepository() {
+        return new IvmlModelRepository(this);
     }
 
     /**

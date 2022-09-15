@@ -533,6 +533,37 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
         IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) 
         throws ModelManagementException {
         M result = null;
+        if (ModelImport.isWildcard(modelName)) {
+            List<M> imports = new ArrayList<>();
+            for (String name : repository.getMatchingModelNames(modelName)) {
+                M resolved = resolveSingle(name, restrictions, baseUri, repository, evaluationContext);
+                if (null != resolved) {
+                    imports.add(resolved);
+                }
+            }
+            result = repository.createModel(modelName, imports);
+        } else {
+            result = resolveSingle(modelName, restrictions, baseUri, repository, evaluationContext);
+        }
+        return result;
+    }
+
+    /**
+     * Resolves a single, non-wildcard model import.
+     * 
+     * @param modelName the name of the model
+     * @param restrictions optional version restrictions (may be <b>null</b> if there is none)
+     * @param baseUri the URI to start resolving from (may be the URI of a model)
+     * @param repository the model repository
+     * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
+     *   interpreted locally)
+     * @return the resolved model
+     * @throws ModelManagementException in case of resolution failures
+     */
+    private M resolveSingle(String modelName, IVersionRestriction restrictions, URI baseUri,
+        IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) 
+        throws ModelManagementException {
+        M result = null;
         ResolutionContext<M> context = new ResolutionContext<M>(modelName, baseUri, repository, evaluationContext);
         List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(modelName);
         ModelInfo<M> toLoad = determineMatching(context, versions, restrictions);
@@ -577,15 +608,55 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
         ModelImport<M> imp = context.getToResolve();
         if (!imp.isConflict()) {
             if (null == imp.getResolved()) {
-                List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(imp.getName());
-                if (null != versions && versions.size() > 0) {
-                    conflicts = resolve(context, done, messages, versions, imp);
+                if (imp.isWildcard()) {
+                    List<M> imports = new ArrayList<>();
+                    for (String name : context.getModelRepository().getMatchingModelNames(imp.getName())) {
+                        ModelImport<M> tmpImp = imp.copy(name);
+                        List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(name);
+                        if (null != versions && versions.size() > 0) {
+                            conflicts = add(conflicts, resolve(context, done, messages, versions, tmpImp));
+                        } else {
+                            cannotResolveImport(tmpImp, messages, context.getModelURI(), 
+                                context.getEvaluationContext());
+                        }
+                        if (null != tmpImp.getResolved()) {
+                            imports.add(tmpImp.getResolved());
+                        }
+                    }
+                    try {
+                        imp.setResolved(context.getModelRepository().createModel(imp.getName(), imports));
+                    } catch (ModelManagementException e) {
+                        messages.add(new Message(e.getMessage(), Status.ERROR));
+                    }
                 } else {
-                    cannotResolveImport(imp, messages, context.getModelURI(), context.getEvaluationContext());
+                    List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(imp.getName());
+                    if (null != versions && versions.size() > 0) {
+                        conflicts = resolve(context, done, messages, versions, imp);
+                    } else {
+                        cannotResolveImport(imp, messages, context.getModelURI(), context.getEvaluationContext());
+                    }
                 }
             }
         } 
         return conflicts;
+    }
+
+    /**
+     * Adds {@code add} to {@code orig}.
+     * 
+     * @param orig the original list, may be <b>null</b>
+     * @param add the list to add, may be <b>null</b>
+     * @return {@code orig} with {@code add} or {@code add} if {@code orig} is <b>null</b>
+     */
+    private List<ModelImport<M>> add(List<ModelImport<M>> orig, List<ModelImport<M>> add) {
+        if (null == orig) {
+            orig = add;
+        } else {
+            if (null != add) {
+                orig.addAll(add);
+            }
+        }
+        return orig;
     }
 
 }

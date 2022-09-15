@@ -419,11 +419,33 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             done.add(accessor);
             result = getCustomOperation(accessor, paramTypes, opInc);
             if (null == result) {
-                for (int i = 0; null == result && i < accessor.getImportsCount(); i++) {
-                    ProjectImport imp = accessor.getImport(i);
-                    if (null == imp.getInterfaceName() && null != imp.getResolved()) {
-                        result = getCustomOperation(imp.getResolved(), paramTypes, done, opInc);
-                    }
+                result = getCustomOperationOnImports(accessor, paramTypes, done, opInc);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Finds an operation via {@code accessor} imports.
+     * 
+     * @param accessor the accessor to look into
+     * @param paramTypes the parameter types
+     * @param done the already processed custom operation accessors to avoid cycles
+     * @param opInc number of left parameters to ignore
+     * @return the operation or <b>null</b> if not found
+     */
+    private Operation getCustomOperationOnImports(ICustomOperationAccessor accessor, IDatatype[] paramTypes, 
+            HashSet<ICustomOperationAccessor> done, int opInc) {
+        Operation result = null;
+        for (int i = 0; null == result && i < accessor.getImportsCount(); i++) {
+            ProjectImport imp = accessor.getImport(i);
+            if (imp.isWildcard()) {
+                if (imp.isInsert() && imp.getResolved() != null) {
+                    result = getCustomOperationOnImports(imp.getResolved(), paramTypes, done, opInc);                
+                }
+            } else {
+                if (null == imp.getInterfaceName() && null != imp.getResolved()) {
+                    result = getCustomOperation(imp.getResolved(), paramTypes, done, opInc);
                 }
             }
         }

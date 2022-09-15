@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2022 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package net.ssehub.easy.basics.modelManagement;
 
 import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.basics.messages.IMessage;
@@ -32,7 +33,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
  * 
  * @author Holger Eichelberger
  */
-class ModelRepository <M extends IModel> implements IModelManagementRepository<M>, IModelRepository<M> {
+public abstract class ModelRepository<M extends IModel> implements IModelManagementRepository<M>, IModelRepository<M> {
 
     private ModelManagement<M> modelMgmt;
     
@@ -41,7 +42,7 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
      * 
      * @param modelMgmt the model management instance to delegate to
      */
-    ModelRepository(ModelManagement<M> modelMgmt) {
+    protected ModelRepository(ModelManagement<M> modelMgmt) {
         this.modelMgmt = modelMgmt;
     }
     
@@ -68,6 +69,22 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
     @Override
     public ModelInfo<M> getModelInfo(String name, Version version, URI uri) {
         return modelMgmt.availableModels().getModelInfo(name, version, uri);
+    }
+
+    @Override
+    public List<String> getMatchingModelNames(String name) {
+        List<String> result = new ArrayList<>();
+        if (ModelImport.isWildcard(name)) {
+            String prefix = name.substring(0, name.length() - 1);
+            for (String mName: modelMgmt.availableModels().modelNames()) {
+                if (mName.startsWith(prefix)) {
+                    result.add(mName);
+                }
+            }
+        } else {
+            result.add(name);
+        }
+        return result;
     }
     
     /**
@@ -139,5 +156,5 @@ class ModelRepository <M extends IModel> implements IModelManagementRepository<M
     public synchronized ModelInfo<M> getResolvedModelInfo(M model) {
         return modelMgmt.availableModels().getResolvedModelInfo(model);            
     }
-
+    
 }
