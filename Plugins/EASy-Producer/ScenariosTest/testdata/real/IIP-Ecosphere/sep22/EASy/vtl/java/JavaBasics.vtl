@@ -1,0 +1,235 @@
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaBasics(Configuration config, FileArtifact target) {
+
+    def String asIdentifier(String s) {
+        s.toIdentifier();
+    }
+
+    def String asMethodNameSuffix(String s) {
+        s.firstToUpperCase().toIdentifier();
+    }
+    
+    def String asTypeName(String s) {
+        if (s.indexOf("[") > 0) {
+            s; // assume type name with array
+        } else if (s.indexOf(".") > 0) {
+            s; // assume FQN
+        } else {
+            s.firstToUpperCase().toCamelCaseIdentifier();
+        }
+    }
+    
+    def String getAppMvnVersion(Application app) {
+        String appVersion = "${app.ver}";
+        if (app.snapshot) {
+            appVersion = appVersion + "-SNAPSHOT";
+        }
+        appVersion;
+    }
+
+    def String getAppMvnName(Application app) {
+        asTypeName(app.name);
+    }
+    
+    // ------------------------------------------ type name access -------------------------------------
+
+    def String toTypeName(IOType type) {
+        toTypeName(type.type);
+    }
+    
+    def String toTypeName(DataType type) {
+        asTypeName(type.name);
+    }
+    
+    def String toTypeName(PrimitiveType type) {
+        type.name; // fallback
+    }
+    
+    def String toTypeName(EnumType type) {
+        asTypeName(type.name);
+    }
+
+    def String toTypeName(ShortTypeType type) {
+        "short";
+    }
+    
+    def String toTypeName(IntegerTypeType type) {
+        "int";
+    }
+
+    def String toTypeName(UInt16TypeType type) {
+        "int";
+    }
+
+    def String toTypeName(LongTypeType type) {
+        "long";
+    }
+    
+    def String toTypeName(StringTypeType type) {
+        "String";
+    }
+
+    def String toTypeName(BooleanTypeType type) {
+        "boolean";
+    }
+
+    def String toTypeName(FloatTypeType type) {
+        "float";
+    }
+
+    def String toTypeName(DoubleTypeType type) {
+        "double";
+    }
+
+    def String toTypeName(ByteTypeType type) {
+        "byte";
+    }
+
+    def String toTypeName(ObjectTypeType type) {
+        "Object";
+    }
+    
+    // Start - Added types OPC UA - by Ahmad
+	def String toTypeName(Integer16TypeType type) {
+        "short";
+    }
+    
+    def String toTypeName(Integer32TypeType type) {
+        "int";
+    }
+    
+    def String toTypeName(Integer64TypeType type) {
+        "long";
+    }
+    
+    def String toTypeName(SByteTypeType type) {
+        "byte";
+    }
+    
+    def String toTypeName(UnsignedInteger16TypeType type) {
+        "short";
+    }
+
+    def String toTypeName(UnsignedInteger32TypeType type) {
+        "int";
+    }
+    
+    def String toTypeName(UnsignedInteger64TypeType type) {
+        "long";
+    }
+    
+    //NOT READY!! might need convertion to byte array com.google.protobuf.ByteString
+    def String toTypeName(ByteStringTypeType type) {
+        "byte[]";
+    }
+    
+    def String toTypeName(DateTimeTypeType type) {
+        "java.time.LocalDateTime";
+    }
+	// End - Added types OPC UA - by Ahmad
+	
+    def String toTypeName(ArrayType type) {
+        toTypeName(type.type) + "[]";
+    } // implies ByteArrayTypeType, IntegerArrayTypeType, DoubleArrayTypeType
+
+    def String toTypeName(IEC61131_3DateTimeTypeType type) {
+        "java.util.Date";
+    }
+    
+    def String considerWrapper(String typeName) {
+        switch (typeName) { // Java primitives to Wrapper
+            "int" : "Integer",
+            "long" : "Long",
+            "float" : "Float",
+            "double" : "Double",
+            "byte" : "Byte",
+            "boolean" : "Boolean",
+            "char" : "Char",
+            "short" : "Short",
+            default: typeName
+        }
+    }
+    
+    def String toTypeName(ListType type) {
+        String t = considerWrapper(toTypeName(type));
+        "java.util.List<${t}>"
+    }
+    
+    // ------------------------------------------ primitive type casting -------------------------------------
+    
+    def cast(DataType type) {
+        "(" + toTypeName(type) + ")";
+    }
+
+    // ------------------------------------------ (MVN) artifact access -------------------------------------
+    
+    def String getArtifact(MeshElement elt) {
+        getArtifact(elt.impl);
+    }
+    
+    def String getArtifact(ServiceBase service) {
+        "";
+    }
+
+    def String getArtifact(CompleteService service) {
+        service.artifact;
+    }
+
+    def String getArtifact(JavaService service) {
+        service.artifact;
+    }
+
+    def String getArtifact(Connector conn) {
+        conn.artifact;
+    }
+
+    def String getSelectorArtifact(FamilyMemberSelector sel) {
+        "";
+    }
+
+    def String getSelectorArtifact(ServiceSelectorBasedFamilyMemberSelector sel) {
+        sel.artifact;
+    }
+    
+    // ------------------------------------------ families ----------------------------------
+    
+    const String familyInterfaceSuffix = "FamilyInterface";
+    
+    def String familyInterfaceName(String clsName) {
+        clsName + familyInterfaceSuffix;
+    }
+    
+    def String familyMemberName(String clsName, String familyInterfaceName) {
+        if (familyInterfaceName <> "") {
+            clsName + "Family" + familyInterfaceName.substring(0, familyInterfaceName.length() - familyInterfaceSuffix.length());
+        } else {
+            clsName;
+        }
+    }
+    
+    def getJavaServiceKind(ServiceKind kind) {
+        switch (kind) {
+            ServiceKind::SOURCE_SERVICE: "ServiceKind.SOURCE_SERVICE",
+            ServiceKind::SINK_SERVICE: "ServiceKind.SINK_SERVICE",
+            ServiceKind::TRANSFORMATION_SERVICE: "ServiceKind.TRANSFORMATION_SERVICE",
+            ServiceKind::PROBE_SERVICE: "ServiceKind.PROBE_SERVICE",
+            default: "null" // shall not occur
+        }
+    }
+    
+    // ------------------------------------------ other -------------------------------------
+
+    def String toPath(String pkg) {
+        pkg.replace(".", "/");
+    }
+    
+    def String toJvmMemLimitOpt(Integer limit) {
+        if (limit > 0) {
+            "-Xmx${limit}M"
+        } else {
+            ""
+        }
+    }
+
+}

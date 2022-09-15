@@ -1,0 +1,788 @@
+import Basics;
+import JavaBasics;
+import SpringCloudStreamBasics;
+import MeshBasics;
+import SpringBasics;
+import JavaConnector;
+import ServiceBasics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaSpringCloudStreamMeshElementTest(Configuration config, FileArtifact target, MeshElement elt, String pkg, 
+    Application app, Boolean sharedInterfaces, String familyInterface, ServiceBase familyMember, 
+    setOf(MeshElement) nodes, setOf(String) serializers) extends MeshBasics {
+
+    setOf(String) doneIngestors = {};
+    String typeAdd = "";
+
+    // ------------------------ specialization of MeshBasics --------
+    
+    // via processOutput
+    def generateIngestor(ServiceBase base, String methodSuffix, String conn, String type, String dir, ServiceBase target, String connPlaceHolder) {
+        if (not(doneIngestors.includes(type))) {
+            doneIngestors.add(type);
+            if (springConnId(base, conn, target) <> "") { 
+                'matcher.addPredicate(${type}.class, getAssertPredicate${type}());' // dynamic evaluation, no test needed
+            } else {
+                'final Predicate<${type}> pred${type} = getAssertPredicate${type}();
+                createReceptionCallback("${base.id}_${type}", d -> {
+                    incrementReceived(${type}.class); 
+                    printReceivedData(d);
+                    Assert.assertTrue(pred${type}.test(d));
+                }, ${type}.class);'
+            }
+        }
+    }
+
+    // --------------------- imports ---------------------------
+
+    def genImports(MeshElement elt, ServiceBase service) {
+        'import de.iip_ecosphere.platform.services.environment.*;
+        import de.iip_ecosphere.platform.support.resources.ResourceLoader;
+        import de.iip_ecosphere.platform.services.environment.spring.SpringAsyncServiceBase;
+        import de.iip_ecosphere.platform.transport.Transport;
+        
+        import java.io.InputStream;
+        import org.hamcrest.core.IsAnything;
+
+        import org.springframework.boot.SpringBootConfiguration;
+        import org.springframework.boot.test.context.SpringBootTest;
+        import org.springframework.test.context.TestPropertySource;
+        import org.springframework.test.context.junit4.SpringRunner;
+        import org.springframework.beans.factory.annotation.*;
+        import org.springframework.integration.support.MessageBuilder;
+        import org.springframework.messaging.Message;
+        import org.springframework.cloud.stream.messaging.*;
+        import org.springframework.messaging.Message;
+
+        import org.springframework.context.ConfigurableApplicationContext;
+        import org.springframework.boot.builder.SpringApplicationBuilder;
+        import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
+        import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+        import org.springframework.boot.WebApplicationType;
+        import org.springframework.cloud.stream.binder.test.InputDestination;
+        import org.springframework.cloud.stream.binder.test.OutputDestination;
+
+        import static org.junit.Assert.*;'
+    }
+
+    def genImports(MeshSource elt, Connector connector) {
+        String impConnector = "";
+        if (connector.class.length() > 0) {
+            impConnector = "import ${connector.class};";
+        }
+        'import java.util.concurrent.atomic.*;
+        import de.iip_ecosphere.platform.connectors.ConnectorParameter;
+        ${impConnector|e}
+        import de.iip_ecosphere.platform.transport.connectors.ReceptionCallback;'
+    }
+
+    // --------------------- classes ---------------------
+    
+    def genClasses(MeshElement elt, ServiceBase service, String clsName) {
+        '/**
+        * Represents all potential inputs to the service and the JSON input format.
+        *
+        * @author EASy-Producer
+        */
+        public static class DataUnit extends DataMapper.BaseDataUnit {
+        
+            ${getDataUnitAttributes(service)}
+
+            ${getDataUnitGetters(service)}
+            
+            ${getDataUnitSetters(service)}
+            
+            @Override
+            public String toString() {
+                return org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString(this, 
+                    de.iip_ecosphere.platform.services.environment.IipStringStyle.SHORT_STRING_STYLE);
+            }
+            
+        }
+        
+        ${genMatcher(elt, service, clsName)|e}'
+    }
+    
+    def genMatcher(MeshElement elt, ServiceBase service, String clsName) {
+        '/**
+        * A predicate-based matcher for spring-based output testing. Class generated here, because we do not want to 
+        * include the testing artifact of services.environment and hamcrest shall not be a major production dependency.
+        *
+        * @author EASy-Producer
+        */
+        private class TestMatcher extends IsAnything<Object> {
+        
+            private Map<Class<?>, Predicate<?>> predicates = new HashMap<>();
+        
+            /**
+            * Creates an instance.
+            */
+            public TestMatcher() {
+                super("${service.id} matcher");
+            }
+            
+            /**
+            * Adds a predicate for a given type.
+            * 
+            * @param <T> the type of data to be considered by the predicate
+            * @param cls the type to add the predicate for
+            * @param pred the predicate
+            */
+            private <T> void addPredicate(Class<T> cls, Predicate<T> pred) {
+                predicates.put(cls, pred);
+            }
+        
+            @Override
+            public boolean matches(Object obj) {
+                return test(obj);
+            }
+            
+            /**
+            * Does a typed test against {@link #predicates}.
+            *
+            * @param <T> the type of data to be considered by the test
+            * @param obj the data/object to be tested
+            * @return whether {@code obj} matches the condition of a registered predicate or {@code true} if none was 
+            *     registered
+            */
+            private <T> boolean test(T obj) {
+                incrementReceived(obj.getClass());
+                printReceivedData(obj);
+                @SuppressWarnings("unchecked")
+                Predicate<T> pred = (Predicate<T>) predicates.get(obj.getClass());
+                return null == pred ? true : pred.test(obj);
+            }
+        };
+        
+        '            
+    }
+
+    // not needed here
+    def genMatcher(MeshSink elt, ServiceBase service, String clsName) {
+        ''
+    }
+        
+    protected def getDataUnitAttributes(ServiceBase service) {
+        if (service.input.size() > 0) { // EASY bug
+            for (IOType in: service.input) {
+                String typeName = toTypeName(in);
+                String implTypeName = toImplTypeName(in, typeAdd);
+                String attributeName = firstToLowerCase(toTypeName(in));
+                'private ${implTypeName} ${attributeName};
+                '
+            }
+        }
+    }
+
+    protected def getDataUnitGetters(ServiceBase service) {
+        if (service.input.size() > 0) { // EASY bug
+            for (IOType in: service.input) {
+                String typeName = toTypeName(in);
+                String implTypeName = toImplTypeName(in, typeAdd);
+                String attributeName = firstToLowerCase(toTypeName(in));
+                '/**
+                * Returns ${attributeName}.
+                *
+                * @return ${attributeName}, may be <b>null</b>
+                */
+                public ${implTypeName} get${typeName}() {
+                    return ${attributeName};
+                }
+                '
+            }
+        }
+    }
+
+    protected def getDataUnitSetters(ServiceBase service) {
+        if (service.input.size() > 0) { // EASY bug
+            for (IOType in: service.input) {
+                String typeName = toTypeName(in);
+                String implTypeName = toImplTypeName(in, typeAdd);
+                String attributeName = firstToLowerCase(toTypeName(in));
+                '/**
+                * Changes ${attributeName}. [required by Jackson]
+                *
+                * @param ${attributeName}, the new value, may be <b>null</b>
+                */
+                public void set${typeName}(${implTypeName} ${attributeName}) {
+                    this.${attributeName} = ${attributeName};
+                }
+                '
+            }
+        }
+    }
+
+    def genClasses(MeshElement elt, Connector conn, String clsName) {
+        ''
+    }
+    
+    // --------------------- attributes ---------------------
+    
+    def genAttributes(MeshElement elt, ServiceBase service, String clsName) {
+        '${genQueue(elt, service)|e}'
+    }
+    
+    def channelsType(MeshElement elt) {
+        ''
+    }
+
+    def channelsType(MeshSource elt) {
+        'Source'
+    }
+
+    def channelsType(MeshProcessor elt) {
+        'Processor'
+    }
+
+    def channelsType(MeshSink elt) {
+        'Sink'
+    }
+    
+    def genQueue(MeshElement elt, ServiceBase service) {
+        'private TestMatcher matcher = new TestMatcher();'
+    }
+
+    def genQueue(MeshSink elt, ServiceBase service) {
+        ''
+    }
+
+    def genAttributes(MeshElement elt, Connector conn, String clsName) {
+        ''
+    }
+
+    // ------------------- reusable methods -----------------
+
+    def String getFileName(ServiceBase service) {
+        "testData-${toIdentifier(service.id)}.json";
+    }
+
+    def genMethods(MeshElement elt, ServiceBase service, String clsName) {
+        ''
+    }
+
+    def genMethods(MeshSource elt, ServiceBase service, String clsName) {
+        String fileName = getFileName(service);
+        '/**
+        * Tests the source.
+        *
+        * @throws IOException if setting up the source fails
+        */
+        public void testSource() throws IOException {
+            InputStream in;
+            try {
+                in = new java.io.FileInputStream(
+                    System.getProperty("iip.test.dataFile", "../../src/test/resources/${fileName}"));
+            } catch (IOException e) {
+                in = ResourceLoader.getResourceAsStream("${fileName}");
+            }
+            DataMapper.BaseMappingConsumer<DataUnit> consumer = 
+                new DataMapper.BaseMappingConsumer<DataUnit>(DataUnit.class, getInitialPeriod());
+            ${genConsumerBindings(elt, service, "consumer")}
+            DataMapper.mapJsonData(in, DataUnit.class, consumer);
+            ${processOutput(elt, service, nodes)}
+        }
+        '
+    }
+
+    def genMethods(MeshInnerElement elt, ServiceBase service, String clsName) {
+        String fileName = getFileName(service);
+        '/**
+        * Tests the service with a given JSON input stream.
+        * 
+        * @param in the Yaml input stream, will be closed
+        * @throws IOException if the data cannot be loaded/mapped to the service input data
+        */
+        public void testService(InputStream in) throws IOException {
+            try (ConfigurableApplicationContext context = new SpringApplicationBuilder(
+                TestChannelBinderConfiguration.getCompleteConfiguration())
+                    .web(WebApplicationType.NONE)
+                    .run()) {
+                InputDestination source = context.getBean(InputDestination.class);
+                OutputDestination target = context.getBean(OutputDestination.class);
+            
+                DataMapper.BaseMappingConsumer<DataUnit> consumer = 
+                    new DataMapper.BaseMappingConsumer<DataUnit>(DataUnit.class, getInitialPeriod());
+                ${genConsumerBindings(elt, service, "consumer")}
+                DataMapper.mapJsonData(in, DataUnit.class, consumer);
+                ${processOutput(elt, service, nodes)}
+            }
+        }
+        
+        /**
+        * Tests the service with the file given in system property "iip.test.dataFile",  
+        * "../../src/test/resources/${fileName}" or the default resource "${fileName}".
+        *
+        * @throws IOException of the data cannot be loaded/mapped to the service input data
+        */
+        public void testService() throws IOException {
+            InputStream in;
+            try {
+                in = new java.io.FileInputStream(
+                    System.getProperty("iip.test.dataFile", "../../src/test/resources/${fileName}"));
+            } catch (IOException e) {
+                in = ResourceLoader.getResourceAsStream("${fileName}");
+            }
+            testService(in);
+        }
+        '
+    }
+    
+    /*
+    * Generate the bindings for the TimeMappingConsumer, i.e., handlers for the data read from the test input
+    * data file.
+    *
+    * @param elt the mesh element to generate the test for (for dynamic dispatch)
+    * @param service the mesh element implementing service to generate the test for (for dynamic dispatch)
+    * @param var the name of the variable representing the TimeMappinConsumer
+    */
+    protected def genConsumerBindings(MeshElement elt, ServiceBase service, String var) {
+        // generate consumer bindings. Synchronous handlers do the assert after sending, asynchronous handlers
+        // delegate the asserts to the reception callbacks (follow-up function).
+        setOf(DataType) inTypes = {}; 
+        for (IOType t: service.input) {
+            inTypes.add(t.type);
+        }
+        sequenceOf(MeshElement) pred = predecessors(elt);
+        for (MeshElement p: pred->sortedBy(n|n.name)) {
+            for (IOType predOut : p.impl.output) {
+                if (inTypes.includes(predOut.type)) {
+                    String conn = getMethodSuffixId(getMethodSuffix(p, toTypeName(predOut), outType(p, predOut)), p);
+                    String connId = springConnId(p.impl, conn, elt.impl);
+                    String typeName = toTypeName(predOut);
+                    String attributeName = firstToLowerCase(typeName);
+                    if (connId <> "") {
+                        String assert = "";
+                        if (not(service.asynchronous)) {
+                            assert = "Assert.assertThat(target.receive().getPayload(), matcher);";
+                        }
+                        '${var}.addHandler(${typeName}${typeAdd}.class, d -> {
+                            Message<${typeName}${typeAdd}> msg = MessageBuilder.withPayload(d).build();
+                            source.send(msg);
+                            ${assert|e}
+                        });'
+                    } else {
+                        String senderId = p.impl.id;
+                        '${var}.addHandler(${typeName}${typeAdd}.class, d -> {
+                            Transport.send(c -> c.asyncSend("${senderId}_${typeName}", d), "${senderId}", "${conn}-in-0");
+                        });'
+                    }
+                }
+            }
+        }
+    }
+    
+    protected def genAssertPredicates(MeshElement elt, ServiceBase service, String clsName) {
+        for (IOType out: service.output, "\n") {
+            String typeName = toTypeName(out);
+            '/**
+            * Creates/returns a predicate asserting that the received data of type ${typeName}
+            * as output of the testing object is ok (or not). Allows for overriding the test behavior
+            * with "semantic" expectations.
+            *
+            * @return the predicate (default: lambda function always returning {@code true})
+            */ 
+            protected Predicate<${typeName}> getAssertPredicate${typeName}() {
+                return d -> true;
+            }'
+        }
+    }
+    
+    // nothing comes out of a sink
+    protected def genAssertPredicates(MeshSink elt, ServiceBase service, String clsName) {
+        ''
+    }
+    
+    def genMethods(MeshSource elt, Connector connector, String clsName) {
+        String connGen = getConnectorGenerics(connector, false);
+        String outType = asTypeName(getFirstTypeName(connector.output));
+
+        '/**
+        * Tests the connector.
+        *
+        * @param params the connector parameter to use
+        * @param callback the callback to attach to the connector
+        *
+        * @throws IOException shall not occur
+        */
+        protected void testConnector(ConnectorParameter params, ReceptionCallback<${outType}> callback) throws IOException {
+            ActiveAasBase.setNotificationMode(NotificationMode.NONE); // disable AAS connector registration
+            ${connector.class}${connGen} conn = 
+                new ${connector.class}<>(${clsName}.createConnectorAdapter());
+            conn.connect(params);
+            conn.setReceptionCallback(callback);
+            conn.request(true);
+            ${genSampling(connector)|e}
+            System.out.println("Disconnecting...");
+            conn.disconnect();
+        }
+        
+        /**
+        * Returns the connector parameter to be used.
+        *
+        * @return the connector parameter, by default as configured in the model
+        */
+        protected ConnectorParameter createConnectorParameter() {
+            return ${clsName}.createConnectorParameter();
+        }'
+    }
+    
+    def genSampling(Connector connector) {
+        Boolean useNotifications = connector.samplingPeriod <= 0; // else polling
+        if (useNotifications) {
+            ''
+        } else {
+            'conn.notificationsChanged(false); // force sampling independent of model
+            int samplingTime = CmdLine.getIntArg(cmdArgs, "iip.test.samplingTime", 10000);
+            System.out.println("Waiting for sampling... " + samplingTime + " ms until auto-stop");
+            TimeUtils.sleep(samplingTime);'
+        }
+    }
+
+    // --------------------- tests --------------------------
+
+    def genAssertReceived() {
+        'Assert.assertTrue("Received counters not as expected", 
+            createReceivedCounterAssertPredicate().test(Collections.unmodifiableMap(received)));'
+    }
+
+    def genTests(MeshElement elt, ServiceBase service, String clsName) {
+        ''
+    }
+
+    def genTests(MeshSource elt, ServiceBase service, String clsName) {
+        '/**
+        * Tests the source.
+        *
+        * @throws IOException shall not occur / test failure
+        */
+        @Test
+        public void test${firstToUpperCase(toIdentifier(service.id))}Service() throws IOException {
+            testSource();
+            ${genAssertReceived()}
+        }
+        '
+    }
+
+    def genTests(MeshInnerElement elt, ServiceBase service, String clsName) {
+        String fileName = getFileName(service);
+        '/**
+        * Tests the service with the default resource "${fileName}".
+        *
+        * @throws IOException shall not occur / test failure
+        */
+        @Test
+        public void test${firstToUpperCase(toIdentifier(service.id))}Service() throws IOException {
+            testService();
+            ${genAssertReceived()}            
+        }
+        '
+    }
+
+    def genTests(MeshSource elt, Connector connector, String clsName) {
+        String outType = asTypeName(getFirstTypeName(connector.output));
+        
+        '/**
+        * Tests the connector, here whether the connector (parameterized by 
+        * {@link #createConnectorParameter()} delivered any data.
+        *
+        * @throws IOException shall not occur / test failure
+        */
+        @Test
+        public void testConnector() throws IOException {
+            ${clsName}Test test = new ${clsName}Test();
+            AtomicInteger counter = new AtomicInteger(0);
+            ReceptionCallback<${outType}> callback = new ReceptionCallback<${outType}>() {
+    
+                @Override
+                public void received(${outType} data) {
+                    counter.incrementAndGet();
+                    printReceivedData(data);
+                    incrementReceived(${outType}.class);
+                }
+                
+                @Override
+                public Class<${outType}> getType() {
+                    return ${outType}.class;
+                }
+                
+            };
+            test.testConnector(test.createConnectorParameter(), callback);
+            Assert.assertTrue("Connector does not deliver data", counter.get() > 0);
+            ${genAssertReceived()}
+        }
+        '
+    }
+    
+    // ------------------- properties -----------------------
+    
+    def sequenceOf(MeshElement) predecessors(MeshElement elt) {
+        sequenceOf(MeshElement) no = {};
+        no.add(elt);
+        for (MeshElement e: nodes) {
+            for (MeshConnector c: nextConnectors(e)) {
+               if (c.next == elt and not(no.includes(e))) {
+                   no.add(e);
+               }
+            }
+        }
+        no;
+    }
+    
+    def genDynamicProperties(MeshElement elt, ServiceBase service, String clsName) {
+        String result = "";
+        String sep = ",\n    ";
+        mapOf(String, setOf(String)) destinations = {};
+        setOf(String) functions = {};
+        setOf(String) sources = {};
+        
+        // emulate params for a single node under testing and its predecessors
+        sequenceOf(MeshElement) no = predecessors(elt);
+        mapOf(MeshElement, setOf(MeshConnector)) mMesh = {};
+        for (MeshElement e: no) {
+            setOf(MeshConnector) mMeshConn;
+            if (mMesh.containsKey(e)) {
+                mMeshConn = mMesh.get(e);
+            } else {
+                mMeshConn = {};
+                mMesh.add(e, mMeshConn);
+            }
+            for (MeshConnector c: nextConnectors(e)) {
+                mMeshConn.add(c);
+            }
+        }
+
+        calcBindings(mMesh, no, destinations, functions, sources, elt.impl.id);
+        if (destinations.size() > 0) {
+            for (String k : destinations.keys().asSequence()->sortedBy(e|e)) { // sortedBy for testing
+                String dst = "";
+                Boolean useNativeEncoding = false;
+                for (String d : destinations.get(k).asSequence()->sortedBy(n|n)) { // sortedBy for testing
+                    if (d == "*") {
+                        useNativeEncoding = true;
+                    } else {
+                        if (dst.length() > 0) {
+                            dst = dst + ",";
+                        }
+                        dst = dst + d;
+                    }
+                }
+                result = appendWithSeparator(result, sep, '"spring.cloud.stream.bindings.${k}.destination=${dst}"');
+                if (useNativeEncoding) {
+                    result = appendWithSeparator(result, sep, '"spring.cloud.stream.bindings.${k}.useNativeEncoding=true"');
+                }
+            }
+        }
+
+        sequenceOf(MeshElement) pollNodes = {};
+        pollNodes.add(elt);
+        Integer pollInterval = calcPollerInterval(pollNodes);
+        if (pollInterval > 0) {
+            result = appendWithSeparator(result, sep, '"spring.cloud.stream.poller.fixedDelay=${pollInterval}"');
+        }
+        result = appendWithSeparator(result, sep, '"spring.cloud.function.definition=${semicolonList(functions)}"');
+        for (MeshElement e : nodes->sortedBy(n|n.impl.id)) { // sorting for testing tests
+            String sId = toIdentifier(e.impl.id);
+            result = appendWithSeparator(result, sep, '"iip.service.${sId}=${e == elt}"');
+        }
+        result;
+    }
+
+    // ------------------- main method ----------------------
+    
+    def genClassAnnotations(MeshElement elt, ServiceBase service, String clsName) {
+        '@SpringBootTest(classes = iip.Starter.class)
+        @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
+        @TestPropertySource(properties = {
+            ${genDynamicProperties(elt, service, clsName)}})
+        @RunWith(SpringRunner.class)'
+    }
+
+    def genClassAnnotations(MeshElement elt, Connector conn, String clsName) {
+        ''
+    }
+
+    def genClassComment(MeshElement elt, ServiceBase service, String fileName) {
+        '* There is no guarantee on the sequence of received data, in particular not when 
+        * the service is declared to be asynchronous. The test loads input data file from the system 
+        * property "iip.test.dataFile", "../../src/test/resources/${fileName}", the default resource "${fileName}" 
+        * or "resources/software" if you want to deploy it, e.g., in case of a mocked connector.
+        * The input data file is a JSON file, one data unit per line, following a generic structure per data unit. 
+        * A data unit consists of one optional object entry per input type of the service under test (attribute name
+        * is the type name with first character in small case) - the contents of the same structure as defined in the
+        * configuration model. The structure for this service is: {@code ${getDataUnitJson(service, typeAdd)}}. Depending
+        * on your data type definitions in the model, individual fields may be mandatory (indicated by <i>m</i>), 
+        * optional (indicated by <i>o</i>) or nested fields (not indicated further). "\\$period" is 
+        * an optional generic entry that defines the delay period <i>p</i> between the actual
+        * and the next data entry (if unspecified the initial value is {@link #getInitialPeriod()}.
+        * "\\$repeats" is the number of repeats of the specifying line (0: none, positive: #repeats, negative: endless).'
+    }
+
+    def genClassComment(MeshElement elt, Connector conn, String fileName) {
+        '* The connector test directly approaches the configured connector, i.e., the addressed device or server must 
+        * be accessible. The command line parameter {@code --iip.test.samplingTime=t} can specify the time <i>t</i> in 
+        * ms the connector will do sampling during the test (default <i>t</i>=10000).'
+    }
+    
+    def genMain(MeshElement elt, ServiceBase service, String clsName) {
+        'JUnitCore junit = new JUnitCore();
+        junit.addListener(new TextListener(System.out));
+        junit.run(${clsName}Test.class);'
+    }
+
+    def genMain(MeshSource elt, Connector connector, String clsName) {
+        String outType = asTypeName(getFirstTypeName(connector.output));
+        '${clsName}Test test = new ${clsName}Test();
+        ReceptionCallback<${outType}> callback = new ReceptionCallback<${outType}>() {
+
+            @Override
+            public void received(${outType} data) {
+                System.out.println(data);
+            }
+            
+            @Override
+            public Class<${outType}> getType() {
+                return ${outType}.class;
+            }
+            
+        };
+        test.testConnector(test.createConnectorParameter(), callback);
+        System.exit(0);'
+    }
+
+    def genExtends(MeshElement elt, ServiceBase service) {
+        'extends SpringAsyncServiceBase '
+    }
+
+    def genExtends(MeshSource elt, Connector connector) {
+        ''
+    }
+
+    // ------------------- main ----------------------
+
+    def main(Configuration config, FileArtifact target, MeshElement elt, String pkg, Application app, 
+        Boolean sharedInterfaces, String familyInterface, ServiceBase familyMember, setOf(MeshElement) nodes, 
+        setOf(String) serializers) {
+
+        IIPEcosphere cfg = config;
+        if (cfg.sharedInterfaces) {
+            typeAdd = "Impl";
+        } else {
+            typeAdd = "";
+        }
+        String clsName = getClsName(elt);
+        String fileName = getFileName(elt.impl);
+        if (familyInterface <> "") {
+            clsName = familyMemberName(asTypeName(familyMember.name), familyInterface);
+            fileName = getFileName(familyMember);
+        }
+        generateDataMethods(elt, true); // prerequisite for processIngestors
+
+        'package ${pkg};
+        
+        import java.io.IOException;
+        import java.util.*;
+        import java.util.function.*;
+        import java.util.concurrent.BlockingQueue;
+        
+        import de.iip_ecosphere.platform.support.TimeUtils;
+        import de.iip_ecosphere.platform.support.iip_aas.ActiveAasBase;
+        import de.iip_ecosphere.platform.support.iip_aas.ActiveAasBase.NotificationMode;
+        import de.iip_ecosphere.platform.support.iip_aas.config.CmdLine;
+        import de.iip_ecosphere.platform.transport.serialization.*;
+        ${genImports(elt, elt.impl)|e}
+        
+        import org.junit.*;
+        import org.junit.runner.RunWith;
+        import org.junit.internal.TextListener;
+        import org.junit.runner.JUnitCore;
+        
+        import iip.datatypes.*;
+        import iip.interfaces.*;
+        import iip.serializers.*;
+        import iip.nodes.*;
+
+        /**
+        * Implements tests for "${clsName}". The generated class is meant to be re-usable and extensible, e.g.,
+        * regarding the assert predicates. We provide a main method to ease startup. 
+        ${genClassComment(elt, elt.impl, fileName)|e}
+        *
+        * @author EASy-Producer
+        */        
+        ${genClassAnnotations(elt, elt.impl, clsName)|e}
+        public class ${clsName}Test ${genExtends(elt, elt.impl)}{
+        
+            ${genAttributes(elt, elt.impl, clsName)|e}
+            private Map<Class<?>, Integer> received = new HashMap<>();
+            private static String[] cmdArgs = new String[0];
+            
+            ${genClasses(elt, elt.impl, clsName)|e}
+            
+            /**
+            * Creates an instance and registers the application serializers.
+            */
+            public ${clsName}Test() {
+                ${generateSerializerRegistration(serializers)}
+            }
+            
+            ${genMethods(elt, elt.impl, clsName)|e}
+            
+            /**
+            * Increments the received counter for the given data {@code type}.
+            *
+            * @param type the type to increment the counter for
+            */
+            private void incrementReceived(Class<?> type) {
+                if (received.containsKey(type)) {
+                    received.put(type, received.get(type) + 1);
+                } else {
+                    received.put(type, 1);
+                }
+            }
+            
+            ${genAssertPredicates(elt, elt.impl, clsName)|e}
+            
+            /**
+            * Returns the predicate to assert the counters for received data type instances.
+            *
+            * @return the predicate (by default, a predicate with constant value {@code true})
+            */
+            protected Predicate<Map<Class<?>, Integer>> createReceivedCounterAssertPredicate() {
+                return m -> true;
+            }
+            
+            /**
+            * Prints the received data. Can be overridden.
+            *
+            * @param data the received data
+            */
+            protected void printReceivedData(Object data) {
+                System.out.println(data);
+            }
+            
+            /**
+            * Returns the initial period.
+            *
+            * @return the initial period in ms, no (initial) input delay happens if the value is zero or negative
+            */
+            protected int getInitialPeriod() {
+                return 500;
+            } 
+
+            ${genTests(elt, elt.impl, clsName)|e}
+            
+            /**
+            * Starts the configured version of this service/connector as main program.
+            *
+            * @param args the command line arguments
+            * @throws IOException shall not occur
+            */
+            public static void main(String[] args) throws IOException {
+                cmdArgs = args;
+                ${genMain(elt, elt.impl, clsName)}
+            }
+            
+        }'
+    }
+    
+}

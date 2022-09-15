@@ -164,10 +164,12 @@ public class DtdParser {
         try {
             while ((line = br.readLine()) != null) {
                 if (line.isEmpty()) {
-                    String addString = stringList.get(stringList.size() - 1);
-                    addString += "\r\n";
-                    stringList.remove(stringList.size() - 1);
-                    stringList.add(addString);
+                    if (stringList.size() > 0) {
+                        String addString = stringList.get(stringList.size() - 1);
+                        addString += "\r\n";
+                        stringList.remove(stringList.size() - 1);
+                        stringList.add(addString);
+                    }
                 } else {
                     stringList.add(line);
                 }

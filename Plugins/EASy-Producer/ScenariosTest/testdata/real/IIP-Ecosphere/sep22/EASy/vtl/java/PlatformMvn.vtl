@@ -1,0 +1,60 @@
+import Basics;
+import MavenBasics;
+import JavaMapping;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template PlatformMvn(IIPEcosphere config, XmlFileArtifact target, String dir, String main, Boolean tests, Boolean monitoring) {
+
+    def main(IIPEcosphere config, XmlFileArtifact target, String dir, String main, Boolean tests, Boolean monitoring) {
+        String iipGroup = "de.iip-ecosphere.platform";
+        String springGroup = "org.springframework.boot";
+        String projectVersion = "\\${project.version}";
+        
+        XmlElement project = createMavenRoot(target);
+        if (monitoring) {
+            createMavenProjectAttributes(project, "monitoring.exec", "ConfiguredPlatformMonitoringInstance", "Configured platform monitoring instance");
+        } else {
+            createMavenProjectAttributes(project, "platform.exec", "ConfiguredPlatformInstance", "Configured platform instance");
+        }
+        createMavenParent(project, iipGroup, "platformDependencies", "${config.iipVer}");
+        
+        XmlElement dep = createDependencies(project);
+        XmlElement d = appendDependency(dep, iipGroup, aasClientModule(config), projectVersion);
+        if (monitoring) {
+            // conflicts on Linux with Tomcat
+            XmlElement e = new XmlElement(new XmlElement(d, "exclusions"), "exclusion");
+            new XmlElement(e, "groupId", "org.apache.tomcat");
+            new XmlElement(e, "artifactId", "tomcat-catalina");
+        } else {
+            appendDependency(dep, iipGroup, aasServerModule(config), projectVersion);
+        }
+        appendDependency(dep, iipGroup, transportProtocolModule(config), projectVersion);
+        if (monitoring) {
+            if (config.platformMonitoring.isKindOf(PrometheusPlatformMonitoring)) {
+                // does not override somehow in monitoring.prometheus, wrong version occurs here
+                appendDependency(dep, "io.micrometer", "micrometer-registry-prometheus", "1.8.3");
+            }
+            appendDependency(dep, iipGroup, centralMonitoringModule(config), projectVersion);
+            appendDependency(dep, iipGroup, "monitoring", projectVersion);
+        } else {
+            appendDependency(dep, iipGroup, deviceRegistryModule(config), projectVersion);
+            appendDependency(dep, iipGroup, deviceMgtStorageModule(config), projectVersion);
+            appendDependency(dep, iipGroup, "configuration.configuration", projectVersion);
+            appendDependency(dep, iipGroup, "platform", projectVersion);
+            appendDependency(dep, iipGroup, managementUiModule(config), projectVersion);
+        }
+        appendIipBaseDependencies(dep);
+        
+        XmlElement plugins = createMavenBuildElement(project, "", true);
+        appendMavenJarPlugin(plugins, "2.3", false, main);
+        appendMavenDependencyPluginCopyDeps(plugins, jarDir="../${dir}", copyOwn=true);
+        appendCompilerPlugin(plugins);
+        appendSurefirePlugin(plugins, tests=tests);
+
+        sequenceOf(String) files = {"*.yml", "*.png", "*.jpg"};
+        XmlElement ex2 = appendMavenResourcesCopyResources(plugins, mavenBuildOutputResourcesDir(), getResourcesFolder()+"/software", files, id="sw-res");
+        appendMavenResourcesCopyResourcesExecution(ex2, "copy-resources", mavenBuildOutputResourcesDir(), getResourcesFolder()+"/platform", files, id="platf-res");
+    }
+
+}

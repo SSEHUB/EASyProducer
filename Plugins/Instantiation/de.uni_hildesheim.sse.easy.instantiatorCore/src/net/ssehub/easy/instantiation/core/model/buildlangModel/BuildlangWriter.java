@@ -243,8 +243,7 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
             for (int i = 0; i < script.getImportsCount(); i++) {
                 ModelImport<Script> imp = script.getImport(i);
                 printIndentation();
-                print("import ");
-                print(imp.getName());
+                printImportLeadin(imp);
                 printVersionRestrictions(imp.getVersionRestriction(), false);
                 println(";");
             }

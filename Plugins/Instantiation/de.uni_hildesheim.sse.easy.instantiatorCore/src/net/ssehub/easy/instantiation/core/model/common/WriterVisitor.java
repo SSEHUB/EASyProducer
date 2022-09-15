@@ -4,6 +4,7 @@ import java.io.Writer;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.CompoundTypeDescriptor.SlotDescriptor;
@@ -187,6 +188,20 @@ public class WriterVisitor<V extends VariableDeclaration> extends ExpressionWrit
         }
     }
 
+    /**
+     * Prints the import keyword(s) and the name.
+     * 
+     * @param imp the import to be printed
+     */
+    protected void printImportLeadin(ModelImport<?> imp) {
+        if (imp.isInsert()) {
+            print("insert");
+        } else {
+            print("import");
+        }
+        print(" ");
+        print(imp.getName());
+    }
     
     /**
      * Returns <code>0</code> of object is <b>null</b> else <code>1</code>.

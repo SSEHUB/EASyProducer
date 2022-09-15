@@ -13,8 +13,10 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getInsert <em>Insert</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getInterface <em>Interface</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getWildcard <em>Wildcard</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction <em>Restriction</em>}</li>
  * </ul>
  *
@@ -24,6 +26,28 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ImportStmt extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Insert</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Insert</em>' attribute.
+   * @see #setInsert(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getImportStmt_Insert()
+   * @model
+   * @generated
+   */
+  String getInsert();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getInsert <em>Insert</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Insert</em>' attribute.
+   * @see #getInsert()
+   * @generated
+   */
+  void setInsert(String value);
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -67,6 +91,28 @@ public interface ImportStmt extends EObject
    * @generated
    */
   void setInterface(String value);
+
+  /**
+   * Returns the value of the '<em><b>Wildcard</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Wildcard</em>' attribute.
+   * @see #setWildcard(String)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getImportStmt_Wildcard()
+   * @model
+   * @generated
+   */
+  String getWildcard();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getWildcard <em>Wildcard</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Wildcard</em>' attribute.
+   * @see #getWildcard()
+   * @generated
+   */
+  void setWildcard(String value);
 
   /**
    * Returns the value of the '<em><b>Restriction</b></em>' containment reference.

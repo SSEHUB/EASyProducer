@@ -52,8 +52,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         for (int i = 0; i < template.getImportsCount(); i++) {
             ModelImport<? extends Template> ref = template.getImport(i);
             printIndentation();
-            print("import ");
-            print(ref.getName());
+            printImportLeadin(ref);
             printVersionRestrictions(ref.getVersionRestriction(), false);
             println(";");
         }

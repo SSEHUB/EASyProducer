@@ -1751,8 +1751,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Import:
-	//	// here fqn because this may reference a specific project (of an external project)
-	//	'import' name=Identifier versionSpec=VersionSpec? ';';
+	//	('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';';
 	public ExpressionDslGrammarAccess.ImportElements getImportAccess() {
 		return gaExpressionDsl.getImportAccess();
 	}

@@ -1652,32 +1652,45 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	public class ImportStmtElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.ImportStmt");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cImportKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Keyword cImportKeyword_0_0 = (Keyword)cAlternatives_0.eContents().get(0);
+		private final Assignment cInsertAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
+		private final Keyword cInsertInsertKeyword_0_1_0 = (Keyword)cInsertAssignment_0_1.eContents().get(0);
 		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cNameIdentifierParserRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
 		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
 		private final Keyword cColonColonKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
 		private final Assignment cInterfaceAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
 		private final RuleCall cInterfaceIdentifierParserRuleCall_2_1_0 = (RuleCall)cInterfaceAssignment_2_1.eContents().get(0);
-		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
-		private final Keyword cWithKeyword_3_0 = (Keyword)cGroup_3.eContents().get(0);
-		private final Assignment cRestrictionAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
-		private final RuleCall cRestrictionExpressionParserRuleCall_3_1_0 = (RuleCall)cRestrictionAssignment_3_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Assignment cWildcardAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final Keyword cWildcardAsteriskKeyword_3_0 = (Keyword)cWildcardAssignment_3.eContents().get(0);
+		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
+		private final Keyword cWithKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
+		private final Assignment cRestrictionAssignment_4_1 = (Assignment)cGroup_4.eContents().get(1);
+		private final RuleCall cRestrictionExpressionParserRuleCall_4_1_0 = (RuleCall)cRestrictionAssignment_4_1.eContents().get(0);
+		private final Keyword cSemicolonKeyword_5 = (Keyword)cGroup.eContents().get(5);
 		
 		//ImportStmt:
-		//	'import'
-		//	name=Identifier ('::' interface=Identifier)? ('with' restriction=Expression)?
+		//	('import' | insert='insert') name=Identifier ('::' interface=Identifier)? wildcard="*"? ('with'
+		//	restriction=Expression)?
 		//	';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//'import'
-		//name=Identifier ('::' interface=Identifier)? ('with' restriction=Expression)?
+		//('import' | insert='insert') name=Identifier ('::' interface=Identifier)? wildcard="*"? ('with' restriction=Expression)?
 		//';'
 		public Group getGroup() { return cGroup; }
 
+		//('import' | insert='insert')
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+
 		//'import'
-		public Keyword getImportKeyword_0() { return cImportKeyword_0; }
+		public Keyword getImportKeyword_0_0() { return cImportKeyword_0_0; }
+
+		//insert='insert'
+		public Assignment getInsertAssignment_0_1() { return cInsertAssignment_0_1; }
+
+		//'insert'
+		public Keyword getInsertInsertKeyword_0_1_0() { return cInsertInsertKeyword_0_1_0; }
 
 		//name=Identifier
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
@@ -1697,20 +1710,26 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 		//Identifier
 		public RuleCall getInterfaceIdentifierParserRuleCall_2_1_0() { return cInterfaceIdentifierParserRuleCall_2_1_0; }
 
+		//wildcard="*"?
+		public Assignment getWildcardAssignment_3() { return cWildcardAssignment_3; }
+
+		//"*"
+		public Keyword getWildcardAsteriskKeyword_3_0() { return cWildcardAsteriskKeyword_3_0; }
+
 		//('with' restriction=Expression)?
-		public Group getGroup_3() { return cGroup_3; }
+		public Group getGroup_4() { return cGroup_4; }
 
 		//'with'
-		public Keyword getWithKeyword_3_0() { return cWithKeyword_3_0; }
+		public Keyword getWithKeyword_4_0() { return cWithKeyword_4_0; }
 
 		//restriction=Expression
-		public Assignment getRestrictionAssignment_3_1() { return cRestrictionAssignment_3_1; }
+		public Assignment getRestrictionAssignment_4_1() { return cRestrictionAssignment_4_1; }
 
 		//Expression
-		public RuleCall getRestrictionExpressionParserRuleCall_3_1_0() { return cRestrictionExpressionParserRuleCall_3_1_0; }
+		public RuleCall getRestrictionExpressionParserRuleCall_4_1_0() { return cRestrictionExpressionParserRuleCall_4_1_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_4() { return cSemicolonKeyword_4; }
+		public Keyword getSemicolonKeyword_5() { return cSemicolonKeyword_5; }
 	}
 
 	public class ConflictStmtElements extends AbstractParserRuleElementFinder {
@@ -4261,8 +4280,8 @@ public class IvmlGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//ImportStmt:
-	//	'import'
-	//	name=Identifier ('::' interface=Identifier)? ('with' restriction=Expression)?
+	//	('import' | insert='insert') name=Identifier ('::' interface=Identifier)? wildcard="*"? ('with'
+	//	restriction=Expression)?
 	//	';';
 	public ImportStmtElements getImportStmtAccess() {
 		return pImportStmt;

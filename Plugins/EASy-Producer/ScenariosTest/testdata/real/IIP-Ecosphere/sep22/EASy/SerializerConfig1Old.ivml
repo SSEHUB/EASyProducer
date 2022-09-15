@@ -1,0 +1,313 @@
+project SerializerConfig1Old {
+
+    import CommonSetupNoMonUi;
+    import DataTypes;
+
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    // ------------ data types ------------------
+    
+    RecordType rec1 = {
+        name = "Rec1",
+        fields = {
+            Field {
+                name = "intField",
+                type = refBy(IntegerType),
+                description = "Some int value"
+            }, Field {
+                name = "stringField",
+                type = refBy(StringType),
+                description = "Some String value"
+            }
+        }
+    };
+    
+    // ------------ individual, reusable services ------------------
+    
+    EnumType myTestEnum = EnumType {
+        name = "myTestEnum",
+        literals = {
+            EnumLiteral {
+                name = "Lit1",
+                ordinal = 25
+            }, EnumLiteral {
+                name = "Lit2",
+                ordinal = 100
+            }
+        }
+    };
+    
+    Service mySourceService = JavaService {
+        id = "mySource",
+        name = "mySource example",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "MySourceImpl",
+        artifact = "",
+        kind = ServiceKind::SOURCE_SERVICE,
+        traceRcv = TraceKind::TRACE,
+        traceSent = TraceKind::TRACE,        
+        output = {{type=refBy(StringType)}}
+        // TODO parameter
+    };
+    
+    RecordType testType = {
+        name = "testType",
+        fields = {
+            Field {
+                name = "$type",
+                type = refBy(StringType)
+            }, Field {
+                name = "_kip",
+                type = refBy(StringType)
+            }, Field {
+                name = "values",
+                type = refBy(IntegerArrayType)
+            }
+        }
+    };
+    
+    RecordType myConnMachineIn = {
+        path = "/opc/mach/",
+        name = "myConnMachineIn",
+        fields = {
+            Field {
+                name = "dataField",
+                type = refBy(StringType)
+            }, Field {
+                name = "axis",
+                type = refBy(IntegerType)
+            }, Field {
+                name = "cmdField",
+                type = refBy(StringType)
+            }
+        }        
+    };
+
+    RecordType myConnMachineOut = {
+        path = "/opc/mach/",
+        name = "myConnMachineOut",
+        fields = {
+            Field {
+                name = "cmdField",
+                type = refBy(StringType)
+            }, Field {
+                name = "dataField",
+                type = refBy(StringType)
+            }, Field {
+                name = "dataValue",
+                type = refBy(IntegerType)
+            }
+        }        
+    };
+    
+    compound UnitMeta {
+        String unit;
+    }
+    
+    RecordType myConnPltfIn = {
+        name = "myConnPltfIn",
+        fields = {
+            Field {
+                name = "axis",
+                type = refBy(IntegerType),
+                optional = true
+            }, Field {
+                name = "dataField",
+                type = refBy(StringType),
+                optional = true
+            }
+        }        
+    };
+    annotate UnitMeta meta to myConnPltfIn;
+
+    RecordType myConnPltfOut = {
+        name = "myConnPltfOut",
+        fields = {
+            Field {
+                name = "cmdField",
+                type = refBy(StringType),
+                optional = true
+            }
+        }        
+    };
+    
+    OpcUaV1Connector myOpcUaConn = {
+        id = "myOpcConn",
+        name = "myOpcConn example",
+        description = "",
+        ver = "0.1.0",
+        port = 1234, // default localhost
+        
+        input = {{type=refBy(myConnPltfOut)}},
+        output = {{type=refBy(myConnPltfIn)}},
+        inInterface = refBy(myConnMachineIn), 
+        outInterface = refBy(myConnMachineOut),
+        traceRcv = TraceKind::TRACE,
+        traceSent = TraceKind::TRACE,        
+        operations = {
+          FieldAssignmentOperation{field=refBy(myConnPltfIn.fields[0]), 
+            operation=AddDataTranslationOperation{
+                arguments={
+                    DataFieldAccess{field=refBy(myConnMachineOut.fields[2])},
+                    IntegerConstantDataOperation{value=100}}
+            }
+          }
+        }
+    };
+    
+    MqttV3Connector myMqttConn = {
+        id = "myMqttConn",
+        name = "myMqttConnExample",
+        description = "",
+        ver = "0.1.0",
+        port = 4321, // default localhost
+        
+        input = {{type=refBy(StringType)}}, // PRELIMINARY
+        output = {{type=refBy(myConnPltfIn)}},
+        inChannel = "IN",
+        outChannel = "OUT",
+        inInterface = refBy(myConnMachineIn),
+        outInterface = refBy(myConnMachineOut),
+        machineFormatter = TextLineFormatter{separator=","},
+        machineParser = TextLineParser{separator=","},
+        traceRcv = TraceKind::LOG,
+        traceSent = TraceKind::LOG,        
+        operations = {
+          FieldAssignmentOperation{field=refBy(myConnPltfIn.fields[0]), 
+            operation=AddDataTranslationOperation{
+                arguments={
+                    DataFieldAccess{field=refBy(myConnMachineOut.fields[2])},
+                    IntegerConstantDataOperation{value=100}}
+            }
+          }
+        }
+    };
+
+    Service myAnonymizerService = JavaService {
+        id = "myAnonymizer",
+        name = "myAnonymizer example",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "MyAnonymizerImpl",
+        artifact = "",
+        kind = ServiceKind::TRANSFORMATION_SERVICE,
+        traceRcv = TraceKind::LOG,
+        traceSent = TraceKind::LOG,        
+        input = {{type=refBy(StringType)}, {type=refBy(myConnPltfIn)}},
+        output = {{type=refBy(rec1)}}
+    };
+
+    Service myKiService = JavaService {
+        id = "myKi",
+        name = "myKi example",
+        description = "",
+        ver = "0.1.0",
+        asynchronous = false,
+        deployable = true,
+        class = "MyKiImpl",
+        artifact = "",
+        kind = ServiceKind::TRANSFORMATION_SERVICE,
+        traceRcv = TraceKind::TRACE,
+        traceSent = TraceKind::TRACE,        
+        input = {{type=refBy(rec1)}},
+        output = {{type=refBy(StringType)}}
+    };
+
+    Service myReceiverService = JavaService {
+        id = "MyReceiver",
+        name = "MyReceiver",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "MyReceiverImpl",
+        artifact = "",
+        kind = ServiceKind::SINK_SERVICE,
+        input = {{type=refBy(StringType)}}
+    };
+
+    // ------------ application and service nets ------------------
+    
+    Application myApp = {
+        id = "myApp",
+        name = "myApp example old",
+        ver = "0.1.0",
+        description = "",
+        services = {refBy(myMesh)}        
+    };
+    
+    ServiceMesh myMesh = {
+        description = "initial service net",
+        sources = {refBy(mySource), refBy(myOpcConn), refBy(myMqttC)}
+    };
+    
+    MeshSource myOpcConn = {
+       impl = refBy(myOpcUaConn),
+       next = {refBy(myOpcConnMyAnonymizer)}
+    };
+
+    MeshConnector myOpcConnMyAnonymizer = {
+        name = "MyOpcConn->MyAnonymizer",
+        next = refBy(myAnonymizer)
+    };
+
+    MeshSource myMqttC = {
+       impl = refBy(myMqttConn),
+       next = {refBy(myMqttConnMyAnonymizer)}
+    };
+    
+    MeshConnector myMqttConnMyAnonymizer = {
+        name = "MyMqttConn->MyAnonymizer",
+        next = refBy(myAnonymizer)
+    };
+
+    MeshSource mySource = {
+        impl = refBy(mySourceService),
+        next = {refBy(myConnMySourceMyAnonymizer)}
+    };
+    
+    MeshConnector myConnMySourceMyAnonymizer = {
+        name = "MySource->MyAnonymizer",
+        next = refBy(myAnonymizer)
+    };
+
+    MeshProcessor myAnonymizer = {
+        impl = refBy(myAnonymizerService),
+        next = {refBy(myConnMyAnonymizerMyKi)}
+    };
+
+    MeshConnector myConnMyAnonymizerMyKi = {
+        name = "MyAnonymizer->MyKi",
+        next = refBy(myKi)
+    };
+
+    MeshProcessor myKi = {
+        impl = refBy(myKiService), 
+        next = {refBy(myConnMyKiMyReceiver)}
+    };
+
+    MeshConnector myConnMyKiMyReceiver = {
+        name = "MyKi->MyReceiver",
+        next = refBy(myReceiver)
+    };
+
+    MeshSink myReceiver = {
+        impl = refBy(myReceiverService)
+    };
+
+    // ---------- generation setup ------------
+    
+    sharedInterfaces = false;
+    // default sharedArtifact, not used in testing
+
+    // ------------ freezing ------------------
+    
+    freeze {
+        sharedInterfaces;
+        sharedArtifact;
+        .; // every variable declared in this project
+    } but (f|f.bindingTime >= BindingTime.runtimeMon);
+
+}

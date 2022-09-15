@@ -1,0 +1,835 @@
+import JavaBasics;
+import JavaMapping;
+import Basics;
+import MeshBasics;
+
+// TODO services, dynamic; similar Kodex
+import Rtsa;
+
+@advice(IIPEcosphere)
+vilScript IIPEcosphere (Project source, Configuration config, Project target) {
+
+    // preliminary!!! make it language-generic
+
+    // java packages, turned to paths below
+    String javaDatatypesPackage = "iip.datatypes";
+    String javaSerializersPackage = "iip.serializers";
+    String javaInterfacesPackage = "iip.interfaces";
+    String javaImplPackage = "iip.impl";
+    String javaStubsPackage = "iip.stubs";
+    String javaNodesPackage = "iip.nodes";
+    String dfltMain="de.iip_ecosphere.platform.support.LifecycleHandler$"+"WaitingStarter";
+    String mvnProjectBuildDir = "$" + "{project.build.directory}"; // escaping fails in some cases, safe choice
+    String mvnProjectPySrcDir = "$" + "{project.basedir}/src/main/python";
+
+    Path ecsRuntimeRoot = "${target}/ecsRuntime";
+    Path serviceMgrRoot = "${target}/serviceMgr";
+    Path ecsServiceMgrRoot = "${target}/ecsServiceMgr";
+    Path platformRoot = "${target}/platform";
+    Path monitoringRoot = "${target}/monitoring";
+    Path mgtUiRoot = "${target}/mgtUi";
+    Path commonRoot = "${target}/common";
+    Path artifactsRoot = "${target}/artifacts";
+    Path brokerRoot = "${target}/broker";
+    String assemblyRel = "src/main/assembly";
+    String serviceArtifactsRel = "src/main/serviceArtifacts";
+    
+    Boolean tests = false;
+    Boolean mvnUpdate = false;
+    
+    main(Project source, Configuration config, Project target) = {
+        generatePlatform(source, config, target); // first for container
+        generateApps(source, config, target);
+    }
+    
+    // called from Platform Instantiator, don't change signature
+    mainCli(Project source, Configuration config, Project target) = {
+        tests = false;
+        generatePlatform(source, config, target); // first for container
+        generateApps(source, config, target);
+    }
+
+    // ------------------------------------------ generating apps ----------------------------------------
+
+    // called from tests/platform instantiator, don't change signature
+    generateInterfaces(Project source, Configuration config, Project target) = {
+        generateApps(source, config, target, false, false);
+    }
+
+    // called from tests/platform instantiator, don't change signature
+    generateApps(Project source, Configuration config, Project target) = {
+        generateApps(source, config, target, true, false);
+    }
+
+    // called from tests/platform instantiator, don't change signature
+    generateAppsNoDeps(Project source, Configuration config, Project target) = {
+        generateApps(source, config, target, true, true);
+    }
+    
+    protected generateApps(Project source, Configuration config, Project target, Boolean apps, Boolean noDeps) = {
+        IIPEcosphere cfg = config;
+        setOf(RecordType) recordTypes = RecordType.allInstances();
+        setOf(Application) applications = Application.allInstances();
+        
+        setOf(String) javaSerializers = {};
+        setOf(String) artifacts = {};
+        if (cfg.sharedInterfaces) {
+            generateSharedInterfaces(config, target, javaSerializers, artifacts);
+        }
+        
+        for (Application a : applications) {
+            String appName = getAppMvnName(a);
+            Path appRoot = "${target}/${appName}";
+            appRoot.mkdir();
+            Path javaSrc = "${appRoot}/src/main/java";
+            Path javaTestSrc = "${appRoot}/src/test/java";
+            Path pySrc = "${appRoot}/src/main/python";
+            Path resourcesSrc = "${appRoot}/src/main/resources";
+            Path assemblySrc = "${appRoot}/${assemblyRel}";
+            Path javaDatatypesSrc = "${javaSrc}/${toPath(javaDatatypesPackage)}";
+            Path javaSerializersSrc = "${javaSrc}/${toPath(javaSerializersPackage)}";
+            Path javaInterfacesSrc = "${javaSrc}/${toPath(javaInterfacesPackage)}";
+            Path javaStubsSrc = "${javaSrc}/${toPath(javaStubsPackage)}";
+            Path javaNodesSrc = "${javaSrc}/${toPath(javaNodesPackage)}";
+            Path javaNodesTestSrc = "${javaTestSrc}/${toPath(javaNodesPackage)}";
+
+            assemblySrc.mkdir();
+            // generate data classes and serializers
+            if (not(cfg.sharedInterfaces)) {
+                javaDatatypesSrc.mkdir();
+                javaSerializersSrc.mkdir();
+                generateEnums(javaDatatypesSrc, pySrc);    
+                for (RecordType r : recordTypes) {
+                    // generate for all languages and according to serializer settings
+                    String clsName = asTypeName(r.name);
+                    vilTemplateProcessor("JavaType", config, "${javaDatatypesSrc}/${clsName}.java", type=r, 
+                        pkg=javaDatatypesPackage, interface=false, sharedInterfaces=false, impl=true);
+                    vilTemplateProcessor("JavaJsonSerializer", config, "${javaSerializersSrc}/${clsName}Serializer.java", 
+                        type=r, pkg=javaSerializersPackage, typePkg=javaDatatypesPackage, sharedInterfaces=false);
+                    javaSerializers.add("${javaSerializersPackage}.${clsName}Serializer");
+                    vilTemplateProcessor("PythonType", config, "${pySrc}/datatypes/${clsName}.py", type=r, interface=false, 
+                        sharedInterfaces=false);
+                    vilTemplateProcessor("PythonJsonSerializer", config, "${pySrc}/serializers/${clsName}Serializer.py", 
+                        type=r, sharedInterfaces=false);
+                };
+            }
+
+            if (apps) {
+                // generate service classes and service integration
+                setOf(String) bins = {}; 
+                setOf(String) assemblies = {}; 
+                setOf(String) resources = {}; 
+                sequenceOf(MeshElement) elements = {};
+                artifacts.add(a.artifact);
+                mapOf(MeshElement, setOf(MeshConnector)) mappedMesh = {};
+                // TODO filter according to assigned resources, allow for later instantiation
+                for (ServiceMesh n : a.services) {
+                    setOf(MeshElement) nodes = n.sources->closure(MeshElement e|nextMeshNodes(e, mappedMesh));
+                    setOf(MeshElement) nodes2 = {}; // just a copy, it seems that using the iterable below fails
+                    nodes2 = nodes2.including(nodes);
+                    for (MeshElement no : nodes) {
+                        String clsName = asTypeName(no.name);
+                        generateServiceElements(appRoot, config, artifacts, no, no.impl);
+                        // connector gen references connector impl, in case of non-specific connector may not yet be there
+                        Boolean genElt = not(noDeps) or (noDeps and not(no.impl.isTypeOf(Connector)));
+                        if (genElt) {
+                            vilTemplateProcessor("JavaSpringCloudStreamMeshElement", config, 
+                                "${javaNodesSrc}/${clsName}.java", 
+                                elt=no, pkg=javaNodesPackage, app=a, sharedInterfaces=cfg.sharedInterfaces, 
+                                familyInterface="", familyMember=no.impl, nodes=nodes2);
+                        }
+                        if (not(noDeps)) {
+                            vilTemplateProcessor("JavaSpringCloudStreamMeshElementTest", config, 
+                                "${javaNodesTestSrc}/${clsName}Test.java", 
+                                elt=no, pkg=javaNodesPackage, app=a, sharedInterfaces=cfg.sharedInterfaces, 
+                                familyInterface="", familyMember=no.impl, nodes=nodes2, serializers=javaSerializers);
+                        }
+                        setOf(Service) mbs = {};
+                        generateNestedServices(no, no.impl, javaNodesSrc, javaNodesTestSrc, clsName, javaNodesPackage, 
+                            a, artifacts, noDeps, mbs, nodes2, javaSerializers);
+                        elements.add(no);
+                        generateServiceResources(no, no.impl, appRoot, bins, assemblies, resources, artifacts, noDeps);
+                        for (Service m: mbs) {
+                            generateServiceResources(no, m, appRoot, bins, assemblies, resources, artifacts, noDeps);
+                        }
+                    };
+                };
+                elements = elements->sortedBy(n|n.name).toSequence(); // for testing
+                
+                vilTemplateProcessor("JavaSpringCloudStreamStarter", config, "${javaSrc}/iip/Starter.java", pkg="iip", serializers=javaSerializers);
+    
+                vilTemplateProcessor("JavaSpringCloudStreamYaml", config, "${resourcesSrc}/application.yml", mappedMesh=mappedMesh, nodes=elements, app=a);
+                vilTemplateProcessor("SpringCloudStreamDeploymentDescriptor", config, "${resourcesSrc}/deployment.yml", app=a, elements=elements);
+                vilTemplateProcessor("JavaSpringCloudStreamAssembly", config, "${assemblySrc}/spring.xml");
+                assemblies.add("spring|${assemblyRel}/spring.xml|package|${mvnProjectBuildDir}");
+                vilTemplateProcessor("JavaLogbackXml", config, "${resourcesSrc}/logback.xml");
+    
+                if (not(cfg.sharedInterfaces)) {
+                    vilTemplateProcessor("JavaInterfaceAssembly", config, "${assemblySrc}/javaInterfaces.xml");
+                    assemblies.add("interfaces|${assemblyRel}/javaInterfaces.xml|package|${mvnProjectBuildDir}");
+                    vilTemplateProcessor("PythonAssembly", config, "${assemblySrc}/pythonInterfaces.xml", withServices=false, dependency="");
+                    assemblies.add("python|${assemblyRel}/pythonInterfaces.xml|package|${mvnProjectBuildDir}");
+                }
+                
+                // partition according to container strategy
+                String appVersion = getAppMvnVersion(a);
+                vilTemplateProcessor("AppMvn", config, "${appRoot}/pom.xml", artifacts=artifacts, bins=bins, assemblies=assemblies, resources=resources, starterCls="iip.Starter", appName=appName, appVersion=appVersion, appDescription=a.description, tests=tests);
+                vilTemplateProcessor("AppAnt", config, "${appRoot}/build-jk.xml", artifactPrefix=appName, srvFolderName="IIP-apps-${appName}");
+                
+                //maven("${appRoot}", mvnUpdate);
+
+                generateServiceContainer(appRoot, config, a, elements);
+            }
+            
+            Boolean withTemplate = true; // preliminary
+            if (withTemplate) {
+                appRoot = "${target}/templates/eclipse/impl.${appName}";
+                appRoot.mkdir();
+                javaSrc = "${appRoot}/src/main/java";
+                javaSrc.mkdir();
+                javaTestSrc = "${appRoot}/src/test/java";
+                javaTestSrc.mkdir();
+                pySrc = "${appRoot}/src/main/python";
+                resourcesSrc = "${appRoot}/src/main/resources";
+                resourcesSrc.mkdir();
+                Path testResourcesSrc = "${appRoot}/src/test/resources";
+                testResourcesSrc.mkdir();
+                
+                vilTemplateProcessor("TemplatesEclipseProject", config, "${appRoot}/.project", appName="impl." + appName);
+                vilTemplateProcessor("TemplatesEclipseClasspath", config, "${appRoot}/.classpath", appName="impl." + appName);
+                vilTemplateProcessor("TemplatesEclipseGitignore", config, "${appRoot}/.gitignore", appName=appName);
+
+                setOf(String) assemblies = {}; 
+                mapOf(MeshElement, setOf(MeshConnector)) mappedMesh = {};
+                sequenceOf(MeshElement) elements = {};
+                for (ServiceMesh n : a.services) {
+                    setOf(MeshElement) nodes = n.sources->closure(MeshElement e|nextMeshNodes(e, mappedMesh));
+                    for (MeshElement no : nodes) {
+                        generateTemplateElements(appRoot, config, no, no.impl, assemblies);
+                        elements.add(no);
+                    }
+                }
+                elements = elements->sortedBy(n|n.name).toSequence(); // for testing
+                vilTemplateProcessor("TemplatesEclipseReadme", config, "${appRoot}/README.md", appName="impl." + appName, nodes=elements);
+
+                String appVersion = getAppMvnVersion(a);
+                vilTemplateProcessor("AppMvnTest", config, "${appRoot}/pom.xml", assemblies=assemblies, nodes=elements, appName=appName, appVersion=appVersion, appDescription="Implementation of ${a.name}", tests=tests);
+                vilTemplateProcessor("TemplatesIdentityStoreYaml", config, "${resourcesSrc}/identityStore.yml", appName=appName);
+                
+                zip(appRoot, appRoot, "${target}/templates/eclipse/impl.${appName}.zip");
+            }
+        };
+    }
+
+    // ------------------------------------------ generating apps: generating template code -----------------------------------
+    
+    generateTemplateElements(Path appRoot, Configuration config, MeshElement no, ServiceBase service, setOf(String) assemblies) = {
+    }
+
+    generateTemplateElements(Path appRoot, Configuration config, MeshElement no, CompleteService service, setOf(String) assemblies) = {
+        // do nothing, everything is here already generically in place
+    }
+
+    generateTemplateElements(Path appRoot, Configuration config, MeshElement no, JavaService service, setOf(String) assemblies) = {
+        if (service.class <> "") {
+            JavaPath jp = service.class;
+            Path p = appRoot + "/src/main/java/" + jp.getPathSegments().toPath();
+            p.mkdir();
+            vilTemplateProcessor("JavaMeshElementTemplate", config, "${p}/${jp.getName()}.java", elt=no, pkg=jp.getPathSegments(), name=jp.getName());
+            if (needsDataUnitJson(no.impl)) {
+                Path testResourcesSrc = "${appRoot}/src/test/resources";
+                vilTemplateProcessor("TemplatesTestDataJson", config, "${testResourcesSrc}/testData-${getClsName(no)}.json.tmpl", elt=no);
+            }
+        }
+    }
+
+    generateTemplateElements(Path appRoot, Configuration config, MeshElement no, PythonService service, setOf(String) assemblies) = {
+        String clsName = asTypeName(no.name);
+        vilTemplateProcessor("PythonMeshElementTemplate", config, "${appRoot}/src/main/python/services/${clsName}.py", elt=no, pkg="services");
+        Path assemblyPath = "${appRoot}/src/main/assembly";
+        assemblyPath.mkdir();
+        vilTemplateProcessor("PythonAssemblyTemplate", config, "${assemblyPath}/python.xml");
+        assemblies.add("python|${assemblyPath}/python.xml|package|${mvnProjectBuildDir}/classes|");
+    }
+    
+    // ------------------------------------------ generating apps: generating service-specific code artifacts -----------------------------------
+    
+    // dispatch basis
+    generateServiceElements(Path appRoot, Configuration config, setOf(String) artifacts, MeshElement no, ServiceBase service) = {
+        generateJavaServiceElements(appRoot, config, artifacts, no, service);
+    }
+    
+    generateJavaServiceElements(Path appRoot, Configuration config, setOf(String) artifacts, MeshElement no, ServiceBase service) = {
+        IIPEcosphere cfg = config;
+        String clsName = asTypeName(no.name);
+        Path javaSrc = "${appRoot}/src/main/java";
+        Path javaInterfacesSrc = "${javaSrc}/${toPath(javaInterfacesPackage)}";
+        Path javaStubsSrc = "${javaSrc}/${toPath(javaStubsPackage)}";
+        if (not(cfg.sharedInterfaces)) {
+            vilTemplateProcessor("JavaMeshElementInterface", config, "${javaInterfacesSrc}/${clsName}Service.java", elt=no, 
+                pkg=javaInterfacesPackage);
+            vilTemplateProcessor("JavaMeshElementStub", config, "${javaStubsSrc}/${clsName}Stub.java", elt=no, 
+                pkg=javaStubsPackage);
+        } else {
+            vilTemplateProcessor("JavaServiceStub", config, "${javaStubsSrc}/${clsName}Stub.java", service=service, 
+                pkg=javaStubsPackage);
+        }
+    }
+    
+    generateServiceElements(Path appRoot, Configuration config, setOf(String) artifacts, MeshElement no, CompleteService service) = {
+        // do nothing, everything is here already generically in place
+    }
+    
+    // Python (preliminary in here)
+    generateServiceElements(Path appRoot, Configuration config, setOf(String) artifacts, MeshElement no, PythonService service) = {
+        IIPEcosphere cfg = config;
+        String clsName = asTypeName(no.name);
+        Path pySrc = "${appRoot}/src/main/python";
+        Path pyInterfacesSrc = "${pySrc}/interfaces"; // default name of ServiceEnvironment.py
+        if (not(cfg.sharedInterfaces)) {
+            vilTemplateProcessor("PythonMeshElementInterface", config, "${pyInterfacesSrc}/${clsName}Interface.py", 
+                elt=no, pkg="interfaces");
+        }
+    }
+
+    generateServiceElements(Path appRoot, Configuration config, setOf(String) artifacts, MeshElement no, Connector conn) = {
+        //generateJavaServiceElements(appRoot, config, artifacts, no, conn);
+    }
+
+    generateServiceElements(Path appRoot, Configuration config, setOf(String) artifacts, MeshElement no, ChannelConnector conn) = {
+        //generateJavaServiceElements(appRoot, config, artifacts, no, conn);
+        IIPEcosphere cfg = config;
+        Path javaSrc = "${appRoot}/src/main/java";
+        Path javaNodesSrc = "${javaSrc}/${toPath(javaNodesPackage)}";
+        RecordType machineInIf = conn.inInterface;
+        RecordType machineOutIf = conn.outInterface;
+        DataType platfIn = firstType(conn.output);
+        DataType platfOut = firstType(conn.input);
+        Boolean sharedIf = cfg.sharedInterfaces;
+        String connName = asTypeName(conn.name);
+        
+        if (isConfigured(conn.machineParser) and conn.machineParser <> null) {
+            String parserName = connName + "ParserSerializer";
+            vilTemplateProcessor("JavaConnectorSerializer", config, "${javaNodesSrc}/${parserName}.java", imType=machineOutIf,
+                pltfType=platfIn, pkg=javaNodesPackage, typePkg=javaDatatypesPackage, sharedInterfaces=sharedIf, impl=false, 
+                formatter=null, parser=conn.machineParser, className=parserName, assng=conn.operations);
+            determineArtifacts(artifacts, conn.machineParser);
+        }
+
+        if (isConfigured(conn.machineFormatter) and conn.machineFormatter <> null) {
+            String formatterName = connName + "FormatterSerializer";
+            vilTemplateProcessor("JavaConnectorSerializer", config, "${javaNodesSrc}/${formatterName}.java", imType=machineInIf,
+                pltfType=platfOut, pkg=javaNodesPackage, typePkg=javaDatatypesPackage, sharedInterfaces=sharedIf, impl=false, 
+                formatter=conn.machineFormatter, parser=null, className=formatterName, assng=conn.operations);
+            determineArtifacts(artifacts, conn.machineFormatter);
+        }
+    }
+    
+    determineArtifacts(setOf(String) artifacts, MachineFormatter formatter) = {
+    }
+
+    determineArtifacts(setOf(String) artifacts, JavaMachineFormatter formatter) = {
+        if (isDefined(formatter.artifact) and formatter.artifact.length() > 0) {
+            artifacts.add(formatter.artifact);
+        }
+    }
+
+    determineArtifacts(setOf(String) artifacts, MachineParser parser) = {
+    }
+
+    determineArtifacts(setOf(String) artifacts, JavaMachineParser parser) = {
+        if (isDefined(parser.artifact) and parser.artifact.length() > 0) {
+            artifacts.add(parser.artifact);
+        }
+    }
+    
+    // ------------------------------------------ generating apps: generating app-specific containers --------------------------------------------
+    
+    // initial, depends on container strategies
+    generateServiceContainer(Path appRoot, Configuration config, Application a, sequenceOf(MeshElement) elements) = {
+    
+        if (a.createContainer) {
+            
+            // Checking if there is any PythonService in app
+            Integer isPythonService = 0;        // 0 - false, 1 - true
+            for (MeshElement elem : elements) {
+                Service service = elem.impl;
+                if (service.isTypeOf(PythonService)) {
+                    isPythonService = 1;
+                }
+            }
+            
+            setOf(EcsDevice) devices = EcsDevice.allInstances();
+            for (EcsDevice d : devices) {
+            
+				if (d.containerVariant == "1_joined") {
+					// Dockerfile
+					if (isPythonService == 0) {
+						// JAVA         
+						Path df = "${appRoot}/../Dockerfile.txt";
+						vilTemplateProcessor("Dockerfile_2", config, df, elements=elements, app=a);
+						df.rename("Dockerfile");
+					} else {
+						// JAVA & PYTHON
+						Path req = "${appRoot}/../requirements.txt";
+						vilTemplateProcessor("PythonReq", config, req, elements=elements);              
+
+						Path df = "${appRoot}/../Dockerfile.txt";
+						vilTemplateProcessor("DockerfilePy_2", config, df, elements=elements, app=a);
+						df.rename("Dockerfile");
+					}
+
+					// Create image 
+					Path b = "${appRoot}/../";
+					Path d = "${appRoot}/../Dockerfile";
+					String imageId = dockerBuildImage(b, d, "variante_1_joined/image:01");
+
+					// Remove image
+					dockerRemoveImage(imageId);
+				}	
+
+				if (d.containerVariant == "1_separate") {
+					// Dockerfile
+					if (isPythonService == 0) {
+						// JAVA         
+						Path df = "${appRoot}/../Dockerfile.txt";
+						vilTemplateProcessor("Dockerfile_1", config, df, elements=elements, app=a);
+						df.rename("Dockerfile");        
+					} else {
+						// JAVA & PYTHON
+						Path req = "${appRoot}/../requirements.txt";
+						vilTemplateProcessor("PythonReq", config, req, elements=elements);              
+
+						Path df = "${appRoot}/../Dockerfile.txt";
+						vilTemplateProcessor("DockerfilePy_1", config, df, elements=elements, app=a);
+						df.rename("Dockerfile");
+					}
+
+					// Wrapper-Skript 
+					Path ws = "${appRoot}/../wrapper_script.sh";
+					vilTemplateProcessor("WrapperScript_1", config, ws); 
+
+					// Create image 
+					Path b = "${appRoot}/../";
+					Path d = "${appRoot}/../Dockerfile";
+					String imageId = dockerBuildImage(b, d, "variante_1_separate/image:01");
+
+					// Remove image
+					dockerRemoveImage(imageId);
+				}	
+
+				if (d.containerVariant == "2") {
+					// Container with ECS
+					Path df = "${appRoot}/../Dockerfile.txt";
+					vilTemplateProcessor("Dockerfile_3_ecs", config, df, elements=elements, app=a);
+					df.rename("ecs.Dockerfile");
+					Path b = "${appRoot}/../";
+					Path d = "${appRoot}/../ecs.Dockerfile";
+					String ecs_imageId = dockerBuildImage(b, d, "variante_2/ecs");
+
+					// Container with ServiceMgr and App
+					// Dockerfile
+					if (isPythonService == 0) {
+						// JAVA         
+						Path df = "${appRoot}/../Dockerfile.txt";
+						vilTemplateProcessor("Dockerfile_3_app", config, df, elements=elements, app=a);
+						df.rename("app.Dockerfile");      
+					 } else {
+						// JAVA & PYTHON
+						Path req = "${appRoot}/../requirements.txt";
+						vilTemplateProcessor("PythonReq", config, req, elements=elements);              
+
+						Path df2 = "${appRoot}/../app.Dockerfile.txt";
+						vilTemplateProcessor("DockerfilePy_3_app", config, df2, elements=elements, app=a);
+						df2.rename("app.Dockerfile");
+					 }
+
+					 // Create image 
+					 Path b2 = "${appRoot}/../";
+					 Path d2 = "${appRoot}/../app.Dockerfile";
+					 String app_imageId = dockerBuildImage(b2, d2, "variante_2/app");  
+
+					 // Remove images
+					 dockerRemoveImage(ecs_imageId);
+					 dockerRemoveImage(app_imageId);
+		    	}
+	    	}
+    	}
+    }
+    
+    // ------------------------------------------ generating apps: nested, e.g., family ----------------------------------------------------------
+
+    // dispatch basis
+    generateNestedServices(MeshElement no, ServiceBase family, Path javaNodesSrc, Path javaNodesTestSrc, String clsName, 
+        String javaNodesPackage, Application a, setOf(String) artifacts, Boolean noDeps, setOf(Service) mbs, 
+        setOf(MeshElement) nodes, setOf(String) javaSerializers) = {
+    }
+
+    generateNestedServices(MeshElement no, ServiceFamily family, Path javaNodesSrc, Path javaNodesTestSrc, String clsName, 
+        String javaNodesPackage, Application a, setOf(String) artifacts, Boolean noDeps, setOf(Service) mbs, 
+        setOf(MeshElement) nodes, setOf(String) javaSerializers) = {
+        
+        IIPEcosphere cfg = config;
+        String familyInterface = familyInterfaceName(clsName);
+        vilTemplateProcessor("JavaSpringCloudFamilyInterface", config, "${javaNodesSrc}/${familyInterface}.java", 
+            elt=no, pkg=javaNodesPackage, app=a);
+        Boolean sharedIf = cfg.sharedInterfaces;
+        for (Service m: family.members) {
+            String memberClsName = familyMemberName(asTypeName(m.name), familyInterface);
+            vilTemplateProcessor("JavaSpringCloudStreamMeshElement", config, "${javaNodesSrc}/${memberClsName}.java", 
+                 elt=no, pkg=javaNodesPackage, app=a, sharedInterfaces=sharedIf, familyInterface=familyInterface, familyMember=m, nodes=nodes);
+            /*if (not(noDeps)) {
+                vilTemplateProcessor("JavaSpringCloudStreamMeshElementTest", config, "${javaNodesTestSrc}/${memberClsName}Test.java", 
+                     elt=no, pkg=javaNodesPackage, app=a, sharedInterfaces=sharedIf, familyInterface=familyInterface, familyMember=m, 
+                     nodes=nodes, serializers=javaSerializers);
+            }*/
+            mbs.add(m);
+        }
+        if (not(noDeps) and isDefined(family.selector) and family.selector <> null) {
+            artifacts.add(getSelectorArtifact(family.selector));
+        }
+    }
+
+    // ------------------------------------------ generating apps: generating/handling services resources ----------------------------------------
+
+    // dispatch basis    
+    generateServiceResources(MeshElement no, ServiceBase base, Path appRoot, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, setOf(String) artifacts, Boolean noDeps) = {
+        if (not(noDeps)) {
+            artifacts.add(getArtifact(no));
+        }
+    }
+
+    generateServiceResources(MeshElement no, Connector base, Path appRoot, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, setOf(String) artifacts, Boolean noDeps) = {
+        artifacts.add(getArtifact(base)); // connectors are (currently) platform-supplied
+    }
+
+    // RTSA (preliminary in here)
+    generateServiceResources(MeshElement no, RtsaService service, Path appRoot, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, setOf(String) artifacts, Boolean noDeps) = {
+        resources.add(rtsaResources()+"|"+rtsaBin(service));
+        resources.add(rtsaResources()+"|"+rtsaInstance(service));
+        artifacts.add(getArtifact(service));
+    }
+    
+    // KODEX (preliminary in here)    
+    generateServiceResources(MeshElement no, KodexService service, Path appRoot, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, setOf(String) artifacts, Boolean noDeps) = {
+        IIPEcosphere cfg = config;
+        String serviceFolderName = toFolderName(no.impl.id);
+        String kodexServiceFolderName = "kodex_" + serviceFolderName;
+        Path path = "${appRoot}/${serviceArtifactsRel}";
+        path.mkdir();
+        vilTemplateProcessor("KodexActions", config, "${path}/actions.yml", elt=no);
+        vilTemplateProcessor("KodexApi", config, "${path}/api.yml", elt=no);
+        vilTemplateProcessor("KodexData", config, "${path}/data.yml", elt=no);
+        vilTemplateProcessor("KodexArtifactsAssembly", config, "${appRoot}/${assemblyRel}/${kodexServiceFolderName}.xml", id=kodexServiceFolderName, dir="${path}");
+        bins.add("de.iip-ecosphere.platform:security.services.kodex:" + cfg.iipVer+"|bin|${mvnProjectBuildDir}/classes|kodex.zip|zip|copy");
+        assemblies.add("${kodexServiceFolderName}|${assemblyRel}/${kodexServiceFolderName}.xml|prepare-package|${mvnProjectBuildDir}/classes|${kodexServiceFolderName}");
+        artifacts.add(getArtifact(service));
+    }
+
+    // Python (preliminary in here); copy integratable sources from the artifact    
+    generateServiceResources(MeshElement no, PythonService service, Path appRoot, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, setOf(String) artifacts, Boolean noDeps) = {
+        IIPEcosphere cfg = config; // from global
+        String serviceFolderName = toFolderName(service.id);
+        Path assemblySrc = "${appRoot}/${assemblyRel}";
+        sequenceOf(String) tmp = service.artifact.split(":");
+        String artifact = tmp[0]+":"+tmp[1]+":zip:python:"+tmp[2];
+        if (not(noDeps)) {
+            if (cfg.sharedInterfaces) {
+                bins.add(cfg.sharedArtifact+"|python|${mvnProjectPySrcDir}|python.zip|zip|unpack");
+                bins.add(tmp[0]+":"+tmp[1]+":"+tmp[2]+"|python|${mvnProjectPySrcDir}|python.zip|zip|unpack");
+            }
+            vilTemplateProcessor("PythonAssembly", config, "${assemblySrc}/python_${serviceFolderName}.xml", withServices=true, dependency=artifact);
+            if (not(noDeps)) {
+                assemblies.add("python_${serviceFolderName}|${assemblyRel}/python_${serviceFolderName}.xml|prepare-package|${mvnProjectBuildDir}/classes|python_${serviceFolderName}");
+            }
+            artifacts.add(getArtifact(service));
+        }
+    }
+    
+    // ------------------------------------------- generating shared interfaces/classes ------------------------------------------------------------
+    
+    generateSharedInterfaces(Configuration config, Project target, setOf(String) javaSerializers, setOf(String) artifacts) = {
+        IIPEcosphere cfg = config;
+        Path appRoot = "${target}/ApplicationInterfaces";
+        appRoot.mkdir();
+
+        setOf(RecordType) recordTypes = RecordType.allInstances();
+        setOf(ServiceBase) serviceTypes = ServiceBase.allInstances();
+        Path javaSrc = "${appRoot}/src/main/java";
+        Path pySrc = "${appRoot}/src/main/python";
+        Path resourcesSrc = "${appRoot}/src/main/resources";
+        Path assemblySrc = "${appRoot}/${assemblyRel}";
+        Path javaDatatypesSrc = "${javaSrc}/${toPath(javaDatatypesPackage)}";
+        Path javaSerializersSrc = "${javaSrc}/${toPath(javaSerializersPackage)}";
+        Path javaInterfacesSrc = "${javaSrc}/${toPath(javaInterfacesPackage)}";
+
+        javaDatatypesSrc.mkdir();
+        javaSerializersSrc.mkdir();
+        assemblySrc.mkdir();
+        
+        setOf(String) bins = {}; 
+        setOf(String) assemblies = {}; 
+        setOf(String) resources = {}; 
+        sequenceOf(MeshElement) elements = {};
+    
+        generateEnums(javaDatatypesSrc, pySrc);    
+        for (RecordType r : recordTypes) {
+            // generate for all languages and according to serializer settings
+            String clsName = asTypeName(r.name);
+            vilTemplateProcessor("JavaType", config, "${javaDatatypesSrc}/${clsName}.java", type=r, 
+                pkg=javaDatatypesPackage, interface=true, sharedInterfaces=true, impl=true);
+            vilTemplateProcessor("JavaType", config, "${javaDatatypesSrc}/${clsName}Impl.java", type=r, 
+                pkg=javaDatatypesPackage, interface=false, sharedInterfaces=true, impl=true);
+            vilTemplateProcessor("JavaJsonSerializer", config, "${javaSerializersSrc}/${clsName}Serializer.java", type=r, 
+                pkg=javaSerializersPackage, typePkg=javaDatatypesPackage, sharedInterfaces=true, impl=false);
+            javaSerializers.add("${javaSerializersPackage}.${clsName}Serializer");
+            vilTemplateProcessor("JavaJsonSerializer", config, "${javaSerializersSrc}/${clsName}ImplSerializer.java", 
+                type=r, pkg=javaSerializersPackage, typePkg=javaDatatypesPackage, sharedInterfaces=true, impl=true);
+            javaSerializers.add("${javaSerializersPackage}.${clsName}ImplSerializer");
+            vilTemplateProcessor("PythonType", config, "${pySrc}/datatypes/${clsName}.py", type=r, interface=true, 
+                sharedInterfaces=true);
+            vilTemplateProcessor("PythonType", config, "${pySrc}/datatypes/${clsName}Impl.py", type=r, interface=false, 
+                sharedInterfaces=true);
+            vilTemplateProcessor("PythonJsonSerializer", config, "${pySrc}/serializers/${clsName}Serializer.py", type=r, 
+                sharedInterfaces=true);
+        };
+        
+        for (ServiceBase s : serviceTypes) {
+            generateServiceInterfaces(appRoot, config, s);
+        }
+        
+        //vilTemplateProcessor("JavaInterfaceAssembly", config, "${assemblySrc}/javaInterfaces.xml");
+        //assemblies.add("interfaces|${assemblyRel}/javaInterfaces.xml|package|${mvnProjectBuildDir}");
+        vilTemplateProcessor("PythonAssembly", config, "${assemblySrc}/pythonInterfaces.xml", withServices=false, dependency="");
+        assemblies.add("python|${assemblyRel}/pythonInterfaces.xml|package|${mvnProjectBuildDir}");
+            
+        // partition according to container strategy
+        
+        sequenceOf(String) artList = cfg.sharedArtifact.split(":");
+        vilTemplateProcessor("AppMvn", config, "${appRoot}/pom.xml", artifacts=artifacts, bins=bins, assemblies=assemblies, resources=resources, starterCls="iip.Starter", 
+            appName=artList[1], appVersion=artList[2], appDescription="Shared application interfaces", tests=tests, springPackaging=false, groupId=artList[0]);
+        vilTemplateProcessor("AppAnt", config, "${appRoot}/build-jk.xml", artifactPrefix=artList[1], srvFolderName="IIP-apps-${artList[1]}");
+            
+        //maven("${appRoot}", mvnUpdate);
+
+        artifacts.add(cfg.sharedArtifact);
+    }
+    
+    generateEnums(Path javaDatatypesSrc, Path pySrc) = {
+        setOf(EnumType) enumTypes = EnumType.allInstances();
+        for (EnumType e: enumTypes) {
+            String clsName = asTypeName(e.name);
+            vilTemplateProcessor("JavaEnum", config, "${javaDatatypesSrc}/${clsName}.java", type=e, 
+                pkg=javaDatatypesPackage);
+            vilTemplateProcessor("PythonEnum", config, "${pySrc}/datatypes/${clsName}.py", type=e);
+        }
+    }
+    
+    // ------------------------------------------ gen interfaces: service interfaces ---------------------------------------------------------
+
+    // dispatch basis
+    generateServiceInterfaces(Path appRoot, Configuration config, ServiceBase service) = {
+        String clsName = asTypeName(service.name);
+        Path javaSrc = "${appRoot}/src/main/java";
+        Path javaInterfacesSrc = "${javaSrc}/${toPath(javaInterfacesPackage)}";
+        Path javaServiceImplSrc = "${javaSrc}/${toPath(javaImplPackage)}";
+        vilTemplateProcessor("JavaServiceInterface", config, "${javaInterfacesSrc}/${clsName}Interface.java", service=service, pkg=javaInterfacesPackage);
+        vilTemplateProcessor("JavaServiceBaseImpl", config, "${javaServiceImplSrc}/${clsName}Impl.java", service=service, pkg=javaImplPackage);
+    }
+
+    generateServiceInterfaces(Path appRoot, Configuration config, Connector connector) = {
+        // do nothing, connectors have different interfaces
+    }
+    
+    generateServiceInterfaces(Path appRoot, Configuration config, CompleteService service) = {
+        // do nothing, everything is here already generically in place
+    }
+    
+    // Python (preliminary in here)
+    generateServiceInterfaces(Path appRoot, Configuration config, PythonService service) = {
+        String clsName = asTypeName(service.name);
+        Path pySrc = "${appRoot}/src/main/python";
+        Path pyInterfacesSrc = "${pySrc}/interfaces"; // default name of ServiceEnvironment.py
+        vilTemplateProcessor("PythonServiceInterface", config, "${pyInterfacesSrc}/${clsName}Interface.py", service=service, pkg="interfaces");
+    }
+    
+    // ------------------------------------------ generating instantiated platform artifacts -------------------------------------------------------
+
+    generateBroker(Project source, Configuration config, Project target) = {
+        IIPEcosphere cfg = config;
+
+        brokerRoot.mkdir();
+        generateBrokerScripts(cfg, cfg.transportProtocol);
+    }
+    
+    // called from tests, don't change signature
+    generatePlatform(Project source, Configuration config, Project target) = {
+        IIPEcosphere cfg = config;
+        generateBroker(source, config, target);
+        
+        // cleanup, reuse, ...
+        ecsRuntimeRoot.mkdir();
+        Path p = "${ecsRuntimeRoot}/src/main/resources";
+        p.mkdir();
+        vilTemplateProcessor("EcsRuntimeDockerContainerManagerYaml", config, "${p}/iipecosphere.yml");
+        vilTemplateProcessor("JavaYamlTest", config, "${ecsRuntimeRoot}/src/test/java/test/iip/AllTests.java", pkg="test.iip", fqnCls=containerManagerCfgClass(config), cfgFile="src/main/resources/iipecosphere.yml");
+        vilTemplateProcessor("JavaLogbackXml", config, "${p}/logback.xml");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.net.NetworkManagerDescriptor", descriptor="de.iip_ecosphere.platform.support.iip_aas.LocalNetworkManagerWithParentAas");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.LifecycleDescriptor", descriptor="de.iip_ecosphere.platform.ecsRuntime.EcsCmdLineLifecycleDescriptor");
+        vilTemplateProcessor("EcsRuntimeMvn", config, "${ecsRuntimeRoot}/pom.xml", dir="ecsJars", main=dfltMain, tests=tests);
+        //maven("${ecsRuntimeRoot}", mvnUpdate);
+        generateOsScripts(config, "${target}/ecs", "ecsJars", dfltMain, "IIP-Ecosphere ECSRuntime", "iip-ecsRuntime", "iip-platform.service", addJavaOpts=toJvmMemLimitOpt(min(cfg.serviceManager.memLimit, 
+            cfg.containerManager.memLimit)), sysd="${target}/iip-ecs");
+        
+        serviceMgrRoot.mkdir();
+        p = "${serviceMgrRoot}/src/main/resources";
+        p.mkdir();
+        vilTemplateProcessor("ServiceControlSpringCloudStreamYaml", config, "${p}/iipecosphere.yml");
+        // cfg test requires spring
+        vilTemplateProcessor("JavaLogbackXml", config, "${p}/logback.xml");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.net.NetworkManagerDescriptor", descriptor="de.iip_ecosphere.platform.support.iip_aas.LocalNetworkManagerWithParentAas");
+        vilTemplateProcessor("ServiceControlMvn", config, "${serviceMgrRoot}/pom.xml", dir="svcJars", main=dfltMain, tests=tests);
+        //maven("${serviceMgrRoot}", mvnUpdate);
+        generateOsScripts(config, "${target}/serviceMgr", "svcJars", dfltMain, "IIP-Ecosphere Service Manager", "iip-serviceMgr", "iip-ecs.service", 
+            addJavaOpts=toJvmMemLimitOpt(cfg.serviceManager.memLimit), sysd="${target}/iip-serviceMgr");
+
+        ecsServiceMgrRoot.mkdir();
+        p = "${ecsServiceMgrRoot}/src/main/resources";
+        p.mkdir();
+        vilTemplateProcessor("EcsServiceControlSpringCloudStreamYaml", config, "${p}/iipecosphere.yml");
+        // cfg test requires spring
+        vilTemplateProcessor("JavaLogbackXml", config, "${p}/logback.xml");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.net.NetworkManagerDescriptor", descriptor="de.iip_ecosphere.platform.support.iip_aas.LocalNetworkManagerWithParentAas");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.LifecycleDescriptor", descriptor="de.iip_ecosphere.platform.ecsRuntime.EcsCmdLineLifecycleDescriptor");
+        vilTemplateProcessor("EcsServiceControlMvn", config, "${ecsServiceMgrRoot}/pom.xml", dir="ecsSvcJars", main=dfltMain, tests=tests);
+        //maven("${ecsServiceMgrRoot}", mvnUpdate);
+        generateOsScripts(config, "${target}/ecsServiceMgr", "ecsSvcJars", dfltMain, "IIP-Ecosphere Ecs Runtime/Service Manager", "iip-ecsServiceMgr", "", 
+            addJavaOpts=toJvmMemLimitOpt(cfg.serviceManager.memLimit), sysd="${target}/iip-ecsServiceMgr");
+        
+        platformRoot.mkdir();
+        p = "${platformRoot}/src/main/resources";
+        p.mkdir();
+        vilTemplateProcessor("PlatformYaml", config, "${p}/iipecosphere.yml", modelName=getName(config));
+        vilTemplateProcessor("JavaYamlTest", config, "${platformRoot}/src/test/java/test/iip/AllTests.java", pkg="test.iip", fqnCls="de.iip_ecosphere.platform.platform.PlatformSetup", cfgFile="src/main/resources/iipecosphere.yml");
+        vilTemplateProcessor("JavaLogbackXml", config, "${p}/logback.xml");
+        vilTemplateProcessor("ServicesYaml", config, "${p}/services.yml");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.net.NetworkManagerDescriptor", descriptor="de.iip_ecosphere.platform.support.net.LocalNetworkManagerImpl$"+"Descriptor");
+        vilTemplateProcessor("PlatformMvn", config, "${platformRoot}/pom.xml", dir="plJars", main=dfltMain, tests=tests, monitoring=false);
+        //maven("${platformRoot}", mvnUpdate);
+        generateOsScripts(config, "${target}/platform", "plJars", dfltMain, "IIP-Ecosphere Platform Services", "iip-platform", "iip-broker.service", 
+            withJava8=false, sysd="${target}/iip-platform");
+        generateOsScripts(config, "${target}/cli", "plJars", "de.iip_ecosphere.platform.platform.Cli", "", "", "");
+
+        // preliminary, as long as BaSyx conflicts with Tomcat
+        monitoringRoot.mkdir();
+        p = "${monitoringRoot}/src/main/resources";
+        p.mkdir();
+        vilTemplateProcessor("PlatformYaml", config, "${p}/iipecosphere.yml");
+        vilTemplateProcessor("JavaYamlTest", config, "${monitoringRoot}/src/test/java/test/iip/AllTests.java", pkg="test.iip", fqnCls="de.iip_ecosphere.platform.monitoring.MonitoringSetup", cfgFile="src/main/resources/iipecosphere.yml");
+        vilTemplateProcessor("JavaLogbackXml", config, "${p}/logback.xml");
+        vilTemplateProcessor("JavaServices", config, "${p}/META-INF/services/de.iip_ecosphere.platform.support.net.NetworkManagerDescriptor", descriptor="de.iip_ecosphere.platform.support.net.LocalNetworkManagerImpl$"+"Descriptor");
+        vilTemplateProcessor("PlatformMvn", config, "${monitoringRoot}/pom.xml", dir="monJars", main=dfltMain, tests=tests, monitoring=true);
+        //maven("${monitoringRoot}", mvnUpdate);
+        generateOsScripts(config, "${target}/monitoring", "monJars", dfltMain, "IIP-Ecosphere Platform Monitoring Services", "iip-monitoring", "iip-platform.service", 
+            withJava8=false, sysd="${target}/iip-monitoring");
+ 
+        artifactsRoot.mkdir();
+        commonRoot.mkdir();
+
+        mgtUiRoot.mkdir();
+        vilTemplateProcessor("UiAngularWin", config, "${target}/mgtUi.bat");
+        vilTemplateProcessor("UiAngularLinuxSysd", config, "${target}/iip-mgtUi.service", 
+            requires="iip-platform.service", after="iip-platform.service");
+        vilTemplateProcessor("UiAngularLinux", config, "${target}/mgtUi.sh");
+        FileArtifact f = "${target}/mgtUi.sh";
+        f.setExecutable(false);
+        vilTemplateProcessor("UiAngularExpress", config, "${mgtUiRoot}/server.js");
+        vilTemplateProcessor("UiAngularPom", config, "${mgtUiRoot}/pom.xml");
+        //maven("${mgtUiRoot}", mvnUpdate);
+        p = "${mgtUiRoot}/dist/iipes-web/assets/config";
+        p.mkdir();
+        vilTemplateProcessor("UiAngularConfig", config, "${p}/config.json");
+        
+        vilTemplateProcessor("Readme", config, "${target}/README.txt");
+    }
+    
+    generateBrokerScripts(Configuration config, TransportProtocol protocol) = {
+        vilTemplateProcessor("NoBroker", config, "${brokerRoot}/README.txt");
+    }
+    
+    generateBrokerScripts(Configuration config, TransportProtocolAMQP protocol) = {
+        vilTemplateProcessor("AmqpPom", config, "${brokerRoot}/pom.xml");
+        vilTemplateProcessor("AmqpLinuxSysd", config, "${brokerRoot}/iip-broker.service");
+        vilTemplateProcessor("AmqpLinux", config, "${brokerRoot}/broker.sh");
+        FileArtifact f = "${brokerRoot}/broker.sh";
+        f.setExecutable(false);
+        vilTemplateProcessor("AmqpWin", config, "${brokerRoot}/broker.bat");
+        Path c = "${brokerRoot}/src/test";
+        c.mkdir();
+        vilTemplateProcessor("AmqpConf", config, "${c}/config.json");
+        //maven("${brokerRoot}", mvnUpdate);
+    }
+
+    generateBrokerScripts(Configuration config, TransportProtocolMQTTv3 protocol) = {
+        generateBrokerScriptsHiveMq(config);
+    }
+
+    generateBrokerScripts(Configuration config, TransportProtocolMQTTv5 protocol) = {
+        generateBrokerScriptsHiveMq(config);
+    }
+    
+    generateBrokerScriptsHiveMq(Configuration config) = {
+        vilTemplateProcessor("MqttPom", config, "${brokerRoot}/pom.xml");
+        vilTemplateProcessor("MqttLinuxSysd", config, "${brokerRoot}/iip-broker.service");
+        vilTemplateProcessor("MqttLinux", config, "${brokerRoot}/broker.sh");
+        FileArtifact f = "${brokerRoot}/broker.sh";
+        f.setExecutable(false);
+        vilTemplateProcessor("MqttWin", config, "${brokerRoot}/broker.bat");
+        Path c = "${brokerRoot}/src/test";
+        c.mkdir();
+        vilTemplateProcessor("MqttConf", config, "${c}/config.xml");
+        c = "${c}/extensions";
+        c.mkdir();
+        //maven("${brokerRoot}", mvnUpdate);
+    }
+    
+    generateOsScripts(Configuration config, String pathName, String dir, String main, String desc, String pidName, String requires, Boolean withJava8=true, String addJavaOpts="", String sysd="") = {
+        vilTemplateProcessor("WinBatch", config, "${pathName}.bat", dir=dir, main=main, addJavaOpts=addJavaOpts);
+        if (withJava8) {
+            vilTemplateProcessor("WinBatch", config, "${pathName}8.bat", dir=dir, main=main, withModuleOpts=false, addJavaOpts=addJavaOpts);
+        }
+        vilTemplateProcessor("LinuxBash", config, "${pathName}.sh", dir=dir, main=main, addJavaOpts=addJavaOpts);
+        FileArtifact f = "${pathName}.sh";
+        f.setExecutable(false);
+        if (withJava8) {
+            vilTemplateProcessor("LinuxBash", config, "${pathName}8.sh", dir=dir, main=main, withModuleOpts=false, addJavaOpts=addJavaOpts);
+            f = "${pathName}8.sh";
+            f.setExecutable(false);
+        }
+        if (pidName.length() > 0) {
+           String sName = pathName;
+           if (sysd <> "") {
+               sName = sysd;
+           }
+           vilTemplateProcessor("LinuxSysd", config, "${sName}.service", dir=dir, main=main, description=desc, pidFile="${pidName}.pid", requires=requires, after=requires, addJavaOpts=addJavaOpts);
+           if (withJava8) {
+               vilTemplateProcessor("LinuxSysd", config, "${sName}8.service", dir=dir, main=main, description=desc, pidFile="${pidName}.pid", requires=requires, after=requires, withModuleOpts=false, addJavaOpts=addJavaOpts);
+           }
+           if (requires.length() > 0) {
+               vilTemplateProcessor("LinuxSysd", config, "${sName}-noDeps.service", dir=dir, main=main, description=desc, pidFile="${pidName}.pid", addJavaOpts=addJavaOpts);
+               if (withJava8) {
+                   vilTemplateProcessor("LinuxSysd", config, "${sName}8-noDeps.service", dir=dir, main=main, description=desc, pidFile="${pidName}.pid", withModuleOpts=false, addJavaOpts=addJavaOpts);
+               }
+           }
+        }
+    }
+    
+    String dockerBuildImage(Path b, Path d, String t) = {
+        "";
+    }
+    
+    dockerRemoveImage(String id) = {
+    }
+    
+
+}

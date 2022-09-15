@@ -1,0 +1,482 @@
+import JavaBasics;
+
+// Generation operations for data assignment operations and data transfer among data types
+// May be called direcly for Java-based access, but also can be extended and individual (marked) parts
+// overridden to generate different access styles, e.g., for model access paths.
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template DataOperationBasics(Configuration config, FileArtifact target) {
+
+    setOf(String) dummy = {}; // not nice
+    Boolean optWithStepIn = true;
+    mapOf(String, String) variables = {};
+
+    def translateDataOperations(setOf(AssignmentOperation) assng, DataType src, String srcQual, DataType tgt, String tgtQual, setOf(String) done) {
+        mapOf(Field, String) fields = {};
+        mapOf(Field, String) fieldIndexes = {};
+        mapFields(src, fields, fieldIndexes, srcQual, "", true); 
+        mapFields(tgt, fields, fieldIndexes, tgtQual, "", false);
+        for (AssignmentOperation a : assng, "\n") {
+            '${translateDataOperation(a, fields, fieldIndexes, done)}'
+        }
+    }
+
+    // dispatch basis
+    def String translateDataOperation(AssignmentOperation assng, mapOf(Field, String) fields, mapOf(Field, String) indexes, setOf(String) done) {
+        ""
+    }
+
+    def String translateDataOperation(FieldAssignmentOperation assng, mapOf(Field, String) fields, mapOf(Field, String) indexes, setOf(String) done) {
+        if (fields.containsKey(assng.field)) {
+            translateFieldAccess(assng.field, fields, true, ";", translateDataOperation(assng.operation, fields, indexes), done, true, indexes);
+        } else {
+            ""
+        }
+    }
+
+    def String translateDataOperation(TransferAssignmentOperation assng, mapOf(Field, String) fields, mapOf(Field, String) indexes, setOf(String) done) {
+        if (indexes.containsKey(assng.field) and fields.containsKey(assng.nameField) and fields.containsKey(assng.valueField)) {
+            String fnExpr = getTransferAssignmentExpression(assng, fields, indexes, done);
+            translateFieldAccess(assng.nameField, fields, true, ";", fnExpr, done, true, indexes);
+        } else {
+            ""
+        }
+    }
+    
+    def String getTransferAssignmentExpression(TransferAssignmentOperation assng, mapOf(Field, String) fields, mapOf(Field, String) indexes, setOf(String) done) {
+        "/* FIELD/CONVERTER ACCESS NOT DEFINED */"
+    }
+
+    // dispatch basis
+    def String translateDataOperation(DataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        ""
+    }
+
+    def String translateDataOperation(DataFieldAccess op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        translateFieldAccess(op.field, fields, false, "", "", dummy, false, indexes);
+    }
+    
+    def String translateDataOperation(FieldNameDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        if (indexes.containsKey(op.field)) {
+            "/* FIELD ACCESS NOT DEFINED */";
+        } else {
+            ""
+        }
+    }
+    
+    def String translateFieldAccess(Field field, mapOf(Field, String) fields, Boolean set, String setEnd, String value, setOf(String) done, Boolean recordDone, mapOf(Field, String) indexes) {
+        if (fields.containsKey(field) and indexes.containsKey(field)) {
+           if (recordDone) {
+               done.add(mapTargetPath(fields.get(field), field));
+           }
+           genFieldAccess(fields.get(field), field, set, setEnd, value, indexes.get(field));
+        } else {
+           ""
+        }
+    }
+        
+    // can be overridden
+    def genFieldAccess(String path, Field field, Boolean set, String setEnd, String value, String indexes) {
+       if (set) {
+           path + ".set" + asMethodNameSuffix(field.name) + "(" + value + ")${setEnd}";
+       } else {
+           path + ".get" + asMethodNameSuffix(field.name) + "()"; 
+       }
+    }
+
+    // dispatch basis (completeness)
+    def String translateDataOperation(ConstantDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        ""
+    }
+
+    def String translateDataOperation(IntegerConstantDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        "${op.value}"
+    }
+
+    def String translateDataOperation(StringConstantDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        "\"${op.value}\""
+    }
+
+    def String translateDataOperation(BooleanConstantDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        "${op.value}"
+    }
+
+    def String translateDataOperation(RealConstantDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        "${op.value}"
+    }
+    
+    def String translateDataOperation(ParenthesisDataOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        "(" + translateDataOperation(op.operation, fields, indexes) + ")";
+    }
+
+    // dispatch basis (completeness)
+    def String translateDataOperation(DataTranslationOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        ""
+    }
+
+    def String translateDataOperation(AddDataTranslationOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        combine(op, " + ", fields, indexes);
+    }
+
+    def String translateDataOperation(SubtractDataTranslationOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        combine(op, " - ", fields, indexes);
+    }
+
+    def String translateDataOperation(MuliplyDataTranslationOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        combine(op, " * ", fields, indexes);
+    }
+
+    def String translateDataOperation(DivideDataTranslationOperation op, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        combine(op, " / ", fields, indexes);
+    }
+
+    def String combine(DataTranslationOperation op, String sep, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        combineArgs(op.arguments, sep, fields, indexes);
+    }
+    
+    def String combineArgs(sequenceOf(DataOperation) args, String sep, mapOf(Field, String) fields, mapOf(Field, String) indexes) {
+        String result = "";
+        boolean first = true;
+        for (DataOperation op : args) {
+            if (not(first)) {
+                result = result + sep;
+            }
+            result = result + translateDataOperation(op, fields, indexes);
+            first = false;
+        }
+        result;
+    }
+    
+    // ----------------------------------- maps fields to access paths  -----------------------------
+    
+    // dispatch basis
+    def mapFields(DataType type, mapOf(Field, String) result, mapOf(Field, String) indexes, String qual, String iQual, Boolean forSrc) {
+    } 
+
+    def mapFields(RecordType type, mapOf(Field, String) result, mapOf(Field, String) indexes, String qual, String iQual, Boolean forSrc) {
+        Integer index = 0;
+        for (Field f : type.fields) {
+            String fn;
+            if (forSrc) {
+               fn = mapSourcePath(qual, f);
+            } else {
+               fn = mapTargetPath(qual, f);
+            }
+            result.add(f, qual);
+            String iq;
+            if (iQual.length() > 0) {
+                iq = iQual + ", " + index;
+            } else {
+                iq = "" + index;
+            } 
+            indexes.add(f, iq);
+            mapFields(f.type, result, indexes, fn, iq, forSrc);
+            index = index + 1;
+        }
+    } 
+    
+    def getterPath(String qual, Field f) {
+        qual + ".get" + asMethodNameSuffix(f.name) + "()";
+    }
+
+    def setterPath(String qual, Field f, String value) {
+        qual + ".set" + asMethodNameSuffix(f.name) + "(${value})";
+    }
+
+    // ----------------------------------- maps access paths to fields -----------------------------
+    
+    def mapSourcePaths(DataType type, mapOf(String, Field) result, String qual) {
+    }
+
+    def mapSourcePaths(RecordType type, mapOf(String, Field) result, String qual) {
+        for (Field f : type.fields) {
+            String fn = mapSourcePath(qual, f);
+            result.add(fn, f);
+            mapSourcePaths(f.type, result, fn);
+        }
+    }
+    
+    // customizable paths, may be different depending on application, use here method calls
+    // if you override this function, also override mapTargetSeparator()
+    def mapTargetPath(String qual, Field f) {
+        getterPath(qual, f);
+    }
+
+    def String mapTargetSeparator() {
+        ".";
+    }
+
+    // customizable paths, may be different depending on application, use here method calls
+    // if you override this function, also override mapSourceSeparator()
+    def mapSourcePath(String qual, Field f) {
+        getterPath(qual, f);
+    }
+    
+    def String mapSourceSeparator() {
+        ".";
+    }
+    
+    // ------------------------------------ produce data transfer -----------------------------------
+    // to be used with mapPaths; the idea is to hash over the target datatype (mapPaths, target = to write to) and to 
+    // produce for the input data type (to read from). Thus we have to build up both access path.
+    // Currently the default Java implementation focuses on object transfers from temporary instances.
+    
+    // dispatch basis, do nothing on plain types
+    def produceDataTransfer(DataType type, mapOf(String, Field) mapping, String typeQual, String mapQual, setOf(String) done, String indexes, String paths) {
+    }
+
+    // typical top-level entry point, produce data transfer for RecordType
+    def produceDataTransfer(RecordType type, mapOf(String, Field) mapping, String typeQual, String mapQual, setOf(String) done, String indexes, String paths) {
+        String targetSep = mapTargetSeparator();
+        String sourceSep = mapSourceSeparator();
+        int index = 0;
+        for (Field f : type.fields) {
+            String iq;
+            if (indexes.length() > 0) {
+                iq = indexes + ", " + index;
+            } else {
+                iq = "" + index;
+            }
+            String p = f.name;
+            if (paths.length() > 0) {
+               p = paths + targetSep + p;
+            }
+            index = index + 1;
+            String tn = mapTargetPath(typeQual, f);
+            String mq = mapSourcePath(mapQual, f);
+            if (not(done.includes(tn)) and mapping.containsKey(mq)) {
+                Integer tnPos = tn.rfind(targetSep);
+                Integer mqPos = mq.rfind(sourceSep);
+                '${produceDataTransfer(f, prefixPath(tn, targetSep), mapping.get(mq), prefixPath(mq, sourceSep), iq, p)}' 
+                '${produceDataTransfer(f, f.type, mapping, tn, mq, done, iq, p)}'
+            } else {
+                ''
+            }
+        }
+    }
+
+    // internal dispatch basis, akin produceDataTransfer(DataType), but carries actual field that is not present at top-level call
+    def produceDataTransfer(Field field, DataType type, mapOf(String, Field) mapping, String typeQual, String mapQual, setOf(String) done, String indexes, String paths) {
+        ''
+    }
+
+    // akin produceDataTransfer(RecordType), but carries actual field that is not present at top-level call, calls produceDataTransfer(RecordType)
+    def produceDataTransfer(Field field, RecordType type, mapOf(String, Field) mapping, String typeQual, String mapQual, setOf(String) done, String indexes, String paths) {
+         produceDataTransfer(type, mapping, typeQual, mapQual, done, indexes, paths);
+    }
+        
+    // returns the prefix before the last sep in path
+    def prefixPath(String path, String sep) {
+        Integer pos = path.rfind(sep);
+        if (pos <= 0) {
+            "";
+        } else {
+            path.substring(0, pos);
+        }
+    }
+    
+    // returns the tail after the last sep in path
+    def suffixPath(String path, String sep) {
+        Integer pos = path.rfind(sep);
+        if (pos <= 0) {
+            path;
+        } else {
+            path.substring(pos + 1);
+        }
+    } 
+    
+    def produceDataTransfer(Field tgt, String tgtQual, Field src, String srcQual, String indexes, String paths) {
+        "\n" + setterPath(tgtQual, tgt, getterPath(srcQual, src)) + ";";
+    }
+    
+    // -------------------------------------- formatter/parser conversion ------------------------------------ 
+    
+        // preliminary... JavaBasics + ??
+    def convName(DataType type) {
+        ""
+    }
+    
+    // to/from will be prefixed, must map to method names in Input/OutputConverter
+    def convName(PrimitiveType type) {
+        "/* NOT DEFINED */"
+    }
+
+    def convName(ShortTypeType type) {
+        "Short"
+    }
+    
+    def convName(IntegerTypeType type) {
+        "Integer"
+    }
+
+    def convName(UInt16TypeType type) {
+        "Integer"
+    }
+    
+    def convName(LongTypeType type) {
+        "Long"
+    }
+
+    def convName(StringTypeType type) {
+        "String"
+    }
+    
+    def convName(BooleanTypeType type) {
+        "Boolean"
+    }
+
+    def convName(FloatTypeType type) {
+        "Float"
+    }
+
+    def convName(DoubleTypeType type) {
+         "Double"
+    }
+
+    def convName(ByteTypeType type) {
+         "Byte"
+    }
+
+    def convName(EnumType type) {
+         "Enum"
+    }
+
+	// Start - Added types OPC UA - by Ahmad
+	def convName(Integer16TypeType type) {
+         "short"
+    }
+
+	def convName(Integer32TypeType type) {
+         "int"
+    }
+    
+    def convName(Integer64TypeType type) {
+         "long"
+    }
+    
+    def convName(SByteTypeType type) {
+         "byte"
+    }
+    
+	def convName(UnsignedInteger16TypeType type) {
+         "short"
+    }
+
+	def convName(UnsignedInteger32TypeType type) {
+         "int"
+    }
+    
+    def convName(UnsignedInteger64TypeType type) {
+         "long"
+    }
+    
+    def convName(ByteStringTypeType type) {
+         "ByteString"
+    }
+    
+    def convName(DateTimeTypeType type) {
+         "LocalDateTime"
+    }
+	// End - Added types OPC UA - by Ahmad
+	
+    /*def convName(ObjectTypeType type) { // currently no method in interface, needed?
+    }
+
+    def convName(ByteArrayTypeType type) { // currently no method in interface, needed?
+    }*/
+
+    def convName(IntegerArrayTypeType type) {
+        "IntegerArray"
+    }
+
+    def convName(DoubleArrayTypeType type) {
+        "DoubleArray"
+    }
+
+    def convName(IEC61131_3DateTimeTypeType type) {
+        "Date"
+    }
+    
+    // dispatch basis, additional parameter to be passed to the parser/formatter conversion method, usually empty
+    def convParam(DataType type, Boolean convFrom) {
+        "" // no param
+    }
+    
+    def convParam(IEC61131_3DateTimeTypeType type, Boolean convFrom) {
+        "\"'DT#'YYYY-MM-dd-HH:mm:ss.SS\""
+    }
+    
+    def convParam(EnumType type, Boolean convFrom) {
+        if (convFrom) {
+            ""
+        } else {
+            toTypeName(type) + ".class";
+        }
+    }
+    
+    // generates a formatter/parser conversion operation call
+    // - converter the variable name holding the converter
+    // - the type to convert
+    // - prefix to be used before #convName, "from" or "to"
+    // - data the actual data to be converted, may be a parameter name    
+    def genConvertOp(String converter, DataType type, String prefix, String data) {
+        String convertOp = prefix + convName(type);
+        String convP = convParam(type, prefix=="from");
+        if (convP.length() > 0) {
+            convP = ", ${convP}";
+        }
+        '${converter}.${prefix}${convName(type)}(${data}${convP})'
+    }
+    
+    // temporary variables
+    def String createTemporaryVariable(String path, String sep, DataType type, String init) {
+        if (not(variables.containsKey(path))) {
+            String name = suffixPath(path, sep);
+            if (name.length() == 0) {
+                name = "tmp";
+            }
+            name = name.toIdentifier() + variables.size();
+            variables.add(path, name);
+            String ini = "";
+            if (init.length() > 0) {
+                ini = " = ${init}";
+            }
+            '${asTypeName(type.name)} ${name}$ini;'
+        } else {
+            ''
+        }
+    }
+    
+    def String getTemporaryVariable(String path, String fallback) {
+        if (variables.containsKey(path)) {
+            variables.get(path); 
+        } else {
+            fallback;
+        }
+    }
+    
+    def clearTemporaryVariables() {
+        variables.clear();
+    }
+    
+    // wraps a function expression (without considering ";") so that IOExceptions are 
+    // caught, requires static import of de.iip_ecosphere.platform.support.function.IOVoidFunction.optional
+    def wrapOptional(Field field, String ex) {
+        if (field.optional) {
+            "optional(() -> ${ex})"
+        } else {
+            ex;
+        }
+    }
+    
+    // ------------------------------------------- mapping support ------------------------------------
+    
+    def mapOf(Field, Integer) mappedCachingTimes(setOf(MappingEntry) mapping) {
+        mapOf(Field, Integer) result = {};
+        for (CachingTimeMappingEntry e: mapping->selectByType(CachingTimeMappingEntry)) {
+            result.add(e.field, e.cachingTime);
+        }
+        result;
+    }
+
+}

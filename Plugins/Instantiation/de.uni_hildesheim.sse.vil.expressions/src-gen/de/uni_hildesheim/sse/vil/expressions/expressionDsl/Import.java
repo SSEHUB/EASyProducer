@@ -13,7 +13,9 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getInsert <em>Insert</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getWildcard <em>Wildcard</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getVersionSpec <em>Version Spec</em>}</li>
  * </ul>
  *
@@ -23,6 +25,28 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Import extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Insert</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Insert</em>' attribute.
+   * @see #setInsert(String)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getImport_Insert()
+   * @model
+   * @generated
+   */
+  String getInsert();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getInsert <em>Insert</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Insert</em>' attribute.
+   * @see #getInsert()
+   * @generated
+   */
+  void setInsert(String value);
+
   /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
@@ -44,6 +68,28 @@ public interface Import extends EObject
    * @generated
    */
   void setName(String value);
+
+  /**
+   * Returns the value of the '<em><b>Wildcard</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Wildcard</em>' attribute.
+   * @see #setWildcard(String)
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage#getImport_Wildcard()
+   * @model
+   * @generated
+   */
+  String getWildcard();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getWildcard <em>Wildcard</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Wildcard</em>' attribute.
+   * @see #getWildcard()
+   * @generated
+   */
+  void setWildcard(String value);
 
   /**
    * Returns the value of the '<em><b>Version Spec</b></em>' containment reference.

@@ -1,0 +1,7 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    -> byName(Configuration, String) with (<config>, c1) = adviceTestVM1::c1
+    cmp <- adviceTestVM1::c1
+    -> processCompound(TestCompoundType) with (adviceTestVM1::c1)
+    -> byName(Configuration, String) with (<config>, c2) = adviceTestVM1::c2
+    cmp <- adviceTestVM1::c2
+    -> processCompound(SubTestCompoundType) with (adviceTestVM1::c2)

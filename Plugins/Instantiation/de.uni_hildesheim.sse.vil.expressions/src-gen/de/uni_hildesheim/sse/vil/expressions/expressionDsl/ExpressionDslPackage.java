@@ -436,13 +436,31 @@ public interface ExpressionDslPackage extends EPackage
   int IMPORT = 9;
 
   /**
+   * The feature id for the '<em><b>Insert</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT__INSERT = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int IMPORT__NAME = 0;
+  int IMPORT__NAME = 1;
+
+  /**
+   * The feature id for the '<em><b>Wildcard</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT__WILDCARD = 2;
 
   /**
    * The feature id for the '<em><b>Version Spec</b></em>' containment reference.
@@ -451,7 +469,7 @@ public interface ExpressionDslPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IMPORT__VERSION_SPEC = 1;
+  int IMPORT__VERSION_SPEC = 3;
 
   /**
    * The number of structural features of the '<em>Import</em>' class.
@@ -460,7 +478,7 @@ public interface ExpressionDslPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IMPORT_FEATURE_COUNT = 2;
+  int IMPORT_FEATURE_COUNT = 4;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionStatementImpl <em>Expression Statement</em>}' class.
@@ -2154,6 +2172,17 @@ public interface ExpressionDslPackage extends EPackage
   EClass getImport();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getInsert <em>Insert</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Insert</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getInsert()
+   * @see #getImport()
+   * @generated
+   */
+  EAttribute getImport_Insert();
+
+  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2163,6 +2192,17 @@ public interface ExpressionDslPackage extends EPackage
    * @generated
    */
   EAttribute getImport_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getWildcard <em>Wildcard</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Wildcard</em>'.
+   * @see de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getWildcard()
+   * @see #getImport()
+   * @generated
+   */
+  EAttribute getImport_Wildcard();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import#getVersionSpec <em>Version Spec</em>}'.
@@ -3673,12 +3713,28 @@ public interface ExpressionDslPackage extends EPackage
     EClass IMPORT = eINSTANCE.getImport();
 
     /**
+     * The meta object literal for the '<em><b>Insert</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORT__INSERT = eINSTANCE.getImport_Insert();
+
+    /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EAttribute IMPORT__NAME = eINSTANCE.getImport_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Wildcard</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORT__WILDCARD = eINSTANCE.getImport_Wildcard();
 
     /**
      * The meta object literal for the '<em><b>Version Spec</b></em>' containment reference feature.

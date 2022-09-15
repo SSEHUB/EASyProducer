@@ -1659,5 +1659,16 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testQmDispatch() throws IOException {
         assertEqualWithIvml("qmDispatch", "QMDispatch");
     }
+    
+    /**
+     * Tests dynamic imports with dynamic dispatch.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDynamicImports() throws IOException {
+        assertEqualWithIvml("DynamicImports", "adviceTestVM1");
+    }
+
 
 }

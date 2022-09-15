@@ -1,0 +1,5 @@
+-> main()
+    c <- <config>
+    -> getData(TestCompound) with (typeSelectTest::tc1)
+    -> getData(SpecialCompound) with (typeSelectTest::tc2)
+    -> getData(SpecialCompound) with (typeSelectTest::tc3)

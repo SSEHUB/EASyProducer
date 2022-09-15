@@ -18,6 +18,7 @@ Require:
 
 // ---------------- project header
 
+@Override
 LanguageUnit: // do not rename - required for reuse
     (advices+=Advice)*
     'vilScript' name=Identifier 
@@ -92,6 +93,7 @@ RuleModifier:
 
 // ----------------------- overriding and extending parts of the expression grammar -------------------
 
+@Override
 ExpressionStatement:
     (
       (var=Identifier ('.' field=Identifier)? '=')? 
@@ -99,6 +101,7 @@ ExpressionStatement:
     | alt=Alternative ';'?
     ;
 
+@Override
 PrimaryExpression:  
     otherEx=ExpressionOrQualifiedExecution 
     | unqEx=UnqualifiedExecution 

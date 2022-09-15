@@ -1,0 +1,170 @@
+id: myApp
+name: myApp example old
+version: 0.1.0
+application:
+  id: myApp
+  name: myApp example old
+  version: 0.1.0
+types:
+    - name: MyConnPltfIn
+      fields:
+        - name: axis
+          type: int
+        - name: dataField
+          type: String
+    - name: MyConnPltfOut
+      fields:
+        - name: cmdField
+          type: String
+    - name: Rec1
+      fields:
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+services:
+   - id: myAnonymizer
+     name: myAnonymizer example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: transformRec1_myKi-out-0
+         direction: OUT
+         id: myAnonymizer -> myKi
+         type: Rec1
+         function: processRec1_myAnonymizer
+         service: myKi
+       - channel: processMyConnPltfIn_myAnonymizer-in-0
+         direction: IN
+         id: myMqttConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: processMyConnPltfIn_myAnonymizer
+         service: myMqttConn
+       - channel: processMyConnPltfIn_myAnonymizer-in-0
+         direction: IN
+         id: myOpcConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: processMyConnPltfIn_myAnonymizer
+         service: myOpcConn
+       - channel: processString_myAnonymizer-in-0
+         direction: IN
+         id: mySource -> myAnonymizer
+         type: String
+         function: processString_myAnonymizer
+         service: mySource
+   - id: myKi
+     name: myKi example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveString_MyReceiver-out-0
+         direction: OUT
+         id: myKi -> MyReceiver
+         type: String
+         function: transformString_myKi
+         service: MyReceiver
+       - channel: transformRec1_myKi-in-0
+         direction: IN
+         id: myAnonymizer -> myKi
+         type: Rec1
+         function: transformRec1_myKi
+         service: myAnonymizer
+   - id: myMqttConn
+     name: myMqttConnExample
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processMyConnPltfIn_myAnonymizer-out-0
+         direction: OUT
+         id: myMqttConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: 
+         service: myAnonymizer
+   - id: myOpcConn
+     name: myOpcConn example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processMyConnPltfIn_myAnonymizer-out-0
+         direction: OUT
+         id: myOpcConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: 
+         service: myAnonymizer
+   - id: MyReceiver
+     name: MyReceiver
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SINK_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveString_MyReceiver-in-0
+         direction: IN
+         id: myKi -> MyReceiver
+         type: String
+         function: receiveString_MyReceiver
+         service: myKi
+   - id: mySource
+     name: mySource example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processString_myAnonymizer-out-0
+         direction: OUT
+         id: mySource -> myAnonymizer
+         type: String
+         function: createString_mySource
+         service: myAnonymizer
+

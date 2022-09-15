@@ -1,0 +1,12 @@
+project DynImp2 {
+
+    version v0;
+    import DynamicImportsBasis;
+    
+    compound Service2 refines Service {
+    }
+    
+    def String getProperty(Service2 s) = "Service2";
+    def String getP2(Service2 s) = "Service2";
+
+}

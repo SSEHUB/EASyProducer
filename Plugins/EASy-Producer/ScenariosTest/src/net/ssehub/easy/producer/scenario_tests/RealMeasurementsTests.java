@@ -136,6 +136,11 @@ public class RealMeasurementsTests extends AbstractRealTests {
         public File getVilOutputFolder(File tmp) {
             return null;
         }
+
+        @Override
+        public String getVilStartRuleName() {
+            return "main";
+        }
         
     }
 

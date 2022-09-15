@@ -7,6 +7,7 @@ import de.uni_hildesheim.sse.ivml.ImportStmt;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import net.ssehub.easy.basics.messages.IMessageHandler;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.dslCore.translation.MessageHandler;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
@@ -133,11 +134,27 @@ public class ImportTranslator {
             IVersionRestriction restriction = processRestrictionExpression(importStmt.getName(), 
                 importStmt.getRestriction(), translator, context, 
                 new MessageHandler(translator, importStmt, IvmlPackage.Literals.IMPORT_STMT__RESTRICTION));
-            return new ProjectImport(importStmt.getName(), importStmt.getInterface(), false, false, restriction); 
+            boolean isInsert = importStmt.getInsert() != null;
+            return new ProjectImport(getImportName(importStmt), importStmt.getInterface(), false, false, 
+                restriction, isInsert); 
         } catch (RestrictionEvaluationException e) {
             throw new TranslatorException(e.getMessage(), importStmt, 
                 IvmlPackage.Literals.IMPORT_STMT__RESTRICTION, e.getId());
         }
+    }
+    
+    /**
+     * Returns the (wildcarded) import name.
+     * 
+     * @param importStmt the import statement
+     * @return the (wildcarded) import name
+     */
+    public static String getImportName(ImportStmt importStmt) {
+        String name = importStmt.getName();
+        if (importStmt.getWildcard() != null) {
+            name += ModelImport.WILDCARD_POSTFIX;
+        }
+        return name;
     }
 
 }

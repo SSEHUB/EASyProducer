@@ -1,0 +1,141 @@
+import Basics;
+import MavenBasics;
+import JavaMapping;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template AppMvn(IIPEcosphere config, XmlFileArtifact target, setOf(String) artifacts, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, String starterCls, String appName, String appVersion, String appDescription, Boolean tests, Boolean springPackaging=true, String groupId="") {
+
+    def XmlElement appendSpringBootPlugin(XmlElement plugins, String version="2.4.2", String mainClass="") {
+        XmlElement plugin = appendPlugin(plugins, "org.springframework.boot", "spring-boot-maven-plugin", version, false);
+        XmlElement config = appendConfiguration(plugin);
+        new XmlElement(config, "addResources", "false");
+        XmlElement exec = appendExecutions(plugin);
+        appendGoal(exec, "repackage");
+
+        if (mainClass.length() > 0) {
+            XmlElement cfg = appendConfiguration(exec);
+            new XmlElement(cfg, "mainClass", mainClass);
+            new XmlElement(cfg, "classifier", "bin");
+        }
+    }
+
+    def main(IIPEcosphere config, XmlFileArtifact target, setOf(String) artifacts, setOf(String) bins, setOf(String) assemblies, setOf(String) resources, String starterCls, String appName, String appVersion, String appDescription, Boolean tests, Boolean springPackaging=true, String groupId="") {
+        String iipGroup = "de.iip-ecosphere.platform";
+        String gId = groupId;
+        if (length(gId) == 0) {
+            gId = "${iipGroup}.apps";
+        }
+        String projectVersion = config.iipVer;
+        
+        XmlElement project = createMavenRoot(target);
+        createMavenProjectAttributes(project, "${appName}", "${appName}", "${appDescription}");
+        new XmlElement(project, "groupId", gId);
+        new XmlElement(project, "version", "${appVersion}");
+        // app version cannot be used with maven parent, use import??
+        createMavenParent(project, iipGroup, "platformDependencies", "${config.iipVer}");
+        XmlElement properties = new XmlElement(project, "properties");
+        new XmlElement(properties, "maven.jar.forceCreation", "true"); // spring-boot-plugin result grows if not re-built, clean plugin prevents creating the result jar
+        
+        XmlElement dep = new XmlElement(project, "dependencies");
+        appendDependency(dep, "org.apache.logging.log4j", "log4j-api", "2.15.0"); // override due to CVE-2021-44228
+        appendDependency(dep, "org.apache.logging.log4j", "log4j-core", "2.15.0"); // override due to CVE-2021-44228
+        appendDependency(dep, iipGroup, "transport", projectVersion);
+        appendDependency(dep, iipGroup, "connectors", projectVersion);
+        appendDependency(dep, iipGroup, "services.environment", projectVersion);
+        // TURN THIS INTO XML
+        appendDependency(dep, iipGroup, serviceEnvironmentModule(config), projectVersion);
+        appendDependency(dep, "org.springframework.boot", "spring-boot-starter-web");
+        appendDependency(dep, "org.springframework.boot", "spring-boot-starter-actuator");
+        appendDependency(dep, iipGroup, transportProtocolModule(config), projectVersion);
+        appendDependency(dep, iipGroup, serviceProtocolModule(config), projectVersion);
+        XmlElement d = appendDependency(dep, iipGroup, aasClientModule(config), projectVersion);
+        XmlElement exs = new XmlElement(d, "exclusions");
+        XmlElement ex = new XmlElement(exs, "exclusion");
+        new XmlElement(ex, "groupId", "javax.el");
+        new XmlElement(ex, "artifactId", "el-api");
+        ex = new XmlElement(exs, "exclusion");
+        new XmlElement(ex, "groupId", "org.apache.tomcat");
+        new XmlElement(ex, "artifactId", "tomcat-catalina");
+        for (String art : artifacts.asSequence()->sortedBy(a|a)) { // sortedBy for testing
+            appendArtifact(dep, art, projectVersion);
+        }
+        d = appendDependency(dep, "org.glassfish", "jakarta.el");
+        new XmlElement(d, "optional", "false");
+
+        appendDependency(dep, "org.springframework", "spring-test", scope="test");
+        appendDependency(dep, "org.springframework.boot", "spring-boot-test", scope="test");
+        appendDependency(dep, "junit", "junit", scope="test");
+        appendDependency(dep, "org.junit.jupiter", "junit-jupiter-engine", scope="test");
+        appendDependency(dep, "org.junit.platform", "junit-platform-launcher");
+        appendDependency(dep, "org.springframework", "spring-test", scope="test");
+        appendDependency(dep, "org.springframework.boot", "spring-boot-test", scope="test");
+        appendDependency(dep, "org.springframework.cloud", "spring-cloud-stream", type="test-jar", scope="test", classifier="test-binder");
+        
+        XmlElement plugins = createMavenBuildElement(project, "", true);
+        XmlElement assemblyPlugin = appendAssemblyPlugin(plugins);
+        for (String ass: assemblies.asSequence()->sortedBy(a|a)) { // sortedBy for testing
+            sequenceOf(String) tmp = ass.split("\\|"); // escape |, splits into chars
+            String id = tmp[0];
+            String path = tmp[1];
+            String phase = tmp[2];
+            String outDir = tmp[3];
+            String fName = "";
+            if (tmp.size() > 4) {
+                fName = tmp[4];
+            }            
+            appendAssemblyDescriptor(assemblyPlugin, id, path, attach=true, outputDir=outDir, finalName=fName, phase=phase);
+        }
+        if (springPackaging) {
+            appendSpringBootPlugin(plugins, "2.4.2", "${starterCls}");
+        }
+
+        XmlElement execs = appendMavenDependencyPluginUnpackArtifact(plugins, "${iipGroup}:services.environment:${projectVersion}", "python", "\\${project.basedir}/src/main/python", "pythonEnv.zip", type="zip");
+        mapOf(String, XmlElement) goalItems = {}; 
+        for (String bin: bins.asSequence()->sortedBy(b|b)) { // sortedBy for testing
+            sequenceOf(String) tmp = bin.split("\\|"); // escape |, splits into chars
+            String artifact = tmp[0];
+            String classifier = tmp[1];
+            String outputDir = tmp[2];
+            String destFileName = tmp[3];
+            String type = tmp[4];
+            String goal = tmp[5];
+            if (goalItems.containsKey(goal)) {
+               appendMavenDependencyPluginArtifactItem(goalItems.get(goal), artifact, classifier, outputDir, destFileName, type=type);
+            } else {
+                XmlElement items = appendMavenDependencyPluginExecution(execs, goal, artifact, classifier, outputDir, destFileName, type=type, id=goal + "-unpack");
+                goalItems.add(goal, items);
+            }
+        }
+        
+        XmlElement depPlugin = appendMavenResourcesPlugin(plugins);
+        XmlElement rExecs = appendExecutionsParent(depPlugin);
+        if (resources.size() > 0) {
+            mapOf(String, sequenceOf(String)) resMap = {};
+            for (String res: resources.asSequence()->sortedBy(b|b)) { // sortedBy for testing
+                sequenceOf(String) tmp = res.split("\\|"); // escape |, splits into chars
+                String srcDir = tmp[0];
+                String file = tmp[1];
+                if (not(resMap.containsKey(srcDir))) {
+                    resMap.add(srcDir, {});
+                }
+                resMap.get(srcDir).add(file);
+            }
+            for (String res: resMap.keys().asSequence()->sortedBy(b|b)) { // sortedBy for testing
+                appendMavenResourcesCopyResourcesExecution(rExecs, "copy-resources", "\\${project.build.outputDirectory}", res, resMap.get(res));
+            }
+        }
+
+        sequenceOf(String) files = {"*.yml", "*.png", "*.jpg"};
+        appendMavenResourcesCopyResourcesExecution(rExecs, "copy-resources", mavenBuildOutputResourcesDir(), getResourcesFolder()+"/platform", files, id="platf-res");
+        appendMavenResourcesCopyResourcesExecution(rExecs, "copy-resources", mavenBuildOutputResourcesDir(), getResourcesFolder()+"/software", files, id="sw-res");
+        
+        // prependGroupId as in Spring, fails otherwise with jakarta.el, zip excludes required for now
+        String zipExcludes = "tomcat-catalina, tomcat-coyote, tomcat-util, tomcat-api, tomcat-annotations-api, tomcat-util, tomcat-jaspic-api, tomcat-jni, tomcat-juli, tomcat-servlet-api, tomcat-util, tomcat-util-scan, tomcat-el-api";
+        appendMavenDependencyPluginCopyDepsExecution(execs, jarDir="\\${project.build.directory}/jars", copyOwn=false, 
+            phase="prepare-package", prependGroupId=false, excludeIds=zipExcludes, includeScope="runtime"); 
+        appendMavenDependencyPluginBuildClasspathExecution(execs, outputFile="\\${project.build.directory}/classes/classpath", 
+            prependGroupId=false, prefix="jars", fileSeparator="/", pathSeparator=":", includeScope="runtime"); 
+    }
+
+}

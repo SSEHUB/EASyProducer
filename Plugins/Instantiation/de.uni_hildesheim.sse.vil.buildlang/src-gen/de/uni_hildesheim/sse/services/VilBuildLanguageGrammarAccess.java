@@ -127,7 +127,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Keyword cRightCurlyBracketKeyword_11 = (Keyword)cGroup.eContents().get(11);
 		private final Keyword cSemicolonKeyword_12 = (Keyword)cGroup.eContents().get(12);
 		
-		//// ---------------- project header
+		//@Override
 		//LanguageUnit:
 		//	advices+=Advice*
 		//	'vilScript' name=Identifier
@@ -636,7 +636,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final RuleCall cAltAlternativeParserRuleCall_1_0_0 = (RuleCall)cAltAssignment_1_0.eContents().get(0);
 		private final Keyword cSemicolonKeyword_1_1 = (Keyword)cGroup_1.eContents().get(1);
 		
-		//// ----------------------- overriding and extending parts of the expression grammar -------------------
+		//@Override
 		//ExpressionStatement:
 		//	(var=Identifier ('.' field=Identifier)? '=')?
 		//	expr=Expression ';' | alt=Alternative ';'?;
@@ -716,6 +716,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Assignment cNewExAssignment_7 = (Assignment)cAlternatives.eContents().get(7);
 		private final RuleCall cNewExConstructorExecutionParserRuleCall_7_0 = (RuleCall)cNewExAssignment_7.eContents().get(0);
 		
+		//@Override
 		//PrimaryExpression:
 		//	otherEx=ExpressionOrQualifiedExecution
 		//	| unqEx=UnqualifiedExecution
@@ -1429,7 +1430,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		return getRequireAccess().getRule();
 	}
 
-	//// ---------------- project header
+	//@Override
 	//LanguageUnit:
 	//	advices+=Advice*
 	//	'vilScript' name=Identifier
@@ -1548,7 +1549,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		return getRuleModifierAccess().getRule();
 	}
 
-	//// ----------------------- overriding and extending parts of the expression grammar -------------------
+	//@Override
 	//ExpressionStatement:
 	//	(var=Identifier ('.' field=Identifier)? '=')?
 	//	expr=Expression ';' | alt=Alternative ';'?;
@@ -1560,6 +1561,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		return getExpressionStatementAccess().getRule();
 	}
 
+	//@Override
 	//PrimaryExpression:
 	//	otherEx=ExpressionOrQualifiedExecution
 	//	| unqEx=UnqualifiedExecution
@@ -1781,8 +1783,7 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	}
 
 	//Import:
-	//	// here fqn because this may reference a specific project (of an external project)
-	//	'import' name=Identifier versionSpec=VersionSpec? ';';
+	//	('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';';
 	public ExpressionDslGrammarAccess.ImportElements getImportAccess() {
 		return gaExpressionDsl.getImportAccess();
 	}

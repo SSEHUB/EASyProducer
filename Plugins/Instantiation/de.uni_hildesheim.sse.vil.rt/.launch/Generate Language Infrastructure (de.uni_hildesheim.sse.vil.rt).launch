@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.emf.mwe2.launch.Mwe2LaunchConfigurationType">
-<stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;resources&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt.generator&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt.tests&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt.ui&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;/resources&gt;}"/>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/de.uni_hildesheim.sse.vil.rt"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="4"/>
-</listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="src/de/uni_hildesheim/sse/vil/rt/GenerateRtVil.mwe2"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="de.uni_hildesheim.sse.vil.rt"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
+    <stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;resources&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt.generator&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt.tests&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;item path=&quot;/de.uni_hildesheim.sse.vil.rt.ui&quot; type=&quot;4&quot;/&gt;&#13;&#10;&lt;/resources&gt;}"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/de.uni_hildesheim.sse.vil.rt"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="4"/>
+    </listAttribute>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_ATTR_USE_ARGFILE" value="false"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_SHOW_CODEDETAILS_IN_EXCEPTION_MESSAGES" value="true"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MODULE_NAME" value="de.uni_hildesheim.sse.vil.rt"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="src/de/uni_hildesheim/sse/vil/rt/GenerateRtVil.mwe2"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="de.uni_hildesheim.sse.vil.rt"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m"/>
 </launchConfiguration>

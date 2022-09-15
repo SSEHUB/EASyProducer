@@ -23,8 +23,10 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getInsert <em>Insert</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getInterface <em>Interface</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getWildcard <em>Wildcard</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.ImportStmtImpl#getRestriction <em>Restriction</em>}</li>
  * </ul>
  *
@@ -32,6 +34,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class ImportStmtImpl extends MinimalEObjectImpl.Container implements ImportStmt
 {
+  /**
+   * The default value of the '{@link #getInsert() <em>Insert</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getInsert()
+   * @generated
+   * @ordered
+   */
+  protected static final String INSERT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getInsert() <em>Insert</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getInsert()
+   * @generated
+   * @ordered
+   */
+  protected String insert = INSERT_EDEFAULT;
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -73,6 +95,26 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   protected String interface_ = INTERFACE_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getWildcard() <em>Wildcard</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWildcard()
+   * @generated
+   * @ordered
+   */
+  protected static final String WILDCARD_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getWildcard() <em>Wildcard</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWildcard()
+   * @generated
+   * @ordered
+   */
+  protected String wildcard = WILDCARD_EDEFAULT;
+
+  /**
    * The cached value of the '{@link #getRestriction() <em>Restriction</em>}' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -101,6 +143,31 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.IMPORT_STMT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getInsert()
+  {
+    return insert;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setInsert(String newInsert)
+  {
+    String oldInsert = insert;
+    insert = newInsert;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.IMPORT_STMT__INSERT, oldInsert, insert));
   }
 
   /**
@@ -151,6 +218,31 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
     interface_ = newInterface;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.IMPORT_STMT__INTERFACE, oldInterface, interface_));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getWildcard()
+  {
+    return wildcard;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setWildcard(String newWildcard)
+  {
+    String oldWildcard = wildcard;
+    wildcard = newWildcard;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.IMPORT_STMT__WILDCARD, oldWildcard, wildcard));
   }
 
   /**
@@ -229,10 +321,14 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   {
     switch (featureID)
     {
+      case IvmlPackage.IMPORT_STMT__INSERT:
+        return getInsert();
       case IvmlPackage.IMPORT_STMT__NAME:
         return getName();
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         return getInterface();
+      case IvmlPackage.IMPORT_STMT__WILDCARD:
+        return getWildcard();
       case IvmlPackage.IMPORT_STMT__RESTRICTION:
         return getRestriction();
     }
@@ -249,11 +345,17 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   {
     switch (featureID)
     {
+      case IvmlPackage.IMPORT_STMT__INSERT:
+        setInsert((String)newValue);
+        return;
       case IvmlPackage.IMPORT_STMT__NAME:
         setName((String)newValue);
         return;
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         setInterface((String)newValue);
+        return;
+      case IvmlPackage.IMPORT_STMT__WILDCARD:
+        setWildcard((String)newValue);
         return;
       case IvmlPackage.IMPORT_STMT__RESTRICTION:
         setRestriction((Expression)newValue);
@@ -272,11 +374,17 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   {
     switch (featureID)
     {
+      case IvmlPackage.IMPORT_STMT__INSERT:
+        setInsert(INSERT_EDEFAULT);
+        return;
       case IvmlPackage.IMPORT_STMT__NAME:
         setName(NAME_EDEFAULT);
         return;
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         setInterface(INTERFACE_EDEFAULT);
+        return;
+      case IvmlPackage.IMPORT_STMT__WILDCARD:
+        setWildcard(WILDCARD_EDEFAULT);
         return;
       case IvmlPackage.IMPORT_STMT__RESTRICTION:
         setRestriction((Expression)null);
@@ -295,10 +403,14 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
   {
     switch (featureID)
     {
+      case IvmlPackage.IMPORT_STMT__INSERT:
+        return INSERT_EDEFAULT == null ? insert != null : !INSERT_EDEFAULT.equals(insert);
       case IvmlPackage.IMPORT_STMT__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case IvmlPackage.IMPORT_STMT__INTERFACE:
         return INTERFACE_EDEFAULT == null ? interface_ != null : !INTERFACE_EDEFAULT.equals(interface_);
+      case IvmlPackage.IMPORT_STMT__WILDCARD:
+        return WILDCARD_EDEFAULT == null ? wildcard != null : !WILDCARD_EDEFAULT.equals(wildcard);
       case IvmlPackage.IMPORT_STMT__RESTRICTION:
         return restriction != null;
     }
@@ -316,10 +428,14 @@ public class ImportStmtImpl extends MinimalEObjectImpl.Container implements Impo
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (insert: ");
+    result.append(insert);
+    result.append(", name: ");
     result.append(name);
     result.append(", interface: ");
     result.append(interface_);
+    result.append(", wildcard: ");
+    result.append(wildcard);
     result.append(')');
     return result.toString();
   }

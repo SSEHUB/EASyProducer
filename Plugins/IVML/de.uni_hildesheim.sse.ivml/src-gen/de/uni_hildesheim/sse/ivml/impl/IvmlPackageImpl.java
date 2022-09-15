@@ -1637,7 +1637,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   @Override
-  public EAttribute getImportStmt_Name()
+  public EAttribute getImportStmt_Insert()
   {
     return (EAttribute)importStmtEClass.getEStructuralFeatures().get(0);
   }
@@ -1648,7 +1648,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   @Override
-  public EAttribute getImportStmt_Interface()
+  public EAttribute getImportStmt_Name()
   {
     return (EAttribute)importStmtEClass.getEStructuralFeatures().get(1);
   }
@@ -1659,9 +1659,31 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   @Override
+  public EAttribute getImportStmt_Interface()
+  {
+    return (EAttribute)importStmtEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getImportStmt_Wildcard()
+  {
+    return (EAttribute)importStmtEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getImportStmt_Restriction()
   {
-    return (EReference)importStmtEClass.getEStructuralFeatures().get(2);
+    return (EReference)importStmtEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -3276,8 +3298,10 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEReference(exportEClass, EXPORT__NAMES);
 
     importStmtEClass = createEClass(IMPORT_STMT);
+    createEAttribute(importStmtEClass, IMPORT_STMT__INSERT);
     createEAttribute(importStmtEClass, IMPORT_STMT__NAME);
     createEAttribute(importStmtEClass, IMPORT_STMT__INTERFACE);
+    createEAttribute(importStmtEClass, IMPORT_STMT__WILDCARD);
     createEReference(importStmtEClass, IMPORT_STMT__RESTRICTION);
 
     conflictStmtEClass = createEClass(CONFLICT_STMT);
@@ -3605,8 +3629,10 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEReference(getExport_Names(), this.getQualifiedName(), null, "names", null, 0, -1, Export.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(importStmtEClass, ImportStmt.class, "ImportStmt", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getImportStmt_Insert(), ecorePackage.getEString(), "insert", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getImportStmt_Name(), ecorePackage.getEString(), "name", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getImportStmt_Interface(), ecorePackage.getEString(), "interface", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getImportStmt_Wildcard(), ecorePackage.getEString(), "wildcard", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getImportStmt_Restriction(), this.getExpression(), null, "restriction", null, 0, 1, ImportStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(conflictStmtEClass, ConflictStmt.class, "ConflictStmt", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

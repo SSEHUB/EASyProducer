@@ -37,6 +37,7 @@ public class ExpressionDslParser extends AbstractContentAssistParser {
 			nameMappings = new HashMap<AbstractElement, String>() {
 				private static final long serialVersionUID = 1L;
 				{
+					put(grammarAccess.getImportAccess().getAlternatives_0(), "rule__Import__Alternatives_0");
 					put(grammarAccess.getExpressionAccess().getAlternatives(), "rule__Expression__Alternatives");
 					put(grammarAccess.getLogicalOperatorAccess().getAlternatives(), "rule__LogicalOperator__Alternatives");
 					put(grammarAccess.getEqualityOperatorAccess().getAlternatives(), "rule__EqualityOperator__Alternatives");
@@ -136,8 +137,10 @@ public class ExpressionDslParser extends AbstractContentAssistParser {
 					put(grammarAccess.getParameterAccess().getNameAssignment_1(), "rule__Parameter__NameAssignment_1");
 					put(grammarAccess.getParameterAccess().getDfltAssignment_2_1(), "rule__Parameter__DfltAssignment_2_1");
 					put(grammarAccess.getVersionStmtAccess().getVersionAssignment_1(), "rule__VersionStmt__VersionAssignment_1");
+					put(grammarAccess.getImportAccess().getInsertAssignment_0_1(), "rule__Import__InsertAssignment_0_1");
 					put(grammarAccess.getImportAccess().getNameAssignment_1(), "rule__Import__NameAssignment_1");
-					put(grammarAccess.getImportAccess().getVersionSpecAssignment_2(), "rule__Import__VersionSpecAssignment_2");
+					put(grammarAccess.getImportAccess().getWildcardAssignment_2(), "rule__Import__WildcardAssignment_2");
+					put(grammarAccess.getImportAccess().getVersionSpecAssignment_3(), "rule__Import__VersionSpecAssignment_3");
 					put(grammarAccess.getExpressionStatementAccess().getVarAssignment_0_0(), "rule__ExpressionStatement__VarAssignment_0_0");
 					put(grammarAccess.getExpressionStatementAccess().getFieldAssignment_0_1_1(), "rule__ExpressionStatement__FieldAssignment_0_1_1");
 					put(grammarAccess.getExpressionStatementAccess().getExprAssignment_1(), "rule__ExpressionStatement__ExprAssignment_1");

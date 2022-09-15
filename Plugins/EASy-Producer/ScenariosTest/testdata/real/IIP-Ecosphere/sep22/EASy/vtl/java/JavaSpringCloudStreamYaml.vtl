@@ -1,0 +1,196 @@
+import Basics;
+import JavaBasics;
+import JavaMapping;
+import ServiceBasics;
+import SpringBasics;
+import SpringCloudStreamBasics;
+import MeshBasics;
+import EcsRuntimeDockerContainerManagerYaml;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaSpringCloudStreamYaml(IIPEcosphere config, FileArtifact target, mapOf(MeshElement, setOf(MeshConnector)) mappedMesh, sequenceOf(MeshElement) nodes, Application app) extends MeshBasics {
+
+    sequenceOf(String) tmp = {};
+    setOf(String) beans = {};
+    mapOf(DataType, String) backSenders = {};
+    mapOf(DataType, setOf(String)) backReceivers = {};
+    
+    /*
+    * Emits a list prefixed by name:elt, elements separated by ";". Empty if elt is empty.
+    */
+    def namedList(String name, setOf(String) elt) {
+        if (elt.size() > 0) {
+            "${name}: ${semicolonList(elt)}"
+        }
+    }
+    
+    /*
+    * Conditionally emit native encoding (or not).
+    */
+    def nativeEnc(Boolean enable) {
+        if (enable) {
+            'producer: 
+              useNativeEncoding: true'
+        } else {
+            ''
+        }
+    }
+        
+    /*
+    * Emits a spring destination table from destinations. Considers destination "*" as "useNativeEncoding".
+    */
+    def generateDestinations(mapOf(String, setOf(String)) destinations) {
+        if (destinations.size() > 0) {
+            'bindings:'
+            for (String k : destinations.keys().asSequence()->sortedBy(e|e)) { // sortedBy for testing
+                String dst = "";
+                Boolean useNativeEncoding = false;
+                for (String d : destinations.get(k).asSequence()->sortedBy(n|n)) { // sortedBy for testing
+                    if (d == "*") {
+                        useNativeEncoding = true;
+                    } else {
+                        if (dst.length() > 0) {
+                            dst = dst + ",";
+                        }
+                        dst = dst + d;
+                    }
+                }
+                ' ${k}:
+                    ${destinations(dst)|e}
+                    ${nativeEnc(useNativeEncoding)|e}'
+            }
+        }
+    }
+
+    /*
+    * Conditionally emits dst with prefix "destination:" if non empty, empty if dst is empty.
+    */
+    def destinations(String dst) {
+        if (dst.length() > 0) {
+            'destination: ${dst}'
+        } else {
+            ''
+        }
+    }
+    
+    // ----------------------------- creates a protocol setup --------------------------
+    
+    // what is the protocol host, if not global -> "localhost", else initially the global protocol host in the cfg
+    def protocolHost(TransportProtocol protocol, Boolean global) {
+        if (global) {
+            protocol.globalHost;
+        } else {
+            "localhost";
+        }
+    } 
+
+    // convenience function
+    def protocolConfig(IIPEcosphere config, Boolean global) {
+        protocolConfig(config.transportProtocol, global);
+    }
+
+    // dispatch base
+    def protocolConfig(TransportProtocol protocol, Boolean global) {
+        ''
+    }
+
+    def protocolConfig(TransportProtocolAMQP protocol, Boolean global) {
+        '${produceProtocolConfig(protocol, "amqp", global, true)}'
+    }
+
+    def protocolConfig(TransportProtocolMQTTv3 protocol, Boolean global) {
+        '${produceProtocolConfig(protocol, "mqtt", global, false)}'
+    }
+
+    def protocolConfig(TransportProtocolMQTTv5 protocol, Boolean global) {
+        '${produceProtocolConfig(protocol, "mqtt", global, false)}'
+    }
+
+    def produceProtocolConfig(TransportProtocol protocol, String key, Boolean global, Boolean userPwdFallback) {
+        '${key}:
+            host: ${protocolHost(protocol, global)}
+            port: ${protocol.port}
+            ${produceTransportSecurity(protocol, userPwdFallback)|e}'
+    }
+    
+    // --------------------------- spring poller(s) ---------------------------------------------
+    
+    def poller(sequenceOf(MeshElement) nodes) {
+        // until Spring Cloud Streams 3.1.1 there is no individual poll setting per source
+        // might be solved with code, but unsure if needed at all as connectors are anyway asynchronous
+        Integer pollInterval = calcPollerInterval(nodes);
+        if (pollInterval > 0) {
+            'poller:
+                fixedDelay: ${pollInterval}'
+        }
+    }
+        
+    // ------------------------------------- binders ------------------------------------
+    
+    // produce the official, but also our work-around binder structure
+    // internal binder is for internal, localhost communication
+    // external could be a global broker, that may dynamically be selected by the platform 
+    def produceBinders(IIPEcosphere config) {
+        String binder = binderName(config);
+        'binders:
+            properties:
+               internal:
+                   type: ${binder}
+                   environment:
+                       ${protocolConfig(config, false)}
+               external:
+                   type: ${binder}
+                   environment:
+                       ${protocolConfig(config, true)}'
+    }
+    
+    // ----------------------------------------- main -------------------------------------
+ 
+    def main(IIPEcosphere config, FileArtifact target, mapOf(MeshElement, setOf(MeshConnector)) mappedMesh, sequenceOf(MeshElement) nodes, Application app) {
+        mapOf(String, setOf(String)) destinations = {};
+        setOf(String) functions = {};
+        setOf(String) sources = {};
+        calcBindings(mappedMesh, nodes, destinations, functions, sources, "");
+
+        '${protocolConfig(config, false)}'
+        '${produceTransport(config)}'
+        '${produceAas(config, withDocker=false, implLocalEphemerial=config.aasImplServer.devicesAsEphemeral)}'
+        '${produceBinders(config)}'
+        if (app.debug) {
+            'logging: 
+               level: 
+                 org: 
+                   springframework: 
+                     cloud: DEBUG 
+                     integration: DEBUG'
+        }
+        'metricsprovider:
+            schedulerrate: 3000
+            memorybaseunit: kilobytes
+            diskbaseunit: megabytes
+        management:
+            health:
+                binders:
+                    enabled: true
+            endpoints:
+                web:
+                    exposure:
+                        include: "metrics"
+        spring:
+            main:
+                banner-mode: off
+            cloud:
+                function:
+                    ${namedList("definition", functions)}
+                ${namedList("sources", sources)|e}
+                stream:
+                    ${poller(nodes)|e}
+                    default:
+                        contentType: application/iip
+                    defaultBinder: internal
+                    ${generateDestinations(destinations)}
+                    ${produceBinders(config)}'
+    }
+
+}

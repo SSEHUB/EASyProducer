@@ -1,0 +1,257 @@
+project RoutingTest {
+
+    import CommonSetupNoMonUi;
+
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+
+    // ------------ data types ------------------
+    
+    RecordType rec1 = {
+        name = "RoutingTestData",
+        fields = {
+            Field {
+                name = "serNr",
+                type = refBy(IntegerType)
+            }, Field {
+                name = "stringField",
+                type = refBy(StringType)
+            }
+        }
+    };
+
+    RecordType connIn = {
+        name = "RoutingConnIn",
+        fields = {
+            Field {
+                name = "intField",
+                type = refBy(IntegerType)
+            }
+        }
+    };
+
+    RecordType connOut = {
+        name = "RoutingConnOut",
+        fields = {
+            Field {
+                name = "serNr",
+                type = refBy(IntegerType)
+            }, Field {
+                name = "data",
+                type = refBy(StringType)
+            }
+        }
+    };
+    
+    RecordType command = {
+        name = "RoutingCommand",
+        fields = {
+            Field {
+                name = "cmd",
+                type = refBy(StringType)
+            }
+        }
+    };
+    
+    // ------------ individual, reusable services ------------------
+        
+    Service mySourceService = JavaService {
+        id = "myRoutingSource",
+        name = "myRoutingSource",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        asynchronous = false,
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.SourceImpl",
+        artifact = "de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        kind = ServiceKind::SOURCE_SERVICE,
+        input = {{type=refBy(command), forward=false}},
+        output = {{type=refBy(rec1)}}
+    };
+    
+    // own connector for testing
+    Connector myConnector = {
+        id = "myRoutingConnector",
+        name = "myRoutingConnector",
+        description = "",
+        ver = "0.1.0",
+        port = 1234, 
+        samplingPeriod = 500,
+
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.ConnectorImpl",
+        artifact ="de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        nameplateInfo = {
+           manufacturerProductDesignation = "Routing test connector@en",
+           manufacturer = refBy(manufacturer_sse)
+        },
+        
+        input = {{type=refBy(connIn)}, {type=refBy(command), forward=false}},
+        output = {{type=refBy(connOut)}},
+        inInterface = refBy(connIn),
+        outInterface = refBy(connOut),
+        inputHandlers = {{
+          type=refBy(command), 
+          class="de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.ConnectorCommandEventHandler", 
+          artifact=""} // same artifact as connector -> not specified
+        } 
+    };
+    
+    Service myProcessorService = JavaService {
+        id = "RoutingProcessor",
+        name = "RoutingProcessor",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.ProcessorImpl",
+        artifact = "de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        kind = ServiceKind::TRANSFORMATION_SERVICE,
+        input = {{type=refBy(rec1)}, {type=refBy(connOut)}, {type=refBy(command), forward=false}}, 
+        output = {{type=refBy(rec1)}}
+    };
+
+    Service myProcessorP1Service = JavaService {
+        id = "ParallelRoutingProcessor1",
+        name = "ParallelRoutingProcessor1",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.ProcessorP1Impl",
+        artifact = "de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        kind = ServiceKind::TRANSFORMATION_SERVICE,
+        input = {{type=refBy(rec1)}, {type=refBy(command), forward=false}}, 
+        output = {{type=refBy(rec1)}}
+    };
+
+    Service myProcessorP2Service = JavaService {
+        id = "ParallelRoutingProcessor2",
+        name = "ParallelRoutingProcessor2",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.ProcessorP2Impl",
+        artifact = "de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        kind = ServiceKind::TRANSFORMATION_SERVICE,
+        input = {{type=refBy(rec1)}, {type=refBy(command), forward=false}}, 
+        output = {{type=refBy(rec1)}}
+    };
+
+    Service myProcessorP3Service = JavaService {
+        id = "ParallelRoutingProcessor3",
+        name = "ParallelRoutingProcessor3",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        asynchronous = false,
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.ProcessorP3Impl",
+        artifact = "de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        kind = ServiceKind::TRANSFORMATION_SERVICE,
+        input = {{type=refBy(rec1)}, {type=refBy(command), forward=false}}, 
+        output = {{type=refBy(rec1)}}
+    };
+    
+    Service mySinkService = JavaService {
+        id = "RoutingSink",
+        name = "RoutingSink",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "de.iip_ecosphere.platform.test.apps.serviceImpl.routingTest.SinkImpl",
+        artifact = "de.iip-ecosphere.platform:apps.ServiceImpl:" + iipVer,
+        kind = ServiceKind::SINK_SERVICE,
+        input = {{type=refBy(rec1)}},
+        output = {{type=refBy(command), forward=false}}
+    };
+
+    // ------------ application and service nets ------------------
+    
+    Application myApp = {
+        id = "RoutingTestApp",
+        name = "Routing Test App",
+        ver = "0.1.0",
+        description = "",
+        services = {refBy(myMesh)}        
+    };
+    
+    ServiceMesh myMesh = {
+        description = "routing test mesh",
+        sources = {refBy(mySource), refBy(myConn)}
+    };
+    
+    MeshSource mySource = {
+        pollInterval = 800, // only if source is synchronous
+        impl = refBy(mySourceService),
+        next = {refBy(myConnMySourceMyProcessor)}
+    };
+
+    MeshConnector myConnMySourceMyProcessor = {
+        name = "Source->Processor",
+        next = refBy(myProcessor)
+    };
+    
+    MeshSource myConn = {
+        impl = refBy(myConnector),
+        next = {refBy(myConnMyConnMyProcessor)}
+    };
+    
+    MeshConnector myConnMyConnMyProcessor = {
+        name = "Conn->Processor",
+        next = refBy(myProcessor)
+    };
+
+    MeshProcessor myProcessor = {
+        impl = refBy(myProcessorService),
+        next = {refBy(myConnMyProcessorMyParallelProc1), refBy(myConnMyProcessorMyParallelProc2), refBy(myConnMyProcessorMyParallelProc3)}
+    };
+    
+    MeshConnector myConnMyProcessorMyParallelProc1 = {
+        name = "Processor->ParallelProc1",
+        next = refBy(myProcessorP1)
+    };
+
+    MeshConnector myConnMyProcessorMyParallelProc2 = {
+        name = "Processor->ParallelProc2",
+        next = refBy(myProcessorP2)
+    };
+
+    MeshConnector myConnMyProcessorMyParallelProc3 = {
+        name = "Processor->ParallelProc3",
+        next = refBy(myProcessorP3)
+    };
+
+    MeshProcessor myProcessorP1 = {
+        impl = refBy(myProcessorP1Service),
+        next = {refBy(myConnMyProcessorMySink)}
+    };
+
+    MeshProcessor myProcessorP2 = {
+        impl = refBy(myProcessorP2Service),
+        next = {refBy(myConnMyProcessorMySink)}
+    };
+    
+    MeshProcessor myProcessorP3 = {
+        impl = refBy(myProcessorP3Service),
+        next = {refBy(myConnMyProcessorMySink)}
+    };
+
+    MeshConnector myConnMyProcessorMySink = {
+        name = "ProcessorP1/P2/P3->Sink",
+        next = refBy(mySink)
+    };
+
+    MeshSink mySink = {
+        impl = refBy(mySinkService)
+    };
+    
+    // ---------- generation setup ------------
+    
+    sharedInterfaces = true;
+    sharedArtifact = "de.iip-ecosphere.platform:apps.AppInterfacesRoutingTest:" + iipVer; // for testing all-in-one
+
+    // ------------ freezing ------------------
+    
+    freeze {
+        sharedInterfaces;
+        sharedArtifact;
+        .; // every variable declared in this project
+    } but (f|f.bindingTime >= BindingTime.runtimeMon);
+
+}

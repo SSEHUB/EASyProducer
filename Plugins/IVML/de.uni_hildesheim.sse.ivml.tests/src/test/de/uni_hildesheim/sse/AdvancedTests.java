@@ -1112,5 +1112,17 @@ public class AdvancedTests extends AbstractTest {
         Assert.assertEquals("Wrong project at index " + index + " expected \"" + expectedProject + "\" but was \""
             + actualProject + "\"." , expectedProject, actualProject);
     }
-    
+
+    /**
+     * Tests dynamic IVML imports.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testDynamicImports() throws IOException {
+        File inputTestFile = createFile("DynamicImports");
+        List<Project> projects = assertEqual(inputTestFile, null, null);
+        System.out.println(projects);
+    }
+
 }

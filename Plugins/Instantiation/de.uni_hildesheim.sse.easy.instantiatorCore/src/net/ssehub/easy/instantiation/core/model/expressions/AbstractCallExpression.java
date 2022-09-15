@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
+import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider;
@@ -158,6 +159,30 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         }
         return result;
     }
+    
+    /**
+     * Retrieves further operation candidates from imports, but only inserted imports, also through wildcards.
+     * 
+     * @param model the model to follow the imports on
+     * @param name the name of the operation call to be resolved
+     * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
+     * @param candidates the candidates to be modified
+     * @param inInsert whether we are already in an inInsert import
+     */
+    private static void candidatesOnImports(ITypedModel model, String name, int unnamedArgsCount, 
+        List<IMetaOperation> candidates, boolean inInsert) {
+        for (int i = 0; i < model.getImportsCount(); i++) {
+            ModelImport<?> imp = model.getImport(i);
+            if (imp.getResolved() instanceof ITypedModel) {
+                ITypedModel res = (ITypedModel) imp.getResolved();
+                if (imp.isWildcard() && imp.isInsert()) {
+                    candidatesOnImports(res, name, unnamedArgsCount, candidates, true);
+                } else if (inInsert) {
+                    candidates.addAll(res.getCandidates(name, unnamedArgsCount));
+                }
+            }
+        }
+    }
 
     /**
      * Derives the assignable candidates from <code>operand</code>, i.e., operations which 
@@ -177,6 +202,9 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         List<IMetaOperation> result = new ArrayList<IMetaOperation>();
         IMetaType[] argumentTypes = toTypeDescriptors(arguments);
         List<IMetaOperation> candidates = operand.getCandidates(name, unnamedArgsCount);
+        if (operand instanceof ITypedModel) {
+            candidatesOnImports((ITypedModel) operand, name, unnamedArgsCount, candidates, false);
+        }
         for (int o = 0; o < candidates.size(); o++) {
             IMetaOperation desc = candidates.get(o);
             boolean allEqual = true;

@@ -774,7 +774,7 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     ImportStmt returns ImportStmt
 	 *
 	 * Constraint:
-	 *     (name=Identifier interface=Identifier? restriction=Expression?)
+	 *     (insert='insert'? name=Identifier interface=Identifier? wildcard='*'? restriction=Expression?)
 	 */
 	protected void sequence_ImportStmt(ISerializationContext context, ImportStmt semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

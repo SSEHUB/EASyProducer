@@ -518,23 +518,39 @@ ruleImport returns [EObject current=null]
     @init { enterRule(); 
     }
     @after { leaveRule(); }:
-(	otherlv_0='import' 
+((	otherlv_0='import' 
     {
-    	newLeafNode(otherlv_0, grammarAccess.getImportAccess().getImportKeyword_0());
+    	newLeafNode(otherlv_0, grammarAccess.getImportAccess().getImportKeyword_0_0());
     }
+
+    |(
 (
+		lv_insert_1_0=	'insert' 
+    {
+        newLeafNode(lv_insert_1_0, grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getImportRule());
+	        }
+       		setWithLastConsumed($current, "insert", lv_insert_1_0, "insert");
+	    }
+
+)
+))(
 (
 		{ 
 	        newCompositeNode(grammarAccess.getImportAccess().getNameIdentifierParserRuleCall_1_0()); 
 	    }
-		lv_name_1_0=ruleIdentifier		{
+		lv_name_2_0=ruleIdentifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getImportRule());
 	        }
        		set(
        			$current, 
        			"name",
-        		lv_name_1_0, 
+        		lv_name_2_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Identifier");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -542,25 +558,40 @@ ruleImport returns [EObject current=null]
 )
 )(
 (
-		{ 
-	        newCompositeNode(grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_2_0()); 
+		lv_wildcard_3_0=	'*' 
+    {
+        newLeafNode(lv_wildcard_3_0, grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0());
+    }
+ 
+	    {
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getImportRule());
+	        }
+       		setWithLastConsumed($current, "wildcard", lv_wildcard_3_0, "*");
 	    }
-		lv_versionSpec_2_0=ruleVersionSpec		{
+
+)
+)?(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_3_0()); 
+	    }
+		lv_versionSpec_4_0=ruleVersionSpec		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getImportRule());
 	        }
        		set(
        			$current, 
        			"versionSpec",
-        		lv_versionSpec_2_0, 
+        		lv_versionSpec_4_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.VersionSpec");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)?	otherlv_3=';' 
+)?	otherlv_5=';' 
     {
-    	newLeafNode(otherlv_3, grammarAccess.getImportAccess().getSemicolonKeyword_3());
+    	newLeafNode(otherlv_5, grammarAccess.getImportAccess().getSemicolonKeyword_4());
     }
 )
 ;

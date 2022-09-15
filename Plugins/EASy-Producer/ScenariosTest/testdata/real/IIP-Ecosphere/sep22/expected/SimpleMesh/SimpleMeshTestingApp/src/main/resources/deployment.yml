@@ -1,0 +1,56 @@
+id: SimpleMeshApp
+name: Simple Mesh Testing App
+version: 0.1.0
+application:
+  id: SimpleMeshApp
+  name: Simple Mesh Testing App
+  version: 0.1.0
+types:
+    - name: Rec1
+      fields:
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+services:
+   - id: SimpleReceiver
+     name: Simple Data Receiver
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SINK_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRec1_SimpleReceiver-in-0
+         direction: IN
+         id: SimpleSource -> SimpleReceiver
+         type: Rec1
+         function: receiveRec1_SimpleReceiver
+         service: SimpleSource
+   - id: SimpleSource
+     name: Simple Data Source
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRec1_SimpleReceiver-out-0
+         direction: OUT
+         id: SimpleSource -> SimpleReceiver
+         type: Rec1
+         function: createRec1_SimpleSource
+         service: SimpleReceiver
+

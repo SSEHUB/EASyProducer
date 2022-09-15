@@ -1,0 +1,94 @@
+amqp:
+    host: localhost
+    port: 8883
+    authenticationKey: amqp
+transport:
+    host: localhost
+    port: 8883
+    authenticationKey: amqp
+aas:
+  server:
+    port: 9001
+    host: 127.0.0.1
+    schema: HTTP
+    path: 
+  registry:
+    port: 9002
+    host: 127.0.0.1
+    schema: HTTP
+    path: registry
+  implementation:
+    port: -1
+    host: 127.0.0.1
+    netmask: 
+    schema: HTTP
+    protocol: VAB-TCP
+binders:
+    properties:
+       internal:
+           type: amqpBinder
+           environment:
+               amqp:
+                   host: localhost
+                   port: 8883
+                   authenticationKey: amqp
+       external:
+           type: amqpBinder
+           environment:
+               amqp:
+                   host: localhost
+                   port: 8883
+                   authenticationKey: amqp
+metricsprovider:
+    schedulerrate: 3000
+    memorybaseunit: kilobytes
+    diskbaseunit: megabytes
+management:
+    health:
+        binders:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: "metrics"
+spring:
+    main:
+        banner-mode: off
+    cloud:
+        function:
+            definition: createKRec13_SimpleKodexSource;processKRec13_Pseudonymizer;receiveKRec13Anon_KodexReceiver;transformKRec13AnonKRec13Anon_KodexPythonService
+        stream:
+            poller:
+                fixedDelay: 800
+            default:
+                contentType: application/iip
+            defaultBinder: internal
+            bindings:
+             createKRec13_SimpleKodexSource-out-0:
+                destination: createKRec13_SimpleKodexSource
+             processKRec13_Pseudonymizer-in-0:
+                destination: createKRec13_SimpleKodexSource
+             receiveKRec13Anon_KodexReceiver-in-0:
+                destination: transformKRec13AnonKRec13Anon_KodexPythonService
+             transformKRec13AnonKRec13Anon_KodexPythonService-in-0:
+                destination: processKRec13Anon_Pseudonymizer
+                producer: 
+                  useNativeEncoding: true
+             transformKRec13AnonKRec13Anon_KodexPythonService-out-0:
+                destination: transformKRec13AnonKRec13Anon_KodexPythonService
+            binders:
+                properties:
+                   internal:
+                       type: amqpBinder
+                       environment:
+                           amqp:
+                               host: localhost
+                               port: 8883
+                               authenticationKey: amqp
+                   external:
+                       type: amqpBinder
+                       environment:
+                           amqp:
+                               host: localhost
+                               port: 8883
+                               authenticationKey: amqp

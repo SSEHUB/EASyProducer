@@ -49,6 +49,7 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getMapAccess().getSeparatorAlternatives_4_0(), "rule__Map__SeparatorAlternatives_4_0");
 					put(grammarAccess.getForAccess().getSeparatorAlternatives_4_0(), "rule__For__SeparatorAlternatives_4_0");
 					put(grammarAccess.getStatementOrBlockAccess().getAlternatives(), "rule__StatementOrBlock__Alternatives");
+					put(grammarAccess.getImportAccess().getAlternatives_0(), "rule__Import__Alternatives_0");
 					put(grammarAccess.getExpressionAccess().getAlternatives(), "rule__Expression__Alternatives");
 					put(grammarAccess.getLogicalOperatorAccess().getAlternatives(), "rule__LogicalOperator__Alternatives");
 					put(grammarAccess.getEqualityOperatorAccess().getAlternatives(), "rule__EqualityOperator__Alternatives");
@@ -303,8 +304,10 @@ public class RtVilParser extends AbstractContentAssistParser {
 					put(grammarAccess.getParameterAccess().getNameAssignment_1(), "rule__Parameter__NameAssignment_1");
 					put(grammarAccess.getParameterAccess().getDfltAssignment_2_1(), "rule__Parameter__DfltAssignment_2_1");
 					put(grammarAccess.getVersionStmtAccess().getVersionAssignment_1(), "rule__VersionStmt__VersionAssignment_1");
+					put(grammarAccess.getImportAccess().getInsertAssignment_0_1(), "rule__Import__InsertAssignment_0_1");
 					put(grammarAccess.getImportAccess().getNameAssignment_1(), "rule__Import__NameAssignment_1");
-					put(grammarAccess.getImportAccess().getVersionSpecAssignment_2(), "rule__Import__VersionSpecAssignment_2");
+					put(grammarAccess.getImportAccess().getWildcardAssignment_2(), "rule__Import__WildcardAssignment_2");
+					put(grammarAccess.getImportAccess().getVersionSpecAssignment_3(), "rule__Import__VersionSpecAssignment_3");
 					put(grammarAccess.getExpressionAccess().getExprAssignment_0(), "rule__Expression__ExprAssignment_0");
 					put(grammarAccess.getExpressionAccess().getInitAssignment_1(), "rule__Expression__InitAssignment_1");
 					put(grammarAccess.getLogicalExpressionAccess().getLeftAssignment_0(), "rule__LogicalExpression__LeftAssignment_0");

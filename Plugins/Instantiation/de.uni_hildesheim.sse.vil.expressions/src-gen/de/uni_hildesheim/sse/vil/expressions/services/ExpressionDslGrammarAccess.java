@@ -429,25 +429,36 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	public class ImportElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Import");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cImportKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
+		private final Keyword cImportKeyword_0_0 = (Keyword)cAlternatives_0.eContents().get(0);
+		private final Assignment cInsertAssignment_0_1 = (Assignment)cAlternatives_0.eContents().get(1);
+		private final Keyword cInsertInsertKeyword_0_1_0 = (Keyword)cInsertAssignment_0_1.eContents().get(0);
 		private final Assignment cNameAssignment_1 = (Assignment)cGroup.eContents().get(1);
 		private final RuleCall cNameIdentifierParserRuleCall_1_0 = (RuleCall)cNameAssignment_1.eContents().get(0);
-		private final Assignment cVersionSpecAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cVersionSpecVersionSpecParserRuleCall_2_0 = (RuleCall)cVersionSpecAssignment_2.eContents().get(0);
-		private final Keyword cSemicolonKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		private final Assignment cWildcardAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final Keyword cWildcardAsteriskKeyword_2_0 = (Keyword)cWildcardAssignment_2.eContents().get(0);
+		private final Assignment cVersionSpecAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cVersionSpecVersionSpecParserRuleCall_3_0 = (RuleCall)cVersionSpecAssignment_3.eContents().get(0);
+		private final Keyword cSemicolonKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
 		//Import:
-		//	// here fqn because this may reference a specific project (of an external project)
-		//	'import' name=Identifier versionSpec=VersionSpec? ';';
+		//	('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';';
 		@Override public ParserRule getRule() { return rule; }
 
-		//// here fqn because this may reference a specific project (of an external project)
-		//'import' name=Identifier versionSpec=VersionSpec? ';'
+		//('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';'
 		public Group getGroup() { return cGroup; }
 
-		//// here fqn because this may reference a specific project (of an external project)
+		//('import' | insert='insert')
+		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+
 		//'import'
-		public Keyword getImportKeyword_0() { return cImportKeyword_0; }
+		public Keyword getImportKeyword_0_0() { return cImportKeyword_0_0; }
+
+		//insert='insert'
+		public Assignment getInsertAssignment_0_1() { return cInsertAssignment_0_1; }
+
+		//'insert'
+		public Keyword getInsertInsertKeyword_0_1_0() { return cInsertInsertKeyword_0_1_0; }
 
 		//name=Identifier
 		public Assignment getNameAssignment_1() { return cNameAssignment_1; }
@@ -455,14 +466,20 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		//Identifier
 		public RuleCall getNameIdentifierParserRuleCall_1_0() { return cNameIdentifierParserRuleCall_1_0; }
 
+		//wildcard="*"?
+		public Assignment getWildcardAssignment_2() { return cWildcardAssignment_2; }
+
+		//"*"
+		public Keyword getWildcardAsteriskKeyword_2_0() { return cWildcardAsteriskKeyword_2_0; }
+
 		//versionSpec=VersionSpec?
-		public Assignment getVersionSpecAssignment_2() { return cVersionSpecAssignment_2; }
+		public Assignment getVersionSpecAssignment_3() { return cVersionSpecAssignment_3; }
 
 		//VersionSpec
-		public RuleCall getVersionSpecVersionSpecParserRuleCall_2_0() { return cVersionSpecVersionSpecParserRuleCall_2_0; }
+		public RuleCall getVersionSpecVersionSpecParserRuleCall_3_0() { return cVersionSpecVersionSpecParserRuleCall_3_0; }
 
 		//';'
-		public Keyword getSemicolonKeyword_3() { return cSemicolonKeyword_3; }
+		public Keyword getSemicolonKeyword_4() { return cSemicolonKeyword_4; }
 	}
 
 	public class ExpressionStatementElements extends AbstractParserRuleElementFinder {
@@ -2314,8 +2331,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//Import:
-	//	// here fqn because this may reference a specific project (of an external project)
-	//	'import' name=Identifier versionSpec=VersionSpec? ';';
+	//	('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';';
 	public ImportElements getImportAccess() {
 		return pImport;
 	}

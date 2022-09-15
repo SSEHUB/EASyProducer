@@ -1,0 +1,15 @@
+[Unit]
+Description=IIP-Ecosphere Service Manager
+After=iip-ecs.service
+Requires=iip-ecs.service
+
+[Service]
+WorkingDirectory=/opt/iip/gen
+Type=simple
+Restart=on-failure
+KillMode=control-group
+PIDFile=/run/iip-serviceMgr.pid
+ExecStart=/opt/iip/java -cp "svcJars/*:common/*" -Dio.netty.tryReflectionSetAccessible=true -Dlog4j2.formatMsgNoLookups=true -Diip.pid.dir=/run "de.iip_ecosphere.platform.support.LifecycleHandler$WaitingStarter"
+
+[Install]
+WantedBy=multi-user.target

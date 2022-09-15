@@ -49,6 +49,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getAnnotateToAccess().getSnameAlternatives_0_0(), "rule__AnnotateTo__SnameAlternatives_0_0");
 					put(grammarAccess.getAnnotateToAccess().getAlternatives_4(), "rule__AnnotateTo__Alternatives_4");
 					put(grammarAccess.getFreezeStatementAccess().getAlternatives_0(), "rule__FreezeStatement__Alternatives_0");
+					put(grammarAccess.getImportStmtAccess().getAlternatives_0(), "rule__ImportStmt__Alternatives_0");
 					put(grammarAccess.getOpDefStatementAccess().getAlternatives_8(), "rule__OpDefStatement__Alternatives_8");
 					put(grammarAccess.getExpressionAccess().getAlternatives(), "rule__Expression__Alternatives");
 					put(grammarAccess.getOptBlockExpressionAccess().getAlternatives(), "rule__OptBlockExpression__Alternatives");
@@ -104,7 +105,7 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getExportAccess().getGroup_2(), "rule__Export__Group_2__0");
 					put(grammarAccess.getImportStmtAccess().getGroup(), "rule__ImportStmt__Group__0");
 					put(grammarAccess.getImportStmtAccess().getGroup_2(), "rule__ImportStmt__Group_2__0");
-					put(grammarAccess.getImportStmtAccess().getGroup_3(), "rule__ImportStmt__Group_3__0");
+					put(grammarAccess.getImportStmtAccess().getGroup_4(), "rule__ImportStmt__Group_4__0");
 					put(grammarAccess.getConflictStmtAccess().getGroup(), "rule__ConflictStmt__Group__0");
 					put(grammarAccess.getConflictStmtAccess().getGroup_2(), "rule__ConflictStmt__Group_2__0");
 					put(grammarAccess.getVersionStmtAccess().getGroup(), "rule__VersionStmt__Group__0");
@@ -256,9 +257,11 @@ public class IvmlParser extends AbstractContentAssistParser {
 					put(grammarAccess.getInterfaceDeclarationAccess().getExportsAssignment_3(), "rule__InterfaceDeclaration__ExportsAssignment_3");
 					put(grammarAccess.getExportAccess().getNamesAssignment_1(), "rule__Export__NamesAssignment_1");
 					put(grammarAccess.getExportAccess().getNamesAssignment_2_1(), "rule__Export__NamesAssignment_2_1");
+					put(grammarAccess.getImportStmtAccess().getInsertAssignment_0_1(), "rule__ImportStmt__InsertAssignment_0_1");
 					put(grammarAccess.getImportStmtAccess().getNameAssignment_1(), "rule__ImportStmt__NameAssignment_1");
 					put(grammarAccess.getImportStmtAccess().getInterfaceAssignment_2_1(), "rule__ImportStmt__InterfaceAssignment_2_1");
-					put(grammarAccess.getImportStmtAccess().getRestrictionAssignment_3_1(), "rule__ImportStmt__RestrictionAssignment_3_1");
+					put(grammarAccess.getImportStmtAccess().getWildcardAssignment_3(), "rule__ImportStmt__WildcardAssignment_3");
+					put(grammarAccess.getImportStmtAccess().getRestrictionAssignment_4_1(), "rule__ImportStmt__RestrictionAssignment_4_1");
 					put(grammarAccess.getConflictStmtAccess().getNameAssignment_1(), "rule__ConflictStmt__NameAssignment_1");
 					put(grammarAccess.getConflictStmtAccess().getRestrictionAssignment_2_1(), "rule__ConflictStmt__RestrictionAssignment_2_1");
 					put(grammarAccess.getVersionStmtAccess().getVersionAssignment_1(), "rule__VersionStmt__VersionAssignment_1");

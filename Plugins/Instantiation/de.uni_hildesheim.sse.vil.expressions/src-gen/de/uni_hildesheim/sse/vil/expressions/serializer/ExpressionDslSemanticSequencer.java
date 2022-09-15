@@ -458,7 +458,7 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *     Import returns Import
 	 *
 	 * Constraint:
-	 *     (name=Identifier versionSpec=VersionSpec?)
+	 *     (insert='insert'? name=Identifier wildcard='*'? versionSpec=VersionSpec?)
 	 */
 	protected void sequence_Import(ISerializationContext context, Import semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -1,0 +1,12 @@
+project DynamicImports {
+
+    version v0;
+    import DynamicImportsBasis;
+    insert DynImp*;
+    Service1 s1 = {};
+    String dispS1 = getProperty(s1);
+    String dirS1 = getP1(s1);
+    Service2 s2 = {};
+    String dispS2 = getProperty(s2);
+    String dirS2 = getP2(s2);
+}

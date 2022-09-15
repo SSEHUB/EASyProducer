@@ -97,10 +97,14 @@ public abstract class ModelTranslator
             List<ModelImport<M>> tmp = new ArrayList<ModelImport<M>>();
             for (Import imp : imports) {
                 String name = imp.getName();
+                if (imp.getWildcard() != null) {
+                    name += ModelImport.WILDCARD_POSTFIX;
+                }
                 if (!known.contains(name) /*&& isImport and not conflict*/) {
+                    boolean isInsert = imp.getInsert() != null;
                     warnVersionRestrictions(imp.getVersionSpec());
                     tmp.add(new ModelImport<M>(name, false, getExpressionTranslator().
-                        processRestriction(name, imp.getVersionSpec(), resolver)));
+                        processRestriction(name, imp.getVersionSpec(), resolver), isInsert));
                     known.add(name);
                 } else {
                     throw new TranslatorException(name + " is imported multiple times", imp, 

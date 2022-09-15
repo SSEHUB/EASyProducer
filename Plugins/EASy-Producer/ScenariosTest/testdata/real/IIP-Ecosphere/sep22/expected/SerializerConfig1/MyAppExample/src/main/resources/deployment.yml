@@ -1,0 +1,287 @@
+id: myApp
+name: myApp example
+version: 0.1.0
+application:
+  id: myApp
+  name: myApp example
+  version: 0.1.0
+  manufacturerName: Universitaet Hildesheim@de
+  manufacturerProductDesignation: IIP-Ecosphere plattform test application@de
+  manufacturerLogo: SSE-Logo.png
+  productImage: 
+  address:
+    department: Software Systems Engineering@de
+    street: Universitaetsplatz 1@de
+    zipCode: 31141@de
+    cityTown: Hildesheim@de
+types:
+    - name: MyConnPltfIn
+      fields:
+        - name: axis
+          type: int
+        - name: dataField
+          type: String
+    - name: MyConnPltfOut
+      fields:
+        - name: cmdField
+          type: String
+    - name: Rec1
+      fields:
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+    - name: RtsaTestInput
+      fields:
+        - name: id
+          type: int
+        - name: value1
+          type: double
+        - name: value2
+          type: double
+    - name: RtsaTestOutput
+      fields:
+        - name: id
+          type: int
+        - name: value1
+          type: double
+        - name: value2
+          type: double
+        - name: confidence
+          type: double
+        - name: prediction
+          type: boolean
+services:
+   - id: aasSink
+     name: aasSink
+     version: 0.1.0
+     description: Test AAS sink
+     deployable: true
+     kind: SINK_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRtsaTestOutput_aasSink-in-0
+         direction: IN
+         id: myRtsa -> aasSink
+         type: RtsaTestOutput
+         function: receiveRtsaTestOutput_aasSink
+         service: myRtsa
+   - id: myKiFamily
+     name: KI family example
+     description: 
+     version: 0.0.1
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRtsaTestInput_myRtsa-out-0
+         direction: OUT
+         id: myKiFamily -> myRtsa
+         type: RtsaTestInput
+         function: transformRtsaTestInput_myKiFamily
+         service: myRtsa
+       - channel: transformRec1_myKiFamily-in-0
+         direction: IN
+         id: myAnonymizer -> myKiFamily
+         type: Rec1
+         function: transformRec1_myKiFamily
+         service: myAnonymizer
+   - id: myKi
+     name: myKi example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: false
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRtsaTestInput_myRtsa-out-0
+         direction: OUT
+         id: myKiFamily -> myRtsa
+         type: RtsaTestInput
+         function: transformRtsaTestInput_myKiFamily
+         service: myRtsa
+       - channel: transformRec1_myKiFamily-in-0
+         direction: IN
+         id: myAnonymizer -> myKiFamily
+         type: Rec1
+         function: transformRec1_myKiFamily
+         service: myAnonymizer
+     ensembleWith: myKiFamily
+   - id: myKi2
+     name: Alternative myKi example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: false
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRtsaTestInput_myRtsa-out-0
+         direction: OUT
+         id: myKiFamily -> myRtsa
+         type: RtsaTestInput
+         function: transformRtsaTestInput_myKiFamily
+         service: myRtsa
+       - channel: transformRec1_myKiFamily-in-0
+         direction: IN
+         id: myAnonymizer -> myKiFamily
+         type: Rec1
+         function: transformRec1_myKiFamily
+         service: myAnonymizer
+     ensembleWith: myKiFamily
+   - id: myAnonymizer
+     name: myAnonymizer example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: transformRec1_myKiFamily-out-0
+         direction: OUT
+         id: myAnonymizer -> myKiFamily
+         type: Rec1
+         function: processRec1_myAnonymizer
+         service: myKiFamily
+       - channel: processMyConnPltfIn_myAnonymizer-in-0
+         direction: IN
+         id: myMqttConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: processMyConnPltfIn_myAnonymizer
+         service: myMqttConn
+       - channel: processMyConnPltfIn_myAnonymizer-in-0
+         direction: IN
+         id: myOpcConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: processMyConnPltfIn_myAnonymizer
+         service: myOpcConn
+       - channel: processString_myAnonymizer-in-0
+         direction: IN
+         id: mySource -> myAnonymizer
+         type: String
+         function: processString_myAnonymizer
+         service: mySource
+   - id: myMqttConn
+     name: myMqttConnExample
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processMyConnPltfIn_myAnonymizer-out-0
+         direction: OUT
+         id: myMqttConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: 
+         service: myAnonymizer
+   - id: myOpcConn
+     name: myOpcConn example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processMyConnPltfIn_myAnonymizer-out-0
+         direction: OUT
+         id: myOpcConn -> myAnonymizer
+         type: MyConnPltfIn
+         function: 
+         service: myAnonymizer
+   - id: myRtsa
+     name: myRtsa example
+     version: 0.1.0
+     description: Test RapidMiner RTSA integration
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRtsaTestOutput_aasSink-out-0
+         direction: OUT
+         id: myRtsa -> aasSink
+         type: RtsaTestOutput
+         function: processRtsaTestOutput_myRtsa
+         service: aasSink
+       - channel: processRtsaTestInput_myRtsa-in-0
+         direction: IN
+         id: myKiFamily -> myRtsa
+         type: RtsaTestInput
+         function: processRtsaTestInput_myRtsa
+         service: myKiFamily
+     process: 
+         artifacts:
+           - /RTSA-0.14.5.zip
+           - /myRtsaexample-0.1.0.zip
+         homePath: ${tmp}/myRtsa/rtsa
+         executablePath: ${tmp}/myRtsa/rtsa 
+         cmdArg:
+           - --iip.rtsa.path=iip_basic/score_v1
+         started: true
+   - id: mySource
+     name: mySource example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processString_myAnonymizer-out-0
+         direction: OUT
+         id: mySource -> myAnonymizer
+         type: String
+         function: createString_mySource
+         service: myAnonymizer
+

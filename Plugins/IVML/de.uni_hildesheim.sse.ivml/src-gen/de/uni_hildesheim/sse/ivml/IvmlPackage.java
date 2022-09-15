@@ -1146,13 +1146,22 @@ public interface IvmlPackage extends EPackage
   int IMPORT_STMT = 26;
 
   /**
+   * The feature id for the '<em><b>Insert</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT_STMT__INSERT = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int IMPORT_STMT__NAME = 0;
+  int IMPORT_STMT__NAME = 1;
 
   /**
    * The feature id for the '<em><b>Interface</b></em>' attribute.
@@ -1161,7 +1170,16 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IMPORT_STMT__INTERFACE = 1;
+  int IMPORT_STMT__INTERFACE = 2;
+
+  /**
+   * The feature id for the '<em><b>Wildcard</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int IMPORT_STMT__WILDCARD = 3;
 
   /**
    * The feature id for the '<em><b>Restriction</b></em>' containment reference.
@@ -1170,7 +1188,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IMPORT_STMT__RESTRICTION = 2;
+  int IMPORT_STMT__RESTRICTION = 4;
 
   /**
    * The number of structural features of the '<em>Import Stmt</em>' class.
@@ -1179,7 +1197,7 @@ public interface IvmlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int IMPORT_STMT_FEATURE_COUNT = 3;
+  int IMPORT_STMT_FEATURE_COUNT = 5;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.ivml.impl.ConflictStmtImpl <em>Conflict Stmt</em>}' class.
@@ -3801,6 +3819,17 @@ public interface IvmlPackage extends EPackage
   EClass getImportStmt();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getInsert <em>Insert</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Insert</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ImportStmt#getInsert()
+   * @see #getImportStmt()
+   * @generated
+   */
+  EAttribute getImportStmt_Insert();
+
+  /**
    * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getName <em>Name</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -3821,6 +3850,17 @@ public interface IvmlPackage extends EPackage
    * @generated
    */
   EAttribute getImportStmt_Interface();
+
+  /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getWildcard <em>Wildcard</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Wildcard</em>'.
+   * @see de.uni_hildesheim.sse.ivml.ImportStmt#getWildcard()
+   * @see #getImportStmt()
+   * @generated
+   */
+  EAttribute getImportStmt_Wildcard();
 
   /**
    * Returns the meta object for the containment reference '{@link de.uni_hildesheim.sse.ivml.ImportStmt#getRestriction <em>Restriction</em>}'.
@@ -6070,6 +6110,14 @@ public interface IvmlPackage extends EPackage
     EClass IMPORT_STMT = eINSTANCE.getImportStmt();
 
     /**
+     * The meta object literal for the '<em><b>Insert</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORT_STMT__INSERT = eINSTANCE.getImportStmt_Insert();
+
+    /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -6084,6 +6132,14 @@ public interface IvmlPackage extends EPackage
      * @generated
      */
     EAttribute IMPORT_STMT__INTERFACE = eINSTANCE.getImportStmt_Interface();
+
+    /**
+     * The meta object literal for the '<em><b>Wildcard</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute IMPORT_STMT__WILDCARD = eINSTANCE.getImportStmt_Wildcard();
 
     /**
      * The meta object literal for the '<em><b>Restriction</b></em>' containment reference feature.

@@ -1,0 +1,12 @@
+project DynamicImports {
+
+    version v0;
+    import DynamicImportsBasis;
+    insert DynImp*;
+    Service1 s1 = {};
+    getProperty(s1) <> "";
+    getP1(s1) <> "";
+    Service2 s2 = {};
+    getProperty(s2) <> "";
+    getP2(s2) <> "";
+}

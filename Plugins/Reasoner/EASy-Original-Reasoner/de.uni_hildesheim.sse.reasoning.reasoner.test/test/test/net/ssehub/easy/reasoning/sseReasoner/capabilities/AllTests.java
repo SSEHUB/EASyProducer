@@ -15,7 +15,8 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({    
-    AttributeTests.class,  
+    AttributeTests.class,
+    DynamicImportsTests.class,
     CollectionConstraintsTests.class,
     FailedDecisionsTests.class,
     RuntimeReasoningTests.class,

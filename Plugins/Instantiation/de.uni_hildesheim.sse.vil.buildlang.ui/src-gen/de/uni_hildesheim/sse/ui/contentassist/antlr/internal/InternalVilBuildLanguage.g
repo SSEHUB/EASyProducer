@@ -2290,6 +2290,30 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+rule__Import__Alternatives_0
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getImportAccess().getImportKeyword_0_0()); }
+
+	'import' 
+
+{ after(grammarAccess.getImportAccess().getImportKeyword_0_0()); }
+)
+
+    |(
+{ before(grammarAccess.getImportAccess().getInsertAssignment_0_1()); }
+(rule__Import__InsertAssignment_0_1)
+{ after(grammarAccess.getImportAccess().getInsertAssignment_0_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 rule__Expression__Alternatives
     @init {
 		int stackSize = keepStackSize();
@@ -8037,11 +8061,9 @@ rule__Import__Group__0__Impl
     }
 :
 (
-{ before(grammarAccess.getImportAccess().getImportKeyword_0()); }
-
-	'import' 
-
-{ after(grammarAccess.getImportAccess().getImportKeyword_0()); }
+{ before(grammarAccess.getImportAccess().getAlternatives_0()); }
+(rule__Import__Alternatives_0)
+{ after(grammarAccess.getImportAccess().getAlternatives_0()); }
 )
 
 ;
@@ -8097,9 +8119,9 @@ rule__Import__Group__2__Impl
     }
 :
 (
-{ before(grammarAccess.getImportAccess().getVersionSpecAssignment_2()); }
-(rule__Import__VersionSpecAssignment_2)?
-{ after(grammarAccess.getImportAccess().getVersionSpecAssignment_2()); }
+{ before(grammarAccess.getImportAccess().getWildcardAssignment_2()); }
+(rule__Import__WildcardAssignment_2)?
+{ after(grammarAccess.getImportAccess().getWildcardAssignment_2()); }
 )
 
 ;
@@ -8114,6 +8136,7 @@ rule__Import__Group__3
     }
 :
 	rule__Import__Group__3__Impl
+	rule__Import__Group__4
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -8125,17 +8148,47 @@ rule__Import__Group__3__Impl
     }
 :
 (
-{ before(grammarAccess.getImportAccess().getSemicolonKeyword_3()); }
-
-	';' 
-
-{ after(grammarAccess.getImportAccess().getSemicolonKeyword_3()); }
+{ before(grammarAccess.getImportAccess().getVersionSpecAssignment_3()); }
+(rule__Import__VersionSpecAssignment_3)?
+{ after(grammarAccess.getImportAccess().getVersionSpecAssignment_3()); }
 )
 
 ;
 finally {
 	restoreStackSize(stackSize);
 }
+
+
+rule__Import__Group__4
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+	rule__Import__Group__4__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Import__Group__4__Impl
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getImportAccess().getSemicolonKeyword_4()); }
+
+	';' 
+
+{ after(grammarAccess.getImportAccess().getSemicolonKeyword_4()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+
 
 
 
@@ -12835,6 +12888,29 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+rule__Import__InsertAssignment_0_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0()); }
+(
+{ before(grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0()); }
+
+	'insert' 
+
+{ after(grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0()); }
+)
+
+{ after(grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 rule__Import__NameAssignment_1
     @init {
 		int stackSize = keepStackSize();
@@ -12850,14 +12926,37 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__Import__VersionSpecAssignment_2
+rule__Import__WildcardAssignment_2
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_2_0()); }
-	ruleVersionSpec{ after(grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_2_0()); }
+{ before(grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0()); }
+(
+{ before(grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0()); }
+
+	'*' 
+
+{ after(grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0()); }
+)
+
+{ after(grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__Import__VersionSpecAssignment_3
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_3_0()); }
+	ruleVersionSpec{ after(grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_3_0()); }
 )
 
 ;

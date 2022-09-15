@@ -1,0 +1,578 @@
+import JavaBasics;
+import DataOperationBasics;
+import MeshBasics;
+import ServiceBasics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaConnector(Configuration config, FileArtifact target) extends DataOperationBasics {
+
+    Boolean genFrom = false; // temporary
+    String add = "";
+    String topPath = "";
+    Integer nestedStepCount = 0;
+    mapOf(Field, Integer) cachingTimes = {};
+    
+    // qualified/unqualified Java types to be used as template parameter for data from machine in connector generation, 
+    // dispatch basis
+    def String getMachineOutputTypeName(Connector conn) {
+        "Object"; // generic, to be overridden
+    }
+
+    def String getMachineOutputTypeName(ChannelConnector conn) {
+        "byte[]"; // taken from code
+    }
+
+    def String getMachineOutputTypeName(OpcUaV1Connector conn) {
+        "de.iip_ecosphere.platform.connectors.opcuav1.DataItem"; // taken from code
+    }
+
+    def String getMachineOutputTypeName(AasConnector conn) {
+        "Object"; // taken from code
+    }
+
+    // qualified/unqualified Java types to be used as template parameter for data to machine in connector generation, 
+    // dispatch basis
+    def String getMachineInputTypeName(Connector conn) {
+        "Object"; // generic, to be overridden
+    }
+
+    def String getMachineInputTypeName(ChannelConnector conn) {
+        "byte[]"; // generic, to be overridden
+    }
+
+    def String getMachineInputTypeName(OpcUaV1Connector conn) {
+        "Object"; // generic, to be overridden
+    }
+
+    def String getMachineInputTypeName(AasConnector conn) {
+        "Object"; // taken from code
+    }
+
+    def getConnectorGenerics(Connector conn, boolean withMachine) {
+        String type = "<";
+        if (withMachine) {
+            type = type + getMachineOutputTypeName(conn);
+            type = type + ", ";
+            type = type + getMachineInputTypeName(conn);
+            type = type + ", ";
+        }
+        type = type + asTypeName(getFirstTypeName(conn.output));
+        type = type + ", ";
+        type = type + asTypeName(getFirstTypeName(conn.input));
+        type + ">";
+    }
+    
+    // dispatch basis: return the adapter type for a non-channel connector; monitoring - return the type name for the 
+    // monitoring wrapper
+    def adapterType(Connector conn, Boolean monitoring) {
+        String connGen = getConnectorGenerics(conn, true);
+        String name;
+        if (monitoring) {
+            name = "MonitoredTranslatingProtocolAdapter"; // channeled, but use without channels
+        } else {
+            name = "TranslatingProtocolAdapter";
+        }
+        '${name}${connGen}'
+    }
+    
+    def adapterCreationFragment(Connector conn, String varName, String metricsVarName, String logFileVarName) {
+        String inAdapter;
+        String outAdapter;
+        if (conn.inAdapterClass.length() > 0) {
+            inAdapter = "new ${conn.inAdapterClass}()";
+        } else {
+            inAdapter = "new MachineInputTranslator()";
+        }
+        if (conn.outAdapterClass.length() > 0) {
+            outAdapter = "new ${conn.outAdapterClass}()";
+        } else {
+            outAdapter = "new MachineOutputTranslator()";
+        }
+        
+        '${adapterType(conn, false)} ${varName};
+        if (${metricsVarName} != null) {
+            ${varName} = new ${adapterType(conn, true)}(
+                ${outAdapter}, 
+                ${inAdapter}, 
+                ${metricsVarName}, ${logFileVarName});
+        } else {
+            ${varName} = new ${adapterType(conn, false)}(
+                ${outAdapter}, 
+                ${inAdapter});
+        }'
+    }
+    
+    def escapeString(String str) {
+        "\"${str}\""
+    }
+    
+    def getEncoding(Connector conn) {
+        switch(conn.encoding) {
+            TextEncoding::ANSI : "ISO-8859-1",
+            TextEncoding::ASCII : "US-ASCII",
+            TextEncoding::UTF8 : "UTF8"
+        }
+    }
+    
+    // return the adapter type for a channel connector; monitoring - return the type name for the 
+    // monitoring wrapper
+    def adapterType(ChannelConnector conn, Boolean monitoring) {
+        String connGen = getConnectorGenerics(conn, true);
+        String name;
+        if (monitoring) {
+            name = "MonitoredTranslatingProtocolAdapter"; // channeled, here use with channels
+        } else {
+            name = "ChannelTranslatingProtocolAdapter";
+        }
+        '${name}${connGen}'
+    }
+
+    def adapterCreationFragment(ChannelConnector conn, String varName, String metricsVarName, String logFileVarName) {
+        String inSerializer;
+        String outSerializer;
+        if (conn.inSerializerClass.length() > 0) {
+            if (conn.inSerializerClass == "*") {
+                inSerializer = "new ${conn.inInterface}Serializer()";
+            } else {
+                inSerializer = "(Serializer<"+asTypeName(getFirstTypeName(conn.input))+">) TypeTranslators.createSerializer(getClass().getClassLoader(), \"" + conn.inSerializerClass + "\")";
+            }
+        } else {
+            inSerializer = "new ${asTypeName(conn.name)}FormatterSerializer(${escapeString(getEncoding(conn))}, null)";
+        }
+        if (conn.outSerializerClass.length() > 0) {
+            if (conn.outSerializerClass == "*") {
+                outSerializer = "new ${conn.outInterface}Serializer()";
+            } else {
+                outSerializer = "(Serializer<"+asTypeName(getFirstTypeName(conn.output))+">) TypeTranslators.createSerializer(getClass().getClassLoader(), \"" + conn.outSerializerClass + "\")";
+            }
+        } else {
+            outSerializer = "new ${asTypeName(conn.name)}ParserSerializer(${escapeString(getEncoding(conn))}, null)";
+        }
+
+        String inAdapter;
+        String outAdapter;
+        if (conn.inAdapterClass.length() > 0) {
+            inAdapter = "new ${conn.inAdapterClass}()";
+        } else {
+            inAdapter = "new ConnectorInputTypeAdapter<${asTypeName(getFirstTypeName(conn.input))}>(${inSerializer})";
+        }
+        if (conn.outAdapterClass.length() > 0) {
+            outAdapter = "new ${conn.outAdapterClass}()";
+        } else {
+            outAdapter = "new ConnectorOutputTypeAdapter<${asTypeName(getFirstTypeName(conn.output))}>(${outSerializer})";
+        }
+
+        '${adapterType(conn, false)} ${varName};
+        if (${metricsVarName} != null) {
+            ${varName} = new ${adapterType(conn, true)}(
+                "${conn.outChannel}", ${outAdapter}, 
+                "${conn.inChannel}", ${inAdapter}, 
+                ${metricsVarName}, ${logFileVarName});
+        } else {
+            ${varName} = new ${adapterType(conn, false)}(
+                "${conn.outChannel}", ${outAdapter}, 
+                "${conn.inChannel}", ${inAdapter});
+        }' 
+    }
+    
+    // ------------------------------------------ generating adapter translator classes ---------------------------
+    // private inner static classes with fixed names for (model) connectors, no classes for channel connectors
+    
+    // generate adapter translator classes, convenience call    
+    def generateAdapterTranslators(MeshElement elt) {
+        generateAdapterTranslators(elt.impl);
+    }
+    
+    // generate adapter translator classes, dispatch base    
+    def generateAdapterTranslators(ServiceBase service) {
+        ''
+    }
+
+    // generate the adaptor translator classes for a generic connector    
+    def generateAdapterTranslators(Connector conn) {
+        '
+        ${generateMachineInputTranslator(conn)}
+        ${generateMachineOutputTranslator(conn)}'
+    }
+    
+    // don't generate translator classes for channel connectors    
+    def generateAdapterTranslators(ChannelConnector conn) {
+        ''
+    }
+    
+    def genOutputTransTo(DataType imType, DataType pltfType, setOf(AssignmentOperation) assng) {
+        ''
+    }
+    
+    // unify imType with access/model without having an instance, write into pltfType
+    def genOutputTransTo(RecordType imType, RecordType pltfType, setOf(AssignmentOperation) assng) {
+        genFrom = false;
+        setOf(String) done = {};
+        topPath = imType.path;
+        String imTypePath = "";
+        if (not(optWithStepIn)) {
+             imTypePath = topPath;
+        }
+        '${translateDataOperations(assng, imType, imTypePath, pltfType, "result", done)}'
+        mapOf(String, Field) mapping = {};
+        mapSourcePaths(imType, mapping, imTypePath);
+        '${produceDataTransfer(pltfType, mapping, "result", imTypePath, done, "", "")}'
+    }
+    
+    // called via translateDataOperations
+    def genFieldAccess(String path, Field field, Boolean set, String setEnd, String value, String indexes) {
+        '${genFieldAccessInt(path, field, set, setEnd, value, indexes, nestedStepCount)}'; // EASY-bug, nestedStepCount in wrong scope
+    }
+    
+    protected def genFieldAccessInt(String path, Field field, Boolean set, String setEnd, String value, String indexes, Integer nestedCount) {
+       String p;
+       if (optWithStepIn) {
+           p = field.name;
+           if (nestedCount == 0 and topPath <> "") {
+               p = topPath + "/" + p;
+           }
+       } else {
+           p = path + "/" + field.name;
+       }
+       if (set) {
+           if (not(genFrom)) {
+               wrapOptional(field, path + ".set" + asMethodNameSuffix(field.name) + "(" + value + ")") + "${setEnd}"; 
+           } else {
+               wrapOptional(field, "access.set(\"" + p +"\", " + genConvertOp("outConverter", field.type, "from", value) + ")") + "${setEnd}"; 
+           }
+       } else {
+           String ex = "access.get(\"" + p +"\", ${cachingTime(field)})";
+           '${genConvertOp("inConverter", field.type, "to", ex)}';
+       }
+    }
+    
+    def cachingTime(Field field) {
+        if (cachingTimes.containsKey(field)) {
+            cachingTimes.get(field);
+        } else {
+            field.cachingTime;
+        }
+    }
+    
+    // called via produceDataTransfer
+    def produceDataTransfer(Field tgt, String tgtQual, Field src, String srcQual, String indexes, String paths) {
+        String acc = genFieldAccessInt(mapSourcePath(srcQual, src), tgt, genFrom, ";", getterPath(tgtQual, tgt), indexes, nestedStepCount); 
+        if (not(genFrom)) {
+            if (tgt.type.isKindOf(RecordType)) {
+                String nextPath = getterPath(tgtQual, tgt); // all "vars" before the .set
+                String cons = "new ${toTypeName(tgt.type)}${add}()";
+                '\n${createTemporaryVariable(nextPath, mapSourceSeparator(), tgt.type, "${cons}")}
+                ${wrapOptional(tgt, setterPath(getTemporaryVariable(tgtQual, tgtQual), tgt, getTemporaryVariable(nextPath, cons)))};'
+            } else {
+                '\n${wrapOptional(tgt, setterPath(getTemporaryVariable(tgtQual, tgtQual), tgt, acc))};'
+            }            
+        } else {
+            '${acc}'
+        }
+    }
+    
+    // called via produceDataTransfer
+    def produceDataTransfer(Field field, RecordType type, mapOf(String, Field) mapping, String typeQual, String mapQual, setOf(String) done, String indexes, String paths) {
+        if (not(genFrom) and optWithStepIn) {
+            String path = topPath;
+            if (nestedStepCount == 0 and path.length() > 0) {
+                path = path + "/" + field.name;
+            } else {
+                path = field.name;
+            }
+            nestedStepCount = nestedStepCount + 1;
+            '\n\naccess = access.stepInto("${path}");' !<CR>;
+        }
+        '${produceDataTransfer(type, mapping, typeQual, mapQual, done, indexes, paths)}'
+        if (not(genFrom) and optWithStepIn and nestedStepCount > 0) {
+            nestedStepCount = nestedStepCount - 1;
+            'access = access.stepOut();\n'
+        }
+    }
+    
+    // called via mapPaths and produceDataTransfer
+    def mapSourcePath(String qual, Field f) {
+        qual + "/" + f.name;
+    }
+    
+    def String mapSourceSeparator() {
+        "/";
+    }
+    
+    // overwrite internal dispatch basis to allow for data transfer generation on all fields. Object fields are used below to initalize
+    // object fields of data instances
+    def produceDataTransfer(Field f, DataType type, mapOf(String, Field) mapping, String typeQual, String mapQual, setOf(String) done, String indexes, String paths) {
+        String targetSep = mapTargetSeparator();
+        String sourceSep = mapSourceSeparator();
+        String tn = mapTargetPath(typeQual, f);
+        String mq = mapSourcePath(mapQual, f);
+        if (not(done.includes(tn)) and mapping.containsKey(mq)) {
+            Integer tnPos = tn.rfind(targetSep);
+            Integer mqPos = mq.rfind(sourceSep);
+            '${produceDataTransfer(f, prefixPath(tn, targetSep), mapping.get(mq), prefixPath(mq, sourceSep), indexes, paths)}' 
+        } else {
+            ''
+        }
+    }
+    
+    def genOutputTransFrom(DataType imType, DataType pltfType, setOf(AssignmentOperation) assng) {
+        ''
+    }
+
+    // unify imType with access/model without having an instance, write into pltfType
+    def genOutputTransFrom(RecordType imType, RecordType pltfType, setOf(AssignmentOperation) assng) {
+        genFrom = true;
+        setOf(String) done = {};
+        topPath = imType.path;
+        String imTypePath = "";
+        if (not(optWithStepIn)) {
+             imTypePath = topPath;
+        }
+        '${translateDataOperations(assng, imType, imTypePath, pltfType, "data", done)}'
+        mapOf(String, Field) mapping = {};
+        mapSourcePaths(imType, mapping, imTypePath);
+        '${produceDataTransfer(pltfType, mapping, "data", imTypePath, done, "", "")}'|8;
+    }
+    
+    def setAdd(Configuration config) {
+        IIPEcosphere cfg = config;
+        if (cfg.sharedInterfaces) {
+            add = "Impl";
+        } else {
+            add = "";
+        }
+    }
+
+    def generateMachineOutputTranslator(Connector conn) {
+        clearTemporaryVariables();
+        Boolean useNotifications = conn.samplingPeriod <= 0; // else polling
+        cachingTimes = mappedCachingTimes(conn.mapping);
+        if (conn.inAdapterClass.length() == 0) {
+            setAdd(config);
+            String coType = asTypeName(getFirstTypeName(conn.output));
+            String oType = getMachineOutputTypeName(conn);
+        '
+        private static class MachineOutputTranslator extends AbstractConnectorOutputTypeTranslator<${oType}, ${coType}> {
+        
+            @Override
+            public ${coType} to(${oType} source) throws IOException {
+                ModelAccess access = getModelAccess();
+                ModelInputConverter inConverter = access.getInputConverter();
+                ModelOutputConverter outConverter = access.getOutputConverter();
+                ${coType} result = new ${coType}${add}();
+                ${genOutputTransTo(conn.outInterface, getFirstType(conn.output), conn.operations)}
+                return result; 
+            }
+        
+            @Override
+            public void initializeModelAccess() throws IOException {
+                ModelAccess access = getModelAccess();
+                access.useNotifications(${useNotifications});
+            }
+        
+            @Override
+            public Class<? extends ${oType}> getSourceType() {
+                return ${oType}.class;
+            }
+        
+            @Override
+            public Class<? extends ${coType}> getTargetType() {
+                return ${coType}.class;
+            }
+        
+        }'
+        } else {
+        ''
+        }
+    }
+
+    def generateMachineInputTranslator(Connector conn) {
+        clearTemporaryVariables();
+        cachingTimes = mappedCachingTimes(conn.mapping);
+        if (conn.outAdapterClass.length() == 0) {
+            setAdd(config);
+            String ciType = asTypeName(getFirstTypeName(conn.input));
+            String iType = getMachineInputTypeName(conn);
+        '
+        private static class MachineInputTranslator extends AbstractConnectorInputTypeTranslator<${ciType}, ${iType}> {
+        
+            @Override
+            public ${iType} from(${ciType} data) throws IOException {
+                ModelAccess access = getModelAccess();
+                ModelInputConverter inConverter = access.getInputConverter();
+                ModelOutputConverter outConverter = access.getOutputConverter();
+                ${genOutputTransFrom(conn.inInterface, getFirstType(conn.input), conn.operations)}
+                return null; // done, no instance of pseudo type
+            }
+        
+            @Override
+            public Class<? extends ${iType}> getSourceType() {
+                return ${iType}.class;
+            }
+        
+            @Override
+            public Class<? extends ${ciType}> getTargetType() {
+                return ${ciType}.class;
+            }
+        
+        }'
+        } else {
+            ''
+        }
+    }
+    
+    // --------------------------------------- reception callback -----------------------------------------
+    
+    def generateReceptionCallback(MeshElement elt) {
+        generateReceptionCallback(elt, elt.impl);
+    }
+
+    def generateReceptionCallback(MeshElement elt, ServiceBase service) {
+        ''
+    }
+
+    def generateReceptionCallback(MeshElement elt, Connector conn) {
+        String serviceId = "_" + toIdentifier(conn.id);
+        String coType = asTypeName(getFirstTypeName(conn.output));
+        String suffix = coType.firstToUpperCase() + serviceId;
+        String methodSuffix = "create" + suffix;
+        
+        setOf(String) connections = {};        
+        setOf(DataType) outFwd = {}; // are we allowed to sendthis?
+        for (IOType t: forward(conn.output)) {
+            outFwd.add(t.type);
+        }
+        for (MeshConnector c: nextConnectors(elt)) {
+            MeshElement target = c.next;
+            for (IOType t: target.impl.input) {
+               if (outFwd.includes(t.type)) {
+                     String type = toTypeName(t.type);
+                     String outName = getOutName(target, type);
+                     String connId = getMethodSuffixId(getMethodSuffix(target, type, outName), target);
+                     connections.add(connId + "-in-0");
+               }
+            }
+        }
+        String connectionIds = "";
+        for (String c: connections->sortedBy(n|n)) {
+            connectionIds = connectionIds + ", \"${c}\"";
+        }        
+        
+        'private class ConnectorReceptionCallback implements ReceptionCallback<${coType}> {
+        
+            {
+                Starter.getSetup(); // initialize Transport if needed
+            }
+        
+            @Override
+            public void received(${coType} data) {
+                MetricsProvider.increaseCounterBy(serviceSent, 1.0);
+                Transport.send(c -> c.asyncSend("${conn.id}_${coType}", data), "${conn.id}"${connectionIds});
+            }
+        
+            @Override
+            public Class<${coType}> getType() {
+                return ${coType}.class;
+            }
+                
+        }'
+    }
+
+    // --------------------------------------- connector parameter -----------------------------------------
+    
+    def generateConnectorParameter(MeshElement elt, Application app) {
+        generateConnectorParameter(elt.impl, app);
+    }
+
+    def generateConnectorParameter(ServiceBase service, Application app) {
+        ''
+    }
+
+    def getApplicationInformation(Connector conn, Application app) {
+        app.id;
+    }
+
+    def getApplicationInformation(AasConnector conn, Application app) {
+        conn.idShortSpec;
+    }
+
+    def generateEndpointPath(Connector conn) {
+        ""
+    }
+
+    def generateEndpointPath(AasConnector conn) {
+        String url = "http://" + conn.registryHost + ":" + conn.registryPort;
+        if (conn.registryPath <> "") {
+            url = url + "/" + conn.registryPath;
+        }
+        '.setEndpointPath("${url}")'
+    }
+    
+    def getCacheMode(Connector conn) {
+        switch (conn.cacheMode) {
+            CacheMode::HASH : "CacheMode.HASH",
+            CacheMode::EQUALS : "CacheMode.EQUALS",
+            default: "CacheMode.NONE"
+        }
+    }
+
+    def generateConnectorParameter(Connector conn, Application app) {
+        '/**
+        * Creates the connector parameter instance. [public for testing]
+        *
+        * @return the instance to be passed to the connector
+        */
+        public static ConnectorParameter createConnectorParameter() {
+            ${generateConnectorParamSecurityDecls(conn)|e}
+            return ConnectorParameter.ConnectorParameterBuilder
+                .newBuilder("${conn.host}", ${conn.port})
+                .setApplicationInformation("${getApplicationInformation(conn, app)}", "${app.description}")
+                .setCacheMode(${getCacheMode(conn)})
+                ${generateEndpointPath(conn)|e}
+                ${generateConnectorParamSecuritySettings(conn)|e}
+                ${generateNotificationInterval(conn)|e}
+                .build();
+        }'
+    }
+    
+    def generateNotificationInterval(Connector conn) {
+        if (conn.samplingPeriod > 0) {
+            '.setNotificationInterval(${conn.samplingPeriod})'
+        }
+    }
+    
+    def generateConnectorParamSecurityDecls(Connector conn) {
+        if (conn.security <> null) {
+            SecuritySettings sec = conn.security;
+            if (isDefined(sec.authenticationKey) and sec.authenticationKey <> "") {
+                'Map<String, IdentityToken> identities = new HashMap<>();
+                IdentityToken tok = IdentityStore.getInstance().getToken("${sec.authenticationKey}", true, "${conn.host}:${conn.port}"); 
+                identities.put(ConnectorParameter.ANY_ENDPOINT, tok);
+                identities.put("opc.tcp://${conn.host}:${conn.port}", tok);'
+            }
+            if (isDefined(sec.keystorePasswordKey) and sec.keystorePasswordKey <> "") {
+                'IdentityToken kTok = IdentityStore.getInstance().getToken("${sec.keystorePasswordKey}", true);' 
+            }
+        }
+    }
+    
+    def generateConnectorParamSecuritySettings(Connector conn) {
+        if (conn.security <> null) {
+            SecuritySettings sec = conn.security;
+            if (isDefined(sec.authenticationKey) and sec.authenticationKey <> "") {
+                '.setIdentities(identities)'
+            }
+            if (isDefined(sec.keystore) and sec.keystore <> "") {
+                '.setKeystore(new File("${sec.keystore}"), kTok.getTokenDataAsString())'
+            }
+            if (isDefined(sec.keyAlias) and sec.keyAlias <> "") {
+                '.setKeyAlias("${sec.keyAlias}")'
+            }
+            if (isDefined(sec.hostNameVerification)) {
+                '.setHostnameVerification(${sec.hostNameVerification})'
+            }
+        }
+    }
+
+}

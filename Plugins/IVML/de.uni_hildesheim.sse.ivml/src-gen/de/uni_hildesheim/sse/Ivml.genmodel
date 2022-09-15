@@ -125,8 +125,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//Export/names"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ImportStmt">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/insert"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/interface"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//ImportStmt/wildcard"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//ImportStmt/restriction"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//ConflictStmt">

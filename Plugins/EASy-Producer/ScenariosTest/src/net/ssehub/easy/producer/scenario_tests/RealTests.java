@@ -4,6 +4,7 @@ import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assert
 import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assertFileEqualityRec;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -543,9 +544,15 @@ public class RealTests extends AbstractRealTests {
     private static class IipTestModifier implements ITestModifier {
 
         private String vilFolderName;
-        
+        private String vilStartRuleName;
+
         private IipTestModifier(String vilFolderName) {
+            this(vilFolderName, "main");
+        }
+        
+        private IipTestModifier(String vilFolderName, String vilStartRuleName) {
             this.vilFolderName = vilFolderName;
+            this.vilStartRuleName = vilStartRuleName;
         }
         
         @Override
@@ -565,6 +572,11 @@ public class RealTests extends AbstractRealTests {
             }
             return result;
         }
+
+        @Override
+        public String getVilStartRuleName() {
+            return vilStartRuleName;
+        }
         
     }
 
@@ -576,9 +588,9 @@ public class RealTests extends AbstractRealTests {
     @Test
     public void testIipEcosphereOct21() throws IOException {
         final String folder = "oct21";
-        executeIipCase(folder, "SerializerConfig1");
-        executeIipCase(folder, "SimpleMesh");
-        executeIipCase(folder, "SimpleMesh3");
+        executeIipCase(folder, "SerializerConfig1", "main");
+        executeIipCase(folder, "SimpleMesh", "main");
+        executeIipCase(folder, "SimpleMesh3", "main");
     }
 
     /**
@@ -589,25 +601,54 @@ public class RealTests extends AbstractRealTests {
     @Test
     public void testIipEcosphereNov21() throws IOException {
         final String folder = "nov21";
-        executeIipCase(folder, "SerializerConfig1");
-        executeIipCase(folder, "SimpleMesh");
-        executeIipCase(folder, "SimpleMesh3");
+        executeIipCase(folder, "SerializerConfig1", "main");
+        executeIipCase(folder, "SimpleMesh", "main");
+        executeIipCase(folder, "SimpleMesh3", "main");
     }
-    
+
+    /**
+     * Tests the IIP-Ecosphere model / instantiation (September 21).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testIipEcosphereSep22() throws IOException {
+        final String folder = "sep22";
+        executeIipCase(folder, "SimpleMesh", "generateApps");
+        executeIipCase(folder, "SimpleMesh3", "generateApps");
+        executeIipCase(folder, "SerializerConfig1", "main");
+        executeIipCase(folder, "SerializerConfig1Old", "generateApps");
+        executeIipCase(folder, "RoutingTest", "generateApps");
+        executeIipCase(folder, "KodexMesh", "generateApps");
+    }
+
     /**
      * Executes an IIP-Ecosphere case.
      * 
      * @param folder the case folder
      * @param modelName the name of the model to load and execute (expected files/created files in folder of same name)
+     * @param vilStartRuleName the name of the VIL start rule to execute
      * @throws IOException if execution/comparison fails
      */
-    private void executeIipCase(String folder, String modelName) throws IOException {
+    private void executeIipCase(String folder, String modelName, String vilStartRuleName) throws IOException {
         String vilFolderName = modelName; // assumed same in expected
         String[] versions = null;
         String[] names = {folder, modelName, "IIPEcosphere"};
         File base = executeCase(names, versions, "IIP-Ecosphere/", null, Mode.REASON_INSTANTIATE, 
-            new IipTestModifier(vilFolderName));
-        assertFileEqualityRec(new File(new File(base, "expected"), vilFolderName), new File(base, vilFolderName));
+            new IipTestModifier(vilFolderName, vilStartRuleName));
+        assertFileEqualityRec(new File(new File(base, "expected"), vilFolderName), new File(base, vilFolderName), 
+            new FileFilter() {
+            
+                @Override
+                public boolean accept(File pathname) {
+                    return !pathname.toString().endsWith("__pycache__");
+                }
+            }
+        );
     }
+    
+    /*protected TracerFactory getTracerFactory() {
+        return ConsoleTracerFactory.INSTANCE;
+    }*/
     
 }

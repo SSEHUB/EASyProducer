@@ -1,0 +1,69 @@
+services:
+- id: aasSink
+  name: aasSink
+  version: 0.1.0
+  description: Test AAS sink
+  manufacturerName: Universitaet Hildesheim@de
+  manufacturerProductDesignation: Application AAS with Trace embedding@en
+  manufacturerLogo: SSE-Logo.png
+  productImage: 
+  address:
+    department: Software Systems Engineering@de
+    street: Universitaetsplatz 1@de
+    zipCode: 31141@de
+    cityTown: Hildesheim@de
+- id: myKi2
+  name: Alternative myKi example
+  version: 0.1.0
+  description: 
+- id: myAnonymizer
+  name: myAnonymizer example
+  version: 0.1.0
+  description: 
+- id: myKi
+  name: myKi example
+  version: 0.1.0
+  description: 
+- id: myMqttConn
+  name: myMqttConnExample
+  version: 0.1.0
+  description: 
+  manufacturerName: Universitaet Hildesheim@de
+  manufacturerProductDesignation: Generic MQTT v3 connector@en
+  manufacturerLogo: SSE-Logo.png
+  productImage: 
+  address:
+    department: Software Systems Engineering@de
+    street: Universitaetsplatz 1@de
+    zipCode: 31141@de
+    cityTown: Hildesheim@de
+- id: myOpcConn
+  name: myOpcConn example
+  version: 0.1.0
+  description: 
+  manufacturerName: Universitaet Hildesheim@de
+  manufacturerProductDesignation: Generic OPC UA connector@en
+  manufacturerLogo: SSE-Logo.png
+  productImage: 
+  address:
+    department: Software Systems Engineering@de
+    street: Universitaetsplatz 1@de
+    zipCode: 31141@de
+    cityTown: Hildesheim@de
+- id: myRtsa
+  name: myRtsa example
+  version: 0.1.0
+  description: Test RapidMiner RTSA integration
+  manufacturerName: RapidMiner Germany@de
+  manufacturerProductDesignation: RTSA AI service@en
+  manufacturerLogo: 
+  productImage: 
+  address:
+    department: RapidMiner GmbH@de
+    street: Westfalendamm 87@de
+    zipCode: 44141@de
+    cityTown: Dortmund@de
+- id: mySource
+  name: mySource example
+  version: 0.1.0
+  description: 

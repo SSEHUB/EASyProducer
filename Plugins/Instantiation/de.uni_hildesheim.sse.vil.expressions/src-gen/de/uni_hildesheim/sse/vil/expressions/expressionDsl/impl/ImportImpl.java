@@ -23,7 +23,9 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ImportImpl#getInsert <em>Insert</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ImportImpl#getName <em>Name</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ImportImpl#getWildcard <em>Wildcard</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ImportImpl#getVersionSpec <em>Version Spec</em>}</li>
  * </ul>
  *
@@ -31,6 +33,26 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class ImportImpl extends MinimalEObjectImpl.Container implements Import
 {
+  /**
+   * The default value of the '{@link #getInsert() <em>Insert</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getInsert()
+   * @generated
+   * @ordered
+   */
+  protected static final String INSERT_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getInsert() <em>Insert</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getInsert()
+   * @generated
+   * @ordered
+   */
+  protected String insert = INSERT_EDEFAULT;
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -50,6 +72,26 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
    * @ordered
    */
   protected String name = NAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getWildcard() <em>Wildcard</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWildcard()
+   * @generated
+   * @ordered
+   */
+  protected static final String WILDCARD_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getWildcard() <em>Wildcard</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getWildcard()
+   * @generated
+   * @ordered
+   */
+  protected String wildcard = WILDCARD_EDEFAULT;
 
   /**
    * The cached value of the '{@link #getVersionSpec() <em>Version Spec</em>}' containment reference.
@@ -88,6 +130,31 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
    * @generated
    */
   @Override
+  public String getInsert()
+  {
+    return insert;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setInsert(String newInsert)
+  {
+    String oldInsert = insert;
+    insert = newInsert;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.IMPORT__INSERT, oldInsert, insert));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public String getName()
   {
     return name;
@@ -105,6 +172,31 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
     name = newName;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.IMPORT__NAME, oldName, name));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getWildcard()
+  {
+    return wildcard;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setWildcard(String newWildcard)
+  {
+    String oldWildcard = wildcard;
+    wildcard = newWildcard;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, ExpressionDslPackage.IMPORT__WILDCARD, oldWildcard, wildcard));
   }
 
   /**
@@ -183,8 +275,12 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.IMPORT__INSERT:
+        return getInsert();
       case ExpressionDslPackage.IMPORT__NAME:
         return getName();
+      case ExpressionDslPackage.IMPORT__WILDCARD:
+        return getWildcard();
       case ExpressionDslPackage.IMPORT__VERSION_SPEC:
         return getVersionSpec();
     }
@@ -201,8 +297,14 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.IMPORT__INSERT:
+        setInsert((String)newValue);
+        return;
       case ExpressionDslPackage.IMPORT__NAME:
         setName((String)newValue);
+        return;
+      case ExpressionDslPackage.IMPORT__WILDCARD:
+        setWildcard((String)newValue);
         return;
       case ExpressionDslPackage.IMPORT__VERSION_SPEC:
         setVersionSpec((VersionSpec)newValue);
@@ -221,8 +323,14 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.IMPORT__INSERT:
+        setInsert(INSERT_EDEFAULT);
+        return;
       case ExpressionDslPackage.IMPORT__NAME:
         setName(NAME_EDEFAULT);
+        return;
+      case ExpressionDslPackage.IMPORT__WILDCARD:
+        setWildcard(WILDCARD_EDEFAULT);
         return;
       case ExpressionDslPackage.IMPORT__VERSION_SPEC:
         setVersionSpec((VersionSpec)null);
@@ -241,8 +349,12 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
   {
     switch (featureID)
     {
+      case ExpressionDslPackage.IMPORT__INSERT:
+        return INSERT_EDEFAULT == null ? insert != null : !INSERT_EDEFAULT.equals(insert);
       case ExpressionDslPackage.IMPORT__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case ExpressionDslPackage.IMPORT__WILDCARD:
+        return WILDCARD_EDEFAULT == null ? wildcard != null : !WILDCARD_EDEFAULT.equals(wildcard);
       case ExpressionDslPackage.IMPORT__VERSION_SPEC:
         return versionSpec != null;
     }
@@ -260,8 +372,12 @@ public class ImportImpl extends MinimalEObjectImpl.Container implements Import
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (name: ");
+    result.append(" (insert: ");
+    result.append(insert);
+    result.append(", name: ");
     result.append(name);
+    result.append(", wildcard: ");
+    result.append(wildcard);
     result.append(')');
     return result.toString();
   }

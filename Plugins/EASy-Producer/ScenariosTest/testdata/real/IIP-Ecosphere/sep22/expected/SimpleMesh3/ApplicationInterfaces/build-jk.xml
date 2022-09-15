@@ -1,0 +1,10 @@
+<project name="configuration.configuration" default="maven" basedir=".">
+    <!-- import of the global SSE Jenkins properties -->
+    <property file="${user.home}/global-build.properties"/>
+    <property file="${user.home}/qualimaster-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
+    <!-- deploy to SSE Mvn repo -->
+    <target name="maven"> 
+        <mvnDeployResolveArtifact artifactPattern="apps.AppInterfacesSimpleMesh3-*.*.*.jar" folderName="IIP-apps-apps.AppInterfacesSimpleMesh3" jarFolder="target" pomFile="pom.xml"/>
+    </target>
+</project>

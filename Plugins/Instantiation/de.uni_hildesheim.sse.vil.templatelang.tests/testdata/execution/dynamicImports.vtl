@@ -1,0 +1,17 @@
+insert dynImp*;
+
+@advice(adviceTestVM1)
+template dynamicImports(Configuration config, FileArtifact target) {
+
+    def processCompound(TestCompoundType cmp) {
+        'test compound type'
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        TestCompoundType cmp = config.byName("c1");
+        processCompound(cmp);
+        cmp = config.byName("c2");
+        processCompound(cmp);
+    }
+
+}

@@ -6032,7 +6032,7 @@ protected class RuleModifier_ProtectedAssignment extends AssignmentToken  {
 
 /************ begin Rule ExpressionStatement ****************
  *
- * // ----------------------- overriding and extending parts of the expression grammar -------------------
+ * @Override
  * ExpressionStatement:
  * 	(var=Identifier ('.' field=Identifier)? '=')?
  * 	expr=Expression ';' | alt=Alternative ';'?;
@@ -6394,6 +6394,7 @@ protected class ExpressionStatement_AltAssignment_1_0 extends AssignmentToken  {
 
 /************ begin Rule PrimaryExpression ****************
  *
+ * @Override
  * PrimaryExpression:
  * 	otherEx=ExpressionOrQualifiedExecution
  * 	| unqEx=UnqualifiedExecution
@@ -10866,13 +10867,11 @@ protected class VersionStmt_SemicolonKeyword_2 extends KeywordToken  {
 /************ begin Rule Import ****************
  *
  * Import:
- * 	// here fqn because this may reference a specific project (of an external project)
- * 	'import' name=Identifier versionSpec=VersionSpec? ';';
+ * 	('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';';
  *
  **/
 
-// // here fqn because this may reference a specific project (of an external project)
-// 'import' name=Identifier versionSpec=VersionSpec? ';'
+// ('import' | insert='insert') name=Identifier wildcard="*"? versionSpec=VersionSpec? ';'
 protected class Import_Group extends GroupToken {
 	
 	public Import_Group(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
@@ -10887,7 +10886,7 @@ protected class Import_Group extends GroupToken {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Import_SemicolonKeyword_3(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Import_SemicolonKeyword_4(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -10901,17 +10900,39 @@ protected class Import_Group extends GroupToken {
 
 }
 
-// // here fqn because this may reference a specific project (of an external project)
-// 'import'
-protected class Import_ImportKeyword_0 extends KeywordToken  {
+// ('import' | insert='insert')
+protected class Import_Alternatives_0 extends AlternativesToken {
+
+	public Import_Alternatives_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
 	
-	public Import_ImportKeyword_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	@Override
+	public Alternatives getGrammarElement() {
+		return grammarAccess.getImportAccess().getAlternatives_0();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new Import_ImportKeyword_0_0(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new Import_InsertAssignment_0_1(lastRuleCallOrigin, this, 1, inst);
+			default: return null;
+		}	
+	}
+
+}
+
+// 'import'
+protected class Import_ImportKeyword_0_0 extends KeywordToken  {
+	
+	public Import_ImportKeyword_0_0(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getImportAccess().getImportKeyword_0();
+		return grammarAccess.getImportAccess().getImportKeyword_0_0();
 	}
 
     @Override
@@ -10922,6 +10943,40 @@ protected class Import_ImportKeyword_0 extends KeywordToken  {
 	}
 
 }
+
+// insert='insert'
+protected class Import_InsertAssignment_0_1 extends AssignmentToken  {
+	
+	public Import_InsertAssignment_0_1(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getImportAccess().getInsertAssignment_0_1();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			default: return lastRuleCallOrigin.createFollowerAfterReturn(this, index, index, inst);
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("insert",true)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("insert");
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getImportAccess().getInsertInsertKeyword_0_1_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
 
 // name=Identifier
 protected class Import_NameAssignment_1 extends AssignmentToken  {
@@ -10938,7 +10993,7 @@ protected class Import_NameAssignment_1 extends AssignmentToken  {
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Import_ImportKeyword_0(lastRuleCallOrigin, this, 0, inst);
+			case 0: return new Import_Alternatives_0(lastRuleCallOrigin, this, 0, inst);
 			default: return null;
 		}	
 	}
@@ -10957,16 +11012,50 @@ protected class Import_NameAssignment_1 extends AssignmentToken  {
 
 }
 
-// versionSpec=VersionSpec?
-protected class Import_VersionSpecAssignment_2 extends AssignmentToken  {
+// wildcard="*"?
+protected class Import_WildcardAssignment_2 extends AssignmentToken  {
 	
-	public Import_VersionSpecAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Import_WildcardAssignment_2(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Assignment getGrammarElement() {
-		return grammarAccess.getImportAccess().getVersionSpecAssignment_2();
+		return grammarAccess.getImportAccess().getWildcardAssignment_2();
+	}
+
+    @Override
+	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
+		switch(index) {
+			case 0: return new Import_NameAssignment_1(lastRuleCallOrigin, this, 0, inst);
+			default: return null;
+		}	
+	}
+
+    @Override	
+	public IEObjectConsumer tryConsume() {
+		if((value = eObjectConsumer.getConsumable("wildcard",false)) == null) return null;
+		IEObjectConsumer obj = eObjectConsumer.cloneAndConsume("wildcard");
+		if(keywordSerializer.isValid(obj.getEObject(), grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0(), value, null)) {
+			type = AssignmentType.KEYWORD;
+			element = grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0();
+			return obj;
+		}
+		return null;
+	}
+
+}
+
+// versionSpec=VersionSpec?
+protected class Import_VersionSpecAssignment_3 extends AssignmentToken  {
+	
+	public Import_VersionSpecAssignment_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
+	}
+	
+	@Override
+	public Assignment getGrammarElement() {
+		return grammarAccess.getImportAccess().getVersionSpecAssignment_3();
 	}
 
     @Override
@@ -10985,7 +11074,7 @@ protected class Import_VersionSpecAssignment_2 extends AssignmentToken  {
 			IEObjectConsumer param = createEObjectConsumer((EObject)value);
 			if(param.isInstanceOf(grammarAccess.getVersionSpecRule().getType().getClassifier())) {
 				type = AssignmentType.PARSER_RULE_CALL;
-				element = grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_2_0(); 
+				element = grammarAccess.getImportAccess().getVersionSpecVersionSpecParserRuleCall_3_0(); 
 				consumed = obj;
 				return param;
 			}
@@ -10997,29 +11086,31 @@ protected class Import_VersionSpecAssignment_2 extends AssignmentToken  {
 	public AbstractToken createFollowerAfterReturn(AbstractToken next,	int actIndex, int index, IEObjectConsumer inst) {
 		if(value == inst.getEObject() && !inst.isConsumed()) return null;
 		switch(index) {
-			case 0: return new Import_NameAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
+			case 0: return new Import_WildcardAssignment_2(lastRuleCallOrigin, next, actIndex, consumed);
+			case 1: return new Import_NameAssignment_1(lastRuleCallOrigin, next, actIndex, consumed);
 			default: return null;
 		}	
 	}	
 }
 
 // ';'
-protected class Import_SemicolonKeyword_3 extends KeywordToken  {
+protected class Import_SemicolonKeyword_4 extends KeywordToken  {
 	
-	public Import_SemicolonKeyword_3(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
+	public Import_SemicolonKeyword_4(AbstractToken lastRuleCallOrigin, AbstractToken next, int transitionIndex, IEObjectConsumer eObjectConsumer) {
 		super(lastRuleCallOrigin, next, transitionIndex, eObjectConsumer);
 	}
 	
 	@Override
 	public Keyword getGrammarElement() {
-		return grammarAccess.getImportAccess().getSemicolonKeyword_3();
+		return grammarAccess.getImportAccess().getSemicolonKeyword_4();
 	}
 
     @Override
 	public AbstractToken createFollower(int index, IEObjectConsumer inst) {
 		switch(index) {
-			case 0: return new Import_VersionSpecAssignment_2(lastRuleCallOrigin, this, 0, inst);
-			case 1: return new Import_NameAssignment_1(lastRuleCallOrigin, this, 1, inst);
+			case 0: return new Import_VersionSpecAssignment_3(lastRuleCallOrigin, this, 0, inst);
+			case 1: return new Import_WildcardAssignment_2(lastRuleCallOrigin, this, 1, inst);
+			case 2: return new Import_NameAssignment_1(lastRuleCallOrigin, this, 2, inst);
 			default: return null;
 		}	
 	}

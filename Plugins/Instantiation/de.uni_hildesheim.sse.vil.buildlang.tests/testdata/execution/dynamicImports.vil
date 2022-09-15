@@ -1,0 +1,17 @@
+insert dynImp*;
+
+@advice(typeSelectTest)
+vilScript dynamicImports (Project source, Project target, Configuration config) {
+
+    String getData(TestCompound c) = : {
+        "test";
+    }
+
+    main() = : {
+        typeSelectTest c = config;
+        getData(c.tc1);
+        getData(c.tc2);
+        getData(c.tc3);
+    }
+
+}

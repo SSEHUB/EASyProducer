@@ -793,7 +793,7 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   @Override
-  public EAttribute getImport_Name()
+  public EAttribute getImport_Insert()
   {
     return (EAttribute)importEClass.getEStructuralFeatures().get(0);
   }
@@ -804,9 +804,31 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   @Override
+  public EAttribute getImport_Name()
+  {
+    return (EAttribute)importEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getImport_Wildcard()
+  {
+    return (EAttribute)importEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getImport_VersionSpec()
   {
-    return (EReference)importEClass.getEStructuralFeatures().get(1);
+    return (EReference)importEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -2113,7 +2135,9 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEAttribute(versionStmtEClass, VERSION_STMT__VERSION);
 
     importEClass = createEClass(IMPORT);
+    createEAttribute(importEClass, IMPORT__INSERT);
     createEAttribute(importEClass, IMPORT__NAME);
+    createEAttribute(importEClass, IMPORT__WILDCARD);
     createEReference(importEClass, IMPORT__VERSION_SPEC);
 
     expressionStatementEClass = createEClass(EXPRESSION_STATEMENT);
@@ -2335,7 +2359,9 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEAttribute(getVersionStmt_Version(), ecorePackage.getEString(), "version", null, 0, 1, VersionStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(importEClass, Import.class, "Import", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getImport_Insert(), ecorePackage.getEString(), "insert", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getImport_Name(), ecorePackage.getEString(), "name", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getImport_Wildcard(), ecorePackage.getEString(), "wildcard", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getImport_VersionSpec(), this.getVersionSpec(), null, "versionSpec", null, 0, 1, Import.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(expressionStatementEClass, ExpressionStatement.class, "ExpressionStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

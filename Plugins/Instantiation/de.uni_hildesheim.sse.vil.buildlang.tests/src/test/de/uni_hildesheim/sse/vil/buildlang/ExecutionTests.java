@@ -1217,5 +1217,15 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     public void testCarShop() throws IOException {
         assertSelfInstantiate("carShop", MAIN_RULE, "CarShop", null);
     }
+    
+    /**
+     * Tests dynamic imports.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testDynamicImports() throws IOException {
+        assertSelfInstantiate("dynamicImports", MAIN_RULE, "typeSelectTest", null);
+    }
 
 }

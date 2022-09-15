@@ -1,0 +1,296 @@
+id: RoutingTestApp
+name: Routing Test App
+version: 0.1.0
+application:
+  id: RoutingTestApp
+  name: Routing Test App
+  version: 0.1.0
+types:
+    - name: RoutingCommand
+      fields:
+        - name: cmd
+          type: String
+    - name: RoutingConnIn
+      fields:
+        - name: intField
+          type: int
+    - name: RoutingConnOut
+      fields:
+        - name: serNr
+          type: int
+        - name: data
+          type: String
+    - name: RoutingTestData
+      fields:
+        - name: serNr
+          type: int
+        - name: stringField
+          type: String
+services:
+   - id: myRoutingConnector
+     name: myRoutingConnector
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRoutingConnOut_RoutingProcessor-out-0
+         direction: OUT
+         id: myRoutingConnector -> RoutingProcessor
+         type: RoutingConnOut
+         function: 
+         service: RoutingProcessor
+       - channel: processRoutingCommand_myRoutingConnector-in-0
+         direction: IN
+         id: RoutingSink -> myRoutingConnector
+         type: RoutingCommand
+         function: createRoutingCommand_myRoutingConnector
+         service: RoutingSink
+   - id: myRoutingSource
+     name: myRoutingSource
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRoutingTestData_RoutingProcessor-out-0
+         direction: OUT
+         id: myRoutingSource -> RoutingProcessor
+         type: RoutingTestData
+         function: createRoutingTestData_myRoutingSource
+         service: RoutingProcessor
+       - channel: processRoutingCommand_myRoutingSource-in-0
+         direction: IN
+         id: RoutingSink -> myRoutingSource
+         type: RoutingCommand
+         function: createRoutingCommand_myRoutingSource
+         service: RoutingSink
+   - id: ParallelRoutingProcessor1
+     name: ParallelRoutingProcessor1
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRoutingTestData_RoutingSink-out-0
+         direction: OUT
+         id: ParallelRoutingProcessor1 -> RoutingSink
+         type: RoutingTestData
+         function: processRoutingTestData_ParallelRoutingProcessor1
+         service: RoutingSink
+       - channel: processRoutingTestData_ParallelRoutingProcessor1-in-0
+         direction: IN
+         id: RoutingProcessor -> ParallelRoutingProcessor1
+         type: RoutingTestData
+         function: processRoutingTestData_ParallelRoutingProcessor1
+         service: RoutingProcessor
+       - channel: processRoutingCommand_ParallelRoutingProcessor1-in-0
+         direction: IN
+         id: RoutingSink -> ParallelRoutingProcessor1
+         type: RoutingCommand
+         function: processRoutingCommand_ParallelRoutingProcessor1
+         service: RoutingSink
+   - id: ParallelRoutingProcessor2
+     name: ParallelRoutingProcessor2
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRoutingTestData_RoutingSink-out-0
+         direction: OUT
+         id: ParallelRoutingProcessor2 -> RoutingSink
+         type: RoutingTestData
+         function: processRoutingTestData_ParallelRoutingProcessor2
+         service: RoutingSink
+       - channel: processRoutingTestData_ParallelRoutingProcessor2-in-0
+         direction: IN
+         id: RoutingProcessor -> ParallelRoutingProcessor2
+         type: RoutingTestData
+         function: processRoutingTestData_ParallelRoutingProcessor2
+         service: RoutingProcessor
+       - channel: processRoutingCommand_ParallelRoutingProcessor2-in-0
+         direction: IN
+         id: RoutingSink -> ParallelRoutingProcessor2
+         type: RoutingCommand
+         function: processRoutingCommand_ParallelRoutingProcessor2
+         service: RoutingSink
+   - id: ParallelRoutingProcessor3
+     name: ParallelRoutingProcessor3
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveRoutingTestData_RoutingSink-out-0
+         direction: OUT
+         id: ParallelRoutingProcessor3 -> RoutingSink
+         type: RoutingTestData
+         function: transformRoutingTestData_ParallelRoutingProcessor3
+         service: RoutingSink
+       - channel: transformRoutingTestData_ParallelRoutingProcessor3-in-0
+         direction: IN
+         id: RoutingProcessor -> ParallelRoutingProcessor3
+         type: RoutingTestData
+         function: transformRoutingTestData_ParallelRoutingProcessor3
+         service: RoutingProcessor
+       - channel: transformRoutingCommand_ParallelRoutingProcessor3-in-0
+         direction: IN
+         id: RoutingSink -> ParallelRoutingProcessor3
+         type: RoutingCommand
+         function: transformRoutingCommand_ParallelRoutingProcessor3
+         service: RoutingSink
+   - id: RoutingProcessor
+     name: RoutingProcessor
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRoutingTestData_ParallelRoutingProcessor1-out-0
+         direction: OUT
+         id: RoutingProcessor -> ParallelRoutingProcessor1
+         type: RoutingTestData
+         function: processRoutingTestData_RoutingProcessor
+         service: ParallelRoutingProcessor1
+       - channel: processRoutingTestData_ParallelRoutingProcessor2-out-0
+         direction: OUT
+         id: RoutingProcessor -> ParallelRoutingProcessor2
+         type: RoutingTestData
+         function: processRoutingTestData_RoutingProcessor
+         service: ParallelRoutingProcessor2
+       - channel: transformRoutingTestData_ParallelRoutingProcessor3-out-0
+         direction: OUT
+         id: RoutingProcessor -> ParallelRoutingProcessor3
+         type: RoutingTestData
+         function: processRoutingTestData_RoutingProcessor
+         service: ParallelRoutingProcessor3
+       - channel: processRoutingConnOut_RoutingProcessor-in-0
+         direction: IN
+         id: myRoutingConnector -> RoutingProcessor
+         type: RoutingConnOut
+         function: processRoutingConnOut_RoutingProcessor
+         service: myRoutingConnector
+       - channel: processRoutingTestData_RoutingProcessor-in-0
+         direction: IN
+         id: myRoutingSource -> RoutingProcessor
+         type: RoutingTestData
+         function: processRoutingTestData_RoutingProcessor
+         service: myRoutingSource
+       - channel: processRoutingCommand_RoutingProcessor-in-0
+         direction: IN
+         id: RoutingSink -> RoutingProcessor
+         type: RoutingCommand
+         function: processRoutingCommand_RoutingProcessor
+         service: RoutingSink
+   - id: RoutingSink
+     name: RoutingSink
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SINK_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processRoutingCommand_myRoutingConnector-out-0
+         direction: OUT
+         id: RoutingSink -> myRoutingConnector
+         type: RoutingCommand
+         function: receiveRoutingCommand_RoutingSink
+         service: myRoutingConnector
+       - channel: processRoutingCommand_myRoutingSource-out-0
+         direction: OUT
+         id: RoutingSink -> myRoutingSource
+         type: RoutingCommand
+         function: receiveRoutingCommand_RoutingSink
+         service: myRoutingSource
+       - channel: receiveRoutingTestData_RoutingSink-in-0
+         direction: IN
+         id: ParallelRoutingProcessor1 -> RoutingSink
+         type: RoutingTestData
+         function: receiveRoutingTestData_RoutingSink
+         service: ParallelRoutingProcessor1
+       - channel: processRoutingCommand_ParallelRoutingProcessor1-out-0
+         direction: OUT
+         id: RoutingSink -> ParallelRoutingProcessor1
+         type: RoutingCommand
+         function: receiveRoutingCommand_RoutingSink
+         service: ParallelRoutingProcessor1
+       - channel: receiveRoutingTestData_RoutingSink-in-0
+         direction: IN
+         id: ParallelRoutingProcessor2 -> RoutingSink
+         type: RoutingTestData
+         function: receiveRoutingTestData_RoutingSink
+         service: ParallelRoutingProcessor2
+       - channel: processRoutingCommand_ParallelRoutingProcessor2-out-0
+         direction: OUT
+         id: RoutingSink -> ParallelRoutingProcessor2
+         type: RoutingCommand
+         function: receiveRoutingCommand_RoutingSink
+         service: ParallelRoutingProcessor2
+       - channel: receiveRoutingTestData_RoutingSink-in-0
+         direction: IN
+         id: ParallelRoutingProcessor3 -> RoutingSink
+         type: RoutingTestData
+         function: receiveRoutingTestData_RoutingSink
+         service: ParallelRoutingProcessor3
+       - channel: transformRoutingCommand_ParallelRoutingProcessor3-out-0
+         direction: OUT
+         id: RoutingSink -> ParallelRoutingProcessor3
+         type: RoutingCommand
+         function: receiveRoutingCommand_RoutingSink
+         service: ParallelRoutingProcessor3
+       - channel: processRoutingCommand_RoutingProcessor-out-0
+         direction: OUT
+         id: RoutingSink -> RoutingProcessor
+         type: RoutingCommand
+         function: receiveRoutingCommand_RoutingSink
+         service: RoutingProcessor
+

@@ -1,0 +1,148 @@
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template PythonBasics(Configuration config, FileArtifact target) {
+
+    def String toBoolean(Boolean b) {
+        if (b) {
+            "True";
+        } else {
+            "False";
+        }
+    }
+
+    def String asIdentifier(String s) {
+        s.replace(" ", "").replace("$","D").toIdentifier();
+    }
+
+    def String asMethodNameSuffix(String s) {
+        s.asIdentifier().firstToUpperCase();
+    }
+    
+    def String asTypeName(String s) {
+        s.asIdentifier().firstToUpperCase();
+    }
+    
+    def String toTypeName(IOType type) {
+        toTypeName(type.type);
+    }
+    
+    def String toTypeName(DataType type) {
+        type.name;
+    }
+    
+    def String toTypeName(RecordType type) {
+        asTypeName(type.name);
+    }
+    
+    def String toTypeName(EnumType type) {
+        asTypeName(type.name);
+    }
+    
+    def String toTypeName(PrimitiveType type) {
+        type.name; // fallback
+    }
+
+    def String toTypeName(ShortTypeType type) {
+        "int";
+    }
+    
+    def String toTypeName(IntegerTypeType type) {
+        "int";
+    }
+    
+    def String toTypeName(UInt16TypeType type) {
+        "int";
+    }
+
+    def String toTypeName(LongTypeType type) {
+        "int";
+    }
+    
+    def String toTypeName(StringTypeType type) {
+        "str";
+    }
+
+    def String toTypeName(BooleanTypeType type) {
+        "bool";
+    }
+
+    def String toTypeName(FloatTypeType type) {
+        "float";
+    }
+
+    def String toTypeName(DoubleTypeType type) {
+        "float";
+    }
+
+    def String toTypeName(ByteTypeType type) {
+        "int"; // ??
+    }
+
+    def String toTypeName(ObjectTypeType type) {
+        "Any";
+    }
+
+	// Start - Added types OPC UA - by Ahmad
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(Integer16TypeType type) {
+        "Int";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(Integer32TypeType type) {
+        "Int";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(Integer64TypeType type) {
+        "Int";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(SByteTypeType type) {
+        "Int";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(UnsignedInteger16TypeType type) {
+        "Int";
+    }
+
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(UnsignedInteger32TypeType type) {
+        "Int";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(UnsignedInteger64TypeType type) {
+        "Int";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(ByteStringTypeType type) {
+        "bytearray";
+    }
+    
+    //NOT READY!! Check mapping to Python
+    def String toTypeName(DateTimeTypeType type) {
+        "datetime";
+    }
+	// End - Added types OPC UA - by Ahmad
+	
+    def String toTypeName(ArrayType type) {
+        "list";
+    } // implies IntegerArrayTypeType, DoubleArrayTypeType 
+
+    def String toTypeName(ByteArrayTypeType type) {
+        "bytearray";
+    }
+
+    def String toTypeName(IEC61131_3DateTimeTypeType type) {
+        "datetime";
+    }
+
+    def String toTypeName(ListType type) {
+        "list[" + toTypeName(type.type) + "]";
+    } 
+    
+}

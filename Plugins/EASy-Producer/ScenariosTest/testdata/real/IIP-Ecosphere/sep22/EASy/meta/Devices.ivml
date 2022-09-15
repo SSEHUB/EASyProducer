@@ -1,0 +1,116 @@
+project Devices {
+
+    import MetaConcepts;
+    import DataTypes;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+        
+    abstract compound ContainerManager {
+       Integer memLimit = 0; // e.g., JVM memory limit in MBytes     
+         // - globally allocated hosts/ports
+         // - global AAS location/URN/URI
+    };
+    
+    compound DockerContainerManager refines ContainerManager {
+        NonEmptyString dockerHost;
+        NonEmptyString dockerImageYamlFilename = "image-info.yml";
+        Boolean deleteWhenUndeployed = false;
+    };
+    
+    ContainerManager containerManager = DockerContainerManager {
+        dockerHost = "unix:///var/run/docker.sock"
+    };
+    isDefined(containerManager);
+    
+    // --------------- Dependencies -------------------------
+    
+    abstract compound Dependency {
+    }
+   
+    // must be installed on system level
+    // Instantiation shall create installedDependencies.yml with this key and install path!
+    compound SystemDependency refines Dependency {
+        String key; 
+    }
+    
+    compound LinuxSystemDependency refines SystemDependency {
+        String name;
+    }
+
+    // preliminary, to record that
+    compound LinuxCommandBasedSystemDependency refines SystemDependency {
+        sequenceOf(String) downloads = {};
+        sequenceOf(String) installCommands = {};
+        sequenceOf(String) bashSetups = {};
+    }
+
+    enum JavaVersion {jdk8, jdk11, jdk16}; 
+
+    SystemDependency JRE8 = {
+        key = "JAVA8"
+    };
+   
+    SystemDependency JDK8 = {
+        key = "JAVA8"
+    };
+
+    SystemDependency JRE11 = {
+        key = "JAVA11"
+    };
+
+    SystemDependency JDK11 = {
+        key = "JAVA11"
+    };
+    
+    
+    SystemDependency PYTHON2 = {
+        key = "PYTHON2"
+    };
+
+    SystemDependency PYTHON3 = {
+        key = "PYTHON3"
+    };
+
+    SystemDependency PYTHON39 = {
+        key = "PYTHON39"
+    };
+   
+    compound PythonDependency refines Dependency {      //e.g. numpy 1.21.5
+        String name;
+        String version;
+        setOf(refTo(Dependency)) dependencies = {};
+    }
+    
+    // ------------------ Devices --------------------------- 
+    
+    enum CpuArchitecture {x86, ARM};
+    enum CpuBits {bit32, bit64};
+    
+    compound EcsDevice refines CComputer {
+        String id;
+        EphemeralPort aasImplPort; // for container; if given, "override" port from transport
+        CpuArchitecture cpu;
+        CpuBits bits;
+        setOf(refTo(Dependency)) provides = {};
+        setOf(String) requiredModules = {};
+        String containerVariant = "1_joined";
+    }
+    
+    compound PhoenixContactDevice refines EcsDevice {
+        setOf(String) requiredModules = {"de.iip-ecosphere.platform:support.metrics.plcNext:" + iipVer};
+    }
+    
+    
+    // --------------- constant freezes --------------------
+    
+    freeze {
+        JRE8;
+        JDK8;
+        JRE11;
+        JDK11;
+        PYTHON2;
+        PYTHON3;
+        PYTHON39;
+    } but (f|f.bindingTime >= BindingTime.runtimeMon);
+
+}

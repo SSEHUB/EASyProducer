@@ -243,8 +243,8 @@ Export :
 ;		
 	
 ImportStmt: 
-	'import' 
-	name=Identifier ('::' interface=Identifier)?
+	('import' | insert='insert')?
+	name=Identifier ('::' interface=Identifier)? (wildcard="*"?)
 	(
 	  'with' restriction = Expression
 	)?

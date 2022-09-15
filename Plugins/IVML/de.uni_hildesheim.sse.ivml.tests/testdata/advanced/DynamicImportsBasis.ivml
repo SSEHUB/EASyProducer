@@ -1,0 +1,10 @@
+project DynamicImportsBasis {
+
+    version v0;
+
+    abstract compound Service {
+    }
+    
+    def String getProperty(Service s) = "";
+        
+}

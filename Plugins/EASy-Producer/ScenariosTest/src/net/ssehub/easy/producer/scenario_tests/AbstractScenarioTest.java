@@ -266,6 +266,13 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
          */
         public File getVilOutputFolder(File temp);
         
+        /**
+         * Returns the VIL start rule name.
+         * 
+         * @return the start rule name
+         */
+        public String getVilStartRuleName();
+        
     }
 
     /**
@@ -307,6 +314,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         @Override
         public File getVilOutputFolder(File temp) {
             return null;
+        }
+
+        @Override
+        public String getVilStartRuleName() {
+            return "main";
         }
         
     }
@@ -398,6 +410,9 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
             Executor executor = new Executor(script, param);
             executor.addBase(targetFile);
+            if (null != modifier) {
+                executor.addStartRuleName(modifier.getVilStartRuleName());
+            }
             try {
                 executor.execute();
             } catch (VilException e) {

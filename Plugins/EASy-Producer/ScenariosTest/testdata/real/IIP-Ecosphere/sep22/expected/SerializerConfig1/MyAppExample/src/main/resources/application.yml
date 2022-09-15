@@ -1,0 +1,98 @@
+amqp:
+    host: localhost
+    port: 8883
+    authenticationKey: amqp
+transport:
+    host: localhost
+    port: 8883
+    authenticationKey: amqp
+aas:
+  server:
+    port: 9001
+    host: 127.0.0.1
+    schema: HTTP
+    path: 
+  registry:
+    port: 9002
+    host: 127.0.0.1
+    schema: HTTP
+    path: registry
+  implementation:
+    port: -1
+    host: 127.0.0.1
+    netmask: 
+    schema: HTTP
+    protocol: VAB-TCP
+binders:
+    properties:
+       internal:
+           type: amqpBinder
+           environment:
+               amqp:
+                   host: localhost
+                   port: 8883
+                   authenticationKey: amqp
+       external:
+           type: amqpBinder
+           environment:
+               amqp:
+                   host: localhost
+                   port: 8883
+                   authenticationKey: amqp
+logging: 
+   level: 
+     org: 
+       springframework: 
+         cloud: DEBUG 
+         integration: DEBUG
+metricsprovider:
+    schedulerrate: 3000
+    memorybaseunit: kilobytes
+    diskbaseunit: megabytes
+management:
+    health:
+        binders:
+            enabled: true
+    endpoints:
+        web:
+            exposure:
+                include: "metrics"
+spring:
+    main:
+        banner-mode: off
+    cloud:
+        function:
+            definition: createMyConnPltfIn_myMqttConn;createMyConnPltfIn_myOpcConn;createString_mySource;processRtsaTestInput_myRtsa;receiveRtsaTestOutput_aasSink;transformRec1RtsaTestInput_myKiFamily;transformRtsaTestInput_myKiFamily
+        stream:
+            default:
+                contentType: application/iip
+            defaultBinder: internal
+            bindings:
+             processRtsaTestInput_myRtsa-in-0:
+                destination: transformRtsaTestInput_myKiFamily
+             receiveRtsaTestOutput_aasSink-in-0:
+                destination: processRtsaTestOutput_myRtsa
+                producer: 
+                  useNativeEncoding: true
+             transformRec1RtsaTestInput_myKiFamily-in-0:
+                destination: processRec1_myAnonymizer
+                producer: 
+                  useNativeEncoding: true
+             transformRtsaTestInput_myKiFamily-out-0:
+                destination: transformRtsaTestInput_myKiFamily
+            binders:
+                properties:
+                   internal:
+                       type: amqpBinder
+                       environment:
+                           amqp:
+                               host: localhost
+                               port: 8883
+                               authenticationKey: amqp
+                   external:
+                       type: amqpBinder
+                       environment:
+                           amqp:
+                               host: localhost
+                               port: 8883
+                               authenticationKey: amqp

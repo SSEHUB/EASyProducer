@@ -1,0 +1,8 @@
+@advice(typeSelectTest)
+vilScript dynImp1 (Project source, Project target, Configuration config) {
+
+    String getData(SpecialCompound c) = : {
+        "special";
+    }
+
+}
