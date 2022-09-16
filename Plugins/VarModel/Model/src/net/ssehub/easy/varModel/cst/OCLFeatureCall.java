@@ -296,18 +296,20 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
         // actually unsure whether the other inferType operations have to use this method
         IDatatype result = op.getActualReturnType(immediateOperand, parameter);
         ReturnTypeMode mode = op.getReturnTypeMode(); // this is intended to be polymorphic
-        if (ReturnTypeMode.TYPED_PARAM_1 == mode && mode.getParameterIndex() < parameters.length 
+        if (ReturnTypeMode.IMMEDIATE_OPERAND_COLLECTION == mode && immediateOperand instanceof MetaType) {
+            // special situation, currently only at allInstances; operation declaration does not know
+            // about specific type to return as only known in expression
+            if (getOperand() instanceof ConstantValue) { // currently no complex type expressions
+                Value val = ((ConstantValue) getOperand()).getConstantValue();
+                if (val instanceof MetaTypeValue) {
+                    IDatatype requestedType = ((MetaTypeValue) val).getValue();
+                    result = createCollectionType(result, requestedType);
+                }
+            }
+        } else if (ReturnTypeMode.TYPED_PARAM_1 == mode && mode.getParameterIndex() < parameters.length 
             && MetaType.TYPE.isAssignableFrom(result)) {
             ConstraintSyntaxTree param = parameters[mode.getParameterIndex()];
-            if (immediateOperand instanceof Set) {
-                Set set = (Set) immediateOperand;
-                result = new Set("", param.getContainedType(), set.getParent());
-            } else if (immediateOperand instanceof Sequence) {
-                Sequence sequence = (Sequence) immediateOperand;
-                result = new Sequence("", param.getContainedType(), sequence.getParent());
-            } else {
-                result = param.getContainedType();
-            }
+            result = createCollectionType(immediateOperand, param.getContainedType());
         } else if (ReturnTypeMode.TYPED_META_1 == mode && mode.getParameterIndex() < parameters.length) {
             ConstraintSyntaxTree cst = getParameter(mode.getParameterIndex());
             if (cst instanceof ConstantValue) {
@@ -316,6 +318,27 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
                     result = ((MetaTypeValue) val).getValue();
                 }
             }
+        }
+        return result;
+    }
+    
+    /**
+     * Creates a collection type.
+     * 
+     * @param immediateOperand the operand determining the collection type
+     * @param containedType the type to be used as contained type of the result collection
+     * @return the collection type, {@code containedType} if {@code immediateOperand} is not a collection
+     */
+    private IDatatype createCollectionType(IDatatype immediateOperand, IDatatype containedType) {
+        IDatatype result;
+        if (immediateOperand instanceof Set) {
+            Set set = (Set) immediateOperand;
+            result = new Set("", containedType, set.getParent());
+        } else if (immediateOperand instanceof Sequence) {
+            Sequence sequence = (Sequence) immediateOperand;
+            result = new Sequence("", containedType, sequence.getParent());
+        } else {
+            result = containedType;
         }
         return result;
     }
