@@ -190,6 +190,33 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
             }
         }
     }
+
+    /**
+     * Visits the most recent changes into the top-most change set. Does not modify the change set.
+     * 
+     * @param visitor the visitor to be called for each change
+     */
+    public void changes(IChangeHistoryVisitor visitor) {
+        if (!changeSetStack.isEmpty()) {
+            CSet top = changeSetStack.peek();
+            for (Map.Entry<AbstractIvmlVariable, Value> e: top.entrySet()) {
+                visitor.changed(e.getKey(), e.getValue());
+            }
+        }
+    }
+    
+    /**
+     * Visits all changes. Does not modify the change set.
+     * 
+     * @param visitor the visitor to be called for each change
+     */
+    public void allChanges(IChangeHistoryVisitor visitor) {
+        for (CSet changes: changeSetStack) {
+            for (Map.Entry<AbstractIvmlVariable, Value> e: changes.entrySet()) {
+                visitor.changed(e.getKey(), e.getValue());
+            }
+        }
+    }
     
     /**
      * Commits the most recent change set into the one before or if there is none into the committed set.

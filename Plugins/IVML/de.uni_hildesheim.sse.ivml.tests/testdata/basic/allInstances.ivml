@@ -5,8 +5,10 @@ project allInstances {
     }
 
     compound data {
+        String name = "";
     }
 
     size(allInstances(position)) > 0;
     size(allInstances(data)) > 0;
+    size(allInstances(data)->select(d|d.name <> "")) > 0;
 }
