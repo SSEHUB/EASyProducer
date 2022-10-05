@@ -60,4 +60,11 @@ public abstract class MessageReceiver implements IMessageReceiver {
      */
     public abstract void error(Diagnostic diagnostic);
 
+    /**
+     * Adds a message.
+     * 
+     * @param msg the message to be added
+     */
+    public abstract void addMessage(Message msg);
+    
 }

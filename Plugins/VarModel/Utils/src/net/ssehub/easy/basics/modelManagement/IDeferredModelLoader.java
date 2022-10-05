@@ -24,8 +24,18 @@ package net.ssehub.easy.basics.modelManagement;
 public interface IDeferredModelLoader <M extends IModel> {
 
     /**
-     * Completes loading in a deferred manner.
+     * Returns an ID of the model, e.g., its URI or its name. Used to identify this loader among 
+     * multiple trials of loading the same model.
+     * 
+     * @return the ID
      */
-    public void completeLoading();
+    public String getModelId();
+    
+    /**
+     * Completes loading in a deferred manner.
+     * 
+     * @param target cleanup target
+     */
+    public void completeLoading(IDeferredModelLoader<M> target);
 
 }

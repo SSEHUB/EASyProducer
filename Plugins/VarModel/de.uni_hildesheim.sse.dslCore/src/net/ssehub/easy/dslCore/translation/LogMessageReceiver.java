@@ -101,5 +101,9 @@ public class LogMessageReceiver extends MessageReceiver {
     public void setLocationHint(URI locationHint) {
         this.locationHint = locationHint;
     }
+
+    @Override
+    public void addMessage(Message msg) {
+    }
     
 };

@@ -118,5 +118,15 @@ public abstract class ModelTranslator <E extends ExpressionTranslator> extends M
     public void error(Diagnostic diagnostic) {
         expressionTranslator.error(diagnostic);
     }
+    
+    /**
+     * Adds a message.
+     * 
+     * @param msg the message to be added
+     */
+    public void addMessage(Message msg) {
+        expressionTranslator.addMessage(msg);
+    }
+
 
 }

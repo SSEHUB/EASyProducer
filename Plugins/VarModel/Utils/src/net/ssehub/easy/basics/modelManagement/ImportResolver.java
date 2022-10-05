@@ -81,8 +81,12 @@ public abstract class ImportResolver<M extends IModel> {
      * Clears this instance for reuse.
      */
     public void clear() {
+        IDeferredModelLoader<M> msgTarget = null;
+        if (deferredLoaders.size() > 1) {
+            msgTarget = deferredLoaders.get(deferredLoaders.size() - 1);
+        }
         for (int l = 0; l < deferredLoaders.size(); l++) {
-            deferredLoaders.get(l).completeLoading();
+            deferredLoaders.get(l).completeLoading(msgTarget);
         }
         deferredLoaders.clear();
         transitiveLoading = true; // back to default
@@ -153,6 +157,13 @@ public abstract class ImportResolver<M extends IModel> {
      */
     public void addDeferredLoader(IDeferredModelLoader<M> loader) {
         if (null != loader) {
+            for (int l = deferredLoaders.size() - 1; l >= 0; l--) {
+                IDeferredModelLoader<M> tmp = deferredLoaders.get(l);
+                if (tmp.getModelId().equals(loader.getModelId())) {
+                    deferredLoaders.remove(l);
+                    break;
+                }
+            }
             deferredLoaders.add(loader);
         }
     }

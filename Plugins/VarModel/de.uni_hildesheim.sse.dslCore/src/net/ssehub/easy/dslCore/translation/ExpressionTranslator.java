@@ -164,6 +164,18 @@ public abstract class ExpressionTranslator extends MessageReceiver {
     }
     
     /**
+     * Adds a message.
+     * 
+     * @param msg the message to be added
+     */
+    public void addMessage(Message msg) {
+        messages.add(msg);
+        if (msg.getStatus() == Status.ERROR) {
+            errorCount++;
+        }
+    }
+    
+    /**
      * Clears all messages registered for <code>info</code>.
      * 
      * @param info the information object to clear the messages for
