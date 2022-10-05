@@ -143,14 +143,14 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
         ModelTranslator translator = new ModelTranslator();
         VariabilityUnit root = parse(uri, true, translator, VariabilityUnit.class);
         Result mRes = null;
-        if (null != root) {
-            try {
+        try {
+            if (null != root) {
                 mRes = translator.createModel(root, toNetUri(uri), true, impResolver);
-            } catch (URISyntaxException e) {
-                throw new IOException(e);
+            } else {
+                mRes = translator.createEmptyResult(toNetUri(uri));
             }
-        } else {
-            mRes = translator.createEmptyResult();
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
         }
         impResolver.addDeferredLoader(mRes);
         if (null == resolver) {

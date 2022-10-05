@@ -44,7 +44,7 @@ public class MismatchedTest extends AbstractTest {
      */
     @Test
     public void testMismatchTestFail() throws IOException {
-        resultHandler(1, 0, loadCompleteProject("MismatchTest"));
+        resultHandler(0, 0, loadCompleteProject("MismatchTest")); // changed over time
     }
 
 }

@@ -142,14 +142,17 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
 
         private List<ResultEntry> entries = new ArrayList<ResultEntry>();
         private ModelTranslator translator;
+        private String id;
         
         /**
          * Creates a result instance representing the parse result for multiple projects and enables deferred loading.
          * 
          * @param translator the model translator instance
+         * @param uri the model URI to be used as ID
          */
-        private Result(ModelTranslator translator) {
+        private Result(ModelTranslator translator, URI uri) {
             this.translator = translator;
+            this.id = uri.toString();
         }
 
         /**
@@ -162,9 +165,16 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         }
         
         @Override
-        public void completeLoading() {
+        public void completeLoading(IDeferredModelLoader<Project> msgTarget) {
             for (int e = 0; e < entries.size(); e++) {
                 entries.get(e).completeLoading(this);
+            }
+            if (msgTarget instanceof Result && msgTarget != this) {
+                Result rTarget = (Result) msgTarget;
+                ModelTranslator myTranslator = getTranslator();
+                for (int m = 0; m < myTranslator.getMessageCount(); m++) {
+                    rTarget.getTranslator().addMessage(myTranslator.getMessage(m));
+                }
             }
         }
         
@@ -188,6 +198,11 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
          */
         ModelTranslator getTranslator() {
             return translator;
+        }
+
+        @Override
+        public String getModelId() {
+            return id;
         }
         
     }
@@ -220,7 +235,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      */
     public Result createModel(VariabilityUnit unit, URI uri, boolean registerSuccessful, 
         ImportResolver<Project> impResolver) {
-        Result result = new Result(this);
+        Result result = new Result(this, uri);
         if (null != unit.getProjects()) {
             HashSet<String> names = new HashSet<String>();
             for (de.uni_hildesheim.sse.ivml.Project p : unit.getProjects()) {
@@ -240,10 +255,11 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     /**
      * Creates an empty result for failure cases.
      * 
+     * @param uri the model uri to identify this result/loader
      * @return an empty result
      */
-    public Result createEmptyResult() {
-        return new Result(this);
+    public Result createEmptyResult(URI uri) {
+        return new Result(this, uri);
     }
 
     /**
