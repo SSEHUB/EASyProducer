@@ -20,7 +20,7 @@ import net.ssehub.easy.varModel.model.values.NullValue;
 
 /**
  * Implements a simple stream-based execution tracer. Produces normalized sequences of collections
- * in order to facilitate easy comparison.
+ * in order to facilitate easy comparison. Does not support filtering.
  * 
  * @author Holger Eichelberger
  */

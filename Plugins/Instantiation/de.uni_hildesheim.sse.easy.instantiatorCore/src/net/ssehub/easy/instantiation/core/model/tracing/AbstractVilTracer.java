@@ -11,9 +11,12 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangElement
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IEnumeratingLoop;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter;
+import net.ssehub.easy.instantiation.core.model.common.NoTraceFilter;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter.LanguageElementKind;
 import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
@@ -42,6 +45,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     private String indentation = "";
     private boolean emitTraceText;
     private boolean enable = true;
+    private ITraceFilter filter = NoTraceFilter.INSTANCE;
 
     /**
      * Creates a tracer instance without emitting trace texts.
@@ -57,6 +61,18 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
      */
     protected AbstractVilTracer(boolean emitTraceText) {
         this.emitTraceText = emitTraceText;
+    }
+
+    @Override
+    public void setTraceFilter(ITraceFilter filter) {
+        if (null != filter) {
+            this.filter = filter;
+        }
+    }
+    
+    @Override
+    public ITraceFilter getTraceFilter() {
+        return filter;
     }
     
     /**
@@ -86,7 +102,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
             writeImpl(indentation + msg);
         }
     }
-
+    
     /**
      * Writes a message.
      * 
@@ -107,7 +123,9 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void traceExecutionException(VilException exception) {
-        write("exception " + exception.getMessage());
+        if (filter.isEnabled(LanguageElementKind.FAILURE)) {
+            write("exception " + exception.getMessage());
+        }
     }
 
     /**
@@ -135,7 +153,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     
     @Override
     public void visitingCallExpression(OperationDescriptor descriptor, CallType callType, Object[] args) {
-        if (TracerHelper.trace(descriptor)) {
+        if (TracerHelper.trace(descriptor) && filter.isEnabled(LanguageElementKind.OPERATION_EXECUTION)) {
             String msg = "call " + descriptor.getName();
             if (descriptor.isConstructor() && null != descriptor.getReturnType()) {
                 msg += " " + descriptor.getReturnType().getVilName();
@@ -173,25 +191,29 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void visitRule(Rule rule, RuntimeEnvironment<?, ?> environment) {
-        String msg = "execute " + rule.getSignature() + " with (";
-        for (int p = 0; p < rule.getParameterCount(); p++) {
-            try {
-                if (p > 0) {
-                    msg += ", ";
+        if (filter.isEnabled(LanguageElementKind.FUNCTION_EXECUTION)) {
+            String msg = "execute " + rule.getSignature() + " with (";
+            for (int p = 0; p < rule.getParameterCount(); p++) {
+                try {
+                    if (p > 0) {
+                        msg += ", ";
+                    }
+                    msg += TracerHelper.toString(environment.getValue(rule.getParameter(p)), true);
+                } catch (VilException e) {
+                    // just ignore this
                 }
-                msg += TracerHelper.toString(environment.getValue(rule.getParameter(p)), true);
-            } catch (VilException e) {
-                // just ignore this
             }
+            msg += ")";
+            write(msg);
+            increaseIndentation();
         }
-        msg += ")";
-        write(msg);
-        increaseIndentation();
     }
 
     @Override
     public void visitedRule(Rule rule, RuntimeEnvironment<?, ?> environment, Object result) {
-        decreaseIndentation();
+        if (filter.isEnabled(LanguageElementKind.FUNCTION_EXECUTION)) {
+            decreaseIndentation();
+        }
     }
 
     @Override
@@ -221,7 +243,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void visitSystemCall(String[] args) {
-        if (args.length > 0) {
+        if (filter.isEnabled(LanguageElementKind.SYSCALL_EXECUTION) && args.length > 0) {
             String msg = "syscall";
             for (int i = 0; i < args.length; i++) {
                 if (i > 0) {
@@ -244,45 +266,53 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void failedAt(Expression expression) {
-        StringWriter out = new StringWriter();
-        ExpressionWriter writer = new BuildlangWriter(out);
-        try {
-            expression.accept(writer);
-        } catch (VilException e) {
+        if (filter.isEnabled(LanguageElementKind.FAILURE)) {
+            StringWriter out = new StringWriter();
+            ExpressionWriter writer = new BuildlangWriter(out);
+            try {
+                expression.accept(writer);
+            } catch (VilException e) {
+            }
+            write("failed expression: " + out);
         }
-        write("failed expression: " + out);
     }
 
     @Override
     public void failedAt(IBuildlangElement element) {
-        StringWriter out = new StringWriter();
-        BuildlangWriter writer = new BuildlangWriter(out);
-        try {
-            element.accept(writer);
-        } catch (VilException e) {
+        if (filter.isEnabled(LanguageElementKind.FAILURE)) {
+            StringWriter out = new StringWriter();
+            BuildlangWriter writer = new BuildlangWriter(out);
+            try {
+                element.accept(writer);
+            } catch (VilException e) {
+            }
+            write("failed at: " + out);
         }
-        write("failed at: " + out);
     }
 
     @Override
     public void visitScript(Script script, RuntimeEnvironment<?, ?> environment) {
-        String ver = Version.toString(script.getVersion());
-        if (null != ver && ver.length() > 0) {
-            ver = " version " + ver;
+        if (filter.isEnabled(LanguageElementKind.LANGUAGE_UNIT)) {
+            String ver = Version.toString(script.getVersion());
+            if (null != ver && ver.length() > 0) {
+                ver = " version " + ver;
+            }
+            String location = "";
+            ModelInfo<Script> info = BuildModel.INSTANCE.availableModels().getModelInfo(script);
+            if (null != info) {
+                location = " @ " + info.getLocation();
+            }
+            write("executing script " + script.getName() + " (" + script.getLanguageName() + ") " 
+                + ver + location);
+            increaseIndentation();
         }
-        String location = "";
-        ModelInfo<Script> info = BuildModel.INSTANCE.availableModels().getModelInfo(script);
-        if (null != info) {
-            location = " @ " + info.getLocation();
-        }
-        write("executing script " + script.getName() + " (" + script.getLanguageName() + ") " 
-            + ver + location);
-        increaseIndentation();
     }
     
     @Override
     public void visitScriptBody(Script script, RuntimeEnvironment<?, ?> environment) {
-        decreaseIndentation();
+        if (filter.isEnabled(LanguageElementKind.LANGUAGE_UNIT)) {
+            decreaseIndentation();
+        }
     }
 
     @Override
@@ -291,25 +321,29 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void visitDef(Def def, RuntimeEnvironment<?, ?> environment) {
-        String msg = "execute def " + def.getSignature() + " with (";
-        for (int p = 0; p < def.getParameterCount(); p++) {
-            try {
-                if (p > 0) {
-                    msg += ", ";
+        if (filter.isEnabled(LanguageElementKind.FUNCTION_DEFINITION)) {
+            String msg = "execute def " + def.getSignature() + " with (";
+            for (int p = 0; p < def.getParameterCount(); p++) {
+                try {
+                    if (p > 0) {
+                        msg += ", ";
+                    }
+                    msg += TracerHelper.toString(environment.getValue(def.getParameter(p)), true);
+                } catch (VilException e) {
+                    // just ignore this
                 }
-                msg += TracerHelper.toString(environment.getValue(def.getParameter(p)), true);
-            } catch (VilException e) {
-                // just ignore this
             }
+            msg += ")";
+            write(msg);
+            increaseIndentation();
         }
-        msg += ")";
-        write(msg);
-        increaseIndentation();
     }
 
     @Override
     public void visitedDef(Def def, RuntimeEnvironment<?, ?> environment, Object result) {
-        decreaseIndentation();
+        if (filter.isEnabled(LanguageElementKind.FUNCTION_DEFINITION)) {
+            decreaseIndentation();
+        }
     }
 
     @Override
@@ -330,29 +364,35 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void failedAt(ITemplateLangElement element) {
-        StringWriter out = new StringWriter();
-        TemplateLangWriter writer = new TemplateLangWriter(out);
-        try {
-            element.accept(writer);
-        } catch (VilException e) {
+        if (filter.isEnabled(LanguageElementKind.FAILURE)) {
+            StringWriter out = new StringWriter();
+            TemplateLangWriter writer = new TemplateLangWriter(out);
+            try {
+                element.accept(writer);
+            } catch (VilException e) {
+            }
+            write("failed at: " + out.toString());
         }
-        write("failed at: " + out.toString());
     }
 
     @Override
     public void visitTemplate(Template template) {
-        String location = "";
-        ModelInfo<Template> info = TemplateModel.INSTANCE.availableModels().getModelInfo(template);
-        if (null != info) {
-            location = " @ " + info.getLocation();
+        if (filter.isEnabled(LanguageElementKind.LANGUAGE_UNIT)) {
+            String location = "";
+            ModelInfo<Template> info = TemplateModel.INSTANCE.availableModels().getModelInfo(template);
+            if (null != info) {
+                location = " @ " + info.getLocation();
+            }
+            write(template.getName() + " " + Version.toString(template.getVersion()) + location);
+            increaseIndentation();
         }
-        write(template.getName() + " " + Version.toString(template.getVersion()) + location);
-        increaseIndentation();
     }
 
     @Override
     public void visitedTemplate(Template template) {
-        decreaseIndentation();
+        if (filter.isEnabled(LanguageElementKind.LANGUAGE_UNIT)) {
+            decreaseIndentation();
+        }
     }
 
     @Override

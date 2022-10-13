@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.io.Writer;
 
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -42,6 +43,15 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     public StreamTracer(Writer out, boolean emitFailed, String... baseFolder) {
         super(out, baseFolder);
         this.emitFailed = emitFailed;
+    }
+    
+    @Override
+    public void setTraceFilter(ITraceFilter filter) {
+    }
+    
+    @Override
+    public ITraceFilter getTraceFilter() {
+        return null; // not supported
     }
 
     @Override

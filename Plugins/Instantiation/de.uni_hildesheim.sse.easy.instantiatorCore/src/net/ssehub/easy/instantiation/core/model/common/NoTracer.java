@@ -17,6 +17,15 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.expressio
     }
     
     @Override
+    public void setTraceFilter(ITraceFilter filter) {
+    }
+    
+    @Override
+    public ITraceFilter getTraceFilter() {
+        return null; // not supported
+    }
+    
+    @Override
     public void trace(String text) {
     }
 

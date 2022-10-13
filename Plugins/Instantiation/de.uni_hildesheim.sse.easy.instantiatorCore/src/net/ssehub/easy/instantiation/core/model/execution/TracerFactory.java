@@ -6,6 +6,8 @@ import java.util.Map;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.basics.progress.ProgressObserver.ISubtask;
 import net.ssehub.easy.basics.progress.ProgressObserver.ITask;
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter;
+import net.ssehub.easy.instantiation.core.model.common.NoTraceFilter;
 
 /**
  * A factory for the VIL language execution tracers. Basically, default tracer factory ({@link #getDefaultInstance()})
@@ -43,6 +45,7 @@ public abstract class TracerFactory {
 
     private static TracerFactory defaultFactory = DEFAULT;
     private static Map<Long, TracerFactory> instances = new HashMap<Long, TracerFactory>();
+    private static ITraceFilter filter = NoTraceFilter.INSTANCE; // legacy
 
     /**
      * The default tracer factory returning tracer instances which do not trace
@@ -121,6 +124,24 @@ public abstract class TracerFactory {
     }
     
     /**
+     * Defines the trace filter to applied on all created tracers.
+     * 
+     * @param fInstance the new trace filter, ignored if <b>null</b>
+     * @return the filter before this call, may be <b>null</b>
+     */
+    public static ITraceFilter setTraceFilter(ITraceFilter fInstance) {
+        ITraceFilter result = filter;
+        if (null != fInstance) {
+            filter = fInstance;
+        }
+        return result;
+    }
+    
+    public static ITraceFilter getTraceFilter() {
+        return filter;
+    }
+    
+    /**
      * Creates a tracer for the VIL template language.
      * 
      * @return a tracer instance for the VIL template language (<b>null</b> will lead to the 
@@ -158,6 +179,7 @@ public abstract class TracerFactory {
         if (null == result) {
             result = DEFAULT.createTemplateLanguageTracerImpl();
         }
+        result.setTraceFilter(filter);
         return result;
     }
     
@@ -174,6 +196,7 @@ public abstract class TracerFactory {
         if (null == result) {
             result = DEFAULT.createBuildLanguageTracerImpl();
         }
+        result.setTraceFilter(filter);
         return result;
     }
 

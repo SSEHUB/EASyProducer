@@ -53,4 +53,18 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.expres
      */
     public void enable(boolean enable);
 
+    /**
+     * Sets a trace filter on this tracer.
+     * 
+     * @param filter the new trace filter, ignored if <b>null</b>
+     */
+    public void setTraceFilter(ITraceFilter filter);
+    
+    /**
+     * Returns the active trace filter.
+     * 
+     * @return the filter, may be <b>null</b> if the tracer does not support filters
+     */
+    public ITraceFilter getTraceFilter();
+
 }

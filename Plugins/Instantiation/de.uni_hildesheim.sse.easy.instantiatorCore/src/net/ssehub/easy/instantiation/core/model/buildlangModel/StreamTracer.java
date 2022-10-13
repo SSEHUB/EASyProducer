@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
 import java.io.Writer;
 
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
@@ -11,7 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
 /**
  * Implements a simple stream-based execution tracer. Produces normalized sequences of collections
  * in order to facilitate easy comparison. As this may affect followup computations, don't use this tracer for 
- * real execution!
+ * real execution! Does not support filtering.
  * 
  * @author Holger Eichelberger
  */
@@ -42,6 +43,15 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     public StreamTracer(Writer out, boolean emitFailed, String... baseFolder) {
         super(out, baseFolder);
         this.emitFailed = emitFailed;
+    }
+
+    @Override
+    public void setTraceFilter(ITraceFilter filter) {
+    }
+    
+    @Override
+    public ITraceFilter getTraceFilter() {
+        return null; // not supported
     }
 
     @Override

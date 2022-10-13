@@ -22,6 +22,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.IEnumeratingLoop;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.VariableDeclaration;
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
@@ -267,6 +268,16 @@ public class DelegatingTracer implements ITracer {
     @Override
     public void traceError(String text) {
         delegate.traceError(text);
+    }
+
+    @Override
+    public void setTraceFilter(ITraceFilter filter) {
+        delegate.setTraceFilter(filter);
+    }
+
+    @Override
+    public ITraceFilter getTraceFilter() {
+        return delegate.getTraceFilter();
     }
 
 }
