@@ -31,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangElement
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IEnumeratingLoop;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.ITraceFilter;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -270,6 +271,15 @@ public class LocalExperimentsTests extends ExperimentsTests {
 
         @Override
         public void visitedWhileBody() {
+        }
+
+        @Override
+        public void setTraceFilter(ITraceFilter filter) {
+        }
+
+        @Override
+        public ITraceFilter getTraceFilter() {
+            return null;
         }
         
     }
