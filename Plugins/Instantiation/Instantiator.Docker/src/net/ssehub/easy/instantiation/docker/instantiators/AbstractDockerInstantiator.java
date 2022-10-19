@@ -37,8 +37,9 @@ public abstract class AbstractDockerInstantiator extends AbstractFileInstantiato
     protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(
         System.getProperty("easy.docker.failOnError", "true"));
 
+    // http://localhost:2375 causes unsupported schema problems on Windows although explained in internet
     private static final String DOCKER_HOST = System.getProperty("easy.docker.host", 
-        SystemUtils.IS_OS_WINDOWS ? "http://localhost:2375" : "unix:///var/run/docker.sock");
+        SystemUtils.IS_OS_WINDOWS ? "unix:///var/run/docker.sock" : "unix:///var/run/docker.sock");
 
     /**
      * Returns the docker client instance.

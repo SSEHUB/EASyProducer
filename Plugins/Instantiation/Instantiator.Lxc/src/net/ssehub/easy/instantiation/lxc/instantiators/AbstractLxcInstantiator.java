@@ -37,8 +37,9 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
     protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(
         System.getProperty("easy.lxc.failOnError", "true"));
 
-    private static final String LXC_HOST = System.getProperty("easy.lxc.host", 
-        SystemUtils.IS_OS_WINDOWS ? "http://localhost:2375" : "unix:///var/run/docker.sock");
+    // http://localhost:2375 causes unsupported schema problems on Windows although explained in internet
+    private static final String LXC_HOST = System.getProperty("easy.docker.host", 
+        SystemUtils.IS_OS_WINDOWS ? "unix:///var/run/docker.sock" : "unix:///var/run/docker.sock");
 
     /**
      * Returns the docker client instance.
