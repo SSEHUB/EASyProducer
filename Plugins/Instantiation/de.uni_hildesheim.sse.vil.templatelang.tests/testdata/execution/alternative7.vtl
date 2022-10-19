@@ -1,0 +1,21 @@
+@advice(alternative7)
+template alternative7(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        alternative7 cfg = config;
+        Integer iVal = 0;
+        if (iVal == CONST_0) {
+            iVal = 1;
+        } else {
+            iVal = 2;
+        }
+        '${iVal}'
+        if (cfg.enumVal == MyEnum.Val1) {
+            iVal = 3;
+        } else         if (cfg.enumVal == MyEnum.Val2) {
+            iVal = 5;
+        }
+        '${iVal}'
+    }
+
+}

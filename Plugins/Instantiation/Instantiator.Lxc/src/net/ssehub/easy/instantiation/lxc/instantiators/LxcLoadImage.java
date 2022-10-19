@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.instantiation.docker.instantiators;
+package net.ssehub.easy.instantiation.lxc.instantiators;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,23 +25,23 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
- * Loads a Docker image.
+ * Instantiator to load a LXC image.
  * 
  * @author Monika Staciwa
  */
-@Instantiator("dockerLoadImage")
-public class DockerLoadImage extends AbstractDockerInstantiator {
+@Instantiator("lxcLoadImage")
+public class LxcLoadImage extends AbstractLxcInstantiator {
 
     // checkstyle: stop exception type check
     
     /**
-     * Loads a Docker image.
+     * Loads a LXC image.
      * 
      * @param archive the image archive to load
      * @return {@code true} if successful, {@code false} 
      * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean dockerLoadImage(Path archive) throws VilException {
+    public static boolean lxcLoadImage(Path archive) throws VilException {
         boolean ok = false;
         File tarFile = archive.getAbsolutePath();
         try {

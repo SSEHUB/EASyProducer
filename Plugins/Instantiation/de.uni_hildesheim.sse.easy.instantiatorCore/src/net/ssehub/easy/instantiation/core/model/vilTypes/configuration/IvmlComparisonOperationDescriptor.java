@@ -63,14 +63,32 @@ public class IvmlComparisonOperationDescriptor extends IvmlOperationDescriptor {
                 // be careful due to casts below
                 tmp = (args[0] == TypeRegistry.NULL);
             } else {
-                Object dVal = ((DecisionVariable) args[0]).getValue();
-                Object iVal = ((IvmlElement) args[1]).getValue();
+                Object dVal = getValue(args[0]);
+                Object iVal = getValue(args[1]);
                 tmp = (dVal != null && iVal != null && dVal.equals(iVal));
             }
             if (!equality) {
                 tmp = !tmp;
             }
             result = tmp;
+        }
+        return result;
+    }
+    
+    /**
+     * Turns an {@code obj} into a value, considering {@link DecisionVariable} and {@link IvmlElement} casts.
+     * 
+     * @param obj the object to be turned into a value
+     * @return the value, may be {@code obj}
+     */
+    private static Object getValue(Object obj) {
+        Object result;
+        if (obj instanceof DecisionVariable) {
+            result = ((DecisionVariable) obj).getValue();
+        } else if (obj instanceof IvmlElement) {
+            result = ((IvmlElement) obj).getValue();
+        } else {
+            result = obj; // IVML value or Java value
         }
         return result;
     }

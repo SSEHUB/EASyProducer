@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.instantiation.docker.instantiators;
+package net.ssehub.easy.instantiation.lxc.instantiators;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,22 +33,22 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
- * Instantiator to save a Docker image.
+ * Instantiator to save a LXC image.
  * 
  * @author Monika Staciwa
  */
-@Instantiator("dockerSaveImage")
-public class DockerSaveImage extends AbstractDockerInstantiator {
+@Instantiator("lxcSaveImage")
+public class LxcSaveImage extends AbstractLxcInstantiator {
     
     /**
-     * Saves a Docker image.
+     * Save a LXC image.
      * 
      * @param imageName name of the image, "repository:tag"
      * @param target the image file to be created 
      * @return {@code true} if removed
      * @throws VilException in case of artifact / parameter problems
      */
-    public static Set<FileArtifact> dockerSaveImage(String imageName, Path target) throws VilException {
+    public static Set<FileArtifact> lxcSaveImage(String imageName, Path target) throws VilException {
         long timestamp = PathUtils.normalizedTime();
         File targetPath = determineTargetPath(target);
        

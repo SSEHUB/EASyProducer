@@ -1,0 +1,18 @@
+project alternative7 {
+  version v0;
+  
+  const Integer CONST_0 = 0;
+  const Integer CONST_1 = 1;
+ 
+  enum MyEnum {
+     Val1,
+     Val2
+  };
+  
+  MyEnum enumVal = MyEnum::Val2;
+  
+  freeze {
+    .;
+  };
+  
+}

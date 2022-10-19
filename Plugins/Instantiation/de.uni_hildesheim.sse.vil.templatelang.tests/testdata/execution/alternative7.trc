@@ -1,0 +1,11 @@
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    cfg <- <config>
+    iVal <- 0
+    -> ==(Integer, Integer) with (0, alternative7::CONST_0) = false
+    visit else-branch
+    iVal <- 2
+    -> ==(MyEnum, MyEnum) with (alternative7::enumVal, Val1) = false
+    visit else-branch
+    -> ==(MyEnum, MyEnum) with (alternative7::enumVal, Val2) = true
+    visit if-branch
+    iVal <- 5

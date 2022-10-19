@@ -13,48 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.instantiation.docker.instantiators;
+package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
- * Loads a Docker image.
+ * Instantiator to remove a LXC image.
  * 
  * @author Monika Staciwa
  */
-@Instantiator("dockerLoadImage")
-public class DockerLoadImage extends AbstractDockerInstantiator {
+@Instantiator("lxcRemoveImage")
+public class LxcRemoveImage extends AbstractLxcInstantiator {
 
     // checkstyle: stop exception type check
     
     /**
-     * Loads a Docker image.
+     * Returns the name of a LXC image.
      * 
-     * @param archive the image archive to load
-     * @return {@code true} if successful, {@code false} 
+     * @param id the id of the image to return the name for
+     * @return {@code true} if removed
      * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean dockerLoadImage(Path archive) throws VilException {
-        boolean ok = false;
-        File tarFile = archive.getAbsolutePath();
+    public static boolean lxcRemoveImage(String id) throws VilException {
         try {
-            InputStream imageStream = new FileInputStream(tarFile);
-            createClient().loadImageCmd(imageStream).exec();
-            imageStream.close();
-            ok = true;
-        } catch (IOException e) {
+            createClient().removeImageCmd(id).withForce(true).exec();
+            return true;
+        } catch (Exception e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
+            } else {
+                return false;
             }
-        }            
-        return ok;
+        }
     }
     
     // checkstyle: resume exception type check

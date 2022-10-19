@@ -115,11 +115,21 @@
         <echo>################################</echo>
         <ant dir="libs.Docker" antfile="${build.script.name}" />
 
+        <echo>################################</echo>
+        <echo>###  Assembling LXC-Lib      ###</echo>
+        <echo>################################</echo>
+        <ant dir="libs.Lxc" antfile="${build.script.name}" />
+
         <echo>##########################################</echo>
         <echo>###   Compiling Docker Instantiator    ###</echo>
         <echo>##########################################</echo>
         <ant dir="Instantiator.Docker" antfile="${build.script.name}" />
- 
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Lxc Instantiator       ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="Instantiator.Lxc" antfile="${build.script.name}" />
+
         <echo>####################################</echo>
         <echo>###  Compiling Expressions Core  ###</echo>
         <echo>####################################</echo>
