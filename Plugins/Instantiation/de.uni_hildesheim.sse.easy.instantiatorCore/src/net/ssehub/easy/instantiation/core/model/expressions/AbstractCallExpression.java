@@ -412,8 +412,10 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      */
     private static int calcSuperDiffRec(IMetaType iter, IMetaType reference) {
         int diff = calcSuperDiff(iter, reference); // iterate over argType, consider generic parameter??
-        for (int p = 0; p < iter.getGenericParameterCount(); p++) {
-            diff += calcSuperDiffRec(iter.getGenericParameterType(p), reference.getGenericParameterType(p));
+        if (iter.getGenericParameterCount() == reference.getGenericParameterCount()) {
+            for (int p = 0; p < iter.getGenericParameterCount(); p++) {
+                diff += calcSuperDiffRec(iter.getGenericParameterType(p), reference.getGenericParameterType(p));
+            }
         }
         return diff;
     }
