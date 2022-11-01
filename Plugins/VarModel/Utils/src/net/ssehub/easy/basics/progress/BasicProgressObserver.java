@@ -18,6 +18,9 @@ package net.ssehub.easy.basics.progress;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.basics.internal.Bundle;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+
 /**
  * A basic, eclipse-like progress observer.
  * 
@@ -153,7 +156,8 @@ public class BasicProgressObserver extends ProgressObserver {
             parent = new Task(task);
             return parent;
         } else {
-            throw new IllegalArgumentException("only one task supported");
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("only one task supported");
+            return parent;
         }
     }
 
@@ -168,14 +172,14 @@ public class BasicProgressObserver extends ProgressObserver {
     public void notifyStart(ITask task, ISubtask subtask, int max) {
         if (NO_SUBTASK == subtask) {
             if (null == parent) {
-                throw new IllegalArgumentException("no task registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("no parent registered");
             }
             if (parent.equals(task)) {
                 monitor.setTaskName(parent.getName());
                 parent.setMax(max);
                 monitor.beginTask(parent.getName(), max);
             } else {
-                throw new IllegalArgumentException("task not registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("task not registered");
             }
         } else {
             int pos = subtasks.indexOf(subtask);
@@ -184,7 +188,7 @@ public class BasicProgressObserver extends ProgressObserver {
                 t.setMax(max);
                 monitor.subTask(t.getName());
             } else {
-                throw new IllegalArgumentException("subtask not registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("subtask not registered");
             }
         }
     }
@@ -193,7 +197,7 @@ public class BasicProgressObserver extends ProgressObserver {
     public void notifyProgress(ITask task, ISubtask subtask, int step, int max) {
         if (NO_SUBTASK == subtask || null == subtask) {
             if (null == parent) {
-                throw new IllegalArgumentException("no task registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("no parent registered");
             }
             if (parent.equals(task)) {
                 if (max > 0) {
@@ -201,7 +205,7 @@ public class BasicProgressObserver extends ProgressObserver {
                 }
                 monitor.worked(parent.setCurrent(step));
             } else {
-                throw new IllegalArgumentException("task not registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("task not registered");
             }
         }
         // subtasks are not displayed
@@ -211,7 +215,7 @@ public class BasicProgressObserver extends ProgressObserver {
     public void notifyEnd(ITask task, ISubtask subtask) {
         if (NO_SUBTASK == subtask) {
             if (null == parent) {
-                throw new IllegalArgumentException("no task registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("no task registered");
             }
             if (parent.equals(task)) {
                 monitor.worked(parent.getRemainder());
@@ -220,12 +224,12 @@ public class BasicProgressObserver extends ProgressObserver {
         } else {
             if (subtasks.contains(subtask)) {
                 if (null == parent) {
-                    throw new IllegalArgumentException("no task registered");
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("no task registered");
                 }
                 monitor.setTaskName(parent.getName());
                 subtasks.remove(subtask);
             } else {
-                throw new IllegalArgumentException("task not registered");
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("task not registered");
             }
         }
     }
