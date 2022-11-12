@@ -75,6 +75,19 @@ public interface ITraceFilter {
         FAILURE
     }
     
+    /**
+     * Returns whether tracing on the given language element is enabled.
+     * 
+     * @param kind the element kind
+     * @return {@code true} for tracing, {@code false} else
+     */
     public boolean isEnabled(LanguageElementKind kind);
 
+    /**
+     * Returns whether warnings are enabled.
+     * 
+     * @return {@code true} for warnings, {@code false} else
+     */
+    public boolean isWarningEnabled();
+    
 }

@@ -416,7 +416,9 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void traceWarning(String message) {
-        write("Warning: " + message);
+        if (filter.isWarningEnabled()) {
+            write("Warning: " + message);
+        }
     }
 
     @Override

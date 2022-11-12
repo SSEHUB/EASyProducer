@@ -35,4 +35,9 @@ public class AllButFailureTraceFilter implements ITraceFilter {
         return kind == LanguageElementKind.FAILURE;
     }
 
+    @Override
+    public boolean isWarningEnabled() {
+        return false;
+    }
+
 }

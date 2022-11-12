@@ -35,4 +35,9 @@ public class NoTraceFilter implements ITraceFilter {
         return true;
     }
 
+    @Override
+    public boolean isWarningEnabled() {
+        return true;
+    }
+
 }

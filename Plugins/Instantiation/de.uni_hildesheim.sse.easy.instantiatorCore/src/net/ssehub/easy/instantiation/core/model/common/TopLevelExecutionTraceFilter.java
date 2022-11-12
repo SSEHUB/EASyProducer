@@ -35,5 +35,10 @@ public class TopLevelExecutionTraceFilter implements ITraceFilter {
     public boolean isEnabled(LanguageElementKind kind) {
         return kind == LanguageElementKind.FAILURE || kind == LanguageElementKind.LANGUAGE_UNIT;
     }
+    
+    @Override
+    public boolean isWarningEnabled() {
+        return false;
+    }
 
 }
