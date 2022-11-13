@@ -147,9 +147,9 @@ public class GlobalPathPreferencePage extends PreferencePage implements
      * Set the default values for the 3 paths.
      */
     private void setDefaultValues() {
-        ivmlInput.setText(Configuration.DEFAULT.getPath(PathKind.IVML));
-        vilInput.setText(Configuration.DEFAULT.getPath(PathKind.VIL));
-        vtlInput.setText(Configuration.DEFAULT.getPath(PathKind.VTL));
+        ivmlInput.setText(Configuration.DEFAULT.combinePath(PathKind.IVML));
+        vilInput.setText(Configuration.DEFAULT.combinePath(PathKind.VIL));
+        vtlInput.setText(Configuration.DEFAULT.combinePath(PathKind.VTL));
     }
 
     @Override

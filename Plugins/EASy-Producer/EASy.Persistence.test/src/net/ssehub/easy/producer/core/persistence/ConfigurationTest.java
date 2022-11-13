@@ -113,7 +113,7 @@ public class ConfigurationTest {
         if (null == config) {
             config = Configuration.DEFAULT;
         }
-        assertPath(msg, expected, config.getPath(kind));
+        assertPath(msg, expected, config.getPath(kind, 0));
     }
     
     /**
@@ -219,7 +219,7 @@ public class ConfigurationTest {
             new File(project, Configuration.TOP_LEVEL_CONFIG_NAME), false);
         
         // force saving with same values
-        config.setPath(PathKind.IVML, config.getPath(PathKind.IVML));
+        config.setPath(PathKind.IVML, config.getPath(PathKind.IVML, 0));
         config.store();
 
         Utils.assertEquals("XML", new File(original, "expected"), 

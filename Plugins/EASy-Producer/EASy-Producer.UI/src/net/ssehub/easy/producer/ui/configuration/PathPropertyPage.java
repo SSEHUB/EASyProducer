@@ -214,9 +214,9 @@ public class PathPropertyPage extends PropertyPage implements IWorkbenchPreferen
      * @param configuration the configuration to take the paths from
      */
     private void setInputs(Configuration configuration) {
-        ivmlInput.setText(configuration.getPath(PathKind.IVML));
-        vilInput.setText(configuration.getPath(PathKind.VIL));
-        vtlInput.setText(configuration.getPath(PathKind.VTL));
+        ivmlInput.setText(configuration.combinePath(PathKind.IVML));
+        vilInput.setText(configuration.combinePath(PathKind.VIL));
+        vtlInput.setText(configuration.combinePath(PathKind.VTL));
     }
     
     @Override

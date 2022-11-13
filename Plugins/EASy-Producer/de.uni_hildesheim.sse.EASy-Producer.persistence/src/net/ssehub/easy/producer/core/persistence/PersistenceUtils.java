@@ -34,6 +34,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelLocations;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
@@ -149,6 +150,38 @@ public class PersistenceUtils {
             }
         } // pathological case - occurred in some tests    
     }
+    
+    /**
+     * Updates the paths.
+     * 
+     * @param config the configuration instance to use
+     * @param kind the path kind
+     * @param locations the target model locations
+     * @param observer the progress observer to use
+     * @throws ModelManagementException if updating the locations fails
+     */
+    public static void updateLocations(Configuration config, PathKind kind, ModelLocations<?> locations, 
+        ProgressObserver observer) throws ModelManagementException {
+        for (int p = 0; p < config.getPathCount(kind); p++) {
+            locations.updateLocation(config.getPathFile(kind, p), observer);
+        }
+    }
+
+    /**
+     * Updates the paths.
+     * 
+     * @param config the configuration instance to use
+     * @param kind the path kind
+     * @param locations the target model locations
+     * @param observer the progress observer to use
+     * @throws ModelManagementException if updating the locations fails
+     */
+    public static void addLocations(Configuration config, PathKind kind, ModelLocations<?> locations, 
+        ProgressObserver observer) throws ModelManagementException {
+        for (int p = 0; p < config.getPathCount(kind); p++) {
+            locations.addLocation(config.getPathFile(kind, p), observer);
+        }
+    }
         
     /**
      * Adds the given location to {@link VarModel}, {@link BuildModel}, and {@link TemplateModel}.
@@ -161,20 +194,17 @@ public class PersistenceUtils {
         throws ModelManagementException {
         ModelManagementException returnExc = null;
         try {
-            VarModel.INSTANCE.locations()
-                .addLocation(config.getPathFile(PathKind.IVML).getAbsoluteFile(), observer);
+            addLocations(config, PathKind.IVML, VarModel.INSTANCE.locations(), observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
         }
         try {
-            BuildModel.INSTANCE.locations()
-                .addLocation(config.getPathFile(PathKind.VIL).getAbsoluteFile(), observer);
+            addLocations(config, PathKind.VIL, BuildModel.INSTANCE.locations(), observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
         }
         try {
-            TemplateModel.INSTANCE.locations()
-                .addLocation(config.getPathFile(PathKind.VTL).getAbsoluteFile(), observer);
+            addLocations(config, PathKind.VTL, TemplateModel.INSTANCE.locations(), observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
         }
@@ -184,10 +214,12 @@ public class PersistenceUtils {
             if (null == kind) {
                 kind = PathKind.IVML;
             }
-            try {
-                accessor.addLocation(config.getPathFile(kind).getAbsoluteFile(), observer);
-            } catch (ModelManagementException exc) {
-                returnExc = exc;
+            for (int p = 0; p < config.getPathCount(kind); p++) {
+                try {
+                    accessor.addLocation(config.getPathFile(kind, p).getAbsoluteFile(), observer);
+                } catch (ModelManagementException exc) {
+                    returnExc = exc;
+                }
             }
         }
         
@@ -204,7 +236,7 @@ public class PersistenceUtils {
      * @return the configuration location as a subpath of <code>projectFolder</code>
      */
     public static final File getLocationFile(File projectFolder, PathKind kind) {
-        return getConfiguration(projectFolder).getPathFile(kind);
+        return getConfiguration(projectFolder).getPathFile(kind, 0);
     }
     
     /**

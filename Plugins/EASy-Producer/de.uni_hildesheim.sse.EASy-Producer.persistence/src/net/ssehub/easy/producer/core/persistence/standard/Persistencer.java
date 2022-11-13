@@ -20,6 +20,7 @@ import java.io.File;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.ModelLocations;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
@@ -144,8 +145,8 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         ProjectCreationResult result = null;
         File projectFolder = new File(parentFolder, projectName);
         Configuration config = PersistenceUtils.getConfiguration(projectFolder);
-        File configFolder = config.getPathFile(PathKind.IVML);
-        File scriptFolder = config.getPathFile(PathKind.VIL);
+        File configFolder = config.getPathFile(PathKind.IVML, 0);
+        File scriptFolder = config.getPathFile(PathKind.VIL, 0);
         boolean projectOk;
         if (lazy) {
             // this part is for ScaleLog... it might make sense to check for the files in the EASy folder...
@@ -155,7 +156,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
                 if (!configFolder.equals(scriptFolder)) {
                     projectOk = scriptFolder.mkdirs();
                 }
-                File vtlFolder = config.getPathFile(PathKind.VTL);
+                File vtlFolder = config.getPathFile(PathKind.VTL, 0);
                 if (!scriptFolder.equals(vtlFolder)) {
                     projectOk = vtlFolder.mkdirs();
                 }
@@ -237,7 +238,8 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
     private void writeDebugData(PLPInfo plp) throws PersistenceException {
         if (plp.getSaveDebugInformation()) {
             Configuration config = PersistenceUtils.getConfiguration(plp.getProjectLocation());
-            String projectPath = config.getPathFile(PathKind.IVML).getAbsolutePath();
+            // as before, just use the first location, the others only for resolution
+            String projectPath = config.getPathFile(PathKind.IVML, 0).getAbsolutePath();
 
             // Save debug information from configuration
             // Save Configuration in same folder as the project
@@ -262,8 +264,9 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
      */
     private void save(PersistentProject project) throws PersistenceException {
         Configuration config = PersistenceUtils.getConfiguration(project.getLocation());
-        String projectPath = config.getPathFile(PathKind.IVML).getAbsolutePath();
-        String scriptPath = config.getPathFile(PathKind.VIL).getAbsolutePath();
+        // as before, just use the first location, the others only for resolution
+        String projectPath = config.getPathFile(PathKind.IVML, 0).getAbsolutePath();
+        String scriptPath = config.getPathFile(PathKind.VIL, 0).getAbsolutePath();
         
         // Write the ivml data
         ProjectContainer ivmlProject = project.getProject();
@@ -301,9 +304,9 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         try {
             Configuration config = PersistenceUtils.getConfiguration(projectFolder);
             // use absolute locations?
-            VarModel.INSTANCE.locations().updateLocation(config.getPathFile(PathKind.IVML), observer);
-            BuildModel.INSTANCE.locations().updateLocation(config.getPathFile(PathKind.VIL), observer);
-            TemplateModel.INSTANCE.locations().updateLocation(config.getPathFile(PathKind.VTL), observer);
+            PersistenceUtils.updateLocations(config, PathKind.IVML, VarModel.INSTANCE.locations(), observer);
+            PersistenceUtils.updateLocations(config, PathKind.VIL, BuildModel.INSTANCE.locations(), observer);
+            PersistenceUtils.updateLocations(config, PathKind.VTL, TemplateModel.INSTANCE.locations(), observer);
         } catch (ModelManagementException e) {
             throw new PersistenceException(e.getMessage());
         }

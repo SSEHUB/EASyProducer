@@ -6,6 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -37,7 +41,7 @@ public class Configuration {
     
     // configuration values
     
-    private String[] paths;
+    private Map<PathKind, List<String>> paths;
     
     // internal
     
@@ -89,7 +93,9 @@ public class Configuration {
         this.file = src.file;
         this.timestamp = src.timestamp;
         createStructures();
-        System.arraycopy(src.paths, 0, this.paths, 0, src.paths.length);
+        for (PathKind kind: PathKind.values()) {
+            this.paths.put(kind, new ArrayList<String>(src.paths.get(kind)));
+        }
     }
     
     /**
@@ -101,7 +107,6 @@ public class Configuration {
         createStructures();
         this.projectFolder = projectFolder;
         this.file = new File(this.projectFolder, TOP_LEVEL_CONFIG_NAME);
-        paths = new String[PathKind.values().length];
         if (file.exists()) {
             load();
         } else {
@@ -186,9 +191,9 @@ public class Configuration {
             InputSource inputSource = new InputSource(reader);
             xmlReader.setContentHandler(new ConfigurationContentHandler(this));
             xmlReader.parse(inputSource);
-            if (null == getPath(PathKind.VTL)) {
+            if (null == getPath(PathKind.VTL, 0)) {
                 // set VTL path by default to VIL path
-                setPathDirect(PathKind.VTL, getPath(PathKind.VIL));
+                setPathDirect(PathKind.VTL, combinePath(PathKind.VIL));
             }
         } catch (SAXException e) {
             throw new IOException(e);
@@ -246,7 +251,10 @@ public class Configuration {
      * Creates the initial structures / objects for configuration attributes.
      */
     private void createStructures() {
-        paths = new String[PathKind.values().length];
+        paths = new HashMap<PathKind, List<String>>();
+        for (PathKind kind : PathKind.values()) {
+            paths.put(kind, new ArrayList<String>());
+        }
     }
     
     /**
@@ -263,7 +271,7 @@ public class Configuration {
      */
     private void clear() {
         for (PathKind kind : PathKind.values()) {
-            paths[kind.ordinal()] = null;
+            paths.get(kind).clear();
         }        
     }
     
@@ -273,8 +281,8 @@ public class Configuration {
      * @param kind the path kind to set the default value
      */
     private void setPathDefault(PathKind kind) {
-        if (null == paths[kind.ordinal()]) {
-            paths[kind.ordinal()] = DEFAULT.paths[kind.ordinal()];
+        if (paths.get(kind).isEmpty()) {
+            paths.get(kind).addAll(DEFAULT.paths.get(kind));
         }
     }
     
@@ -293,15 +301,21 @@ public class Configuration {
     
     /**
      * Sets a path due to its string representation, thus, be careful. This method does not store the new configuration.
+     * If {@code path} contains multiple paths, e.g., separated by ";" or ":", they will be set at once.
      * 
      * @param kind the path kind to modify
      * @param path the path value
+     * @see #combinePath(PathKind)
      */
     public void setPathDirect(PathKind kind, String path) {
         if (!path.endsWith(FileUtils.SEPARATOR_STRING)) {
             path += FileUtils.SEPARATOR_STRING;
         }
-        paths[kind.ordinal()] = path;
+        List<String> pth = paths.get(kind);
+        pth.clear();
+        for (String s: path.replace(":", ";").split(";")) {
+            pth.add(s);
+        }
     }
     
     /**
@@ -337,15 +351,27 @@ public class Configuration {
         }
         setPathDirect(kind, FileUtils.toIndependent(path.getPath()));
     }
-    
+
+    /**
+     * Returns the number of configured paths per {@code kind}.
+     * 
+     * @param kind the path kind
+     * @return the number of paths
+     */
+    public int getPathCount(PathKind kind) {
+        return paths.get(kind).size();
+    }
+
     /**
      * Returns a path as a string.
      * 
      * @param kind the path kind
-     * @return the related path
+     * @param index the path index
+     * @return the related path, <b>null</b> if none was configured for {@code kind}
+     * @throws IndexOutOfBoundsException if not within range of {@link #getPathCount(PathKind)}
      */
-    public String getPath(PathKind kind) {
-        return paths[kind.ordinal()];
+    public String getPath(PathKind kind, int index) {
+        return paths.get(kind).isEmpty() ? null : paths.get(kind).get(index);
     }
     
     /**
@@ -355,17 +381,19 @@ public class Configuration {
      * @return <code>boolean</code> if the specified path is the same, <code>false</code> else
      */
     public boolean isPathEasyDefault(PathKind kind) {
-        return PersistenceConstants.EASY_FILES_DEFAULT.equals(getPath(kind));
+        return PersistenceConstants.EASY_FILES_DEFAULT.equals(getPath(kind, 0));
     }
 
     /**
      * Returns a path as a file within the containing project.
      * 
      * @param kind the path kind
+     * @param index the path index
      * @return the related path
+     * @throws IndexOutOfBoundsException if not within range of {@link #getPathCount(PathKind)}
      */
-    public File getPathFile(PathKind kind) {
-        return new File(projectFolder, getPath(kind));
+    public File getPathFile(PathKind kind, int index) {
+        return new File(projectFolder, getPath(kind, index));
     }
     
     /**
@@ -393,20 +421,43 @@ public class Configuration {
     }
     
     /**
+     * Returns all paths for {@code kind} combined by the system path separator.
+     * 
+     * @param kind the kind
+     * @return the combined path
+     */
+    public String combinePath(PathKind kind) {
+        String result;
+        List<String> pth = paths.get(kind);
+        if (pth.isEmpty()) {
+            result = null;
+        } else {
+            result = "";
+            for (int p = 0; p < pth.size(); p++) {
+                if (p > 0) {
+                    result += File.pathSeparator;
+                }
+                result += pth.get(p);
+            }
+        }
+        return result;
+    }
+    
+    /**
      * Stores a given path.
      * 
      * @param writer the writer to store the path to
      * @param kind the path kind to store
      */
     private void storePath(IndentationPrintWriter writer, PathKind kind) {
-        String path = getPath(kind);
+        String path = combinePath(kind);
         if (null != path && path.length() > 0) {
             writer.printIndentation();
             writer.print("<" + ConfigurationContentHandler.XML_ELT_PATH + " " 
                 + ConfigurationContentHandler.XML_ATTR_KIND + "=\"");
             writer.print(kind.name());
             writer.print("\" " + ConfigurationContentHandler.XML_ATTR_VALUE + "=\"");
-            writer.print(getPath(kind));
+            writer.print(path);
             writer.println("\" />");
         }
     }

@@ -41,7 +41,7 @@ public class PersistenceUtils {
      */
     public static final IFolder getLocationFolder(IProject project, PathKind kind) {
         Configuration config = getConfiguration(project);
-        return project.getFolder(new Path(config.getPath(kind)));
+        return project.getFolder(new Path(config.getPath(kind, 0)));
     }
     
     /**

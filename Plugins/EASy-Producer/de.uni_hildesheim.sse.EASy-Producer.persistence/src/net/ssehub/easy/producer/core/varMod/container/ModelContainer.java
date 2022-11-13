@@ -130,7 +130,7 @@ public abstract class ModelContainer<M extends IModel> implements IModelListener
      * @return The location of the loaded model.
      */
     protected final File getLocation(PathKind kind) {
-        return location.getPathFile(kind);
+        return location.getPathFile(kind, 0);
     }
     
     /**

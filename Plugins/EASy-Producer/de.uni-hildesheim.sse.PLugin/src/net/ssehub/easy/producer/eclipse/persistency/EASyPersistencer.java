@@ -73,7 +73,7 @@ public class EASyPersistencer implements PersistenceConstants {
     public static File projectPath(PLPInfo plp) {
         //File configFolder = configLocation(plp.getProjectLocation());
         Configuration config = PersistenceUtils.getConfiguration(plp.getProjectLocation());
-        File configFolder = config.getPathFile(PathKind.IVML);
+        File configFolder = config.getPathFile(PathKind.IVML, 0);
         String filename = PersistenceUtils.ivmlFileLocation(plp.getProject(), configFolder.getAbsolutePath());
         
         return new File(filename);

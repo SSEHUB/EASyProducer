@@ -58,7 +58,7 @@ public class EASyPreferenceStore {
     public static void persistDefaultConfiguration() {
         IEclipsePreferences prefs = getPreferences();
         for (PathKind kind : Configuration.PathKind.values()) {
-            prefs.put(getKey(kind), Configuration.DEFAULT.getPath(kind));    
+            prefs.put(getKey(kind), Configuration.DEFAULT.combinePath(kind));    
         }
         flush(prefs);
     }
