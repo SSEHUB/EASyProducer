@@ -18,6 +18,7 @@ package net.ssehub.easy.instantiation.docker.instantiators;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
@@ -64,17 +65,23 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
             if (null != aCfgs) {
                 cmd.withBuildAuthConfigs(aCfgs);
             }
-            String imageId = cmd
-                .exec(new BuildImageResultCallback() {
-                    
-                    @Override
-                    public void onNext(BuildResponseItem item) {
-                        super.onNext(item);
-                        TracerFactory.progressSubTask(1, 1, "Docker push: " + item.getId() + " " + item.getStatus());
-                    }
 
-                })
-                .awaitImageId();
+            final String taskDescription = "Docker build";
+            TracerFactory.ensureTasks(taskDescription);
+            final AtomicInteger count = new AtomicInteger(0);
+            String imageId = cmd.exec(new BuildImageResultCallback() {
+                
+                @Override
+                public void onNext(BuildResponseItem item) {
+                    super.onNext(item);
+                    System.out.println("Tracing Docker response " + taskDescription + ": " + item.getId() 
+                        + " " + item.getStatus());
+                    int cnt = count.incrementAndGet(); // preliminary
+                    TracerFactory.progressSubTask(cnt, cnt, taskDescription);
+                }
+
+            }).awaitImageId();
+            TracerFactory.closeTasks(taskDescription);
             return imageId;        
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {

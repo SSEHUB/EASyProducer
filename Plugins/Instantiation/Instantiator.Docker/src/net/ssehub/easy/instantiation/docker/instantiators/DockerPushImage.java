@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.docker.instantiators;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -58,19 +60,22 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 cmd.withAuthConfig(cfg);
             }
             
-            final String fallbackTaskDescription = "Docker activity";
-            TracerFactory.ensureTasks(fallbackTaskDescription);
+            final String taskDescription = "Docker push";
+            TracerFactory.ensureTasks(taskDescription);
+            final AtomicInteger count = new AtomicInteger(0);
             cmd.exec(new ResultCallback.Adapter<PushResponseItem>() {
                 
                 @Override
                 public void onNext(PushResponseItem item) {
                     super.onNext(item);
-                    TracerFactory.progressSubTask(1, 1, "Docker push: " + item.getId() + " " + item.getStatus());
+                    System.out.println("Tracing Docker response " + taskDescription + ": " + item.getId() 
+                        + " " + item.getStatus());
+                    int cnt = count.incrementAndGet(); // preliminary
+                    TracerFactory.progressSubTask(cnt, cnt, taskDescription);
                 }
                 
             }).awaitCompletion();
-            TracerFactory.closeTasks(fallbackTaskDescription);
-            
+            TracerFactory.closeTasks(taskDescription);
             return true;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
