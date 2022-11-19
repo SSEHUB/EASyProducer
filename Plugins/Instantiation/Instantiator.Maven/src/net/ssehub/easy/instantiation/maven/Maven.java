@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.maven;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -60,7 +61,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @Instantiator("maven")
 public class Maven extends AbstractFileInstantiator {
 
-    private static final String TMP_FOLDER = "easy-maven323";
+    private static final String TMP_FOLDER = "easy-maven363";
+    private static final boolean CMD_TEST = true;
     // folder without /lib!
     private static final boolean AS_PROCESS = Boolean.valueOf(System.getProperty("easy.maven.asProcess", "true"));
     private static final String MAVEN_HOME = System.getProperty("easy.maven.home", null);
@@ -330,6 +332,33 @@ public class Maven extends AbstractFileInstantiator {
         return classpath;
     }
     
+    private static InputStream getResourceAsStream(String name) {
+        InputStream result = Maven.class.getResourceAsStream(name);
+        if (CMD_TEST && null == result) { // fallback for main-testing
+            if (name.startsWith("/")) {
+                name = "." + name;
+            }
+            File f = new File(name);
+            if (f.exists()) {
+                try {
+                    result = new FileInputStream(name);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        return result;
+    }
+    
+    private static void closeQuietly(InputStream stream) {
+        if (null != stream) {
+            try {
+                stream.close();
+            } catch (IOException e) {
+            }
+        }
+    }
+    
     /**
      * Tries to unpack the Maven libraries to <i>tmpDir</i>{@link #TMP_FOLDER} by reading <code>lib/dir.list</code>.
      * 
@@ -338,7 +367,7 @@ public class Maven extends AbstractFileInstantiator {
      */
     private static File tryUnpack(String classpath) {
         File result = new File(classpath).getParentFile();
-        InputStream list = Maven.class.getResourceAsStream("/lib/dir.list");
+        InputStream list = getResourceAsStream("/lib/dir.list");
         if (list != null) {
             result = new File(FileUtils.getTempDirectory(), TMP_FOLDER);
             File target = new File(result, "lib");
@@ -352,7 +381,7 @@ public class Maven extends AbstractFileInstantiator {
                         if (line.length() > 0) {
                             File f = new File(target, line);
                             if (!f.exists()) {
-                                copyResourceToFile("/lib/" + line, f);
+                                copyResourceToFile("/lib/" + line, f, getSub(line));
                             }
                         }
                     }
@@ -360,8 +389,26 @@ public class Maven extends AbstractFileInstantiator {
             } catch (IOException e) {
                 getLogger().warn("Maven: Cannot read lib/dir.list: " + e.getMessage());
             }
+            closeQuietly(list);
         }
         return result;
+    }
+    
+    /**
+     * Returns the target sub-directory in line.
+     * 
+     * @param line the line
+     * @return the sub-directory, may be <b>null</b> for none
+     */
+    private static String getSub(String line) {
+        int pos = line.lastIndexOf("/");
+        String sub;
+        if (pos > 0) {
+            sub = line.substring(0, pos);
+        } else {
+            sub = null;
+        }
+        return sub;
     }
 
     /**
@@ -369,11 +416,15 @@ public class Maven extends AbstractFileInstantiator {
      * 
      * @param resource the resource
      * @param target the target file
+     * @param sub optional target sub-directory within {@code target}, may be <b>null</b> for none
      */
-    private static void copyResourceToFile(String resource, File target) {
-        InputStream fIn = Maven.class.getResourceAsStream(resource);
+    private static void copyResourceToFile(String resource, File target, String sub) {
+        InputStream fIn = getResourceAsStream(resource);
         if (fIn != null) {
             try {
+                if (sub != null) {
+                    new File(target, sub).mkdirs();
+                }
                 Files.copy(fIn, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 fIn.close();
             } catch (IOException e) {
@@ -454,6 +505,7 @@ public class Maven extends AbstractFileInstantiator {
         } else {
             m2Conf = null; // enable fallback
         }
+        params.add("-Dmaven.multiModuleProjectDirectory=false"); // seems to be required since 3.3.1
         if (null == m2Conf) { // fallback for standalone (does not work in linux so far)
             params.add("org.apache.maven.cli.MavenCli");
             manipulator = new CliMessageManipulator();
@@ -472,7 +524,7 @@ public class Maven extends AbstractFileInstantiator {
         for (String target : targets) {
             params.add(target);
         }
-        getLogger().debug("Maven command line: " + params);        
+        getLogger().debug("Maven command line: " + params);
         ProcessBuilder builder = new ProcessBuilder(params);
         if (null == System.getenv("JAVA_HOME") && null != JavaUtilities.JDK_PATH) {
             File jdkFolder = new File(JavaUtilities.JDK_PATH);
@@ -502,7 +554,7 @@ public class Maven extends AbstractFileInstantiator {
      * @param contextClassLoader the context class loader to obtain the classpath from if possible at all
      * @return the classpath
      */
-    private static String obtainProcessClasspath(ClassLoader contextClassLoader) {
+    private static String obtainProcessClasspath(ClassLoader contextClassLoader) {        
         Pattern classpathExclude = null;
         if (null != CLASSPATH_EXCLUDE) {
             try {
