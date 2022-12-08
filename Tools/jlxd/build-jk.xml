@@ -10,6 +10,9 @@
 	    <maven pomFile="pom.xml" goal="install">
 	    	<arg value='-DskipTests'/> <!-- no LXC installed on Jenkins -->
 		</maven>
-	    <!--<mvnDeployPom folderName="JLXC" pomFile="pom.xml" />-->
+		<ant dir="jlxd-cli" antfile="build-jk.xml" />
+		<ant dir="jlxd-cli-boot" antfile="build-jk.xml" />
+		<ant dir="jlxd-core" antfile="build-jk.xml" />
+		<ant dir="jlxd-ui" antfile="build-jk.xml" />
 	</target>
 </project>

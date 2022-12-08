@@ -7,6 +7,6 @@
 	
     <!-- deploy to SSE Mvn repo -->
 	<target name="maven"> 
-		<mvnDeployResolveArtifact folderName="jlxd-boot" pomFile="pom.xml" jarFolder="target" artifactPattern="jlxd-boot-*.*.*.jar" />
+		<mvnDeployResolveArtifact folderName="jlxd-boot" pomFile="pom.xml" jarFolder="target" artifactPattern="jlxd-cli-boot-*.*.*.jar" />
 	</target>
 </project>
