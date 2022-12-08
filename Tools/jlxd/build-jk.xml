@@ -7,7 +7,9 @@
 	
     <!-- deploy to SSE Mvn repo -->
 	<target name="maven"> 
-	    <maven pomFile="pom.xml" goal="install"/>
+	    <maven pomFile="pom.xml" goal="install">
+	    	<arg value='-DskipTests'/> <!-- no LXC installed on Jenkins -->
+		</maven>
 	    <!--<mvnDeployPom folderName="JLXC" pomFile="pom.xml" />-->
 	</target>
 </project>
