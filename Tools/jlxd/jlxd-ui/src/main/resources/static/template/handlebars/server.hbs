@@ -1,0 +1,6 @@
+<h3>Servers</h3>
+<ul class="nav nav-pills">
+{{#each this}}
+<li {{#if active}}class="active"{{/if}}><a href="#" onclick="selectServer('{{name}}')">{{name}} {{remoteHostAndPort}}</a></li>
+{{/each}}
+</ul>

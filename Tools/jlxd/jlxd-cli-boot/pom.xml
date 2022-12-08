@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.ssehub.easy.producer</groupId>
+	<artifactId>jlxd-cli-boot</artifactId>
+	<packaging>jar</packaging>
+	<version>1.1-SNAPSHOT</version>
+	<name>Java LXD CLI Spring Boot (IIP-Ecosphere Clone)</name>
+	<url>http://jcloud.com.au</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>
+
+	<organization>
+		<name>JCloud</name>
+		<url>http://www.jcloud.com.au</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>david.vittor</id>
+			<name>David Vittor</name>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>schulzlu</id>
+			<name>Luca Schulz</name>
+			<email>schulzlu@uni-hildesheim.de</email>
+			<url>https://sse.uni-hildesheim.de/</url>
+			<organization>SSE @ University of Hildesheim</organization>
+			<organizationUrl>https://sse.uni-hildesheim.de/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Berlin</timezone>
+		</developer>
+	</developers>
+
+	<build>
+		<finalName>jlxd</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>au.com.jcloud.lxd.App</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>au.com.jcloud.lxd.App</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- GSon library -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+
+		<!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.powermock</groupId>
+		    <artifactId>powermock-api-mockito</artifactId>
+		    <version>1.6.6</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.powermock</groupId>
+		    <artifactId>powermock-module-junit4</artifactId>
+		    <version>1.6.6</version>
+		    <scope>test</scope>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+		  <groupId>log4j</groupId>
+		  <artifactId>log4j</artifactId>
+		  <version>1.2.17</version>
+		</dependency>
+	
+		<!-- Apache Commons -->
+		<dependency>
+		  <groupId>org.apache.commons</groupId>
+		  <artifactId>commons-lang3</artifactId>
+		  <version>3.4</version>
+		</dependency>
+
+		<!-- Javax inject -->
+		<dependency>
+		    <groupId>javax.inject</groupId>
+		    <artifactId>javax.inject</artifactId>
+		    <version>1</version>
+		</dependency>
+
+	</dependencies>
+</project>

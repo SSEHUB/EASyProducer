@@ -1,0 +1,62 @@
+<h4>List of containers <button type="submit" class="btn btn-small btn-info" onclick="reloadContainers()">Refresh</button></h4>
+<table id="containerTable" class="table table-striped">
+	<thead id="containerTableHeader">
+		<tr>
+			<td>Name</td>
+			<td>Status</td>
+			<td>PID</td>
+			<td>IP</td>
+			<td>Processes</td>
+			<td>Created</td>
+			<td>Actions</td>
+		</tr>
+	</thead>
+	<tbody id="containerTableData">
+		{{#each this}}
+		<tr id="row_{{name}}">
+			<td id="name"><b>{{name}}</b></td>
+			<td id="status">{{status}}</td>
+			<td id="pid">{{state.pid}}</td>
+			<td id="ip">
+{{#each state.network}}
+	{{#if (ifCond @key '!=' "lo")}}
+		{{#unless @first}},{{/unless}}
+	    {{@key}}={{this.ip4Address}}
+	{{/if}}
+{{/each}}
+			</td>
+			<td id="processes">{{state.processes}}</td>
+			<td id="createdDate">{{createdDateAsIsoDateTime}}</td>
+			<td id="actions">
+				<a href="#" id="viewState_{{name}}" style="color: orange" onclick="toggleViewState(event, this,'{{name}}')"><span class="glyphicon glyphicon-menu-up"></span>&nbsp;<span id="showHide">SHOW</span></a>
+				{{#if (ifCond status '===' "Running")}}
+				<a href="#" id="stopContainer" style="color: brown" onclick="ajaxPost(event, this, '/container/stop/{{name}}')"><span class="glyphicon glyphicon-stop"></span>&nbsp;STOP</a>
+				<a href="#" id="freezeContainer" style="color: brown" onclick="ajaxPost(event, this, '/container/state/{{name}}/freeze')"><span class="glyphicon glyphicon-pause"></span>&nbsp;FREEZE</a>
+				<a href="#" id="restartContainer" style="color: brown" onclick="ajaxPost(event, this, '/container/state/{{name}}/restart')"><span class="glyphicon glyphicon-refresh"></span>&nbsp;RESTART</a>
+				{{else}}
+					{{#if (ifCond status '===' "Frozen")}}
+					<a href="#" id="unfreezeContainer" style="color: brown" onclick="ajaxPost(event, this, '/container/state/{{name}}/unfreeze')"><span class="glyphicon glyphicon-play"></span>&nbsp;UNFREEZE</a>
+					{{else}}
+					<a href="#" id="startContainer" style="color: brown" onclick="ajaxPost(event, this, '/container/start/{{name}}')"><span class="glyphicon glyphicon-play"></span>&nbsp;START</a>
+					{{/if}}
+				{{/if}}
+				{{#if (ifCond status '===' "Stopped")}}
+				<a href="#" id="editContainer" style="color: blue" data-name="{{name}}" onclick="toggleEditState(event, this, '{{name}}')"><span class="glyphicon glyphicon-pencil"></span>&nbsp;EDIT</a>
+				<a href="#" id="saveContainer" style="display: none; color: green" data-name="{{name}}" onclick="toggleEditState(event, this, '{{name}}')"><span class="glyphicon glyphicon-floppy-disk"></span>&nbsp;SAVE</a>
+				<a href="#" id="deleteContainer" style="color: red" data-name="{{name}}" onclick="deleteContainer('{{name}}')"><span class="glyphicon glyphicon-remove"></span>&nbsp;DELETE</a>
+				{{/if}}
+			</td>
+		</tr>
+		<tr id="stateRow_{{name}}" style="display: none" >
+			<td colspan="7">
+				<div id="stateRowContent_{{name}}">Ephemeral={{ephemeral}}, Memory (current/peak)={{state.memoryUsageInMB}}MB/{{state.memoryPeakUsageInMB}}MB, Swap Memory (current/peak)={{state.swapMemoryUsageInMB}}MB/{{state.swapPeakMemoryUsageInMB}}MB</div>
+			</td>
+		</tr>
+		{{else}}
+		<tr><td colspan="7">No containers found</td></tr>
+		{{/each}}
+		<tr>
+			<td colspan="7"><button type="button" class="btn btn-info" data-toggle="modal" data-target="#addContainer">Add Container</button></td>
+		</tr>
+	</tbody>
+</table>

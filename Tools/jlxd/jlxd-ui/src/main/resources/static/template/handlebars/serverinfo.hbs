@@ -1,0 +1,37 @@
+<h3>Server Info</h3>
+<table id="serverInfoTable" class="table table-striped">
+	<thead id="serverInfoTableHeader">
+		<tr>
+			<td>Name</td>
+			<td>API</td>
+			<td>Auth</td>
+			<td>Config</td>
+			<td>zfsPoolName</td>
+			<td>PID</td>
+			<td>Driver</td>
+			<td>Kernel</td>
+			<td>Server</td>
+			<td>Storage</td>
+			<td>Public</td>
+			<td>Actions</td>
+		</tr>
+	</thead>
+	<tbody id="serverInfoTableData">
+		{{#each this}}
+		<tr id="row_{{name}}">
+			<td id="name">{{name}}</td>
+			<td id="api">{{apiVersion}}</td>
+			<td id="auth">{{auth}}</td>
+			<td id="config">{{config.httpsAddress}} / {{config.trustPassword}}</td>
+			<td id="zfsPoolName">{{config.zfsPoolName}}</td>
+			<td id="pid">{{environment.serverPid}}</td>
+			<td id="driver">{{environment.driver}}:{{environment.driverVersion}}</td>
+			<td id="kernel">{{environment.kernel}}:{{environment.kernelVersion}}</td>
+			<td id="server">{{environment.server}}:{{environment.serverVersion}}</td>
+			<td id="storage">{{environment.storage}}:{{environment.storageVersion}}</td>
+			<td id="public">{{public}}</td>
+			<td id="actions"><span id="removeServer" class="glyphicon glyphicon-remove" style="color: red" data-name="{{name}}" onclick="removeServer('{{name}}')"></span></a></td>
+		</tr>
+		{{/each}}
+	</tbody>
+</table>

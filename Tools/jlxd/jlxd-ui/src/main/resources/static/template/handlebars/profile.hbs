@@ -1,0 +1,23 @@
+<h4>List of profiles <button type="submit" class="btn btn-small btn-info" onclick="reloadProfiles()">Refresh</button></h4>
+<table id="profileTable" class="table table-striped">
+	<thead id="profileTableHeader">
+		<tr>
+			<td>Name</td>
+			<td>Description</td>
+			<td>Config</td>
+			<td>Devices</td>
+		</tr>
+	</thead>
+	<tbody id="profileTableData">
+		{{#each this}}
+		<tr>
+			<td id="name"><b>{{name}}</b></td>
+			<td id="description">{{description}}</td>
+			<td id="config">{{#each config}}{{@key}}: {{this}}{{/each}}</td>
+			<td id="devices">{{#each devices}}{{@key}}: {{type}}: {{name}}{{/each}}</td>
+		</tr>
+		{{else}}
+		<tr><td colspan="3">No profiles found</td></tr>
+		{{/each}}
+	</tbody>
+</table>

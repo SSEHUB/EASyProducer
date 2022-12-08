@@ -1,0 +1,51 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.ssehub.easy.producer</groupId>
+	<artifactId>jlxd-all</artifactId>
+	<packaging>pom</packaging>
+	<version>1.1-SNAPSHOT</version>
+	<name>Java LXD Project (IIP-Ecosphere Clone)</name>
+	<url>http://jcloud.com.au</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+	</properties>
+
+	<organization>
+		<name>JCloud</name>
+		<url>http://www.jcloud.com.au</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>david.vittor</id>
+			<name>David Vittor</name>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>schulzlu</id>
+			<name>Luca Schulz</name>
+			<email>schulzlu@uni-hildesheim.de</email>
+			<url>https://sse.uni-hildesheim.de/</url>
+			<organization>SSE @ University of Hildesheim</organization>
+			<organizationUrl>https://sse.uni-hildesheim.de/</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Berlin</timezone>
+		</developer>
+	</developers>
+
+	<modules>
+		<module>jlxd-core</module>
+		<module>jlxd-cli</module>
+		<module>jlxd-cli-boot</module>
+		<module>jlxd-ui</module>
+	</modules>
+</project>

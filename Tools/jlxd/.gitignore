@@ -1,0 +1,11 @@
+**/target
+**/build
+**/dist
+**/.classpath
+**/.project
+**/.settings
+**/.gradle
+**/*.iml
+**/*.ipr
+**/*.iws
+
