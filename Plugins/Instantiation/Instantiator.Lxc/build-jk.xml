@@ -15,6 +15,9 @@
         <pathelement path="${libs.libs.common.io}"/>
 		<pathelement path="${libs.utils}"/>  
         <pathelement path="${libs.instantiator.core}"/>
+        <fileset dir="../libs.Docker"> <!-- preliminary -->
+            <include name="**/*.jar" />
+        </fileset>
 		<fileset dir="../libs.Lxc">
             <include name="**/*.jar" />
         </fileset>
