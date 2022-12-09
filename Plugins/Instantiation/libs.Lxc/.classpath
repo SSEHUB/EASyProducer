@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="commons-compress-1.19.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.fasterxml.jackson.core.jackson-core-2.11.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.fasterxml.jackson.core.jackson-databind-2.11.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="org.apache.httpcomponents.client5.httpclient5-5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="org.apache.httpcomponents.core5.httpcore5-5.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="org.bouncycastle.bcpkix-jdk15on-1.64.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.fasterxml.jackson.core.jackson-annotations-2.11.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.github.docker-java.docker-java-api-3.2.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.github.docker-java.docker-java-core-3.2.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.github.docker-java.docker-java-transport-3.2.7.jar"/>
-	<classpathentry exported="true" kind="lib" path="com.github.docker-java.docker-java-transport-httpclient5-3.2.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="commons-lang3-3.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="gson-2.6.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="hamcrest-core-1.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="javassist-3.21.0-GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="javax.inject-1.jar"/>
+	<classpathentry exported="true" kind="lib" path="jlxd-cli-1.1-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="jlxd-core-1.1-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="junit-4.11.jar"/>
+	<classpathentry exported="true" kind="lib" path="log4j-1.2.17.jar"/>
+	<classpathentry exported="true" kind="lib" path="mockito-all-1.10.19.jar"/>
+	<classpathentry exported="true" kind="lib" path="mockito-core-1.10.19.jar"/>
+	<classpathentry exported="true" kind="lib" path="objenesis-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-api-mockito-1.6.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-api-mockito-common-1.6.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-api-support-1.6.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-core-1.6.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-module-junit4-1.6.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-module-junit4-common-1.6.6.jar"/>
+	<classpathentry exported="true" kind="lib" path="powermock-reflect-1.6.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
