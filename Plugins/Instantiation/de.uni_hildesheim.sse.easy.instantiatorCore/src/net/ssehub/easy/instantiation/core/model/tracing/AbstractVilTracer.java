@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
+import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangElement;
@@ -46,6 +47,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     private boolean emitTraceText;
     private boolean enable = true;
     private ITraceFilter filter = NoTraceFilter.INSTANCE;
+    private boolean templateDefVisited = false;
 
     /**
      * Creates a tracer instance without emitting trace texts.
@@ -336,7 +338,25 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
             msg += ")";
             write(msg);
             increaseIndentation();
+        } else {
+            if (!templateDefVisited) { // first visit -> "main", no output, state target 
+                if ("main".equals(def.getName()) && def.getDeclaringType() instanceof Template) {
+                    Template template = (Template) def.getDeclaringType();
+                    if (template.getParameterCount() >= 2) {
+                        VariableDeclaration var = template.getParameter(1);
+                        try {
+                            Object value = environment.getValue(var);
+                            if (value instanceof IFileSystemArtifact) {
+                                write("  -> " + ((IFileSystemArtifact) value).getPath());
+                            }
+                        } catch (VilException e) {
+                            // just ignore this
+                        }
+                    }
+                }
+            }
         }
+        templateDefVisited = true;
     }
 
     @Override
@@ -377,6 +397,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void visitTemplate(Template template) {
+        templateDefVisited = false;
         if (filter.isEnabled(LanguageElementKind.LANGUAGE_UNIT)) {
             String location = "";
             ModelInfo<Template> info = TemplateModel.INSTANCE.availableModels().getModelInfo(template);
@@ -390,6 +411,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void visitedTemplate(Template template) {
+        templateDefVisited = false;
         if (filter.isEnabled(LanguageElementKind.LANGUAGE_UNIT)) {
             decreaseIndentation();
         }
