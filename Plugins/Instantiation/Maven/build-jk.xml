@@ -19,6 +19,7 @@
         <!-- Copy needed non class files -->
         <jar destfile="${build.jar.dir}/${ant.project.name}.jar" manifest="META-INF/MANIFEST.MF">
             <fileset dir="." includes="**/*.jar"/>
+        	<fileset dir="." includes="OSGI-INF/**/*.*"/>
         </jar>
         <!-- Copy created jar to global EASy Plug-ins directory -->
         <copy todir="${easy.bundles.dir}">
