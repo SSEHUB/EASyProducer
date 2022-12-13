@@ -41,7 +41,7 @@
     </target>
     
     <!-- Creates a jar file -->
-    <target name="jar">
+    <target name="jar" depends="compile">
         <!-- Copy needed non class files -->
         <jar destfile="${build.jar.dir}/${ant.project.name}.jar" manifest="META-INF/MANIFEST.MF">
             <fileset dir="bin" includes="**/*.*"/>
