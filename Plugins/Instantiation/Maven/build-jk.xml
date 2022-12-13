@@ -3,7 +3,27 @@
     <!-- import von globalen Properties Einstellungen -->
     <property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
-    
+
+    <!-- Einstellungen fuer dieses Projekt -->
+    <property name="src.dir" value="src"/>
+    <property name="javacSource" value="1.7"/>
+    <property name="javacTarget" value="1.7"/>
+
+    <path id ="includes">
+        <!-- Model -->
+        <pathelement path="${libs.model}"/>
+        <pathelement path="${libs.utils}"/>
+        <pathelement path="${libs.dslCore}"/>
+        <pathelement path="${libs.instantiator.core}"/>
+        <fileset dir=".">
+            <include name="**/*.jar" />
+        </fileset>
+        <!-- Eclipse-Plugins -->
+        <fileset dir="${eclipse.plugins.dir}">
+            <include name="**/*.jar" />
+        </fileset>
+     </path>
+
     <!-- Targets  -->
     <target name="init">
         <!-- Delete generated folders -->
@@ -12,6 +32,12 @@
         <!-- Create folders -->
         <mkdir dir="${build.base.dir}"/>
         <mkdir dir="${build.jar.dir}"/>
+    </target>
+	
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+            <classpath refid="includes" />  
+        </javac>
     </target>
     
     <!-- Creates a jar file -->
