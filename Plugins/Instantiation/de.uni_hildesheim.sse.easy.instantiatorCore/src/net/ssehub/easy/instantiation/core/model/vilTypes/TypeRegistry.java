@@ -436,27 +436,32 @@ public class TypeRegistry {
      * @param cls the class to be cached
      */
     private static void cacheInheritedAnnotations(Class<?> cls) {
-        if (cls != Object.class) { // don't go to the very end
-            Method[] methods = cls.getDeclaredMethods();
-            for (int m = 0; m < methods.length; m++) {
-                Method method = methods[m];
-                Invisible inv = method.getAnnotation(Invisible.class);
-                if (null != inv && inv.inherit()) {
-                    if (addInvisibleInherited(methods[m])) {
-                        break; // already registered
+        try {
+            if (cls != Object.class) { // don't go to the very end
+                Method[] methods = cls.getDeclaredMethods();
+                for (int m = 0; m < methods.length; m++) {
+                    Method method = methods[m];
+                    Invisible inv = method.getAnnotation(Invisible.class);
+                    if (null != inv && inv.inherit()) {
+                        if (addInvisibleInherited(methods[m])) {
+                            break; // already registered
+                        }
+                    }
+                }
+                Class<?> superCls = cls.getSuperclass();
+                if (null != superCls) {
+                    cacheInheritedAnnotations(superCls);
+                }
+                Class<?>[] interf = cls.getInterfaces();
+                if (null != interf) {
+                    for (int i = 0; i < interf.length; i++) {
+                        cacheInheritedAnnotations(interf[i]);
                     }
                 }
             }
-            Class<?> superCls = cls.getSuperclass();
-            if (null != superCls) {
-                cacheInheritedAnnotations(superCls);
-            }
-            Class<?>[] interf = cls.getInterfaces();
-            if (null != interf) {
-                for (int i = 0; i < interf.length; i++) {
-                    cacheInheritedAnnotations(interf[i]);
-                }
-            }
+        } catch (IllegalStateException e) { // if Eclipse data location has not been specified yet
+            EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID)
+                .warn("While caching inherited annotations: " + e.getMessage());
         }
     }
 
