@@ -430,6 +430,8 @@ public class TypeRegistry {
         }
     }
     
+    // checkstyle: stop exception type check
+    
     /**
      * Caches the inherited annotations and avoids repeated class analysis. [performance]
      * 
@@ -459,14 +461,13 @@ public class TypeRegistry {
                     }
                 }
             }
-        } catch (IllegalStateException e) { // subsequent: if Eclipse data location has not been specified yet
+        } catch (Throwable e) { // for some reason if Eclipse does not find classes
             EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID)
-                .warn("Illegal state while caching inherited annotations: " + e.getMessage());
-        } catch (NoClassDefFoundError e) { // for some reason if Eclipse does not find classes
-            EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID)
-                .warn("No class def found while caching inherited annotations: " + e.getMessage());
+                .warn(e.getClass().getSimpleName() + " while caching inherited annotations: " + e.getMessage());
         }
     }
+    
+    // checkstyle: resume exception type check
 
     /**
      * Returns whether a certain method given by its signature (see {@link OperationDescriptor#getSignature()} 
