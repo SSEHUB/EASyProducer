@@ -459,9 +459,12 @@ public class TypeRegistry {
                     }
                 }
             }
-        } catch (IllegalStateException e) { // if Eclipse data location has not been specified yet
+        } catch (IllegalStateException e) { // subsequent: if Eclipse data location has not been specified yet
             EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID)
-                .warn("While caching inherited annotations: " + e.getMessage());
+                .warn("Illegal state while caching inherited annotations: " + e.getMessage());
+        } catch (NoClassDefFoundError e) { // for some reason if Eclipse does not find classes
+            EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID)
+                .warn("No class def found while caching inherited annotations: " + e.getMessage());
         }
     }
 
