@@ -21,23 +21,23 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 /**
  * Instantiator to remove a LXC image.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcRemoveImage")
 public class LxcRemoveImage extends AbstractLxcInstantiator {
 
     // checkstyle: stop exception type check
-    
+
     /**
-     * Returns the name of a LXC image.
+     * Removes LXC image by id from local repository.
      * 
-     * @param id the id of the image to return the name for
+     * @param fingerprint the fingerprint of the image to be deleted from local repository
      * @return {@code true} if removed
      * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean lxcRemoveImage(String id) throws VilException {
+    public static boolean lxcRemoveImage(String fingerprint) throws VilException {
         try {
-            createClient().removeImageCmd(id).withForce(true).exec();
+            createClient().deleteImage(fingerprint);
             return true;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
@@ -47,7 +47,7 @@ public class LxcRemoveImage extends AbstractLxcInstantiator {
             }
         }
     }
-    
+
     // checkstyle: resume exception type check
-    
+
 }

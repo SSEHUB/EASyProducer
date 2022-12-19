@@ -15,43 +15,37 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import java.util.List;
+import java.util.Map;
 
-import com.github.dockerjava.api.model.Image;
-
+import au.com.jcloud.lxd.model.Image;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
  * Instantiator to obtain the name of a docker image.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcImageName")
 public class LxcImageName extends AbstractLxcInstantiator {
 
     // checkstyle: stop exception type check
-    
+
     /**
      * Returns the name of a LXC image.
      * 
-     * @param id the id of the image to return the name for
+     * @param fingerprint the fingerprint of the image to return the name for
      * @return the name, if not found <b>null</b> (undefined)
-     * @throws VilException in case of artifact / parameter problems
+     * @throws VilException
+     *             in case of artifact / parameter problems
      */
-    public static String lxcImageName(String id) throws VilException {
+    public static String lxcImageName(String fingerprint) throws VilException {
         String name = null;
         try {
-            List<Image> imgs = (List<Image>) createClient().listImagesCmd().withShowAll(true).exec();
-    
-            for (Image img: imgs) {
-                // Extracting 12-digits version of the image id. 
-                String imgId = img.getId();
-                imgId = imgId.substring(7, 19);
-                // Comparing with input id
-                if (imgId.equals(id)) {
-                    name = img.getRepoTags()[0];
-                }
+            Map<String, Image> imgs = createClient().loadImageMap();
+
+            if (imgs.containsKey(fingerprint)) {
+                name = imgs.get(fingerprint).getAliases().toString().replaceAll("[\\]\\[\\(\\)]", "");
             }
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
@@ -60,7 +54,7 @@ public class LxcImageName extends AbstractLxcInstantiator {
         }
         return name;
     }
-    
+
     // checkstyle: resume exception type check
-    
+
 }

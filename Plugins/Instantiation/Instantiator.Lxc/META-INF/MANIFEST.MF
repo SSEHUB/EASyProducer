@@ -15,8 +15,7 @@ Require-Bundle: net.ssehub.easy.instantiation.core,
  org.eclipse.text;visibility:=reexport,
  net.ssehub.easy.libs.lxc;bundle-version="1.1.0",
  org.apache.commons.lang;bundle-version="2.6.0",
- org.slf4j.api;bundle-version="1.7.30",
- net.ssehub.easy.libs.docker;bundle-version="3.2.7"
+ org.slf4j.api;bundle-version="1.7.30"
 Import-Package: org.eclipse.jdt.core,
  org.eclipse.jdt.core.dom,
  org.eclipse.jface.text,

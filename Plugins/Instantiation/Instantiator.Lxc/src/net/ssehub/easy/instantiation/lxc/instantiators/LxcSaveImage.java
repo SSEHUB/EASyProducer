@@ -17,8 +17,6 @@ package net.ssehub.easy.instantiation.lxc.instantiators;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,45 +33,59 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 /**
  * Instantiator to save a LXC image.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcSaveImage")
 public class LxcSaveImage extends AbstractLxcInstantiator {
-    
+
     /**
-     * Save a LXC image.
+     * Exports a LXC image to a unified tarball if the image was created from a
+     * container. Otherwise it will create a split image tarball with metadata
+     * and rootfs.
      * 
-     * @param imageName name of the image, "repository:tag"
-     * @param target the image file to be created 
+     * @param imageName name of the image, "repository:image-name"
+     * @param target the path where the image file will be created
+     * @param fileName the name the created file gets
      * @return {@code true} if removed
-     * @throws VilException in case of artifact / parameter problems
+     * @throws VilException
+     *             in case of artifact / parameter problems
      */
-    public static Set<FileArtifact> lxcSaveImage(String imageName, Path target) throws VilException {
+    public static Set<FileArtifact> lxcSaveImage(String imageName, Path target, String fileName) throws VilException {
         long timestamp = PathUtils.normalizedTime();
         File targetPath = determineTargetPath(target);
-       
+
+        String imageNameSub = imageName.substring(imageName.lastIndexOf(":") + 1);
+        String destinationPath = targetPath.getAbsolutePath().toString();
+        String exportImage = "lxc image export ";
+
+        System.out.println(destinationPath);
+
+        boolean imageExists = false;
+
         try {
-            InputStream in = createClient().saveImageCmd(imageName).exec();
-            if (null != in) {
-                java.nio.file.Files.copy(
-                    in, 
-                    targetPath.toPath(), 
-                    StandardCopyOption.REPLACE_EXISTING);                
+            imageExists = createClient().loadImageMap().containsKey(imageNameSub);
+            if (imageExists) {
+                createCmdClient().executeLinuxCmd(
+                                exportImage + " " + imageName + " " + destinationPath + "/" + fileName);
             } else {
-                throw new VilException("No image found, stream=null", VilException.ID_RUNTIME);
+                throw new VilException("No image found", VilException.ID_RUNTIME);
             }
         } catch (IOException e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }
+        } catch (InterruptedException e) {
+            if (FAIL_ON_ERROR) {
+                throw new VilException(e, VilException.ID_RUNTIME);
+            }
         }
-        
+
         List<FileArtifact> result = new ArrayList<FileArtifact>();
         ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
-        FileUtils.scan(targetPath.getAbsoluteFile(), target.getArtifactModel(), timestamp, scanResult, 
-            FileArtifact.class);
+        FileUtils.scan(targetPath.getAbsoluteFile(), target.getArtifactModel(), timestamp, scanResult,
+                        FileArtifact.class);
         scanResult.checkForException();
-        return new ListSet<FileArtifact>(result, FileArtifact.class);        
+        return new ListSet<FileArtifact>(result, FileArtifact.class);
     }
-    
+
 }

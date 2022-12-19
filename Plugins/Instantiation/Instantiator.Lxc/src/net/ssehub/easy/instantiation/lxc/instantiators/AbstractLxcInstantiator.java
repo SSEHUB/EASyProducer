@@ -15,46 +15,57 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import org.apache.commons.lang.SystemUtils;
-
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
-import com.github.dockerjava.transport.DockerHttpClient;
-import com.github.dockerjava.transport.SSLConfig;
-
+import au.com.jcloud.lxd.bean.LxdServerCredential;
+import au.com.jcloud.lxd.service.ILinuxCliService;
+import au.com.jcloud.lxd.service.ILxdApiService;
+import au.com.jcloud.lxd.service.ILxdService;
+import au.com.jcloud.lxd.service.impl.LinuxCliServiceImpl;
+import au.com.jcloud.lxd.service.impl.LxdApiServiceImpl;
+import au.com.jcloud.lxd.service.impl.LxdServiceImpl;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
 
 /**
- * Abstract reusable LXC instantiator, basic implementation for the individual commands.
- *  
- * @author Monika Staciwa
+ * Abstract reusable LXC instantiator, basic implementation for the individual
+ * commands.
+ * 
+ * @author Luca Schulz
  */
 public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
 
-    protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(
-        System.getProperty("easy.lxc.failOnError", "true"));
+    protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(System.getProperty("easy.lxc.failOnError", "true"));
 
-    // http://localhost:2375 causes unsupported schema problems on Windows although explained in internet
-    private static final String LXC_HOST = System.getProperty("easy.docker.host", 
-        SystemUtils.IS_OS_WINDOWS ? "unix:///var/run/docker.sock" : "unix:///var/run/docker.sock");
+    private static final String LXC_HOST = System.getProperty("easy.lxc.host", "localhost:8443");
 
     /**
-     * Returns the docker client instance.
+     * Returns the LXC client instance to use API.
      * 
-     * @return the docker client instance
+     * @return the LXC client instance
      */
-    protected static DockerClient createClient() {
-        // Setting the docker client
-        DockerClientConfig standardConfig = DefaultDockerClientConfig.createDefaultConfigBuilder()
-            .withDockerHost(LXC_HOST).build(); 
-        DockerHttpClient httpClient = new ApacheDockerHttpClient.Builder()
-            .dockerHost(standardConfig.getDockerHost())
-            .sslConfig((SSLConfig) standardConfig.getSSLConfig())
-            .build();
-        return DockerClientImpl.getInstance(standardConfig, httpClient);        
+    protected static ILxdService createClient() {
+        // Setting the lxc client
+
+        ILxdService lxcClient = new LxdServiceImpl();
+        ILxdApiService lxdApiService = new LxdApiServiceImpl();
+        ILinuxCliService linuxCliService = new LinuxCliServiceImpl();
+        lxdApiService.setLinuxCliService(linuxCliService);
+        lxcClient.setLxdApiService(lxdApiService);
+
+        LxdServerCredential credential = new LxdServerCredential(LXC_HOST);
+        lxcClient.setLxdServerCredential(credential);
+
+        return lxcClient;
+    }
+
+    /**
+     * Returns the client instance to execute a Linux-Command.
+     * 
+     * @return the LXC client instance
+     */
+    protected static ILinuxCliService createCmdClient() {
+
+        ILinuxCliService lxcClient = new LinuxCliServiceImpl();
+
+        return lxcClient;
     }
 
 }

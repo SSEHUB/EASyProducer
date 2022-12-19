@@ -16,66 +16,44 @@
 
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import java.io.File;
-import java.util.HashSet;
-
-import com.github.dockerjava.api.command.BuildImageCmd;
-import com.github.dockerjava.api.command.BuildImageResultCallback;
-import com.github.dockerjava.api.model.AuthConfigurations;
-import com.github.dockerjava.api.model.BuildResponseItem;
-
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
  * Builds Lxc images.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcBuildImage")
 public class LxcBuildImage extends AbstractLxcInstantiator {
 
     // checkstyle: stop exception type check
-    
+
     /**
-     * Executes a specific Dockerfile and builds an image.
+     * Executes a specific LXC Template, builds an image and imports it to LXD.
      * 
-     * @param baseDirectory the base directory for the build context
-     * @param dockerFile the docker file for the container to create
-     * @param name name of the image with following schema (repository:tag)
-     * @return the container id, may be <b>null</b>/undefined
+     * @param baseDirectory the base directory for the build context(.tar.xz) will be stored
+     * @param lxcTemplate the LXC template to create the image from
+     * @param imageName name of the image
+     * @return the image fingerprint, may be <b>null</b>/undefined
      * @throws VilException in case of artifact / parameter problems
      */
-    public static String lxcBuildImage(Path baseDirectory, Path dockerFile, String name) throws VilException {
-        HashSet<String> tags = new HashSet<String>();
-        tags.add(name);
-        
-        try {
-            File dockerfile = dockerFile.getAbsolutePath();
-            BuildImageCmd cmd = createClient().buildImageCmd()
-                .withDockerfile(dockerfile)
-                .withPull(true)
-                .withNoCache(true)      // false - building multiply images from one build context not possible
-                .withBaseDirectory(baseDirectory.getAbsolutePath())
-                .withTags(tags);
-            AuthConfigurations aCfgs = LxcLogin.getAuthConfigs();
-            if (null != aCfgs) {
-                cmd.withBuildAuthConfigs(aCfgs);
-            }
-            String imageId = cmd
-                .exec(new BuildImageResultCallback() {
-                    
-                    @Override
-                    public void onNext(BuildResponseItem item) {
-                        super.onNext(item);
-                        TracerFactory.progressSubTask(1, 1, "Docker push: " + item.getId() + " " + item.getStatus());
-                    }
+    public static String lxcBuildImage(Path baseDirectory, Path lxcTemplate, String imageName) throws VilException {
+        String distrobuilderCmd = "distrobuilder build-lxd ";
+        String flags = " --type=unified --import-into-lxd=";
+        String templatePath = lxcTemplate.getAbsolutePath().toString();
 
-                })
-                .awaitImageId();
-            return imageId;        
+        try {
+            createCmdClient().executeLinuxCmd("cd " + baseDirectory + " && sudo " + distrobuilderCmd + templatePath 
+                + flags + imageName);
+
+            // Should wait until the command is actually finished now
+            // VilException will be thrown
+            // but Image will still be built
+            String imageFingerprint = createClient().loadImageMap().get(imageName).getFingerprint();
+
+            return imageFingerprint;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
@@ -84,7 +62,7 @@ public class LxcBuildImage extends AbstractLxcInstantiator {
             }
         }
     }
-    
+
     // checkstyle: resume exception type check
-  
+
 }

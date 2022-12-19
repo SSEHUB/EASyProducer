@@ -24,7 +24,6 @@ import net.ssehub.easy.instantiation.lxc.instantiators.LxcBuildImage;
 import net.ssehub.easy.instantiation.lxc.instantiators.LxcImageName;
 import net.ssehub.easy.instantiation.lxc.instantiators.LxcLoadImage;
 import net.ssehub.easy.instantiation.lxc.instantiators.LxcLogin;
-import net.ssehub.easy.instantiation.lxc.instantiators.LxcLoginByToken;
 import net.ssehub.easy.instantiation.lxc.instantiators.LxcLogout;
 import net.ssehub.easy.instantiation.lxc.instantiators.LxcPushImage;
 import net.ssehub.easy.instantiation.lxc.instantiators.LxcRemoveImage;
@@ -51,7 +50,6 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(LxcSaveImage.class);
             TypeRegistry.DEFAULT.register(LxcLoadImage.class);
             TypeRegistry.DEFAULT.register(LxcLogin.class);
-            TypeRegistry.DEFAULT.register(LxcLoginByToken.class);
             TypeRegistry.DEFAULT.register(LxcLogout.class);
             TypeRegistry.DEFAULT.register(LxcPushImage.class);
         }

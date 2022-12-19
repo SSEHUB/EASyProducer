@@ -15,10 +15,7 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -27,36 +24,41 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 /**
  * Instantiator to load a LXC image.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcLoadImage")
 public class LxcLoadImage extends AbstractLxcInstantiator {
 
     // checkstyle: stop exception type check
-    
+
     /**
-     * Loads a LXC image.
+     * Loads/Imports a LXC image from archive into LXD .
      * 
-     * @param archive the image archive to load
-     * @return {@code true} if successful, {@code false} 
-     * @throws VilException in case of artifact / parameter problems
+     * @param archive
+     *            the image archive to load (only unified tarball allowed)
+     * @param name
+     *            the name that the image is going to get
+     * @return {@code true} if successful, {@code false}
+     * @throws VilException
+     *             in case of artifact / parameter problems
      */
-    public static boolean lxcLoadImage(Path archive) throws VilException {
+    public static boolean lxcLoadImage(Path archive, String name) throws VilException {
         boolean ok = false;
-        File tarFile = archive.getAbsolutePath();
         try {
-            InputStream imageStream = new FileInputStream(tarFile);
-            createClient().loadImageCmd(imageStream).exec();
-            imageStream.close();
+            createCmdClient().executeLinuxCmd("lxc image import " + archive + " --alias " + name);
             ok = true;
         } catch (IOException e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }
-        }            
+        } catch (InterruptedException e) {
+            if (FAIL_ON_ERROR) {
+                throw new VilException(e, VilException.ID_RUNTIME);
+            }
+        }
         return ok;
     }
-    
+
     // checkstyle: resume exception type check
-    
+
 }

@@ -15,11 +15,6 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import com.github.dockerjava.api.async.ResultCallback;
-import com.github.dockerjava.api.command.PushImageCmd;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.PushResponseItem;
-
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
@@ -27,7 +22,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 /**
  * Instantiator to push a LXC image to a repository.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcPushImage")
 public class LxcPushImage extends AbstractLxcInstantiator {
@@ -35,42 +30,32 @@ public class LxcPushImage extends AbstractLxcInstantiator {
     // checkstyle: stop exception type check
 
     /**
-     * Returns the name of a LXC image.
+     * Copies a image from local to trusted remote repository or the other way
+     * if imageName consists of remote:image-name.
      * 
-     * @param imageName name of the image, "repository:tag"
-     * @param registry the target registry
-     * @param repository the repository within registry to use
-     * @param tag optional tag, may be empty
+     * @param imageName name of the image to be copied, for local images the name is
+     *     enough for remote images use this syntax: "repository:image-name"
+     * @param repository (destination), the target trusted repository, "repository:"
+     * @param newImageName the image a name for new repository otherwise if empty it will
+     *     be nameless
      * @return {@code true} if removed
      * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean lxcPushImage(String imageName, String registry, String repository, String tag) 
-        throws VilException {
+    public static boolean lxcPushImage(String imageName, String repository, String newImageName) throws VilException {
         try {
-            if (!imageName.equals(registry + "/" + repository)) {
-                createClient().tagImageCmd(imageName, registry + "/" + repository, tag).exec();
-            }
-            
-            PushImageCmd cmd = createClient().pushImageCmd(registry + "/" + repository + ":" + tag);
 
-            AuthConfig cfg = LxcLogin.getAuthConfig(registry);
-            if (null != cfg) {
-                cmd.withAuthConfig(cfg);
+            String copyImage = "lxc image copy ";
+
+            if (!"".equals(newImageName)) {
+                createCmdClient().executeLinuxCmd(
+                                copyImage + " " + imageName + " " + repository + " --alias " + newImageName);
+            } else {
+                createCmdClient().executeLinuxCmd(copyImage + " " + imageName + " " + repository);
             }
-            
+
             final String fallbackTaskDescription = "LXC activity";
             TracerFactory.ensureTasks(fallbackTaskDescription);
-            cmd.exec(new ResultCallback.Adapter<PushResponseItem>() {
-                
-                @Override
-                public void onNext(PushResponseItem item) {
-                    super.onNext(item);
-                    TracerFactory.progressSubTask(1, 1, "LXC push: " + item.getId() + " " + item.getStatus());
-                }
-                
-            }).awaitCompletion();
-            TracerFactory.closeTasks(fallbackTaskDescription);
-            
+
             return true;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
@@ -80,7 +65,7 @@ public class LxcPushImage extends AbstractLxcInstantiator {
             }
         }
     }
-    
+
     // checkstyle: resume exception type check
-    
+
 }

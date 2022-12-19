@@ -15,37 +15,18 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
  * Instantiator to log out from one or multiple registries.
  * 
- * @author Monika Staciwa
+ * @author Luca Schulz
  */
 @Instantiator("lxcLogout")
 public class LxcLogout extends AbstractLxcInstantiator {
 
     /**
-     * Logs out from all known registries.
+     * !!! As the LxcLogin Class is not implemented, this class is redundant!!!
      * 
-     * @return {@code true} if logged out (always {@code true})
-     * @throws VilException in case of artifact / parameter problems
      */
-    public static boolean lxcLogout() throws VilException {
-        LxcLogin.clear();
-        return true;
-    }
-
-    /**
-     * Logs out from a registry.
-     * 
-     * @param registry the registry address
-     * @return {@code true} if logged out
-     * @throws VilException in case of artifact / parameter problems
-     */
-    public static boolean lxcLogout(String registry) throws VilException {
-        return LxcLogin.clear(registry);
-    }
-    
 }

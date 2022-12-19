@@ -109,23 +109,17 @@
          <groupId>org.eclipse.platform</groupId>
          <artifactId>org.eclipse.text</artifactId>
      </dependency>
-    <!-- Docker API Client -->
+    <!-- JLxd API Client -->
     <dependency>
-        <groupId>com.github.docker-java</groupId>
-        <artifactId>docker-java-core</artifactId>
-        <version>3.2.7</version>
+	  <groupId>net.ssehub.easy.producer.external</groupId>
+	  <artifactId>jlxd-cli</artifactId>
+	  <version>1.1-SNAPSHOT</version>
     </dependency>
-    <!-- Docker API Client -->
+    <!-- JLxd API Client -->
     <dependency>
-        <groupId>com.github.docker-java</groupId>
-        <artifactId>docker-java-transport</artifactId>
-        <version>3.2.7</version>
-    </dependency>
-    <!-- Docker API Client -->
-    <dependency>
-        <groupId>com.github.docker-java</groupId>
-        <artifactId>docker-java-transport-httpclient5</artifactId>
-        <version>3.2.7</version>
+	  <groupId>net.ssehub.easy.producer.external</groupId>
+	  <artifactId>jlxd-core</artifactId>
+	  <version>1.1-SNAPSHOT</version>
     </dependency>
   </dependencies>  
  </project>
