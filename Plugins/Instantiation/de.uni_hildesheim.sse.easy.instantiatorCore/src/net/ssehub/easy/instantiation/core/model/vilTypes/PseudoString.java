@@ -468,7 +468,7 @@ public class PseudoString implements IVilType {
 
     /**
      * Turns the given <code>string</code> into a (Java) programming language identifier by removing all
-     * non identifier characters.
+     * non identifier characters. The beginning of the result may not be an identifier.
      * 
      * @param string the string to be turned into an identifier
      * @return the identifier (may be empty in the extreme case)
@@ -480,6 +480,29 @@ public class PseudoString implements IVilType {
         StringBuilder tmp = new StringBuilder(string);
         deleteNonJavaIdentifierParts(tmp);
         return tmp.toString();
+    }
+    
+    /**
+     * Turns the given <code>string</code> into a (Java) programming language identifier by removing all
+     * non identifier characters. If the beginning of the result is not an identifier, prepend {@code prefix}.
+     * 
+     * @param string the string to be turned into an identifier
+     * @param prefix string to be prepended if the beginning of the result is not an identifier
+     * @return the identifier (may be empty in the extreme case)
+     * 
+     * @see #toIdentifier(String, String)
+     */
+    public static String toIdentifier(String string, String prefix) {
+        // see matchIdentifier
+        String tmp = toIdentifier(string);
+        if (tmp.length() > 0) {
+            if (!Character.isJavaIdentifierStart(tmp.charAt(0))) {
+                tmp = prefix + tmp;
+            }
+        } else {
+            tmp = prefix;
+        }
+        return tmp;
     }
 
     /**
