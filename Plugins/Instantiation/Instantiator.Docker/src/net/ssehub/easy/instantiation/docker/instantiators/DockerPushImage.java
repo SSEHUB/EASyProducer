@@ -22,6 +22,7 @@ import com.github.dockerjava.api.command.PushImageCmd;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.PushResponseItem;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
@@ -68,10 +69,10 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 @Override
                 public void onNext(PushResponseItem item) {
                     super.onNext(item);
-                    System.out.println("Tracing Docker response " + taskDescription + ": " + item.getId() 
-                        + " " + item.getStatus());
-                    int cnt = count.incrementAndGet(); // preliminary
-                    TracerFactory.progressSubTask(cnt, cnt, taskDescription);
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), "docker").info(
+                        "Docker response " + taskDescription + ": " + item.getId() + " " + item.getStatus());
+                    int cnt = count.incrementAndGet(); // preliminary, unknown number of subtasks
+                    TracerFactory.progressSubTask(cnt, cnt + 1, taskDescription);
                 }
                 
             }).awaitCompletion();

@@ -25,6 +25,7 @@ import com.github.dockerjava.api.command.BuildImageResultCallback;
 import com.github.dockerjava.api.model.AuthConfigurations;
 import com.github.dockerjava.api.model.BuildResponseItem;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
@@ -74,10 +75,10 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
                 @Override
                 public void onNext(BuildResponseItem item) {
                     super.onNext(item);
-                    System.out.println("Tracing Docker response " + taskDescription + ": " + item.getId() 
-                        + " " + item.getStatus());
-                    int cnt = count.incrementAndGet(); // preliminary
-                    TracerFactory.progressSubTask(cnt, cnt, taskDescription);
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), "docker").info(
+                        "Docker response " + taskDescription + ": " + item.getId() + " " + item.getStatus());
+                    int cnt = count.incrementAndGet(); // preliminary, unknown number of subtasks
+                    TracerFactory.progressSubTask(cnt, cnt + 1, taskDescription);
                 }
 
             }).awaitImageId();

@@ -346,6 +346,7 @@ public abstract class TracerFactory {
                 obs.notifyProgress(task.task, sub, actual, max);
                 if (actual == max) {
                     obs.notifyEnd(task.task, sub);
+                    task.subtasks.remove(taskName);
                 }
             }
         }        
