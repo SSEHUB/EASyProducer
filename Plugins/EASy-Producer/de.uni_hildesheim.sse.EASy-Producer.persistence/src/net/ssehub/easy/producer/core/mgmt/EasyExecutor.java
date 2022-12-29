@@ -499,6 +499,15 @@ public class EasyExecutor {
             VarModel.INSTANCE.locations().removeLocation(folder, observer);
         }
     }
+    
+    /**
+     * Clears model caches (IVML, VIL, VTL) and implicitly forces a re-resolution, in particular of wildcard imports.
+     */
+    public void clearModels() {
+        TemplateModel.INSTANCE.clear();
+        BuildModel.INSTANCE.clear();
+        VarModel.INSTANCE.clear();
+    }
 
     /**
      * Executes all steps as described above.
