@@ -108,6 +108,11 @@
               <version>${project.version}</version>
           </dependency>
           <dependency>
+              <groupId>net.ssehub.easy.instantiation</groupId>
+              <artifactId>lxc</artifactId>
+              <version>${project.version}</version>
+          </dependency>
+          <dependency>
 	          <groupId>net.ssehub.easy.instantiation</groupId>
 	          <artifactId>xvcl</artifactId>
 	          <version>${project.version}</version>
