@@ -187,8 +187,6 @@ public class BasicProgressObserver extends ProgressObserver {
                 Task t = subtasks.get(pos);
                 t.setMax(max);
                 monitor.subTask(t.getName());
-            } else {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("subtask not registered");
             }
         }
     }
@@ -204,8 +202,6 @@ public class BasicProgressObserver extends ProgressObserver {
                     parent.setMax(max);
                 }
                 monitor.worked(parent.setCurrent(step));
-            } else {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("task not registered");
             }
         }
         // subtasks are not displayed
@@ -228,8 +224,6 @@ public class BasicProgressObserver extends ProgressObserver {
                 }
                 monitor.setTaskName(parent.getName());
                 subtasks.remove(subtask);
-            } else {
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn("task not registered");
             }
         }
     }
