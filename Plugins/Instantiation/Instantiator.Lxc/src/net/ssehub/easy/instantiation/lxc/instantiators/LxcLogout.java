@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
@@ -26,7 +27,14 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 public class LxcLogout extends AbstractLxcInstantiator {
 
     /**
-     * !!! As the LxcLogin Class is not implemented, this class is redundant!!!
+     * No real logout for LXC. Providing a stub operation for now.
      * 
+     * @param baseDirectory
+     *            the base directory
+     * @throws VilException
+     *             in case of artifact / parameter problems
      */
+    public static void lxcLogout(String baseDirectory) throws VilException {
+    }
+    
 }
