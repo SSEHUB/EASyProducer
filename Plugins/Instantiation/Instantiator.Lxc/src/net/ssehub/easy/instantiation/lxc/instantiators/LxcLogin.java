@@ -43,8 +43,14 @@ public class LxcLogin extends AbstractLxcInstantiator {
      *             in case of artifact / parameter problems
      */
     public static void lxcLogin(String baseDirectory) throws VilException {
-        System.setProperty("snap_cert", baseDirectory + File.separator + "snap/lxd/common/config/client.crt");
-        System.setProperty("snap_key", baseDirectory + File.separator + "snap/lxd/common/config/client.key");
+        try {
+    	    System.setProperty("snap_cert", baseDirectory + File.separator + "snap/lxd/common/config/client.crt");
+    	    System.setProperty("snap_key", baseDirectory + File.separator + "snap/lxd/common/config/client.key");
+        } catch (Exception e) {
+            if (FAIL_ON_ERROR) {
+                throw new VilException(e, VilException.ID_RUNTIME);
+            }
+        }
     }
 
 }
