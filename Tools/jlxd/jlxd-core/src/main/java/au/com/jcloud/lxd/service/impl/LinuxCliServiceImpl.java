@@ -42,11 +42,11 @@ public class LinuxCliServiceImpl implements ILinuxCliService {
 				process = Runtime.getRuntime().exec(cmdArray);
 				process.getOutputStream().close();
 			}
-			ProcessWithTimeout processWithTimeout = new ProcessWithTimeout(process);
-			int exitCode = processWithTimeout.waitForProcess(LxdConstants.JLXD_EXEC_TIMEOUT);
-			if (exitCode == Integer.MIN_VALUE) {
-				throw new InterruptedException("Timeout occured in command: " + cmd);
-			}
+//			ProcessWithTimeout processWithTimeout = new ProcessWithTimeout(process);
+//			int exitCode = processWithTimeout.waitForProcess(LxdConstants.JLXD_EXEC_TIMEOUT);
+//			if (exitCode == Integer.MIN_VALUE) {
+//				throw new InterruptedException("Timeout occured in command: " + cmd);
+//			}
 			in = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			String line;
 
