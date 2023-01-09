@@ -54,7 +54,7 @@ public class LxcBuildImage extends AbstractLxcInstantiator {
             String imageFingerprint = createClient().loadImageMap().get(imageName).getFingerprint();
 
             return imageFingerprint;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
             } else {

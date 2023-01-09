@@ -39,7 +39,7 @@ public class LxcRemoveImage extends AbstractLxcInstantiator {
         try {
             createClient().deleteImage(fingerprint);
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             } else {

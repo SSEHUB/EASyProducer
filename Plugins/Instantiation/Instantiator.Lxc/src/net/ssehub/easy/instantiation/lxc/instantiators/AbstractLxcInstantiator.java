@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
+import java.io.File;
+
 import au.com.jcloud.lxd.bean.LxdServerCredential;
 import au.com.jcloud.lxd.service.ILinuxCliService;
 import au.com.jcloud.lxd.service.ILxdApiService;
@@ -35,6 +37,7 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
     protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(System.getProperty("easy.lxc.failOnError", "true"));
 
     private static final String LXC_HOST = System.getProperty("easy.lxc.host", "localhost:8443");
+    private static String baseDirectory;
 
     /**
      * Returns the LXC client instance to use API.
@@ -44,6 +47,7 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
     protected static ILxdService createClient() {
         // Setting the lxc client
 
+        setLxcProperties();
         ILxdService lxcClient = new LxdServiceImpl();
         ILxdApiService lxdApiService = new LxdApiServiceImpl();
         ILinuxCliService linuxCliService = new LinuxCliServiceImpl();
@@ -62,10 +66,32 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
      * @return the LXC client instance
      */
     protected static ILinuxCliService createCmdClient() {
-
+        setLxcProperties();
         ILinuxCliService lxcClient = new LinuxCliServiceImpl();
-
         return lxcClient;
+    }
+
+    /**
+     * Defines the LXC base directory also used for authentication/as parent folder for certificates.
+     * 
+     * @param directory the base directory. If given, used for authentication. If empty or <b>null</b> 
+     * resets authentication/logon.
+     */
+    protected static void setBaseDirectory(String directory) {
+        baseDirectory = directory;
+    }
+
+    /**
+     * Sets the LXC system properties depending on {@link #baseDirectory}.
+     */
+    protected static void setLxcProperties() {
+        if (null != baseDirectory && baseDirectory.length() > 0) {
+            System.setProperty("snap_cert", baseDirectory + File.separator + "snap/lxd/common/config/client.crt");
+            System.setProperty("snap_key", baseDirectory + File.separator + "snap/lxd/common/config/client.key");
+        } else {
+            System.setProperty("snap_cert", "");
+            System.setProperty("snap_key", "");
+        }
     }
 
 }

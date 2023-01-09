@@ -16,7 +16,6 @@
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,16 +69,11 @@ public class LxcSaveImage extends AbstractLxcInstantiator {
             } else {
                 throw new VilException("No image found", VilException.ID_RUNTIME);
             }
-        } catch (IOException e) {
-            if (FAIL_ON_ERROR) {
-                throw new VilException(e, VilException.ID_RUNTIME);
-            }
-        } catch (InterruptedException e) {
+        } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }
         }
-
         List<FileArtifact> result = new ArrayList<FileArtifact>();
         ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
         FileUtils.scan(targetPath.getAbsoluteFile(), target.getArtifactModel(), timestamp, scanResult,

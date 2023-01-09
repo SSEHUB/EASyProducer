@@ -47,7 +47,7 @@ public class LxcImageName extends AbstractLxcInstantiator {
             if (imgs.containsKey(fingerprint)) {
                 name = imgs.get(fingerprint).getAliases().toString().replaceAll("[\\]\\[\\(\\)]", "");
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }

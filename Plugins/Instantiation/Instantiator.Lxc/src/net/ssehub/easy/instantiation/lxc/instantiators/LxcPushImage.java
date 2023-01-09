@@ -57,7 +57,7 @@ public class LxcPushImage extends AbstractLxcInstantiator {
             TracerFactory.ensureTasks(fallbackTaskDescription);
 
             return true;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             } else {

@@ -35,6 +35,7 @@ public class LxcLogout extends AbstractLxcInstantiator {
      *             in case of artifact / parameter problems
      */
     public static void lxcLogout(String baseDirectory) throws VilException {
+        setBaseDirectory(null);
     }
     
 }

@@ -15,8 +15,6 @@
  */
 package net.ssehub.easy.instantiation.lxc.instantiators;
 
-import java.io.IOException;
-
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
@@ -47,11 +45,7 @@ public class LxcLoadImage extends AbstractLxcInstantiator {
         try {
             createCmdClient().executeLinuxCmd("lxc image import " + archive + " --alias " + name);
             ok = true;
-        } catch (IOException e) {
-            if (FAIL_ON_ERROR) {
-                throw new VilException(e, VilException.ID_RUNTIME);
-            }
-        } catch (InterruptedException e) {
+        } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }
