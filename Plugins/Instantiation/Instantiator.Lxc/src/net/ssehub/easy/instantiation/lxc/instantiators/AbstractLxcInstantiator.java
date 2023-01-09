@@ -54,7 +54,8 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
         lxdApiService.setLinuxCliService(linuxCliService);
         lxcClient.setLxdApiService(lxdApiService);
 
-        LxdServerCredential credential = new LxdServerCredential(LXC_HOST);
+        LxdServerCredential credential = new LxdServerCredential(LXC_HOST, System.getProperty("snap_cert"),
+                System.getProperty("snap_key"));
         lxcClient.setLxdServerCredential(credential);
 
         return lxcClient;
