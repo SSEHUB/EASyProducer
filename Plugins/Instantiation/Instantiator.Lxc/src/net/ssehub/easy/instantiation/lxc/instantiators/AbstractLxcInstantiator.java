@@ -36,6 +36,8 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
 
     protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(System.getProperty("easy.lxc.failOnError", "true"));
 
+    private static final String PROP_CERT = "snap_cert";
+    private static final String PROP_KEY = "snap_key";
     private static final String LXC_HOST = System.getProperty("easy.lxc.host", "localhost:8443");
     private static String baseDirectory;
 
@@ -47,15 +49,15 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
     protected static ILxdService createClient() {
         // Setting the lxc client
 
-        setLxcProperties();
         ILxdService lxcClient = new LxdServiceImpl();
         ILxdApiService lxdApiService = new LxdApiServiceImpl();
         ILinuxCliService linuxCliService = new LinuxCliServiceImpl();
         lxdApiService.setLinuxCliService(linuxCliService);
         lxcClient.setLxdApiService(lxdApiService);
 
-        LxdServerCredential credential = new LxdServerCredential(LXC_HOST, System.getProperty("snap_cert"),
-                System.getProperty("snap_key"));
+        LxdServerCredential credential = new LxdServerCredential(LXC_HOST, 
+            System.getProperty(PROP_CERT),
+            System.getProperty(PROP_KEY));
         lxcClient.setLxdServerCredential(credential);
 
         return lxcClient;
@@ -67,7 +69,6 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
      * @return the LXC client instance
      */
     protected static ILinuxCliService createCmdClient() {
-        setLxcProperties();
         ILinuxCliService lxcClient = new LinuxCliServiceImpl();
         return lxcClient;
     }
@@ -79,20 +80,8 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
      * resets authentication/logon.
      */
     protected static void setBaseDirectory(String directory) {
-        baseDirectory = directory;
-    }
-
-    /**
-     * Sets the LXC system properties depending on {@link #baseDirectory}.
-     */
-    protected static void setLxcProperties() {
-        if (null != baseDirectory && baseDirectory.length() > 0) {
-            System.setProperty("snap_cert", baseDirectory + File.separator + "snap/lxd/common/config/client.crt");
-            System.setProperty("snap_key", baseDirectory + File.separator + "snap/lxd/common/config/client.key");
-        } else {
-            System.setProperty("snap_cert", "");
-            System.setProperty("snap_key", "");
-        }
+        System.setProperty(PROP_CERT, baseDirectory + File.separator + "snap/lxd/common/config/client.crt");
+        System.setProperty(PROP_KEY, baseDirectory + File.separator + "snap/lxd/common/config/client.key");
     }
 
 }
