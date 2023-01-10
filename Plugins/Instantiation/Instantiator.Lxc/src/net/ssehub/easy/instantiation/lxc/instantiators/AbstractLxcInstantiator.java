@@ -39,7 +39,6 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
     private static final String PROP_CERT = "snap_cert";
     private static final String PROP_KEY = "snap_key";
     private static final String LXC_HOST = System.getProperty("easy.lxc.host", "localhost:8443");
-    private static String baseDirectory;
 
     /**
      * Returns the LXC client instance to use API.
@@ -76,10 +75,9 @@ public abstract class AbstractLxcInstantiator extends AbstractFileInstantiator {
     /**
      * Defines the LXC base directory also used for authentication/as parent folder for certificates.
      * 
-     * @param directory the base directory. If given, used for authentication. If empty or <b>null</b> 
-     * resets authentication/logon.
+     * @param baseDirectory the base directory. If given, used for authentication. 
      */
-    protected static void setBaseDirectory(String directory) {
+    protected static void setBaseDirectory(String baseDirectory) {
         System.setProperty(PROP_CERT, baseDirectory + File.separator + "snap/lxd/common/config/client.crt");
         System.setProperty(PROP_KEY, baseDirectory + File.separator + "snap/lxd/common/config/client.key");
     }
