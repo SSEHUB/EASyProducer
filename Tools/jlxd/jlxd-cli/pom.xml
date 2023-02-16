@@ -8,6 +8,7 @@
 	<version>1.1</version>
 	<name>Java LXD CommandLine Client (IIP-Ecosphere Clone)</name>
 	<url>http://jcloud.com.au</url>
+    <description>Java LXD command line Client.</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

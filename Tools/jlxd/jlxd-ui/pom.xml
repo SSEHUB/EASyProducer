@@ -8,6 +8,7 @@
 	<version>1.1</version>
 	<name>Java LXD UI (IIP-Ecosphere Clone)</name>
 	<url>http://jcloud.com.au</url>
+	<description>Java LXD UI (optional).</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

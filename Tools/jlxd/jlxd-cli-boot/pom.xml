@@ -8,6 +8,7 @@
 	<version>1.1</version>
 	<name>Java LXD CLI Spring Boot (IIP-Ecosphere Clone)</name>
 	<url>http://jcloud.com.au</url>
+    <description>Java LXD Boot/Dependencies.</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
