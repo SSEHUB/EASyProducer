@@ -113,13 +113,13 @@
     <dependency>
 	  <groupId>net.ssehub.easy.producer.external</groupId>
 	  <artifactId>jlxd-cli</artifactId>
-	  <version>1.1-SNAPSHOT</version>
+	  <version>1.1</version>
     </dependency>
     <!-- JLxd API Client -->
     <dependency>
 	  <groupId>net.ssehub.easy.producer.external</groupId>
 	  <artifactId>jlxd-core</artifactId>
-	  <version>1.1-SNAPSHOT</version>
+	  <version>1.1</version>
     </dependency>
   </dependencies>  
  </project>

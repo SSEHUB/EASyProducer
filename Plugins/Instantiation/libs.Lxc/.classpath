@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="jlxd-cli-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="jlxd-core-1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="commons-lang3-3.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="gson-2.6.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="hamcrest-core-1.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="javassist-3.21.0-GA.jar"/>
 	<classpathentry exported="true" kind="lib" path="javax.inject-1.jar"/>
-	<classpathentry exported="true" kind="lib" path="jlxd-cli-1.1-SNAPSHOT.jar"/>
-	<classpathentry exported="true" kind="lib" path="jlxd-core-1.1-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="junit-4.11.jar"/>
 	<classpathentry exported="true" kind="lib" path="log4j-1.2.17.jar"/>
 	<classpathentry exported="true" kind="lib" path="mockito-all-1.10.19.jar"/>
