@@ -5,7 +5,7 @@
 	<groupId>net.ssehub.easy.producer.external</groupId>
 	<artifactId>jlxd-cli-boot</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<name>Java LXD CLI Spring Boot (IIP-Ecosphere Clone)</name>
 	<url>http://jcloud.com.au</url>
 

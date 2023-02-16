@@ -5,7 +5,7 @@
 	<groupId>net.ssehub.easy.producer.external</groupId>
 	<artifactId>jlxd-cli</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1-SNAPSHOT</version>
+	<version>1.1</version>
 	<name>Java LXD CommandLine Client (IIP-Ecosphere Clone)</name>
 	<url>http://jcloud.com.au</url>
 
@@ -152,7 +152,7 @@
 		<dependency>
 			<groupId>net.ssehub.easy.producer.external</groupId>
 			<artifactId>jlxd-core</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.1</version>
 		</dependency>
 
 		<!-- Testing -->
