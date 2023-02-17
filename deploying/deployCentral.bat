@@ -48,7 +48,7 @@ call :DeployArtifact instantiation velocity %EASY_VERSION% false
 call :DeployArtifact instantiation xvcl %EASY_VERSION% false
 call :DeployArtifact instantiation docker %EASY_VERSION% false
 call :DeployArtifact instantiation lxc %EASY_VERSION% false
-call :DeployArtifact runtime EASy-Dependencies %EASY_VERSION% true
+call :DeployArtifact runtime EASy-dependencies %EASY_VERSION% true
 call :DeployArtifact runtime loader %EASY_VERSION% false
 call :DeployArtifact producer CommandLine %EASY_VERSION% false
 REM currently no bundled versions as sources/javadoc for Eclipse part are missing
@@ -76,8 +76,9 @@ REM param4: deploy only the POM
 		SET LOCALPREFIX=
 	) ELSE (
 	    SET URLPREFIX=%PREFIX%/
-		SET TMPPRE=%PREFIX:/=-%
-		SET LOCALPREFIX=%TMPPRE%-
+		REM SET TMPPRE=%PREFIX:/=-%
+		REM SET LOCALPREFIX=%TMPPRE%-
+		SET LOCALPREFIX=%PREFIX%-
     )
 	SET POM=%ARTIFACTPREFIX%.pom
 	SET JAR=%ARTIFACTPREFIX%.jar
@@ -98,7 +99,8 @@ REM param4: deploy only the POM
 	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%SOURCES% -Dclassifier=sources
 	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%JAVADOC% -Dclassifier=javadoc
 	) ELSE (
-			call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%POM%
+	    echo %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%POM% -DgeneratePom=false -Dpackaging=pom
+	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%POM% -DgeneratePom=false -Dpackaging=pom
 	)
 
 	endlocal
