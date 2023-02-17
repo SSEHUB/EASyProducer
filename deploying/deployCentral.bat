@@ -10,7 +10,7 @@ REM run this script
 REM goto https://oss.sonatype.org/#welcome, staging repositories, netssehub-...*, "close" for check/deploy, if successful go for "release"
 
 SET LOCALREPO=http://projects.sse.uni-hildesheim.de/qm/maven/net/ssehub/easy
-SET EASY_VERSION=1.3.3
+SET EASY_VERSION=1.3.4
 SET DIR=.\tmp
 SET TARGET=https://oss.sonatype.org/service/local/staging/deploy/maven2
 SET REPO=ossrh
@@ -18,6 +18,10 @@ SET DEPLOYCMD=mvn gpg:sign-and-deploy-file -Durl=%TARGET% -DrepositoryId=%REPO%
 SET EMPTY=""
 
 mkdir tmp
+REM call :DeployArtifact producer/external jlxd-core 1.1 false
+REM call :DeployArtifact producer/external jlxd-cli 1.1 false
+REM call :DeployArtifact producer/external jlxd-cli-boot 1.1 true
+REM call :DeployArtifact producer/external jlxd-ui 1.1 false
 REM deploy the individual artifacts for SPASS-meter
 call :DeployArtifact %EMPTY% dependencies %EASY_VERSION% true
 call :DeployArtifact %EMPTY% basics %EASY_VERSION% false
@@ -43,6 +47,7 @@ call :DeployArtifact instantiation serializer.xml %EASY_VERSION% false
 call :DeployArtifact instantiation velocity %EASY_VERSION% false
 call :DeployArtifact instantiation xvcl %EASY_VERSION% false
 call :DeployArtifact instantiation docker %EASY_VERSION% false
+call :DeployArtifact instantiation lxc %EASY_VERSION% false
 call :DeployArtifact runtime EASy-Dependencies %EASY_VERSION% true
 call :DeployArtifact runtime loader %EASY_VERSION% false
 call :DeployArtifact producer CommandLine %EASY_VERSION% false
@@ -71,7 +76,8 @@ REM param4: deploy only the POM
 		SET LOCALPREFIX=
 	) ELSE (
 	    SET URLPREFIX=%PREFIX%/
-		SET LOCALPREFIX=%PREFIX%-
+		SET TMPPRE=%PREFIX:/=-%
+		SET LOCALPREFIX=%TMPPRE%-
     )
 	SET POM=%ARTIFACTPREFIX%.pom
 	SET JAR=%ARTIFACTPREFIX%.jar
