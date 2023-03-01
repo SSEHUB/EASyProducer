@@ -194,7 +194,9 @@ public class Engine {
         Iterator<EvaluationVisitor.Message> iter = failedElements.getMessages();
         while (iter.hasNext()) {
             EvaluationVisitor.Message msg = iter.next();
-            Message prblmMessage = createMessage(msg.getDescription(), Status.WARNING); //  msg.getStatus()
+            Status status = Status.WARNING; //  msg.getStatus()
+            Message prblmMessage = createMessage("Reasoner message: (" + status + "): " 
+                + msg.getDescription(), status); 
             failedElementSuggestions.add(Message.SuggestionType.OTHER);
             result.addMessage(prblmMessage);
             clearFailedInfo();
