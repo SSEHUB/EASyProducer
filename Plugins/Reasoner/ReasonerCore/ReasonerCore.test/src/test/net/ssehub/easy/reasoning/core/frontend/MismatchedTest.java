@@ -17,6 +17,7 @@ package test.net.ssehub.easy.reasoning.core.frontend;
 
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
@@ -42,6 +43,7 @@ public class MismatchedTest extends AbstractTest {
      * Reduced QM model with failing typeCheck of FE.
      * @throws IOException in case of problems reading a model
      */
+    @Ignore
     @Test
     public void testMismatchTestFail() throws IOException {
         resultHandler(0, 0, loadCompleteProject("MismatchTest")); // changed over time

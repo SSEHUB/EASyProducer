@@ -47,7 +47,8 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
      */
     public enum SuggestionType {
         PROBLEM_POINTS,
-        REASSIGNMENT
+        REASSIGNMENT,
+        OTHER
     }
     
     /**
