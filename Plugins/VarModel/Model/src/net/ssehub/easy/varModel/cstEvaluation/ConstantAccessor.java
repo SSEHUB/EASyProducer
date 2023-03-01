@@ -19,6 +19,7 @@ import net.ssehub.easy.basics.pool.IPoolManager;
 import net.ssehub.easy.basics.pool.Pool;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.IntValue;
@@ -82,7 +83,12 @@ public class ConstantAccessor extends EvaluationAccessor {
 
     @Override
     public boolean setValue(Value value, boolean asAssignment) {
-        getContext().addErrorMessage("cannot assign a value to a constant - variable needed", Message.CODE_RESOLUTION);
+        String valueMsg = "null";
+        if (null != value) {
+            valueMsg = value.getValue() + "/" + IvmlDatatypeVisitor.getUnqualifiedType(value.getType());
+        }
+        getContext().addErrorMessage("cannot assign value " + valueMsg + " to a constant", 
+            Message.CODE_RESOLUTION);
         return false;
     }
     
@@ -112,7 +118,7 @@ public class ConstantAccessor extends EvaluationAccessor {
                 if (0 <= index && index < cVal.getElementSize()) {
                     result = ConstantAccessor.POOL.getInstance().bind(cVal.getElement(index), false, getContext());
                 } else {
-                    getContext().addErrorMessage("invalid index value", Message.CODE_RESOLUTION);
+                    getContext().addErrorMessage("invalid index value " + index, Message.CODE_RESOLUTION);
                 }
             } else {
                 getContext().addErrorMessage("index must be an integer value", Message.CODE_RESOLUTION);
