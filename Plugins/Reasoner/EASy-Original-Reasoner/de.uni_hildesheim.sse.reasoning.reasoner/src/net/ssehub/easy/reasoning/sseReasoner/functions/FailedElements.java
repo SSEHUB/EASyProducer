@@ -1,10 +1,13 @@
 package net.ssehub.easy.reasoning.sseReasoner.functions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 
@@ -25,7 +28,11 @@ public class FailedElements {
      * Map of failed {@link AbstractVariable}s and {@link FailedElementDetails}s behind it.
      */
     private Map<AbstractVariable, FailedElementDetails> problemVariables;
-    
+
+    /**
+     * Other, unresolved messages.
+     */
+    private List<EvaluationVisitor.Message> messages;
     
     /**
      * Creates a new {@link FailedElements} instance, which can be used for exact one reasoning process.
@@ -34,6 +41,7 @@ public class FailedElements {
     public FailedElements() {
         problemConstraints = new HashMap<Constraint, FailedElementDetails>();
         problemVariables = new HashMap<AbstractVariable, FailedElementDetails>();
+        messages = new ArrayList<EvaluationVisitor.Message>();
     }
     
     /**
@@ -52,6 +60,10 @@ public class FailedElements {
      */
     public void removeProblemConstraint(Constraint constraint) {
         problemConstraints.remove(constraint);
+    }
+    
+    public void addMessage(EvaluationVisitor.Message message) {
+        messages.add(message);
     }
 
     /**
@@ -79,7 +91,11 @@ public class FailedElements {
      * @return <tt>true</tt> if at least one errors was reported to this instance, <tt>false</tt> otherwise.
      */
     public boolean hasProblems() {
-        return !(problemConstraints.isEmpty() && problemVariables.isEmpty());
+        boolean messageProblem = false;
+        for (int m = 0; !messageProblem && m < messages.size(); m++) {
+            messageProblem = messages.get(m).getStatus() == Status.ERROR;
+        }
+        return messageProblem || !(problemConstraints.isEmpty() && problemVariables.isEmpty());
     }
     
     /**
@@ -129,6 +145,15 @@ public class FailedElements {
     public Iterator<AbstractVariable> getProblemVariables() {
         return problemVariables.keySet().iterator();
     }
+
+    /**
+     * Returns the messages.
+     * 
+     * @return the messages
+     */
+    public Iterator<EvaluationVisitor.Message> getMessages() {
+        return messages.iterator();
+    }
     
     /**
      * Returns a map of problem {@link AbstractVariable}s and associated {@link FailedElementDetails}s.
@@ -144,6 +169,7 @@ public class FailedElements {
     public void clear() {
         problemConstraints.clear();
         problemVariables.clear();
+        messages.clear();
     }
    
 }

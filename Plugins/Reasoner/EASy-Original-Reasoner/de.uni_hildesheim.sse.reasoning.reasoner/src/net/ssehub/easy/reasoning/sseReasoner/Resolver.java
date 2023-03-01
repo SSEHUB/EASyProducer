@@ -1577,7 +1577,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                         printProblemPoints(usedVariables);
                     }
                 }
-            } 
+            } else {
+                failedElements.addMessage(msg);
+            }
         }
         if (evaluator.constraintFulfilled() && Constraint.Type.DEFAULT == constraint.getType()) {
             simpleAssignmentFinder.acceptAndClear(constraint, config, false);

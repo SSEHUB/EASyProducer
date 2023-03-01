@@ -22,6 +22,7 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ModelElement;
@@ -99,6 +100,7 @@ public class Engine {
         if (failedElements.hasProblems()) {
             analyzeProblemConstraints(failedElements);
             analyzeProblemVariables(failedElements);
+            analyzeMessages(failedElements);
         }
         evaluationTime = System.currentTimeMillis() - startTime;
         reevaluationCount = resolver.reevaluationCount();
@@ -116,6 +118,7 @@ public class Engine {
     
     /**
      * Method for analyzing problem points - failed constraints and associated variables.
+     * 
      * @param failedElements Problem points.
      */
     private void analyzeProblemConstraints(FailedElements failedElements) {
@@ -143,7 +146,7 @@ public class Engine {
                 failedElementSuggestions.add(Message.SuggestionType.PROBLEM_POINTS);
                 errorClassification.add(failedElementDetails.getErrorClassifier());
             }
-            Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS);
+            Message problemConstraintMsg = createMessage(VIOLATED_CONSTRAINTS, Status.ERROR);
             result.addMessage(problemConstraintMsg);
             clearFailedInfo();
         }
@@ -151,6 +154,7 @@ public class Engine {
     
     /**
      * Method for analyzing failed elements and creating error messages.
+     * 
      * @param failedElements All failed elements from the reasoner.
      */
     private void analyzeProblemVariables(FailedElements failedElements) {       
@@ -175,11 +179,27 @@ public class Engine {
                 constraintVariables.add(null);
                 errorClassification.add(failedElementDetails.getErrorClassifier());
             } 
-            Message problemVarialbeMsg = createMessage(VIOLATED_VARIABLES);
+            Message problemVarialbeMsg = createMessage(VIOLATED_VARIABLES, Status.ERROR);
             result.addMessage(problemVarialbeMsg);
             clearFailedInfo();
         } 
     } 
+    
+    /**
+     * Analyzes remaining messages.
+     * 
+     * @param failedElements All failed elements from the reasoner.
+     */
+    private void analyzeMessages(FailedElements failedElements) {
+        Iterator<EvaluationVisitor.Message> iter = failedElements.getMessages();
+        while (iter.hasNext()) {
+            EvaluationVisitor.Message msg = iter.next();
+            Message prblmMessage = createMessage(msg.getDescription(), msg.getStatus());
+            failedElementSuggestions.add(Message.SuggestionType.OTHER);
+            result.addMessage(prblmMessage);
+            clearFailedInfo();
+        }
+    }
     
     /**
      * Clears information about failed elements.
@@ -199,10 +219,11 @@ public class Engine {
     /**
      * Method for creating custom message fields.
      * @param text Text for the message.
+     * @param status of the message
      * @return Created message.
      */
-    private Message createMessage(String text) {
-        Message msg = new Message(text, failedModelElements, Status.ERROR);
+    private Message createMessage(String text, Status status) {
+        Message msg = new Message(text, failedModelElements, status);
         msg.addConstraintVariables(variablesInConstraints);
         msg.addProblemVariables(problemDecisions);
         msg.addProblemConstraintParts(problemConstraintParts);
