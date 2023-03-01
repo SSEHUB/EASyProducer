@@ -871,7 +871,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
             }
             context.popLevel();
         } else {
-            error("argument and operation count do not match", Message.CODE_RESOLUTION);
+            error("argument and parameter number does not match: " + operation.getSignature(), Message.CODE_RESOLUTION);
         }
     }
     
