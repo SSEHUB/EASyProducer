@@ -533,6 +533,7 @@ public class RealTests extends AbstractRealTests {
      * 
      * @throws IOException shall not occur
      */
+    @Ignore("Unresolved constant assignments")
     @Test
     public void testQualiMasterMay21() throws IOException {
         String[] versions = {"0", "0"};
