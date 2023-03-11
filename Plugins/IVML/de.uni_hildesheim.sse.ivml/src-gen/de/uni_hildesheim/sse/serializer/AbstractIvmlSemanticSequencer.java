@@ -9,6 +9,7 @@ import de.uni_hildesheim.sse.ivml.ActualArgument;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
+import de.uni_hildesheim.sse.ivml.AnnotationDeclarations;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
@@ -111,6 +112,9 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 				return; 
 			case IvmlPackage.ANNOTATE_TO:
 				sequence_AnnotateTo(context, (AnnotateTo) semanticObject); 
+				return; 
+			case IvmlPackage.ANNOTATION_DECLARATIONS:
+				sequence_AnnotationDeclarations(context, (AnnotationDeclarations) semanticObject); 
 				return; 
 			case IvmlPackage.ASSIGNMENT_EXPRESSION:
 				sequence_AssignmentExpression(context, (AssignmentExpression) semanticObject); 
@@ -406,6 +410,18 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     )
 	 */
 	protected void sequence_AnnotateTo(ISerializationContext context, AnnotateTo semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     AnnotationDeclarations returns AnnotationDeclarations
+	 *
+	 * Constraint:
+	 *     id+=Identifier*
+	 */
+	protected void sequence_AnnotationDeclarations(ISerializationContext context, AnnotationDeclarations semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	
@@ -951,7 +967,14 @@ public abstract class AbstractIvmlSemanticSequencer extends AbstractDelegatingSe
 	 *     OpDefStatement returns OpDefStatement
 	 *
 	 * Constraint:
-	 *     (static='static'? result=Type id=Identifier param=OpDefParameterList (impl=Expression | block=BlockExpression))
+	 *     (
+	 *         annotations=AnnotationDeclarations? 
+	 *         static='static'? 
+	 *         result=Type 
+	 *         id=Identifier 
+	 *         param=OpDefParameterList 
+	 *         (impl=Expression | block=BlockExpression)
+	 *     )
 	 */
 	protected void sequence_OpDefStatement(ISerializationContext context, OpDefStatement semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

@@ -8,6 +8,7 @@ import de.uni_hildesheim.sse.ivml.ActualArgumentList;
 import de.uni_hildesheim.sse.ivml.AdditiveExpression;
 import de.uni_hildesheim.sse.ivml.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.ivml.AnnotateTo;
+import de.uni_hildesheim.sse.ivml.AnnotationDeclarations;
 import de.uni_hildesheim.sse.ivml.AssignmentExpression;
 import de.uni_hildesheim.sse.ivml.AssignmentExpressionPart;
 import de.uni_hildesheim.sse.ivml.AttrAssignment;
@@ -296,6 +297,13 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   private EClass opDefStatementEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass annotationDeclarationsEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1758,9 +1766,20 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
    * @generated
    */
   @Override
+  public EReference getOpDefStatement_Annotations()
+  {
+    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EAttribute getOpDefStatement_Static()
   {
-    return (EAttribute)opDefStatementEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)opDefStatementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -1771,7 +1790,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   @Override
   public EReference getOpDefStatement_Result()
   {
-    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(1);
+    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1782,7 +1801,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   @Override
   public EAttribute getOpDefStatement_Id()
   {
-    return (EAttribute)opDefStatementEClass.getEStructuralFeatures().get(2);
+    return (EAttribute)opDefStatementEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1793,7 +1812,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   @Override
   public EReference getOpDefStatement_Param()
   {
-    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(3);
+    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -1804,7 +1823,7 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   @Override
   public EReference getOpDefStatement_Impl()
   {
-    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(4);
+    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -1815,7 +1834,29 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
   @Override
   public EReference getOpDefStatement_Block()
   {
-    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(5);
+    return (EReference)opDefStatementEClass.getEStructuralFeatures().get(6);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EClass getAnnotationDeclarations()
+  {
+    return annotationDeclarationsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getAnnotationDeclarations_Id()
+  {
+    return (EAttribute)annotationDeclarationsEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -3312,12 +3353,16 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     createEAttribute(versionStmtEClass, VERSION_STMT__VERSION);
 
     opDefStatementEClass = createEClass(OP_DEF_STATEMENT);
+    createEReference(opDefStatementEClass, OP_DEF_STATEMENT__ANNOTATIONS);
     createEAttribute(opDefStatementEClass, OP_DEF_STATEMENT__STATIC);
     createEReference(opDefStatementEClass, OP_DEF_STATEMENT__RESULT);
     createEAttribute(opDefStatementEClass, OP_DEF_STATEMENT__ID);
     createEReference(opDefStatementEClass, OP_DEF_STATEMENT__PARAM);
     createEReference(opDefStatementEClass, OP_DEF_STATEMENT__IMPL);
     createEReference(opDefStatementEClass, OP_DEF_STATEMENT__BLOCK);
+
+    annotationDeclarationsEClass = createEClass(ANNOTATION_DECLARATIONS);
+    createEAttribute(annotationDeclarationsEClass, ANNOTATION_DECLARATIONS__ID);
 
     opDefParameterListEClass = createEClass(OP_DEF_PARAMETER_LIST);
     createEReference(opDefParameterListEClass, OP_DEF_PARAMETER_LIST__LIST);
@@ -3643,12 +3688,16 @@ public class IvmlPackageImpl extends EPackageImpl implements IvmlPackage
     initEAttribute(getVersionStmt_Version(), ecorePackage.getEString(), "version", null, 0, 1, VersionStmt.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(opDefStatementEClass, OpDefStatement.class, "OpDefStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getOpDefStatement_Annotations(), this.getAnnotationDeclarations(), null, "annotations", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getOpDefStatement_Static(), ecorePackage.getEString(), "static", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpDefStatement_Result(), this.getType(), null, "result", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getOpDefStatement_Id(), ecorePackage.getEString(), "id", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpDefStatement_Param(), this.getOpDefParameterList(), null, "param", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpDefStatement_Impl(), this.getExpression(), null, "impl", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOpDefStatement_Block(), this.getBlockExpression(), null, "block", null, 0, 1, OpDefStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(annotationDeclarationsEClass, AnnotationDeclarations.class, "AnnotationDeclarations", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAnnotationDeclarations_Id(), ecorePackage.getEString(), "id", null, 0, -1, AnnotationDeclarations.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(opDefParameterListEClass, OpDefParameterList.class, "OpDefParameterList", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getOpDefParameterList_List(), this.getOpDefParameter(), null, "list", null, 0, -1, OpDefParameterList.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

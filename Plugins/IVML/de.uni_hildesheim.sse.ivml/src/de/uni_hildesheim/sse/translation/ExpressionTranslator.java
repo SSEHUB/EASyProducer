@@ -1656,7 +1656,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         boolean allWithoutId = (withoutId == entryCount);
         if (!allWithId && !allWithoutId) {
             throw new TranslatorException(
-                "value entries must either all have names or none", init, 
+                "compound initializer value entries must either all have names or none", init, 
                 IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
         }
         if (lhsType instanceof Container) {

@@ -271,9 +271,15 @@ VersionStmt:
 //------------------------------------ OCL (excerpt) ----------------------------	
 
 OpDefStatement:
+    annotations=AnnotationDeclarations?
 	'def' static='static'? result=Type id=Identifier 
 	'(' param=OpDefParameterList ')' 
 	'=' (impl=Expression ';' | block=BlockExpression)
+;
+
+AnnotationDeclarations:
+    {AnnotationDeclarations}
+    ('@' id+=Identifier)*
 ;
 
 OpDefParameterList:

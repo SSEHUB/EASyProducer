@@ -2,6 +2,7 @@
  */
 package de.uni_hildesheim.sse.ivml.impl;
 
+import de.uni_hildesheim.sse.ivml.AnnotationDeclarations;
 import de.uni_hildesheim.sse.ivml.BlockExpression;
 import de.uni_hildesheim.sse.ivml.Expression;
 import de.uni_hildesheim.sse.ivml.IvmlPackage;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getAnnotations <em>Annotations</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getStatic <em>Static</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getResult <em>Result</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.impl.OpDefStatementImpl#getId <em>Id</em>}</li>
@@ -38,6 +40,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements OpDefStatement
 {
+  /**
+   * The cached value of the '{@link #getAnnotations() <em>Annotations</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAnnotations()
+   * @generated
+   * @ordered
+   */
+  protected AnnotationDeclarations annotations;
+
   /**
    * The default value of the '{@link #getStatic() <em>Static</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -137,6 +149,56 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   protected EClass eStaticClass()
   {
     return IvmlPackage.Literals.OP_DEF_STATEMENT;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public AnnotationDeclarations getAnnotations()
+  {
+    return annotations;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetAnnotations(AnnotationDeclarations newAnnotations, NotificationChain msgs)
+  {
+    AnnotationDeclarations oldAnnotations = annotations;
+    annotations = newAnnotations;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS, oldAnnotations, newAnnotations);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setAnnotations(AnnotationDeclarations newAnnotations)
+  {
+    if (newAnnotations != annotations)
+    {
+      NotificationChain msgs = null;
+      if (annotations != null)
+        msgs = ((InternalEObject)annotations).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS, null, msgs);
+      if (newAnnotations != null)
+        msgs = ((InternalEObject)newAnnotations).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS, null, msgs);
+      msgs = basicSetAnnotations(newAnnotations, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS, newAnnotations, newAnnotations));
   }
 
   /**
@@ -399,6 +461,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS:
+        return basicSetAnnotations(null, msgs);
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:
         return basicSetResult(null, msgs);
       case IvmlPackage.OP_DEF_STATEMENT__PARAM:
@@ -421,6 +485,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS:
+        return getAnnotations();
       case IvmlPackage.OP_DEF_STATEMENT__STATIC:
         return getStatic();
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:
@@ -447,6 +513,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS:
+        setAnnotations((AnnotationDeclarations)newValue);
+        return;
       case IvmlPackage.OP_DEF_STATEMENT__STATIC:
         setStatic((String)newValue);
         return;
@@ -479,6 +548,9 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS:
+        setAnnotations((AnnotationDeclarations)null);
+        return;
       case IvmlPackage.OP_DEF_STATEMENT__STATIC:
         setStatic(STATIC_EDEFAULT);
         return;
@@ -511,6 +583,8 @@ public class OpDefStatementImpl extends MinimalEObjectImpl.Container implements 
   {
     switch (featureID)
     {
+      case IvmlPackage.OP_DEF_STATEMENT__ANNOTATIONS:
+        return annotations != null;
       case IvmlPackage.OP_DEF_STATEMENT__STATIC:
         return STATIC_EDEFAULT == null ? static_ != null : !STATIC_EDEFAULT.equals(static_);
       case IvmlPackage.OP_DEF_STATEMENT__RESULT:

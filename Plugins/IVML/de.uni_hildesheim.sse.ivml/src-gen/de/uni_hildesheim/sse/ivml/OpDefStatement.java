@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getAnnotations <em>Annotations</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getStatic <em>Static</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getResult <em>Result</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getId <em>Id</em>}</li>
@@ -27,6 +28,28 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface OpDefStatement extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Annotations</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Annotations</em>' containment reference.
+   * @see #setAnnotations(AnnotationDeclarations)
+   * @see de.uni_hildesheim.sse.ivml.IvmlPackage#getOpDefStatement_Annotations()
+   * @model containment="true"
+   * @generated
+   */
+  AnnotationDeclarations getAnnotations();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.ivml.OpDefStatement#getAnnotations <em>Annotations</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Annotations</em>' containment reference.
+   * @see #getAnnotations()
+   * @generated
+   */
+  void setAnnotations(AnnotationDeclarations value);
+
   /**
    * Returns the value of the '<em><b>Static</b></em>' attribute.
    * <!-- begin-user-doc -->

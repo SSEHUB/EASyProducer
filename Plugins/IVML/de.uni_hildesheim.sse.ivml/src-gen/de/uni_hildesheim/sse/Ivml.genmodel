@@ -139,12 +139,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//VersionStmt/version"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//OpDefStatement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/annotations"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefStatement/static"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/result"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//OpDefStatement/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/impl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefStatement/block"/>
+    </genClasses>
+    <genClasses ecoreClass="Ivml.ecore#//AnnotationDeclarations">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Ivml.ecore#//AnnotationDeclarations/id"/>
     </genClasses>
     <genClasses ecoreClass="Ivml.ecore#//OpDefParameterList">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Ivml.ecore#//OpDefParameterList/list"/>

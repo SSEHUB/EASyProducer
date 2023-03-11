@@ -225,6 +225,11 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
         return createOpDefStatementAdapter();
       }
       @Override
+      public Adapter caseAnnotationDeclarations(AnnotationDeclarations object)
+      {
+        return createAnnotationDeclarationsAdapter();
+      }
+      @Override
       public Adapter caseOpDefParameterList(OpDefParameterList object)
       {
         return createOpDefParameterListAdapter();
@@ -877,6 +882,21 @@ public class IvmlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createOpDefStatementAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link de.uni_hildesheim.sse.ivml.AnnotationDeclarations <em>Annotation Declarations</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see de.uni_hildesheim.sse.ivml.AnnotationDeclarations
+   * @generated
+   */
+  public Adapter createAnnotationDeclarationsAdapter()
   {
     return null;
   }

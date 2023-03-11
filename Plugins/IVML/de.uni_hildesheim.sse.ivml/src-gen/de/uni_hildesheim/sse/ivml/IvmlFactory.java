@@ -293,6 +293,15 @@ public interface IvmlFactory extends EFactory
   OpDefStatement createOpDefStatement();
 
   /**
+   * Returns a new object of class '<em>Annotation Declarations</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Annotation Declarations</em>'.
+   * @generated
+   */
+  AnnotationDeclarations createAnnotationDeclarations();
+
+  /**
    * Returns a new object of class '<em>Op Def Parameter List</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

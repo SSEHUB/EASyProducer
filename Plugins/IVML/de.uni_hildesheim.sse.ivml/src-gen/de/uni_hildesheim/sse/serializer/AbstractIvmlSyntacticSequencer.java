@@ -23,6 +23,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	protected AbstractElementAlias match_AttrAssignment_SemicolonKeyword_9_q;
 	protected AbstractElementAlias match_Eval_SemicolonKeyword_6_q;
 	protected AbstractElementAlias match_Freeze_SemicolonKeyword_5_q;
+	protected AbstractElementAlias match_ImportStmt_ImportKeyword_0_0_q;
 	protected AbstractElementAlias match_InterfaceDeclaration_SemicolonKeyword_5_q;
 	protected AbstractElementAlias match_Project_SemicolonKeyword_9_q;
 	protected AbstractElementAlias match_TypedefCompound_SemicolonKeyword_7_q;
@@ -33,6 +34,7 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 		match_AttrAssignment_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getAttrAssignmentAccess().getSemicolonKeyword_9());
 		match_Eval_SemicolonKeyword_6_q = new TokenAlias(false, true, grammarAccess.getEvalAccess().getSemicolonKeyword_6());
 		match_Freeze_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getFreezeAccess().getSemicolonKeyword_5());
+		match_ImportStmt_ImportKeyword_0_0_q = new TokenAlias(false, true, grammarAccess.getImportStmtAccess().getImportKeyword_0_0());
 		match_InterfaceDeclaration_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getInterfaceDeclarationAccess().getSemicolonKeyword_5());
 		match_Project_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getProjectAccess().getSemicolonKeyword_9());
 		match_TypedefCompound_SemicolonKeyword_7_q = new TokenAlias(false, true, grammarAccess.getTypedefCompoundAccess().getSemicolonKeyword_7());
@@ -56,6 +58,8 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 				emit_Eval_SemicolonKeyword_6_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_Freeze_SemicolonKeyword_5_q.equals(syntax))
 				emit_Freeze_SemicolonKeyword_5_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_ImportStmt_ImportKeyword_0_0_q.equals(syntax))
+				emit_ImportStmt_ImportKeyword_0_0_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_InterfaceDeclaration_SemicolonKeyword_5_q.equals(syntax))
 				emit_InterfaceDeclaration_SemicolonKeyword_5_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_Project_SemicolonKeyword_9_q.equals(syntax))
@@ -101,6 +105,17 @@ public abstract class AbstractIvmlSyntacticSequencer extends AbstractSyntacticSe
 	 *     names+=FreezeStatement '}' (ambiguity) (rule end)
 	 */
 	protected void emit_Freeze_SemicolonKeyword_5_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+		acceptNodes(transition, nodes);
+	}
+	
+	/**
+	 * Ambiguous syntax:
+	 *     'import'?
+	 *
+	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) name=Identifier
+	 */
+	protected void emit_ImportStmt_ImportKeyword_0_0_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	

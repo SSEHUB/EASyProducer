@@ -94,6 +94,7 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
       case IvmlPackage.CONFLICT_STMT: return createConflictStmt();
       case IvmlPackage.VERSION_STMT: return createVersionStmt();
       case IvmlPackage.OP_DEF_STATEMENT: return createOpDefStatement();
+      case IvmlPackage.ANNOTATION_DECLARATIONS: return createAnnotationDeclarations();
       case IvmlPackage.OP_DEF_PARAMETER_LIST: return createOpDefParameterList();
       case IvmlPackage.OP_DEF_PARAMETER: return createOpDefParameter();
       case IvmlPackage.EXPRESSION_STATEMENT: return createExpressionStatement();
@@ -494,6 +495,18 @@ public class IvmlFactoryImpl extends EFactoryImpl implements IvmlFactory
   {
     OpDefStatementImpl opDefStatement = new OpDefStatementImpl();
     return opDefStatement;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public AnnotationDeclarations createAnnotationDeclarations()
+  {
+    AnnotationDeclarationsImpl annotationDeclarations = new AnnotationDeclarationsImpl();
+    return annotationDeclarations;
   }
 
   /**
