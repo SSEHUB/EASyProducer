@@ -1735,16 +1735,34 @@ ruleRuleDeclaration returns [EObject current=null]
 )((
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_0_0()); 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getAnnotationsAnnotationDeclarationsParserRuleCall_1_0_0()); 
 	    }
-		lv_modifier_1_0=ruleRuleModifier		{
+		lv_annotations_1_0=ruleAnnotationDeclarations		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
+	        }
+       		set(
+       			$current, 
+       			"annotations",
+        		lv_annotations_1_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.AnnotationDeclarations");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+)?(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0()); 
+	    }
+		lv_modifier_2_0=ruleRuleModifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
        			"modifier",
-        		lv_modifier_1_0, 
+        		lv_modifier_2_0, 
         		"de.uni_hildesheim.sse.VilBuildLanguage.RuleModifier");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1753,16 +1771,16 @@ ruleRuleDeclaration returns [EObject current=null]
 )?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_1_0()); 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getTypeTypeParserRuleCall_1_2_0()); 
 	    }
-		lv_type_2_0=ruleType		{
+		lv_type_3_0=ruleType		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
        			"type",
-        		lv_type_2_0, 
+        		lv_type_3_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Type");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1771,64 +1789,64 @@ ruleRuleDeclaration returns [EObject current=null]
 )?(
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getNameIdentifierParserRuleCall_1_2_0()); 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getNameIdentifierParserRuleCall_1_3_0()); 
 	    }
-		lv_name_3_0=ruleIdentifier		{
+		lv_name_4_0=ruleIdentifier		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
        			"name",
-        		lv_name_3_0, 
+        		lv_name_4_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Identifier");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)	otherlv_4='(' 
+)	otherlv_5='(' 
     {
-    	newLeafNode(otherlv_4, grammarAccess.getRuleDeclarationAccess().getLeftParenthesisKeyword_1_3());
+    	newLeafNode(otherlv_5, grammarAccess.getRuleDeclarationAccess().getLeftParenthesisKeyword_1_4());
     }
 (
 (
 		{ 
-	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getParamListParameterListParserRuleCall_1_4_0()); 
+	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getParamListParameterListParserRuleCall_1_5_0()); 
 	    }
-		lv_paramList_5_0=ruleParameterList		{
+		lv_paramList_6_0=ruleParameterList		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
        			"paramList",
-        		lv_paramList_5_0, 
+        		lv_paramList_6_0, 
         		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.ParameterList");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)?	otherlv_6=')' 
+)?	otherlv_7=')' 
     {
-    	newLeafNode(otherlv_6, grammarAccess.getRuleDeclarationAccess().getRightParenthesisKeyword_1_5());
+    	newLeafNode(otherlv_7, grammarAccess.getRuleDeclarationAccess().getRightParenthesisKeyword_1_6());
     }
-	otherlv_7='=' 
+	otherlv_8='=' 
     {
-    	newLeafNode(otherlv_7, grammarAccess.getRuleDeclarationAccess().getEqualsSignKeyword_1_6());
+    	newLeafNode(otherlv_8, grammarAccess.getRuleDeclarationAccess().getEqualsSignKeyword_1_7());
     }
 )?(
 (
 		{ 
 	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getConditionsRuleConditionsParserRuleCall_2_0()); 
 	    }
-		lv_conditions_8_0=ruleRuleConditions		{
+		lv_conditions_9_0=ruleRuleConditions		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
        			"conditions",
-        		lv_conditions_8_0, 
+        		lv_conditions_9_0, 
         		"de.uni_hildesheim.sse.VilBuildLanguage.RuleConditions");
 	        afterParserOrEnumRuleCall();
 	    }
@@ -1839,22 +1857,22 @@ ruleRuleDeclaration returns [EObject current=null]
 		{ 
 	        newCompositeNode(grammarAccess.getRuleDeclarationAccess().getBlockRuleElementBlockParserRuleCall_3_0()); 
 	    }
-		lv_block_9_0=ruleRuleElementBlock		{
+		lv_block_10_0=ruleRuleElementBlock		{
 	        if ($current==null) {
 	            $current = createModelElementForParent(grammarAccess.getRuleDeclarationRule());
 	        }
        		set(
        			$current, 
        			"block",
-        		lv_block_9_0, 
+        		lv_block_10_0, 
         		"de.uni_hildesheim.sse.vil.rt.RtVil.RuleElementBlock");
 	        afterParserOrEnumRuleCall();
 	    }
 
 )
-)(	otherlv_10=';' 
+)(	otherlv_11=';' 
     {
-    	newLeafNode(otherlv_10, grammarAccess.getRuleDeclarationAccess().getSemicolonKeyword_4());
+    	newLeafNode(otherlv_11, grammarAccess.getRuleDeclarationAccess().getSemicolonKeyword_4());
     }
 )?)
 ;
@@ -5424,6 +5442,58 @@ ruleDeclarationUnit returns [EObject current=null]
 
 )
 ))?)
+;
+
+
+
+
+
+// Entry rule entryRuleAnnotationDeclarations
+entryRuleAnnotationDeclarations returns [EObject current=null] 
+	:
+	{ newCompositeNode(grammarAccess.getAnnotationDeclarationsRule()); }
+	 iv_ruleAnnotationDeclarations=ruleAnnotationDeclarations 
+	 { $current=$iv_ruleAnnotationDeclarations.current; } 
+	 EOF 
+;
+
+// Rule AnnotationDeclarations
+ruleAnnotationDeclarations returns [EObject current=null] 
+    @init { enterRule(); 
+    }
+    @after { leaveRule(); }:
+((
+	{ 
+	  /* */ 
+	}
+    {
+        $current = forceCreateModelElement(
+            grammarAccess.getAnnotationDeclarationsAccess().getAnnotationDeclarationsAction_0(),
+            $current);
+    }
+)(	otherlv_1='@' 
+    {
+    	newLeafNode(otherlv_1, grammarAccess.getAnnotationDeclarationsAccess().getCommercialAtKeyword_1_0());
+    }
+(
+(
+		{ 
+	        newCompositeNode(grammarAccess.getAnnotationDeclarationsAccess().getIdIdentifierParserRuleCall_1_1_0()); 
+	    }
+		lv_id_2_0=ruleIdentifier		{
+	        if ($current==null) {
+	            $current = createModelElementForParent(grammarAccess.getAnnotationDeclarationsRule());
+	        }
+       		add(
+       			$current, 
+       			"id",
+        		lv_id_2_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Identifier");
+	        afterParserOrEnumRuleCall();
+	    }
+
+)
+))*)
 ;
 
 

@@ -5,6 +5,7 @@ package de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
@@ -294,6 +295,13 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   private EClass declarationUnitEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass annotationDeclarationsEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -1651,6 +1659,28 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
    * @generated
    */
   @Override
+  public EClass getAnnotationDeclarations()
+  {
+    return annotationDeclarationsEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public EAttribute getAnnotationDeclarations_Id()
+  {
+    return (EAttribute)annotationDeclarationsEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getCall()
   {
     return callEClass;
@@ -2237,6 +2267,9 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     createEAttribute(declarationUnitEClass, DECLARATION_UNIT__ID);
     createEReference(declarationUnitEClass, DECLARATION_UNIT__DEFLT);
 
+    annotationDeclarationsEClass = createEClass(ANNOTATION_DECLARATIONS);
+    createEAttribute(annotationDeclarationsEClass, ANNOTATION_DECLARATIONS__ID);
+
     callEClass = createEClass(CALL);
     createEReference(callEClass, CALL__NAME);
     createEReference(callEClass, CALL__DECL);
@@ -2460,6 +2493,9 @@ public class ExpressionDslPackageImpl extends EPackageImpl implements Expression
     initEClass(declarationUnitEClass, DeclarationUnit.class, "DeclarationUnit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getDeclarationUnit_Id(), ecorePackage.getEString(), "id", null, 0, 1, DeclarationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDeclarationUnit_Deflt(), this.getExpression(), null, "deflt", null, 0, 1, DeclarationUnit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(annotationDeclarationsEClass, AnnotationDeclarations.class, "AnnotationDeclarations", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getAnnotationDeclarations_Id(), ecorePackage.getEString(), "id", null, 0, -1, AnnotationDeclarations.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(callEClass, Call.class, "Call", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getCall_Name(), this.getQualifiedPrefix(), null, "name", null, 0, 1, Call.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

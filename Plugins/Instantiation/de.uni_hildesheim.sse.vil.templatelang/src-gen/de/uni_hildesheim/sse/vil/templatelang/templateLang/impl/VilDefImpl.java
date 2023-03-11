@@ -2,6 +2,7 @@
  */
 package de.uni_hildesheim.sse.vil.templatelang.templateLang.impl;
 
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getAnnotations <em>Annotations</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getProtected <em>Protected</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl#getId <em>Id</em>}</li>
@@ -37,6 +39,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
 {
+  /**
+   * The cached value of the '{@link #getAnnotations() <em>Annotations</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAnnotations()
+   * @generated
+   * @ordered
+   */
+  protected AnnotationDeclarations annotations;
+
   /**
    * The default value of the '{@link #getProtected() <em>Protected</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -126,6 +138,56 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   protected EClass eStaticClass()
   {
     return TemplateLangPackage.Literals.VIL_DEF;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public AnnotationDeclarations getAnnotations()
+  {
+    return annotations;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetAnnotations(AnnotationDeclarations newAnnotations, NotificationChain msgs)
+  {
+    AnnotationDeclarations oldAnnotations = annotations;
+    annotations = newAnnotations;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, TemplateLangPackage.VIL_DEF__ANNOTATIONS, oldAnnotations, newAnnotations);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setAnnotations(AnnotationDeclarations newAnnotations)
+  {
+    if (newAnnotations != annotations)
+    {
+      NotificationChain msgs = null;
+      if (annotations != null)
+        msgs = ((InternalEObject)annotations).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.VIL_DEF__ANNOTATIONS, null, msgs);
+      if (newAnnotations != null)
+        msgs = ((InternalEObject)newAnnotations).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - TemplateLangPackage.VIL_DEF__ANNOTATIONS, null, msgs);
+      msgs = basicSetAnnotations(newAnnotations, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.VIL_DEF__ANNOTATIONS, newAnnotations, newAnnotations));
   }
 
   /**
@@ -338,6 +400,8 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__ANNOTATIONS:
+        return basicSetAnnotations(null, msgs);
       case TemplateLangPackage.VIL_DEF__TYPE:
         return basicSetType(null, msgs);
       case TemplateLangPackage.VIL_DEF__PARAM:
@@ -358,6 +422,8 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__ANNOTATIONS:
+        return getAnnotations();
       case TemplateLangPackage.VIL_DEF__PROTECTED:
         return getProtected();
       case TemplateLangPackage.VIL_DEF__TYPE:
@@ -382,6 +448,9 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__ANNOTATIONS:
+        setAnnotations((AnnotationDeclarations)newValue);
+        return;
       case TemplateLangPackage.VIL_DEF__PROTECTED:
         setProtected((String)newValue);
         return;
@@ -411,6 +480,9 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__ANNOTATIONS:
+        setAnnotations((AnnotationDeclarations)null);
+        return;
       case TemplateLangPackage.VIL_DEF__PROTECTED:
         setProtected(PROTECTED_EDEFAULT);
         return;
@@ -440,6 +512,8 @@ public class VilDefImpl extends MinimalEObjectImpl.Container implements VilDef
   {
     switch (featureID)
     {
+      case TemplateLangPackage.VIL_DEF__ANNOTATIONS:
+        return annotations != null;
       case TemplateLangPackage.VIL_DEF__PROTECTED:
         return PROTECTED_EDEFAULT == null ? protected_ != null : !PROTECTED_EDEFAULT.equals(protected_);
       case TemplateLangPackage.VIL_DEF__TYPE:

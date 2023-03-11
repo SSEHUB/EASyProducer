@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
@@ -82,6 +83,9 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 				return; 
 			case ExpressionDslPackage.ADVICE:
 				sequence_Advice(context, (Advice) semanticObject); 
+				return; 
+			case ExpressionDslPackage.ANNOTATION_DECLARATIONS:
+				sequence_AnnotationDeclarations(context, (AnnotationDeclarations) semanticObject); 
 				return; 
 			case ExpressionDslPackage.ARGUMENT_LIST:
 				sequence_ArgumentList(context, (ArgumentList) semanticObject); 
@@ -252,6 +256,18 @@ public class ExpressionDslSemanticSequencer extends AbstractDelegatingSemanticSe
 	 *     (name=QualifiedName versionSpec=VersionSpec?)
 	 */
 	protected void sequence_Advice(ISerializationContext context, Advice semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     AnnotationDeclarations returns AnnotationDeclarations
+	 *
+	 * Constraint:
+	 *     id+=Identifier*
+	 */
+	protected void sequence_AnnotationDeclarations(ISerializationContext context, AnnotationDeclarations semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

@@ -2,6 +2,7 @@
  */
 package de.uni_hildesheim.sse.vilBuildLanguage;
 
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
@@ -16,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getAnnotations <em>Annotations</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getModifier <em>Modifier</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getName <em>Name</em>}</li>
@@ -30,6 +32,28 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface RuleDeclaration extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Annotations</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Annotations</em>' containment reference.
+   * @see #setAnnotations(AnnotationDeclarations)
+   * @see de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage#getRuleDeclaration_Annotations()
+   * @model containment="true"
+   * @generated
+   */
+  AnnotationDeclarations getAnnotations();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration#getAnnotations <em>Annotations</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Annotations</em>' containment reference.
+   * @see #getAnnotations()
+   * @generated
+   */
+  void setAnnotations(AnnotationDeclarations value);
+
   /**
    * Returns the value of the '<em><b>Modifier</b></em>' containment reference.
    * <!-- begin-user-doc -->

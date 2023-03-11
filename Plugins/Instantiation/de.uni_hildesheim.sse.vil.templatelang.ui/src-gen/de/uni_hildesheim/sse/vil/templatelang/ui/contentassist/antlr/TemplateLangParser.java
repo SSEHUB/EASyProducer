@@ -137,6 +137,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclarationAccess().getGroup_2(), "rule__Declaration__Group_2__0");
 					put(grammarAccess.getDeclarationUnitAccess().getGroup(), "rule__DeclarationUnit__Group__0");
 					put(grammarAccess.getDeclarationUnitAccess().getGroup_1(), "rule__DeclarationUnit__Group_1__0");
+					put(grammarAccess.getAnnotationDeclarationsAccess().getGroup(), "rule__AnnotationDeclarations__Group__0");
+					put(grammarAccess.getAnnotationDeclarationsAccess().getGroup_1(), "rule__AnnotationDeclarations__Group_1__0");
 					put(grammarAccess.getCallAccess().getGroup(), "rule__Call__Group__0");
 					put(grammarAccess.getArgumentListAccess().getGroup(), "rule__ArgumentList__Group__0");
 					put(grammarAccess.getArgumentListAccess().getGroup_1(), "rule__ArgumentList__Group_1__0");
@@ -179,11 +181,12 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFormattingHintAccess().getPartsAssignment_3_1(), "rule__FormattingHint__PartsAssignment_3_1");
 					put(grammarAccess.getFormattingHintPartAccess().getNameAssignment_0(), "rule__FormattingHintPart__NameAssignment_0");
 					put(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2(), "rule__FormattingHintPart__ValueAssignment_2");
-					put(grammarAccess.getVilDefAccess().getProtectedAssignment_0(), "rule__VilDef__ProtectedAssignment_0");
-					put(grammarAccess.getVilDefAccess().getTypeAssignment_2(), "rule__VilDef__TypeAssignment_2");
-					put(grammarAccess.getVilDefAccess().getIdAssignment_3(), "rule__VilDef__IdAssignment_3");
-					put(grammarAccess.getVilDefAccess().getParamAssignment_5(), "rule__VilDef__ParamAssignment_5");
-					put(grammarAccess.getVilDefAccess().getStmtsAssignment_7(), "rule__VilDef__StmtsAssignment_7");
+					put(grammarAccess.getVilDefAccess().getAnnotationsAssignment_0(), "rule__VilDef__AnnotationsAssignment_0");
+					put(grammarAccess.getVilDefAccess().getProtectedAssignment_1(), "rule__VilDef__ProtectedAssignment_1");
+					put(grammarAccess.getVilDefAccess().getTypeAssignment_3(), "rule__VilDef__TypeAssignment_3");
+					put(grammarAccess.getVilDefAccess().getIdAssignment_4(), "rule__VilDef__IdAssignment_4");
+					put(grammarAccess.getVilDefAccess().getParamAssignment_6(), "rule__VilDef__ParamAssignment_6");
+					put(grammarAccess.getVilDefAccess().getStmtsAssignment_8(), "rule__VilDef__StmtsAssignment_8");
 					put(grammarAccess.getStmtBlockAccess().getStmtsAssignment_2(), "rule__StmtBlock__StmtsAssignment_2");
 					put(grammarAccess.getStmtAccess().getVarAssignment_0(), "rule__Stmt__VarAssignment_0");
 					put(grammarAccess.getStmtAccess().getAltAssignment_1(), "rule__Stmt__AltAssignment_1");
@@ -310,6 +313,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getDeclarationAccess().getUnitsAssignment_2_1(), "rule__Declaration__UnitsAssignment_2_1");
 					put(grammarAccess.getDeclarationUnitAccess().getIdAssignment_0(), "rule__DeclarationUnit__IdAssignment_0");
 					put(grammarAccess.getDeclarationUnitAccess().getDefltAssignment_1_1(), "rule__DeclarationUnit__DefltAssignment_1_1");
+					put(grammarAccess.getAnnotationDeclarationsAccess().getIdAssignment_1_1(), "rule__AnnotationDeclarations__IdAssignment_1_1");
 					put(grammarAccess.getCallAccess().getNameAssignment_0(), "rule__Call__NameAssignment_0");
 					put(grammarAccess.getCallAccess().getDeclAssignment_2(), "rule__Call__DeclAssignment_2");
 					put(grammarAccess.getCallAccess().getParamAssignment_3(), "rule__Call__ParamAssignment_3");

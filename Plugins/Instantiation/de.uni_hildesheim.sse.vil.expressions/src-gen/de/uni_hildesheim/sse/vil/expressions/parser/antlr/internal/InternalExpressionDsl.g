@@ -2287,6 +2287,8 @@ ruleDeclarationUnit returns [EObject current=null]
 
 
 
+
+
 // Entry rule entryRuleCall
 entryRuleCall returns [EObject current=null] 
 	:

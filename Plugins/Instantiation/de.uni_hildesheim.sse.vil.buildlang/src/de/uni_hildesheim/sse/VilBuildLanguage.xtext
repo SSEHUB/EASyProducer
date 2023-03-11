@@ -55,6 +55,7 @@ ScriptContents:
 RuleDeclaration:
     {RuleDeclaration}
     (
+        (annotations=AnnotationDeclarations)?
         (modifier = RuleModifier)?
         (type = Type)?
         name=Identifier

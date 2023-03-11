@@ -1503,6 +1503,38 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getDefltExpressionParserRuleCall_1_1_0() { return cDefltExpressionParserRuleCall_1_1_0; }
 	}
 
+	public class AnnotationDeclarationsElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.AnnotationDeclarations");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cAnnotationDeclarationsAction_0 = (Action)cGroup.eContents().get(0);
+		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
+		private final Keyword cCommercialAtKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
+		private final Assignment cIdAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cIdIdentifierParserRuleCall_1_1_0 = (RuleCall)cIdAssignment_1_1.eContents().get(0);
+		
+		//AnnotationDeclarations:
+		//	{AnnotationDeclarations} ('@' id+=Identifier)*;
+		@Override public ParserRule getRule() { return rule; }
+
+		//{AnnotationDeclarations} ('@' id+=Identifier)*
+		public Group getGroup() { return cGroup; }
+
+		//{AnnotationDeclarations}
+		public Action getAnnotationDeclarationsAction_0() { return cAnnotationDeclarationsAction_0; }
+
+		//('@' id+=Identifier)*
+		public Group getGroup_1() { return cGroup_1; }
+
+		//'@'
+		public Keyword getCommercialAtKeyword_1_0() { return cCommercialAtKeyword_1_0; }
+
+		//id+=Identifier
+		public Assignment getIdAssignment_1_1() { return cIdAssignment_1_1; }
+
+		//Identifier
+		public RuleCall getIdIdentifierParserRuleCall_1_1_0() { return cIdIdentifierParserRuleCall_1_1_0; }
+	}
+
 	public class CallElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Call");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -2112,6 +2144,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	private final DeclaratorElements pDeclarator;
 	private final DeclarationElements pDeclaration;
 	private final DeclarationUnitElements pDeclarationUnit;
+	private final AnnotationDeclarationsElements pAnnotationDeclarations;
 	private final CallElements pCall;
 	private final ArgumentListElements pArgumentList;
 	private final NamedArgumentElements pNamedArgument;
@@ -2178,6 +2211,7 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 		this.pDeclarator = new DeclaratorElements();
 		this.pDeclaration = new DeclarationElements();
 		this.pDeclarationUnit = new DeclarationUnitElements();
+		this.pAnnotationDeclarations = new AnnotationDeclarationsElements();
 		this.pCall = new CallElements();
 		this.pArgumentList = new ArgumentListElements();
 		this.pNamedArgument = new NamedArgumentElements();
@@ -2662,6 +2696,16 @@ public class ExpressionDslGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getDeclarationUnitRule() {
 		return getDeclarationUnitAccess().getRule();
+	}
+
+	//AnnotationDeclarations:
+	//	{AnnotationDeclarations} ('@' id+=Identifier)*;
+	public AnnotationDeclarationsElements getAnnotationDeclarationsAccess() {
+		return pAnnotationDeclarations;
+	}
+	
+	public ParserRule getAnnotationDeclarationsRule() {
+		return getAnnotationDeclarationsAccess().getRule();
 	}
 
 	//Call:

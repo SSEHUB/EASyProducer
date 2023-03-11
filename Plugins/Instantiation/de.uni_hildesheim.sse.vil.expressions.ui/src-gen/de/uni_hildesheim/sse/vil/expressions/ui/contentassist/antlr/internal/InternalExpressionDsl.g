@@ -1045,6 +1045,8 @@ finally {
 
 
 
+
+
 // Entry rule entryRuleCall
 entryRuleCall 
 :
@@ -4757,6 +4759,8 @@ finally {
 
 
 
+
+
 rule__Call__Group__0
     @init {
 		int stackSize = keepStackSize();
@@ -7196,6 +7200,7 @@ rule__DeclarationUnit__DefltAssignment_1_1
 finally {
 	restoreStackSize(stackSize);
 }
+
 
 rule__Call__NameAssignment_0
     @init {

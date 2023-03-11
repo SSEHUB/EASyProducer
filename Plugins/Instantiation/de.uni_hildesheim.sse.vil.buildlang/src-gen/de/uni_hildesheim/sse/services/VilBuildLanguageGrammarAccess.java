@@ -340,17 +340,19 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Action cRuleDeclarationAction_0 = (Action)cGroup.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Assignment cModifierAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
-		private final RuleCall cModifierRuleModifierParserRuleCall_1_0_0 = (RuleCall)cModifierAssignment_1_0.eContents().get(0);
-		private final Assignment cTypeAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cTypeTypeParserRuleCall_1_1_0 = (RuleCall)cTypeAssignment_1_1.eContents().get(0);
-		private final Assignment cNameAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
-		private final RuleCall cNameIdentifierParserRuleCall_1_2_0 = (RuleCall)cNameAssignment_1_2.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
-		private final Assignment cParamListAssignment_1_4 = (Assignment)cGroup_1.eContents().get(4);
-		private final RuleCall cParamListParameterListParserRuleCall_1_4_0 = (RuleCall)cParamListAssignment_1_4.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_1_5 = (Keyword)cGroup_1.eContents().get(5);
-		private final Keyword cEqualsSignKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
+		private final Assignment cAnnotationsAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final RuleCall cAnnotationsAnnotationDeclarationsParserRuleCall_1_0_0 = (RuleCall)cAnnotationsAssignment_1_0.eContents().get(0);
+		private final Assignment cModifierAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cModifierRuleModifierParserRuleCall_1_1_0 = (RuleCall)cModifierAssignment_1_1.eContents().get(0);
+		private final Assignment cTypeAssignment_1_2 = (Assignment)cGroup_1.eContents().get(2);
+		private final RuleCall cTypeTypeParserRuleCall_1_2_0 = (RuleCall)cTypeAssignment_1_2.eContents().get(0);
+		private final Assignment cNameAssignment_1_3 = (Assignment)cGroup_1.eContents().get(3);
+		private final RuleCall cNameIdentifierParserRuleCall_1_3_0 = (RuleCall)cNameAssignment_1_3.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_1_4 = (Keyword)cGroup_1.eContents().get(4);
+		private final Assignment cParamListAssignment_1_5 = (Assignment)cGroup_1.eContents().get(5);
+		private final RuleCall cParamListParameterListParserRuleCall_1_5_0 = (RuleCall)cParamListAssignment_1_5.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_1_6 = (Keyword)cGroup_1.eContents().get(6);
+		private final Keyword cEqualsSignKeyword_1_7 = (Keyword)cGroup_1.eContents().get(7);
 		private final Assignment cConditionsAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cConditionsRuleConditionsParserRuleCall_2_0 = (RuleCall)cConditionsAssignment_2.eContents().get(0);
 		private final Assignment cBlockAssignment_3 = (Assignment)cGroup.eContents().get(3);
@@ -359,7 +361,8 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		
 		//// ---------------- rules
 		//RuleDeclaration:
-		//	{RuleDeclaration} (modifier=RuleModifier?
+		//	{RuleDeclaration} (annotations=AnnotationDeclarations?
+		//	modifier=RuleModifier?
 		//	type=Type?
 		//	name=Identifier
 		//	'(' paramList=ParameterList? ')'
@@ -369,7 +372,8 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		//	';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//{RuleDeclaration} (modifier=RuleModifier?
+		//{RuleDeclaration} (annotations=AnnotationDeclarations?
+		//modifier=RuleModifier?
 		//type=Type?
 		//name=Identifier
 		//'(' paramList=ParameterList? ')'
@@ -382,45 +386,52 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 		//{RuleDeclaration}
 		public Action getRuleDeclarationAction_0() { return cRuleDeclarationAction_0; }
 
-		//(modifier=RuleModifier?
+		//(annotations=AnnotationDeclarations?
+		//modifier=RuleModifier?
 		//type=Type?
 		//name=Identifier
 		//'(' paramList=ParameterList? ')'
 		//'=')?
 		public Group getGroup_1() { return cGroup_1; }
 
+		//annotations=AnnotationDeclarations?
+		public Assignment getAnnotationsAssignment_1_0() { return cAnnotationsAssignment_1_0; }
+
+		//AnnotationDeclarations
+		public RuleCall getAnnotationsAnnotationDeclarationsParserRuleCall_1_0_0() { return cAnnotationsAnnotationDeclarationsParserRuleCall_1_0_0; }
+
 		//modifier=RuleModifier?
-		public Assignment getModifierAssignment_1_0() { return cModifierAssignment_1_0; }
+		public Assignment getModifierAssignment_1_1() { return cModifierAssignment_1_1; }
 
 		//RuleModifier
-		public RuleCall getModifierRuleModifierParserRuleCall_1_0_0() { return cModifierRuleModifierParserRuleCall_1_0_0; }
+		public RuleCall getModifierRuleModifierParserRuleCall_1_1_0() { return cModifierRuleModifierParserRuleCall_1_1_0; }
 
 		//type=Type?
-		public Assignment getTypeAssignment_1_1() { return cTypeAssignment_1_1; }
+		public Assignment getTypeAssignment_1_2() { return cTypeAssignment_1_2; }
 
 		//Type
-		public RuleCall getTypeTypeParserRuleCall_1_1_0() { return cTypeTypeParserRuleCall_1_1_0; }
+		public RuleCall getTypeTypeParserRuleCall_1_2_0() { return cTypeTypeParserRuleCall_1_2_0; }
 
 		//name=Identifier
-		public Assignment getNameAssignment_1_2() { return cNameAssignment_1_2; }
+		public Assignment getNameAssignment_1_3() { return cNameAssignment_1_3; }
 
 		//Identifier
-		public RuleCall getNameIdentifierParserRuleCall_1_2_0() { return cNameIdentifierParserRuleCall_1_2_0; }
+		public RuleCall getNameIdentifierParserRuleCall_1_3_0() { return cNameIdentifierParserRuleCall_1_3_0; }
 
 		//'('
-		public Keyword getLeftParenthesisKeyword_1_3() { return cLeftParenthesisKeyword_1_3; }
+		public Keyword getLeftParenthesisKeyword_1_4() { return cLeftParenthesisKeyword_1_4; }
 
 		//paramList=ParameterList?
-		public Assignment getParamListAssignment_1_4() { return cParamListAssignment_1_4; }
+		public Assignment getParamListAssignment_1_5() { return cParamListAssignment_1_5; }
 
 		//ParameterList
-		public RuleCall getParamListParameterListParserRuleCall_1_4_0() { return cParamListParameterListParserRuleCall_1_4_0; }
+		public RuleCall getParamListParameterListParserRuleCall_1_5_0() { return cParamListParameterListParserRuleCall_1_5_0; }
 
 		//')'
-		public Keyword getRightParenthesisKeyword_1_5() { return cRightParenthesisKeyword_1_5; }
+		public Keyword getRightParenthesisKeyword_1_6() { return cRightParenthesisKeyword_1_6; }
 
 		//'='
-		public Keyword getEqualsSignKeyword_1_6() { return cEqualsSignKeyword_1_6; }
+		public Keyword getEqualsSignKeyword_1_7() { return cEqualsSignKeyword_1_7; }
 
 		//conditions=RuleConditions?
 		public Assignment getConditionsAssignment_2() { return cConditionsAssignment_2; }
@@ -1486,7 +1497,8 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 
 	//// ---------------- rules
 	//RuleDeclaration:
-	//	{RuleDeclaration} (modifier=RuleModifier?
+	//	{RuleDeclaration} (annotations=AnnotationDeclarations?
+	//	modifier=RuleModifier?
 	//	type=Type?
 	//	name=Identifier
 	//	'(' paramList=ParameterList? ')'
@@ -2087,6 +2099,16 @@ public class VilBuildLanguageGrammarAccess extends AbstractGrammarElementFinder 
 	
 	public ParserRule getDeclarationUnitRule() {
 		return getDeclarationUnitAccess().getRule();
+	}
+
+	//AnnotationDeclarations:
+	//	{AnnotationDeclarations} ('@' id+=Identifier)*;
+	public ExpressionDslGrammarAccess.AnnotationDeclarationsElements getAnnotationDeclarationsAccess() {
+		return gaExpressionDsl.getAnnotationDeclarationsAccess();
+	}
+	
+	public ParserRule getAnnotationDeclarationsRule() {
+		return getAnnotationDeclarationsAccess().getRule();
 	}
 
 	//Call:

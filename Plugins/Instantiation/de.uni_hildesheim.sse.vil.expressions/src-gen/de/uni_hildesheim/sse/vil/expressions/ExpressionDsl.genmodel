@@ -151,6 +151,9 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//DeclarationUnit/id"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//DeclarationUnit/deflt"/>
     </genClasses>
+    <genClasses ecoreClass="ExpressionDsl.ecore#//AnnotationDeclarations">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ExpressionDsl.ecore#//AnnotationDeclarations/id"/>
+    </genClasses>
     <genClasses ecoreClass="ExpressionDsl.ecore#//Call">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Call/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ExpressionDsl.ecore#//Call/decl"/>

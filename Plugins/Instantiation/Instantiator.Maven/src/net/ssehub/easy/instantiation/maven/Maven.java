@@ -101,6 +101,21 @@ public class Maven extends AbstractFileInstantiator {
      * Executes a specific MAVEN build specification with "clean" and "install" targets.
      * 
      * @param root the root-path
+     * @param mvnArgs optional maven arguments
+     * @param updateSnapshots whether snapshots shall be updated
+     * @return the created artifacts
+     * @throws VilException in case of artifact / parameter problems
+     */
+    @OperationMeta(returnGenerics = FileArtifact.class)
+    public static Set<FileArtifact> maven(Path root, Sequence<String> mvnArgs, boolean updateSnapshots) 
+        throws VilException {
+        return maven(root, (String) null, mvnArgs, updateSnapshots);
+    }    
+
+    /**
+     * Executes a specific MAVEN build specification with "clean" and "install" targets.
+     * 
+     * @param root the root-path
      * @param buildFilePath the path where the MAVEN file is located
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
@@ -122,9 +137,25 @@ public class Maven extends AbstractFileInstantiator {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, String buildFilePath, boolean updateSnapshots) 
         throws VilException {
-        return build(root, buildFilePath, updateSnapshots, new String[] {"clean", "install"});
+        return maven(root, buildFilePath, null, updateSnapshots);
     }    
-    
+
+    /**
+     * Executes a specific MAVEN build specification with "clean" and "install" targets.
+     * 
+     * @param root the root-path
+     * @param updateSnapshots whether snapshots shall be updated
+     * @param mvnArgs additional maven arguments
+     * @param buildFilePath the path where the MAVEN file is located
+     * @return the created artifacts
+     * @throws VilException in case of artifact / parameter problems
+     */
+    @OperationMeta(returnGenerics = FileArtifact.class)
+    public static Set<FileArtifact> maven(Path root, String buildFilePath, Sequence<String> mvnArgs, 
+        boolean updateSnapshots) throws VilException {
+        return build(root, buildFilePath, updateSnapshots, new String[] {"clean", "install"}, mvnArgs);
+    }    
+
     /**
      * Executes a specific MAVEN build specification.
      * 
@@ -138,7 +169,7 @@ public class Maven extends AbstractFileInstantiator {
         throws VilException {
         return maven(root, false, buildtargets);
     }
-    
+
     /**
      * Executes a specific MAVEN build specification.
      * 
@@ -151,9 +182,24 @@ public class Maven extends AbstractFileInstantiator {
     @OperationMeta(returnGenerics = FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, boolean updateSnapshots, Sequence<String> buildtargets) 
         throws VilException {
-        return build(root, null, updateSnapshots, toTargets(buildtargets));
+        return maven(root, (Sequence<String>) null, updateSnapshots, buildtargets);
     }
-
+    
+    /**
+     * Executes a specific MAVEN build specification.
+     * 
+     * @param root the root-path
+     * @param updateSnapshots whether snapshots shall be updated
+     * @param buildtargets the targets to be executed
+     * @param mvnArgs additional maven arguments, may be <b>null</b> for none
+     * @return the created artifacts
+     * @throws VilException in case of artifact / parameter problems
+     */
+    @OperationMeta(returnGenerics = FileArtifact.class)
+    public static Set<FileArtifact> maven(Path root, Sequence<String> mvnArgs, boolean updateSnapshots, 
+        Sequence<String> buildtargets) throws VilException {
+        return build(root, null, updateSnapshots, toTargets(buildtargets), mvnArgs);
+    }
 
     /**
      * Executes a specific MAVEN build specification.
@@ -184,7 +230,7 @@ public class Maven extends AbstractFileInstantiator {
     public static Set<FileArtifact> maven(Path root, String buildFilePath, boolean updateSnapshots, 
         Sequence<String> buildtargets) 
         throws VilException {
-        return build(root, buildFilePath, updateSnapshots, toTargets(buildtargets));
+        return build(root, buildFilePath, updateSnapshots, toTargets(buildtargets), null);
     }
     
     /**
@@ -201,6 +247,29 @@ public class Maven extends AbstractFileInstantiator {
         }
         return targets;
     }
+    
+    /**
+     * Adds {@code updateSnapshots} and {@code mvnArgs} to {@code arguments}.
+     * 
+     * @param arguments the arguments to be modified as a side effect
+     * @param updateSnapshots whether snapshots will be updated
+     * @param mvnArgs additional maven arguments, may contain {@code -U} added then only once, may be <b>null</b> 
+     *     for none
+     */
+    private static void addArguments(List<String> arguments, boolean updateSnapshots, Sequence<String> mvnArgs) {
+        final String mvnUpdateArg = "-U"; // also -s, localrepo?
+        boolean doUpdate = false;
+        if (null != mvnArgs) {
+            for (String arg: mvnArgs) {
+                arg = arg.trim();
+                doUpdate = mvnUpdateArg.equals(arg);
+                arguments.add(arg);
+            }
+        }
+        if (!doUpdate && updateSnapshots) {
+            arguments.add(mvnUpdateArg);
+        }
+    }
 
     /**
      * Executes a specific MAVEN build specification.
@@ -209,11 +278,12 @@ public class Maven extends AbstractFileInstantiator {
      * @param buildFilePath the path where the MAVEN file is located
      * @param updateSnapshots whether snapshots shall be updated (-U)
      * @param targets the targets to be executed
+     * @param mvnArgs additional maven args, may be <b>null</b>
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    private static Set<FileArtifact> build(Path root, String buildFilePath, boolean updateSnapshots, String[] targets) 
-        throws VilException {
+    private static Set<FileArtifact> build(Path root, String buildFilePath, boolean updateSnapshots, String[] targets, 
+        Sequence<String> mvnArgs) throws VilException {
         File targetPath = determineTargetPath(root);
         if (null != buildFilePath) {
             buildFilePath = new File(targetPath, buildFilePath).toString();
@@ -227,9 +297,7 @@ public class Maven extends AbstractFileInstantiator {
             ICommandLineProgram prg = CommandLineProgramRegistry.getRegisteredProgram("mvn");
             if (null != prg) {
                 List<String> arguments = new ArrayList<String>();
-                if (updateSnapshots) {
-                    arguments.add("-U");
-                }
+                addArguments(arguments, updateSnapshots, mvnArgs);
                 for (String t: targets) {
                     arguments.add(t);
                 }
@@ -243,7 +311,7 @@ public class Maven extends AbstractFileInstantiator {
         }
         if (asProcess) {
             try {
-                cliResult = runAsProcess(buildFilePath, updateSnapshots, targets);
+                cliResult = runAsProcess(buildFilePath, updateSnapshots, targets, mvnArgs);
             } catch (IOException | InterruptedException e) {
                 throw new VilException("maven build failed: " + e.getMessage(), 
                     VilException.ID_RUNTIME_EXECUTION);
@@ -473,12 +541,13 @@ public class Maven extends AbstractFileInstantiator {
      * @param buildFilePath the path where the MAVEN file is located
      * @param updateSnapshots whether snapshots shall be updated (-U)
      * @param targets the targets to be executed
+     * @param mvnArgs additional maven args, may be <b>null</b> for none
      * @return the command line execution code of Maven
      * @throws IOException in case that execution or process creation fails 
      * @throws InterruptedException in case that the created process was interrupted
      */
-    private static int runAsProcess(String buildFilePath, boolean updateSnapshots, String[] targets) 
-        throws IOException, InterruptedException {
+    private static int runAsProcess(String buildFilePath, boolean updateSnapshots, String[] targets, 
+        Sequence<String> mvnArgs) throws IOException, InterruptedException {
         List<String> params = new ArrayList<String>();
         String jdkHome = JavaUtilities.JDK_PATH;
         if (null == jdkHome) {
@@ -510,9 +579,7 @@ public class Maven extends AbstractFileInstantiator {
             params.add("org.apache.maven.cli.MavenCli");
             manipulator = new CliMessageManipulator();
         }
-        if (updateSnapshots) {
-            params.add("-U");
-        }
+        addArguments(params, updateSnapshots, mvnArgs);
         if (null != SETTINGS) {
             params.add("-s");
             params.add(SETTINGS);

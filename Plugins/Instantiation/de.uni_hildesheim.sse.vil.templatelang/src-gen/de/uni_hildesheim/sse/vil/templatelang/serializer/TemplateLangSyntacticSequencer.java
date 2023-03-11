@@ -22,7 +22,7 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 	protected TemplateLangGrammarAccess grammarAccess;
 	protected AbstractElementAlias match_Compound_SemicolonKeyword_7_q;
 	protected AbstractElementAlias match_Content_SemicolonKeyword_1_2_q;
-	protected AbstractElementAlias match_VilDef_SemicolonKeyword_8_q;
+	protected AbstractElementAlias match_VilDef_SemicolonKeyword_9_q;
 	protected AbstractElementAlias match_userMultiselect_SemicolonKeyword_4_q;
 	
 	@Inject
@@ -30,7 +30,7 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 		grammarAccess = (TemplateLangGrammarAccess) access;
 		match_Compound_SemicolonKeyword_7_q = new TokenAlias(false, true, grammarAccess.getCompoundAccess().getSemicolonKeyword_7());
 		match_Content_SemicolonKeyword_1_2_q = new TokenAlias(false, true, grammarAccess.getContentAccess().getSemicolonKeyword_1_2());
-		match_VilDef_SemicolonKeyword_8_q = new TokenAlias(false, true, grammarAccess.getVilDefAccess().getSemicolonKeyword_8());
+		match_VilDef_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getVilDefAccess().getSemicolonKeyword_9());
 		match_userMultiselect_SemicolonKeyword_4_q = new TokenAlias(false, true, grammarAccess.getUserMultiselectAccess().getSemicolonKeyword_4());
 	}
 	
@@ -50,8 +50,8 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 				emit_Compound_SemicolonKeyword_7_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_Content_SemicolonKeyword_1_2_q.equals(syntax))
 				emit_Content_SemicolonKeyword_1_2_q(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if (match_VilDef_SemicolonKeyword_8_q.equals(syntax))
-				emit_VilDef_SemicolonKeyword_8_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_VilDef_SemicolonKeyword_9_q.equals(syntax))
+				emit_VilDef_SemicolonKeyword_9_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_userMultiselect_SemicolonKeyword_4_q.equals(syntax))
 				emit_userMultiselect_SemicolonKeyword_4_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else acceptNodes(getLastNavigableState(), syntaxNodes);
@@ -89,7 +89,7 @@ public class TemplateLangSyntacticSequencer extends AbstractSyntacticSequencer {
 	 * This ambiguous syntax occurs at:
 	 *     stmts=StmtBlock (ambiguity) (rule end)
 	 */
-	protected void emit_VilDef_SemicolonKeyword_8_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_VilDef_SemicolonKeyword_9_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	

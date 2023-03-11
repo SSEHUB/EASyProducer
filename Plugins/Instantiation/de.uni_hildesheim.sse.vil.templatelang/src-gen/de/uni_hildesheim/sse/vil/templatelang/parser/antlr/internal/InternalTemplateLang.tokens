@@ -10,7 +10,7 @@
 '.'=43
 '/'=68
 ':'=34
-'::'=75
+'::'=76
 ':='=40
 ';'=27
 '<'=20
@@ -21,6 +21,7 @@
 '=='=60
 '>'=63
 '>='=64
+'@'=75
 '@advice'=49
 '@format'=24
 '@indent'=21
@@ -28,7 +29,7 @@
 ']'=74
 'abstract'=45
 'and'=55
-'callOf'=82
+'callOf'=83
 'case'=39
 'compound'=46
 'const'=44
@@ -37,7 +38,7 @@
 'else'=29
 'extends'=16
 'extension'=42
-'false'=77
+'false'=78
 'flush'=37
 'for'=35
 'generic-multiSelect'=41
@@ -46,20 +47,20 @@
 'implies'=58
 'import'=52
 'insert'=53
-'mapOf'=81
+'mapOf'=82
 'multiSelect'=38
 'new'=71
 'not'=69
-'null'=78
+'null'=79
 'or'=56
 'protected'=25
 'refines'=47
-'sequenceOf'=80
-'setOf'=79
+'sequenceOf'=81
+'setOf'=80
 'super'=70
 'switch'=32
 'template'=13
-'true'=76
+'true'=77
 'typedef'=48
 'version'=51
 'while'=36
@@ -147,3 +148,4 @@ T__79=79
 T__80=80
 T__81=81
 T__82=82
+T__83=83

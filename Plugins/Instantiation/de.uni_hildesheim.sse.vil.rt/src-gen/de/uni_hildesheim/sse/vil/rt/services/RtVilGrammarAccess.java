@@ -30,6 +30,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cScriptsAssignment_3 = (Assignment)cGroup.eContents().get(3);
 		private final RuleCall cScriptsLanguageUnitParserRuleCall_3_0 = (RuleCall)cScriptsAssignment_3.eContents().get(0);
 		
+		//@Override
 		//ImplementationUnit:
 		//	{ImplementationUnit} imports+=Import*
 		//	requires+=Require*
@@ -85,6 +86,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cRightCurlyBracketKeyword_10 = (Keyword)cGroup.eContents().get(10);
 		private final Keyword cSemicolonKeyword_11 = (Keyword)cGroup.eContents().get(11);
 		
+		//@Override
 		//LanguageUnit:
 		//	advices+=Advice*
 		//	'rtVilScript' name=Identifier
@@ -785,6 +787,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cElementsRuleElementParserRuleCall_3_0 = (RuleCall)cElementsAssignment_3.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
 		
+		//@Override
 		//RuleElementBlock:
 		//	{RuleElementBlock}
 		//	'{'
@@ -840,6 +843,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cFailAssignment_4 = (Assignment)cAlternatives.eContents().get(4);
 		private final RuleCall cFailFailStatementParserRuleCall_4_0 = (RuleCall)cFailAssignment_4.eContents().get(0);
 		
+		//@Override
 		//RuleElement:
 		//	varDecl=VariableDeclaration
 		//	| exprStmt=ExpressionStatement
@@ -1062,6 +1066,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	
+	//@Override
 	//ImplementationUnit:
 	//	{ImplementationUnit} imports+=Import*
 	//	requires+=Require*
@@ -1074,6 +1079,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getImplementationUnitAccess().getRule();
 	}
 
+	//@Override
 	//LanguageUnit:
 	//	advices+=Advice*
 	//	'rtVilScript' name=Identifier
@@ -1199,6 +1205,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getTacticDeclarationAccess().getRule();
 	}
 
+	//@Override
 	//RuleElementBlock:
 	//	{RuleElementBlock}
 	//	'{'
@@ -1213,6 +1220,7 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 		return getRuleElementBlockAccess().getRule();
 	}
 
+	//@Override
 	//RuleElement:
 	//	varDecl=VariableDeclaration
 	//	| exprStmt=ExpressionStatement
@@ -1296,7 +1304,8 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 
 	//// ---------------- rules
 	//RuleDeclaration:
-	//	{RuleDeclaration} (modifier=RuleModifier?
+	//	{RuleDeclaration} (annotations=AnnotationDeclarations?
+	//	modifier=RuleModifier?
 	//	type=Type?
 	//	name=Identifier
 	//	'(' paramList=ParameterList? ')'
@@ -1871,6 +1880,16 @@ public class RtVilGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getDeclarationUnitRule() {
 		return getDeclarationUnitAccess().getRule();
+	}
+
+	//AnnotationDeclarations:
+	//	{AnnotationDeclarations} ('@' id+=Identifier)*;
+	public ExpressionDslGrammarAccess.AnnotationDeclarationsElements getAnnotationDeclarationsAccess() {
+		return gaExpressionDsl.getAnnotationDeclarationsAccess();
+	}
+	
+	public ParserRule getAnnotationDeclarationsRule() {
+		return getAnnotationDeclarationsAccess().getRule();
 	}
 
 	//Call:

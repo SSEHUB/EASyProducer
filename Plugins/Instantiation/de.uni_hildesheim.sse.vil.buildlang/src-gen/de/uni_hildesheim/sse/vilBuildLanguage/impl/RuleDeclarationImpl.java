@@ -2,6 +2,7 @@
  */
 package de.uni_hildesheim.sse.vilBuildLanguage.impl;
 
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
@@ -28,6 +29,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getAnnotations <em>Annotations</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getModifier <em>Modifier</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vilBuildLanguage.impl.RuleDeclarationImpl#getName <em>Name</em>}</li>
@@ -40,6 +42,16 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  */
 public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements RuleDeclaration
 {
+  /**
+   * The cached value of the '{@link #getAnnotations() <em>Annotations</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getAnnotations()
+   * @generated
+   * @ordered
+   */
+  protected AnnotationDeclarations annotations;
+
   /**
    * The cached value of the '{@link #getModifier() <em>Modifier</em>}' containment reference.
    * <!-- begin-user-doc -->
@@ -129,6 +141,56 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   protected EClass eStaticClass()
   {
     return VilBuildLanguagePackage.Literals.RULE_DECLARATION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public AnnotationDeclarations getAnnotations()
+  {
+    return annotations;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public NotificationChain basicSetAnnotations(AnnotationDeclarations newAnnotations, NotificationChain msgs)
+  {
+    AnnotationDeclarations oldAnnotations = annotations;
+    annotations = newAnnotations;
+    if (eNotificationRequired())
+    {
+      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS, oldAnnotations, newAnnotations);
+      if (msgs == null) msgs = notification; else msgs.add(notification);
+    }
+    return msgs;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setAnnotations(AnnotationDeclarations newAnnotations)
+  {
+    if (newAnnotations != annotations)
+    {
+      NotificationChain msgs = null;
+      if (annotations != null)
+        msgs = ((InternalEObject)annotations).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS, null, msgs);
+      if (newAnnotations != null)
+        msgs = ((InternalEObject)newAnnotations).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS, null, msgs);
+      msgs = basicSetAnnotations(newAnnotations, msgs);
+      if (msgs != null) msgs.dispatch();
+    }
+    else if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS, newAnnotations, newAnnotations));
   }
 
   /**
@@ -416,6 +478,8 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS:
+        return basicSetAnnotations(null, msgs);
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         return basicSetModifier(null, msgs);
       case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
@@ -440,6 +504,8 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS:
+        return getAnnotations();
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         return getModifier();
       case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:
@@ -466,6 +532,9 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS:
+        setAnnotations((AnnotationDeclarations)newValue);
+        return;
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         setModifier((RuleModifier)newValue);
         return;
@@ -498,6 +567,9 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS:
+        setAnnotations((AnnotationDeclarations)null);
+        return;
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         setModifier((RuleModifier)null);
         return;
@@ -530,6 +602,8 @@ public class RuleDeclarationImpl extends MinimalEObjectImpl.Container implements
   {
     switch (featureID)
     {
+      case VilBuildLanguagePackage.RULE_DECLARATION__ANNOTATIONS:
+        return annotations != null;
       case VilBuildLanguagePackage.RULE_DECLARATION__MODIFIER:
         return modifier != null;
       case VilBuildLanguagePackage.RULE_DECLARATION__TYPE:

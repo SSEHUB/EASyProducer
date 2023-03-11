@@ -50,7 +50,9 @@ FormattingHintPart:
 ;
 
 VilDef:
-  (protected = 'protected')? 'def' (type=Type)? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
+  (annotations=AnnotationDeclarations)?
+  (protected='protected')? 
+  'def' (type=Type)? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
   ;
   
 StmtBlock: 

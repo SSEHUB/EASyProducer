@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpression;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AdditiveExpressionPart;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Advice;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ArgumentList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Compound;
@@ -104,6 +105,9 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 				return; 
 			case ExpressionDslPackage.ADVICE:
 				sequence_Advice(context, (Advice) semanticObject); 
+				return; 
+			case ExpressionDslPackage.ANNOTATION_DECLARATIONS:
+				sequence_AnnotationDeclarations(context, (AnnotationDeclarations) semanticObject); 
 				return; 
 			case ExpressionDslPackage.ARGUMENT_LIST:
 				sequence_ArgumentList(context, (ArgumentList) semanticObject); 
@@ -556,7 +560,14 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     VilDef returns VilDef
 	 *
 	 * Constraint:
-	 *     (protected='protected'? type=Type? id=Identifier param=ParameterList? stmts=StmtBlock)
+	 *     (
+	 *         annotations=AnnotationDeclarations? 
+	 *         protected='protected'? 
+	 *         type=Type? 
+	 *         id=Identifier 
+	 *         param=ParameterList? 
+	 *         stmts=StmtBlock
+	 *     )
 	 */
 	protected void sequence_VilDef(ISerializationContext context, VilDef semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);

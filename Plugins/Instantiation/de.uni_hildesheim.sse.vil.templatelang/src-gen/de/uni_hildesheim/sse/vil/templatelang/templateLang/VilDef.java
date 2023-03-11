@@ -2,6 +2,7 @@
  */
 package de.uni_hildesheim.sse.vil.templatelang.templateLang;
 
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.AnnotationDeclarations;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
 
@@ -16,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getAnnotations <em>Annotations</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getProtected <em>Protected</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getType <em>Type</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getId <em>Id</em>}</li>
@@ -29,6 +31,28 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface VilDef extends EObject
 {
+  /**
+   * Returns the value of the '<em><b>Annotations</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Annotations</em>' containment reference.
+   * @see #setAnnotations(AnnotationDeclarations)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getVilDef_Annotations()
+   * @model containment="true"
+   * @generated
+   */
+  AnnotationDeclarations getAnnotations();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef#getAnnotations <em>Annotations</em>}' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Annotations</em>' containment reference.
+   * @see #getAnnotations()
+   * @generated
+   */
+  void setAnnotations(AnnotationDeclarations value);
+
   /**
    * Returns the value of the '<em><b>Protected</b></em>' attribute.
    * <!-- begin-user-doc -->

@@ -97,6 +97,7 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
       case ExpressionDslPackage.DECLARATOR: return createDeclarator();
       case ExpressionDslPackage.DECLARATION: return createDeclaration();
       case ExpressionDslPackage.DECLARATION_UNIT: return createDeclarationUnit();
+      case ExpressionDslPackage.ANNOTATION_DECLARATIONS: return createAnnotationDeclarations();
       case ExpressionDslPackage.CALL: return createCall();
       case ExpressionDslPackage.ARGUMENT_LIST: return createArgumentList();
       case ExpressionDslPackage.NAMED_ARGUMENT: return createNamedArgument();
@@ -507,6 +508,18 @@ public class ExpressionDslFactoryImpl extends EFactoryImpl implements Expression
   {
     DeclarationUnitImpl declarationUnit = new DeclarationUnitImpl();
     return declarationUnit;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public AnnotationDeclarations createAnnotationDeclarations()
+  {
+    AnnotationDeclarationsImpl annotationDeclarations = new AnnotationDeclarationsImpl();
+    return annotationDeclarations;
   }
 
   /**

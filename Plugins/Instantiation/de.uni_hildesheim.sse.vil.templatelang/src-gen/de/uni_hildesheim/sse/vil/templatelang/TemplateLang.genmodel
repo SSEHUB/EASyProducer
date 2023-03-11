@@ -39,6 +39,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//FormattingHintPart/value"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//VilDef">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/annotations"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//VilDef/protected"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//VilDef/id"/>

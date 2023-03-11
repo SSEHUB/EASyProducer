@@ -421,69 +421,81 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	public class VilDefElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.vil.templatelang.TemplateLang.VilDef");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cProtectedAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final Keyword cProtectedProtectedKeyword_0_0 = (Keyword)cProtectedAssignment_0.eContents().get(0);
-		private final Keyword cDefKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cTypeTypeParserRuleCall_2_0 = (RuleCall)cTypeAssignment_2.eContents().get(0);
-		private final Assignment cIdAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cIdIdentifierParserRuleCall_3_0 = (RuleCall)cIdAssignment_3.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
-		private final Assignment cParamAssignment_5 = (Assignment)cGroup.eContents().get(5);
-		private final RuleCall cParamParameterListParserRuleCall_5_0 = (RuleCall)cParamAssignment_5.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_6 = (Keyword)cGroup.eContents().get(6);
-		private final Assignment cStmtsAssignment_7 = (Assignment)cGroup.eContents().get(7);
-		private final RuleCall cStmtsStmtBlockParserRuleCall_7_0 = (RuleCall)cStmtsAssignment_7.eContents().get(0);
-		private final Keyword cSemicolonKeyword_8 = (Keyword)cGroup.eContents().get(8);
+		private final Assignment cAnnotationsAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final RuleCall cAnnotationsAnnotationDeclarationsParserRuleCall_0_0 = (RuleCall)cAnnotationsAssignment_0.eContents().get(0);
+		private final Assignment cProtectedAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final Keyword cProtectedProtectedKeyword_1_0 = (Keyword)cProtectedAssignment_1.eContents().get(0);
+		private final Keyword cDefKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cTypeAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cTypeTypeParserRuleCall_3_0 = (RuleCall)cTypeAssignment_3.eContents().get(0);
+		private final Assignment cIdAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cIdIdentifierParserRuleCall_4_0 = (RuleCall)cIdAssignment_4.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Assignment cParamAssignment_6 = (Assignment)cGroup.eContents().get(6);
+		private final RuleCall cParamParameterListParserRuleCall_6_0 = (RuleCall)cParamAssignment_6.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_7 = (Keyword)cGroup.eContents().get(7);
+		private final Assignment cStmtsAssignment_8 = (Assignment)cGroup.eContents().get(8);
+		private final RuleCall cStmtsStmtBlockParserRuleCall_8_0 = (RuleCall)cStmtsAssignment_8.eContents().get(0);
+		private final Keyword cSemicolonKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
 		//VilDef:
-		//	protected='protected'? 'def' type=Type? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?;
+		//	annotations=AnnotationDeclarations?
+		//	protected='protected'?
+		//	'def' type=Type? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?;
 		@Override public ParserRule getRule() { return rule; }
 
-		//protected='protected'? 'def' type=Type? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
+		//annotations=AnnotationDeclarations?
+		//protected='protected'?
+		//'def' type=Type? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?
 		public Group getGroup() { return cGroup; }
 
+		//annotations=AnnotationDeclarations?
+		public Assignment getAnnotationsAssignment_0() { return cAnnotationsAssignment_0; }
+
+		//AnnotationDeclarations
+		public RuleCall getAnnotationsAnnotationDeclarationsParserRuleCall_0_0() { return cAnnotationsAnnotationDeclarationsParserRuleCall_0_0; }
+
 		//protected='protected'?
-		public Assignment getProtectedAssignment_0() { return cProtectedAssignment_0; }
+		public Assignment getProtectedAssignment_1() { return cProtectedAssignment_1; }
 
 		//'protected'
-		public Keyword getProtectedProtectedKeyword_0_0() { return cProtectedProtectedKeyword_0_0; }
+		public Keyword getProtectedProtectedKeyword_1_0() { return cProtectedProtectedKeyword_1_0; }
 
 		//'def'
-		public Keyword getDefKeyword_1() { return cDefKeyword_1; }
+		public Keyword getDefKeyword_2() { return cDefKeyword_2; }
 
 		//type=Type?
-		public Assignment getTypeAssignment_2() { return cTypeAssignment_2; }
+		public Assignment getTypeAssignment_3() { return cTypeAssignment_3; }
 
 		//Type
-		public RuleCall getTypeTypeParserRuleCall_2_0() { return cTypeTypeParserRuleCall_2_0; }
+		public RuleCall getTypeTypeParserRuleCall_3_0() { return cTypeTypeParserRuleCall_3_0; }
 
 		//id=Identifier
-		public Assignment getIdAssignment_3() { return cIdAssignment_3; }
+		public Assignment getIdAssignment_4() { return cIdAssignment_4; }
 
 		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_3_0() { return cIdIdentifierParserRuleCall_3_0; }
+		public RuleCall getIdIdentifierParserRuleCall_4_0() { return cIdIdentifierParserRuleCall_4_0; }
 
 		//'('
-		public Keyword getLeftParenthesisKeyword_4() { return cLeftParenthesisKeyword_4; }
+		public Keyword getLeftParenthesisKeyword_5() { return cLeftParenthesisKeyword_5; }
 
 		//param=ParameterList?
-		public Assignment getParamAssignment_5() { return cParamAssignment_5; }
+		public Assignment getParamAssignment_6() { return cParamAssignment_6; }
 
 		//ParameterList
-		public RuleCall getParamParameterListParserRuleCall_5_0() { return cParamParameterListParserRuleCall_5_0; }
+		public RuleCall getParamParameterListParserRuleCall_6_0() { return cParamParameterListParserRuleCall_6_0; }
 
 		//')'
-		public Keyword getRightParenthesisKeyword_6() { return cRightParenthesisKeyword_6; }
+		public Keyword getRightParenthesisKeyword_7() { return cRightParenthesisKeyword_7; }
 
 		//stmts=StmtBlock
-		public Assignment getStmtsAssignment_7() { return cStmtsAssignment_7; }
+		public Assignment getStmtsAssignment_8() { return cStmtsAssignment_8; }
 
 		//StmtBlock
-		public RuleCall getStmtsStmtBlockParserRuleCall_7_0() { return cStmtsStmtBlockParserRuleCall_7_0; }
+		public RuleCall getStmtsStmtBlockParserRuleCall_8_0() { return cStmtsStmtBlockParserRuleCall_8_0; }
 
 		//';'?
-		public Keyword getSemicolonKeyword_8() { return cSemicolonKeyword_8; }
+		public Keyword getSemicolonKeyword_9() { return cSemicolonKeyword_9; }
 	}
 
 	public class StmtBlockElements extends AbstractParserRuleElementFinder {
@@ -1478,7 +1490,9 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//VilDef:
-	//	protected='protected'? 'def' type=Type? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?;
+	//	annotations=AnnotationDeclarations?
+	//	protected='protected'?
+	//	'def' type=Type? id=Identifier '(' param=ParameterList? ')' stmts=StmtBlock ';'?;
 	public VilDefElements getVilDefAccess() {
 		return pVilDef;
 	}
@@ -2082,6 +2096,16 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	
 	public ParserRule getDeclarationUnitRule() {
 		return getDeclarationUnitAccess().getRule();
+	}
+
+	//AnnotationDeclarations:
+	//	{AnnotationDeclarations} ('@' id+=Identifier)*;
+	public ExpressionDslGrammarAccess.AnnotationDeclarationsElements getAnnotationDeclarationsAccess() {
+		return gaExpressionDsl.getAnnotationDeclarationsAccess();
+	}
+	
+	public ParserRule getAnnotationDeclarationsRule() {
+		return getAnnotationDeclarationsAccess().getRule();
 	}
 
 	//Call:
