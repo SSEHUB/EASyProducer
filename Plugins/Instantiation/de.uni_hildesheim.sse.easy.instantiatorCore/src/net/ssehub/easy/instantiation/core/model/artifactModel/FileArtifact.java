@@ -5,6 +5,10 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
@@ -330,4 +334,40 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         FileSystemArtifactOperations.setExecutable(this, ownerOnly);
     }
 
+    /**
+     * Returns the MD5 hash of this file artifact.
+     * 
+     * @return the MD5 hash
+     * @throws VilException if the file artifact cannot be opened/read or the MD5 algorithm is not available
+     */
+    public String getMd5Hash() throws VilException {
+        String result;
+        try {
+            byte[] data = Files.readAllBytes(path.getAbsolutePath().toPath());
+            byte[] hash = MessageDigest.getInstance("MD5").digest(data);
+            result = new BigInteger(1, hash).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            throw new VilException(e.getMessage(), VilException.ID_ARTIFACT_INTERNAL);
+        } catch (IOException e) {
+            throw new VilException(e.getMessage(), VilException.ID_IO);
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether this file artifact has the same content as {@code artifact}.
+     * 
+     * @param artifact the artifact to compare
+     * @return {@code true} if both artifacts have the same content, {@code false} else
+     * @throws VilException if one of the file artifacts cannot be accessed/opened
+     */
+    public boolean hasSameContent(FileArtifact artifact) throws VilException {
+        try {
+            return org.apache.commons.io.FileUtils.contentEquals(path.getAbsolutePath(), 
+                artifact.getPath().getAbsolutePath());
+        } catch (IOException e) {
+            throw new VilException(e, VilException.ID_IO);
+        }
+    }
+    
 }

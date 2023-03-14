@@ -391,6 +391,16 @@ public class XmlFileArtifactTest extends AbstractTest {
         
         //The artifacts should share the same content in the first place
         Assert.assertTrue(compareXmlFilesManually(artifact, artifactCopy));
+        try {
+            Assert.assertTrue(artifact.hasSameContent(artifact));
+            Assert.assertTrue(artifact.hasSameContent(artifactCopy));
+            String md5 = artifact.getName();
+            Assert.assertNotNull(md5);
+            Assert.assertTrue(md5.length() > 0);
+        } catch (VilException e) {
+            Assert.fail("No exception expected: " + e.getMessage());
+        }
+
         
         String oldFirstElementName = "";
         Iterator<? extends FragmentArtifact> iter = artifactCopy.selectAll().
