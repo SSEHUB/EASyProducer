@@ -335,6 +335,9 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
     private static <M extends Script> String[] getBaseFolders(EqualitySetup<M> setup) {
         List<String> tmp = new ArrayList<String>();
         addBaseFolders(setup, Executor.PARAM_SOURCE, tmp);
+        if (tmp.size() > 0) { // for some tests, we copy from a parent folder
+            tmp.add(PathUtils.normalize(new File(tmp.get(0)).getParent()));
+        }
         addBaseFolders(setup, Executor.PARAM_TARGET, tmp);
         // and also the script directory
         tmp.add(setup.getFile().getParentFile().getAbsolutePath());

@@ -28,6 +28,7 @@ import com.github.dockerjava.api.model.BuildResponseItem;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
@@ -54,6 +55,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
         HashSet<String> tags = new HashSet<String>();
         tags.add(name);
         
+        IInstantiatorTracer tracer = TracerFactory.getInstance().createInstantiatorTracerImpl();
         try {
             File dockerfile = dockerFile.getAbsolutePath();
             BuildImageCmd cmd = createClient().buildImageCmd()
@@ -67,6 +69,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
                 cmd.withBuildAuthConfigs(aCfgs);
             }
 
+            tracer.traceMessage("Building docker image " + name + ". Please wait...");
             final String taskDescription = "Docker build";
             TracerFactory.ensureTasks(taskDescription);
             final AtomicInteger count = new AtomicInteger(0);
@@ -83,9 +86,11 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
 
             }).awaitImageId();
             TracerFactory.closeTasks(taskDescription);
+            tracer.traceMessage("Building docker image " + name + " completed: " + imageId);
             return imageId;        
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
+                tracer.traceMessage("Building docker image " + name + "failed: " + e.getMessage());
                 throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
             } else {
                 return null;

@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.lxc.instantiators;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
 /**
@@ -44,7 +46,9 @@ public class LxcBuildImage extends AbstractLxcInstantiator {
         String flags = " --type=unified --import-into-lxd=";
         String templatePath = lxcTemplate.getAbsolutePath().toString();
 
+        IInstantiatorTracer tracer = TracerFactory.getInstance().createInstantiatorTracerImpl();
         try {
+            tracer.traceMessage("Building LXC image " + imageName+ ". Please wait...");
             createCmdClient().executeLinuxCmd("cd " + baseDirectory + " && sudo " + distrobuilderCmd + templatePath 
                 + flags + imageName);
 
@@ -52,10 +56,12 @@ public class LxcBuildImage extends AbstractLxcInstantiator {
             // VilException will be thrown
             // but Image will still be built
             String imageFingerprint = createClient().loadImageMap().get(imageName).getFingerprint();
+            tracer.traceMessage("Building LXC image " + imageName + " completed: " + imageFingerprint);
 
             return imageFingerprint;
         } catch (Throwable e) {
             if (FAIL_ON_ERROR) {
+                tracer.traceMessage("Building LXC image " + imageName + "failed: " + e.getMessage());
                 throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
             } else {
                 return null;

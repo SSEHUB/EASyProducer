@@ -5,6 +5,7 @@ import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.*;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -1156,6 +1157,41 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @Test
     public void testCopy2() throws IOException {
         assertSelfInstantiate("copy2", MAIN_RULE, null, null);
+    }
+
+    /**
+     * Tests the copying from outside "target".
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testCopy3() throws IOException {
+        assertSelfInstantiate("copy3", MAIN_RULE, new SelfInstantiationAsserter() {
+            
+            @Override
+            public File determineTestDirectory(File file) {
+                File extSrc = new File(getTestDataDir(), "externalArtifacts");
+                File extTgt = new File(file.getParentFile(), "externalArtifacts");
+                extTgt.mkdirs();
+                try {
+                    FileUtils.copyDirectory(extSrc, extTgt);
+                } catch (IOException e) {
+                    Assert.fail("Copying external artifacts: " + e.getMessage());
+                }
+                return file;
+            }
+            
+            @Override
+            public void deleteBetween(File base) {
+            }
+            
+            @Override
+            public void assertIn(File base) {
+                Assert.assertTrue(new File(base, "ext/test.xml").exists());
+                Assert.assertTrue(new File(base, "ext/a/testA.xml").exists());
+                Assert.assertTrue(new File(base, "ext/a/text.txt").exists());
+            }
+        }, null);
     }
 
     /**

@@ -1,0 +1,8 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    from <- externalArtifacts
+    to <- ext
+    -> println(Any) with (externalArtifacts)
+    -> println(Any) with (ext)
+    -> mkdir(Path) with (ext)
+    -> copy(Path, FileSystemArtifact) with (externalArtifacts, ext/) = {ext/a/testA.xml, ext/a/text.txt, ext/test.xml}
+    -> println(Any) with (done)

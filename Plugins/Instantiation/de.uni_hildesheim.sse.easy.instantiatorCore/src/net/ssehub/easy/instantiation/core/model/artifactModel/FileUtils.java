@@ -111,7 +111,15 @@ public class FileUtils {
             tf.mkdirs();
         }
         ArtifactModel tm = tp.getArtifactModel();
-        for (FileArtifact f : source.selectAll()) {
+        Set<FileArtifact> artifacts = source.selectAll();
+        if (artifacts.size() == 0 && hasFiles(source.getAbsolutePath())) {
+            // usually a folder external to source/target
+            List<FileArtifact> arts = new ArrayList<FileArtifact>();
+            ScanResult<FileArtifact> res = new ScanResult<FileArtifact>(arts);
+            scan(source.getAbsolutePath(), null, 0L, res, FileArtifact.class);
+            artifacts = new ListSet<FileArtifact>(arts, FileArtifact.class);
+        }
+        for (FileArtifact f : artifacts) {
             Path sp = f.getPath();
             File destinationFile = determineDestination(source, f, tf);
             ArtifactModel sm;
@@ -123,6 +131,17 @@ public class FileUtils {
             FileUtils.copyOrMove(sp.getAbsolutePath(), destinationFile, sm, tm, result);
         }
         return new ListSet<IFileSystemArtifact>(result, IFileSystemArtifact.class);
+    }
+    
+    public static boolean hasFiles(File file) {
+        boolean result = false;
+        if (file.isFile()) {
+            result = file.exists();
+        } else if (file.isDirectory()) {
+            File[] dir = file.listFiles();
+            result = dir != null && dir.length > 0;
+        }
+        return result;
     }
 
     /**
@@ -326,9 +345,9 @@ public class FileUtils {
         }
         
     }
-    
+
     /**
-     * Scans the file system for new files.
+     * Scans {@code location} for new files.
      * 
      * @param <T> the actual type of artifacts to be produced
      * 

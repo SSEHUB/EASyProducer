@@ -1,0 +1,13 @@
+vilScript copyTest3 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        Path from = "$target/../externalArtifacts/";
+        Path to = "$target/ext/";
+        println(from);
+        println(to);
+        to.mkdir();
+        from.copy(to);
+        println("done");
+    }
+
+}
