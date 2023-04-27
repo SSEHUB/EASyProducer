@@ -24,6 +24,7 @@ import com.github.dockerjava.api.model.PushResponseItem;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 
@@ -49,11 +50,17 @@ public class DockerPushImage extends AbstractDockerInstantiator {
      */
     public static boolean dockerPushImage(String imageName, String registry, String repository, String tag) 
         throws VilException {
+
+        IInstantiatorTracer tracer = TracerFactory.getInstance().createInstantiatorTracerImpl();
         try {
             if (!imageName.equals(registry + "/" + repository)) {
+                tracer.traceMessage("Tagging image " + imageName + " as " + registry + "/" 
+                    + repository + " with " + tag);
                 createClient().tagImageCmd(imageName, registry + "/" + repository, tag).exec();
             }
             
+            tracer.traceMessage("Pushing docker image " + imageName + " as" +  registry + "/" + repository + ":" 
+                    + tag + ". Please wait...");
             PushImageCmd cmd = createClient().pushImageCmd(registry + "/" + repository + ":" + tag);
 
             AuthConfig cfg = DockerLogin.getAuthConfig(registry);
@@ -77,9 +84,11 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 
             }).awaitCompletion();
             TracerFactory.closeTasks(taskDescription);
+            tracer.traceMessage("Pushing docker image " + imageName + " completed.");
             return true;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
+                tracer.traceMessage("Pushing docker image " + imageName + "failed: " + e.getMessage());
                 throw new VilException(e, VilException.ID_RUNTIME);
             } else {
                 return false;
