@@ -276,5 +276,15 @@
                 <include name="**/*"/>
             </fileset>
         </oscp>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/plugins" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${basedir}/gen/final/plugins">
+                <include name="**/*"/>
+            </fileset>
+        </oscp>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/features" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${basedir}/gen/final/features">
+                <include name="**/*"/>
+            </fileset>
+        </oscp>
     </target>
 </project>
