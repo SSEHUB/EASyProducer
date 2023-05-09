@@ -271,6 +271,8 @@
             ]]>
         </echo>
         <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -R /var/www/eclipse/update-sites/easy/nightly/*"/>
+    	<osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/plugins"/>
+    	<osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/features"/>
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${basedir}/gen/final">
                 <include name="**/*"/>
