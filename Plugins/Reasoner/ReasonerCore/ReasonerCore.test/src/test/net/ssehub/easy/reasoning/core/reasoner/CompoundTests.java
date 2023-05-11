@@ -10,7 +10,10 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.BooleanValue;
+import net.ssehub.easy.varModel.model.values.CompoundValue;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
+import net.ssehub.easy.varModel.model.values.IntValue;
+import net.ssehub.easy.varModel.model.values.StringValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
@@ -297,6 +300,49 @@ public class CompoundTests extends AbstractTest {
         Assert.assertNotNull(var);
         Assert.assertNotNull(var.getValue());
         Assert.assertEquals("DockerContainerMgr", var.getValue().getType().getName());
+    } 
+
+    /**
+     * Assignment-based compound initialization with defaults [contributed by IIP-Ecosphere].
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void compoundInit5Test() throws ModelQueryException {
+        Configuration cfg = reasoningTest("CompoundInit5.ivml", 0);
+        IDecisionVariable var = cfg.getDecision("mgr", false);
+        Assert.assertNotNull(var);
+        Assert.assertTrue(var.getValue() instanceof CompoundValue);
+        Assert.assertEquals("DockerContainerMgr", var.getValue().getType().getName());
+        CompoundValue val = (CompoundValue) var.getValue();
+        Value v = val.getNestedValue("timeout");
+        Assert.assertTrue(v instanceof IntValue);
+        Assert.assertEquals(100, ((IntValue) v).getValue().intValue());
+        v = val.getNestedValue("artifact");
+        Assert.assertTrue(v instanceof StringValue);
+        Assert.assertEquals("myArtifact", ((StringValue) v).getValue());
+    } 
+
+    /**
+     * Assignment-based compound initialization with defaults [contributed by IIP-Ecosphere].
+     * 
+     * @throws ModelQueryException shall not occur
+     */
+    @Test
+    public void compoundInit6Test() throws ModelQueryException, IOException {
+        Project prj = loadCompleteProject("CompoundInit6");
+        Configuration cfg = resultHandler(0, -1, prj);
+        IDecisionVariable var = cfg.getDecision("mgr", false);
+        Assert.assertNotNull(var);
+        Assert.assertTrue(var.getValue() instanceof CompoundValue);
+        Assert.assertEquals("DockerContainerMgr", var.getValue().getType().getName());
+        CompoundValue val = (CompoundValue) var.getValue();
+        Value v = val.getNestedValue("timeout");
+        Assert.assertTrue(v instanceof IntValue);
+        Assert.assertEquals(100, ((IntValue) v).getValue().intValue());
+        v = val.getNestedValue("artifact");
+        Assert.assertTrue(v instanceof StringValue);
+        Assert.assertEquals("myArtifact", ((StringValue) v).getValue());
     } 
 
 }

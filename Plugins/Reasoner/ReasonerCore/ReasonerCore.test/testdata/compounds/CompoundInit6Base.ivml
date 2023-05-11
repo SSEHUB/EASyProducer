@@ -1,0 +1,19 @@
+project CompoundInit6Base {
+
+    abstract compound ContainerMgr {
+        Integer timeout = 100;
+        String artifact = "";
+    };
+
+    compound DefaultContainerMgr refines ContainerMgr {
+    };
+    
+    compound DockerContainerMgr refines ContainerMgr {
+        String artifact = "myArtifact";
+    };
+    
+    ContainerMgr mgr = DefaultContainerMgr {};
+    
+    isDefined(mgr);
+    
+}

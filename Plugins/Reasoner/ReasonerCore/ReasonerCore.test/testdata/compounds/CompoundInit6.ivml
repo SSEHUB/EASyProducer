@@ -1,0 +1,11 @@
+project CompoundInit6 {
+
+    version v0;
+
+    import CompoundInit6Base;
+
+    mgr = DockerContainerMgr {};
+    
+    isDefined(mgr);
+    
+}
