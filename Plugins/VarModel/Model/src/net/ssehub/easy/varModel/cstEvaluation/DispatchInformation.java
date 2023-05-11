@@ -18,17 +18,19 @@ package net.ssehub.easy.varModel.cstEvaluation;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.ssehub.easy.varModel.model.OperationAnnotations;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
- * Stores dispatch information for dynamically dispatching a custom operation.
+ * Calculates the dynamic dispatch of a custom operation.
  * 
  * @author Holger Eichelberger
  */
-class DispatchInformation {
+public class DispatchInformation {
+    
     private CustomOperation operation;
     private IDatatype[] argTypes;
     private int bestDiff;
@@ -38,19 +40,49 @@ class DispatchInformation {
     private String opName;
     private int opParamCount;
     private IDatatype returnType;
-    
+    private int overrideCount;
+    private int dispatchBasisCount;
+    private boolean countAnnotations;
+
     /**
-     * Creates a dispatch information object.
+     * Creates a dispatch information object (not counting annotations).
      * 
      * @param operation the operation to dispatch
      * @param args the operation arguments
      */
     DispatchInformation(CustomOperation operation, EvaluationAccessor[] args) {
+        this(operation, getArgTypes(args), false);
+    }
+
+    /**
+     * Creates a dispatch information object.
+     * 
+     * @param operation the operation to dispatch
+     * @param argTypes the argument types
+     * @param countAnnotations shall annotations be counted or not
+     */
+    public DispatchInformation(CustomOperation operation, IDatatype[] argTypes, boolean countAnnotations) {
         this.operation = operation;
+        this.countAnnotations = countAnnotations;
         opName = operation.getName();
         opParamCount = operation.getParameterCount();
         returnType = operation.getReturns();
-        argTypes = new IDatatype[args.length];
+        this.argTypes = argTypes;
+        bestMatch = operation;
+        bestDiff = EvaluationUtils.calculateDiff(operation, returnType, argTypes);
+        candidates = new HashSet<String>();
+        candidates.add(operation.getSignature());
+        doneProjects = new HashSet<Project>();
+    }
+    
+    /**
+     * Extracts the argument types.
+     * 
+     * @param args the arguments
+     * @return the argument types
+     */
+    private static IDatatype[] getArgTypes(EvaluationAccessor[] args) {
+        IDatatype[] argTypes = new IDatatype[args.length];
         for (int a = 0, n = args.length; a < n; a++) {
             Value val = args[a].getValue();
             if (null != val) {
@@ -61,12 +93,7 @@ class DispatchInformation {
                 argTypes[a] = args[a].getVariable().getDeclaration().getType();
             }
         }
-
-        bestMatch = operation;
-        bestDiff = EvaluationUtils.calculateDiff(operation, returnType, argTypes);
-        candidates = new HashSet<String>();
-        candidates.add(operation.getSignature());
-        doneProjects = new HashSet<Project>();
+        return argTypes;
     }
 
     /**
@@ -74,19 +101,19 @@ class DispatchInformation {
      * 
      * @return the best matching operation
      */
-    CustomOperation getBestMatch() {
+    public CustomOperation getBestMatch() {
         return bestMatch;
     }
-
+    
     /**
      * Checks the given scope for dispatch candidates.
      * 
      * @param scope the scope to check for
      */
-    void checkForDispatch(Project scope) {
+    public void checkForDispatch(Project scope) {
         if (!doneProjects.contains(scope)) {
             doneProjects.add(scope);
-            for (int o = 0, n = scope.getOperationCount(); bestDiff > 0 && o < n; o++) {
+            for (int o = 0, n = scope.getOperationCount(); (bestDiff > 0 || countAnnotations) && o < n; o++) {
                 CustomOperation tmp = scope.getOperation(o);
                 if (tmp != operation && opName.equals(tmp.getName()) && opParamCount == tmp.getParameterCount()) {
                     String tmpSignature = tmp.getSignature();
@@ -100,6 +127,10 @@ class DispatchInformation {
                             bestMatch = tmp;
                             bestDiff = diff;
                         }
+                        if (countAnnotations) {
+                            overrideCount += tmp.hasAnnotation(OperationAnnotations.OVERRIDE) ? 1 : 0;
+                            dispatchBasisCount += tmp.hasAnnotation(OperationAnnotations.DISPATCH_BASIS) ? 1 : 0;
+                        }
                     }
                 }
             }
@@ -110,6 +141,35 @@ class DispatchInformation {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the number of overridden annotated operations (after calling {@link #checkForDispatch(Project)}).
+     * 
+     * @return the number of overridden operations, always 0 if no annotations shall 
+     *     be {@link #DispatchInformation(CustomOperation, EvaluationAccessor[], boolean) counted}
+     */
+    public int getOverrideCount() {
+        return overrideCount;
+    }
+    
+    /**
+     * Returns the number of dispatch basis annotated operations  (after calling {@link #checkForDispatch(Project)}).
+     * 
+     * @return the number of annotated operations, always 0 if no annotations shall 
+     *     be {@link #DispatchInformation(CustomOperation, EvaluationAccessor[], boolean) counted}
+     */
+    public int getDispatchBasisCount() {
+        return dispatchBasisCount;
+    }
+    
+    /**
+     * Returns the number of candidates (after calling {@link #checkForDispatch(Project)}).
+     * 
+     * @return the number of candidates
+     */
+    public int getCandidatesCount() {
+        return candidates.size();
     }
     
 }

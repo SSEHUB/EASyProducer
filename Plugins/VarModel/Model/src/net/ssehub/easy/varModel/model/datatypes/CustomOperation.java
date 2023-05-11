@@ -183,6 +183,33 @@ public class CustomOperation extends Operation {
         }
     }
 
+    /**
+     * Returns whether the operation owns {@code annotation} irrespective of upper/lowercase characters.
+     * 
+     * @param annotation the annotation to search
+     * @return {@code true} for found, {@code true} else
+     */
+    public boolean hasAnnotation(String annotation) {
+        return hasAnnotation(annotations, annotation);
+    }
+            
+    /**
+     * Returns whether {@code annotations} contains {@code annotation} irrespective of upper/lowercase characters.
+     * 
+     * @param annotations the annotations to search within (may be <b>null</b>)
+     * @param annotation the annotation to search
+     * @return {@code true} for found, {@code true} else
+     */
+    public static boolean hasAnnotation(String[] annotations, String annotation) {
+        boolean found = false;
+        if (annotations != null) {
+            for (int i = 0; !found && i < annotations.length; i++) {
+                found = annotations[i].equalsIgnoreCase(annotation);
+            }
+        }
+        return found;
+    }
+
     @Override
     protected boolean registerAsOperation() {
         return false;

@@ -373,6 +373,8 @@ public class CustomOpOnCustomDataTypesTest {
         } catch (IndexOutOfBoundsException e) {
             // ok
         }
+        Assert.assertFalse(op.hasAnnotation("a"));
+
         ArrayList<String> annotations = new ArrayList<String>();
         annotations.add("override");
         op.setAnnotations(annotations);
@@ -384,6 +386,9 @@ public class CustomOpOnCustomDataTypesTest {
         } catch (IndexOutOfBoundsException e) {
             // ok
         }
+        
+        Assert.assertFalse(op.hasAnnotation("a"));
+        Assert.assertTrue(op.hasAnnotation("Override"));
     }
     
 }
