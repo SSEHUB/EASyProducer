@@ -830,8 +830,14 @@ public class IVMLWriter extends AbstractVarModelWriter {
 
     @Override
     public void visitOperationDefinition(OperationDefinition opdef) {
-        appendIndentation();
         CustomOperation op = opdef.getOperation();
+        for (int a = 0; a < op.getAnnotationCount(); a++) {
+            appendIndentation();
+            appendOutput("@");
+            appendOutput(op.getAnnotation(a));
+            appendOutput(LINEFEED);
+        }
+        appendIndentation();
         appendOutput(DEF);
         appendOutput(WHITESPACE);
         if (op.isStatic()) {

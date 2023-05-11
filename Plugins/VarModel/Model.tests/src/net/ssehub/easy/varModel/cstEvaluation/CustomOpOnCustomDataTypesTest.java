@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.varModel.cstEvaluation;
 
+import java.util.ArrayList;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +26,7 @@ import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
+import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
@@ -37,6 +40,7 @@ import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
@@ -351,6 +355,35 @@ public class CustomOpOnCustomDataTypesTest {
         visitor.visit(expr);
         assertEvalVisitorBoolResult(visitor, false);
         visitor.clearResult();
+    }
+    
+    /**
+     * Tests annotations of a "custom operation".
+     */
+    @Test
+    public void testOpAnnotations() throws ValueDoesNotMatchTypeException {
+        Project prj = new Project("test");
+        DecisionVariableDeclaration[] params = new DecisionVariableDeclaration[0];
+        CustomOperation op = new CustomOperation(IntegerType.TYPE, 
+            "test", prj.getType(), new ConstantValue(ValueFactory.createValue(IntegerType.TYPE, 1)), params);
+        Assert.assertEquals(0, op.getAnnotationCount());
+        try {
+            op.getAnnotation(0);
+            Assert.fail("no exception");
+        } catch (IndexOutOfBoundsException e) {
+            // ok
+        }
+        ArrayList<String> annotations = new ArrayList<String>();
+        annotations.add("override");
+        op.setAnnotations(annotations);
+        Assert.assertEquals(1, op.getAnnotationCount());
+        Assert.assertEquals(annotations.get(0), op.getAnnotation(0));
+        try {
+            op.getAnnotation(1);
+            Assert.fail("no exception");
+        } catch (IndexOutOfBoundsException e) {
+            // ok
+        }
     }
     
 }
