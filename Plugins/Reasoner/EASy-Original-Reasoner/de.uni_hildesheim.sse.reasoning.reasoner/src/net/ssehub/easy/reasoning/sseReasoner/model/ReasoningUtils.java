@@ -195,10 +195,9 @@ public class ReasoningUtils {
         ConstraintSyntaxTree res = exp;
         if (null != targetType && sourceType != targetType) {
             try {
-                if (null == sourceType) {
-                    sourceType = exp.inferDatatype();
-                }
-                if (!TypeQueries.sameTypes(sourceType, targetType) && !TypeQueries.isAnyType(targetType)) {
+                IDatatype expType = exp.inferDatatype();
+                if (!TypeQueries.sameTypes(sourceType, targetType) && !TypeQueries.sameTypes(expType, targetType) 
+                    && !TypeQueries.isAnyType(targetType)) {
                     res = new OCLFeatureCall(res, OclKeyWords.AS_TYPE, createTypeValueConstant(targetType));
                 }
             } catch (CSTSemanticException e) {

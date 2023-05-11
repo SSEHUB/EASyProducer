@@ -212,6 +212,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             // remove those between newValue and oldValue (start at oldValue)
             Set<Compound> types = collectRefines(oldType, newType);
             cleanupConstraints(variable, true, types);        
+            translateDeclaration(variable.getDeclaration(), variable, null); // null as access is unclear
             ReasoningUtils.SET_COMPOUND_POOL.releaseInstance(types);
         }
     }
@@ -717,7 +718,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         ConstraintSyntaxTree selfEx = null;
         DefaultConstraints tmpDflt = null;
 
-        if (null != defaultValue) { // considering the actual type rather than base
+        if (null != var && var.getValue() != null) {
+            actType = var.getValue().getType();
+        } else if (null != defaultValue) { // considering the actual type rather than base
             actType = inferTypeSafe(defaultValue, actType);
         }
         actType = DerivedDatatype.resolveToBasis(actType);
@@ -1113,6 +1116,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         ConstraintSyntaxTree cAcc) {
         if (null != variable) {
             if (null != variable.getValue()) { // dynamic/assigned type may differ
+                type = (Compound) variable.getValue().getType();
                 cAcc = checkTypeCast(decl.getType(), variable.getValue().getType(), decl, cAcc);
             }
             for (int i = 0, n = variable.getNestedElementsCount(); i < n; i++) {
