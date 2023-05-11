@@ -17,8 +17,10 @@ package net.ssehub.easy.reasoning.sseReasoner;
 
 import static net.ssehub.easy.reasoning.sseReasoner.model.ReasoningUtils.getConstraintValueExpression;
 
+import net.ssehub.easy.reasoning.sseReasoner.functions.DefaultValueTranslator;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
+import net.ssehub.easy.varModel.cst.BasicCopyVisitor;
 import net.ssehub.easy.varModel.cst.BlockExpression;
 import net.ssehub.easy.varModel.cst.Comment;
 import net.ssehub.easy.varModel.cst.CompoundAccess;
@@ -72,6 +74,7 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
     private IDecisionVariable variable;
     private IModelElement parent;
     private boolean substituteVars;
+    private ConstraintSyntaxTree cst;
 
     /**
      * Creates the visitor.
@@ -89,10 +92,12 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
      * @param cst the constraint to accept / visit
      * @param parent parent for temporary constraints
      * @param variable the actually (nested) variable, used to relate the created constraint to, may be <b>null</b>
+     * @return cst or a modified version of it
      */
-    public void accept(ConstraintSyntaxTree cst, IModelElement parent, IDecisionVariable variable) {
+    public ConstraintSyntaxTree accept(ConstraintSyntaxTree cst, IModelElement parent, IDecisionVariable variable) {
         process = false;
-        cst.accept(this);           
+        this.cst = cst;
+        this.cst.accept(this);           
         
         // save state for recurrence
         IDecisionVariable sVariable = this.variable;
@@ -121,6 +126,8 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
         isCompoundInitializer = false;
         expression = null;
         value = null;
+        
+        return this.cst;
     }
     
     @Override
@@ -138,6 +145,27 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
                 }
             }
         }
+    }
+    
+    private static class ValueSubstitutionVisitor extends BasicCopyVisitor {
+        
+        private ConstantValue origin;
+        private ConstraintSyntaxTree replacement;
+        
+        public ValueSubstitutionVisitor(ConstantValue origin, ConstraintSyntaxTree replacement) {
+            this.origin = origin;
+            this.replacement = replacement;
+        }
+        
+        @Override
+        public void visitConstantValue(ConstantValue value) {
+            if (value.getConstantValue() == origin.getConstantValue()) {
+                setResult(replacement);
+            } else {
+                super.visitConstantValue(value);
+            }
+        }
+        
     }
 
     @Override
@@ -217,6 +245,24 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
     
     @Override
     public void visitConstantValue(ConstantValue value) {
+        if (value.getConstantValue() instanceof CompoundValue) {
+            CompoundValue cValue = (CompoundValue) value.getConstantValue();
+            int nullCount = 0;
+            for (String slot : cValue.getSlotNames()) {
+                if (cValue.getNestedValue(slot) == null) {
+                    nullCount++;
+                }
+            }
+            if (nullCount > 0 && nullCount == cValue.getNestedElementsSize()) {
+                System.out.println("!!!");         
+                // special case, the "empty" value which shall have the (inherited) defaults
+        
+                ValueSubstitutionVisitor vis = new ValueSubstitutionVisitor(
+                    value, DefaultValueTranslator.translateDefaultValueSafe(value));
+                this.cst.accept(vis);
+                this.cst = vis.getResult();
+            }
+        }
     }
 
     @Override

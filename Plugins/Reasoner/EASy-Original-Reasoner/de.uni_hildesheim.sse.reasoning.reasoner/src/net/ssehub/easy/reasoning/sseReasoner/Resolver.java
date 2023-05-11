@@ -1434,7 +1434,11 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         }
         // check whether the constraint is a value assignment
         if (checkForInitializers) { // needed, also to avoid recursions on constant values inducing constraints
-            initChecker.accept(cst, constraint.getParent(), variable);
+            try {
+                constraint.setConsSyntax(initChecker.accept(cst, constraint.getParent(), variable));
+            } catch (CSTSemanticException e) {
+                LOGGER.exception(e); // shall not occur if constraints are created correctly, ok to log
+            }
         }
         boolean add = true;
         if (incremental) {
