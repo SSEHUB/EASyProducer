@@ -97,6 +97,8 @@ import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 
+import static de.uni_hildesheim.sse.translation.Utils.*;
+
 /**
  * Implements a ECore-to-IVML translator. Please note that errors which occur
  * during translation are not signalled as individual exceptions but collected
@@ -114,7 +116,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         new HashMap<VariableDeclarationPart, DecisionVariableDeclaration>();
     
     private Map<TypedefMapping, DerivedDatatype> typedefMapping = new HashMap<TypedefMapping, DerivedDatatype>();
-    
+
     private Set<EObject> definitionsProcessed = new HashSet<EObject>();
     private DerivedTypeMetaCompoundAccessVisitor derivedTypeVisitor = new DerivedTypeMetaCompoundAccessVisitor(this);
     private IModelProcessingListener<Project> onLoadMsgCleanupListener = new IModelProcessingListener<Project>() {
@@ -960,25 +962,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             }
         }
     }
-    
-    /**
-     * Turns variable declaration parts into strings for debugging.
-     * 
-     * @param parts the parts
-     * @return the names
-     */
-    @SuppressWarnings("unused")
-    private String toString(List<VariableDeclarationPart> parts) {
-        String result = "";
-        for (int i = 0; i < parts.size(); i++) {
-            if (i > 0) {
-                result = result + ",";
-            }
-            result = result + parts.get(i).getName();
-        }
-        return result;
-    }
-    
+        
     /**
      * Process variable declaration <code>decl</code> add IVML object model
      * instances to <code>project</code> or <code>compound</code>.
@@ -1059,20 +1043,6 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     }
 
     /**
-     * Emits an already defined error.
-     * 
-     * @param name the already defined name
-     * @param object the causing Ecore object
-     * @param feature the causing feature
-     * @throws TranslatorException the corresponding exception always  
-     */
-    private void alreadyDefinedError(String name, EObject object, EStructuralFeature feature) 
-        throws TranslatorException {
-        throw new TranslatorException("name '" + name + "' is already defined in the same scope", object, feature, 
-            ErrorCodes.REDEFINITION);
-    }
-
-    /**
      * Processes a custom operation definition and adds it to the type context.
      * 
      * @param op the operation definition
@@ -1113,7 +1083,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                     }
                     context.addToContext(params[p]);
                 }
-                checkDefaultParamSequence(op, params);
+                checkDefaultParamSequence(op, params, this);
             }
             IDatatype projectType = project.getType();
             CustomOperation operation;
@@ -1122,7 +1092,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             } else {
                 operation = new CustomDynamicOperation(resultType, op.getId(), projectType, null, params);
             }
-            setAnnotations(op, operation);
+            setAnnotations(op, operation, project, this);
             opDef.setOperation(operation);
             context.addToContext(opDef);
             project.add(opDef);
@@ -1167,54 +1137,6 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             context.popLayer();
         }
         return done;
-    }
-
-    /**
-     * Defines the annotations for an operation.
-     * 
-     * @param op the defining operation statement
-     * @param operation the translated IVML operation
-     */
-    private void setAnnotations(OpDefStatement op, CustomOperation operation) {
-        if (null != op.getAnnotations()) {
-            operation.setAnnotations(op.getAnnotations().getId());
-        }
-    }
-    
-    /**
-     * Returns the unqualified name of <code>type</code>.
-     * 
-     * @param type the type
-     * @return the unqualified name
-     */
-    private static String unqualified(IDatatype type) {
-        return IvmlDatatypeVisitor.getUnqualifiedType(type);
-    }
-    
-    /**
-     * Checks the sequence of default and non-default parameters.
-     * 
-     * @param op the operation declaration
-     * @param param the parameters to check
-     */
-    private void checkDefaultParamSequence(OpDefStatement op, DecisionVariableDeclaration[] param) {
-        int lastNonDefaultParam = -1;
-        int lastDefaultParam = -1;
-        for (int p = 0; p < param.length; p++) {
-            if (null == param[p].getName()) {
-                lastNonDefaultParam = p;
-            } else {
-                if (lastDefaultParam < 0) {
-                    lastDefaultParam = p;
-                }
-            }
-        }
-        if (param.length > 0) {
-            if (lastDefaultParam > 0 && lastNonDefaultParam > lastDefaultParam) {
-                error("parameters with default values must follow parameters without default values", op, 
-                    IvmlPackage.Literals.ACTUAL_ARGUMENT_LIST__NAME, ErrorCodes.WARNING_USAGE);
-            }
-        }
     }
     
     /**
@@ -1892,46 +1814,6 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             assignComments(sComment, freezes, comments, block);
         }
         context.addToProject(freeze, sComment, block);
-    }
-    
-    /**
-     * Creates a structured comment for the given <code>object</code> in <code>context</code> depending on the 
-     * contents of <code>comments</code>, i.e. whether there are comments or not.
-     * 
-     * @param object the EObject to create the comment for
-     * @param context the type context to assign the created context to
-     * @param comments the comments to consider
-     * @return the created comment object or <b>null</b>
-     */
-    private StructuredComment createStructuredComment(EObject object, TypeContext context, List<Comment> comments) {
-        StructuredComment comment;
-        if (comments.isEmpty()) {
-            comment = null; 
-        } else {
-            comment = CommentUtils.ensureStructuredComment(object, context);
-        }
-        return comment;
-    }
-    
-    /**
-     * Assigns the comments in <code>comments</code> to the corresponding model elements
-     * in <code>elements</code>.
-     * 
-     * @param target the structured comment to store the mapping in
-     * @param elements the elements to be assigned to the comments
-     * @param comments the comments (must be of same size)
-     * @param parent the explicit parent element of the comments
-     */
-    private void assignComments(StructuredComment target, List<?> elements, List<Comment> comments, 
-        IModelElement parent) {
-        assert comments.size() == elements.size();
-        for (int i = 0; i < comments.size(); i++) {
-            Comment comment = comments.get(i);
-            if (null != comment) {
-                comment.setParent(parent);
-                target.assignComment(elements.get(i), comment);
-            }
-        }
     }
 
     /**
