@@ -485,6 +485,16 @@ public class BasicTests extends AbstractBasicTest<Script> {
     }
 
     /**
+     * Tests a simple override annotation.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testOverride() throws IOException {
+        assertEqual("override");
+    }
+
+    /**
      * Tests instantiator calls in a map statement (contributed by Christian).
      * 
      * @throws IOException should not occur

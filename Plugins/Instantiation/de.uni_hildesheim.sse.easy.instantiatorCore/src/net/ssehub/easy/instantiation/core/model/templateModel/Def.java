@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
@@ -26,6 +27,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     private Map<String, VariableDeclaration> namedParam;
     private TypeDescriptor<?> specifiedType;
     private boolean isProtected = false;
+    private String[] annotations;
     
     /**
      * Constructor for serialization.
@@ -259,6 +261,42 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     @Override
     public boolean isConstructor() {
         return false;
+    }
+    
+    /**
+     * Defines the operation annotations.
+     * 
+     * @param annotations the annotations
+     */
+    public void setAnnotations(List<String> annotations) {
+        if (null != annotations) {
+            this.annotations = annotations.toArray(new String[annotations.size()]);
+        }
+    }
+
+    /**
+     * Returns the number of declared annotations.
+     * 
+     * @return the number of declared annotations
+     */
+    public int getAnnotationCount() {
+        return null == annotations ? 0 : annotations.length;
+    }
+    
+    /**
+     * Returns the specified annotation.
+     * 
+     * @param index the 0-based index of the annotation
+     * @return the specified annotation
+     * @throws IndexOutOfBoundsException if no annotations are defined or if the index is not 
+     *     in[0;{@link #getAnnotationCount()})
+     */
+    public String getAnnotation(int index) {
+        if (null == annotations) {
+            throw new IndexOutOfBoundsException("no annotations defined");
+        } else {
+            return annotations[index];
+        }
     }
     
 }

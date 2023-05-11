@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.core.model.buildlangModel;
 
+import java.util.List;
+
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule.Side;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
@@ -29,6 +31,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 public abstract class AbstractRule extends RuleBlock implements IResolvableOperation<VariableDeclaration>, 
     IStringValueProvider {
 
+    private String[] annotations;
+    
     /**
      * Creates the rule.
      * 
@@ -110,6 +114,42 @@ public abstract class AbstractRule extends RuleBlock implements IResolvableOpera
     @Override
     public boolean isConstructor() {
         return false;
+    }
+
+    /**
+     * Defines the operation annotations.
+     * 
+     * @param annotations the annotations
+     */
+    public void setAnnotations(List<String> annotations) {
+        if (null != annotations) {
+            this.annotations = annotations.toArray(new String[annotations.size()]);
+        }
+    }
+
+    /**
+     * Returns the number of declared annotations.
+     * 
+     * @return the number of declared annotations
+     */
+    public int getAnnotationCount() {
+        return null == annotations ? 0 : annotations.length;
+    }
+    
+    /**
+     * Returns the specified annotation.
+     * 
+     * @param index the 0-based index of the annotation
+     * @return the specified annotation
+     * @throws IndexOutOfBoundsException if no annotations are defined or if the index is not 
+     *     in[0;{@link #getAnnotationCount()})
+     */
+    public String getAnnotation(int index) {
+        if (null == annotations) {
+            throw new IndexOutOfBoundsException("no annotations defined");
+        } else {
+            return annotations[index];
+        }
     }
 
 }

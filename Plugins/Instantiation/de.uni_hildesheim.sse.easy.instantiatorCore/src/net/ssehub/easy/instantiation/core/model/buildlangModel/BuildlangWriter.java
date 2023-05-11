@@ -288,6 +288,12 @@ public class BuildlangWriter extends WriterVisitor<VariableDeclaration> implemen
     
     @Override
     public Object visitRule(Rule rule) throws VilException {
+        for (int a = 0; a < rule.getAnnotationCount(); a++) {
+            printIndentation();
+            print("@");
+            print(rule.getAnnotation(a));
+            println();
+        }
         printIndentation();
         if (null != rule.getName()) {
             if (rule.isProtected()) {

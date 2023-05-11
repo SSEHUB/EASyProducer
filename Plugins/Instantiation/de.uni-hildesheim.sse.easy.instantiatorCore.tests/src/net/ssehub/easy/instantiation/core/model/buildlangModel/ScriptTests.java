@@ -70,4 +70,30 @@ public class ScriptTests extends AbstractTest {
         Assert.assertEquals("model comparison fails:", model, expected);
     }
 
+    /**
+     * Tests annotations of a "rule".
+     */
+    @Test
+    public void testRuleAnnotations() {
+        Rule rule = new Rule();
+        Assert.assertEquals(0, rule.getAnnotationCount());
+        try {
+            rule.getAnnotation(0);
+            Assert.fail("no exception");
+        } catch (IndexOutOfBoundsException e) {
+            // ok
+        }
+        ArrayList<String> annotations = new ArrayList<String>();
+        annotations.add("override");
+        rule.setAnnotations(annotations);
+        Assert.assertEquals(1, rule.getAnnotationCount());
+        Assert.assertEquals(annotations.get(0), rule.getAnnotation(0));
+        try {
+            rule.getAnnotation(1);
+            Assert.fail("no exception");
+        } catch (IndexOutOfBoundsException e) {
+            // ok
+        }
+    }
+    
 }

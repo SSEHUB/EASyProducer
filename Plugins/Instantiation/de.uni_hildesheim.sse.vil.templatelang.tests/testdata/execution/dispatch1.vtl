@@ -6,26 +6,32 @@ template dispatch1(Configuration config, Artifact target) {
         }
     }
 
+    @dispatchCase
     def createValueAssignment(DecisionVariable variable, Boolean value) {
         'Boolean ${variable.name()} $value'
     }
 
+    @dispatchCase
     def createValueAssignment(DecisionVariable variable, EnumValue value) {
         'enum ${variable.name()} $value ${value.ordinal()}'
     }
 
+    @dispatchCase
     def createValueAssignment(DecisionVariable variable, Integer value) {
         'integer ${variable.name()} ${value}'
     }
 
+    @dispatchCase
     def createValueAssignment(DecisionVariable variable, Real value) {
         'real ${variable.name()} ${value}'
     }
 
+    @dispatchCase
     def createValueAssignment(DecisionVariable variable, String value) {
         'string ${variable.name()} ${value}'
     }
 
+    @dispatchBasis
     def createValueAssignment(DecisionVariable variable, Any value) {
         'unknown ${variable.name()}'
     }

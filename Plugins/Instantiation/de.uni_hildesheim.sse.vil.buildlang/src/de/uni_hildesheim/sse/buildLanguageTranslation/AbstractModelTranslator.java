@@ -597,7 +597,11 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         @Override
         protected Rule createRule(RuleDeclaration ruleDecl, TypeDescriptor<?> returnType, 
             VariableDeclaration[] params, M parent) {
-            return new Rule(ruleDecl.getName(), isProtected(ruleDecl), returnType, params, parent);
+            Rule r = new Rule(ruleDecl.getName(), isProtected(ruleDecl), returnType, params, parent);
+            if (null != ruleDecl.getAnnotations()) {
+                r.setAnnotations(ruleDecl.getAnnotations().getId());
+            }
+            return r;
         }
 
         @Override

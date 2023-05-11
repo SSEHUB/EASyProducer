@@ -1,0 +1,17 @@
+vilScript override (Project source, Project target, Configuration config) {
+
+    Boolean test(FileArtifact f) = : {
+        true;
+    }
+
+    @Override
+    Boolean test(XmlFileArtifact f) = : {
+        false;
+    }
+
+    main() = : {
+        FileArtifact fa = new FileArtifact();
+        test(fa);
+    }
+
+}
