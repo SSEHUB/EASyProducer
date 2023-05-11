@@ -1122,6 +1122,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             } else {
                 operation = new CustomDynamicOperation(resultType, op.getId(), projectType, null, params);
             }
+            setAnnotations(op, operation);
             opDef.setOperation(operation);
             context.addToContext(opDef);
             project.add(opDef);
@@ -1166,6 +1167,18 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
             context.popLayer();
         }
         return done;
+    }
+
+    /**
+     * Defines the annotations for an operation.
+     * 
+     * @param op the defining operation statement
+     * @param operation the translated IVML operation
+     */
+    private void setAnnotations(OpDefStatement op, CustomOperation operation) {
+        if (null != op.getAnnotations()) {
+            operation.setAnnotations(op.getAnnotations().getId());
+        }
     }
     
     /**

@@ -9,7 +9,9 @@ project testopdefDispatch {
         Integer j;
     }
 
+    @dispatchBasis
     def Boolean test(Base b) = b.i > 0;
+    @dispatchCase
     def Boolean test(Refined r) = r.i > 0 and r.j > 0;
     Refined r;
     test(r);

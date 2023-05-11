@@ -254,7 +254,6 @@ class CheckInitializerVisitor extends ValueVisitorAdapter implements IConstraint
                 }
             }
             if (nullCount > 0 && nullCount == cValue.getNestedElementsSize()) {
-                System.out.println("!!!");         
                 // special case, the "empty" value which shall have the (inherited) defaults
         
                 ValueSubstitutionVisitor vis = new ValueSubstitutionVisitor(
