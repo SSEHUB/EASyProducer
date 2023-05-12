@@ -358,18 +358,18 @@ public class Utils {
                 if (dispCase && di.getCandidatesCount() > 0) {
                     if (di.getDispatchBasisCount() > 1) {
                         receiver.warning("Multiple matching dispatch basis operations found for " 
-                            + operation.getSignature(), op, IvmlPackage.Literals.OP_DEF_PARAMETER_LIST__LIST, 
+                            + operation.getSignature(), op, IvmlPackage.Literals.OP_DEF_STATEMENT__ANNOTATIONS, 
                             ErrorCodes.WARNING_USAGE);
                     } else if (di.getDispatchBasisCount() == 0) {
                         receiver.warning("No matching dispatch basis operations found for " + operation.getSignature(), 
-                            op, IvmlPackage.Literals.OP_DEF_PARAMETER_LIST__LIST, ErrorCodes.WARNING_USAGE);
+                            op, IvmlPackage.Literals.OP_DEF_STATEMENT__ANNOTATIONS, ErrorCodes.WARNING_USAGE);
                     }
                 }
                 if (override) {
                     boolean ok = di.getCandidatesCount() > 0 && di.getOverrideCount() < di.getCandidatesCount();
                     if (!ok) {
                         receiver.warning("No matching non-overriding operation found for " +  operation.getSignature(), 
-                            op, IvmlPackage.Literals.OP_DEF_PARAMETER_LIST__LIST, ErrorCodes.WARNING_USAGE);
+                            op, IvmlPackage.Literals.OP_DEF_STATEMENT__ANNOTATIONS, ErrorCodes.WARNING_USAGE);
                     }
                 }
             }
