@@ -12,6 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 
 /**
  * Implements a template language subtemplate ('def').
@@ -298,5 +299,10 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
             return annotations[index];
         }
     }
-    
+
+    @Override
+    public boolean hasAnnotation(String annotation) {
+        return CustomOperation.hasAnnotation(annotations, annotation);
+    }
+
 }

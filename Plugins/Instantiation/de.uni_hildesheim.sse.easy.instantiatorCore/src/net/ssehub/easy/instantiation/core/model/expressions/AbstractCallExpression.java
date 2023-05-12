@@ -168,15 +168,17 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
      * @param candidates the candidates to be modified
      * @param inInsert whether we are already in an inInsert import
+     * @param all if {@code true} add all candidates irrespective of already known same operation signatures, 
+     *    {@code false} only add unknown signatures
      */
     private static void candidatesOnImports(ITypedModel model, String name, int unnamedArgsCount, 
-        List<IMetaOperation> candidates, boolean inInsert) {
+        List<IMetaOperation> candidates, boolean inInsert, boolean all) {
         for (int i = 0; i < model.getImportsCount(); i++) {
             ModelImport<?> imp = model.getImport(i);
             if (imp.getResolved() instanceof ITypedModel) {
                 ITypedModel res = (ITypedModel) imp.getResolved();
                 if (imp.isWildcard() && imp.isInsert()) {
-                    candidatesOnImports(res, name, unnamedArgsCount, candidates, true);
+                    candidatesOnImports(res, name, unnamedArgsCount, candidates, true, all);
                 } else if (inInsert) {
                     candidates.addAll(res.getCandidates(name, unnamedArgsCount));
                 }
@@ -194,73 +196,79 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
      * @param arguments the arguments of the call
      * @param allowAny allow AnyType as assignable parameter type (dynamic dispatch)
      * @param unnamedArgsCount the number of unnamed arguments in <code>arguments</code>
+     * @param all if {@code true} add all candidates irrespective of already known same operation signatures, 
+     *    {@code false} only add unknown signatures
      * @return the list of candidate operations
      * @throws VilException in case of type resolution problems or in case of an ambiguous call specification
      */
-    private static List<IMetaOperation> assignableCandidates(IMetaType operand, String name, CallArgument[] arguments, 
-        int unnamedArgsCount, boolean allowAny) throws VilException {
+    public static List<IMetaOperation> assignableCandidates(IMetaType operand, String name, CallArgument[] arguments, 
+        int unnamedArgsCount, boolean allowAny, boolean all) throws VilException {
         List<IMetaOperation> result = new ArrayList<IMetaOperation>();
         IMetaType[] argumentTypes = toTypeDescriptors(arguments);
         List<IMetaOperation> candidates = operand.getCandidates(name, unnamedArgsCount);
         if (operand instanceof ITypedModel) {
-            candidatesOnImports((ITypedModel) operand, name, unnamedArgsCount, candidates, false);
+            candidatesOnImports((ITypedModel) operand, name, unnamedArgsCount, candidates, false, all);
         }
-        for (int o = 0; o < candidates.size(); o++) {
-            IMetaOperation desc = candidates.get(o);
-            boolean allEqual = true;
-            for (int p = 0; allEqual && p < arguments.length; p++) {
-                IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
-                if (null != pType) { // pType==null legacy: undeclared unnamed parameters
-                    IMetaType aType = argumentTypes[p];
-                    allEqual &= TypeRegistry.equals(pType, aType);
-                    if (!allEqual) {
-                        IMetaOperation funcOp = resolveResolvableOperation(null, pType, aType, 
-                            arguments[p].getExpression(), RESLIST);
-                        if (null != funcOp) {
-                            arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
-                            allEqual = true;
-                        }
-                    }
-                }
-            }
-            if (allEqual) {
-                result.add(desc);
-            }
-        }
-        if (result.isEmpty()) {
-            int minAssignables = 0;
+        if (all) {
+            result.addAll(candidates);
+        } else {
             for (int o = 0; o < candidates.size(); o++) {
                 IMetaOperation desc = candidates.get(o);
-                boolean allAssignable = true;
-                int aCount = 0;
-                final TypeDescriptor<?> any = TypeRegistry.anyType();
-                for (int p = 0; allAssignable && p < arguments.length; p++) {
+                boolean allEqual = true;
+                for (int p = 0; allEqual && p < arguments.length; p++) {
                     IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
-                    IMetaType aType = argumentTypes[p];
-                    // pType==null legacy: undeclared unnamed parameters
-                    if (null != pType) { 
-                        if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
-                            aCount += (pType != aType) ? 1 : 0;
-                        } else {
-                            allAssignable = false;
+                    if (null != pType) { // pType==null legacy: undeclared unnamed parameters
+                        IMetaType aType = argumentTypes[p];
+                        allEqual &= TypeRegistry.equals(pType, aType);
+                        if (!allEqual) {
+                            IMetaOperation funcOp = resolveResolvableOperation(null, pType, aType, 
+                                arguments[p].getExpression(), RESLIST);
+                            if (null != funcOp) {
+                                arguments[p].resolveOperation((TypeDescriptor<?>) pType, funcOp);
+                                allEqual = true;
+                            }
                         }
                     }
                 }
-                if (allAssignable) {
-                    // consider only minimum number of implicit conversions -> dynamic dispatch
-                    if (0 == minAssignables || aCount < minAssignables) {
-                        result.clear();
-                        minAssignables = aCount;
-                    } 
-                    if (aCount == minAssignables) {
-                        addAndPruneByType(result, desc, argumentTypes, arguments, unnamedArgsCount);
+                if (allEqual) {
+                    result.add(desc);
+                }
+            }
+            if (result.isEmpty()) {
+                int minAssignables = 0;
+                for (int o = 0; o < candidates.size(); o++) {
+                    IMetaOperation desc = candidates.get(o);
+                    boolean allAssignable = true;
+                    int aCount = 0;
+                    final TypeDescriptor<?> any = TypeRegistry.anyType();
+                    for (int p = 0; allAssignable && p < arguments.length; p++) {
+                        IMetaType pType = getParameterType(desc, p, arguments, unnamedArgsCount);
+                        IMetaType aType = argumentTypes[p];
+                        // pType==null legacy: undeclared unnamed parameters
+                        if (null != pType) { 
+                            if (pType.isAssignableFrom(aType) || (allowAny && any == pType)) {
+                                aCount += (pType != aType) ? 1 : 0;
+                            } else {
+                                allAssignable = false;
+                            }
+                        }
+                    }
+                    if (allAssignable) {
+                        // consider only minimum number of implicit conversions -> dynamic dispatch
+                        if (0 == minAssignables || aCount < minAssignables) {
+                            result.clear();
+                            minAssignables = aCount;
+                        } 
+                        if (aCount == minAssignables) {
+                            addAndPruneByType(result, desc, argumentTypes, arguments, unnamedArgsCount);
+                        }
                     }
                 }
             }
-        }
-        if (result.size() > 1) {
-            throw new VilException(toSignatures(result) + " are ambiguous" , VilException.ID_AMBIGUOUS);
-        }
+            if (result.size() > 1) {
+                throw new VilException(toSignatures(result) + " are ambiguous" , VilException.ID_AMBIGUOUS);
+            }
+        } 
         return result;
     }
 
@@ -305,7 +313,7 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
                 && IvmlTypes.ivmlElement().isAssignableFrom(aType) && operand instanceof IModel) {
                 String opName = varModelIdEx.getIdentifier();
                 CallArgument[] args = toTypeDescriptors(pType, 1);
-                List<IMetaOperation> ops = assignableCandidates(operand, opName, args, args.length, false);
+                List<IMetaOperation> ops = assignableCandidates(operand, opName, args, args.length, false, false);
                 if (1 == ops.size()) { // return type may also select
                     IMetaOperation functionOp = ops.get(0);
                     TypeDescriptor<?> ret = pType.getGenericParameterType(pType.getGenericParameterCount() - 1);
@@ -794,7 +802,8 @@ public abstract class AbstractCallExpression extends Expression implements IArgu
         IMetaOperation resolved = null;
         // check for direct applicable candidates
         int unnamedArgsCount = CallArgument.countUnnamedArguments(arguments);
-        List<IMetaOperation> candidates = assignableCandidates(operand, name, arguments, unnamedArgsCount, allowAny);
+        List<IMetaOperation> candidates = assignableCandidates(operand, name, arguments, unnamedArgsCount, 
+            allowAny, false);
         if (1 == candidates.size()) {
             resolved = candidates.get(0);
         } else if (allowConversion) {

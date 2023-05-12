@@ -33,16 +33,21 @@ import net.ssehub.easy.instantiation.core.model.common.Advice;
 import net.ssehub.easy.instantiation.core.model.common.Compound;
 import net.ssehub.easy.instantiation.core.model.common.ExpressionStatement;
 import net.ssehub.easy.instantiation.core.model.common.ICompoundReceiver;
+import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.ITypedefReceiver;
 import net.ssehub.easy.instantiation.core.model.common.IVariableDeclarationReceiver;
 import net.ssehub.easy.instantiation.core.model.common.Imports;
 import net.ssehub.easy.instantiation.core.model.common.ListVariableDeclarationReceiver;
+import net.ssehub.easy.instantiation.core.model.common.OperationAnnotations;
 import net.ssehub.easy.instantiation.core.model.common.Typedef;
 import net.ssehub.easy.instantiation.core.model.common.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.expressions.AbstractCallExpression;
+import net.ssehub.easy.instantiation.core.model.expressions.CallArgument;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.Resolver;
 import net.ssehub.easy.instantiation.core.model.vilTypes.CompoundTypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeResolver;
@@ -661,5 +666,59 @@ public abstract class ModelTranslator
     protected List<IMessage> postResolveImports(M model, URI uri, List<IMessage> resolutionMessages) {
         return resolutionMessages;
     }
+
+    /**
+     * Checks operation annotation consistency and emits warnings/errors.
+     * 
+     * @param <O> the operation type
+     * @param op the operation to check
+     * @param cause the causing ECore element (in case of throwing an exception)
+     * @param causingFeature the causing feature (in case of throwing an exception)
+     */
+    protected <O extends IResolvableOperation<I>> void checkOperationAnnotations(O op, EObject cause, 
+        EStructuralFeature causingFeature) {
+        boolean dispCase = op.hasAnnotation(OperationAnnotations.DISPATCH_CASE);
+        boolean override = op.hasAnnotation(OperationAnnotations.OVERRIDE);
+        if (dispCase || override) {
+            CallArgument[] args = new CallArgument[op.getParameterCount()];
+            for (int p = 0; p < args.length; p++) {
+                args[p] = new CallArgument(op.getParameter(p).getType());
+            }
+            int unnamedArgsCount = CallArgument.countUnnamedArguments(args);
+            try {
+                List<IMetaOperation> cand = AbstractCallExpression.assignableCandidates(op.getDeclaringType(), 
+                    op.getName(), args, unnamedArgsCount, false, true);
+                int dispatchBasisCount = 0;
+                int overrideCount = 0;
+                for (int o = 0; o < cand.size(); o++) {
+                    IMetaOperation c = cand.get(o);
+                    if (c instanceof IResolvableOperation) {
+                        IResolvableOperation<?> tmp = (IResolvableOperation<?>) c;
+                        overrideCount += tmp.hasAnnotation(OperationAnnotations.OVERRIDE) ? 1 : 0;
+                        dispatchBasisCount += tmp.hasAnnotation(OperationAnnotations.DISPATCH_BASIS) ? 1 : 0;
+                    }
+                }
+                if (dispCase && cand.size() > 0) {
+                    if (dispatchBasisCount > 1) {
+                        warning("Multiple matching dispatch basis operations found for " 
+                            + op.getSignature(), cause, causingFeature, ErrorCodes.TYPE_CONSISTENCY);
+                    } else if (dispatchBasisCount == 0) {
+                        warning("No matching dispatch basis operations found for " + op.getSignature(), 
+                            cause, causingFeature, ErrorCodes.TYPE_CONSISTENCY);
+                    }
+                }
+                if (override) {
+                    boolean ok = cand.size() > 0 && overrideCount < cand.size();
+                    if (!ok) {
+                        warning("No matching non-overriding operation found for " + op.getSignature(), 
+                            cause, causingFeature, ErrorCodes.TYPE_CONSISTENCY);
+                    }
+                }
+            } catch (VilException e) {
+                warning(e.getMessage(), cause, causingFeature, e.getId());
+            }
+        }
+    }
+    
 
 }

@@ -600,6 +600,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
             Rule r = new Rule(ruleDecl.getName(), isProtected(ruleDecl), returnType, params, parent);
             if (null != ruleDecl.getAnnotations()) {
                 r.setAnnotations(ruleDecl.getAnnotations().getId());
+                checkOperationAnnotations(r, ruleDecl, VilBuildLanguagePackage.Literals.RULE_DECLARATION__ANNOTATIONS);
             }
             return r;
         }
@@ -640,7 +641,7 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         }
 
     }
-
+    
     /**
      * Resolves a set of expressions.
      * 

@@ -40,6 +40,8 @@ public class TemplateTest {
         } catch (IndexOutOfBoundsException e) {
             // ok
         }
+        Assert.assertFalse(def.hasAnnotation("a"));
+
         ArrayList<String> annotations = new ArrayList<String>();
         annotations.add("override");
         def.setAnnotations(annotations);
@@ -51,6 +53,8 @@ public class TemplateTest {
         } catch (IndexOutOfBoundsException e) {
             // ok
         }
+        Assert.assertFalse(def.hasAnnotation("a"));
+        Assert.assertTrue(def.hasAnnotation("Override"));
     }
 
 }

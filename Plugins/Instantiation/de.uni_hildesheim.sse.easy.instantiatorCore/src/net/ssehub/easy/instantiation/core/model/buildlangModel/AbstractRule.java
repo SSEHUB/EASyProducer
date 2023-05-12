@@ -22,6 +22,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.Abstrac
 import net.ssehub.easy.instantiation.core.model.common.IResolvableOperation;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
+import net.ssehub.easy.varModel.model.datatypes.CustomOperation;
 
 /**
  * Defines an abstract VIL rule.
@@ -150,6 +151,11 @@ public abstract class AbstractRule extends RuleBlock implements IResolvableOpera
         } else {
             return annotations[index];
         }
+    }
+
+    @Override
+    public boolean hasAnnotation(String annotation) {
+        return CustomOperation.hasAnnotation(annotations, annotation);
     }
 
 }

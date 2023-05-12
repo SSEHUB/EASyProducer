@@ -83,6 +83,8 @@ public class ScriptTests extends AbstractTest {
         } catch (IndexOutOfBoundsException e) {
             // ok
         }
+        Assert.assertFalse(rule.hasAnnotation("a"));
+
         ArrayList<String> annotations = new ArrayList<String>();
         annotations.add("override");
         rule.setAnnotations(annotations);
@@ -94,6 +96,8 @@ public class ScriptTests extends AbstractTest {
         } catch (IndexOutOfBoundsException e) {
             // ok
         }
+        Assert.assertFalse(rule.hasAnnotation("a"));
+        Assert.assertTrue(rule.hasAnnotation("Override"));
     }
     
 }

@@ -428,6 +428,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         Def result = new Def(def.getId(), param, null, specifiedType, template);
         if (null != def.getAnnotations()) {
             result.setAnnotations(def.getAnnotations().getId());
+            checkOperationAnnotations(result, def, TemplateLangPackage.Literals.VIL_DEF__ANNOTATIONS);
         }
         if (null != def.getProtected()) {
             result.setProtected(true);
