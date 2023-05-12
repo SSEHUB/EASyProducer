@@ -276,7 +276,7 @@
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${basedir}/gen/final">
                 <include name="artifacts.jar"/>
-            	<include name="features.jar"/>
+            	<include name="content.jar"/>
             </fileset>
         </oscp>
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/plugins" trust="true" keyfile="${user.home}/.ssh/id_rsa">
