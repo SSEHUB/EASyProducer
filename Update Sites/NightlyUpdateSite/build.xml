@@ -273,12 +273,12 @@
         <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -R /var/www/eclipse/update-sites/easy/nightly/*"/>
     	<osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/plugins"/>
     	<osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/features"/>
-        <!-- Does not take up sub-folders, i.e., plugins and features
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${basedir}/gen/final">
-                <include name="**/*"/>
+                <include name="artifacts.jar"/>
+            	<include name="features.jar"/>
             </fileset>
-        </oscp>-->
+        </oscp>
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/plugins" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${basedir}/gen/final/plugins">
                 <include name="**/*"/>
