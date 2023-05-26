@@ -59,7 +59,7 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 createClient().tagImageCmd(imageName, registry + "/" + repository, tag).exec();
             }
             
-            tracer.traceMessage("Pushing docker image " + imageName + " as" +  registry + "/" + repository + ":" 
+            tracer.traceMessage("Pushing docker image " + imageName + " as " +  registry + "/" + repository + ":" 
                     + tag + ". Please wait...");
             PushImageCmd cmd = createClient().pushImageCmd(registry + "/" + repository + ":" + tag);
 

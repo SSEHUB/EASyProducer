@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils.ScanResult;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Constants;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
@@ -415,6 +416,11 @@ public class Path implements IVilType, IStringValueProvider {
     public Set<FileArtifact> selectAll() {
         List<FileArtifact> result = new LinkedList<FileArtifact>();
         model.selectByType(this, null, result, true, false); // TODO check IFileSystemArtifact
+        if (result.size() == 0 && FileUtils.hasFiles(getAbsolutePath())) {
+            // usually a folder external to source/target
+            ScanResult<FileArtifact> res = new ScanResult<FileArtifact>(result);
+            FileUtils.scan(getAbsolutePath(), null, 0L, res, FileArtifact.class);
+        }
         return new ListSet<FileArtifact>(result, FileArtifact.class);
     }
     

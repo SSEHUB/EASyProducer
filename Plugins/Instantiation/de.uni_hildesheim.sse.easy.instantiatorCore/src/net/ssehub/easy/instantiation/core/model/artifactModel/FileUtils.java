@@ -133,6 +133,12 @@ public class FileUtils {
         return new ListSet<IFileSystemArtifact>(result, IFileSystemArtifact.class);
     }
     
+    /**
+     * Returns whether {@code file} exists or is a directory and contains files.
+     * 
+     * @param file the file to check
+     * @return {@code true} if there are files in {@code file}
+     */
     public static boolean hasFiles(File file) {
         boolean result = false;
         if (file.isFile()) {
