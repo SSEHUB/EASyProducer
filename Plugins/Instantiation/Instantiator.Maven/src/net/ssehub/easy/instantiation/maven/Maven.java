@@ -491,10 +491,13 @@ public class Maven extends AbstractFileInstantiator {
         if (fIn != null) {
             try {
                 if (sub != null) {
-                    new File(target, sub).mkdirs();
+                    File dir = new File(target, sub);
+                    dir.mkdirs();
+                    dir.deleteOnExit();
                 }
                 Files.copy(fIn, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 fIn.close();
+                target.deleteOnExit();
             } catch (IOException e) {
                 getLogger().error("Maven: Cannot write library " + target + ": " + e.getMessage());
             }
