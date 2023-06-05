@@ -40,6 +40,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 @Instantiator("dockerBuildImage")
 public class DockerBuildImage extends AbstractDockerInstantiator {
 
+    private static final boolean BUILD_WITH_CACHE = Boolean.valueOf(
+        System.getProperty("easy.docker.buildImageWithCache", "true"));
+    
     // checkstyle: stop exception type check
     
     /**
@@ -61,7 +64,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
             BuildImageCmd cmd = createClient().buildImageCmd()
                 .withDockerfile(dockerfile)
                 .withPull(true)
-                .withNoCache(true)      // false - building multiply images from one build context not possible
+                .withNoCache(BUILD_WITH_CACHE)   // false - building multiply images from one build context not possible
                 .withBaseDirectory(baseDirectory.getAbsolutePath())
                 .withTags(tags);
             AuthConfigurations aCfgs = DockerLogin.getAuthConfigs();
