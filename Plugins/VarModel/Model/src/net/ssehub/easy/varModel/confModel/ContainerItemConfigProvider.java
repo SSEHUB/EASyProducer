@@ -128,9 +128,11 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
 
     @Override
     protected void freeze(IFreezeSelector selector) {
-        IDecisionVariable thisVariable = getParent().getNestedElement(index);
-        if (selector.shallFreeze(thisVariable)) {
-            state = AssignmentState.FROZEN;
+        if (0 <= index && index < getParent().getNestedElementsCount()) { // no checking of index before
+            IDecisionVariable thisVariable = getParent().getNestedElement(index);
+            if (selector.shallFreeze(thisVariable)) {
+                state = AssignmentState.FROZEN;
+            }
         }
     }
 }
