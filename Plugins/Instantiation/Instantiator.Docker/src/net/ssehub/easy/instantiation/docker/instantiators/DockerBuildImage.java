@@ -64,7 +64,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
             BuildImageCmd cmd = createClient().buildImageCmd()
                 .withDockerfile(dockerfile)
                 .withPull(true)
-                .withNoCache(BUILD_WITH_CACHE)   // false - building multiply images from one build context not possible
+                .withNoCache(!BUILD_WITH_CACHE)  // false - building multiply images from one build context not possible
                 .withBaseDirectory(baseDirectory.getAbsolutePath())
                 .withTags(tags);
             AuthConfigurations aCfgs = DockerLogin.getAuthConfigs();
