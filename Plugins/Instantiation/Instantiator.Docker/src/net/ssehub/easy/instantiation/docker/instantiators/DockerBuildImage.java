@@ -60,6 +60,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
         
         IInstantiatorTracer tracer = TracerFactory.getInstance().createInstantiatorTracerImpl();
         try {
+            long start = System.currentTimeMillis();
             File dockerfile = dockerFile.getAbsolutePath();
             BuildImageCmd cmd = createClient().buildImageCmd()
                 .withDockerfile(dockerfile)
@@ -89,7 +90,8 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
 
             }).awaitImageId();
             TracerFactory.closeTasks(taskDescription);
-            tracer.traceMessage("Building docker image " + name + " completed: " + imageId);
+            tracer.traceMessage("Building docker image " + name + " completed " + imageId + " in " 
+                + (System.currentTimeMillis() - start) + " ms");
             return imageId;        
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {

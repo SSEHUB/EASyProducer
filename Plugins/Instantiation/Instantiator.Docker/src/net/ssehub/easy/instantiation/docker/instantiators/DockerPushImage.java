@@ -53,6 +53,7 @@ public class DockerPushImage extends AbstractDockerInstantiator {
 
         IInstantiatorTracer tracer = TracerFactory.getInstance().createInstantiatorTracerImpl();
         try {
+            long start = System.currentTimeMillis();
             if (!imageName.equals(registry + "/" + repository)) {
                 tracer.traceMessage("Tagging image " + imageName + " as " + registry + "/" 
                     + repository + " with " + tag);
@@ -84,7 +85,8 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                 
             }).awaitCompletion();
             TracerFactory.closeTasks(taskDescription);
-            tracer.traceMessage("Pushing docker image " + imageName + " completed.");
+            tracer.traceMessage("Pushing docker image " + imageName + " completed in " 
+                + (System.currentTimeMillis() - start) + " ms.");
             return true;
         } catch (Exception e) {
             if (FAIL_ON_ERROR) {
