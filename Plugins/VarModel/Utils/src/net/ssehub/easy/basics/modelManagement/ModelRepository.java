@@ -17,7 +17,6 @@ package net.ssehub.easy.basics.modelManagement;
 
 import java.io.File;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.basics.messages.IMessage;
@@ -73,18 +72,7 @@ public abstract class ModelRepository<M extends IModel> implements IModelManagem
 
     @Override
     public List<String> getMatchingModelNames(String name) {
-        List<String> result = new ArrayList<>();
-        if (ModelImport.isWildcard(name)) {
-            String prefix = name.substring(0, name.length() - 1);
-            for (String mName: modelMgmt.availableModels().modelNames()) {
-                if (mName.startsWith(prefix)) {
-                    result.add(mName);
-                }
-            }
-        } else {
-            result.add(name);
-        }
-        return result;
+        return modelMgmt.getMatchingModelNames(name);
     }
     
     /**

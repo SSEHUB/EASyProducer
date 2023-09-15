@@ -1115,4 +1115,25 @@ public abstract class ModelManagement <M extends IModel> {
         }
     }
 
+    /**
+     * Returns the matching model names for a potential wildcard name.
+     * 
+     * @param name the name to return the matches for
+     * @return if name is a wildcard name, all known matching names; else, {@code name}
+     */
+    public List<String> getMatchingModelNames(String name) {
+        List<String> result = new ArrayList<>();
+        if (ModelImport.isWildcard(name)) {
+            String prefix = name.substring(0, name.length() - 1);
+            for (String mName: availableModels().modelNames()) {
+                if (mName.startsWith(prefix)) {
+                    result.add(mName);
+                }
+            }
+        } else {
+            result.add(name);
+        }
+        return result;
+    }
+
 }
