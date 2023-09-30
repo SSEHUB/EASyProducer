@@ -17,6 +17,7 @@
 	<!-- Creates a jar file -->
 	<target name="jar">
 		<!-- Copy needed non class files -->
+		<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" manifest="META-INF/MANIFEST.MF">
             <fileset dir="." includes="**/*.jar"/>
 	    </jar>
