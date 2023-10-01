@@ -248,7 +248,7 @@
         <copy file="${srcFolder}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
         <copy failonerror="false" file="${home.easy.easy-producer.docu.dir}/javadoc.zip" tofile="${tgtFolder}/easy-headless-javadoc.jar"/>
-        <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
+        <copy failonerror="false" file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
         <mvnDeploy folderName="${ant.project.name}-easy" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
@@ -273,7 +273,7 @@
         <copy file="${srcFolder}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
         <copy failonerror="false" file="${home.easy.easy-producer.docu.dir}/javadoc.zip" tofile="${tgtFolder}/easy-headless-javadoc.jar"/>
-        <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
+		<copy failonerror="false" file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
         <mvnDeploy folderName="${ant.project.name}-easy-ex" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
@@ -298,7 +298,7 @@
         <copy file="${srcFolder}/easy-headless.jar" tofile="${tgtFolder}/easy-headless.jar"/>
         <delFromZip zip="${tgtFolder}/easy-headless.jar" path="org/apache/log4j"/>
         <copy failonerror="false" file="${home.easy.easy-producer.docu.dir}/javadoc.zip" tofile="${tgtFolder}/easy-headless-javadoc.jar"/>
-        <copy file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
+        <copy failonerror="false" file="${home.easy.easy-producer.docu.dir}/src.zip" tofile="${tgtFolder}/easy-headless-sources.jar"/>
         <mvnDeploy folderName="${ant.project.name}-easy-noxtext" jarFolder="${tgtFolder}" jarFile="easy-headless.jar"
             pomFile="${tgtFolder}/pom.xml"/>
 
