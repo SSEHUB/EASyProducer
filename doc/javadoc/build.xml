@@ -126,8 +126,10 @@
     <target name="zip">	
     	<delete file="javadoc.zip"/>
 		<zip destfile="javadoc.zip" basedir="${doc.dir}"/>
+        <copy file="javadoc.zip" todir=".."/> <!-- referenced by others, keep both -->
         <delete file="src.zip"/>
         <zip destfile="src.zip" basedir="${src.all.files}"/>
+    	<copy file="src.zip" todir=".."/> <!-- referenced by others, keep both -->
     </target>
 	
 	<target name="all" depends="init, javadoc, zip"/>
