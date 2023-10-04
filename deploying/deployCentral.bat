@@ -10,7 +10,7 @@ REM run this script
 REM goto https://oss.sonatype.org/#welcome, staging repositories, netssehub-...*, "close" for check/deploy, if successful go for "release"
 
 SET LOCALREPO=http://projects.sse.uni-hildesheim.de/qm/maven/net/ssehub/easy
-SET EASY_VERSION=1.3.4
+SET EASY_VERSION=1.3.5
 SET DIR=.\tmp
 SET TARGET=https://oss.sonatype.org/service/local/staging/deploy/maven2
 SET REPO=ossrh
