@@ -33,6 +33,7 @@
          </classpath>
          <sysproperty key="classworlds.conf" value="${maven.bin.dir}/bin/m2.conf" />
          <sysproperty key="maven.home" value="${maven.bin.dir}" />
+         <arg line="-gs ${maven.settings}" />
          <arg line="--batch-mode @{options} @{goal}" />
          <args/>
        </java>

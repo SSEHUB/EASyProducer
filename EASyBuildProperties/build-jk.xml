@@ -5,6 +5,7 @@
 	<target name="copy">
 	    <copy file = "./global-build.properties" todir="${user.home}"/>
         <copy file = "./macros.xml" todir="${user.home}"/>
+        <copy file = "./easy-maven-settings.xml" todir="${user.home}"/>
 	</target>
     
     <target name="updateChLog">
