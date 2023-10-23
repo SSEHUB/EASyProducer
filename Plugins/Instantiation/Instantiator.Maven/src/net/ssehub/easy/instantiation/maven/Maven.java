@@ -591,10 +591,10 @@ public class Maven extends AbstractFileInstantiator {
         if (null != REPO_LOCAL) {
             params.add("-Dmaven.repo.local=" + REPO_LOCAL);
         }
-        
         for (String target : targets) {
             params.add(target);
         }
+        splitArgs(System.getenv("MAVEN_ARGS"), params);
         getLogger().debug("Maven command line: " + params);
         ProcessBuilder builder = new ProcessBuilder(params);
         if (null == System.getenv("JAVA_HOME") && null != JavaUtilities.JDK_PATH) {
@@ -608,6 +608,31 @@ public class Maven extends AbstractFileInstantiator {
         Process proc = builder.start();
         StreamGobbler.gobble(proc, manipulator);
         return proc.waitFor();
+    }
+    
+    /**
+     * Splits {@code args} into individual params and adds them to {@code params}. {@code args} may contain quotes.
+     * 
+     * @param args the arguments, may be <b>null</b>
+     * @param params the parameters, modified as side effect by adding
+     */
+    private static void splitArgs(String args, List<String> params) {
+        if (args != null) {
+            boolean inQuote = false;
+            int lastPos = 0;
+            for (int i = 0; i < args.length(); i++) {
+                char c = args.charAt(i);
+                if (Character.isWhitespace(c) && !inQuote) {
+                    params.add(args.substring(lastPos, i).trim());
+                    lastPos = i + 1;
+                } else if (c == '"') {
+                    inQuote = !inQuote;
+                }
+            }
+            if (lastPos < args.length()) {
+                params.add(args.substring(lastPos, args.length()).trim());
+            }
+        }
     }
     
     /**
