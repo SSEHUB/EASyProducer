@@ -302,6 +302,7 @@ public class Maven extends AbstractFileInstantiator {
                 for (String t: targets) {
                     arguments.add(t);
                 }
+                splitArgs(System.getenv("MAVEN_ARGS"), arguments);
                 String[] args = new String[arguments.size()];
                 cliResult = prg.prepare().execute(arguments.toArray(args), buildFilePath, System.out, System.out);
             } else {
@@ -613,11 +614,11 @@ public class Maven extends AbstractFileInstantiator {
     /**
      * Splits {@code args} into individual params and adds them to {@code params}. {@code args} may contain quotes.
      * 
-     * @param args the arguments, may be <b>null</b>
+     * @param args the arguments, may be <b>null</b> or empty
      * @param params the parameters, modified as side effect by adding
      */
     private static void splitArgs(String args, List<String> params) {
-        if (args != null) {
+        if (args != null && args.length() > 0) {
             boolean inQuote = false;
             int lastPos = 0;
             for (int i = 0; i < args.length(); i++) {
