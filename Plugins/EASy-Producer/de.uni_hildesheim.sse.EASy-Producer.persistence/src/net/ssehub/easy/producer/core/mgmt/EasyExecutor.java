@@ -473,8 +473,9 @@ public class EasyExecutor {
                 try {
                     exec.execute();
                 } catch (VilException e) {
-                    TracerFactory.unregisterProgressObserver(observer);
+                    logger.error("VIL execution failed: " + e.getMessage());
                 }
+                TracerFactory.unregisterProgressObserver(observer);
             } else {
                 logger.error("No VIL script found: " + vilModelName);
             }
