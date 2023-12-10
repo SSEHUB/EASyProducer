@@ -75,7 +75,7 @@
     
   <repositories>       
     <repository>
-      <id>sse</id>
+      <id>SSE-mvn</id>
       <name>sse</name>
       <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
       <layout>default</layout>
