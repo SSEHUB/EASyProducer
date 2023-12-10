@@ -331,7 +331,7 @@ public abstract class TracerFactory {
                         }
                         task.subtasks.clear();
                     }
-                    progressSubTask(actual, max, task.taskDescription);
+                    progressSubTask(actual, max, description);
                 }
             }
         }
