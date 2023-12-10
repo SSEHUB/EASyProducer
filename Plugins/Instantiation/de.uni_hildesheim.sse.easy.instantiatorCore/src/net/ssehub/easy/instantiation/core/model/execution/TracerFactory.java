@@ -310,9 +310,7 @@ public abstract class TracerFactory {
             boolean newTask = false;
             if (null == task) {
                 newTask = true;
-            } else if (null != description && !task.taskDescription.equals(description)) {
-                // null == description -> keep task
-                // not same description -> new task
+            } else if (actual == max) {
                 obs.notifyEnd(task.task);
                 newTask = true;
             }
@@ -321,8 +319,21 @@ public abstract class TracerFactory {
                 task.taskDescription = null == description ? "..." : description;
                 task.task = obs.registerTask(task.taskDescription);
                 entry.setValue(task);
+                obs.notifyStart(task.task, max);
+            } else {
+                obs.notifyProgress(task.task, actual, max);
+                task.taskDescription = description;
+                // implicit subtask on descriptionchange, ProcessNotifier
+                if (null != description && !description.equals(task.taskDescription)) {
+                    if (task.subtasks.get(description) == null) {
+                        for (Map.Entry<String, ISubtask> e : task.subtasks.entrySet()) {
+                            obs.notifyEnd(task.task, e.getValue());
+                        }
+                        task.subtasks.clear();
+                    }
+                    progressSubTask(actual, max, task.taskDescription);
+                }
             }
-            obs.notifyProgress(task.task, actual, max);
         }
     }
     
