@@ -37,6 +37,7 @@ public class BasicProgressObserver extends ProgressObserver {
     private static class Task implements ITask, ISubtask {
 
         private String name;
+        @SuppressWarnings("unused")
         private int max;
         private int current;
 
@@ -76,14 +77,6 @@ public class BasicProgressObserver extends ProgressObserver {
             int result = current - this.current;
             this.current = current;
             return result;
-        }
-
-        /**
-         * Returns the progress of the current task.
-         * @return How many steps are still open to fulfill the current task.
-         */
-        public int getRemainder() {
-            return max - current;
         }
 
     }
@@ -199,7 +192,7 @@ public class BasicProgressObserver extends ProgressObserver {
     public void notifyEnd(ITask task, ISubtask subtask) {
         if (NO_SUBTASK == subtask) {
             if (null != parent && parent.equals(task)) {
-                monitor.worked(parent.getRemainder());
+                monitor.worked(parent.current);
                 parent = null;
             }
         } else {
