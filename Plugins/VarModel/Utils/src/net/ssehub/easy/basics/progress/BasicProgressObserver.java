@@ -37,7 +37,6 @@ public class BasicProgressObserver extends ProgressObserver {
     private static class Task implements ITask, ISubtask {
 
         private String name;
-        @SuppressWarnings("unused")
         private int max;
         private int current;
 
@@ -192,7 +191,7 @@ public class BasicProgressObserver extends ProgressObserver {
     public void notifyEnd(ITask task, ISubtask subtask) {
         if (NO_SUBTASK == subtask) {
             if (null != parent && parent.equals(task)) {
-                monitor.worked(parent.current);
+                monitor.worked(parent.max);
                 parent = null;
             }
         } else {
