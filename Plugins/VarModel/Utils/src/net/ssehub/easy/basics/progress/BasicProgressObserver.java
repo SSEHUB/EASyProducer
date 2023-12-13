@@ -177,8 +177,9 @@ public class BasicProgressObserver extends ProgressObserver {
     public void notifyProgress(ITask task, ISubtask subtask, int step, int max) {
         if (NO_SUBTASK == subtask || null == subtask) {
             if (null != parent && parent.equals(task)) {
-                if (max > 0) {
+                if (max > 0 && max != parent.max) {
                     parent.setMax(max);
+                    monitor.beginTask(null, max);
                 }
                 parent.setCurrent(step);
                 monitor.worked(step);
