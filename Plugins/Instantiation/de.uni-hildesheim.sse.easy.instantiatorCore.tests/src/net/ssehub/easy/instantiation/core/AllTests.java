@@ -10,6 +10,7 @@ import net.ssehub.easy.instantiation.core.model.JavaUtilitiesTest;
 import net.ssehub.easy.instantiation.core.model.artifactmodel.XmlFileArtifactTest;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangTests;
 import net.ssehub.easy.instantiation.core.model.common.CommonTests;
+import net.ssehub.easy.instantiation.core.model.defaultInstantiators.DefaultInstantiatorsTests;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionTests;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangTests;
 import net.ssehub.easy.instantiation.core.model.vilTypes.VilTests;
@@ -21,8 +22,15 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.VilTests;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({VilTests.class, ExpressionTests.class, CommonTests.class,
-    BuildlangTests.class, TemplateLangTests.class, XmlFileArtifactTest.class, JavaUtilitiesTest.class })
+@Suite.SuiteClasses({
+    VilTests.class, 
+    ExpressionTests.class, 
+    CommonTests.class,
+    DefaultInstantiatorsTests.class,
+    BuildlangTests.class, 
+    TemplateLangTests.class, 
+    XmlFileArtifactTest.class, 
+    JavaUtilitiesTest.class })
 public class AllTests {
     
     /**

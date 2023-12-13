@@ -322,7 +322,6 @@ public abstract class TracerFactory {
                 obs.notifyStart(task.task, max);
             } else {
                 obs.notifyProgress(task.task, actual, max);
-                task.taskDescription = description;
                 // implicit subtask on descriptionchange, ProcessNotifier
                 if (null != description && !description.equals(task.taskDescription)) {
                     if (task.subtasks.get(description) == null) {
