@@ -269,6 +269,9 @@ public class OCLFeatureCall extends ConstraintSyntaxTree {
             for (int p = 0; p < parameters.length; p++) {
                 if (EmptyInitializer.INSTANCE == parameters[p]) {
                     IDatatype pType = op.getParameterType(p);
+                    while (pType != null && !(pType instanceof Compound || pType instanceof Container)) {
+                        pType = pType.getType();
+                    }
                     try {
                         if (Compound.TYPE.isAssignableFrom(pType)) {
                             parameters[p] = new CompoundInitializer((Compound) pType, new String[] {}, 
