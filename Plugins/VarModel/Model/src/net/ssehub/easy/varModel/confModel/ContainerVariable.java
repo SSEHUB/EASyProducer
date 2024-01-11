@@ -119,7 +119,7 @@ public abstract class ContainerVariable extends StructuredVariable {
         
         if (value == NullValue.INSTANCE) {
             nestedElements.clear();
-        } else {
+        } else if (value instanceof ContainerValue) {
             conValue = (ContainerValue) value;
             IDatatype type = DerivedDatatype.resolveToBasis(getDeclaration().getType());
             type = ((Container) type).getContainedType();
