@@ -361,7 +361,7 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
     /**
      * Parses a text into a typed expression in the context of <code>project</code>. Project is not modified!
      * 
-     * @param type the target type
+     * @param type the target type, may be <b>null</b> the {@link #createExpression(String, IModelElement)} is called
      * @param text the text to be parsed containing the constraint
      * @param parent the intended parent model element (turned into {@link Compound} or {@link Project} 
      *     depending on nesting
@@ -372,22 +372,26 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
     public ConstraintSyntaxTree createExpression(IDatatype type, String text, Project parent) 
         throws CSTSemanticException, ConstraintSyntaxException {
         ConstraintSyntaxTree cst = null;
-        String expression = text;
-        if (TypeQueries.isContainer(type)) {
-            expression = "let " + IvmlDatatypeVisitor.getUnqualifiedType(type) + " tmp = " 
-                + expression + " in tmp <> null;";
-            cst = createConstraint(expression, parent, true).getConsSyntax();
-            if (cst instanceof Let) {
-                cst = ((Let) cst).getInitExpression();
-            } else {
-                throw new CSTSemanticException("Cannot construct temporary let expression", 
-                    CSTSemanticException.INTERNAL);
-            }
+        if (null == type) {
+            cst = createExpression(text, parent);
         } else {
-            if (TypeQueries.isCompound(type) && expression.trim().startsWith("{")) {
-                expression = IvmlDatatypeVisitor.getUnqualifiedType(type) + expression;
+            String expression = text;
+            if (TypeQueries.isContainer(type)) {
+                expression = "let " + IvmlDatatypeVisitor.getUnqualifiedType(type) + " tmp = " 
+                    + expression + " in tmp <> null;";
+                cst = createConstraint(expression, parent, true).getConsSyntax();
+                if (cst instanceof Let) {
+                    cst = ((Let) cst).getInitExpression();
+                } else {
+                    throw new CSTSemanticException("Cannot construct temporary let expression", 
+                        CSTSemanticException.INTERNAL);
+                }
+            } else {
+                if (TypeQueries.isCompound(type) && expression.trim().startsWith("{")) {
+                    expression = IvmlDatatypeVisitor.getUnqualifiedType(type) + expression;
+                }
+                cst = createExpression(expression, parent);
             }
-            cst = createExpression(expression, parent);
         }
         return cst;
     }
