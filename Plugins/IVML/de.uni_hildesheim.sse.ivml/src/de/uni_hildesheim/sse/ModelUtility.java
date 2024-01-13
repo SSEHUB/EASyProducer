@@ -40,15 +40,19 @@ import net.ssehub.easy.dslCore.translation.MessageReceiver;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
+import net.ssehub.easy.varModel.cst.EmptyInitializer;
+import net.ssehub.easy.varModel.cst.Let;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
+import net.ssehub.easy.varModel.model.datatypes.TypeQueries;
 import net.ssehub.easy.varModel.persistency.ConfigurableIVMLWriter;
 
 /**
@@ -353,9 +357,46 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
         }
         return constraint;
     }
-    
+
     /**
-     * Parses a text into an expression in the context of <code>project</code>. Project is not modified!
+     * Parses a text into a typed expression in the context of <code>project</code>. Project is not modified!
+     * 
+     * @param type the target type
+     * @param text the text to be parsed containing the constraint
+     * @param parent the intended parent model element (turned into {@link Compound} or {@link Project} 
+     *     depending on nesting
+     * @return the expression, <b>null</b> in case of internal instantiation errors
+     * @throws CSTSemanticException in case of semantic problems in <code>text</code>
+     * @throws ConstraintSyntaxException in case of syntax problems in <code>text</code>
+     */
+    public ConstraintSyntaxTree createExpression(IDatatype type, String text, Project parent) 
+        throws CSTSemanticException, ConstraintSyntaxException {
+        ConstraintSyntaxTree cst = null;
+        String expression = text;
+        if (TypeQueries.isContainer(type)) {
+            expression = "let " + IvmlDatatypeVisitor.getUnqualifiedType(type) + " tmp = " 
+                + expression + " in tmp <> null;";
+            cst = createConstraint(expression, parent, true).getConsSyntax();
+            if (cst instanceof Let) {
+                cst = ((Let) cst).getInitExpression();
+            } else {
+                throw new CSTSemanticException("Cannot construct temporary let expression", 
+                    CSTSemanticException.INTERNAL);
+            }
+        } else {
+            if (TypeQueries.isCompound(type) && expression.trim().startsWith("{")) {
+                expression = IvmlDatatypeVisitor.getUnqualifiedType(type) + expression;
+            }
+            cst = createExpression(expression, parent);
+        }
+        return cst;
+    }
+
+    /**
+     * Parses a text into an expression in the context of <code>project</code>. Project is not modified! Containers 
+     * typically return an internal {@link EmptyInitializer} as it remains unclear whether the value shall be a set or 
+     * a sequence. For creating container and typed compound values, please refer to 
+     * {@link #createExpression(IDatatype, String, Project)}.
      * 
      * @param text the text to be parsed containing the constraint
      * @param parent the intended parent model element (turned into {@link Compound} or {@link Project} 

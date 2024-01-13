@@ -283,12 +283,12 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 LetExpression letEx = expr.getLet();
                 IDatatype type = context.resolveType(letEx.getType());
                 DecisionVariableDeclaration var = new DecisionVariableDeclaration(
-                        letEx.getName(), type, parent);
+                    letEx.getName(), type, parent);
                 context.pushLayer(parent);
                 context.addToContext(var);
                 try {
-                    var.setValue(processExpression(null, letEx.getValueExpr(), context, parent));
-                    result = new Let(var, processExpression(null, letEx.getSubExpr(), context, parent));
+                    var.setValue(processExpression(type, letEx.getValueExpr(), context, parent));
+                    result = new Let(var, processExpression(type, letEx.getSubExpr(), context, parent));
                 } catch (TranslatorException e) {
                     throw e;
                 } catch (IvmlException e) {
