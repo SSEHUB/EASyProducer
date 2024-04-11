@@ -142,13 +142,15 @@ public class ReasoningUtils {
      * @param value the value to set
      */
     public static void setValue(IDecisionVariable var, Constraint value) {
-        try {
-            Value cstVal = ValueFactory.createValue(ConstraintType.TYPE, value.getConsSyntax());
-            var.setValue(cstVal, var.getState());
-        } catch (ConfigurationException e) {
-            LOGGER.exception(e); // should not occur, ok to log
-        } catch (ValueDoesNotMatchTypeException e) {
-            LOGGER.exception(e); // should not occur, ok to log
+        if (null != value) { // if created constraint is erroneous
+            try {
+                Value cstVal = ValueFactory.createValue(ConstraintType.TYPE, value.getConsSyntax());
+                var.setValue(cstVal, var.getState());
+            } catch (ConfigurationException e) {
+                LOGGER.exception(e); // should not occur, ok to log
+            } catch (ValueDoesNotMatchTypeException e) {
+                LOGGER.exception(e); // should not occur, ok to log
+            }
         }
     }
 
