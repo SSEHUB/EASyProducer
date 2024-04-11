@@ -1639,15 +1639,15 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
             String slotName = access.getSlotName();
             IDecisionVariable variable = result.getVariable();
             Value value = result.getValue();
+            Value derefValue = null;
+            boolean isNull = value == null && variable == null;
             clearResult();
-            if (value instanceof ReferenceValue) {
-                // dereference first
+            if (value instanceof ReferenceValue) { // dereference first
                 ReferenceValue refVal = (ReferenceValue) value;
                 AbstractVariable decl = refVal.getValue(); 
                 if (null == decl) {
                     ConstraintSyntaxTree ex = refVal.getValueEx();
-                    if (null != ex) {
-                        // determines result
+                    if (null != ex) { // determines result
                         ex.accept(this);
                     }
                     variable = null;
@@ -1655,6 +1655,9 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                     IDecisionVariable res = context.getDecision(decl);
                     if (null == res) { // no top-top-level variable
                         res = Configuration.findInParents(variable, decl.getName());
+                    }
+                    if (null == res && variable instanceof LocalDecisionVariable) { // iteration, we only have a value
+                        derefValue = ((LocalDecisionVariable) variable).getValue();
                     }
                     variable = res;
                 }
@@ -1664,15 +1667,13 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
             } else if (variable instanceof LocalDecisionVariable) {
                 result = CompoundSlotAccessor.POOL.getInstance().bind((LocalDecisionVariable) variable, 
                     slotName, context);
-            } else if (value instanceof CompoundValue) {
-                // static qualified in compound
+            } else if (value instanceof CompoundValue) { // static qualified in compound
                 CompoundValue cValue = (CompoundValue) value;
                 Value nValue = cValue.getNestedValue(slotName);
                 if (null != nValue) {
                     result = ConstantAccessor.POOL.getInstance().bind(nValue, false, context);
                 }
-            } else if (value instanceof MetaTypeValue) {
-                // static qualified top
+            } else if (value instanceof MetaTypeValue) { // static qualified top
                 IDatatype type = ((MetaTypeValue) value).getValue();
                 value = context.bind(type);
                 if (value instanceof CompoundValue) {
@@ -1681,8 +1682,10 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
                         result = ConstantAccessor.POOL.getInstance().bind(value, false, context);
                     }
                 }
+            } else if (null != derefValue) {
+                result = ConstantAccessor.POOL.getInstance().bind(derefValue, false, context);
             } else {
-                if (null == result) {
+                if (!isNull && null == result) {
                     if (null == variable) {
                         error("cannot evaluate compound/slot in " + StringProvider.toIvmlString(access), 
                             Message.CODE_RESOLUTION);

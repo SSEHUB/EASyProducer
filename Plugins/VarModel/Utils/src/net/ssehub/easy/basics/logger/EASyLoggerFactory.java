@@ -37,6 +37,9 @@ public class EASyLoggerFactory {
     public static final boolean DEBUG = false;
 
     private static final String LOGGING_LEVEL_PROPERTY = "easy.logging.level";
+    private static final String LOGGING_TRACE_PROPERTY = "easy.logging.trace";
+    
+    private static final boolean TRACE = Boolean.valueOf(System.getProperty(LOGGING_TRACE_PROPERTY, "false"));
     
     /**
      * Specification to log into a specified file instead of logging into the console.
@@ -77,11 +80,12 @@ public class EASyLoggerFactory {
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
-         * @param   msg     The string message (or a key in the message catalog)
+         * @param  msg The string message (or a key in the message catalog)
          */
         public void debug(String msg) {
             if (level == LoggingLevel.DEBUG) {
                 logger.debug(msg, clazz, bundleName);
+                trace();
             }
         }
         
@@ -98,6 +102,7 @@ public class EASyLoggerFactory {
         public void debug(Object msg) {
             if (level == LoggingLevel.DEBUG && null != msg) {
                 logger.debug(msg.toString(), clazz, bundleName);
+                trace();
             }
         }
         
@@ -115,6 +120,7 @@ public class EASyLoggerFactory {
         public void debug(Object msg1, Object msg2) {
             if (level == LoggingLevel.DEBUG && null != msg1) {
                 logger.debug(msg1.toString() + msg2, clazz, bundleName);
+                trace();
             }
         }
         
@@ -133,6 +139,7 @@ public class EASyLoggerFactory {
         public void debug(Object msg1, Object msg2, Object msg3) {
             if (level == LoggingLevel.DEBUG && null != msg1) {
                 logger.debug(msg1.toString() + msg2 + msg3, clazz, bundleName);
+                trace();
             }
         }
         
@@ -152,6 +159,7 @@ public class EASyLoggerFactory {
         public void debug(Object msg1, Object msg2, Object msg3, Object msg4) {
             if (level == LoggingLevel.DEBUG && null != msg1) {
                 logger.debug(msg1.toString() + msg2 + msg3 + msg4, clazz, bundleName);
+                trace();
             }
         }
         
@@ -179,6 +187,7 @@ public class EASyLoggerFactory {
                     message.append(msg5[i].toString());                    
                 }
                 logger.debug(message.toString(), clazz, bundleName);
+                trace();
             }
         }
         
@@ -194,6 +203,7 @@ public class EASyLoggerFactory {
         public void info(String msg) {
             if (level.ordinal() <= LoggingLevel.INFO.ordinal()) {
                 logger.info(msg, clazz, bundleName);
+                trace();
             }
         }
 
@@ -209,6 +219,7 @@ public class EASyLoggerFactory {
         public void warn(String msg) {
             if (level.ordinal() <= LoggingLevel.WARN.ordinal()) {
                 logger.warn(msg, clazz, bundleName);
+                trace();
             }
         }
         
@@ -224,6 +235,7 @@ public class EASyLoggerFactory {
         public void error(String msg) {
             if (level.ordinal() <= LoggingLevel.ERROR.ordinal()) {
                 logger.error(msg, clazz, bundleName);
+                trace();
             }
         }
         
@@ -242,8 +254,20 @@ public class EASyLoggerFactory {
                 if (level == LoggingLevel.DEBUG) {
                     exception.printStackTrace();
                 }
+                trace();
             }
         }
+        
+        private void trace() {
+            if (TRACE) {
+                Throwable th = new Throwable();
+                StackTraceElement[] trace = th.getStackTrace();
+                for (int t = 2; t < trace.length; t++) { // 2 = omit own and logging call
+                    System.out.println(trace[t]);
+                }
+            }
+        }
+        
     }   
     
     /**
