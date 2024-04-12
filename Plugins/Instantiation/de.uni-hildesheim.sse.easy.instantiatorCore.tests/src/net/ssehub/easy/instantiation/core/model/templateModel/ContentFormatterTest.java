@@ -125,7 +125,6 @@ public class ContentFormatterTest {
             + "    \n"
             + "}\n";
         String res = formatter.format(test);
-        System.out.println(res);
         String expected = 
               "// This is a rather long\n"
             + "// text for this formatter.\n"
@@ -134,6 +133,33 @@ public class ContentFormatterTest {
             + "        main(String[] args) {\n"
             + "        println(\"http\"\n"
             + "            + \"://aaa.bbb.ccc\");\n"
+            + "    }\n"
+            + "\n"
+            + "}\n";
+        Assert.assertEquals(expected, res);
+    }
+
+    @Test
+    public void testContentFormatterStringArg2() {
+        ContentFormatter formatter = createJavaFormatter();
+        String test = 
+              "// This is a rather long text for this formatter.\n"
+            + "public class Test {\n"
+            + "    public static void main(String[] args) {\n"
+            + "        out.println(\"http://aaa.bbb.ccc\");\n"
+            + "    }\n"
+            + "\n"
+            + "    \n"
+            + "}\n";
+        String res = formatter.format(test);
+        String expected = 
+              "// This is a rather long\n"
+            + "// text for this formatter.\n"
+            + "public class Test {\n"
+            + "    public static void\n"
+            + "        main(String[] args) {\n"
+            + "        out.println(\n"
+            + "            \"http://aaa.bbb.ccc\");\n"
             + "    }\n"
             + "\n"
             + "}\n";

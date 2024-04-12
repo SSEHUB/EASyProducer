@@ -72,8 +72,16 @@ public class ContentFormatter {
         public boolean isSplitChar(char ch);
         
         /**
+         * If the current position is a {@link #isSplitChar(char) split char}, then shall the split position be 
+         * modified?
+         * 
+         * @return increment or decrement to split position, may be 0 for none
+         */
+        public int adjustSplitPosition();
+        
+        /**
          * If the current position is a {@link #isSplitChar(char) split char}, then shall something be
-         * added at this specific position, e.g., a string end for string end + string start.
+         * added at this specific position, e.g., a string end for string end + string start?
          * 
          * @return the additional text, may be empty for none
          */
@@ -81,7 +89,7 @@ public class ContentFormatter {
 
         /**
          * If the current position is a {@link #isSplitChar(char) split char}, then shall something be
-         * added after the new line break, e.g., a + string end for string end + string start.
+         * added after the new line break, e.g., a + string end for string end + string start?
          * 
          * @return the additional text, may be empty for none
          */
@@ -142,6 +150,11 @@ public class ContentFormatter {
             return false;
         }
 
+        @Override
+        public int adjustSplitPosition() {
+            return 0;
+        }
+        
         @Override
         public String addBeforeSplit() {
             return "";
@@ -246,7 +259,16 @@ public class ContentFormatter {
             }
             return result;
         }
-        
+
+        @Override
+        public int adjustSplitPosition() {
+            int result = 0; 
+            if (State.STRING_START == state) {
+                result = -1;
+            }
+            return result;
+        }
+
         @Override
         public String addBeforeSplit() {
             String result = "";
@@ -517,8 +539,9 @@ public class ContentFormatter {
             }
             ins += profile.addBeforeSplit() + lineBreak + adjustIndentation(bld, startPos, indentStep) 
                 + profile.addAfterSplit();
-            bld.insert(splitPos, ins);
-            result += ins.length();
+            int adjustSplitPos = profile.adjustSplitPosition();
+            bld.insert(splitPos + adjustSplitPos, ins);
+            result += ins.length() - adjustSplitPos;
         }
         return result;
     }
@@ -575,7 +598,6 @@ public class ContentFormatter {
         if (null != profile) {
             profile.reset();
         }
-        //profile = null;
         lastLineEmpty = false;
     }
     
