@@ -207,8 +207,10 @@ public class ContentFormatter {
         }
         
         private State state;
+        private String javadocIndent;
 
-        public JavaProfile() {
+        public JavaProfile(String javadocIndent) {
+            this.javadocIndent = javadocIndent;
             reset();
         }
         
@@ -219,7 +221,7 @@ public class ContentFormatter {
         
         @Override
         public Profile createInstance() {
-            return new JavaProfile();
+            return new JavaProfile(this.javadocIndent);
         }
         
         @Override
@@ -240,7 +242,7 @@ public class ContentFormatter {
         public String addToIndent() {
             String result = "";
             if (State.ML_COMMENT_JAVADOC == state) {
-                result = " * ";
+                result = javadocIndent;
             } else if (State.SL_COMMENT == state) {
                 result = "// ";
             }
@@ -349,7 +351,8 @@ public class ContentFormatter {
     
     // registers
     static {
-        PROFILES.put("JAVA", new JavaProfile());
+        PROFILES.put("JAVA", new JavaProfile(" * "));
+        PROFILES.put("JAVA-OUTDOC", new JavaProfile("* "));
         PROFILES.put("", new DefaultProfile());
     }
     
@@ -477,9 +480,9 @@ public class ContentFormatter {
     private void splitLines(StringBuilder bld) {
         final int maxLineLength = fConf.getLineLength();
         int pos = 0;
-        int lastLastStartPos = -1;
         int lastStartPos = 0;
         int lastSplitPos = 0;
+        int lastNlPos = 0; // lastNLpos only for determining the indentation
         char lastSplitChar = 0;
         int doubleChars = 0;
         while (pos < bld.length()) {
@@ -493,13 +496,12 @@ public class ContentFormatter {
             }
             if (isNewline(c) || c == ' ' || profile.isSplitChar(c)) { // we can split here
                 if (pos - doubleChars - lastStartPos > maxLineLength) { // here, line length exceeded
-                    advance += splitLines(c, bld, pos, lastStartPos);
+                    advance += splitLines(c, bld, pos, lastNlPos);
                     int adv = advance;                    
                     if (pos - doubleChars - lastSplitPos > maxLineLength) { // just in case that we hopped over
-                        advance += splitLines(lastSplitChar, bld, lastSplitPos, lastLastStartPos);
+                        advance += splitLines(lastSplitChar, bld, lastSplitPos, lastNlPos);
                     }
                     lastSplitPos = pos + adv; // adjust positions
-                    lastLastStartPos = lastStartPos;
                     lastStartPos = lastSplitPos;
                 } else {
                     lastSplitPos = pos; // do not split, advance split position
@@ -508,6 +510,9 @@ public class ContentFormatter {
                     }
                 }
                 lastSplitChar = c;
+                if (isNewline(c)) {
+                    lastNlPos = pos;
+                }
             }
             pos += advance == 0 ? 1 : advance;
         }

@@ -26,13 +26,17 @@ import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
  * @author Holger Eichelberger
  */
 public class ContentFormatterTest {
-    
+
     private ContentFormatter createJavaFormatter() {
+        return createJavaFormatter(20, null);
+    }
+    
+    private ContentFormatter createJavaFormatter(int lineLength, String profile) {
         ContentFormatter formatter = new ContentFormatter();
         FormattingConfiguration fConf = new FormattingConfiguration();
         fConf.setLineEnding("\n");
-        fConf.setLineLength(20);
-        fConf.setProfile("Java");
+        fConf.setLineLength(lineLength);
+        fConf.setProfile(null == profile ? "Java" : profile);
         formatter.setFormattingConfiguration(fConf);
         IndentationConfiguration iConf = new IndentationConfiguration(4);
         formatter.setIndentationConfiguration(iConf);
@@ -79,6 +83,32 @@ public class ContentFormatterTest {
             + "        main(String[] args) {\n"
             + "    }\n"
             + "}\n";
+        Assert.assertEquals(expected, res);
+    }
+    
+    @Test
+    public void testContentFormatterJavadocIndented() {
+        ContentFormatter formatter = createJavaFormatter(26, null);
+        String test = 
+              "    /**\n"
+            + "     * This is a rather long text for this formatter and it goes on here.\n"
+            + "     */\n"
+            + "    public class Test {\n"
+            + "        public static void main(String[] args) {\n"
+            + "        }\n"
+            + "    }\n";
+        String res = formatter.format(test);
+        String expected = 
+              "    /**\n"
+            + "     * This is a rather long\n"
+            + "     * text for this formatter and\n"
+            + "     * it goes on here.\n"
+            + "     */\n"
+            + "    public class Test {\n"
+            + "        public static void\n"
+            + "            main(String[] args) {\n"
+            + "        }\n"
+            + "    }\n";
         Assert.assertEquals(expected, res);
     }
 
