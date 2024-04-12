@@ -253,7 +253,7 @@ public class ContentFormatter {
         public boolean isSplitChar(char ch) {
             boolean result = false;
             if (State.CODE == state) {
-                result = ch == '.' || ch == '"';
+                result = ch == '.' || ch == '"' || ch == '(';
             } else if (State.STRING_START == state) {
                 result = ch == '"';
             } else if (State.STRING == state) { // allow everywhere, see addBeforeSplit/addAfterSplit
@@ -483,7 +483,6 @@ public class ContentFormatter {
         int lastStartPos = 0;
         int lastSplitPos = 0;
         int lastNlPos = 0; // lastNLpos only for determining the indentation
-        char lastSplitChar = 0;
         int doubleChars = 0;
         while (pos < bld.length()) {
             int advance = 0;
@@ -494,14 +493,19 @@ public class ContentFormatter {
                 c = '\n';
                 doubleChars++;
             }
-            if (isNewline(c) || c == ' ' || profile.isSplitChar(c)) { // we can split here
-                if (pos - doubleChars - lastStartPos >= maxLineLength) { // here, line length exceeded
-                    advance += splitLines(c, bld, pos, lastNlPos);
-                    int adv = advance;                    
-                    if (pos - doubleChars - lastSplitPos >= maxLineLength) { // just in case that we hopped over
-                        advance += splitLines(lastSplitChar, bld, lastSplitPos, lastNlPos);
+            if (canSplit(c)) { // we can split here
+                int count = pos - doubleChars - lastStartPos;
+                boolean split = count >= maxLineLength;
+                if (!split) { // lookahead, are we before and the next is too late?
+                    int nextPos = pos + 1;
+                    while (nextPos < bld.length() && !canSplit(bld.charAt(nextPos))) {
+                        nextPos++;
                     }
-                    lastSplitPos = pos + adv; // adjust positions
+                    split = (nextPos > pos + 1 && nextPos - doubleChars - lastStartPos >= maxLineLength);
+                }
+                if (split) { // here, line length exceeded
+                    advance += splitLines(c, bld, pos, lastNlPos);
+                    lastSplitPos = pos + advance; // adjust positions
                     lastStartPos = lastSplitPos;
                 } else {
                     lastSplitPos = pos; // do not split, advance split position
@@ -509,7 +513,6 @@ public class ContentFormatter {
                         lastStartPos = pos;
                     }
                 }
-                lastSplitChar = c;
                 if (isNewline(c)) {
                     lastNlPos = pos;
                     doubleChars = 0; // new line, do not let them accumulate!
@@ -517,6 +520,16 @@ public class ContentFormatter {
             }
             pos += advance == 0 ? 1 : advance;
         }
+    }
+    
+    /**
+     * Can we split at {@code ch}.
+     * 
+     * @param ch the character to test
+     * @return {@code true} for splitting, {@code false} else
+     */
+    private boolean canSplit(char ch) {
+        return isNewline(ch) || ch == ' ' || profile.isSplitChar(ch);
     }
 
     /**

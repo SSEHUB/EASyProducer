@@ -54,8 +54,9 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
             "public class Test {\n"
-            + "    public static void\n"
-            + "        main(String[] args) {\n"
+            + "    public static\n"
+            + "        void main(String[]\n"
+            + "        args) {\n"
             + "    }\n"
             + "}\n";
         Assert.assertEquals(expected, res);
@@ -63,7 +64,7 @@ public class ContentFormatterTest {
 
     @Test
     public void testContentFormatterJavadoc() {
-        ContentFormatter formatter = createJavaFormatter();
+        ContentFormatter formatter = createJavaFormatter(21, null);
         String test = 
               "/**\n"
             + " * This is a rather long text for this formatter.\n"
@@ -76,11 +77,13 @@ public class ContentFormatterTest {
         String expected = 
               "/**\n"
             + " * This is a rather\n"
-            + " * long text for this formatter.\n"
+            + " * long text for this\n"
+            + " * formatter.\n"
             + " */\n"
             + "public class Test {\n"
-            + "    public static void\n"
-            + "        main(String[] args) {\n"
+            + "    public static\n"
+            + "        void main(String[]\n"
+            + "        args) {\n"
             + "    }\n"
             + "}\n";
         Assert.assertEquals(expected, res);
@@ -88,7 +91,7 @@ public class ContentFormatterTest {
     
     @Test
     public void testContentFormatterJavadocIndented() {
-        ContentFormatter formatter = createJavaFormatter(26, null);
+        ContentFormatter formatter = createJavaFormatter(28, null);
         String test = 
               "    /**\n"
             + "     * This is a rather long text for this formatter and it goes on here.\n"
@@ -100,9 +103,10 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
               "    /**\n"
-            + "     * This is a rather long\n"
-            + "     * text for this formatter and\n"
-            + "     * it goes on here.\n"
+            + "     * This is a rather\n"
+            + "     * long text for this\n"
+            + "     * formatter and it goes on\n"
+            + "     * here.\n"
             + "     */\n"
             + "    public class Test {\n"
             + "        public static void\n"
@@ -114,7 +118,7 @@ public class ContentFormatterTest {
 
     @Test
     public void testContentFormatterComment() {
-        ContentFormatter formatter = createJavaFormatter();
+        ContentFormatter formatter = createJavaFormatter(21, null);
         String test = 
               "// This is a rather long text for this formatter.\n"
             + "public class Test {\n"
@@ -125,11 +129,13 @@ public class ContentFormatterTest {
             + "}\n";
         String res = formatter.format(test);
         String expected = 
-              "// This is a rather long\n"
-            + "// text for this formatter.\n"
+              "// This is a rather\n"
+            + "// long text for this\n"
+            + "// formatter.\n"
             + "public class Test {\n"
-            + "    public static void\n"
-            + "        main(String[] args) {\n"
+            + "    public static\n"
+            + "        void main(String[]\n"
+            + "        args) {\n"
             + "    }\n"
             + "\n"
             + "}\n";
@@ -144,7 +150,7 @@ public class ContentFormatterTest {
     
     @Test
     public void testContentFormatterStringArg() {
-        ContentFormatter formatter = createJavaFormatter();
+        ContentFormatter formatter = createJavaFormatter(21, null);
         String test = 
               "// This is a rather long text for this formatter.\n"
             + "public class Test {\n"
@@ -156,13 +162,15 @@ public class ContentFormatterTest {
             + "}\n";
         String res = formatter.format(test);
         String expected = 
-              "// This is a rather long\n"
-            + "// text for this formatter.\n"
+              "// This is a rather\n"
+            + "// long text for this\n"
+            + "// formatter.\n"
             + "public class Test {\n"
-            + "    public static void\n"
-            + "        main(String[] args) {\n"
-            + "        println(\"htt\"\n"
-            + "            + \"p://aaa.bbb.ccc\");\n"
+            + "    public static\n"
+            + "        void main(String[]\n"
+            + "        args) {\n"
+            + "        println(\n"
+            + "            \"http://aaa.bbb.ccc\");\n"
             + "    }\n"
             + "\n"
             + "}\n";
@@ -171,7 +179,7 @@ public class ContentFormatterTest {
 
     @Test
     public void testContentFormatterStringArg2() {
-        ContentFormatter formatter = createJavaFormatter();
+        ContentFormatter formatter = createJavaFormatter(25, null);
         String test = 
               "// This is a rather long text for this formatter.\n"
             + "public class Test {\n"
@@ -200,9 +208,13 @@ public class ContentFormatterTest {
     public void test() {
         ContentFormatter formatter = createJavaFormatter(120, "JAVA-outDoc");
         String s = "";        
+        System.out.print("1        ");
+        for (int i = 1; i <= 12; i++) {
+            System.out.print("1         ");    
+        }
+        System.out.println();
         String res = formatter.format(s);
         System.out.println(res);
-        
     }*/
 
 }
