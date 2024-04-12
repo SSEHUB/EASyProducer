@@ -495,10 +495,10 @@ public class ContentFormatter {
                 doubleChars++;
             }
             if (isNewline(c) || c == ' ' || profile.isSplitChar(c)) { // we can split here
-                if (pos + 1 - doubleChars - lastStartPos >= maxLineLength) { // here, line length exceeded
+                if (pos - doubleChars - lastStartPos >= maxLineLength) { // here, line length exceeded
                     advance += splitLines(c, bld, pos, lastNlPos);
                     int adv = advance;                    
-                    if (pos + 1 - doubleChars - lastSplitPos >= maxLineLength) { // just in case that we hopped over
+                    if (pos - doubleChars - lastSplitPos >= maxLineLength) { // just in case that we hopped over
                         advance += splitLines(lastSplitChar, bld, lastSplitPos, lastNlPos);
                     }
                     lastSplitPos = pos + adv; // adjust positions

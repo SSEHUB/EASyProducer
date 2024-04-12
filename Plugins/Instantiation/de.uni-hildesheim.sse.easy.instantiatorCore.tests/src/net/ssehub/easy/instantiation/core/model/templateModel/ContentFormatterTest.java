@@ -75,8 +75,8 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
               "/**\n"
-            + " * This is a rather long\n"
-            + " * text for this formatter.\n"
+            + " * This is a rather\n"
+            + " * long text for this formatter.\n"
             + " */\n"
             + "public class Test {\n"
             + "    public static void\n"
@@ -161,8 +161,8 @@ public class ContentFormatterTest {
             + "public class Test {\n"
             + "    public static void\n"
             + "        main(String[] args) {\n"
-            + "        println(\"http\"\n"
-            + "            + \"://aaa.bbb.ccc\");\n"
+            + "        println(\"htt\"\n"
+            + "            + \"p://aaa.bbb.ccc\");\n"
             + "    }\n"
             + "\n"
             + "}\n";
