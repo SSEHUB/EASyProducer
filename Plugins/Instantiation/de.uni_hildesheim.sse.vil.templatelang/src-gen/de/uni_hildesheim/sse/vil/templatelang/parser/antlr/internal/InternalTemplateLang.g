@@ -672,11 +672,11 @@ ruleFormattingHintPart returns [EObject current=null]
     {
     	newLeafNode(otherlv_1, grammarAccess.getFormattingHintPartAccess().getEqualsSignKeyword_1());
     }
-(
+((
 (
 		lv_value_2_0=RULE_STRING
 		{
-			newLeafNode(lv_value_2_0, grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0()); 
+			newLeafNode(lv_value_2_0, grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0_0()); 
 		}
 		{
 	        if ($current==null) {
@@ -690,7 +690,26 @@ ruleFormattingHintPart returns [EObject current=null]
 	    }
 
 )
-))
+)
+    |(
+(
+		lv_numValue_3_0=RULE_NUMBER
+		{
+			newLeafNode(lv_numValue_3_0, grammarAccess.getFormattingHintPartAccess().getNumValueNUMBERTerminalRuleCall_2_1_0()); 
+		}
+		{
+	        if ($current==null) {
+	            $current = createModelElement(grammarAccess.getFormattingHintPartRule());
+	        }
+       		setWithLastConsumed(
+       			$current, 
+       			"numValue",
+        		lv_numValue_3_0, 
+        		"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.NUMBER");
+	    }
+
+)
+)))
 ;
 
 

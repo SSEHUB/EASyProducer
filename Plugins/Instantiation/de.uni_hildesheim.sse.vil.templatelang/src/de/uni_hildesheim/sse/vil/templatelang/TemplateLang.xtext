@@ -46,7 +46,7 @@ FormattingHint:
 ;
 
 FormattingHintPart:
-    name=Identifier '=' value=STRING
+    name=Identifier '=' (value=STRING | numValue=NUMBER)
 ;
 
 VilDef:

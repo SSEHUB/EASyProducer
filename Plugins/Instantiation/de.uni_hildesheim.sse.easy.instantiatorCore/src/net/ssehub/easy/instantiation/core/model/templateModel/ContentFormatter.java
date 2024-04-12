@@ -72,6 +72,22 @@ public class ContentFormatter {
         public boolean isSplitChar(char ch);
         
         /**
+         * If the current position is a {@link #isSplitChar(char) split char}, then shall something be
+         * added at this specific position, e.g., a string end for string end + string start.
+         * 
+         * @return the additional text, may be empty for none
+         */
+        public String addBeforeSplit();
+
+        /**
+         * If the current position is a {@link #isSplitChar(char) split char}, then shall something be
+         * added after the new line break, e.g., a + string end for string end + string start.
+         * 
+         * @return the additional text, may be empty for none
+         */
+        public String addAfterSplit();
+
+        /**
          * Notifies the profile about the actual character being processed. May form the state.
          * 
          * @param ch the character
@@ -127,6 +143,16 @@ public class ContentFormatter {
         }
 
         @Override
+        public String addBeforeSplit() {
+            return "";
+        }
+
+        @Override
+        public String addAfterSplit() {
+            return "";
+        }
+
+        @Override
         public void processingChar(char ch) {
         }
 
@@ -156,6 +182,9 @@ public class ContentFormatter {
         private enum State {
             CODE,
             SLASH,
+            STRING_START,
+            STRING,
+            STRING_ESCAPE,
             ML_COMMENT,
             ML_COMMENT_1,
             ML_COMMENT_JAVADOC,
@@ -188,7 +217,7 @@ public class ContentFormatter {
         @Override
         public int additionalIndent() {
             int result = 0;
-            if (State.CODE == state) {
+            if (State.CODE == state || State.STRING_START == state || State.STRING == state) {
                 result = 1;
             }
             return result;       
@@ -209,7 +238,29 @@ public class ContentFormatter {
         public boolean isSplitChar(char ch) {
             boolean result = false;
             if (State.CODE == state) {
-                result = ch == '.';
+                result = ch == '.' || ch == '"';
+            } else if (State.STRING_START == state) {
+                result = ch == '"';
+            } else if (State.STRING == state) { // allow everywhere, see addBeforeSplit/addAfterSplit
+                result = true;
+            }
+            return result;
+        }
+        
+        @Override
+        public String addBeforeSplit() {
+            String result = "";
+            if (State.STRING == state) {
+                result = "\"";
+            }
+            return result;
+        }
+
+        @Override
+        public String addAfterSplit() {
+            String result = "";
+            if (State.STRING == state) {
+                result = "+ \"";
             }
             return result;
         }
@@ -227,6 +278,10 @@ public class ContentFormatter {
                 } else if (State.ML_COMMENT_JAVADOC_STAR == state) {
                     state = State.CODE;
                 }
+            } else if ('\\' == ch) {
+                if (State.STRING == state) {
+                    state = State.STRING_ESCAPE;
+                }
             } else if ('*' == ch) {
                 if (State.SLASH == state) {
                     state = State.ML_COMMENT_1;
@@ -241,7 +296,13 @@ public class ContentFormatter {
                 if (state == State.SL_COMMENT) {
                     state = State.CODE;
                 }
-            } 
+            } else if ('"' == ch) {
+                if (State.CODE == state) {
+                    state = State.STRING_START;
+                } else if (State.STRING_START == state || State.STRING == state) {
+                    state = State.CODE;
+                } // do not switch in comment, ignore if in STRING_ESCAPE
+            }
             if (state == before) {
                 if (State.SLASH == state) {
                     state = State.CODE; // reset   
@@ -251,6 +312,8 @@ public class ContentFormatter {
                     state = State.ML_COMMENT_JAVADOC;
                 } else if (State.ML_COMMENT_1 == state) {
                     state = State.ML_COMMENT;
+                } else if (State.STRING_ESCAPE == state || State.STRING_START == state) {
+                    state = State.STRING;
                 }
             }
         }
@@ -449,11 +512,13 @@ public class ContentFormatter {
             if (!profile.isSplitChar(ch)) {
                 bld.delete(splitPos, splitPos + 1);
             } else {
-                ins += ch;
+                splitPos++;
+                result++;
             }
-            ins += lineBreak + adjustIndentation(bld, startPos, indentStep);
+            ins += profile.addBeforeSplit() + lineBreak + adjustIndentation(bld, startPos, indentStep) 
+                + profile.addAfterSplit();
             bld.insert(splitPos, ins);
-            result = ins.length();
+            result += ins.length();
         }
         return result;
     }

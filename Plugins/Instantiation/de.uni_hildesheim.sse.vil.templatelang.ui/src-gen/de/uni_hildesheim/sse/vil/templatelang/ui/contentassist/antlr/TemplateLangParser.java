@@ -39,6 +39,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 				{
 					put(grammarAccess.getLanguageUnitAccess().getAlternatives_13(), "rule__LanguageUnit__Alternatives_13");
 					put(grammarAccess.getHintedExpressionAccess().getHintAlternatives_1_1_0(), "rule__HintedExpression__HintAlternatives_1_1_0");
+					put(grammarAccess.getFormattingHintPartAccess().getAlternatives_2(), "rule__FormattingHintPart__Alternatives_2");
 					put(grammarAccess.getStmtAccess().getAlternatives(), "rule__Stmt__Alternatives");
 					put(grammarAccess.getAlternativeAccess().getAlternatives_4(), "rule__Alternative__Alternatives_4");
 					put(grammarAccess.getAlternativeAccess().getAlternatives_5_1(), "rule__Alternative__Alternatives_5_1");
@@ -180,7 +181,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 					put(grammarAccess.getFormattingHintAccess().getPartsAssignment_2(), "rule__FormattingHint__PartsAssignment_2");
 					put(grammarAccess.getFormattingHintAccess().getPartsAssignment_3_1(), "rule__FormattingHint__PartsAssignment_3_1");
 					put(grammarAccess.getFormattingHintPartAccess().getNameAssignment_0(), "rule__FormattingHintPart__NameAssignment_0");
-					put(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2(), "rule__FormattingHintPart__ValueAssignment_2");
+					put(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2_0(), "rule__FormattingHintPart__ValueAssignment_2_0");
+					put(grammarAccess.getFormattingHintPartAccess().getNumValueAssignment_2_1(), "rule__FormattingHintPart__NumValueAssignment_2_1");
 					put(grammarAccess.getVilDefAccess().getAnnotationsAssignment_0(), "rule__VilDef__AnnotationsAssignment_0");
 					put(grammarAccess.getVilDefAccess().getProtectedAssignment_1(), "rule__VilDef__ProtectedAssignment_1");
 					put(grammarAccess.getVilDefAccess().getTypeAssignment_3(), "rule__VilDef__TypeAssignment_3");

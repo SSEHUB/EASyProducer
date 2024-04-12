@@ -37,6 +37,7 @@
     <genClasses ecoreClass="TemplateLang.ecore#//FormattingHintPart">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//FormattingHintPart/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//FormattingHintPart/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute TemplateLang.ecore#//FormattingHintPart/numValue"/>
     </genClasses>
     <genClasses ecoreClass="TemplateLang.ecore#//VilDef">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference TemplateLang.ecore#//VilDef/annotations"/>

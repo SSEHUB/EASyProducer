@@ -512,6 +512,17 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
    * @generated
    */
   @Override
+  public EAttribute getFormattingHintPart_NumValue()
+  {
+    return (EAttribute)formattingHintPartEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EClass getVilDef()
   {
     return vilDefEClass;
@@ -1313,6 +1324,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     formattingHintPartEClass = createEClass(FORMATTING_HINT_PART);
     createEAttribute(formattingHintPartEClass, FORMATTING_HINT_PART__NAME);
     createEAttribute(formattingHintPartEClass, FORMATTING_HINT_PART__VALUE);
+    createEAttribute(formattingHintPartEClass, FORMATTING_HINT_PART__NUM_VALUE);
 
     vilDefEClass = createEClass(VIL_DEF);
     createEReference(vilDefEClass, VIL_DEF__ANNOTATIONS);
@@ -1461,6 +1473,7 @@ public class TemplateLangPackageImpl extends EPackageImpl implements TemplateLan
     initEClass(formattingHintPartEClass, FormattingHintPart.class, "FormattingHintPart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFormattingHintPart_Name(), ecorePackage.getEString(), "name", null, 0, 1, FormattingHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getFormattingHintPart_Value(), ecorePackage.getEString(), "value", null, 0, 1, FormattingHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getFormattingHintPart_NumValue(), ecorePackage.getEString(), "numValue", null, 0, 1, FormattingHintPart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(vilDefEClass, VilDef.class, "VilDef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getVilDef_Annotations(), theExpressionDslPackage.getAnnotationDeclarations(), null, "annotations", null, 0, 1, VilDef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

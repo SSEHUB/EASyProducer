@@ -354,13 +354,22 @@ public interface TemplateLangPackage extends EPackage
   int FORMATTING_HINT_PART__VALUE = 1;
 
   /**
+   * The feature id for the '<em><b>Num Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int FORMATTING_HINT_PART__NUM_VALUE = 2;
+
+  /**
    * The number of structural features of the '<em>Formatting Hint Part</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int FORMATTING_HINT_PART_FEATURE_COUNT = 2;
+  int FORMATTING_HINT_PART_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl <em>Vil Def</em>}' class.
@@ -1361,6 +1370,17 @@ public interface TemplateLangPackage extends EPackage
   EAttribute getFormattingHintPart_Value();
 
   /**
+   * Returns the meta object for the attribute '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getNumValue <em>Num Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Num Value</em>'.
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getNumValue()
+   * @see #getFormattingHintPart()
+   * @generated
+   */
+  EAttribute getFormattingHintPart_NumValue();
+
+  /**
    * Returns the meta object for class '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef <em>Vil Def</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2305,6 +2325,14 @@ public interface TemplateLangPackage extends EPackage
      * @generated
      */
     EAttribute FORMATTING_HINT_PART__VALUE = eINSTANCE.getFormattingHintPart_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Num Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute FORMATTING_HINT_PART__NUM_VALUE = eINSTANCE.getFormattingHintPart_NumValue();
 
     /**
      * The meta object literal for the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl <em>Vil Def</em>}' class.

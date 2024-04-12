@@ -240,8 +240,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                     result.setLineEnding(StringUtils.convertString(part.getValue()));
                 } else if (FORMATTING_HINT_LINELENGTH.equals(name)) {
                     result = ensureFormattingConfiguration(result);
+                    String val;
+                    if (part.getNumValue() != null) {
+                        val = part.getNumValue();
+                    } else {
+                        val = part.getValue();
+                    }
                     try {
-                        result.setLineLength(Integer.parseInt(StringUtils.convertString(part.getValue())));
+                        result.setLineLength(Integer.parseInt(StringUtils.convertString(val)));
                     } catch (NumberFormatException e) {
                         warning("lineLength value is not an integer - igored", part, 
                             TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);

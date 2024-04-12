@@ -392,14 +392,17 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		private final Assignment cNameAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final RuleCall cNameIdentifierParserRuleCall_0_0 = (RuleCall)cNameAssignment_0.eContents().get(0);
 		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cValueSTRINGTerminalRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
+		private final Alternatives cAlternatives_2 = (Alternatives)cGroup.eContents().get(2);
+		private final Assignment cValueAssignment_2_0 = (Assignment)cAlternatives_2.eContents().get(0);
+		private final RuleCall cValueSTRINGTerminalRuleCall_2_0_0 = (RuleCall)cValueAssignment_2_0.eContents().get(0);
+		private final Assignment cNumValueAssignment_2_1 = (Assignment)cAlternatives_2.eContents().get(1);
+		private final RuleCall cNumValueNUMBERTerminalRuleCall_2_1_0 = (RuleCall)cNumValueAssignment_2_1.eContents().get(0);
 		
 		//FormattingHintPart:
-		//	name=Identifier '=' value=STRING;
+		//	name=Identifier '=' (value=STRING | numValue=NUMBER);
 		@Override public ParserRule getRule() { return rule; }
 
-		//name=Identifier '=' value=STRING
+		//name=Identifier '=' (value=STRING | numValue=NUMBER)
 		public Group getGroup() { return cGroup; }
 
 		//name=Identifier
@@ -411,11 +414,20 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 		//'='
 		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
 
+		//(value=STRING | numValue=NUMBER)
+		public Alternatives getAlternatives_2() { return cAlternatives_2; }
+
 		//value=STRING
-		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
+		public Assignment getValueAssignment_2_0() { return cValueAssignment_2_0; }
 
 		//STRING
-		public RuleCall getValueSTRINGTerminalRuleCall_2_0() { return cValueSTRINGTerminalRuleCall_2_0; }
+		public RuleCall getValueSTRINGTerminalRuleCall_2_0_0() { return cValueSTRINGTerminalRuleCall_2_0_0; }
+
+		//numValue=NUMBER
+		public Assignment getNumValueAssignment_2_1() { return cNumValueAssignment_2_1; }
+
+		//NUMBER
+		public RuleCall getNumValueNUMBERTerminalRuleCall_2_1_0() { return cNumValueNUMBERTerminalRuleCall_2_1_0; }
 	}
 
 	public class VilDefElements extends AbstractParserRuleElementFinder {
@@ -1480,7 +1492,7 @@ public class TemplateLangGrammarAccess extends AbstractGrammarElementFinder {
 	}
 
 	//FormattingHintPart:
-	//	name=Identifier '=' value=STRING;
+	//	name=Identifier '=' (value=STRING | numValue=NUMBER);
 	public FormattingHintPartElements getFormattingHintPartAccess() {
 		return pFormattingHintPart;
 	}

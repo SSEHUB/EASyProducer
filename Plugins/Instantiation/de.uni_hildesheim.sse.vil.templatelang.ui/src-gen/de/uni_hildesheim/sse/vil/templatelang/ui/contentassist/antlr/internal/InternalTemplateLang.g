@@ -2162,6 +2162,28 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+rule__FormattingHintPart__Alternatives_2
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2_0()); }
+(rule__FormattingHintPart__ValueAssignment_2_0)
+{ after(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2_0()); }
+)
+
+    |(
+{ before(grammarAccess.getFormattingHintPartAccess().getNumValueAssignment_2_1()); }
+(rule__FormattingHintPart__NumValueAssignment_2_1)
+{ after(grammarAccess.getFormattingHintPartAccess().getNumValueAssignment_2_1()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 rule__Stmt__Alternatives
     @init {
 		int stackSize = keepStackSize();
@@ -4148,9 +4170,9 @@ rule__FormattingHintPart__Group__2__Impl
     }
 :
 (
-{ before(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2()); }
-(rule__FormattingHintPart__ValueAssignment_2)
-{ after(grammarAccess.getFormattingHintPartAccess().getValueAssignment_2()); }
+{ before(grammarAccess.getFormattingHintPartAccess().getAlternatives_2()); }
+(rule__FormattingHintPart__Alternatives_2)
+{ after(grammarAccess.getFormattingHintPartAccess().getAlternatives_2()); }
 )
 
 ;
@@ -12439,14 +12461,29 @@ finally {
 	restoreStackSize(stackSize);
 }
 
-rule__FormattingHintPart__ValueAssignment_2
+rule__FormattingHintPart__ValueAssignment_2_0
     @init {
 		int stackSize = keepStackSize();
     }
 :
 (
-{ before(grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0()); }
-	RULE_STRING{ after(grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0()); }
+{ before(grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0_0()); }
+	RULE_STRING{ after(grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0_0()); }
+)
+
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__FormattingHintPart__NumValueAssignment_2_1
+    @init {
+		int stackSize = keepStackSize();
+    }
+:
+(
+{ before(grammarAccess.getFormattingHintPartAccess().getNumValueNUMBERTerminalRuleCall_2_1_0()); }
+	RULE_NUMBER{ after(grammarAccess.getFormattingHintPartAccess().getNumValueNUMBERTerminalRuleCall_2_1_0()); }
 )
 
 ;

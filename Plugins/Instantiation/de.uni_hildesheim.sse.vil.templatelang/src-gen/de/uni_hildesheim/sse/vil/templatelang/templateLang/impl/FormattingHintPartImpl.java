@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.FormattingHintPartImpl#getNumValue <em>Num Value</em>}</li>
  * </ul>
  *
  * @generated
@@ -67,6 +68,26 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
    * @ordered
    */
   protected String value = VALUE_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #getNumValue() <em>Num Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNumValue()
+   * @generated
+   * @ordered
+   */
+  protected static final String NUM_VALUE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getNumValue() <em>Num Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getNumValue()
+   * @generated
+   * @ordered
+   */
+  protected String numValue = NUM_VALUE_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -145,6 +166,31 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
    * @generated
    */
   @Override
+  public String getNumValue()
+  {
+    return numValue;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setNumValue(String newNumValue)
+  {
+    String oldNumValue = numValue;
+    numValue = newNumValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, TemplateLangPackage.FORMATTING_HINT_PART__NUM_VALUE, oldNumValue, numValue));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
     switch (featureID)
@@ -153,6 +199,8 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
         return getName();
       case TemplateLangPackage.FORMATTING_HINT_PART__VALUE:
         return getValue();
+      case TemplateLangPackage.FORMATTING_HINT_PART__NUM_VALUE:
+        return getNumValue();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -172,6 +220,9 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
         return;
       case TemplateLangPackage.FORMATTING_HINT_PART__VALUE:
         setValue((String)newValue);
+        return;
+      case TemplateLangPackage.FORMATTING_HINT_PART__NUM_VALUE:
+        setNumValue((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -193,6 +244,9 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
       case TemplateLangPackage.FORMATTING_HINT_PART__VALUE:
         setValue(VALUE_EDEFAULT);
         return;
+      case TemplateLangPackage.FORMATTING_HINT_PART__NUM_VALUE:
+        setNumValue(NUM_VALUE_EDEFAULT);
+        return;
     }
     super.eUnset(featureID);
   }
@@ -211,6 +265,8 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case TemplateLangPackage.FORMATTING_HINT_PART__VALUE:
         return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+      case TemplateLangPackage.FORMATTING_HINT_PART__NUM_VALUE:
+        return NUM_VALUE_EDEFAULT == null ? numValue != null : !NUM_VALUE_EDEFAULT.equals(numValue);
     }
     return super.eIsSet(featureID);
   }
@@ -230,6 +286,8 @@ public class FormattingHintPartImpl extends MinimalEObjectImpl.Container impleme
     result.append(name);
     result.append(", value: ");
     result.append(value);
+    result.append(", numValue: ");
+    result.append(numValue);
     result.append(')');
     return result.toString();
   }

@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getName <em>Name</em>}</li>
  *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getValue <em>Value</em>}</li>
+ *   <li>{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getNumValue <em>Num Value</em>}</li>
  * </ul>
  *
  * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getFormattingHintPart()
@@ -66,5 +67,27 @@ public interface FormattingHintPart extends EObject
    * @generated
    */
   void setValue(String value);
+
+  /**
+   * Returns the value of the '<em><b>Num Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Num Value</em>' attribute.
+   * @see #setNumValue(String)
+   * @see de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage#getFormattingHintPart_NumValue()
+   * @model
+   * @generated
+   */
+  String getNumValue();
+
+  /**
+   * Sets the value of the '{@link de.uni_hildesheim.sse.vil.templatelang.templateLang.FormattingHintPart#getNumValue <em>Num Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Num Value</em>' attribute.
+   * @see #getNumValue()
+   * @generated
+   */
+  void setNumValue(String value);
 
 } // FormattingHintPart

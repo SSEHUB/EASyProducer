@@ -350,19 +350,10 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     FormattingHintPart returns FormattingHintPart
 	 *
 	 * Constraint:
-	 *     (name=Identifier value=STRING)
+	 *     (name=Identifier (value=STRING | numValue=NUMBER))
 	 */
 	protected void sequence_FormattingHintPart(ISerializationContext context, FormattingHintPart semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME));
-			if (transientValues.isValueTransient(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__VALUE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, TemplateLangPackage.Literals.FORMATTING_HINT_PART__VALUE));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getFormattingHintPartAccess().getNameIdentifierParserRuleCall_0_0(), semanticObject.getName());
-		feeder.accept(grammarAccess.getFormattingHintPartAccess().getValueSTRINGTerminalRuleCall_2_0(), semanticObject.getValue());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
