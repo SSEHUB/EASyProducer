@@ -196,4 +196,13 @@ public class ContentFormatterTest {
         Assert.assertEquals(expected, res);
     }
 
+    /*@Test
+    public void test() {
+        ContentFormatter formatter = createJavaFormatter(120, "JAVA-outDoc");
+        String s = "";        
+        String res = formatter.format(s);
+        System.out.println(res);
+        
+    }*/
+
 }
