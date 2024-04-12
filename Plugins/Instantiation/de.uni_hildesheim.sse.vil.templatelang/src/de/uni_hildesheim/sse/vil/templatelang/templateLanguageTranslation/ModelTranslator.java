@@ -234,14 +234,32 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         FormattingConfiguration result = null;
         if (null != hint) {
             for (FormattingHintPart part : hint.getParts()) {
-                if (FORMATTING_HINT_LINEEND.equals(part.getName())) {
-                    result = new FormattingConfiguration();
-                    String value = StringUtils.convertString(part.getValue());
-                    result.setLineEnding(value);
+                String name = part.getName();
+                if (FORMATTING_HINT_LINEEND.equals(name)) {
+                    result = ensureFormattingConfiguration(result);
+                    result.setLineEnding(StringUtils.convertString(part.getValue()));
+                } else if (FORMATTING_HINT_LINELENGTH.equals(name)) {
+                    result = ensureFormattingConfiguration(result);
+                    try {
+                        result.setLineLength(Integer.parseInt(StringUtils.convertString(part.getValue())));
+                    } catch (NumberFormatException e) {
+                        warning("lineLength value is not an integer - igored", part, 
+                            TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);
+                    }
+                } else if (FORMATTING_HINT_PROFILE.equals(name)) {
+                    result = ensureFormattingConfiguration(result);
+                    result.setProfile(StringUtils.convertString(part.getValue()));
                 }
             }
         }
         return result;
+    }
+    
+    private FormattingConfiguration ensureFormattingConfiguration(FormattingConfiguration config) {
+        if (null == config) {
+            config = new FormattingConfiguration();
+        }
+        return config;
     }
      
     /**

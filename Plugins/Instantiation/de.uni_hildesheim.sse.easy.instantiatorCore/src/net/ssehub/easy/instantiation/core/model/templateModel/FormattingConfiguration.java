@@ -23,6 +23,8 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 public class FormattingConfiguration {
     
     private String lineEnding;
+    private int lineLength;
+    private String profile;
 
     /**
      * Creates an empty configuration.
@@ -46,6 +48,42 @@ public class FormattingConfiguration {
      */
     public String getLineEnding() {
         return lineEnding;
+    }
+
+    /**
+     * Defines the line length.
+     * 
+     * @param lineLength the line length in characters
+     */
+    public void setLineLength(int lineLength) {
+        this.lineLength = lineLength;
+    }
+
+    /**
+     * Returns the line length. Call {@link #setLineLength(int)} before.
+     * 
+     * @return the line length, invalid if not positive
+     */
+    public int getLineLength() {
+        return lineLength;
+    }
+
+    /**
+     * Defines the formatting profile for specific/context sensitive settings.
+     * 
+     * @param profile the profile name
+     */
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    /**
+     * Returns the formatting profile for specific/context sensitive settings.
+     * 
+     * @return profile name
+     */
+    public String getProfile() {
+        return profile;
     }
 
     /**

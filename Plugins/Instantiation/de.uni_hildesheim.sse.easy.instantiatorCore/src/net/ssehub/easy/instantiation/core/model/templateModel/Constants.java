@@ -27,4 +27,14 @@ public class Constants {
      */
     public static final String FORMATTING_HINT_LINEEND = "lineEnd";
 
+    /**
+     * The name for the optional formatting hint to define the (maximum) line length.
+     */
+    public static final String FORMATTING_HINT_LINELENGTH = "lineLength";
+
+    /**
+     * The name for the optional formatting hint to define the profile.
+     */
+    public static final String FORMATTING_HINT_PROFILE = "profile";
+
 }

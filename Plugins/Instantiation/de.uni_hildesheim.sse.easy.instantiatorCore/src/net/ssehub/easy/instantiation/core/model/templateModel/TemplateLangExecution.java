@@ -112,6 +112,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     private Stack<String> defContentStack = new Stack<String>();
     private ContentStatement lastContent = null;
     private LineEndType lastContentLineEndType = LineEndType.DEFAULT;
+    private ContentFormatter contentFormatter;
 
     /**
      * Creates a new evaluation visitor.
@@ -218,6 +219,9 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         environment.switchContext(template); // initial context, assumption that method is only called from outside
         tracer.visitTemplate(template);
         visitModelHeader(template);
+        contentFormatter = new ContentFormatter();
+        contentFormatter.setFormattingConfiguration(getFormattingConfiguration());
+        contentFormatter.setIndentationConfiguration(environment.getIndentationConfiguration());
         Def main = null;
         for (int d = 0; null == main && d < template.getDefCount(); d++) {
             Def def = template.getDef(d);
@@ -260,12 +264,26 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         String content = defContentStack.pop();
         if (0 == contentNestingLevel) { // top level - compose or emit
             if (defContentStack.isEmpty()) {
-                out.print(content);
+                emit(content);
             } else {
                 appendContent(content);
             }
         } // nested content mode - composed from return
         return result;
+    }
+    
+    /**
+     * Emits the content, takes care of the formatting configuration.
+     * 
+     * @param content the content to emit
+     */
+    private void emit(String content) {
+        if (null != contentFormatter) {
+            content = contentFormatter.format(content);
+        }
+        if (null != content) {
+            out.print(content);
+        }
     }
 
     /**
@@ -711,13 +729,22 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
      * @return the actual line end (fallback is the Java line end)
      */
     private String getLineEnd() {
+        return FormattingConfiguration.getLineEnding(getFormattingConfiguration());
+    }
+    
+    /**
+     * Returns the formatting configuration.
+     * 
+     * @return the formatting configuration, may be <b>null</b>
+     */
+    private FormattingConfiguration getFormattingConfiguration() {
         FormattingConfiguration cfg = null;
         ITypedModel model = environment.getContextModel();
         if (model instanceof Template) {
             Template template = (Template) model;
             cfg = template.getFormattingConfiguration();
         }
-        return FormattingConfiguration.getLineEnding(cfg);
+        return cfg;
     }
     
     @Override

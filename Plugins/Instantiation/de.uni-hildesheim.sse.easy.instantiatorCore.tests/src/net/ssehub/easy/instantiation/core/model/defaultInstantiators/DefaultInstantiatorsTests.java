@@ -24,7 +24,7 @@ import org.junit.runners.Suite;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ProgressNotifier.class })
+@Suite.SuiteClasses({ProgressNotifierTest.class })
 public class DefaultInstantiatorsTests {
 
 }
