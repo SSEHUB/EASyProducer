@@ -517,7 +517,7 @@ public class ContentFormatter {
                 doubleChars++;
             }
             if (canSplit(c)) { // we can split here
-                int count = pos - doubleChars - lastStartPos;
+                int count = pos - doubleChars - lastStartPos + 1;
                 boolean split = count >= maxLineLength;
                 if (!split) { // lookahead, are we before and the next is too late?
                     int nextPos = pos + 1;
