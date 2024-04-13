@@ -30,6 +30,7 @@ import net.ssehub.easy.reasoning.sseReasoner.Descriptor;
 import net.ssehub.easy.reasoning.sseReasoner.functions.FailedElements;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
+import net.ssehub.easy.varModel.confModel.ContainerVariable;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.AttributeVariable;
@@ -39,6 +40,7 @@ import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.ContainerOperationCall;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.ResolvedVariable;
 import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor.Message;
@@ -659,7 +661,9 @@ public class ReasoningUtils {
     public static ConstraintSyntaxTree createParentExpression(IDecisionVariable variable) {
         ConstraintSyntaxTree result = null;
         IConfigurationElement parent = variable.getParent();
-        if (parent instanceof IDecisionVariable) { // we are nested
+        if (parent instanceof ContainerVariable) {
+            result = new ResolvedVariable(variable);
+        } else if (parent instanceof IDecisionVariable) { // we are nested
             ConstraintSyntaxTree parentAcc = createParentExpression((IDecisionVariable) parent);
             if (variable.getDeclaration() instanceof Attribute) {
                 result = new AttributeVariable(parentAcc, (Attribute) variable.getDeclaration());

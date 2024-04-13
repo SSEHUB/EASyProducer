@@ -27,22 +27,38 @@ import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
  */
 public class ContentFormatterTest {
 
+    /**
+     * Creates a default formatter with line length 20 for Java.
+     * 
+     * @return the formatter
+     */
     private ContentFormatter createJavaFormatter() {
         return createJavaFormatter(20, null);
     }
     
+    /**
+     * Creates a customizable formatter for testing.
+     * 
+     * @param lineLength the line length
+     * @param profile the profile
+     * @return the formatter
+     */
     private ContentFormatter createJavaFormatter(int lineLength, String profile) {
         ContentFormatter formatter = new ContentFormatter();
         FormattingConfiguration fConf = new FormattingConfiguration();
         fConf.setLineEnding("\n");
         fConf.setLineLength(lineLength);
         fConf.setProfile(null == profile ? "Java" : profile);
+        fConf.setProfileArgument("javadocIndent", " * "); // the default value, just for testing
         formatter.setFormattingConfiguration(fConf);
         IndentationConfiguration iConf = new IndentationConfiguration(4);
         formatter.setIndentationConfiguration(iConf);
         return formatter;
     }
     
+    /**
+     * Tests basic formatting/indentation.
+     */
     @Test
     public void testContentFormatter() {
         ContentFormatter formatter = createJavaFormatter();
@@ -62,6 +78,9 @@ public class ContentFormatterTest {
         Assert.assertEquals(expected, res);
     }
 
+    /**
+     * Tests JavaDoc formatting/indentation.
+     */
     @Test
     public void testContentFormatterJavadoc() {
         ContentFormatter formatter = createJavaFormatter(21, null);
@@ -89,6 +108,9 @@ public class ContentFormatterTest {
         Assert.assertEquals(expected, res);
     }
     
+    /**
+     * Tests JavaDoc indented formatting/indentation.
+     */
     @Test
     public void testContentFormatterJavadocIndented() {
         ContentFormatter formatter = createJavaFormatter(28, null);
@@ -116,6 +138,9 @@ public class ContentFormatterTest {
         Assert.assertEquals(expected, res);
     }
 
+    /**
+     * Tests line-end comment formatting/indentation.
+     */
     @Test
     public void testContentFormatterComment() {
         ContentFormatter formatter = createJavaFormatter(21, null);
@@ -147,7 +172,9 @@ public class ContentFormatterTest {
         Assert.assertEquals(null, res);
     }
 
-    
+    /**
+     * Tests string argument method formatting/indentation.
+     */
     @Test
     public void testContentFormatterStringArg() {
         ContentFormatter formatter = createJavaFormatter(21, null);
@@ -177,6 +204,9 @@ public class ContentFormatterTest {
         Assert.assertEquals(expected, res);
     }
 
+    /**
+     * Tests line-end comment and string argument formatting/indentation.
+     */
     @Test
     public void testContentFormatterStringArg2() {
         ContentFormatter formatter = createJavaFormatter(25, null);

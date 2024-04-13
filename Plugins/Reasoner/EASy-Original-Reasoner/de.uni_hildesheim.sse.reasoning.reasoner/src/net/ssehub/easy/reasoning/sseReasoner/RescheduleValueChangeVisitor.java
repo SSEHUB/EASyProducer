@@ -19,7 +19,9 @@ import java.util.List;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.varModel.confModel.CompoundVariable;
 import net.ssehub.easy.varModel.confModel.IAssignmentState;
+import net.ssehub.easy.varModel.confModel.IConfiguration;
 import net.ssehub.easy.varModel.confModel.IConfigurationElement;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
@@ -72,8 +74,17 @@ class RescheduleValueChangeVisitor extends ValueVisitorAdapter implements IValue
             IModelElement parent = null == constraints || constraints.isEmpty() 
                 ? variable.getDeclaration().getParent() 
                 : constraints.get(0).getParent();
-            Constraint c = resolver.createConstraintVariableConstraint(cst, createParentExpression(variable), 
-                null, parent, varParent);
+
+            ConstraintSyntaxTree selfEx = null;
+            IConfigurationElement selfVar = variable;
+            while (!(selfVar instanceof CompoundVariable) && !(selfVar instanceof IConfiguration)) {
+                selfVar = selfVar.getParent();
+            }
+            if (selfVar instanceof CompoundVariable) {
+                selfEx = createParentExpression((CompoundVariable) selfVar);
+            }
+            
+            Constraint c = resolver.createConstraintVariableConstraint(cst, selfEx, null, parent, varParent);
             setValue(variable, c); // fixes value after substitution, does not cause change event
             resolver.moveOtherConstraintsToConstraintBase(variable);
         }

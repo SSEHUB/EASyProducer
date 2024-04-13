@@ -233,39 +233,46 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     private FormattingConfiguration processFormattingHint(FormattingHint hint) {
         FormattingConfiguration result = null;
         if (null != hint) {
+            result = new FormattingConfiguration();
             for (FormattingHintPart part : hint.getParts()) {
                 String name = part.getName();
                 if (FORMATTING_HINT_LINEEND.equals(name)) {
-                    result = ensureFormattingConfiguration(result);
                     result.setLineEnding(StringUtils.convertString(part.getValue()));
                 } else if (FORMATTING_HINT_LINELENGTH.equals(name)) {
-                    result = ensureFormattingConfiguration(result);
-                    String val;
-                    if (part.getNumValue() != null) {
-                        val = part.getNumValue();
-                    } else {
-                        val = part.getValue();
-                    }
                     try {
-                        result.setLineLength(Integer.parseInt(StringUtils.convertString(val)));
+                        result.setLineLength(Integer.parseInt(getFormattingHintPartNumStringValue(part)));
                     } catch (NumberFormatException e) {
                         warning("lineLength value is not an integer - igored", part, 
                             TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);
                     }
                 } else if (FORMATTING_HINT_PROFILE.equals(name)) {
-                    result = ensureFormattingConfiguration(result);
                     result.setProfile(StringUtils.convertString(part.getValue()));
+                } else if (name.startsWith(FORMATTING_HINT_PROFILE_ARG_PREFIX)) {
+                    String argName = name.substring(FORMATTING_HINT_PROFILE_ARG_PREFIX.length());
+                    result.setProfileArgument(argName, getFormattingHintPartNumStringValue(part));
                 }
             }
         }
         return result;
     }
-    
-    private FormattingConfiguration ensureFormattingConfiguration(FormattingConfiguration config) {
-        if (null == config) {
-            config = new FormattingConfiguration();
+
+    /**
+     * Returns either the numeric or the string value of {@code part}.
+     * 
+     * @param part the part
+     * @return the value as string
+     */
+    private String getFormattingHintPartNumStringValue(FormattingHintPart part) {
+        String val;
+        if (part.getNumValue() != null) {
+            val = part.getNumValue();
+        } else {
+            val = part.getValue();
         }
-        return config;
+        if (null != val) {
+            val = StringUtils.convertString(val);
+        }
+        return val;
     }
      
     /**

@@ -121,6 +121,13 @@ public class ContentFormatter {
          */
         public void reset();
         
+        /**
+         * (Re-)configures this profile.
+         * 
+         * @param fConfig the configuration to configure this profile with
+         */
+        public void configure(FormattingConfiguration fConfig);
+        
     }
 
     /**
@@ -183,6 +190,10 @@ public class ContentFormatter {
         public void reset() {
         }
 
+        @Override
+        public void configure(FormattingConfiguration fConfig) {
+        }
+
     }
 
     /**
@@ -207,10 +218,12 @@ public class ContentFormatter {
         }
         
         private State state;
-        private String javadocIndent;
+        private String javadocIndent = " * ";
 
-        public JavaProfile(String javadocIndent) {
-            this.javadocIndent = javadocIndent;
+        /**
+         * Creates a profile instance.
+         */
+        public JavaProfile() {
             reset();
         }
         
@@ -221,7 +234,9 @@ public class ContentFormatter {
         
         @Override
         public Profile createInstance() {
-            return new JavaProfile(this.javadocIndent);
+            JavaProfile result = new JavaProfile();
+            result.javadocIndent = this.javadocIndent;
+            return result;
         }
         
         @Override
@@ -347,12 +362,19 @@ public class ContentFormatter {
             return true;
         }
 
+        @Override
+        public void configure(FormattingConfiguration fConfig) {
+            String arg = fConfig.getProfileArgument("javadocIndent");
+            if (null != arg) {
+                this.javadocIndent = arg;
+            }
+        }
+
     }
     
     // registers
     static {
-        PROFILES.put("JAVA", new JavaProfile(" * "));
-        PROFILES.put("JAVA-OUTDOC", new JavaProfile("* "));
+        PROFILES.put("JAVA", new JavaProfile());
         PROFILES.put("", new DefaultProfile());
     }
     
@@ -378,6 +400,7 @@ public class ContentFormatter {
             result = result.createInstance();
             this.profile = result;
         }
+        result.configure(fConf);
         return result;
     }
 

@@ -37,4 +37,9 @@ public class Constants {
      */
     public static final String FORMATTING_HINT_PROFILE = "profile";
 
+    /**
+     * The prefix for the optional formatting hint to define a profile argument.
+     */
+    public static final String FORMATTING_HINT_PROFILE_ARG_PREFIX = "profileArg_";
+    
 }

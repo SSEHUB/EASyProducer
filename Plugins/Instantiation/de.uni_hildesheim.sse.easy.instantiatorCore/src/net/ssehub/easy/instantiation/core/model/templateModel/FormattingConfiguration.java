@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Stores VTL formatting configurations.
  * 
@@ -25,6 +28,7 @@ public class FormattingConfiguration {
     private String lineEnding;
     private int lineLength;
     private String profile;
+    private Map<String, String> profileArguments = new HashMap<String, String>();
 
     /**
      * Creates an empty configuration.
@@ -84,6 +88,28 @@ public class FormattingConfiguration {
      */
     public String getProfile() {
         return profile;
+    }
+
+    /**
+     * Defines a profile-specific argument.
+     * 
+     * @param name the name of the argument, ignored if <b>null</b>
+     * @param value the value of the argument
+     */
+    public void setProfileArgument(String name, String value) {
+        if (name != null) {
+            this.profileArguments.put(name, value);
+        }
+    }
+
+    /**
+     * Returns a profile-specific argument.
+     * 
+     * @param name the name of the argument
+     * @return the argument value, may be <b>null</b> in particular if {@code name} is <b>null</b>
+     */
+    public String getProfileArgument(String name) {
+        return null != name ? profileArguments.get(name) : null;
     }
 
     /**
