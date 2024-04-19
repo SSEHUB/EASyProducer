@@ -464,8 +464,11 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="net.ssehub.easy.instantiation.xvcl"/>
       <plugin id="net.ssehub.easy.libs.ant"/>
       <plugin id="net.ssehub.easy.libs.aspectj.tools"/>
+      <plugin id="net.ssehub.easy.libs.commons.codec"/>
       <plugin id="net.ssehub.easy.libs.commons.io"/>
+      <plugin id="net.ssehub.easy.libs.commons.lang"/>
       <plugin id="net.ssehub.easy.libs.maven"/>
+      <plugin id="net.ssehub.easy.libs.slf4j.api"/>
       <plugin id="net.ssehub.easy.libs.velocity"/>
       <plugin id="net.ssehub.easy.libs.xvcl"/>
       <plugin id="net.ssehub.easy.loader"/>
@@ -482,11 +485,9 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.apache.batik.i18n"/>
       <plugin id="org.apache.batik.util"/>
       <plugin id="org.apache.commons.cli"/>
-      <plugin id="org.apache.commons.codec"/>
       <plugin id="org.apache.commons.httpclient"/>
       <plugin id="org.apache.commons.io"/>
       <plugin id="org.apache.commons.jxpath"/>
-      <plugin id="org.apache.commons.lang"/>
       <plugin id="org.apache.commons.logging"/>
       <plugin id="org.apache.felix.gogo.command"/>
       <plugin id="org.apache.felix.gogo.runtime"/>
@@ -736,7 +737,6 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.opentest4j"/>
       <plugin id="org.sat4j.core"/>
       <plugin id="org.sat4j.pb"/>
-      <plugin id="org.slf4j.api"/>
       <plugin id="org.tukaani.xz"/>
       <plugin id="org.w3c.css.sac"/>
       <plugin id="org.w3c.dom.events"/>
