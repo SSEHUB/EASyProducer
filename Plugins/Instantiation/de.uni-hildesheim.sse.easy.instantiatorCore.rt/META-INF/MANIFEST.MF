@@ -15,10 +15,10 @@ Require-Bundle: net.ssehub.easy.instantiation.core;visibility:=reexport,
  org.eclipse.core.runtime,
  net.ssehub.easy.reasoning.core,
  net.ssehub.easy.instantiation.serializer.xml,
- org.apache.commons.lang;bundle-version="2.6.0"
+ net.ssehub.easy.libs.commons.lang,
+ net.ssehub.easy.libs.commons.io
 Export-Package: net.ssehub.easy.instantiation.rt.core.model.confModel,
  net.ssehub.easy.instantiation.rt.core.model.rtVil,
  net.ssehub.easy.instantiation.rt.core.model.rtVil.types
-Import-Package: org.apache.commons.io,
- org.osgi.service.component
+Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy

@@ -14,7 +14,7 @@ Require-Bundle: net.ssehub.easy.varModel;bundle-version="0.0.6",
  org.eclipse.core.runtime,
  org.apache.ant;visibility:=reexport,
  net.ssehub.easy.libs.commons.io;visibility:=reexport,
- org.apache.commons.lang;bundle-version="2.6.0",
+ net.ssehub.easy.libs.commons.lang,
  net.ssehub.easy.reasoning.core,
  net.ssehub.easy.dslCore;bundle-version="0.0.1";visibility:=reexport,
  org.eclipse.emf.ecore
