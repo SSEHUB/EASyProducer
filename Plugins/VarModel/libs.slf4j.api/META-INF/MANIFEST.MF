@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: libs.slf4j.api
+Bundle-SymbolicName: net.ssehub.easy.libs.slf4j.api
+Automatic-Module-Name: net.ssehub.easy.libs.commons.io
+Bundle-Version: 1.7.30
+Bundle-ClassPath: org.slf4j.api_1.7.30.jar
+Export-Package: org.slf4j,
+ org.slf4j.event,
+ org.slf4j.helpers,
+ org.slf4j.spi
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: SSE, University of Hildesheim
