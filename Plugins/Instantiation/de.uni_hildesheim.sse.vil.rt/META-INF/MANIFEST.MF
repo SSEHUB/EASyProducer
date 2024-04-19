@@ -20,10 +20,12 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
+ org.eclipse.equinox.common,
  org.antlr.runtime,
  org.eclipse.xtext.common.types,
  de.uni-hildesheim.sse.easy.instantiatorCore.rt,
  org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtext.xbase,
  org.objectweb.asm;bundle-version="[5.0.1,9.2.0)";resolution:=optional
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib

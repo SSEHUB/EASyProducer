@@ -158,7 +158,7 @@
       <property name="severity" value="error"/>
     </module>
     <module name="SimplifyBooleanExpression">
-      <property name="severity" value="error"/>
+      <property name="severity" value="warning"/>
     </module>
     <module name="SimplifyBooleanReturn">
       <property name="severity" value="error"/>
