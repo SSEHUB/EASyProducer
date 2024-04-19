@@ -109,6 +109,7 @@
             <arg value="-append" />
         </eclipseLauncher>
 
+    	<delete failonerror="false" dir="${basedir}/archive"/>
         <mkdir dir="${basedir}/archive"/>
         <tstamp>
             <format property="NOW" pattern="yyyyMMdd-HHmmss" locale="en,EN"/>
