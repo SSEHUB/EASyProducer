@@ -31,7 +31,7 @@ Require-Bundle: net.ssehub.easy.varModel,
  org.eclipse.equinox.ds;resolution:=optional,
  org.apache.felix.scr;resolution:=optional,
  org.eclipse.core.runtime,
- org.apache.commons.lang,
+ net.ssehub.easy.libs.commons.lang;bundle-version="2.6.0",
  net.ssehub.easy.instantiation.core,
  net.ssehub.easy.reasoning.sseReasoner
 Export-Package: net.ssehub.easy.instantiation.serializer.xml,

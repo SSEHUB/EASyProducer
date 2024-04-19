@@ -31,9 +31,9 @@ Export-Package: com.github.dockerjava.api,
  com.github.dockerjava.transport
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: SSE, University of Hildesheim
-Require-Bundle: org.slf4j.api;bundle-version="1.7.30",
- org.apache.commons.io;bundle-version="2.6.0",
- org.apache.commons.lang;bundle-version="2.6.0",
+Require-Bundle: net.ssehub.easy.libs.slf4j.api,
+ net.ssehub.easy.libs.commons.io,
+ net.ssehub.easy.libs.commons.lang,
  com.google.guava;bundle-version="27.1.0",
- org.apache.commons.codec;bundle-version="1.14.0",
+ net.ssehub.easy.libs.commons.codec;bundle-version="1.14.0",
  com.sun.jna;bundle-version="5.6.0"
