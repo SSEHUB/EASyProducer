@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: libs.common.codec
 Bundle-SymbolicName: net.ssehub.easy.libs.commons.codec
-Automatic-Module-Name: net.ssehub.easy.libs.commons.io
+Automatic-Module-Name: net.ssehub.easy.libs.commons.codec
 Bundle-Version: 1.14.0
 Bundle-ClassPath: org.apache.commons.codec_1.14.0.jar
 Export-Package: org.apache.commons.codec,

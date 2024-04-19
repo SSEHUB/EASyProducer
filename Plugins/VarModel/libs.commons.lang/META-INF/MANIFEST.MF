@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: apache.commons.lang
 Bundle-SymbolicName: net.ssehub.easy.libs.commons.lang
-Automatic-Module-Name: net.ssehub.easy.libs.commons.io
+Automatic-Module-Name: net.ssehub.easy.libs.commons.lang
 Bundle-Version: 2.6.0
 Bundle-ClassPath: org.apache.commons.lang_2.6.0.jar
 Export-Package: org.apache.commons.lang,
