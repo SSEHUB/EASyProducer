@@ -1,12 +1,13 @@
 package net.ssehub.easy.varModel.model.filter;
 
-import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.hasItems;
 
 import java.util.List;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,12 +45,13 @@ public class FreezeBlockFinderTest extends AbstractFrozenElementsFinderTest {
         
         Assert.assertNotNull(frozenBlocks);
         Assert.assertEquals(FREEZEBLOCKS.length, frozenBlocks.size());
-        Assert.assertThat(frozenBlocks, hasItems(FREEZEBLOCKS));
+        MatcherAssert.assertThat(frozenBlocks, hasItems(FREEZEBLOCKS));
     }
     
     /**
      * Tests whether only imported elements can be found.
      */
+    @SuppressWarnings("unchecked")
     @Test
     public void testFindImportedFreezeBlocks() {
         finder = new FreezeBlockFinder(ORIGIN_PROJECT, FilterType.ONLY_IMPORTS);
@@ -60,6 +62,6 @@ public class FreezeBlockFinderTest extends AbstractFrozenElementsFinderTest {
         
         Assert.assertNotNull(frozenBlocks);
         Assert.assertEquals(3, frozenBlocks.size());
-        Assert.assertThat(frozenBlocks, expected);
+        MatcherAssert.assertThat(frozenBlocks, expected);
     }
 }
