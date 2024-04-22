@@ -89,7 +89,7 @@ public class EditorUtils {
     
     /**
      * Obtains the edited expression from an editor created by 
-     * {@link #embedIvmlConstraintEditor(ModelInfo, Composite, IConstraintFilter)}.
+     * {@link #embedIvmlConstraintEditor(ModelInfo, Composite, IConstraintFilter, boolean)}.
      * 
      * @param editor the editor
      * @param info the model information of the containing project

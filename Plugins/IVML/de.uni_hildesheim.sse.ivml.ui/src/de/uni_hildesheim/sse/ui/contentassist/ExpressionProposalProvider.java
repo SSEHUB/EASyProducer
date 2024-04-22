@@ -629,7 +629,9 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
     /**
      * Returns the IVML type for a chain of <code>calls</code>.
      * 
-     * @param expression the expression to return the type for
+     * @param calls the calls to infer
+     * @param operand the basic data type to apply the calls to (may be <b>null</b>, use first parameter type [implicit operand] instead if 
+     *   present)
      * @param model the node representing the ECore Xtext model
      * @param cmpDef the containing type definition (may be <b>null</b> for project)
      * @return the inferred type or <b>null</b> if no type is available
@@ -644,7 +646,9 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
     /**
      * Returns the IVML type for a <code>call</code>.
      * 
-     * @param expression the expression to return the type for
+     * @param call the call to infer
+     * @param operand the basic data type to apply the calls to (may be <b>null</b>, use first parameter type [implicit operand] instead if 
+     *   present)
      * @param model the node representing the ECore Xtext model
      * @param cmpDef the containing type definition (may be <b>null</b> for project)
      * @return the inferred type or <b>null</b> if no type is available
@@ -673,7 +677,7 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
     /**
      * Returns the IVML type for a <code>call</code>.
      * 
-     * @param expression the expression to return the type for
+     * @param call the call to infer
      * @param operand the operand type (may be <b>null</b>, use first parameter type [implicit operand] instead if 
      *   present)
      * @param model the node representing the ECore Xtext model

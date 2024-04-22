@@ -26,7 +26,7 @@ public interface IUsedProjectFinder {
     /**
      * Returns the used {@link net.ssehub.easy.varModel.model.Project}s.
      * Needs that the visitor was executed before.
-     * @return All found Projects, must not be <tt>null</tt>.
+     * @return All found Projects, must not be <b>null</b>.
      */
     public java.util.Set<Project> getUsedProjects();
 }

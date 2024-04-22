@@ -109,8 +109,8 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * 
      * @param model
      *            the current model
-     * @param ruleCall
-     *            the current rule call
+     * @param assignment
+     *            the assignment to process
      * @param context
      *            the current context
      * @param acceptor
@@ -994,8 +994,8 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * 
      * @param context
      *            ContentAssistContext
-     * @return <code>List<Typedef></code> with all Typedef-declarations.
-     *         Maybe </b>null</b>.
+     * @return <code>List&lt;Typedef&gt;</code> with all Typedef-declarations.
+     *         Maybe <b>null</b>.
      */
     private List<Typedef> getTypeDefs(ContentAssistContext context) {
 
@@ -1039,7 +1039,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
     /**
      * searches for the TypedefCompound-objects by given names.
      * 
-     * @param name
+     * @param names
      *            the names of the compounds as a Strings
      * @param context
      *            ContentAssistContext
@@ -1059,7 +1059,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * 
      * @param context
      *            ContentAssistContext
-     * @return <code>List<VariableDeclaration></code> with all
+     * @return <code>List&lt;VariableDeclaration&gt;</code> with all
      *         <code>VariableDeclaration</code> inside of the project. Maybe
      *         <b>null</b>.
      */
@@ -1090,7 +1090,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      *            the type of the variable, as <code>String</code>
      * @param context
      *            ContentAssistContext
-     * @return </code>List<VariableDeclaration></code> with every
+     * @return <code>List&lt;VariableDeclaration&gt;</code> with every
      *         <code>VariableDeclaration</code>, which has the the specific
      *         type, given by the parameter. Maybe <b>null</b>.
      */
@@ -1145,7 +1145,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      *            setOf(Integer), Integer would be the type.).
      * @param context
      *            ContentAssistContext
-     * @return <code>List<VariableDeclaration></code> with all
+     * @return <code>List&lt;VariableDeclaration&gt;</code> with all
      *         <code>VariableDeclaration</code>'s which have DerivedTypes. Maybe
      *         <b>null</b>.
      */
@@ -1197,7 +1197,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * 
      * @param context
      *            ContentAssistContext
-     * @return <code>List<AttributeTo></code> with all <code>AttributeTo</code>
+     * @return <code>List&lt;AttributeTo&gt;</code> with all <code>AttributeTo</code>
      *         Statements. Maybe <b>null</b>.
      */
     private List<AnnotateTo> getAttributes(ContentAssistContext context) {
@@ -1218,7 +1218,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * Returns all operations for all registered types in the IVML_DATATYPES
      * Array.
      * 
-     * @return <code>List<Operation></code> with all operations. Maybe
+     * @return <code>List&lt;Operation&gt;</code> with all operations. Maybe
      *         <b>null</b>.
      */
     private List<Operation> getAllOperationsCleaned() {
@@ -1264,7 +1264,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * 
      * @param type
      *            the returntype, you want.
-     * @return <code>List<StyledString></code> with all operations, ready to
+     * @return <code>List&lt;StyledString&gt;</code> with all operations, ready to
      *         propose. Maybe <b>null</b>.
      */
     private List<StyledString> getOperationsForReturnType(String type) {
@@ -1451,10 +1451,10 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
     }
 
     /**
-     * Returns if the given operationtype matches to the given operation.
+     * Returns if the given operation type matches to the given operation.
      * 
-     * @param operationType
-     * @param operation
+     * @param operationType the operation type
+     * @param operation the operation
      * @return <b>true</b> if it matches, <b>false</b> otherwise.
      */
     private boolean getOperationType(String operationType, Operation operation) {
@@ -1468,41 +1468,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
         return result;
     }
 
-    /**
-     * Returns all registered operations for a specific type. This method should
-     * only be used for proposing operations in a Call (dot-notation).
-     * 
-     * @param node
-     *            the last complete node
-     * @return <code>List<StyledString></code> with all operations, ready to
-     *         display. Maybe <b>null</b>.
-     */
-    // this is now done in ExpressionProposalProvider based on IDatatype
-    /*
-     * private List<StyledString> proposeOperationsForType(INode node) {
-     * List<StyledString> result = null; if (node != null) { String type =
-     * getTypeOfCallContext(node); System.out.println("PROPOSEOPERATIONS_TYPE: "
-     * + type); if (type != null && !type.isEmpty()) { List<Operation> opList =
-     * getAllOperationsForType(type); if (!isEmpty(opList)) { result = new
-     * ArrayList<StyledString>(); for (Operation operation : opList) { if
-     * (getOperationType("FUNCTION_CALL", operation)) { StyledString display =
-     * new StyledString(); String name = operation.getName(); boolean
-     * hasParameter = false; display.append(name + "(");
-     * 
-     * //setup parameters if (operation.getParameterCount() > 0) { for (int i =
-     * 0; i < operation.getParameterCount(); i++) { IDatatype parameter =
-     * operation.getParameter(i); if (parameter != null && parameter.getName()
-     * != null && parameter.getType() != null && parameter.getType().getName()
-     * != null) { String paramName = "parameter" + i; String paramType =
-     * parameter.getType().getName(); display.append(paramType + " " + paramName
-     * + ", "); } } hasParameter = true; } if (hasParameter) { String
-     * tempdisplay = display.getString(); tempdisplay = tempdisplay.substring(0,
-     * tempdisplay.length() - 2); display = new StyledString();
-     * display.append(tempdisplay); } display.append(")"); display.append(" : "
-     * + operation.getReturns()); result.add(display); } } } } } return result;
-     * }
-     * 
-     * /** proposes DerivedType-variables (exp: setOf(Type)) to assign
+    /** proposes DerivedType-variables (exp: setOf(Type)) to assign
      * 
      * @param context <code>ContentAssistContext</code>
      * 
@@ -1661,7 +1627,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * proposes all <code>Typedef</code>-objects which are inside of the tdList.
      * 
      * @param tdList
-     *            <code>List<Typedef></code>, with all <code>Typedef</code>
+     *            <code>List&lt;Typedef&gt;</code>, with all <code>Typedef</code>
      *            -objects.
      * @param context
      *            <code>ContentAssistContext</code>
@@ -1717,7 +1683,7 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * dvList.
      * 
      * @param dvList
-     *            <code>List<VariableDeclaration></code> with all variables.
+     *            <code>List&lt;VariableDeclaration&gt;</code> with all variables.
      * @param context
      *            <code>ContentAssistContext</code>
      * @param acceptor
@@ -1783,9 +1749,6 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
      * automatically completes a compound-assign with all specified variables in
      * the declaration.
      * 
-     * @param varList
-     *            <code>List<VariableDeclarationImpl</code> with all variables,
-     *            which should automatically inserted.
      * @param context
      *            ContentAssistContext
      * @param acceptor

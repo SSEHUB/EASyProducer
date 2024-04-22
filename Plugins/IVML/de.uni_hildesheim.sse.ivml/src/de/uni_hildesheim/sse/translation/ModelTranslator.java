@@ -135,7 +135,8 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
     };
 
     /**
-     * Implements a translation result enabling deferred model loading. As long as {@link #completeLoading()} is not 
+     * Implements a translation result enabling deferred model loading. As long as 
+     * {@link #completeLoading(IDeferredModelLoader)} is not 
      * called, the model instances stored in this instance are not ready for use.
      * 
      * @author Holger Eichelberger

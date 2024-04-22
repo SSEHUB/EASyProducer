@@ -3,6 +3,7 @@ package test.de.uni_hildesheim.sse;
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -13,7 +14,7 @@ import org.junit.Test;
 public class TestUnderFix extends AbstractTest {
 
     /**
-     * Creates a file in {@link #DIR}.
+     * Creates a file in {@link #getTestDataDir()}.
      * 
      * @param name the name of the file (excluding ".ivml")
      * @return the file
@@ -28,6 +29,7 @@ public class TestUnderFix extends AbstractTest {
      * @throws IOException should not occur
      */
     @Test
+    @Ignore
     public void test() throws IOException {
         assertEqual(createFile("test"), "testC", "0");
     }

@@ -208,7 +208,7 @@ public class ImportTest extends AbstractTest {
      * Note that the locations must be registered before loading the project.
      * Works only if exactly one project with the specified name exists at the registered locations.
      * @param projectName The name of the project to load.
-     * @return The loaded project, will not be <tt>null</tt>.
+     * @return The loaded project, will not be <b>null</b>.
      * @see #addLocation(File)
      */
     private Project loadAndCheckProject(String projectName) {

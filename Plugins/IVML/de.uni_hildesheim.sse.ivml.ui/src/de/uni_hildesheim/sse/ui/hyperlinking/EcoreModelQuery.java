@@ -333,12 +333,12 @@ public class EcoreModelQuery extends AbstractEcoreModelQuery<Project, ModelEleme
 	
 	
 	/**
-	 * Checks whether the name of the given {@link VariableDeclaration} equals the name of the given {@ ModelElementDescription}.
+	 * Checks whether the name of the given {@link VariableDeclaration} equals the name of the given {@link ModelElementDescription}.
 	 * This is done by iterating over all variable declaration parts of the {@link VariableDeclaration} and checking whether one of
-	 * these parts match the name of the {@ ModelElementDescription}.
+	 * these parts match the name of the {@link ModelElementDescription}.
 	 * 
 	 * @param varDecl the {@link VariableDeclaration} of which all variable declaration parts are checked against the name defined
-	 * by the given {@ ModelElementDescription}
+	 * by the given {@link ModelElementDescription}
 	 * @param elementDescription the {@link ModelElementDescription} which name is checked against all variable declaration parts
 	 * of the given {@link VariableDeclaration} 
 	 * @return <code>true</code> if the name defined in the given {@link ModelElementDescription} matches one variable declaration

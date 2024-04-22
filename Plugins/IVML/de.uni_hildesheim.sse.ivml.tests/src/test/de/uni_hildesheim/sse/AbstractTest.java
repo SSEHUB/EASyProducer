@@ -63,7 +63,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     }
 
     /**
-     * Starts up the {@link VarModel} by registering {@link #TESTDATA_DIR} as
+     * Starts up the {@link VarModel} by registering {@link #getTestDataDir()} as
      * model directory and registering {@link ModelUtility} as model loader.
      */
     @BeforeClass
@@ -79,7 +79,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     }
 
     /**
-     * Tears down the {@link VarModel} by unregistering {@link #TESTDATA_DIR}
+     * Tears down the {@link VarModel} by unregistering {@link #getTestDataDir()}
      * as model directory and unregistering {@link ModelUtility} as model
      * loader.
      */

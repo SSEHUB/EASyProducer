@@ -241,7 +241,7 @@ class UsedProjectFinder extends AbstractProjectVisitor implements IUsedProjectFi
     
     /**
      * Creates a map ion form of (project name, list of instances) for all found projects.
-     * @return A map of used {@link Project} instances, will not be <tt>null</tt> unless
+     * @return A map of used {@link Project} instances, will not be <b>null</b> unless
      * the main {@link Project} was not visited before.
      */
     public Map<String, List<Project>> createProjectMap() {
