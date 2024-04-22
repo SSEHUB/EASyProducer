@@ -173,7 +173,7 @@ public class ValidationUtils {
         /**
          * Prints out the translation result.
          * 
-         * @param result the translation result obtained from {@link #createModel(Object, java.net.URI)
+         * @param result the translation result obtained from {@link #createModel(Object, java.net.URI)}
          * @param out the output writer
          */
         public void print(TranslationResult<T> result, Writer out);

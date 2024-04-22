@@ -44,7 +44,7 @@ public interface IWizardPageDescriptor {
     
     /**
      * An image for the {@link AbstractFiletypeWizardPage}.
-     * @return A loaded image or <tt>null</tt>.
+     * @return A loaded image or <b>null</b>.
      */
     public ImageDescriptor getImageDescriptor();
     

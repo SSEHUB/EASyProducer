@@ -74,7 +74,7 @@ public abstract class EvaluationAccessor {
     
     /**
      * Returns the value of the accessed element, referred values are dereferenced.<br/>
-     * <b><font color="red">Note:</font></b> This method is expensive as it may create a new {@link EvaluationVisitor}
+     * <b>Note:</b> This method is expensive as it may create a new {@link EvaluationVisitor}
      * to resolve reference expressions.
      * 
      * @return the dereferenced value (may be <b>null</b> if undefined)

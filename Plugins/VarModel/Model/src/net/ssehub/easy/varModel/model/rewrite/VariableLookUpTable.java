@@ -60,7 +60,7 @@ class VariableLookUpTable {
      * For instance:
      * <code>
      * Constraint cVar = ...;
-     * def Boolean func(Integer intVar) = cVar && ...;
+     * def Boolean func(Integer intVar) = cVar &amp;&amp; ...;
      * </code>
      */
     private Map<AbstractVariable, Set<ContainableModelElement>> constraintReusers;
@@ -187,7 +187,7 @@ class VariableLookUpTable {
      * Returns the set of instances of the given {@link IDatatype}.
      * @param type The <b>exact</b> {@link IDatatype} for which the instances shall be returned,
      * will <b>not</b> consider {@link IDatatype#isAssignableFrom(IDatatype)}.
-     * @return The instances for the given type or <tt>null</tt> if no instances exist.
+     * @return The instances for the given type or <b>null</b> if no instances exist.
      */
     Set<IDecisionVariable> getInstancesForType(IDatatype type) {
         return instancesPerType.get(type);
@@ -198,7 +198,7 @@ class VariableLookUpTable {
      * @param declaration The declaration for which the instances shall be returned.
      * If the declaration is nested inside a compound which was multiple times instantiated, this single declaration
      * could return multiple {@link IDecisionVariable}s.
-     * @return The instances for the given declaration or <tt>null</tt> if no instances exist.
+     * @return The instances for the given declaration or <b>null</b> if no instances exist.
      */
     Set<IDecisionVariable> getInstancesForDeclaration(AbstractVariable declaration) {
         return instancesPerDeclaration.get(declaration);
@@ -209,8 +209,8 @@ class VariableLookUpTable {
      * an iterator of a constraint.
      * Needs that this {@link VariableLookUpTable} was already initialized with a {@link Configuration}.
      * @param declaration The declaration to check.
-     * @return <tt>true</tt> if the declaration is used for a {@link IDecisionVariable} of the configuration or
-     * if this table was not initialized with a {@link Configuration}, <tt>false</tt> otherwise.
+     * @return {@code true} if the declaration is used for a {@link IDecisionVariable} of the configuration or
+     * if this table was not initialized with a {@link Configuration}, {@code false} otherwise.
      */
     boolean declarationKnown(AbstractVariable declaration) {
         return initialized ? definedDeclarations.contains(declaration) : true;

@@ -32,7 +32,7 @@ public interface IProjectImportFilter {
      * @param context Knowledge of the current translation, comes from the
      * {@link net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
-     * <tt>null</tt> if the element should be deleted.
+     * <b>null</b> if the element should be deleted.
      */
     public ProjectImport handleImport(ProjectImport pImport, RewriteContext context);
 

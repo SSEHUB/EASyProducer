@@ -30,8 +30,8 @@ public class EASyLoggerFactory {
     /**
      * This constant value should be set to:
      * <ul>
-     * <li><tt>false</tt>: For a release.</li>
-     * <li><tt>true</tt>: For development.</li>
+     * <li>{@code false}: For a release.</li>
+     * <li>{@code true}: For development.</li>
      * </ul>
      */
     public static final boolean DEBUG = false;
@@ -66,7 +66,7 @@ public class EASyLoggerFactory {
          * Creates an wrapper/adapter which uses the {@link ILogger} instance of the {@link EASyLoggerFactory}.
          * 
          * @param clazz The class where the logging is done
-         * @param bundleName The name of the plug-in containing the logged class (can be <tt>null</tt>).
+         * @param bundleName The name of the plug-in containing the logged class (can be <b>null</b>).
          */
         private EASyLogger(Class<?> clazz, String bundleName) {
             this.clazz = clazz;
@@ -96,8 +96,8 @@ public class EASyLoggerFactory {
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
-         * @param msg The message (<tt>msg.toString()</tt> will be used for logging)
-         * Should not be <tt>null</tt>.
+         * @param msg The message ({@code msg.toString()} will be used for logging)
+         * Should not be <b>null</b>.
          */
         public void debug(Object msg) {
             if (level == LoggingLevel.DEBUG && null != msg) {
@@ -113,9 +113,9 @@ public class EASyLoggerFactory {
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
-         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
-         * Should not be <tt>null</tt>.
-         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
+         * @param msg1 The message ({@code msg1.toString()} will be used for logging)
+         * Should not be <b>null</b>.
+         * @param msg2 The message ({@code msg2.toString()} will be used for logging)
          */
         public void debug(Object msg1, Object msg2) {
             if (level == LoggingLevel.DEBUG && null != msg1) {
@@ -131,10 +131,10 @@ public class EASyLoggerFactory {
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
-         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
-         * Should not be <tt>null</tt>.
-         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
-         * @param msg3 The message (<tt>msg3.toString()</tt> will be used for logging)
+         * @param msg1 The message ({@code msg1.toString()} will be used for logging)
+         * Should not be <b>null</b>.
+         * @param msg2 The message ({@code msg2.toString()} will be used for logging)
+         * @param msg3 The message ({@code msg3.toString()} will be used for logging)
          */
         public void debug(Object msg1, Object msg2, Object msg3) {
             if (level == LoggingLevel.DEBUG && null != msg1) {
@@ -150,11 +150,11 @@ public class EASyLoggerFactory {
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
-         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
-         * Should not be <tt>null</tt>.
-         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
-         * @param msg3 The message (<tt>msg3.toString()</tt> will be used for logging)
-         * @param msg4 The message (<tt>msg4.toString()</tt> will be used for logging)
+         * @param msg1 The message ({@code msg1.toString()} will be used for logging)
+         * Should not be <b>null</b>.
+         * @param msg2 The message ({@code msg2.toString()} will be used for logging)
+         * @param msg3 The message ({@code msg3.toString()} will be used for logging)
+         * @param msg4 The message ({@code msg4.toString()} will be used for logging)
          */
         public void debug(Object msg1, Object msg2, Object msg3, Object msg4) {
             if (level == LoggingLevel.DEBUG && null != msg1) {
@@ -170,11 +170,11 @@ public class EASyLoggerFactory {
          * level then the given message is forwarded to all the
          * registered output Handler objects.
          * <p>
-         * @param msg1 The message (<tt>msg1.toString()</tt> will be used for logging)
-         * @param msg2 The message (<tt>msg2.toString()</tt> will be used for logging)
-         * @param msg3 The message (<tt>msg3.toString()</tt> will be used for logging)
-         * @param msg4 The message (<tt>msg4.toString()</tt> will be used for logging)
-         * @param msg5 The message (<tt>msg5.toString()</tt> will be used for logging)
+         * @param msg1 The message ({@code msg1.toString()} will be used for logging)
+         * @param msg2 The message ({@code msg2.toString()} will be used for logging)
+         * @param msg3 The message ({@code msg3.toString()} will be used for logging)
+         * @param msg4 The message ({@code msg4.toString()} will be used for logging)
+         * @param msg5 The message ({@code msg5.toString()} will be used for logging)
          */
         public void debug(Object msg1, Object msg2, Object msg3, Object msg4, Object... msg5) {
             if (level == LoggingLevel.DEBUG) {
@@ -321,7 +321,7 @@ public class EASyLoggerFactory {
      * This logger instance should not be passed to other classes. 
      * 
      * @param clazz The class to log.
-     * @param bundleName The name of the plug-in containing the logged class (can be <tt>null</tt>).
+     * @param bundleName The name of the plug-in containing the logged class (can be <b>null</b>).
      * @return ILogger A logger instance for this specified class and plug-in.
      */
     public EASyLogger getLogger(Class<?> clazz, String bundleName) {
@@ -333,7 +333,7 @@ public class EASyLoggerFactory {
      * method for creating concrete logger instances. Also all already created loggers will be updated automatically. 
      * 
      * @param logger The new {@link ILogger} which shall be used to log all info, warnings, and errors.
-     *     Must not be <tt>null</tt>.
+     *     Must not be <b>null</b>.
      * @return the active logger before this operation 
      */
     public ILogger setLogger(ILogger logger) {

@@ -227,7 +227,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
     protected abstract String getBundleId();
     
     /**
-     * Creates a model (while {@link #buildModel(IXtextDocument)).
+     * Creates a model (while {@link #buildModel(IXtextDocument)}).
      * 
      * @param root the root language element
      * @param uri the URI of the underlying document

@@ -114,7 +114,7 @@ public class ConstraintSplitWriter extends IVMLWriter {
     /**
      * To be called after a potential split point (checking the filter).
      * 
-     * @param split the output of the corresponding {@link #pre(ConstraintSyntaxTree) pre} call
+     * @param split the output of the corresponding {@link #pre(IModelElement, ConstraintSyntaxTree) pre} call
      */
     private void post(boolean split) {
         if (split) {

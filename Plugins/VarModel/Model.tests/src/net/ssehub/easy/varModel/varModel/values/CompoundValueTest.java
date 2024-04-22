@@ -31,7 +31,7 @@ public class CompoundValueTest {
     private CompoundValue value2;
     /**
      * Creates a project, which is needed as toplevel element.
-     * @throws ValueDoesNotMatchTypeException 
+     * @throws ValueDoesNotMatchTypeException shall not occur
      */
     @Before
     public void setUp() throws ValueDoesNotMatchTypeException {

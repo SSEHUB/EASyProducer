@@ -73,7 +73,7 @@ class Context {
      * Returns whether currently a qualified name for a
      * {@link net.ssehub.easy.varModel.confModel.IDecisionVariable} as parent is stored
      * for the current visitation.
-     * @return <tt>true</tt> a parent exists for the current visited variable.
+     * @return {@code true} a parent exists for the current visited variable.
      * @see #getParent()
      * @see #addParent(String)
      */
@@ -111,7 +111,7 @@ class Context {
     
     /**
      * Returns whether variables were changed during the current constraint visitation.
-     * @return <tt>true</tt>At least one variable was found.
+     * @return {@code true}At least one variable was found.
      * @see #elementFound()
      */
     boolean elementsWereFound() {

@@ -49,11 +49,11 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
     /**
      * Sole constructor for creating a {@link VariableConfigProvider} for a toplevel {@link IDecisionVariable}.
      * @param relatedVariable The {@link IDecisionVariable} where this {@link VariableConfigProvider} belongs to
-     *     (must not be <tt>null</tt>).
-     * @param value The (initial) value of the related {@link IDecisionVariable} (can be <tt>null</tt> for lazy
+     *     (must not be <b>null</b>).
+     * @param value The (initial) value of the related {@link IDecisionVariable} (can be <b>null</b> for lazy
      *     initialization).
      * @param state The initial {@link IAssignmentState} of the related {@link IDecisionVariable}.
-     *     In case of <tt>null</tt> the state will be set to {@link AssignmentState#UNDEFINED}.
+     *     In case of <b>null</b> the state will be set to {@link AssignmentState#UNDEFINED}.
      */
     protected ToplevelVarConfigProvider(IDecisionVariable relatedVariable, Value value, IAssignmentState state) {
         super();
@@ -129,7 +129,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
      * can be set to null. This must be avoided in case of new values (incremental build up).
      * @param value the value (may be <b>null</b> for incremental buildup)
      * @param state the related assignment state
-     * @param allowDeletation <tt>true</tt> if <tt>null</tt> values can overwrite already set values of an compound.
+     * @param allowDeletation {@code true} if <b>null</b> values can overwrite already set values of an compound.
      * @throws ConfigurationException in case that the types of 
      *   {@link #getDeclaration()} and <code>value</code> do not comply
      */
@@ -171,7 +171,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
      * 
      * @param value the value (may be <b>null</b> for incremental buildup)
      * @param state the related assignment state
-     * @param allowDeletation <tt>true</tt> if <tt>null</tt> values can overwrite already set values of an compound.
+     * @param allowDeletation {@code true} if <b>null</b> values can overwrite already set values of an compound.
      * @param oldValue copy of value.
      * @return value
      * @throws ConfigurationException in case that the types of 
@@ -247,7 +247,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
      * 
      * @param conValue the value (may be <b>null</b> for incremental buildup)
      * @param state the related assignment state
-     * @param allowDeletation <tt>true</tt> if <tt>null</tt> values can overwrite already set values of an compound.
+     * @param allowDeletation {@code true} if <b>null</b> values can overwrite already set values of an compound.
      * @return value
      * @throws ConfigurationException in case that the types of 
      * {@link #getDeclaration()} and <code>value</code> do not comply
@@ -296,7 +296,7 @@ class ToplevelVarConfigProvider extends VariableConfigProvider {
     }
 
     /**
-     * Changes the value adjusting {@link Value#setValueParent(net.ssehub.easy.varModel.model.values.IValueParent) 
+     * Changes the value adjusting {@link Value#setValueParent(net.ssehub.easy.varModel.model.values.IValueParent)} 
      * the parent variable of the involved values).
      * 
      * @param value the new value

@@ -40,7 +40,7 @@ public class SetValueTest {
     /**
      * Creates a set value and adds and edits sub values.
      * Also tests handling of duplicates.
-     * @throws ValueDoesNotMatchTypeException 
+     * @throws ValueDoesNotMatchTypeException shall not occur
      */
     @Test
     public void testBasicOperations() throws ValueDoesNotMatchTypeException {
@@ -116,7 +116,7 @@ public class SetValueTest {
     
     /**
      * Test valid constructor call.
-     * @throws ValueDoesNotMatchTypeException 
+     * @throws ValueDoesNotMatchTypeException shall not occur
      */
     @Test
     public void initialValue() throws ValueDoesNotMatchTypeException {

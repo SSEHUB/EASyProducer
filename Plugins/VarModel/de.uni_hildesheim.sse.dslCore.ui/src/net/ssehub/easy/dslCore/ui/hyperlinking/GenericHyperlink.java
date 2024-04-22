@@ -39,7 +39,7 @@ public class GenericHyperlink<P extends EObject> extends AbstractHyperlink {
      *            the {@link ILeafNode} of the parsed resource for which this
      *            hyperlink should be created
      * @param project
-     *            the {@link Project} the given node is located in
+     *            the project the given node is located in
      * @param factory the creating factory
      */
     public GenericHyperlink(ILeafNode parseTreeElement, P project, IHyperlinkFactory<P> factory) {

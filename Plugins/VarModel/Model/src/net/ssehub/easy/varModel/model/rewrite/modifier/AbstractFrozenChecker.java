@@ -69,8 +69,8 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
      * @param constraint The constraint to check.
      * @param context Knowledge of the current translation, comes from the
      * {@link net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor}
-     * @return <tt>true</tt> if the constraint contains only frozen/constant elements or is <tt>null</tt>,
-     * <tt>false</tt> if it contain at least one open variable.
+     * @return {@code true} if the constraint contains only frozen/constant elements or is <b>null</b>,
+     * {@code false} if it contain at least one open variable.
      */
     protected boolean constraintIsFrozen(ConstraintSyntaxTree constraint, RewriteContext context) {
         boolean allFrozen = true;
@@ -90,7 +90,7 @@ public abstract class AbstractFrozenChecker<M extends ContainableModelElement> i
      * @param declaration The declaration to check (if it is nested, it can have multiple instances).
      * @param context Knowledge of the current translation, comes from the
      * {@link net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor}
-     * @return <tt>true</tt> if all instances are frozen or if it has no instances, <ttfalse</tt> otherwise.
+     * @return {@code true} if all instances are frozen or if it has no instances, {@code false} otherwise.
      */
     protected boolean allInstancesAreFrozen(AbstractVariable declaration, RewriteContext context) {
         boolean allFrozen = true;

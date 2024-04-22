@@ -228,8 +228,8 @@ public class ConfigurationTest {
      * @param declarations A List of declarations, retrieved by a
      * {@link net.ssehub.easy.varModel.model.filter.DeclarationFinder}.
      * @param decl The desired variable Declaration, which should (not) be included in the given list.
-     * @param shouldBeFound <tt>true</tt> if the given declaration should be found in the given project,
-     *     <tt>false</tt> otherwise.
+     * @param shouldBeFound {@code true} if the given declaration should be found in the given project,
+     *     {@code false} otherwise.
      */
     private void checkDeclarationIsInList(List<AbstractVariable> declarations, AbstractVariable decl,
         boolean shouldBeFound) {

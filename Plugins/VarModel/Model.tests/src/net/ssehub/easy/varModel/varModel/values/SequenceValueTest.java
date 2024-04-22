@@ -15,7 +15,7 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
- * Test case for SequenceValue & also CompoundValue.
+ * Test case for SequenceValue &amp; also CompoundValue.
  * @author Saripalli
  *
  */

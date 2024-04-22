@@ -78,6 +78,7 @@ class NumberOperationUtils {
      *
      */
     abstract static class IntUnaryOperation {
+        
         /**
          * Calculates the estimated value for one randomly generated integer value.
          * @param value The integer value
@@ -177,8 +178,8 @@ class NumberOperationUtils {
     /**
      * Tests randomly Integer operations.
      * @param operation A number operation. One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
-     * @param isSymmetric If <tt>true</tt> also a second constraint will be created and tested,
-     * with <tt>value2 (operation) value1</tt>.
+     * @param isSymmetric If {@code true} also a second constraint will be created and tested,
+     * with {@code value2 (operation) value1}.
      * @param op An oracle which should calculate the <b>estimated</b> value.
      */
     static void intOperationLoop(String operation, boolean isSymmetric, IntOperation op) {
@@ -210,7 +211,7 @@ class NumberOperationUtils {
      * Tests randomly Integer operations.
      * @param operation An unary number operation.
      *     One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
-     * @param isSymmetric If <tt>true</tt> operation(expectedResult) = value and vice versa,
+     * @param isSymmetric If {@code true} operation(expectedResult) = value and vice versa,
      *     else operation(expectedResult) = expectedResult
      * @param op An oracle which should calculate the <b>estimated</b> value.
      */
@@ -225,8 +226,8 @@ class NumberOperationUtils {
     /**
      * Tests randomly Real operations.
      * @param operation A number operation. One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
-     * @param isSymmetric If <tt>true</tt> also a second constraint will be created and tested,
-     * with <tt>value2 (operation) value1</tt>.
+     * @param isSymmetric If {@code true} also a second constraint will be created and tested,
+     * with {@code value2 (operation) value1}.
      * @param op An oracle which should calculate the <b>estimated</b> value.
      */
     static void realOperationLoop(String operation, boolean isSymmetric, RealOperation op) {
@@ -258,7 +259,7 @@ class NumberOperationUtils {
      * Tests randomly Real operations.
      * @param operation An unary number operation.
      *     One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
-     * @param isSymmetric If <tt>true</tt> operation(expectedResult) = value and vice versa,
+     * @param isSymmetric If {@code true} operation(expectedResult) = value and vice versa,
      *     else operation(expectedResult) = expectedResult
      * @param op An oracle which should calculate the <b>estimated</b> value.
      */
@@ -298,8 +299,8 @@ class NumberOperationUtils {
      * @param value2 The second constant integer value
      * @param operation A number operation. One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
      * @param expectedResult For testing the expected result of the operation.
-     * @param symmetric If <tt>true</tt> also a second constraint will be created and tested,
-     * with <tt>value2 (operation) value1</tt>.
+     * @param symmetric If {@code true} also a second constraint will be created and tested,
+     * with {@code value2 (operation) value1}.
      * @param numberType The expected {@link IDatatype} of created results.
      */
     static void assertArithmeticConstraint(Number value1, Number value2, String operation, Object expectedResult,
@@ -341,7 +342,7 @@ class NumberOperationUtils {
      *     One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
      * @param expectedResult For testing the expected result of the operation.
      * @param numberType The expected {@link IDatatype} of created results.
-     * @param isSymmetric If <tt>true</tt> operation(expectedResult) = value and vice versa,
+     * @param isSymmetric If {@code true} operation(expectedResult) = value and vice versa,
      *     else operation(expectedResult) = expectedResult
      */
     static void assertUnaryConstraint(Number value, String operation, Object expectedResult,
@@ -401,11 +402,11 @@ class NumberOperationUtils {
      * Creates an arithmetic {@link RealType} constraint. This constraint can be a mixture
      * of one {@link RealType} and one {@link IntegerType} or {@link RealType}.
      * This constraint will have the following form:
-     * <tt>value1 (operation) value2</tt>
+     * {@code value1 (operation) value2}
      * @param value1 The first constant number value
      * @param value2 The second constant number value
      * @param operation A number operation. One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
-     * @return A constraint in form of <tt>value1 (operation) value2</tt>.
+     * @return A constraint in form of {@code value1 (operation) value2}.
      */
     static ConstraintSyntaxTree createArithmeticConstraint(Number value1, Number value2, String operation) {
         OCLFeatureCall cst = null;
@@ -431,11 +432,11 @@ class NumberOperationUtils {
     /**
      * Creates an unary constraint for number types.
      * This constraint will have the following form:
-     * <tt>(operation) value</tt>
+     * {@code (operation) value}
      * @param value The constant number value
      * @param operation A unary number operation.
      *     One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
-     * @return A constraint in form of <tt>(operation) value</tt>.
+     * @return A constraint in form of {@code (operation) value}.
      */
     static ConstraintSyntaxTree createUnaryConstraint(Number value, String operation) {
         OCLFeatureCall cst = null;

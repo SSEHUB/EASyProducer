@@ -45,7 +45,7 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
     /**
      * This includes all {@link DecisionVariableDeclaration}, including nested {@link DecisionVariableDeclaration}s
      * of attribute assignments.
-     * This list will only be generated on demand, i.e. if <tt>getDeclarationCount()</tt> is called.
+     * This list will only be generated on demand, i.e. if {@code getDeclarationCount()} is called.
      */
     private List<DecisionVariableDeclaration> allDeclarations = null;
     
@@ -276,8 +276,8 @@ public class BasicDecisionVariableContainer extends ModelElement implements IDec
     /**
      * Removes the specified model element from this container (if it exists).
      * @param element The {@link Constraint}, {@link DecisionVariableDeclaration}, or {@link AttributeAssignment}
-     * to remove. If <tt>null</tt> nothing will happen.
-     * @return <tt>true</tt> if the model element was part of this container and was removed successfully.
+     * to remove. If <b>null</b> nothing will happen.
+     * @return {@code true} if the model element was part of this container and was removed successfully.
      */
     public boolean removeModelElement(ContainableModelElement element) {
         boolean found = false;

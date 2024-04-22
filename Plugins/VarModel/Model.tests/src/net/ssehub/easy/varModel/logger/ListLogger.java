@@ -21,7 +21,7 @@ class ListLogger implements ILogger {
     
     /**
      * Getter for the info messages.
-     * @return All logged info messages, will not be <tt>null</tt>.
+     * @return All logged info messages, will not be <b>null</b>.
      */
     public List<String> getInfoMessages() {
         return infoMessages;
@@ -29,7 +29,7 @@ class ListLogger implements ILogger {
 
     /**
      * Getter for the error messages.
-     * @return All logged error messages, will not be <tt>null</tt>.
+     * @return All logged error messages, will not be <b>null</b>.
      */
     public List<String> getErrorMessages() {
         return errorMessages;
@@ -37,7 +37,7 @@ class ListLogger implements ILogger {
 
     /**
      * Getter for the warning messages.
-     * @return All logged warning messages, will not be <tt>null</tt>.
+     * @return All logged warning messages, will not be <b>null</b>.
      */
     public List<String> getWarnMessages() {
         return warnMessages;
@@ -45,7 +45,7 @@ class ListLogger implements ILogger {
 
     /**
      * Getter for the debug messages.
-     * @return All logged debug messages, will not be <tt>null</tt>.
+     * @return All logged debug messages, will not be <b>null</b>.
      */
     public List<String> getDebugMessages() {
         return debugMessages;
@@ -53,7 +53,7 @@ class ListLogger implements ILogger {
 
     /**
      * Getter for the exceptions.
-     * @return All logged exception messages, will not be <tt>null</tt>.
+     * @return All logged exception messages, will not be <b>null</b>.
      */
     public List<String> getExceptions() {
         return exceptions;

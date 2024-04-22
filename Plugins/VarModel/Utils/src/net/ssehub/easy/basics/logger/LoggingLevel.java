@@ -18,11 +18,11 @@ package net.ssehub.easy.basics.logger;
 /**
  * ENUM for ILogger Logging Level. Is used to declare what type off messages should be logged.
  * Clients should normally use the predefined Level constants such as DEBUG. 
- * <p>The levels in descending order are:</p>
+ * <p>The levels in descending order are:</p><ol>
  * <li>ERROR (highest value)</li>
  * <li>WARNING</li>
  * <li>INFO</li> 
- * <li>DEBUG (lowest value)</li><br><br>
+ * <li>DEBUG (lowest value)</li></ol><br><br>
  * <p>In addition there is a level OFF that can be used to turn off logging.</p>
  * 
  * @author Sass

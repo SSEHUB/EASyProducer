@@ -95,8 +95,8 @@ abstract class VariableConfigProvider {
     /**
      * Specifies whether the related {@link IDecisionVariable} can have its own {@link IAssignmentState}.
      * In case of a nested {@link IDecisionVariable} of a {@link StructuredVariable}, this is not supported.
-     * @return <tt>true</tt> if the related {@link IDecisionVariable} can have  its own {@link IAssignmentState},
-     *     otherwise <tt>false</tt>.
+     * @return {@code true} if the related {@link IDecisionVariable} can have  its own {@link IAssignmentState},
+     *     otherwise {@code false}.
      */
     protected abstract boolean isStateChangeAllowed();   
     

@@ -543,8 +543,8 @@ public class IVMLWriter extends AbstractVarModelWriter {
 
     /**
      * Calls 
-     * {@link #visitCompoundDecisionVariableContainer(IDecisionVariableContainer, CompoundValue, int, java.util.Set)
-     * <code>comp</code> and for all its refines.
+     * {@link #visitCompoundDecisionVariableContainer(IDecisionVariableContainer, CompoundValue, int, java.util.Set)} 
+     * for {@code comp} and for all its refines.
      * 
      * @param comp the compound
      * @param value the compound value

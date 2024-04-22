@@ -1025,8 +1025,8 @@ public abstract class ModelManagement <M extends IModel> {
     /**
      * Clears all loaded models, available models ({@link #availableModels()}),
      * and model locations ({@link #locations()}). This method will not remove any {@link IModelLoader}s or
-     * {@link ImportResolver}s.<br/><br/>
-     * <font color="red"><b>Warning:</b></font> Be careful with this method, as this may affect other parts
+     * {@link ImportResolver}s.<br><br>
+     * <b>Warning:</b> Be careful with this method, as this may affect other parts
      * of the tooling as the whole singleton will be cleaned up. This method is mainly designed for testing purpose.
      */
     public void clear() {
@@ -1034,6 +1034,14 @@ public abstract class ModelManagement <M extends IModel> {
         availableModels.clear();
         locations.clear();
         // keep parsers -> do not clear loaders
+    }
+
+    /**
+     * Calls {@link #clear()} and clears all known models.
+     */
+    public void clearModels() {
+        models.clear();
+        clear();
     }
     
     /**
@@ -1049,7 +1057,7 @@ public abstract class ModelManagement <M extends IModel> {
     
 
     /**
-     * Clears <code>info</code> (and the related model) from the caches. Please handle with care.
+     * Clears @link #cl<code>info</code> (and the related model) from the caches. Please handle with care.
      * 
      * @param info the info to be cleared
      */

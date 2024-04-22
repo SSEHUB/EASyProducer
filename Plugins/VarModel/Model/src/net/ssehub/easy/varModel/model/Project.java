@@ -144,8 +144,8 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
      * Removes all specified elements from this project.
      * 
      * @param elementsToRemove
-     *            elements which should be removed. See <tt>Configuration.toProject(false)</tt>.
-     * @return <tt>true</tt> if this project changed as a result of the call
+     *            elements which should be removed. See {@code Configuration.toProject(false)}.
+     * @return {@code true} if this project changed as a result of the call
      * @see #removeElement(ContainableModelElement)
      */
     public boolean removeElements(List<ContainableModelElement> elementsToRemove) {
@@ -160,8 +160,8 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
      * Removes the specified element from from this project.
      * 
      * @param element
-     *            the element that should be removed. See <tt>Configuration.toProject(false)</tt>.
-     * @return <tt>true</tt> if this project changed as a result of the call
+     *            the element that should be removed. See {@code Configuration.toProject(false)}.
+     * @return {@code true} if this project changed as a result of the call
      */
     public boolean removeElement(ContainableModelElement element) {
         names.remove(element.getName());
@@ -173,10 +173,9 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
      * Removes the content of the project. Removes:
      * <ul>
      * <li>All model elements</li>
-     * <ul>
      * <li>All Internal constraints</li>
+     * <li>All Imports</li>
      * </ul>
-     * <li>All Imports</li> </ul>
      */
     public void clear() {
         modelElements = new ArrayList<ContainableModelElement>();

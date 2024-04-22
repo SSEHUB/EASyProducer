@@ -17,11 +17,11 @@ import net.ssehub.easy.basics.modelManagement.IModel;
  * <code>de.uni_hildesheim.sse.utils.modelManagement.IModelListener</code> interface
  * with the respective generic:
  * 
- * Listening to a specific <code>de.uni_hildesheim.sse.model.varModel.Project</code>: IModelListerner<Project>
+ * Listening to a specific <code>de.uni_hildesheim.sse.model.varModel.Project</code>: IModelListerner&lt;Project&gt;
  * Listening to a specific <code>de.uni_hildesheim.sse.easy_producer.instantiator.model.buildlangModel.Script</code>: 
- * IModelListerner<Script>
+ * IModelListerner&lt;Script&gt;
  * Listening to a specific <code>de.uni_hildesheim.sse.easy_producer.instantiator.model.templateModel.Template</code>: 
- * IModelListerner<Template>
+ * IModelListerner&lt;Template&gt;
  * 
  * Further, retrieving the respective model, adding this listener to this model and unregistering from this model must 
  * be implemented by the derived classes as well. 

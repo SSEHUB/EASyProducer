@@ -90,7 +90,7 @@ public class ProjectInterfaceFinder extends AbstractProjectVisitor {
     
     /**
      * Returns the found {@link ProjectInterface}s.
-     * @return A list of project interfaces. Maybe empty, but not <tt>null</tt>.
+     * @return A list of project interfaces. Maybe empty, but not <b>null</b>.
      */
     public List<ProjectInterface> getProjectInterfaces() {
         return interfaces;

@@ -13,7 +13,7 @@ import net.ssehub.easy.varModel.model.IvmlKeyWords;
 public class IvmlIdentifierCheckTest {
 
     /**
-     * Tests whether the keyword <tt>null</tt> is checked correctly.
+     * Tests whether the keyword <b>null</b> is checked correctly.
      */
     @Test
     public void testNullKeyWord() {

@@ -35,7 +35,7 @@ public abstract class AbstractJavaLogger implements ILogger {
     protected static final Level DEFAULT_LEVEL = Level.ALL;
 
     /**
-     * Console Handler for the {@link JavaLogger} to allow the specification of the desired system console. <br/>
+     * Console Handler for the {@link JavaLogger} to allow the specification of the desired system console.
      * This logger will log per default to {@link System#err}.
      * @see ConsoleHandler#setConsole(PrintStream)
      * @author El-Sharkawy

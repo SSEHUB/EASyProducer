@@ -32,8 +32,8 @@ public class ImportRegExNameFilter implements IProjectImportFilter {
     /**
      * Default constructor for this class.
      * @param regexFilter The regular expression which shall be used for filtering.
-     * @param whitelist <tt>true</tt> the given names will be kept and all others will be filtered out (whitelist
-     * filtering), <tt>false</tt> the given names will be filtered out and all others will be kept
+     * @param whitelist {@code true} the given names will be kept and all others will be filtered out (whitelist
+     * filtering), {@code false} the given names will be filtered out and all others will be kept
      * (blacklist filtering).
      */
     public ImportRegExNameFilter(String regexFilter, boolean whitelist) {

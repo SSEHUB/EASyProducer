@@ -308,8 +308,8 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     }
 
     /**
-     * Checks whether this value belongs to a {@link Set} or an <tt>Sequence</tt>.
-     * @return <tt>true</tt> if this value belongs to a {@link Set}, otherwise <tt>false</tt>.
+     * Checks whether this value belongs to a {@link Set} or a {@code Sequence}.
+     * @return {@code true} if this value belongs to a {@link Set}, otherwise {@code false}.
      */
     private boolean isSetValue() {
         return Set.TYPE.isAssignableFrom(getType());
@@ -318,8 +318,8 @@ public class ContainerValue extends StructuredValue implements Cloneable {
     /**
      * Checks whether the given array has duplicated values and this value belongs to a set.
      * @param values The values, which shall be assigned to this ContainerValue.
-     * @return <tt>true</tt> if this value belongs to a set and the value array contains duplicates,
-     * otherwise <tt>false</tt>.
+     * @return {@code true} if this value belongs to a set and the value array contains duplicates,
+     * otherwise {@code false}.
      */
     private boolean duplicateValues(Object[] values) {
         boolean duplicatesFound = false;
@@ -347,11 +347,11 @@ public class ContainerValue extends StructuredValue implements Cloneable {
      * @param index The index of the element to be configured.
      * @param nestedValue The new value of the nested element.
      * @throws ValueDoesNotMatchTypeException IF this {@link ContainerValue} represents a value of a {@link Set}
-     *     and the new <tt>nestedValue</tt> is already part of this value.
+     *     and the new {@code nestedValue} is already part of this value.
      * @throws IllegalArgumentException if some property of the specified
      *         element prevents it from being added to this Value
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= {@link #getElementSize()}</tt>)
+     *         ({@code index &lt; 0 || index &gt;= {@link #getElementSize()}})
      */
     public void setValue(int index, Value nestedValue) throws ValueDoesNotMatchTypeException {    
         if (index >= nestedElements.size()) {

@@ -88,12 +88,12 @@ import static net.ssehub.easy.varModel.cstEvaluation.EvaluationUtils.*;
 /**
  * Evaluation visitor for IVML expressions. Usage:
  * <ol>
- *   <li>Single use: Call {@link #EvaluationVisitor(IConfiguration, IAssignmentState, boolean, EvaluationContext)}, 
+ *   <li>Single use: Call {@link #EvaluationVisitor(IConfiguration, IAssignmentState, boolean, IValueChangeListener)}, 
  *     {@link #visit(ConstraintSyntaxTree)}, call {@link #getResult()} and finally {@link #clear()}.</li>
  *   <li>Reuse: Call {@link #EvaluationVisitor()}. Before visiting, call 
- *     {@link #init(IConfiguration, IAssignmentState, boolean, boolean, EvaluationContext)}, 
+ *     {@link #init(IConfiguration, IAssignmentState, boolean, IValueChangeListener)}, 
  *     {@link #visit(ConstraintSyntaxTree)}, call {@link #getResult()} and then {@link #clear()}. Now you can go
- *     on with {@link #init(IConfiguration, boolean)} etc.</li>
+ *     on with {@link #init(IConfiguration, IAssignmentState, boolean, IValueChangeListener)} etc.</li>
  *   <li>Do not forget to {@link #setDispatchScope(Project) set the dispatch scope} to the project which is currently
  *     being evaluated.
  * </ol>
@@ -313,7 +313,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         /**
          * Getter for the variable declaration.
          * 
-         * @return the variable declaration or <tt>null</tt> if no {@link IDecisionVariable}
+         * @return the variable declaration or <b>null</b> if no {@link IDecisionVariable}
          * was passed to the constructor.
          */
         public AbstractVariable getVariable() {
@@ -323,7 +323,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         /**
          * Returns the causing decision variable.
          * 
-         * @return the causing decision variable or <tt>null</tt> if no {@link IDecisionVariable}
+         * @return the causing decision variable or <b>null</b> if no {@link IDecisionVariable}
          * was passed to the constructor.
          */
         public IDecisionVariable getDecision() {
@@ -717,7 +717,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
      * Binds the free variables by one quantor per quantor group.
      * 
      * @param cst the constraint to be quantorized/bound
-     * @param quantorGroups the quantor groups as determined by {@link #groupQuantors(Iterator)}
+     * @param quantorGroups the quantor groups
      * @return the resulting rewritten constraint (may be <b>null</b> if errors occcurred)
      */
     private ConstraintSyntaxTree bindFreeVarsByQuantors(ConstraintSyntaxTree cst, 
@@ -882,7 +882,7 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
      * 
      * @param operand The operand of the OR operation. The operand should already been visited.
      * @param call the call representing the OR operation
-     * @return <tt>true</tt> the operation was evaluated successfully, <tt>false</tt> otherwise.
+     * @return {@code true} the operation was evaluated successfully, {@code false} otherwise.
      */
     private boolean handleBinaryBoolean(EvaluationAccessor operand, OCLFeatureCall call) {
         boolean hasBeenEvaluated = false;

@@ -208,7 +208,7 @@ public class VersionedProjectInfosTest {
     }
     
     /**
-     * Tests {@link VersionedModelInfos#getByClosestUri(java.net.URI)}.
+     * Tests {@link VersionedModelInfos#getByClosestUri(URI, List)}.
      */
     @Test
     public void testGetClosestUri() {
@@ -238,7 +238,7 @@ public class VersionedProjectInfosTest {
     */
     
     /**
-     * Tests the functionality of {@link VersionedModelInfos#getByClosestUri(java.net.URI)}
+     * Tests the functionality of {@link VersionedModelInfos#getByClosestUri(URI, List)}
      * for a given <code>version</code>.<br/>
      * 
      * @param version the version to test with (may be <b>null</b>)
@@ -327,7 +327,7 @@ public class VersionedProjectInfosTest {
     
     /**
      * Asserts the closest project version information using 
-     * {@link VersionedModelInfos#getByClosestUri(java.net.URI)} to <code>expected</code>.
+     * {@link VersionedModelInfos#getByClosestUri(URI, List)} to <code>expected</code>.
      * 
      * @param info the information objects created for testing
      * @param vInfo the subject under test

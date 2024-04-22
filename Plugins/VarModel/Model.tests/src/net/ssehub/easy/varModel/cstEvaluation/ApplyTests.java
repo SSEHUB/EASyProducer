@@ -83,7 +83,7 @@ public class ApplyTests {
     /**
      * Creates the apply constraint, which creates a new set based on the second declaration of the project.
      * The constraint will be in form of:<br/>
-     * <tt>strSet->apply(refTo(String) itr; setOf(String) innerSetType = {} | innerSetType.add(refBy(itr)))</tt><br/>
+     * {@code strSet->apply(refTo(String) itr; setOf(String) innerSetType = {} | innerSetType.add(refBy(itr)))}<br>
      * This constraint my be used for building further constraints or to test it directly with the evaluation visitor.
      * @param project The basis project to use {@link #createTestProject(String)}
      * @return The apply constraint.

@@ -28,7 +28,7 @@ class VariableConfigProviderFactory {
      * Returns the correct {@link VariableConfigProvider} depending on the related {@link IDecisionVariable}.
      * @param relatedVariable The {@link IDecisionVariable} which will use this {@link VariableConfigProvider}.
      * @return The correct {@link VariableConfigProvider} depending on the related {@link IDecisionVariable}
-     *     (must not be <tt>null</tt>.
+     *     (must not be <b>null</b>.
      */
     static VariableConfigProvider createDelegate(IDecisionVariable relatedVariable) {
         VariableConfigProvider delegate = null;

@@ -121,15 +121,15 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     private Deque<IModelElement> parents;
     
     /**
-     * The copied projects (starting point). Will be <tt>null</tt> if only imports are translated.
+     * The copied projects (starting point). Will be <b>null</b> if only imports are translated.
      */
     private Project copiedProject;
     
     /**
      * Indicates that the currently visited elements shall <b>not</b> be added to the current parent, i.e., are local
      * elements.
-     * <tt>true</tt>: Elements shall not be added
-     * <tt>false</tt>: Usual behavior
+     * {@code true}: Elements shall not be added
+     * {@code false}: Usual behavior
      */
     private boolean visitLocalElements;
     
@@ -170,7 +170,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Returns a copied element if it was copied already.
      * @param orgElement The original element, which should be copied
-     * @return The copied element or <tt>null</tt> if it was not copied so far.
+     * @return The copied element or <b>null</b> if it was not copied so far.
      */
     ContainableModelElement getCopiedElement(ContainableModelElement orgElement) {
         return copiedElements.get(orgElement);
@@ -179,7 +179,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Returns the copied parent (should only be used by the {@link CSTCopyVisitor}).
      * @param orgParent The original parent of an element which needs to be copied on the fly outside of this visitor.
-     * @return The copied parent, a {@link Project}, a {@link ContainableModelElement}, or <tt>null</tt> if it was not
+     * @return The copied parent, a {@link Project}, a {@link ContainableModelElement}, or <b>null</b> if it was not
      * copied so far.
      */
     IModelElement getCopiedParent(IModelElement orgParent) {
@@ -204,8 +204,8 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     
     /**
      * Returns a copied {@link ICustomOperationAccessor} for the given original accessor. 
-     * @param orgAccessor An original accessor, must not be <tt>null</tt>.
-     * @return The copied accessor or <tt>null</tt> if it was not copied so far.
+     * @param orgAccessor An original accessor, must not be <b>null</b>.
+     * @return The copied accessor or <b>null</b> if it was not copied so far.
      */
     ICustomOperationAccessor getCopiedAccessor(ICustomOperationAccessor orgAccessor) {
         ICustomOperationAccessor copiedAccessor = null;
@@ -344,7 +344,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Part of the end of the coping: Tries to fix csts of incomplete copied
      * {@link AbstractVariable}s and Constraints.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     * @return {@code true} if at least one element was resolved, {@code false} no elements have been resolved,
      *     maybe because there was nothing to do.
      */
     private boolean resolveUncopyableCSTs() {
@@ -384,7 +384,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Part of the end of the coping: Tries to fix {@link Assignment}s of incomplete copied
      * {@link AttributeAssignment}s.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     * @return {@code true} if at least one element was resolved, {@code false} no elements have been resolved,
      *     maybe because there was nothing to do.
      */
     private boolean resolveIncompleteAssignBlocks() {
@@ -413,7 +413,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Part of the end of the coping: Tries to fix {@link ConstraintSyntaxTree}s of incomplete copied
      * {@link OperationDefinition}s.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     * @return {@code true} if at least one element was resolved, {@code false} no elements have been resolved,
      *     maybe because there was nothing to do.
      */
     private boolean resolveIncompleteOperations() {
@@ -467,7 +467,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      * Retries to copy not copied, original elements.
      * Part of the end of the copying process.
      * @param itr An iterator of {@link #incompleteElements}, pointing to original elements, which could not be copied.
-     * @return <tt>true</tt> if at least one element was resolved, <tt>false</tt> no elements have been resolved,
+     * @return {@code true} if at least one element was resolved, {@code false} no elements have been resolved,
      *     maybe because there was nothing to do.
      */
     private boolean retryCopy(Iterator<? extends IModelElement> itr) {
@@ -498,7 +498,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
      * This cleans up the current parent stack before filling it up with the currently needed parents.
      * @param orgElement The element which shall be copied in the next step, for which the parent stack shall be filled
      *   correctly.
-     * @return <tt>true</tt> if the copied parents could be retrieved correctly, <tt>false</tt> if at least one needed
+     * @return {@code true} if the copied parents could be retrieved correctly, {@code false} if at least one needed
      *   parent was not copied and could not be added to the parent stack (in this case the stack is cleaned up).
      */
     private boolean buildParents(IModelElement orgElement) {
@@ -533,7 +533,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Returns the copy of the visited project. This is the starting projects for all copied (imported) projects. <br/>
      * Please note that this will only return any results if the original project was visited by this visitor.
-     * @return The copied project or <tt>null</tt> if {@link FilterType#ONLY_IMPORTS} was passed to this constructor.
+     * @return The copied project or <b>null</b> if {@link FilterType#ONLY_IMPORTS} was passed to this constructor.
      */
     public Project getCopiedProject() {
         return copiedProject;
@@ -595,7 +595,7 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
     /**
      * Returns the copied {@link IDatatype} for the given one.
      * @param originalType A {@link IDatatype} used in the original project.
-     * @return The copied {@link IDatatype}, the same {@link IDatatype} if it is a basis type, or <tt>null</tt> if the
+     * @return The copied {@link IDatatype}, the same {@link IDatatype} if it is a basis type, or <b>null</b> if the
      *     datatype wasn't translated so far.
      */
     IDatatype getTranslatedType(IDatatype originalType) {

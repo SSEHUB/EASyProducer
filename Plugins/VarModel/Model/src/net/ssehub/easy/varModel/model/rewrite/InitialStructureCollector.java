@@ -95,9 +95,9 @@ class InitialStructureCollector extends AbstractProjectVisitor {
     /**
      * Finds all nested constraint variables in the given {@link ConstraintSyntaxTree} and adds them to the
      * {@link VariableLookUpTable}.
-     * @param cst The {@link ConstraintSyntaxTree} to analyze, should be part of <tt>element</tt>. Nothing will
-     * be done if it is <tt>null</tt>.
-     * @param element The element to add (should be the parent of <tt>cst</tt>).
+     * @param cst The {@link ConstraintSyntaxTree} to analyze, should be part of {@code element}. Nothing will
+     * be done if it is <b>null</b>.
+     * @param element The element to add (should be the parent of {@code cst}).
      */
     private void collectNestedConstraintVariables(ConstraintSyntaxTree cst, ContainableModelElement element) {
         if (null != cst) {

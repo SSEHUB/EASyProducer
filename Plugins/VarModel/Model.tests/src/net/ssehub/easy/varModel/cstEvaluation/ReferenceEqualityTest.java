@@ -292,8 +292,8 @@ public class ReferenceEqualityTest {
      * {@link EvaluationVisitor} creates the expected output.
      * @param testProject The project which is used for testing.
      * @param equalityCST The (un)equality constraint to evaluate.
-     * @param isValid <tt>true</tt> The {@link EvaluationVisitor} should <b>not</b> detect a violation,
-     *     <tt>false</tt> the {@link EvaluationVisitor} should detect a violation.
+     * @param isValid {@code true} The {@link EvaluationVisitor} should <b>not</b> detect a violation,
+     *     {@code false} the {@link EvaluationVisitor} should detect a violation.
      */
     private void validateConstraint(Project testProject, ConstraintSyntaxTree equalityCST, boolean isValid) {
         // Run evaluation visitor
@@ -322,7 +322,7 @@ public class ReferenceEqualityTest {
      * @param testProject The project, containing the two declarations.
      * @param indexDecl1 The 0 based index of the first declaration.
      * @param indexDecl2 The 0 based index of the second declaration.
-     * @param equal <tt>true</tt> equality will be checked, <tt>false</tt> unequality will be checked.
+     * @param equal {@code true} equality will be checked, {@code false} unequality will be checked.
      * @return The (un)equal comparison constraint for the two declarations, which can be used for evaluation
      */
     private ConstraintSyntaxTree createEqualityConstraint(Project testProject, int indexDecl1, int indexDecl2,
@@ -336,7 +336,7 @@ public class ReferenceEqualityTest {
      * Creates an (un)equal comparison constraint for the two variable declarations.
      * @param decl1 The first declaration to compare
      * @param decl2 The second variable om compare
-     * @param equal <tt>true</tt> equality will be checked, <tt>false</tt> unequality will be checked.
+     * @param equal {@code true} equality will be checked, {@code false} unequality will be checked.
      * @return The (un)equal comparison constraint for the two declarations, which can be used for evaluation
      */
     private ConstraintSyntaxTree createEqualityConstraint(AbstractVariable decl1, AbstractVariable decl2,
@@ -355,8 +355,8 @@ public class ReferenceEqualityTest {
     }
     
     /**
-     * Creates a project for testing. This project contains as many variables of the given <tt>basisType</tt> as values
-     * passed to the project. For each variable, the specified value will be assigned as default value. <br/>
+     * Creates a project for testing. This project contains as many variables of the given {@code basisType} as values
+     * passed to the project. For each variable, the specified value will be assigned as default value. <br>
      * Further, the project contains the same amount of reference variables. The first reference will point to the
      * first unreferenced variable and so on. First comes all basis variables than all references. For example:
      * <pre><code>
@@ -372,9 +372,9 @@ public class ReferenceEqualityTest {
      *     error analysis.
      * @param basisType The datatype which shall be used for all variable declarations
      *     (and as basis for the references).
-     * @param refValuesAsCst <tt>false</tt> The target {@link AbstractVariable} will directly be stored inside the
+     * @param refValuesAsCst {@code false} The target {@link AbstractVariable} will directly be stored inside the
      *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue}, this declaration can be accessed via the
-     *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue#getValue()} method. <tt>true</tt> A
+     *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue#getValue()} method. {@code true} A
      *     {@link ConstraintSyntaxTree} is used to point to the declaration. In this case,
      *     {@link net.ssehub.easy.varModel.model.values.ReferenceValue#getValueEx()} must be used and parsed to get the
      *     desired declaration.

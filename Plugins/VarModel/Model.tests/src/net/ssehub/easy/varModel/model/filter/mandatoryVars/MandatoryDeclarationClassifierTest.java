@@ -606,7 +606,7 @@ public class MandatoryDeclarationClassifierTest {
     /**
      * Asserts whether a {@link IDecisionVariable} was resolved correctly.
      * @param variable The variable to check.
-     * @param mandatory The assumed result: <tt>true</tt> the variable should be mandatory.
+     * @param mandatory The assumed result: {@code true} the variable should be mandatory.
      * @param importances The container of all result from the last retrieval.
      */
     private void assertVariable(IDecisionVariable variable, boolean mandatory, VariableContainer importances) {

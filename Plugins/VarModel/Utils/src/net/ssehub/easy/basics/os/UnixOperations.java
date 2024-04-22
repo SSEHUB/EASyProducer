@@ -35,7 +35,7 @@ public class UnixOperations {
     /**
      * Detect symbolic links and to resolve the original file, recursively.
      * @param file A file or folder which may be a symbolic link.
-     * @return The same file if it is <tt>null</tt> or if it is not a symbolic link, otherwise
+     * @return The same file if it is <b>null</b> or if it is not a symbolic link, otherwise
      * the target of the link will be returned.
      * @throws IOException If an I/O error occurs, e.g. this command was executed on Windows
      * @see <a href="http://docs.oracle.com/javase/tutorial/essential/io/links.html#detect">

@@ -198,7 +198,7 @@ public class ConfigurationTest2 {
      * @param declarations {@link DecisionVariableDeclaration}s which should be included in the configuration,
      *     further variables may also be included in the {@link Configuration}.
      * @param areVisible Specification whether the given array of Declarations should be visible to the user.
-     * <tt>true</tt> if the user should the the variables, <tt>false</tt> otherwise.
+     * {@code true} if the user should the the variables, {@code false} otherwise.
      */
     private void variablesAreInConfig(Configuration config, DecisionVariableDeclaration[] declarations,
         boolean areVisible) {

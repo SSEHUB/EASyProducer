@@ -80,10 +80,10 @@ public class ConfigurationSaver {
     /**
      * Specifies whether only user Input should be stored:
      * <ul>
-     * <li><tt>true:</tt> Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
+     * <li>{@code true}: Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
      *     will be saved.</li>
-     * <li><tt>false: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
-     *     {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
+     * <li>{@code false}: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
+     *     {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</li>
      * </ul>
      */
     private boolean onlyUserInput;
@@ -108,16 +108,15 @@ public class ConfigurationSaver {
      *   configuration to {@link Configuration#getProject()} (<code>false</code>)
      * @param onlyUserInput Specifies whether only user Input should be stored:
      *     <ul>
-     *     <li><tt>true:</tt> Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
+     *     <li>{@code true}: Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
      *         will be saved.</li>
-     *     <li><tt>false: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
-     *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
+     *     <li>{@code false}: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
+     *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</li>
      *     </ul>
      * @throws ConfigurationException in case of any configuration errors
      * @see #createProject(Configuration)
      * @see #addVersion(Project, Configuration)
      * @see #addImports(Project, Configuration)
-     * @see #addVariables(Project, Configuration)
      */
     protected ConfigurationSaver(Configuration srcConfiguration, boolean ownProject, boolean onlyUserInput)
         throws ConfigurationException {
@@ -175,7 +174,7 @@ public class ConfigurationSaver {
     
     /**
      * Returns the project where the values and frozen states are saved to.
-     * @return {@link Configuration#getProject()} if the constructor was called with <tt>ownProject = false</tt>,
+     * @return {@link Configuration#getProject()} if the constructor was called with {@code ownProject = false},
      * otherwise a new project which imports {@link Configuration#getProject()}.
      */
     public Project getSavedConfiguration() {
@@ -414,7 +413,7 @@ public class ConfigurationSaver {
     /**
      * Checks whether the sate (of a variable) should be saved.
      * @param state The sate of the current variable to be saved.
-     * @return <tt>true</tt> if the sate should be saved, <tt>false</tt> otherwise.
+     * @return {@code true} if the sate should be saved, {@code false} otherwise.
      */
     private boolean checkState(IAssignmentState state) {
         return !onlyUserInput || (AssignmentState.DERIVED != state && AssignmentState.DEFAULT != state);

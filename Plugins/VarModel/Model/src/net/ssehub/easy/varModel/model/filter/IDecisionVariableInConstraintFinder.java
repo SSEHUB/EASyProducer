@@ -68,7 +68,7 @@ public class IDecisionVariableInConstraintFinder extends AbstractVariableInConst
     /**
      * Returns all {@link AbstractVariable}'s inside the given
      * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}.
-     * @return A set of nested {@link AbstractVariable}'s (This set must not be <tt>null</tt>).
+     * @return A set of nested {@link AbstractVariable}'s (This set must not be <b>null</b>).
      */
     public Set<IDecisionVariable> getVariables() {
         return variables;

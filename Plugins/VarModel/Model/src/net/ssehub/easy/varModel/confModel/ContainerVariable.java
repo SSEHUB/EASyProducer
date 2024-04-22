@@ -51,8 +51,8 @@ public abstract class ContainerVariable extends StructuredVariable {
      *     the variable declaration instantiated by this decision
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
@@ -270,7 +270,7 @@ public abstract class ContainerVariable extends StructuredVariable {
      * Removes a (configured) element ({@link IDecisionVariable}) of this {@link ContainerVariable}.
      * This is the reverse function of {@link #addNestedElement()}.
      * @param var A variable which is directly nested in this variable and shall be deleted.
-     * @return <tt>true</tt> if the specified element was found and deleted from this variable, <tt>false</tt> otherwise
+     * @return {@code true} if the specified element was found and deleted from this variable, {@code false} otherwise
      * @see #addNestedElement()
      */
     public boolean removeNestedElement(IDecisionVariable var) {

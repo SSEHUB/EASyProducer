@@ -25,7 +25,7 @@ import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
- * Stores the {@link VariableImportance} to each variable of a configuration.
+ * Stores the {@link Importance} to each variable of a configuration.
  * @author El-Sharkawy
  */
 public class VariableContainer {
@@ -67,7 +67,7 @@ public class VariableContainer {
     /**
      * Checks whether the given {@link IDecisionVariable} is mandatory.
      * @param variable The {@link IDecisionVariable} to check.
-     * @return <tt>true</tt> if the user should specify a value. This is only a heuristic value.
+     * @return {@code true} if the user should specify a value. This is only a heuristic value.
      */
     public boolean isMandatory(IDecisionVariable variable) {
         // Attributes are not considered here
@@ -90,7 +90,7 @@ public class VariableContainer {
      * This will also consider if a declaration is multiple times instantiates,
      * e.g., a nested declaration of a compound.
      * @param declaration The {@link AbstractVariable} to check.
-     * @return <tt>true</tt> if the user should specify a value. This is only a heuristic value.
+     * @return {@code true} if the user should specify a value. This is only a heuristic value.
      */
     public boolean isMandatory(AbstractVariable declaration) {
         // Attributes are not considered here
@@ -114,7 +114,7 @@ public class VariableContainer {
      * nested elements shall be mandatory. Part of {@link #isMandatory(IDecisionVariable)}
      * and {@link #isMandatory(AbstractVariable)}.
      * @param declaration The declaration to check.
-     * @return <tt>true</tt> if the user should specify a value. This is only a heuristic value.
+     * @return {@code true} if the user should specify a value. This is only a heuristic value.
      */
     private boolean hasMandatoryTypeOrParent(AbstractVariable declaration) {
         boolean isMandatory = false;

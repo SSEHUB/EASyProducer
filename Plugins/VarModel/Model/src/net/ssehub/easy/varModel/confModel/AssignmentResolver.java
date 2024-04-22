@@ -101,7 +101,7 @@ public class AssignmentResolver {
     private Map<IDatatype, List<IDecisionVariable>> instancesPerType;
     
     /**
-     * Part of the {@link AssignmentResolver#resolveAnnotationAssignments(AttributeAssignment, Map)} for recursive
+     * Part of the {@link AssignmentResolver#resolveAnnotationAssignments(AttributeAssignment, Map, List)} for recursive
      * resolving assignment values of annotation assignment blocks. 
      * @author El-Sharkawy
      *
@@ -114,11 +114,12 @@ public class AssignmentResolver {
         
         /**
          * Sole constructor of this class.
-         * @param annotationAssignments A tuple of (<annotation name>, <value>) for the current annotation block.
+         * @param annotationAssignments A tuple of (&lt;annotation name&gt;, &lt;value&gt;) for the current 
+         * annotation block.
          * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
          * and also further elements can be found after a block was visited.
          * @param parents A list of {@link IDecisionVariable}s which shall currently be treated as parents for
-         * retrieving (nested) {@link IDecisionVariable}s during visitation. Can be empty or <tt>null</tt>
+         * retrieving (nested) {@link IDecisionVariable}s during visitation. Can be empty or <b>null</b>
          * if the current parent is the whole project.
          */
         private AssignBlockVisitor(Map<String, Value> annotationAssignments, List<IDecisionVariable> parents) {
@@ -302,7 +303,7 @@ public class AssignmentResolver {
     /**
      * Recursive method to collect all nested {@link IDecisionVariable}.
      * Part of the constructor.
-     * @param variable A already collected variable, may containing nested variables (must not be <tt>null</tt>.
+     * @param variable A already collected variable, may containing nested variables (must not be <b>null</b>.
      */
     private void findInstancesOfNestedVariavbles(IDecisionVariable variable) {
         for (int i = 0, n = variable.getNestedElementsCount(); i < n; i++) {
@@ -322,7 +323,7 @@ public class AssignmentResolver {
      * Returns a list of all (nested) {@link IDecisionVariable}s for the given type.
      * @param type The type for which the {@link IDecisionVariable}s shall be returned.
      * Will <b>not</b> consider {@link IDatatype#isAssignableFrom(IDatatype)}.
-     * @return The list of instances or <tt>null</tt> if no instance exist for the specified type.
+     * @return The list of instances or <b>null</b> if no instance exist for the specified type.
      */
     protected List<IDecisionVariable> getInstancesForType(IDatatype type) {
         return instancesPerType.get(type);
@@ -389,11 +390,11 @@ public class AssignmentResolver {
     /**
      * Recursive method for resolving annotation assignments (part of {@link #resolveAnnotationAssignments(Project)}.
      * @param assignBlock The current visited assignment block.
-     * @param annotationAssignments A tuple of (<annotation name>, <value>) for the current annotation block.
-     * If a nested block is found, these values must be copied into a new map as nested blocks can have other values
-     * and also further elements can be found after a block was visited.
+     * @param annotationAssignments A tuple of (&lt;annotation name&gt;, &lt;value&gt;) for the current annotation 
+     * block. If a nested block is found, these values must be copied into a new map as nested blocks can have other 
+     * values and also further elements can be found after a block was visited.
      * @param parents A list of {@link IDecisionVariable}s which shall currently be treated as parents for
-     * retrieving (nested) {@link IDecisionVariable}s during visitation. Can be empty or <tt>null</tt>
+     * retrieving (nested) {@link IDecisionVariable}s during visitation. Can be empty or <b>null</b>
      * if the current parent is the whole project.
      */
     private void resolveAnnotationAssignments(AttributeAssignment assignBlock,
@@ -456,7 +457,7 @@ public class AssignmentResolver {
      * @param variable the instance to resolve the default values for.
      * @param evaluator the (re-usable) expression evaluator to utilize, may be <b>null</b> then a temporary one is 
      *     created
-     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     * @return {@code true} if a default value could be resolved and assigned to {@code variable}, {@code false}
      *     otherwise.
      *     
      * @see #resolveDefaultValueForDeclaration(AbstractVariable, IDecisionVariable)
@@ -471,7 +472,7 @@ public class AssignmentResolver {
      * used.
      * 
      * @param variable the instance to resolve the default values for.
-     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     * @return {@code true} if a default value could be resolved and assigned to {@code variable}, {@code false}
      *     otherwise.
      *     
      * @see #resolveDefaultValue(IDecisionVariable, EvaluationVisitor)
@@ -484,12 +485,12 @@ public class AssignmentResolver {
      * Resolves default values of a particular declaration.
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
-     * @param variable the instance of <tt>decl</tt>.
+     * @param variable the instance of {@code decl}.
      * @param evaluator the (re-usable) expression evaluator to utilize
      * @param config the configuration to rely on (shall be consistent with <code>variable</code>)
      * @param conflictHandler optional instance to call {@link #conflictingDefault(AbstractVariable)} on, may be 
      *     <b>null</b> 
-     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     * @return {@code true} if a default value could be resolved and assigned to {@code variable}, {@code false}
      *     otherwise.
      *
      * @see #resolveDefaultValues(Project)
@@ -609,8 +610,8 @@ public class AssignmentResolver {
      * Resolves default values of a particular declaration.
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
-     * @param variable the instance of <tt>decl</tt>.
-     * @return <tt>true</tt> if a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+     * @param variable the instance of {@code decl}.
+     * @return {@code true} if a default value could be resolved and assigned to {@code variable}, {@code false}
      *     otherwise.
      *     
      * @see #resolveDefaultValues(Project)

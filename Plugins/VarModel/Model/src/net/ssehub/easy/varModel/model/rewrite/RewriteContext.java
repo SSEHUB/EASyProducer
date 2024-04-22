@@ -100,7 +100,7 @@ public class RewriteContext {
     /**
      * Returns whether the given element was removed from the project.
      * @param elememt An element to test.
-     * @return <tt>true</tt> if the element was removed, <tt>false</tt> if the element still exist.
+     * @return {@code true} if the element was removed, {@code false} if the element still exist.
      */
     public boolean elementWasRemoved(ContainableModelElement elememt) {
         Class<?> elementType = elememt.getClass();
@@ -111,7 +111,7 @@ public class RewriteContext {
     /**
      * Checks whether elements of the given {@link ContainableModelElement} was removed.
      * @param type A class, visited by {@link net.ssehub.easy.varModel.model.IModelVisitor}.
-     * @return <tt>true</tt> if at least one element of this class was removed.
+     * @return {@code true} if at least one element of this class was removed.
      */
     public boolean hasRemovedElementsOfType(Class<? extends ContainableModelElement> type) {
         Set<ContainableModelElement> removedElementList = removedElements.get(type);
@@ -121,7 +121,7 @@ public class RewriteContext {
     
     /**
      * Returns whether elements were removed during the last iteration.
-     * @return <tt>true</tt> if at least one element was removed, <tt>false</tt> otherwise.
+     * @return {@code true} if at least one element was removed, {@code false} otherwise.
      */
     public boolean elementesWereRemoved() {
         return elementsWereRemoved;
@@ -147,7 +147,7 @@ public class RewriteContext {
     /**
      * Tests whether the project is still part of the main project (via an import).
      * @param project The project to test
-     * @return <tt>true</tt>project is still part of the main project, <b><tt>false</tt></b> it is unclear.
+     * @return {@code true}project is still part of the main project, <b>{@code false}</b> it is unclear.
      */
     public boolean projectIsStillPresent(Project project) {
         String qName = generateQualifiedName(project);
@@ -192,7 +192,7 @@ public class RewriteContext {
      * @param config The configuration which is used to retrieve all {@link IDecisionVariable}s.
      * @param type The <b>exact</b> {@link IDatatype} for which the instances shall be returned,
      * will <b>not</b> consider {@link IDatatype#isAssignableFrom(IDatatype)}.
-     * @return The instances for the given type or <tt>null</tt> if no instances exist.
+     * @return The instances for the given type or <b>null</b> if no instances exist.
      */
     public Set<IDecisionVariable> getInstancesForType(Configuration config, IDatatype type) {
         return variablesTable.getInstancesForType(type);
@@ -204,7 +204,7 @@ public class RewriteContext {
      * @param declaration The declaration for which the instances shall be returned.
      * If the declaration is nested inside a compound which was multiple times instantiated, this single declaration
      * could return multiple {@link IDecisionVariable}s.
-     * @return The instances for the given declaration or <tt>null</tt> if no instances exist.
+     * @return The instances for the given declaration or <b>null</b> if no instances exist.
      */
     public Set<IDecisionVariable> getInstancesForDeclaration(Configuration config, AbstractVariable declaration) {
         return variablesTable.getInstancesForDeclaration(declaration);
@@ -215,8 +215,8 @@ public class RewriteContext {
      * an iterator of a constraint.
      * Needs that the internal {@link VariableLookUpTable} was already initialized with a {@link Configuration}.
      * @param declaration The declaration to check.
-     * @return <tt>true</tt> if the declaration is used for a {@link IDecisionVariable} of the configuration or
-     * if the internal table was not initialized with a {@link Configuration}, <tt>false</tt> otherwise.
+     * @return {@code true} if the declaration is used for a {@link IDecisionVariable} of the configuration or
+     * if the internal table was not initialized with a {@link Configuration}, {@code false} otherwise.
      */
     boolean declarationKnown(AbstractVariable declaration) {
         return variablesTable.declarationKnown(declaration);
@@ -225,7 +225,7 @@ public class RewriteContext {
     /**
      * Marks that a project was used, i.e., is still part of the overall structure and should not be removed.
      * @param project A visited project, which is may be imported.
-     * @see #projectIsStillPressent(Project)
+     * @see #projectIsStillPresent(Project)
      */
     public void addUsedProject(Project project) {
         String qName = generateQualifiedName(project);

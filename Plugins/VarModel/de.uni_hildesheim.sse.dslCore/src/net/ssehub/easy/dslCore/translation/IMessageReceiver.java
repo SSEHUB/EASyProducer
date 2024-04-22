@@ -36,8 +36,7 @@ public interface IMessageReceiver {
      * @param cause
      *            the cause (as instance of the EMF grammar model)
      * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
+     *            the cause of the feature as an appropriate constant from the generated grammar
      * @param code
      *            a numerical identification of the error
      */
@@ -51,8 +50,7 @@ public interface IMessageReceiver {
      * @param cause
      *            the cause (as instance of the EMF grammar model)
      * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
+     *            the cause of the feature as an appropriate constant from the generated grammar
      * @param code
      *            a numerical identification of the warning
      */
@@ -67,8 +65,7 @@ public interface IMessageReceiver {
      * @param cause
      *            the cause (as instance of the EMF grammar model)
      * @param causeFeature
-     *            the cause of the feature as an appropriate constant from
-     *            {@link de.uni_hildesheim.sse.ivml.IvmlPackage.Literals}
+     *            the cause of the feature as an appropriate constant from the generated grammar
      * @param code
      *            a numerical identification of the error
      */

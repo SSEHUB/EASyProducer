@@ -105,7 +105,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
          * Resolves default values of a particular variable. 
          * 
          * @param variable the instance to resolve the default values for.
-         * @return <tt>true</tt> of a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+         * @return {@code true} of a default value could be resolved and assigned to {@code variable}, {@code false}
          *     otherwise.
          */
         @Override
@@ -271,7 +271,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     /**
      * Unregisters an listener.
      * @param listener The listener which should be unregistered.
-     * @return <tt>true</tt> if this configuration contained the specified listener
+     * @return {@code true} if this configuration contained the specified listener
      */
     public boolean unregister(IConfigurationChangeListener listener) {
         return listeners.remove(listener);
@@ -347,8 +347,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      * @param topLevelDeclarations The variables to add.
      * @param visible indicates whether the variable is visible to the user:
      * <ul>
-     * <li><tt>true</tt>: The variable is visible by the user and can be displayed in the GUI and so on.</li> 
-     * <li><tt>false</tt>: The variable is not visible by the user but must be considered in reasoning, instantiation,
+     * <li>{@code true}: The variable is visible by the user and can be displayed in the GUI and so on.</li> 
+     * <li>{@code false}: The variable is not visible by the user but must be considered in reasoning, instantiation,
      * and so on.</li> 
      * </ul>
      */
@@ -509,7 +509,7 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     
     /**
      * Returns an iterator for iterating over all stored {@link IDecisionVariable}s.
-     * @return an <tt>Iterator</tt> over the {@link IDecisionVariable} in this configuration.
+     * @return an {@code Iterator} over the {@link IDecisionVariable} in this configuration.
      */
     public Iterator<IDecisionVariable> iterator() {
         Collection<IDecisionVariable> variableCollection = decisions.values();
@@ -590,10 +590,10 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
      *   configuration to {@link #project} (<code>false</code>)
      * @param onlyUserInput Specifies whether only user Input should be stored:
      *     <ul>
-     *     <li><tt>true:</tt> Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
+     *     <li>{@code true}: Assignments in state {@link AssignmentState#ASSIGNED} and {@link AssignmentState#FROZEN}
      *         will be saved.</li>
-     *     <li><tt>false: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
-     *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</tt></li>
+     *     <li>{@code false}: Assignments in state {@link AssignmentState#ASSIGNED}, {@link AssignmentState#FROZEN}, and
+     *         {@link AssignmentState#DERIVED} will be saved (i.e. also computed values).</li>
      *     </ul>
      * @return the project or <b>null</b> if not implemented (default)
      * @throws ConfigurationException in case of any configuration errors
@@ -1085,8 +1085,8 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
 
     /**
      * Creates a copy of the underlying {@link Project} and removes elements which are not needed for a runtime
-     * reasoning, e.g., constraints containing only frozen variables or comments.<br/>
-     * <b><font color="red">Attention:</font></b> This method creates a modified, shallow copy of the visited project.
+     * reasoning, e.g., constraints containing only frozen variables or comments.<br>
+     * <b>Attention:</b> This method creates a modified, shallow copy of the visited project.
      * Thus, the original project becomes invalid through this visitation. This visitor should only be used if the
      * original is no longer needed, e.g., for performance tweaks in a automated setup which does not save any data.
      */
@@ -1105,9 +1105,9 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
     }
     
     /**
-     * Shares the cache of <tt>this</tt> {@link Configuration} with <tt>configToShare</tt>.
-     * This is useful if <tt>configToShare</tt> is a temporary {@link Configuration} / projection and can reuse queries
-     * based <tt>this</tt> {@link Configuration}.
+     * Shares the cache of {@code this} {@link Configuration} with {@code configToShare}.
+     * This is useful if {@code configToShare} is a temporary {@link Configuration} / projection and can reuse queries
+     * based {@code this} {@link Configuration}.
      * @param configToShare A temporary configuration which may reuse the cache from this config.
      */
     public void shareQueryCacheWith(Configuration configToShare) {

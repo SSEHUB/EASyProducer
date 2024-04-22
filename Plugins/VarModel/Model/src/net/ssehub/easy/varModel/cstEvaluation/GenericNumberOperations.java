@@ -166,7 +166,7 @@ class GenericNumberOperations {
     /**
      * Negates a number ({@link IntegerType} or {@link RealType}).
      * @param operand The number which shall be negated.
-     * @param arguments Must be <tt>null</tt> or empty.
+     * @param arguments Must be <b>null</b> or empty.
      * @return The given operand * -1;
      */
     private static EvaluationAccessor inverse(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
@@ -198,7 +198,7 @@ class GenericNumberOperations {
     /**
      * Removes the sign of a number ({@link IntegerType} or {@link RealType}).
      * @param operand The number which shall be made absolute.
-     * @param arguments Must be <tt>null</tt> or empty.
+     * @param arguments Must be <b>null</b> or empty.
      * @return The given |operand|;
      */
     private static EvaluationAccessor absolute(EvaluationAccessor operand, EvaluationAccessor[] arguments) {

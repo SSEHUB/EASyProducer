@@ -124,29 +124,29 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
 
     /**
      * Returns whether this variable is visible by the user.
-     * @return <tt>false</tt> if the variable is hidden by an interface, <tt>true</tt> otherwise
+     * @return {@code false} if the variable is hidden by an interface, {@code true} otherwise
      */
     public boolean isVisible();
 
     /**
      * Returns whether this variable is local, e.g., as a parameter of a user-defined function,
      * a variable defined by a let-expression, or an iterator in a container operation.
-     * @return <tt>false</tt> if the variable is not local and part of an usual configuration, 
+     * @return {@code false} if the variable is not local and part of an usual configuration, 
      *    <code>true</code> if the variable is local
      */
     public boolean isLocal();
 
     /**
      * Checks whether the variable has a configured {@link Value}.
-     * @return <tt>true</tt> if the variable has a value, <tt>false</tt> otherwise.
+     * @return {@code true} if the variable has a value, {@code false} otherwise.
      */
     public boolean hasValue();
     
     /**
      * Checks whether the variable has a {@link net.ssehub.easy.varModel.model.values.NullValue}.
      * Note: this method does not check whether the variable <b>has</b> a value.
-     * @return <tt>true</tt> if the variable has a {@link net.ssehub.easy.varModel.model.values.NullValue},
-     *     <tt>false</tt> otherwise.
+     * @return {@code true} if the variable has a {@link net.ssehub.easy.varModel.model.values.NullValue},
+     *     {@code false} otherwise.
      */
     public boolean hasNullValue();
     
@@ -154,14 +154,14 @@ public interface IDecisionVariable extends IConfigurationElement, IConfiguration
      * Removes all (nested) values which are in state {@link AssignmentState#DERIVED}, i.e., all values which are
      * propagated bay the reasoner. This will keep all user assigned {@link AssignmentState#ASSIGNED} and frozen
      * {@link AssignmentState#FROZEN} values.
-     * @return <tt>true</tt> if there was a change, <tt>false</tt> if the variable keeps unchanged.
+     * @return {@code true} if there was a change, {@code false} if the variable keeps unchanged.
      */
     public boolean removeDerivedValues();
     
     /**
      * Returns the qualified name of the declaration instance.
      * This is build as follows:<br/>
-     * <tt>&lt;Project name&gt; :: [&lt;Parent name&gt;::]* &lt;Declaration name&gt;</tt>
+     * {@code &lt;Project name&gt; :: [&lt;Parent name&gt;::]* &lt;Declaration name&gt;}
      * @return The qualified and unique name of the variable.
      */
     public String getQualifiedName();

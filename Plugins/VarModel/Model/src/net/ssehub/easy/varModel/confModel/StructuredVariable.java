@@ -18,7 +18,7 @@ package net.ssehub.easy.varModel.confModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 
 /**
- * Abstract super class for variables of <tt>StructuredDatatype</tt>'s.
+ * Abstract super class for variables of {@code StructuredDatatype}'s.
  * Specialized classes are:
  * <ul>
  * <li>{@link ContainerVariable}</li>
@@ -36,8 +36,8 @@ abstract class StructuredVariable extends DecisionVariable {
      * @param varDeclaration the variable declaration instantiated by this decision
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
@@ -48,7 +48,7 @@ abstract class StructuredVariable extends DecisionVariable {
     
     /**
      * Returns whether this variable support individual states for nested items. 
-     * @return <tt>true</tt> if nested items can have their own states, otherwise <tt>false</tt>.
+     * @return {@code true} if nested items can have their own states, otherwise {@code false}.
      */
     abstract boolean allowsNestedStates();
 }

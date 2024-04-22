@@ -31,7 +31,7 @@ abstract class ValueChangeListener implements IValueChangeListener {
     
     /**
      * Returns whether this listener was called.
-     * @return <tt>true</tt> if this listener was callled.
+     * @return {@code true} if this listener was callled.
      */
     boolean wasCalled() {
         return wasCalled;

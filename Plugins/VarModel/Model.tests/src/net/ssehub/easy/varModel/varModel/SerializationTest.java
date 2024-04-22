@@ -22,7 +22,6 @@ import net.ssehub.easy.varModel.model.AttributeAssignment;
 import net.ssehub.easy.varModel.model.Comment;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
-import net.ssehub.easy.varModel.model.EvaluationBlock;
 import net.ssehub.easy.varModel.model.ExplicitTypeVariableDeclaration;
 import net.ssehub.easy.varModel.model.FreezeBlock;
 import net.ssehub.easy.varModel.model.Project;
@@ -46,7 +45,7 @@ public class SerializationTest {
     @Test
     public void testNoArgConstructors() {
         ClassTestUtils.assertNoArgConstructor(Attribute.class, AttributeAssignment.class,
-            Comment.class, Constraint.class, DecisionVariableDeclaration.class, EvaluationBlock.class,
+            Comment.class, Constraint.class, DecisionVariableDeclaration.class,
             ExplicitTypeVariableDeclaration.class, FreezeBlock.class, 
             OperationDefinition.class, Project.class, ProjectDecisionVariableDeclaration.class, ProjectImport.class, 
             ProjectType.class, StructuredComment.class);

@@ -73,7 +73,7 @@ class ValueCopyVisitor implements IValueVisitor {
     
     /**
      * Specifies whether the {@link Value} could be translated completely.
-     * @return <tt>true</tt> value was translated completely, <tt>false</tt>
+     * @return {@code true} value was translated completely, {@code false}
      * if some parts of the value must still be translated.
      */
     boolean translatedCompletely() {

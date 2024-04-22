@@ -34,7 +34,7 @@ import net.ssehub.easy.varModel.model.datatypes.Sequence;
 import net.ssehub.easy.varModel.model.datatypes.Set;
 
 /**
- * Abstract super class for finding all toplevel <tt>DecisionVariableDeclaration</tt>'s of a {@link Project}. 
+ * Abstract super class for finding all toplevel {@code DecisionVariableDeclaration}s of a {@link Project}. 
  * @author El-Sharkawy
  *
  */

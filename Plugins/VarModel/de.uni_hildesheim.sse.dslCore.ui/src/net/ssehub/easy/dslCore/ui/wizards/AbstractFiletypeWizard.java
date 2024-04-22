@@ -109,7 +109,7 @@ public abstract class AbstractFiletypeWizard extends Wizard implements INewWizar
      * file.
      * @param containerName The path/folder of the file to be create.
      * @param fileName The file of to create inside the container.
-     * @param monitor a progress monitor, must not be <tt>null</tt>.
+     * @param monitor a progress monitor, must not be <b>null</b>.
      * @throws CoreException if this method fails. Reasons include:
      * <ul>
      * <li> This resource does not exist.</li>

@@ -70,7 +70,6 @@ public class BasicProgressObserver extends ProgressObserver {
          * Sets the current progress of the current task.
          * @param current The  number of already completed steps.
          * @return How many steps are still open to fulfill the current task.
-         * @see #getRemainder()
          */
         public int setCurrent(int current) {
             int result = current - this.current;
@@ -129,9 +128,9 @@ public class BasicProgressObserver extends ProgressObserver {
     }
 
     /**
-     * Sets this monitor to <tt>null</tt> if the current monitor is the same as the specified monitor.
+     * Sets this monitor to <b>null</b> if the current monitor is the same as the specified monitor.
      * @param monitor If the given monitor is the same monitor as the monitor of this observer instance
-     * the monitor of this observer will be set to <tt>null</tt> otherwise will nothing happen.
+     * the monitor of this observer will be set to <b>null</b> otherwise will nothing happen.
      */
     public void unregister(IProgressMonitor monitor) {
         if (this.monitor == monitor) {

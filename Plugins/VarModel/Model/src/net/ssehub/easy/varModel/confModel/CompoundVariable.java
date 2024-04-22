@@ -63,8 +63,8 @@ public class CompoundVariable extends StructuredVariable {
      * @param varDeclaration the variable declaration instantiated by this decision
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
@@ -350,7 +350,7 @@ public class CompoundVariable extends StructuredVariable {
     /**
      * Returns a nested {@link IDecisionVariable}.
      * @param slotName The name of the nested {@link IDecisionVariable} to be returned.
-     * @return The nested {@link IDecisionVariable} with the same name or <tt>null</tt>.
+     * @return The nested {@link IDecisionVariable} with the same name or <b>null</b>.
      */
     public IDecisionVariable getNestedVariable(String slotName) {
         return nestedElements.get(slotName);

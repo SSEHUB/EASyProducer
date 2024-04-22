@@ -43,7 +43,7 @@ public class ParenthesisTest {
     
     /**
      * Tests the inferDatatype method of {@link Parenthesis}.
-     * Builds a constraint <code>(realA + realB) &lt realC</code>
+     * Builds a constraint <code>(realA + realB) &lt; realC</code>
      * @throws CSTSemanticException Must not occur, otherwise there is an error inside the <code>cst</code> package
      */
     @Test

@@ -47,8 +47,8 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
     /**
      * Constructor for this class to specify whether (reference) values should also be visited. 
      * @param cst A constraint where all nested {@link AbstractVariable}'s should be found.
-     * @param considerReferences <tt>true</tt> values will also be visited to discover used declarations inside
-     * reference values, <tt>false</tt> these values will be ignored.
+     * @param considerReferences {@code true} values will also be visited to discover used declarations inside
+     * reference values, {@code false} these values will be ignored.
      */
     public DeclrationInConstraintFinder(ConstraintSyntaxTree cst, boolean considerReferences) {
         super(considerReferences);
@@ -58,7 +58,7 @@ public class DeclrationInConstraintFinder extends AbstractVariableInConstraintFi
     
     /**
      * Returns all {@link AbstractVariable}'s inside the given {@link ConstraintSyntaxTree}.
-     * @return A set of nested {@link AbstractVariable}'s (This set must not be <tt>null</tt>).
+     * @return A set of nested {@link AbstractVariable}'s (This set must not be <b>null</b>).
      */
     public Set<AbstractVariable> getDeclarations() {
         return declarations;

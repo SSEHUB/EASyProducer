@@ -34,7 +34,7 @@ import net.ssehub.easy.varModel.model.values.Value;
  * Part of the {@link ProjectRewriteVisitor} to remove sub values of a RHS of an assignment, if declarations
  * of this assignments have been removed.<br/>
  * Visiting should be started with {@link #reduce(OCLFeatureCall)} instead of using the usual
- * <tt>accept</tt> methods.
+ * {@code accept} methods.
  * @author El-Sharkawy
  *
  */
@@ -61,7 +61,7 @@ class AssignmentReducer extends AbstractConstraintTreeVisitor {
      * <ul>
      *   <li>The passed call, if if was not an assignment or if nothing was to filter</li>
      *   <li>The filtered assignment, if some of the used elements were removed</li>
-     *   <li><tt>null</tt>, if all elements or necessary elements have been removed.</li>
+     *   <li><b>null</b>, if all elements or necessary elements have been removed.</li>
      * </ul>
      */
     protected ConstraintSyntaxTree reduce(OCLFeatureCall assignment) {        
@@ -89,7 +89,7 @@ class AssignmentReducer extends AbstractConstraintTreeVisitor {
     }
     /**
      * Returns whether the given assignment was filtered or not.
-     * @return <tt>true</tt> Something was filtered, <tt>false</tt> assignment is at it was before.
+     * @return {@code true} Something was filtered, {@code false} assignment is at it was before.
      */
     boolean hasFiltered() {
         return filtered;

@@ -52,8 +52,8 @@ public class IvmlIdentifierCheck {
      * into {@link #RESERVED}.
      * 
      * @param fields the fields to be hashed
-     * @param checkAnnotation <tt>false</tt> each field will be added to {@link #RESERVED} which marks them as
-     * reserved keyword, <tt>true</tt> only fields annotated with {@link IVMLKeyWord} will be added to
+     * @param checkAnnotation {@code false} each field will be added to {@link #RESERVED} which marks them as
+     * reserved keyword, {@code true} only fields annotated with {@link IVMLKeyWord} will be added to
      * {@link #RESERVED}. This is useful for inherited keywords as not all of them are also reserved in IVML.
      */
     private static final void hash(Field[] fields, boolean checkAnnotation) {

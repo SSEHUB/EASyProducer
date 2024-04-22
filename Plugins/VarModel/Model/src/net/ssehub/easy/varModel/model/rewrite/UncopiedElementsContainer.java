@@ -103,7 +103,7 @@ class UncopiedElementsContainer {
     }
    
     /**
-     * Set of copied {@link AbstractVariable}s, and their default values. Contrary to {@link #unresolvedDefaults},
+     * Set of copied {@link AbstractVariable}s, and their default values. Contrary to unresolvedDefaults,
      * these defaults could not be translated as some data types are still missing.
      */
     private Set<UnresolvedSyntaxContainer> uncopyableCSTs = new HashSet<UnresolvedSyntaxContainer>();
@@ -220,7 +220,7 @@ class UncopiedElementsContainer {
     
     /**
      * Adds a copied {@link OperationDefinition}, of which the nested
-     * {@link {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}} could not be copied.
+     * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree} could not be copied.
      * @param incompleteOperation The incomplete {@link OperationDefinition} of which the cst must be fixed at a later
      *     time.
      */
@@ -230,7 +230,7 @@ class UncopiedElementsContainer {
     
     /**
      * Returns the set of incompletely copied {@link OperationDefinition}s of which the nested
-     * {@link {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree}} must be corrected.
+     * {@link net.ssehub.easy.varModel.cst.ConstraintSyntaxTree} must be corrected.
      * @return The set of incomplete {@link OperationDefinition}s.
      */
     Set<OperationDefinition> getIncompleteOperations() {
@@ -360,7 +360,7 @@ class UncopiedElementsContainer {
     
     /**
      * Converts {@link ContainableModelElement}s into {@link UncopiedElement}s and adds them to
-     * <tt>unrelsovedElements</tt>.
+     * {@code unrelsovedElements}.
      * Part of {@link #getUnresolvedElements()}.
      * @param unrelsovedElements The list where to add the elements.
      * @param elementsToAdd An attribute of this class, maybe empty.

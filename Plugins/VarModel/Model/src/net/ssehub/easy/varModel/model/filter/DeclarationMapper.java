@@ -55,7 +55,7 @@ public class DeclarationMapper extends AbstractDeclarationFinder {
      * <li>Key: (Not qualified) Name of the {@link DecisionVariableDeclaration}</li>
      * <li>Value: The {@link DecisionVariableDeclaration} itself</li>
      * </ul>
-     * @return Hashmap of all top-level {@link DecisionVariableDeclaration}s, must not be <tt>null</tt>.
+     * @return Hashmap of all top-level {@link DecisionVariableDeclaration}s, must not be <b>null</b>.
      */
     public Map<String, DecisionVariableDeclaration> getDeclarationMap() {
         return declarations;

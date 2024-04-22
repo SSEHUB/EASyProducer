@@ -227,7 +227,7 @@ public class AssignmentResolverAnnotationTest {
      * compound used in the examples here. Will retrieve the correct slots independent of the implementation
      * of compounds.
      * @param dimVar1 A compound instance for which the slots shall be retrieved.
-     * @param delcarations The declarations of directed nested slots, must not be <tt>null</tt>.
+     * @param delcarations The declarations of directed nested slots, must not be <b>null</b>.
      * @return The {@link IDecisionVariable} instances of the slots, in the same order as passed to this method.
      */
     private IDecisionVariable[] getSlotsOfDimensionVariable(IDecisionVariable dimVar1, 

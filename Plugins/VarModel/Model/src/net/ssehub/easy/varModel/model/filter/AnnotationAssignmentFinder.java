@@ -52,8 +52,8 @@ public class AnnotationAssignmentFinder extends AbstractProjectVisitor {
      * Single constructor for this class.
      * @param originProject The project where the visiting shall start
      * @param filterType Specifies whether project imports shall be considered or not.
-     * @param onlyToplevel <tt>true</tt> Only non nested assignment blocks will be found,
-     * <tt>false</tt> all assignment blocks will be found.
+     * @param onlyToplevel {@code true} Only non nested assignment blocks will be found,
+     * {@code false} all assignment blocks will be found.
      */
     public AnnotationAssignmentFinder(Project originProject, FilterType filterType, boolean onlyToplevel) {
         super(originProject, filterType);
@@ -64,7 +64,7 @@ public class AnnotationAssignmentFinder extends AbstractProjectVisitor {
     
     /**
      * Returns the found assignments blocks.
-     * @return A list of assignment blocks, will not be <tt>null</tt>.
+     * @return A list of assignment blocks, will not be <b>null</b>.
      */
     public List<AttributeAssignment> getAssignmentBlocks() {
         return assignmentBlocks;

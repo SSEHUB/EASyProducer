@@ -65,8 +65,8 @@ abstract class DecisionVariable implements IDecisionVariable {
      * @param varDeclaration the variable declaration instantiated by this decision
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */
@@ -283,7 +283,7 @@ abstract class DecisionVariable implements IDecisionVariable {
      * this method will also ensure that this nested Variable will display the correct name.
      * @param newIndex The new index inside the parent {@link IDecisionVariable}.
      * This value must be in the range (this is not checked):
-     * (<tt>0 &lt;= newIndex &lt; getParent().getNestedElementsCount()</tt>)
+     * ({@code 0 &lt;= newIndex &lt; getParent().getNestedElementsCount()})
      */
     void setIndex(int newIndex) {
         if (configProvider instanceof ContainerItemConfigProvider) {
@@ -298,8 +298,8 @@ abstract class DecisionVariable implements IDecisionVariable {
     /**
      * Getter for the {@link VariableConfigProvider}.
      * @return Returns the {@link VariableConfigProvider} used in this class.
-     * This {@link VariableConfigProvider} should not be <tt>null</tt>, however,
-     * it can be <tt>null</tt> during initialization it can be <tt>null</tt>.
+     * This {@link VariableConfigProvider} should not be <b>null</b>, however,
+     * it can be <b>null</b> during initialization it can be <b>null</b>.
      */
     VariableConfigProvider getConfigProvider() {
         return configProvider;
@@ -307,8 +307,8 @@ abstract class DecisionVariable implements IDecisionVariable {
     
     /**
      * Returns whether this variable can have its own {@link IAssignmentState}.
-     * @return <tt>false</tt> if one of the parents is a {@link ContainerVariable},
-     * otherwise it should be <tt>true</tt>.
+     * @return {@code false} if one of the parents is a {@link ContainerVariable},
+     * otherwise it should be {@code true}.
      */
     boolean ownStateAllowed() {
         boolean ownStateallowed = configProvider.isStateChangeAllowed();

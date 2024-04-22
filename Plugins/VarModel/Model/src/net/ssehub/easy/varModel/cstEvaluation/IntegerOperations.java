@@ -220,7 +220,7 @@ public class IntegerOperations {
      * Implements min/max operations of two integer variables/values.
      * @param operand the operand
      * @param arguments the arguments
-     * @param min If <tt>true</tt> the <b>min</b> operation will be applied, <b>max</b> otherwise.
+     * @param min If {@code true} the <b>min</b> operation will be applied, <b>max</b> otherwise.
      * @return The min/max of the two parameters, <b>null</b> if the operation cannot be applied
      */
     private static EvaluationAccessor minmaxOperationIntInt(EvaluationAccessor operand,

@@ -35,7 +35,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**
- * Tests whether instances of {@link DerivedDatatype}s (in IVML: <tt>typedef</tt>) can be created and configured.
+ * Tests whether instances of {@link DerivedDatatype}s (in IVML: {@code typedef}) can be created and configured.
  * @author El-Sharkawy
  *
  */
@@ -54,7 +54,7 @@ public class DerivedVeriableTest {
     }
     
     /**
-     * Created a {@link DerivedDatatype} for testing using <tt>basisType</tt> as basis.
+     * Created a {@link DerivedDatatype} for testing using {@code basisType} as basis.
      * @param basisType A {@link IDatatype} which shall be used as basis for the new {@link DerivedDatatype}.
      * @return The newly created {@link DerivedDatatype}.
      */
@@ -65,12 +65,12 @@ public class DerivedVeriableTest {
     }
 
     /**
-     * Tests whether an instance of {@link DerivedDatatype}s using <tt>basisType</tt> can be created and configured.
+     * Tests whether an instance of {@link DerivedDatatype}s using {@code basisType} can be created and configured.
      * Will only created one instance and test this instance.
      * @param basisType A {@link IDatatype} which shall be used as basis for the new {@link DerivedDatatype}
      * inside this test.
-     * @param debug If <tt>true</tt> The IVML code of the project will be printed to the console for debugging,
-     * should be <tt>false</tt>.
+     * @param debug If {@code true} The IVML code of the project will be printed to the console for debugging,
+     * should be {@code false}.
      * @param value The value wich shall be assigned to the instance of the {@link DerivedDatatype} inside this test.
      */
     private void testDerivedVariable(IDatatype basisType, boolean debug, Object... value) {
@@ -110,7 +110,7 @@ public class DerivedVeriableTest {
     }
     
     /**
-     * Tests whether an instance of {@link DerivedDatatype}s using {@link Sequences}s can be created.
+     * Tests whether an instance of {@link DerivedDatatype}s using {@link Sequence}s can be created.
      */
     @Test
     public void testDerivedSequence() {

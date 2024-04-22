@@ -22,6 +22,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
@@ -74,7 +75,7 @@ public class GenericEditorOpener <T extends EObject, P extends EObject, M extend
      * declaration.
      * 
      * @param parseTreeElement
-     *            the {@link ILeadNode} that represents the selection of the
+     *            the {@link ILeafNode} that represents the selection of the
      *            user for which he wants to see the declaration
      * @param parseTreeProject the project to open the editor for
      */

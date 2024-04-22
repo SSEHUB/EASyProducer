@@ -24,13 +24,14 @@ import java.util.List;
 import org.eclipse.swt.widgets.Composite;
 
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
 import net.ssehub.easy.varModel.confModel.Configuration;
 
 /**
  * Defines an interface and registration methods to describe how top-level models shall
  * be displayed in the EASy product line editor. This helps separating language editors
  * from the EASy UI. Please note that for the plain editor functionality, there is the 
- * {@link #EditorEmbedderFactory} which may also be used outside the EASY UI.
+ * {@link EditorEmbedderFactory} which may also be used outside the EASY UI.
  * 
  * @author Holger Eichelberger
  */

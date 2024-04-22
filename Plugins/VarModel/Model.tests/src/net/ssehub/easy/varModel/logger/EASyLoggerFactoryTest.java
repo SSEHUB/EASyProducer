@@ -49,7 +49,7 @@ public class EASyLoggerFactoryTest {
      * Stores the logging level of the {@link EASyLoggerFactory} before executing the test methods.
      * This facilitates that the {@link LoggingLevel} could be set to the origin level after executing all
      * test methods.
-     * @see #tearDown()
+     * @see #tearDownAfterClass()
      */
     @BeforeClass
     public static void setUpBeforeClass() {

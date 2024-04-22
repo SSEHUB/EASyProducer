@@ -18,8 +18,10 @@ package net.ssehub.easy.dslCore.ui.hyperlinking;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.resource.XtextResource;
+import org.eclipse.xtext.ui.editor.XtextEditor;
 
 import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
+import net.ssehub.easy.varModel.model.filter.ModelElementTypeFinder.ModelElementDescription;
 
 /**
  * Performs queries on underlying models.

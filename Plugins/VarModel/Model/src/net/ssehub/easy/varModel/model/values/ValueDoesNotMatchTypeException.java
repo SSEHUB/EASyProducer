@@ -37,7 +37,7 @@ public class ValueDoesNotMatchTypeException extends IvmlException {
     /**
      * Error code for structured values.
      * This error code should be used if each values is valid, but not allowed in combination,
-     * e.g. a <tt>SetValue</tt> with duplicates.
+     * e.g. a {@code SetValue} with duplicates.
      */
     public static final int NOT_ALLOWED_VALUE_STRUCTURE = 10207;
 

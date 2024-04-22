@@ -39,7 +39,7 @@ public interface IModelElementFilter<M extends ContainableModelElement> {
      * @param context Knowledge of the current translation, comes from the
      * {@link net.ssehub.easy.varModel.model.rewrite.ProjectRewriteVisitor}.
      * @return The modified element. Maybe the same instance as passed as parameter (if nothing should be changed) or
-     * <tt>null</tt> if the element should be deleted.
+     * {@code null} if the element should be deleted.
      */
     public ContainableModelElement handleModelElement(ContainableModelElement element, RewriteContext context);
 

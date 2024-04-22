@@ -69,7 +69,7 @@ public class ConstraintFinder implements IModelVisitor {
     /**
      * Constructor for specifying whether imported projects should be considered while finding the constraints.
      * @param project The project, where all constraints should be found.
-     * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
+     * @param considerImports {@code true} if constraints of imported projects should also be found
      */
     public ConstraintFinder(Project project, boolean considerImports) {
         this(project, considerImports, false);
@@ -78,7 +78,7 @@ public class ConstraintFinder implements IModelVisitor {
     /**
      * Constructor for specifying whether imported projects should be considered while finding the constraints.
      * @param project The project, where all constraints should be found.
-     * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
+     * @param considerImports {@code true} if constraints of imported projects should also be found
      * @param excludeAssignments whether top-level assignments shall be excluded
      */
     public ConstraintFinder(Project project, boolean considerImports, boolean excludeAssignments) {
@@ -88,7 +88,7 @@ public class ConstraintFinder implements IModelVisitor {
     /**
      * Constructor for specifying whether imported projects should be considered while finding the constraints.
      * @param project The project, where all constraints should be found.
-     * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
+     * @param considerImports {@code true} if constraints of imported projects should also be found
      * @param excludeAssignments whether top-level assignments shall be excluded
      * @param handleEvals whether eval constraints should be separated from all constraints.
      */

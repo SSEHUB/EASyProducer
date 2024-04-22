@@ -33,8 +33,8 @@ public class CSTUtils {
      * Checks whether the given {@link ConstraintSyntaxTree} is a assignment or a constraint.
      * Assignments are always instance of {@link OCLFeatureCall}.
      * 
-     * @param completeCST A complete (not sub part) constraint, must not be <tt>null</tt>.
-     * @return <tt>true</tt> if the given constraint is an assignment, <tt>false</tt> if it is a constraint. 
+     * @param completeCST A complete (not sub part) constraint, must not be <b>null</b>.
+     * @return {@code true} if the given constraint is an assignment, {@code false} if it is a constraint. 
      */
     public static boolean isAssignment(ConstraintSyntaxTree completeCST) {
         return completeCST instanceof OCLFeatureCall
@@ -44,9 +44,9 @@ public class CSTUtils {
     /**
      * Checks whether the given {@link ConstraintSyntaxTree} is a simple assignment 
      * (variable assigned with constant or compound/container initializer).
-     * @param completeCST A complete (not sub part) constraint, must not be <tt>null</tt>.
-     * @return <tt>true</tt> if the given constraint is a simple assignment, 
-     * <tt>false</tt> if it is a complex constraint. 
+     * @param completeCST A complete (not sub part) constraint, must not be <b>null</b>.
+     * @return {@code true} if the given constraint is a simple assignment, 
+     * {@code false} if it is a complex constraint. 
      */
     public static boolean isSimpleAssignment(ConstraintSyntaxTree completeCST) {
         Boolean isSimpleAssignment = false;

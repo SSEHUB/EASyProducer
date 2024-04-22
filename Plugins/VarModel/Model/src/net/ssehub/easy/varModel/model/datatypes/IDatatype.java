@@ -122,7 +122,6 @@ public interface IDatatype extends IDatatypeVisitable {
      * Returns whether this type is a primitive type.
      * 
      * @return <code>true</code> if it is a primitive type, <code>false</code> else
-     * @return
      */
     public boolean isPrimitive();
 }

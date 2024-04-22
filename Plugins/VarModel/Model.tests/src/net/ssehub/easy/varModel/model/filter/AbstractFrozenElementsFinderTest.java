@@ -17,7 +17,7 @@ import net.ssehub.easy.varModel.model.datatypes.IntegerType;
 import net.ssehub.easy.varModel.model.datatypes.StringType;
 
 /**
- * Abstract super class for testing <tt>FreezeBlockFinder</tt> and <tt>FrozenElementsFinder</tt>.
+ * Abstract super class for testing {@code FreezeBlockFinder} and {@code FrozenElementsFinder}.
  * @author El-Sharkawy
  *
  */

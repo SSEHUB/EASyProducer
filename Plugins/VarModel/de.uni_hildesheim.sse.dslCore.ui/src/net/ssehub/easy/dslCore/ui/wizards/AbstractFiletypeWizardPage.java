@@ -218,7 +218,7 @@ public class AbstractFiletypeWizardPage extends WizardPage {
 
     /**
      * Displays/Removes errors.
-     * @param message An error message to display to the user, or <tt>null</tt> to delete it.
+     * @param message An error message to display to the user, or <b>null</b> to delete it.
      */
     private void updateStatus(String message) {
         setErrorMessage(message);
@@ -227,7 +227,7 @@ public class AbstractFiletypeWizardPage extends WizardPage {
 
     /**
      * The currently path/folder of the file to create.
-     * @return The path/folder of the file to be create (maybe <tt>null</tt>).
+     * @return The path/folder of the file to be create (maybe <b>null</b>).
      */
     public String getContainerName() {
         return containerText.getText();
@@ -235,7 +235,7 @@ public class AbstractFiletypeWizardPage extends WizardPage {
 
     /**
      * Returns the name of the file to create (including its file extension).
-     * @return The name of the file to create (maybe <tt>null</tt>).
+     * @return The name of the file to create (maybe <b>null</b>).
      */
     public String getFileName() {
         return fileText.getText();

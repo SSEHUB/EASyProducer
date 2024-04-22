@@ -17,7 +17,7 @@ package net.ssehub.easy.varModel.model.datatypes;
 
 
 /**
- * Interface for <tt>DecisionVariableDeclaration</tt>s of {@link DerivedDatatype} to get informed
+ * Interface for {@code DecisionVariableDeclaration}s of {@link DerivedDatatype} to get informed
  * whenever the constraints of the related {@link DerivedDatatype} changes.
  * @author El-Sharkawy
  *
@@ -25,7 +25,7 @@ package net.ssehub.easy.varModel.model.datatypes;
 public interface IDerivedDatatypeListener {
     
     /**
-     * Causes the <tt>DecisionVariableDeclaration</tt> to generate new internal constraints based
+     * Causes the {@code DecisionVariableDeclaration} to generate new internal constraints based
      * on the new constraints stored inside the {@link DerivedDatatype} . 
      */
     public void constraintsChanged();

@@ -99,7 +99,7 @@ public abstract class AbstractProjectVisitor implements IModelVisitor {
     
     /**
      * Resets the knowledge if a this visitor should be used for a second iteration.
-     * Both parameters are only optional (if <tt>null</tt> the original value will be kept).
+     * Both parameters are only optional (if {@code null} the original value will be kept).
      * @param originProject The starting project, should be the project from the constructor call.
      * @param filterType Specifies whether project imports shall be considered or not.
      */

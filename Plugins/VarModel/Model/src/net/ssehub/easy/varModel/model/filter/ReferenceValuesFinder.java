@@ -38,7 +38,7 @@ public class ReferenceValuesFinder {
      * @param refType A given {@link Reference}, for which relevant/possible {@link AbstractVariable}s should be
      *     found.
      * @return A list of all relevant {@link AbstractVariable} found in the given project with the correct data type.
-     *     This list is maybe empty, but not <tt>null</tt>.
+     *     This list is maybe empty, but not <b>null</b>.
      */
     public static List<AbstractVariable> findPossibleValues(Project project, Reference refType) {
         return findPossibleValues(project, refType.getType());
@@ -51,7 +51,7 @@ public class ReferenceValuesFinder {
      *     to configure the given {@link Reference} variable.
      * @param type A given type for which relevant/possible {@link AbstractVariable}s should be found.
      * @return A list of all relevant {@link AbstractVariable} found in the given project with the correct data type.
-     *     This list is maybe empty, but not <tt>null</tt>.
+     *     This list is maybe empty, but not <b>null</b>.
      */
     public static List<AbstractVariable> findPossibleValues(Project project, IDatatype type) {
         DeclarationFinder finder = new DeclarationFinder(project, FilterType.ALL, type);

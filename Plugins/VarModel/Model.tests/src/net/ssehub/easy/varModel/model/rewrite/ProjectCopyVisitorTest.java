@@ -96,7 +96,7 @@ public class ProjectCopyVisitorTest {
      * some general assertions.
      * @param original The project to copy.
      * @param allProjects Optional an empty set of projects, where all copied projects will be added to.
-     *     Maybe <tt>null</tt>.
+     *     Maybe <b>null</b>.
      * @return The copied project for further testings.
      */
     private Project copyProject(Project original, java.util.Set<Project> allProjects) {
@@ -895,7 +895,7 @@ public class ProjectCopyVisitorTest {
 
     /**
      * Tests whether a simple {@link DerivedDatatype} without any dependencies can be copied.
-     * @throws CSTSemanticException If <tt>true</tt>  cannot be created as constraint for a boolean type
+     * @throws CSTSemanticException If {@code true}  cannot be created as constraint for a boolean type
      */
     @Test
     public void testCopyDerivedType() throws CSTSemanticException {

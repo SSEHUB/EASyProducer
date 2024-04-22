@@ -36,7 +36,7 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
      * Sole constructor for creating a {@link VariableConfigProvider} for nested elements of a compound.
      * @param parent A {@link CompoundVariable} which will hold the
      *     nested {@link IDecisionVariable} where this provider belongs to.
-     * @param slotName The <tt>parent</tt>'s slotName of the nested {@link IDecisionVariable}
+     * @param slotName The {@code parent}'s slotName of the nested {@link IDecisionVariable}
      *     where this provider belongs to.
      */
     protected CompoundItemConfigProvider(CompoundVariable parent, String slotName) {

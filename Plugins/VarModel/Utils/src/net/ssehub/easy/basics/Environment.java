@@ -34,7 +34,7 @@ public class Environment {
      * Checks whether EASy runs inside of Eclipse. Overridden to non-eclipse if system 
      * property <code>easy.notInEclipse</code> is somehow set.
      * 
-     * @return <tt>true</tt> if EASy runs inside of Eclipse, <tt>false</tt> otherwise.
+     * @return {@code true} if EASy runs inside of Eclipse, {@code false} otherwise.
      */
     public static boolean runsInEclipse() {
         boolean result;
@@ -92,7 +92,7 @@ public class Environment {
     
     /**
      * Checks whether this program is currently running on a Windows machine.
-     * @return <tt>true</tt> if The current OS is a windows machine, <tt>false</tt> otherwise.
+     * @return {@code true} if The current OS is a windows machine, {@code false} otherwise.
      */
     public static boolean isWinOS() {
         return System.getProperty("os.name").contains("win") || System.getProperty("os.name").contains("Win");
@@ -103,7 +103,7 @@ public class Environment {
      * file system. This method should be used to resolve URL given be Eclipse for resolving locally installed
      * resources. This method should be aware of the <b>white space problem</b>, which may occur if working with
      * URIs.
-     * @param localURL An url pointing to a local resource, must not be <tt>null</tt>.
+     * @param localURL An url pointing to a local resource, must not be <b>null</b>.
      * @return An file object pointing to the same address, which is able to handle white spaces inside the path.
      */
     public static File toFile(URL localURL) {     

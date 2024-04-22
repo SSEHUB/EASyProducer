@@ -30,7 +30,7 @@ public interface IModelListener<M extends IModel> {
     /**
      * Is called to notify that <code>oldModel</code> is replaced by 
      * <code>newModel</code>. The listener registrations for 
-     * <code>oldModel</code> will be adjusted accordingly.<br/>
+     * <code>oldModel</code> will be adjusted accordingly.<br>
      * Do not modify the the listeners of <code>oldModel</code> or <code>newModel</code>
      * during this method.
      * 

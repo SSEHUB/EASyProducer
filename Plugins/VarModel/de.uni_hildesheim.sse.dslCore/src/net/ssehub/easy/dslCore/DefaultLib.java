@@ -66,7 +66,6 @@ public class DefaultLib {
      * Appends a given URL to the list of default library URLs. This operation logs occurred exceptions.
      * 
      * @param url the URL to append (may be <b>null</b>, is ignored then)
-     * @throws IOException in case that resolving the given URL (if not <b>null</b>) fails
      */
     public static void appendURLQuietly(URL url) {
         try {
@@ -119,7 +118,6 @@ public class DefaultLib {
      * Removes a given URL. This operation logs occurred exceptions.
      * 
      * @param url the URL to remove (may be <b>null</b>, is ignored then)
-     * @throws IOException in case that resolving the given URL (if not <b>null</b>) fails
      */
     public static void removeURLQuietly(URL url) {
         try {
@@ -202,7 +200,7 @@ public class DefaultLib {
      * Tries to find the default lib URL based on information provided by the component <code>context</code>. This
      * includes the symbolic bundle name (as pattern via {@link #composePluginPattern(String)} or, with precedence,
      * the actual installation location of the bundle. 
-     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String, String...)}.
+     * Uses {@link #findDefaultLibURL(ClassLoader, int, String, String...)}.
      * 
      * @param loader the class loader for holding the default lib
      * @param bundleId the explicit bundle id to search for if we cannot identify the installation location from 
@@ -211,7 +209,6 @@ public class DefaultLib {
      * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
      *   using / or a prefix name ending with * (path possible)
      * @return the default lib URL or <b>null</b>
-     * @throws IOException in case of I/O problems or problems constructing the result URL
      */
     public static URL appendDefaultLibURLQuietly(ClassLoader loader, String bundleId, ComponentContext context, 
         String... parentFolderName) {
@@ -229,14 +226,13 @@ public class DefaultLib {
      * Tries to find the default lib URL based on information provided by the component <code>context</code>. This
      * includes the symbolic bundle name (as pattern via {@link #composePluginPattern(String)} or, with precedence,
      * the actual installation location of the bundle. 
-     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String, String...)}.
+     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String...)}.
      * 
      * @param loader the class loader for holding the default lib
      * @param context the component context (may be <b>null</b> for none)
      * @param parentFolderName name(s) of the parent folder, may be a simple folder name, a folder name with path prefix
      *   using / or a prefix name ending with * (path possible)
      * @return the default lib URL or <b>null</b>
-     * @throws IOException in case of I/O problems or problems constructing the result URL
      */
     public static URL appendDefaultLibURLQuietly(ClassLoader loader, ComponentContext context, 
         String... parentFolderName) {
@@ -254,7 +250,7 @@ public class DefaultLib {
      * Tries to find the default lib URL based on information provided by the component <code>context</code>. This
      * includes the symbolic bundle name (as pattern via {@link #composePluginPattern(String)} or, with precedence,
      * the actual installation location of the bundle. 
-     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String, String...)}.
+     * Uses {@link #findDefaultLibURL(ClassLoader, ComponentContext, String...)}.
      * 
      * @param loader the class loader for holding the default lib
      * @param context the component context (may be <b>null</b> for none)
@@ -314,7 +310,7 @@ public class DefaultLib {
 
     /**
      * Tries to find the default lib URL. The first pass uses the class loader. If this fails, we use 
-     * {@link #findFallbackLibFolder(String, String)}, which searches for <code>parentFolder</code> 
+     * {@link #findFallbackLibFolder(int, String, String...)}, which searches for <code>parentFolder</code> 
      * containing {@link #DEFAULT_LIB_FOLDER_NAME} starting at the current folder walking up to the root
      * folder. This method limits the path to a nesting level of {@value #DEFAULT_MAX_NESTING}. This complicated 
      * approach may be needed in standalone/CI testing.
@@ -324,7 +320,7 @@ public class DefaultLib {
      *   using / or a prefix name ending with * (path possible)
      * @return the default lib URL or <b>null</b>
      * @throws IOException in case of I/O problems or problems constructing the result URL
-     * @see #findDefaultLibURL(ClassLoader, String, String)
+     * @see #findDefaultLibURL(ClassLoader, int, String, String...)
      */
     public static URL findDefaultLibURL(ClassLoader loader, String... parentFolderName) throws IOException {
         return findDefaultLibURL(loader, DefaultLib.DEFAULT_MAX_NESTING, DefaultLib.DEFAULT_LIB_FOLDER_NAME, 
@@ -333,7 +329,7 @@ public class DefaultLib {
 
     /**
      * Tries to find the default lib URL. The first pass uses the class loader. If this fails, we use 
-     * {@link #findFallbackLibFolder(String, String)}, which searches for <code>parentFolder</code> 
+     * {@link #findFallbackLibFolder(int, String, String...)}, which searches for <code>parentFolder</code> 
      * containing <code>defaultLibFolderName</code> starting at the current folder walking up to the root
      * folder. This complicated approach may be needed in standalon/CI testing.
      * 

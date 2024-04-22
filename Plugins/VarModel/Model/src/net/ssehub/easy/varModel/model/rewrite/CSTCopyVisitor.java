@@ -78,8 +78,8 @@ class CSTCopyVisitor extends CopyVisitor {
     /**
      * Specification whether this visitor should try to fix broken {@link ICustomOperationAccessor}s.
      * These are usually {@link Project}s. 
-     * @param forceAccessors <tt>true</tt> If an accessor could not be found, a fallback (unprezise) mechanism is used,
-     *     this should only be used at the end of the translation if all projects are surely copied, <tt>false</tt> is
+     * @param forceAccessors {@code true} If an accessor could not be found, a fallback (unprezise) mechanism is used,
+     *     this should only be used at the end of the translation if all projects are surely copied, {@code false} is
      *     the default option for this.
      */
     void setForceaccessors(boolean forceAccessors) {
@@ -88,7 +88,7 @@ class CSTCopyVisitor extends CopyVisitor {
     
     /**
      * Specifies whether the constraint could be translated completely.
-     * @return <tt>true</tt> constraint was translated completely, <tt>false</tt> {@link UntranslatedDeclaration}s
+     * @return {@code true} constraint was translated completely, {@code false} untranslated declarations
      *     have been used and must be translated at a later point.
      */
     boolean translatedCompletely() {

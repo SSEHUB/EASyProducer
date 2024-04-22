@@ -33,12 +33,12 @@ public class PersistencyConstants {
     public static final String COMMENT_FILE_EXTENSION = "text";
     
     /**
-     * Default file ending (<tt>.(file extension></tt>) for project files.
+     * Default file ending for project files.
      */
     public static final String PROJECT_FILE_ENDING = "." + PROJECT_FILE_EXTENSION;
     
     /**
-     * Default file ending (<tt>.(file extension></tt>) for project files.
+     * Default file ending for project files.
      */
     public static final String COMMENT_FILE_ENDING = "." + COMMENT_FILE_EXTENSION;
 }

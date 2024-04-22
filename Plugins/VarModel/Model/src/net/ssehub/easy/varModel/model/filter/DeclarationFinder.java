@@ -64,7 +64,7 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
      * {@link IDatatype}. Will only find toplevel declarations.
      * @param project The project where all DecisionVariableDeclarations should be found.
      * @param filterType Specifies whether project imports shall be considered or not.
-     * @param type If type is not <tt>null</tt> only declarations matching the specified type will be found
+     * @param type If type is not <b>null</b> only declarations matching the specified type will be found
      */
     public DeclarationFinder(Project project, FilterType filterType, IDatatype type) {
         this(project, filterType, type, true);
@@ -75,9 +75,9 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
      * {@link IDatatype} and whether only toplevel variables should be retrieved.
      * @param project The project where all DecisionVariableDeclarations should be found.
      * @param filterType Specifies whether project imports shall be considered or not.
-     * @param type If type is not <tt>null</tt> only declarations matching the specified type will be found
-     * @param onlyToplevel <tt>true</tt> only toplevel declarations will be found,
-     * <tt>false</tt> will also consider declarations inside compounds.
+     * @param type If type is not <b>null</b> only declarations matching the specified type will be found
+     * @param onlyToplevel {@code true} only toplevel declarations will be found,
+     * {@code false} will also consider declarations inside compounds.
      */
     public DeclarationFinder(Project project, FilterType filterType, IDatatype type, boolean onlyToplevel) {
         super(project, filterType);
@@ -174,7 +174,7 @@ public class DeclarationFinder extends AbstractDeclarationFinder {
     /**
      * Checks whether a given variables is hidden by an interface or visible.
      * @param decl The {@link AbstractVariable} to check.
-     * @return <tt>false</tt> if the variable is hidden by an interface, <tt>true</tt> otherwise
+     * @return {@code false} if the variable is hidden by an interface, {@code true} otherwise
      */
     private boolean isVisible(AbstractVariable decl) {
         // Threat all variables as visible if no interfaces are used.

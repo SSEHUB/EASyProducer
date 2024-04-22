@@ -824,7 +824,7 @@ public class Operation {
      * @return the operation
      * 
      * @throws IndexOutOfBoundsException if 
-     *   <code>index&lt;0 || index&gt;={@link #getOperationsCount()()}</code>
+     *   <code>index&lt;0 || index&gt;={@link #getOperationsCount()}</code>
      */
     public static Operation getOperation(int index) {
         return allOperations.get(index);

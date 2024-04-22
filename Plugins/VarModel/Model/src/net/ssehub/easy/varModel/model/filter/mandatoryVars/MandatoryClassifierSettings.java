@@ -24,15 +24,15 @@ public class MandatoryClassifierSettings {
     
     /**
      * Consider default values as already assigned values.
-     * <tt>true</tt>: Variables with default values are not mandatory, as there is already a value specified (default)
-     * <tt>false</tt>: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
+     * {@code true}: Variables with default values are not mandatory, as there is already a value specified (default)
+     * {@code false}: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
      */
     private boolean considerDefaultValues;
     
     /**
      * Consider enumeration variables as mandatory, even if they don't have a default value.
-     * <tt>true</tt>: Enumerations are mandatory, as they enforce to select exact one value. 
-     * <tt>false</tt>: Enumerations are not mandatory, as all other variables (default)
+     * {@code true}: Enumerations are mandatory, as they enforce to select exact one value. 
+     * {@code false}: Enumerations are not mandatory, as all other variables (default)
      */
     private boolean considerEnumerationsAsMandatory;
 
@@ -47,8 +47,8 @@ public class MandatoryClassifierSettings {
     /**
      * Returns whether default values should be threaten as already set values.
      * @return
-     *   <tt>true</tt>: Variables with default values are not mandatory, as there is already a value specified
-     *   <tt>false</tt>: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
+     *   {@code true}: Variables with default values are not mandatory, as there is already a value specified
+     *   {@code false}: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
      */
     boolean considerDefaultValues() {
         return considerDefaultValues;
@@ -57,8 +57,8 @@ public class MandatoryClassifierSettings {
     /**
      * Specification, whether default values shall be considered.
      * @param considerDefaultValues
-     *   <tt>true</tt>: Variables with default values are not mandatory, as there is already a value specified
-     *   <tt>false</tt>: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
+     *   {@code true}: Variables with default values are not mandatory, as there is already a value specified
+     *   {@code false}: Variables with default values should be (re-)assigned by the user, if used in a constraint. 
      */
     public void setDefaultValueConsideration(boolean considerDefaultValues) {
         this.considerDefaultValues = considerDefaultValues;
@@ -67,8 +67,8 @@ public class MandatoryClassifierSettings {
     /**
      * Returns whether enumumeration variables shall be treaten as mandatory variables.
      * @return
-     *   <tt>true</tt>: Enumerations are mandatory, as they enforce to select exact one value. 
-     *   <tt>false</tt>: Enumerations are not mandatory, as all other variables
+     *   {@code true}: Enumerations are mandatory, as they enforce to select exact one value. 
+     *   {@code false}: Enumerations are not mandatory, as all other variables
      */
     boolean treatEnumsAsMandatory() {
         return considerEnumerationsAsMandatory;
@@ -78,8 +78,8 @@ public class MandatoryClassifierSettings {
      * Specification, whether enumeration variables shall be considered as mandatory as exactly one value should
      * be selected.
      * @param considerEnumerationsAsMandatory
-     *   <tt>true</tt>: Enumerations are mandatory, as they enforce to select exact one value. 
-     *   <tt>false</tt>: Enumerations are not mandatory, as all other variables
+     *   {@code true}: Enumerations are mandatory, as they enforce to select exact one value. 
+     *   {@code false}: Enumerations are not mandatory, as all other variables
      */
     public void setTreatEnumsAsMandatory(boolean considerEnumerationsAsMandatory) {
         this.considerEnumerationsAsMandatory = considerEnumerationsAsMandatory;

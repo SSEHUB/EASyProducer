@@ -189,12 +189,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     }
     
     /**
-     * Parse an IVML model file for standalone application (without editor) with a new default import resolver.<br/>
-     * <b>Note:</b> This method is called by {@link de.uni_hildesheim.sse.model.management.VarModel} 
-     * so if you intend to use the management facilities in 
-     * {@link de.uni_hildesheim.sse.model.management.VarModel} let the 
-     * {@link de.uni_hildesheim.sse.model.management.VarModel}
-     * do this job for you and do not call this method directly!
+     * Parse an IVML model file for standalone application (without editor) with a new default import resolver.
      * 
      * @param file the location of the model
      * @return the created variability model including messages
@@ -210,12 +205,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     }
     
     /**
-     * Parse an IVML model file for standalone application (without editor) with a new default import resolver.<br/>
-     * <b>Note:</b> This method is called by {@link de.uni_hildesheim.sse.model.management.VarModel} 
-     * so if you intend to use the management facilities in 
-     * {@link de.uni_hildesheim.sse.model.management.VarModel} let the 
-     * {@link de.uni_hildesheim.sse.model.management.VarModel}
-     * do this job for you and do not call this method directly!
+     * Parse an IVML model file for standalone application (without editor) with a new default import resolver.
      * 
      * @param uri the location of the model, e.g. via
      *            URI.createURI("dummy:/example.ex1")
@@ -228,12 +218,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     }
 
     /**
-     * Parse an IVML model file for standalone application (without editor) with a given import resolver.<br/>
-     * <b>Note:</b> This method is called by {@link de.uni_hildesheim.sse.model.management.VarModel} 
-     * so if you intend to use the management facilities in 
-     * {@link de.uni_hildesheim.sse.model.management.VarModel} let the 
-     * {@link de.uni_hildesheim.sse.model.management.VarModel}
-     * do this job for you and do not call this method directly!
+     * Parse an IVML model file for standalone application (without editor) with a given import resolver.
      * 
      * @param uri the location of the model, e.g. via
      *            URI.createURI("dummy:/example.ex1")

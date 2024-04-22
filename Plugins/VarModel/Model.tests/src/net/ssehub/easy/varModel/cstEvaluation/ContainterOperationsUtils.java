@@ -29,7 +29,7 @@ public class ContainterOperationsUtils {
      *     One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
      * @param expectedResult For testing the expected result of the operation.
      * @param numberType The expected {@link IDatatype} of created results.
-     * @param asSet If <tt>true</tt> as Set is created, a sequence otherwise.
+     * @param asSet If {@code true} as Set is created, a sequence otherwise.
      */
     static void assertUnaryConstraint(Number[] value, String operation, Object expectedResult,
         IDatatype numberType, boolean asSet) {
@@ -50,14 +50,14 @@ public class ContainterOperationsUtils {
     /**
      * Creates an unary constraint for {@link net.ssehub.easy.varModel.model.datatypes.Container} types.
      * This constraint will have the following form:
-     * <tt>value.operation()</tt>
+     * {@code value.operation()}
      * @param values The constant container value
      * @param operation A unary container operation.
      *     One of {@link net.ssehub.easy.varModel.model.datatypes.OclKeyWords}.
      * @param contType A {@link net.ssehub.easy.varModel.model.datatypes.Container}
      *     of {@link net.ssehub.easy.varModel.model.datatypes.IntegerType}
      *     or {@link net.ssehub.easy.varModel.model.datatypes.RealType}
-     * @return A constraint in form of <tt>value.operation()</tt>.
+     * @return A constraint in form of {@code value.operation()}.
      */
     static ConstraintSyntaxTree createUnaryConstraint(Number[] values, String operation, IDatatype contType) {
         OCLFeatureCall cst = null;

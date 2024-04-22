@@ -43,8 +43,8 @@ public class DeclarationNameFilter implements IModelElementFilter<DecisionVariab
     /**
      * Constructor which can be used for white or black list based filtering.
      * @param declarationNames Names which shall be filtered.
-     * @param blacklist <tt>true</tt> the given names will be filtered out and all others will be kept
-     * (blacklist filtering), <tt>false</tt> the given names will be kept and all others will be filtered out (whitelist
+     * @param blacklist {@code true} the given names will be filtered out and all others will be kept
+     * (blacklist filtering), {@code false} the given names will be kept and all others will be filtered out (whitelist
      * filtering).
      */
     public DeclarationNameFilter(String[] declarationNames, boolean blacklist) {

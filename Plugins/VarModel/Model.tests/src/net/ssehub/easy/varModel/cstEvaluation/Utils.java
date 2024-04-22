@@ -548,8 +548,6 @@ class Utils {
      * @param op the operation to be tested
      * @param operand the operand value to calculate the string representation for
      * @param expected the expected output
-     * 
-     * @throws ValueDoesNotMatchTypeException shall not occur
      */
     static void testToString(EvaluationContext context, Operation op, EvaluationAccessor operand, String expected) {
         testToString(context, op, operand, expected, -1);
@@ -563,8 +561,6 @@ class Utils {
      * @param operand the operand value to calculate the string representation for
      * @param expected the expected output
      * @param maxLen the maximum length to compare, ignored if negative
-     * 
-     * @throws ValueDoesNotMatchTypeException shall not occur
      */
     static void testToString(EvaluationContext context, Operation op, EvaluationAccessor operand, String expected, 
         int maxLen) {

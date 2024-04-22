@@ -51,7 +51,7 @@ import net.ssehub.easy.varModel.varModel.values.ValueFactoryTest;
 import net.ssehub.easy.varModel.varModel.versioning.ImportValidationTest;
 
 /**
- * Test Suite for running all test cases. <br/>
+ * Test Suite for running all test cases. <br>
  * Please insert all test cases to this test suite for simplify testing.
  * @author El-Sharkawy
  *

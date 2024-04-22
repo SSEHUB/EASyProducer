@@ -32,29 +32,29 @@ import net.ssehub.easy.varModel.varModel.testSupport.MeasurementStatisticsVisito
 /**
  * Extensible measurements collection mechanism to be applied while running a test suite. Aims at collecting 
  * performance data, potentially also detecting performance regression in the future. 
- * <p/>
+ * <p>
  * Measurements are identified by {@link IMeasurementIdentifier} defined in testing scope only. For practical reasons, 
  * it is sometimes easier to use different identifiers, e.g., defined in production code. Therefore, the measurement
  * collector allows registering a global mapping between identifiers using 
  * {@link #registerMapping(Object, IMeasurementIdentifier)} and the respective method accept an Object that is mapped
  * internally (nothing happens if no mapping is possible, directly passing in a {@link IMeasurementIdentifier} 
  * is permitted).
- * <p/>
+ * <p>
  * Some measurements can be done automatically, e.g., aggregation, averaging or measuring the entire (wall) response
- * time {@link DefaultMeasurementIdentifier#RESPONSETIME}. For automatic measurements, collectors can be registered
- * globally {@link #registerAutoCollector(IAutoCollector), which are called when starting or stopping a measurment.
- * <p/>
+ * time {@link DefaultMeasurementIdentifier#RESPONSETIME_AUTO}. For automatic measurements, collectors can be registered
+ * globally {@link #registerAutoCollector(IAutoCollector)}, which are called when starting or stopping a measurment.
+ * <p>
  * There are two ways of collecting measurement data:
  * <ol>
- *     <li>All values at once, call {@link #recordMeasurements(Configuration, String, Map) or on the actual instance
- *         {@link #record(Configuration, String, Map).</li>
- *     <li>Within the brackets of {@link #startMeasurement(Configuration, String, boolean)} 
+ *     <li>All values at once, call {@link #recordMeasurements(Configuration, String, int, Map)} or on the actual 
+ *         instance {@link #record(Configuration, String, int, Map)}</li>
+ *     <li>Within the brackets of {@link #startMeasurement(Configuration, String, int)} 
  *         and {@link #endMeasurement(MeasurementRecord)} returning a unique identifier to be used with further calls. 
  *         Individual measurements can be added by 
  *         {@link #setMeasurement(String, IMeasurementIdentifier, double)} and read out by 
  *         {@link #getMeasurement(String, IMeasurementIdentifier)}. For the actual instance, the methods are 
- *         {@link #start(Configuration, String)}, {@link #end()}, {@link #set(IMeasurementIdentifier, double)}, 
- *         and {@link #get(String, IMeasurementIdentifier)}.</li>
+ *         {@link #start(Configuration, String, int)}, {@link #end(String)}, 
+ *         {@link #set(String, Object, double)}, and {@link #get(String, IMeasurementIdentifier)}.</li>
  * </ol>
  * The default implementation in this class does nothing rather than providing the infrastructure. Concrete subclasses
  * may e.g. log into a file or a database.
@@ -197,27 +197,27 @@ public class MeasurementCollector {
         MODEL_ANNOTATIONS(false),
 
         /**
-         * Average constraint complexity as calculated by {@link MeasurementStatisticsVistor}.
+         * Average constraint complexity as calculated by {@link MeasurementStatisticsVisitor}.
          */
         MODEL_CONSTRAINT_AVG_COMPLEXITY(false),
 
         /**
-         * Total constraint complexity as calculated by {@link MeasurementStatisticsVistor}.
+         * Total constraint complexity as calculated by {@link MeasurementStatisticsVisitor}.
          */
         MODEL_CONSTRAINT_COMPLEXITY(false),
 
         /**
-         * Average variable complexity as calculated by {@link MeasurementStatisticsVistor}.
+         * Average variable complexity as calculated by {@link MeasurementStatisticsVisitor}.
          */
         MODEL_VARIABLE_AVG_COMPLEXITY(false),
         
         /**
-         * Total variable complexity as calculated by {@link MeasurementStatisticsVistor}.
+         * Total variable complexity as calculated by {@link MeasurementStatisticsVisitor}.
          */
         MODEL_VARIABLE_COMPLEXITY(false),
 
         /**
-         * Total model complexity as calculated by {@link MeasurementStatisticsVistor}.
+         * Total model complexity as calculated by {@link MeasurementStatisticsVisitor}.
          */
         MODEL_COMPLEXITY(false);
         
@@ -709,7 +709,7 @@ public class MeasurementCollector {
     }
     
     /**
-     * Stores the given statistics result in <code>record</code.
+     * Stores the given statistics result in {@code record}.
      * >
      * @param statistics the statistics object
      * @param record the record to modify as a side effect

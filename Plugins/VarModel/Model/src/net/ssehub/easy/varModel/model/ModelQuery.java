@@ -236,7 +236,7 @@ public class ModelQuery {
      * @return the corresponding type or <b>null</b>
      * @throws ModelQueryException in case of violated project access restrictions
      * 
-     * @see #findType(IResolutionScope, String, boolean, Class)
+     * @see #findType(IResolutionScope, String, boolean, Class, Set)
      */
     public static IDatatype findType(IResolutionScope elements, String name, Class<? extends IDatatype> type) 
         throws ModelQueryException {

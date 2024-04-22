@@ -117,7 +117,7 @@ public class DerivedDatatype extends CustomDatatype {
     /**
      * Unregisters an existing {@link IDerivedDatatypeListener} to this type.
      * @param listener An instance of this type.
-     * @return <tt>true</tt> if this type contained the specified listener
+     * @return {@code true} if this type contained the specified listener
      */
     public boolean unregister(IDerivedDatatypeListener listener) {
         return listeners.remove(listener);

@@ -115,7 +115,7 @@ public class EvaluationVisitorTest {
      * Contrary to {@link #createAssignmentConstraint(DecisionVariableDeclaration, Object...)},
      * the value can be an arbitrary constraint, e.g. another variable.
      * @param decl The declaration for which a assignment should be done.
-     * @param dynValue another constraint, which can be used to infer a value for <tt>decl</tt>.
+     * @param dynValue another constraint, which can be used to infer a value for {@code decl}.
      * @return The assignment constraint, expressing <code>decl = dynValue</code>. This constraint is not added to the
      *     project to avoid side effects during initialization of the configuration.
      */
@@ -181,7 +181,7 @@ public class EvaluationVisitorTest {
 
     
     /**
-     * Tests whether the <tt>at</tt> operation works on a sequence variable with was set to <tt>null</tt>.
+     * Tests whether the {@code at} operation works on a sequence variable with was set to <b>null</b>.
      * Adam Krafczyk detected an uncaught NullPointerException.
      * @throws CSTSemanticException Must not occur otherwise is this test broken.
      * @throws ValueDoesNotMatchTypeException Must not occur otherwise is this test broken.
@@ -227,7 +227,7 @@ public class EvaluationVisitorTest {
     }
     
     /**
-     * Tests whether the <tt>size</tt> operation works on a sequence variable with was set to <tt>null</tt>.
+     * Tests whether the {@code size} operation works on a sequence variable with was set to <b>null</b>.
      * Adam Krafczyk detected an uncaught NullPointerException.
      * @throws CSTSemanticException Must not occur otherwise is this test broken.
      * @throws ValueDoesNotMatchTypeException Must not occur otherwise is this test broken.
@@ -287,7 +287,7 @@ public class EvaluationVisitorTest {
      * Tests the correct behavior of the {@link EvaluationVisitor}, while working with sequences, which are set to
      * {@link NullValue}.
      * @param cst A sequence operation which shall be visited by the {@link EvaluationVisitor}.
-     * @param config The configuration of a project containing the <tt>cst</tt> constraint.
+     * @param config The configuration of a project containing the {@code cst} constraint.
      * @param operation The name of the operation for creating sufficient error messages if the assertion fails.
      * @param expected the expected status
      */
@@ -709,19 +709,19 @@ public class EvaluationVisitorTest {
      * Tests all nine possible situations of an binary boolean operation.
      * It will test:
      * <ol>
-     * <li><tt>undef OPERATION false</tt></li>
-     * <li><tt>undef OPERATION true</tt></li>
-     * <li><tt>undef OPERATION undef</tt></li>
-     * <li><tt>false OPERATION false</tt></li>
-     * <li><tt>false OPERATION true</tt></li>
-     * <li><tt>false OPERATION undef</tt></li>
-     * <li><tt>true OPERATION false</tt></li>
-     * <li><tt>true OPERATION true</tt></li>
-     * <li><tt>true OPERATION undef</tt></li>
+     * <li>{@code undef OPERATION false}</li>
+     * <li>{@code undef OPERATION true}</li>
+     * <li>{@code undef OPERATION undef}</li>
+     * <li>{@code false OPERATION false}</li>
+     * <li>{@code false OPERATION true}</li>
+     * <li>{@code false OPERATION undef}</li>
+     * <li>{@code true OPERATION false}</li>
+     * <li>{@code true OPERATION true}</li>
+     * <li>{@code true OPERATION undef}</li>
      * </ol>
      * @param operation One of {@link OclKeyWords#AND} or {@link OclKeyWords#OR}.
      * @param expectedValues The expected values for the given list above, should bean arrays with length = 9.
-     *     If expected that the {@link EvaluationVisitor} is not able to resolve the operation, add <tt>null</tt> to
+     *     If expected that the {@link EvaluationVisitor} is not able to resolve the operation, add <b>null</b> to
      *     the specific position of the array.
      * @see #testSpecialBooleanOperartions()
      */
@@ -752,7 +752,7 @@ public class EvaluationVisitorTest {
      * @param operand A variable with no value or a {@link BooleanValue}.
      * @param operation One of {@link OclKeyWords#AND} or {@link OclKeyWords#OR}.
      * @param parameter A variable with no value or a {@link BooleanValue}.
-     * @param expectedResult <tt>null</tt> if expected that the {@link EvaluationVisitor} is not able to resolve the
+     * @param expectedResult <b>null</b> if expected that the {@link EvaluationVisitor} is not able to resolve the
      *     specific operations.
      * @param evaluator The {@link EvaluationVisitor} instance which is already prepared for testing.
      * @see #testSpecialBooleanOperartions()

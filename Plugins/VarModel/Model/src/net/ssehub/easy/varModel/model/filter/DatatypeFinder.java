@@ -58,7 +58,7 @@ public class DatatypeFinder extends AbstractProjectVisitor {
      * @param filterType Specifies whether project imports shall be considered or not.
      * @param type An optional parameter of which kind the found elements should be.
      *     This should be a {@link CustomDatatype}.
-     *     If it is <tt>null</tt> all {@link CustomDatatype} will be collected.
+     *     If it is <b>null</b> all {@link CustomDatatype} will be collected.
      */
     public DatatypeFinder(Project originProject, FilterType filterType, IDatatype type) {
         super(originProject, filterType);

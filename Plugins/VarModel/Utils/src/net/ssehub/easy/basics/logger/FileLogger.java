@@ -36,11 +36,11 @@ public class FileLogger extends AbstractJavaLogger {
     /**
      * Creates an {@link ILogger} for logging into a specified file.
      * @param path The path of the file where the log file shall be written.
-     * @param append If <tt>true</tt> log data will be appended to existing files,
+     * @param append If {@code true} log data will be appended to existing files,
      * otherwise existing files will be overwritten 
      * @throws  IOException if there are IO problems opening the files.
      * @throws  SecurityException  if a security manager exists and if
-     *             the caller does not have <tt>LoggingPermission("control")</tt>.
+     *             the caller does not have {@code LoggingPermission("control")}.
      * @throws  IllegalArgumentException if pattern is an empty string
      */
     private FileLogger(String path, boolean append) throws SecurityException, IOException {
@@ -52,9 +52,9 @@ public class FileLogger extends AbstractJavaLogger {
     /**
      * Returns the singleton instance of this {@link ILogger} implementation.
      * @param path The path of the file where the log file shall be written.
-     * @param append If <tt>true</tt> log data will be appended to existing files,
+     * @param append If {@code true} log data will be appended to existing files,
      * otherwise existing files will be overwritten 
-     * @return The first successfully created logger, or <tt>null</tt> if no logger could be created, e.g.
+     * @return The first successfully created logger, or <b>null</b> if no logger could be created, e.g.
      *     if no valid path was specified.
      */
     public static synchronized FileLogger getInstance(String path, boolean append) {

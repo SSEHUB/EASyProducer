@@ -51,7 +51,7 @@ public class ConstraintSeparator {
      * Constructor for specifying whether imported projects should be considered while finding the constraints.
      * @param project The project, where all constraints should be found
      * and separated into the categories mentioned above.
-     * @param considerImports <tt>true</tt> if constraints of imported projects should also be found
+     * @param considerImports {@code true} if constraints of imported projects should also be found
      */
     public ConstraintSeparator(Project project, boolean considerImports) {
         ConstraintFinder finder = new ConstraintFinder(project, considerImports);

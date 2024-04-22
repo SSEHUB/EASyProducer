@@ -70,7 +70,7 @@ public class DeclarationInContainerFinder implements IModelVisitor {
      * was an {@link AttributeAssignment} (This list maybe empty)</li>
      * <li>Otherwise an empty list will be returned</li>
      * </ul>.
-     * @return A List of {@link DecisionVariableDeclaration} (must not be <tt>null</tt>).
+     * @return A List of {@link DecisionVariableDeclaration} (must not be <b>null</b>).
      */
     public List<DecisionVariableDeclaration> getDeclarations() {
         return declarations;

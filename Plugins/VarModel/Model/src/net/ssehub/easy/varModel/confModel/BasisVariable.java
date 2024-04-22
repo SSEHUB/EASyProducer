@@ -23,11 +23,11 @@ import net.ssehub.easy.varModel.model.values.Value;
  * Class for variables which do not bear nested variables.
  * Supported data types are:
  * <ul>
- * <li><tt>BasisDatatype</tt></li>
- * <li><tt>ConstraintType</tt></li>
- * <li><tt>Enum</tt></li>
- * <li><tt>OrderedEnum</tt></li>
- * <li><tt>Reference</tt></li>
+ * <li>{@code BasisDatatype}</li>
+ * <li>{@code ConstraintType}</li>
+ * <li>{@code Enum}</li>
+ * <li>{@code OrderedEnum}</li>
+ * <li>{@code Reference}</li>
  * </ul>
  * @author El-Sharkawy
  *
@@ -41,8 +41,8 @@ class BasisVariable extends DecisionVariable {
      * @param varDeclaration the variable declaration instantiated by this decision
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */

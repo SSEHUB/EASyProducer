@@ -2,6 +2,7 @@ package net.ssehub.easy.varModel.varModel.management;
 
 import java.io.File;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class VarModelTest implements IProjectListener {
     
     /**
      * Sets up the project before the test runs.
-     * @throws VersionFormatException 
+     * @throws VersionFormatException shall not occur
      */
     @Before
     public void setUp() throws VersionFormatException {
@@ -47,10 +48,19 @@ public class VarModelTest implements IProjectListener {
         pro3.setVersion(version);
         
         vm = VarModel.INSTANCE;
+        vm.clearModels();
         events = vm.events();
         
         imp = new ProjectImport("Name1", "Interface");
         pro3.addImport(imp);
+    }
+
+    /**
+     * Tears down the test.
+     */
+    @After
+    public void tearDown() {
+        vm.clearModels();
     }
 
     /**

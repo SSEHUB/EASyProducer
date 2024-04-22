@@ -44,7 +44,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
      * Sole constructor for creating a {@link VariableConfigProvider} for nested elements of a container.
      * @param parent A {@link CompoundVariable} which will hold the
      *     nested {@link IDecisionVariable} where this provider belongs to.
-     * @param index The <tt>index</tt> of the nested {@link IDecisionVariable}
+     * @param index The {@code index} of the nested {@link IDecisionVariable}
      *     inside the prant.
      */
     ContainerItemConfigProvider(ContainerVariable parent, int index) {
@@ -115,7 +115,7 @@ class ContainerItemConfigProvider extends NestedVarConfigProvider {
      * element as been removed from the list of nested elements.
      * @param newIndex The new index of the related nested {@link IDecisionVariable}.
      * This value must be in the range (this is not checked):
-     * (<tt>0 &lt;= newIndex &lt; getParent().getNestedElementsCount()</tt>)
+     * ({@code 0 &lt;= newIndex &lt; getParent().getNestedElementsCount()})
      */
     void setIndex(int newIndex) {
         this.index = newIndex;

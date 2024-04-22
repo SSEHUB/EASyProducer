@@ -39,8 +39,8 @@ public class ProjectTestUtilities {
     /**
      * Specification whether the project should be printed out inside the {@link #validateProject(Project)} method.
      * <ul>
-     * <li><tt>true</tt>: Project will be printed out.</li>
-     * <li><tt>false</tt>: Default run, without printing out the project.</li>
+     * <li>{@code true}: Project will be printed out.</li>
+     * <li>{@code false}: Default run, without printing out the project.</li>
      * </ul>
      */
     private static final boolean DEBUG = false;
@@ -62,7 +62,7 @@ public class ProjectTestUtilities {
      * This method should be applied to projects, which are used inside a test method.
      * This method should be run before the test starts.
      * @param project A project which shall be used inside a test case.
-     * @param debug If <tt>true</tt> The IVML code of the project will be printed to the console for debugging.
+     * @param debug If {@code true} The IVML code of the project will be printed to the console for debugging.
      */
     public static void validateProject(Project project, boolean debug) {
         // Test whether project is sufficient for testing
@@ -96,7 +96,7 @@ public class ProjectTestUtilities {
     
     /**
      * Creates a custom {@link IDatatype} and adds it to
-     * the <tt>project</tt> for testing.
+     * the {@code project} for testing.
      * This method works only for {@link IDatatype} with a constructor with the following parameters:
      * <ul>
      * <li>name : {@link String}</li>
@@ -105,7 +105,7 @@ public class ProjectTestUtilities {
      * </ul>
      * @param typeClass A custom {@link IDatatype} which shall be created.
      * @param project The parent of the new custom {@link IDatatype}.
-     * @return The newly create custom {@link IDatatype}, which will not be <tt>null</tt>.
+     * @return The newly create custom {@link IDatatype}, which will not be <b>null</b>.
      */
     public static IDatatype createCustomDataType(Class<? extends IDatatype> typeClass, Project project) {
         IDatatype type = null;
@@ -185,7 +185,7 @@ public class ProjectTestUtilities {
     
     /**
      * Creates a variable and adds it to the project.
-     * Part of the {@link #setUp()} method.
+     * 
      * @param type The type of the variable to create.
      * @param project The Project where the variable shall be added to.
      */

@@ -60,7 +60,7 @@ public class NamespaceFinder extends AbstractProjectVisitor {
     
     /**
      * Returns the retrieved namespaces.
-     * @return A list containing all namepsace, will not be <tt>null</tt>.
+     * @return A list containing all namepsace, will not be <b>null</b>.
      */
     public List<String> getNamespaces() {
         return namepsaces;

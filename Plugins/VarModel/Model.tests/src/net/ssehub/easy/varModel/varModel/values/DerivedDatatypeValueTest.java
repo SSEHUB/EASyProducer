@@ -19,7 +19,7 @@ import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
 import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
- * This class test the correct instantiation of Values for the {@link DerivedDatype}s.
+ * This class test the correct instantiation of Values for the {@link DerivedDatatype}s.
  * @author El-Sharkawy
  *
  */
@@ -36,7 +36,7 @@ public class DerivedDatatypeValueTest {
     }
 
     /**
-     * Test the correct instantiation of a Value for a {@link DerivedDatype} with an {@link IntegerType} as
+     * Test the correct instantiation of a Value for a {@link DerivedDatatype} with an {@link IntegerType} as
      * <code>BasisDatatype</code>.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise there is an error in the whole model
      * @throws CSTSemanticException Must not occur, otherwise there is an error in the whole model
@@ -59,7 +59,7 @@ public class DerivedDatatypeValueTest {
     }
    
     /**
-     * Test the correct instantiation of a Value for a {@link DerivedDatype} with an {@link Compound} as
+     * Test the correct instantiation of a Value for a {@link DerivedDatatype} with an {@link Compound} as
      * <code>BasisDatatype</code>.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise there is an error in the whole model
      * @throws CSTSemanticException Must not occur, otherwise there is an error in the whole model

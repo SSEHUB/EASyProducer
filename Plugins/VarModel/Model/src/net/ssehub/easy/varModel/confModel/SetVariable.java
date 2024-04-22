@@ -18,7 +18,7 @@ package net.ssehub.easy.varModel.confModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 
 /**
- * Decision variable for <tt>Set</tt>s.
+ * Decision variable for {@code Set}s.
  * @author lueder
  * @author Holger Eichelberger
  */
@@ -30,8 +30,8 @@ public class SetVariable extends ContainerVariable {
      * @param parent the parent of this set
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether this variable represents (a part of) an attribute or a variable
      */

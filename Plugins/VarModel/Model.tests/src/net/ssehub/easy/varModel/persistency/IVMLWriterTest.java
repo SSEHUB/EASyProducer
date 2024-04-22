@@ -867,7 +867,7 @@ public class IVMLWriterTest {
     /**
      * Part of {@link #testSaveConfiguredAttributes()}. Creates two attributes on different ways for the same
      * {@link IDecisionVariable}, configures them and test whether they are saved correctly.
-     * @param changeStates One variable is created with a default value, the other with an assigned value. <tt>true</tt>
+     * @param changeStates One variable is created with a default value, the other with an assigned value. {@code true}
      *     will change the sates to check whether both kinds of attributes can be saved.
      * @throws ValueDoesNotMatchTypeException Must not occur, otherwise string values cannot be assigned to string
      *     variables

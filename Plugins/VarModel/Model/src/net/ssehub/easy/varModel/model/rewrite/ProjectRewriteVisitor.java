@@ -158,7 +158,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
      * specified the modifier will be applied to each element of the same type. Multiple {@link IModelElementFilter} may
      * be specified for the same {@link ContainableModelElement} type.
      * @param modifier A IModelCopyModifier for a given {@link ContainableModelElement} class,
-     *     must not be <tt>null</tt>.
+     *     must not be <b>null</b>.
      */
     public void addModelCopyModifier(IModelElementFilter<? extends ModelElement> modifier) {
         List<IModelElementFilter<?>> modifierList = modifiers.get(modifier.getModifyingModelClass());
@@ -211,7 +211,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
 
     /**
      * Copies the given Constraint.
-     * @param constraint A constraints, which syntax is not <tt>null</tt>
+     * @param constraint A constraints, which syntax is not <b>null</b>
      */
     private void copyConstraint(Constraint constraint) {
         ConstraintSyntaxTree cst = constraint.getConsSyntax();
@@ -387,7 +387,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
      * to enable further processing between the filtering and the add method,
      * i.e., adapting to the {@link #currentProject}.
      * @param original A {@link ContainableModelElement} of the {@link #currentProject} to be filtered (and modified).
-     * @return The modified instance (maybe the same instance) or <tt>null</tt> if it was completely filtered.
+     * @return The modified instance (maybe the same instance) or <b>null</b> if it was completely filtered.
      * @see #addCopiedElement(ContainableModelElement)
      */
     private ContainableModelElement filter(ContainableModelElement original) {
@@ -411,7 +411,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
     /**
      * Adds a modified and filtered element to the {@link #currentProject}, part of the
      * {@link #filter(ContainableModelElement)} method.
-     * @param copy The copied instance, maybe <tt>null</tt> if filtered completely.
+     * @param copy The copied instance, maybe <b>null</b> if filtered completely.
      */
     private void addCopiedElement(ContainableModelElement copy) {
         if (null != copy) {
@@ -421,7 +421,7 @@ public class ProjectRewriteVisitor implements IModelVisitor {
     
     /**
      * {@inheritDoc} <br/>
-     * <b><font color="red">Attention:</font></b> This method will modify the visited project as a side effect.
+     * <b>Attention:</b> This method will modify the visited project as a side effect.
      * If the original project should not be modified, it is necessary to create a copy first via the
      * {@link ProjectCopyVisitor}.
      */

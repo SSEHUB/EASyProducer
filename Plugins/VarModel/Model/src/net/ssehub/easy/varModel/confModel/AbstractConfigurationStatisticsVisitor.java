@@ -176,7 +176,14 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
         }
     }
     
+    /**
+     * Collected statistics.
+     */
     private ConfigStatistics statistics;
+    
+    /**
+     * Project visitor.
+     */
     private AbstractVisitor projectVisitor = new AbstractVisitor() {
 
         private java.util.Set<Project> done = new HashSet<Project>();
@@ -314,7 +321,7 @@ public abstract class AbstractConfigurationStatisticsVisitor extends AbstractCon
     /**
      * Recursive part to visit all (nested) variables.
      * @param variable The visited decision variable instance.
-     * @param nestedInContainer <tt>true</tt> if the parent is a container, <tt>false</tt> otherwise.
+     * @param nestedInContainer {@code true} if the parent is a container, {@code false} otherwise.
      */
     public void visitVariable(IDecisionVariable variable, boolean nestedInContainer) {
         statistics.nVariables++;

@@ -68,9 +68,9 @@ public class ConfigQuery {
     /**
      * Gathers all {@link IDecisionVariable}s of the given {@link Configuration}, which match the specified type.
      * @param config The {@link Configuration} which contains the queried variables.
-     * @param type The type of which the variables shall be returned, or <tt>null</tt> if all variables should
+     * @param type The type of which the variables shall be returned, or <b>null</b> if all variables should
      *     be returned.
-     * @param onlyToplevel <tt>true</tt> only top level variables will be returned, <tt>false</tt> also nested
+     * @param onlyToplevel {@code true} only top level variables will be returned, {@code false} also nested
      *     variables will be returned, e.g. nested inside a compound.
      * @return variables The set of variables, which match the given parameters.
      */
@@ -91,9 +91,9 @@ public class ConfigQuery {
      * Recursive part of {@link #collectVariablesByType(Configuration, IDatatype, boolean)}, which searches for (nested)
      * variables.
      * @param variable The currently tested variable, which should maybe added.
-     * @param type The type of which the variables shall be returned, or <tt>null</tt> if all variables should
+     * @param type The type of which the variables shall be returned, or <b>null</b> if all variables should
      *     be returned.
-     * @param onlyToplevel <tt>true</tt> only top level variables will be returned, <tt>false</tt> also nested
+     * @param onlyToplevel {@code true} only top level variables will be returned, {@code false} also nested
      *     variables will be returned, e.g. nested inside a compound.
      * @param variables The set of variables to be returned (will be changed as a side-effect).
      */
@@ -115,7 +115,7 @@ public class ConfigQuery {
      * Converts an {@link IDecisionVariable} of the configuration to a {@link Variable} expression, so that it can be
      * used for a value assignment, e.g. for creating a value assignment of a
      * {@link net.ssehub.easy.varModel.model.datatypes.Reference}.
-     * @param variable The variable to be converted, must not be <tt>null</tt>.
+     * @param variable The variable to be converted, must not be <b>null</b>.
      * @return An absolute expression pointing to the given variable, considering nested variables, e.g., of compounds.
      * @throws ModelQueryException If the given variable could not be resolved to an unambiguous expression, e.g., if
      *     the variable is nested inside a {@link net.ssehub.easy.varModel.model.datatypes.Set}.

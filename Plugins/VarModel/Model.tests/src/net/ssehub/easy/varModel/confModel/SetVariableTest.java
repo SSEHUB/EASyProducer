@@ -79,9 +79,9 @@ public class SetVariableTest {
     
     /**
      * Helping method for testing the ouput of saving a value assignment.
-     * This method gets the output of the <tt>Configuration.toProject(true)</tt> method and extracts
+     * This method gets the output of the {@code Configuration.toProject(true)} method and extracts
      * the searched value assignment for further testing.
-     * @param savedConfig The result of <tt>Configuration.toProject(true)</tt>
+     * @param savedConfig The result of {@code Configuration.toProject(true)}
      * @param elementNo The position of the declaration to which the searched assignment belongs,
      * starting at 0.
      * @return The value assignment, without surrounding whitespaces and ;
@@ -99,7 +99,7 @@ public class SetVariableTest {
     }
     
     /**
-     * Saves the configuration in a StringBuffer using the <tt>Configuration.toProject(true)</tt> method.
+     * Saves the configuration in a StringBuffer using the {@code Configuration.toProject(true)} method.
      * @param config the configuration which should be saved.
      * @return The saved configuration.
      */

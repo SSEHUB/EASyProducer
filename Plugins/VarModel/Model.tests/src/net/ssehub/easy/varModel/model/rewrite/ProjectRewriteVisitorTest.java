@@ -1035,8 +1035,8 @@ public class ProjectRewriteVisitorTest {
      * Helpermethod: Tests whether the copied projects contain the expected elements.
      * @param testProject The copied and modified project.
      * @param element An element which shall (not) be contained.
-     * @param shallbeContained <tt>true</tt> the specified element must still exist inside the copied project,
-     *     <tt>false</tt> the copied project must <b>not</b> contain the specified element.
+     * @param shallbeContained {@code true} the specified element must still exist inside the copied project,
+     *     {@code false} the copied project must <b>not</b> contain the specified element.
      * @param nElementsExpected The number of expected {@link ContainableModelElement}s, which shall still be part of
      *     the test {@link Project}. 
      */

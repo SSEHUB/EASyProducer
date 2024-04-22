@@ -346,7 +346,7 @@ public abstract class AbstractTest<R extends IModel> {
     /**
      * Asserts the equality of two strings containing models and, if needed,
      * prints the location where the strings are not equal. This also adds the error
-     * cause to the given writer instead of printing it to <tt>System.err.println()</tt>.
+     * cause to the given writer instead of printing it to {@code System.err.println()}.
      * 
      * @param fileAsString the file as a string
      * @param modelAsString the model as a string

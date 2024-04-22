@@ -234,7 +234,7 @@ public class Utils {
     
     /**
      * List all imported {@link IModel}s for the given model including the model itself. The most inner model
-     * will be the first element of the list, the main model the last (helpful for a correct initialization). <br/>
+     * will be the first element of the list, the main model the last (helpful for a correct initialization). <br>
      * <b>Note:</b> This function should not run into an endless loop in case of cycling imports.
      * @param mainModel The model to start with. May contain any imports and is the starting point.
      * @return The list of all associated projects (first most inner imported model, last is the main model itself).

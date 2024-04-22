@@ -38,7 +38,7 @@ public class VariablesInConstraintFinder extends AbstractStateVariablesInConstra
      * Creates a constraint finder for reuse. Call {@link #setConfiguration(Configuration)} first, accept then the 
      * constraint to be analyzed and call {@link #clear()} afterwards to make the visitor instance ready for reuse.
      * 
-     * (must not be <tt>null</tt>).
+     * (must not be <b>null</b>).
      */
     public VariablesInConstraintFinder() {
         super();
@@ -48,8 +48,8 @@ public class VariablesInConstraintFinder extends AbstractStateVariablesInConstra
      * Creates a constraint finder for single use directly on <code>cst</code>.
      * 
      * @param cst A constraint where all nested {@link IDecisionVariable}'s should be found.
-     * @param config The related Configuration of the project to where the <tt>cst</tt> belongs to
-     * (must not be <tt>null</tt>).
+     * @param config The related Configuration of the project to where the {@code cst} belongs to
+     * (must not be <b>null</b>).
      */
     public VariablesInConstraintFinder(ConstraintSyntaxTree cst, Configuration config) {
         super(cst, config);
@@ -66,7 +66,7 @@ public class VariablesInConstraintFinder extends AbstractStateVariablesInConstra
     
     /**
      * Returns all {@link IDecisionVariable}'s inside the given {@link ConstraintSyntaxTree}.
-     * @return A set of nested {@link IDecisionVariable}'s (This set must not be <tt>null</tt>).
+     * @return A set of nested {@link IDecisionVariable}'s (This set must not be <b>null</b>).
      */
     public Set<IDecisionVariable> getVariables() {
         return variables;
@@ -74,7 +74,7 @@ public class VariablesInConstraintFinder extends AbstractStateVariablesInConstra
     
     /**
      * Returns all {@link IAssignmentState}'s of the found {@link IDecisionVariable}s of {@link #getVariables()}.
-     * @return A set of nested {@link IAssignmentState}'s (This set must not be <tt>null</tt>).
+     * @return A set of nested {@link IAssignmentState}'s (This set must not be <b>null</b>).
      */
     public Set<IAssignmentState> getStates() {
         return states;

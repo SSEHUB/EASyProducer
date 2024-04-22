@@ -57,8 +57,8 @@ public class VariableCreator implements IDatatypeVisitor {
      *   instance, but in case of compounds also the containing {@link DecisionVariable}
      * @param isVisible Specifies whether this variables is exported by an interface or not:
      * <ul>
-     * <li><tt>true</tt>: The variable is exported by an interface or there is no interface</li>.
-     * <li><tt>false</tt>: There is an interface which does not export this variable</li>.
+     * <li>{@code true}: The variable is exported by an interface or there is no interface.</li>
+     * <li>{@code false}: There is an interface which does not export this variable.</li>
      * </ul>
      * @param isAttribute whether a variable represents (as part of) an attribute or an usual variable 
      *     shall be created
@@ -87,10 +87,10 @@ public class VariableCreator implements IDatatypeVisitor {
     /**
      * Return the {@link IDecisionVariable} as in {@link #getVariable()}.
      * However, during the initialization of {@link NestedVarConfigProvider} the usage of the
-     * {@link DefaultValueSetter} will cause {@link NullPointerException}'s. Therefore, this method with 
-     * <tt>setDefaultValue = false</tt> should be used inside the initialization of nested {@link IDecisionVariable}s.
-     * @param setDefaultValue <tt>true</tt> if the default value should be set for the newly created
-     *     {@link IDecisionVariable}, otherwise <tt>false</tt>.
+     * DefaultValueSetter will cause {@link NullPointerException}s. Therefore, this method with 
+     * {@code setDefaultValue = false} should be used inside the initialization of nested {@link IDecisionVariable}s.
+     * @param setDefaultValue {@code true} if the default value should be set for the newly created
+     *     {@link IDecisionVariable}, otherwise {@code false}.
      * @return The {@link IDecisionVariable} representing the given {@link AbstractVariable},
      * which was created by running the constructor of this class.
      * @throws ConfigurationException in case that the types of 

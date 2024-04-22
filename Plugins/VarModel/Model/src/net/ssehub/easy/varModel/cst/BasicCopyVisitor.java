@@ -62,7 +62,7 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
     }
     
     /**
-     * Defines whether {@link ConstraintSytaxTree#inferDatatype} shall be called on each partial expression.
+     * Defines whether {@link ConstraintSyntaxTree#inferDatatype()} shall be called on each partial expression.
      * 
      * @param doInferDatatype call/validate the datatypes, <code>false</code> else (then caller is required
      *  to infer the datatype before usage of the resulting constraint)
@@ -72,7 +72,7 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
     }
 
     /**
-     * Defines whether {@link ConstraintSytaxTree#inferDatatype} shall be called on each partial expression.
+     * Defines whether {@link ConstraintSyntaxTree#inferDatatype()} shall be called on each partial expression.
      * 
      * @param copyConstants copy all constant nodes (<code>true</code>), reuse constant nodes (<code>false)</code>)
      */
@@ -437,7 +437,6 @@ public class BasicCopyVisitor implements IConstraintTreeVisitor {
      * Performs datatype validation if requested.
      * 
      * @param cst the constraint expression to perform the validation on
-     * @throws CSTSemanticException if validation fails
      * @return <code>cst</code>
      */
     protected ConstraintSyntaxTree inferDatatype(ConstraintSyntaxTree cst) {

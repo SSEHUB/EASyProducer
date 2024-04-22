@@ -57,7 +57,7 @@ public class ConfigurationInitializerRegistry {
          * Resolves default values of a particular variable. 
          * 
          * @param variable the instance to resolve the default values for.
-         * @return <tt>true</tt> of a default value could be resolved and assigned to <tt>variable</tt>, <tt>false</tt>
+         * @return {@code true} of a default value could be resolved and assigned to {@code variable}, {@code false}
          *     otherwise.
          */
         public boolean resolveDefaultValue(IDecisionVariable variable);

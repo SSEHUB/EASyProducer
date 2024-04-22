@@ -48,9 +48,9 @@ public abstract class AbstractVariableInConstraintFinder implements IConstraintT
     
     /**
      * Single constructor for this class.
-     * @param considerReferences <tt>true</tt> declarations of
+     * @param considerReferences {@code true} declarations of
      *   {@link net.ssehub.easy.varModel.model.datatypes.Reference} values will also be found,
-     *   <tt>false</tt> these declarations will be omitted. 
+     *   {@code false} these declarations will be omitted. 
      */
     protected AbstractVariableInConstraintFinder(boolean considerReferences) {
         this.considerReferences = considerReferences;

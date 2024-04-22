@@ -147,7 +147,7 @@ public class DispatchInformation {
      * Returns the number of overridden annotated operations (after calling {@link #checkForDispatch(Project)}).
      * 
      * @return the number of overridden operations, always 0 if no annotations shall 
-     *     be {@link #DispatchInformation(CustomOperation, EvaluationAccessor[], boolean) counted}
+     *     be {@link #DispatchInformation(CustomOperation, IDatatype[], boolean) counted}
      */
     public int getOverrideCount() {
         return overrideCount;
@@ -157,7 +157,7 @@ public class DispatchInformation {
      * Returns the number of dispatch basis annotated operations  (after calling {@link #checkForDispatch(Project)}).
      * 
      * @return the number of annotated operations, always 0 if no annotations shall 
-     *     be {@link #DispatchInformation(CustomOperation, EvaluationAccessor[], boolean) counted}
+     *     be {@link #DispatchInformation(CustomOperation, IDatatype[], boolean) counted}
      */
     public int getDispatchBasisCount() {
         return dispatchBasisCount;

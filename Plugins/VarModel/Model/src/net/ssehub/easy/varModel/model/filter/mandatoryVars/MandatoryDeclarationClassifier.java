@@ -260,7 +260,7 @@ public class MandatoryDeclarationClassifier extends AbstractProjectVisitor imple
     }
 
     /**
-     * Changes the {@link VariableImportance} for all instances of the given {@link AbstractVariable}.
+     * Changes the variable importance for all instances of the given {@link AbstractVariable}.
      * @param decl A (nested) declaration for which all instances shall be changed.
      * @param importance The new {@link Importance} to set.
      */

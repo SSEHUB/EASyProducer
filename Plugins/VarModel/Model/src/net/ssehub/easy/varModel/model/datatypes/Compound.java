@@ -206,9 +206,9 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
      * 
      * @param index the index of the refined compound to return
      * @return the refined compound
-     * @throws IndexOutOfBoundsException if <code>index < 0 || index&gt;={@link #getRefinesCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index&gt;={@link #getRefinesCount()}</code>
      */
-    public Compound getRefines(int index) {
+    public Compound getRefines(int index) throws IndexOutOfBoundsException {
         if (null == refines) {
             throw new IndexOutOfBoundsException();
         }
@@ -462,8 +462,8 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     /**
      * Removes the specified model element from this compound (if it exists).
      * @param element The {@link Constraint}, {@link DecisionVariableDeclaration}, or {@link AttributeAssignment}
-     * to remove. If <tt>null</tt> nothing will happen.
-     * @return <tt>true</tt> if the model element was part of this compound and was removed successfully.
+     * to remove. If <b>null</b> nothing will happen.
+     * @return {@code true} if the model element was part of this compound and was removed successfully.
      */
     public boolean removeConstraint(ContainableModelElement element) {
         return container.removeModelElement(element);

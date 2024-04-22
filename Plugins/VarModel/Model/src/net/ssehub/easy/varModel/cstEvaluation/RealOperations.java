@@ -277,7 +277,7 @@ public class RealOperations {
      * Implements arithmetic operations of two integer variables/values.
      * @param operand the operand
      * @param arguments the arguments
-     * @param roundUp If <tt>true</tt> this operation will round commercial (*.5 and higher will be round up), else
+     * @param roundUp If {@code true} this operation will round commercial (*.5 and higher will be round up), else
      *     numbers will be round down in any case.
      * @return The result of the arithmetic operation, <b>null</b> if the operation cannot be applied
      */
@@ -316,7 +316,7 @@ public class RealOperations {
      * Implements min/max operations of two integer/real variables/values.
      * @param operand the operand
      * @param arguments the arguments
-     * @param min If <tt>true</tt> the <b>min</b> operation will be applied, <b>max</b> otherwise.
+     * @param min If {@code true} the <b>min</b> operation will be applied, <b>max</b> otherwise.
      * @return The min/max of the two parameters, <b>null</b> if the operation cannot be applied
      */
     private static EvaluationAccessor minmaxOperationReal(EvaluationAccessor operand,

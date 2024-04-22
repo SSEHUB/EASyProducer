@@ -397,7 +397,7 @@ public class StringOperationsTest {
     }
     
     /**
-     * Tests whether equals operation of <tt>string.size()</tt> works, if string is not initialized.
+     * Tests whether equals operation of {@code string.size()} works, if string is not initialized.
      * Bug occurred at 14.08.2014.
      * Test will test project:
      * <pre><code>

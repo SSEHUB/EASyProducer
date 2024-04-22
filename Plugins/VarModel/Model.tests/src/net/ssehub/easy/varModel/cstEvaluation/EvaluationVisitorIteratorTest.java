@@ -1153,7 +1153,7 @@ public class EvaluationVisitorIteratorTest {
     }
 
     /**
-     * Creates the object-data representing a compound value in {@link #testClosure()}.
+     * Creates the object-data representing a compound value in {@link #testClosure(boolean, boolean)}.
      * 
      * @param name the name of the compound
      * @param next the reference target for the next slot

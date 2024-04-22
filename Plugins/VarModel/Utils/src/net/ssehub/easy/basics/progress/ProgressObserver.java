@@ -183,7 +183,7 @@ public abstract class ProgressObserver {
      * @param task the identification of the task which ends (initially 
      *   use {@link #registerTask(String)} for registering a task)
      * @param subtask the identification of the subtask with <code>task</code>
-     *   (may be <{@link #NO_SUBTASK}, if given, only the subtask is supposed to end, initially 
+     *   (may be {@link #NO_SUBTASK}, if given, only the subtask is supposed to end, initially 
      *   use {@link #registerSubtask(String)} for registering a sub task)
      */
     public abstract void notifyEnd(ITask task, ISubtask subtask);

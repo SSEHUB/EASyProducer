@@ -68,7 +68,7 @@ class ValueCopy implements IValueVisitor {
     
     /**
      * Returns the filtered and copied value.
-     * @return Maybe the same instance if filtering was not needed. Maybe <tt>null</tt> if complete value was filtered.
+     * @return Maybe the same instance if filtering was not needed. Maybe <b>null</b> if complete value was filtered.
      */
     Value getValue() {
         return copiedValue;
@@ -77,7 +77,7 @@ class ValueCopy implements IValueVisitor {
     /**
      * Returns whether the original value will be returned or whether at least one value was removed from the original
      * value.
-     * @return <tt>true</tt> if at least one value was removed, <tt>false</tt> if the original value will be returned.
+     * @return {@code true} if at least one value was removed, {@code false} if the original value will be returned.
      */
     boolean valuesOmitted() {
         return valuesOmmited;
