@@ -291,7 +291,7 @@ public class Engine {
     }
 
     /**
-     * Marks this instance for re-use. Must be called before the first call to {@link #resolve()}.
+     * Marks this instance for re-use.
      * 
      * @see #clear()
      * @see #reInit()

@@ -18,8 +18,8 @@ import net.ssehub.easy.varModel.model.Constraint;
  * Represents all variable and constraint relationships. This class consists of two three mappings:
  * 
  * <ol>
- *   <li>All variable declarations used in constraints ({@link #declConstraintMapping}).
- *   <li>Constraint - decision variable relations</li>
+ *   <li>All variable declarations used in constraints ({@link #declConstraintMapping}).</li>
+ *   <li>Constraint - decision variable relations
  *       <ol>
  *           <li>Constraint assigned to a constraint decision variable {{@link constraintVariableMap}}</li>
  *           <li>decision variables assigned to constraints, multiple in case of collections 
@@ -87,10 +87,10 @@ public class VariablesMap {
     }
     
     /**
-     * Returns all constraints, where the specifies <tt>declaration</tt> was used inside.
-     * @param declaration A declaration for which all constaints using this declaration should be returned.
-     *   Must not be <tt>null</tt>.
-     * @return The list of all constraints where the declaration was used, maybe <tt>null</tt> if it was never used.
+     * Returns all constraints, where the specifies {@code declaration} was used inside.
+     * @param declaration A declaration for which all constraints using this declaration should be returned.
+     *   Must not be <b>null</b>.
+     * @return The list of all constraints where the declaration was used, maybe <b>null</b> if it was never used.
      */
     public Set<Constraint> getRelevantConstraints(AbstractVariable declaration) {
         return declConstraintMapping.get(declaration);
@@ -107,8 +107,6 @@ public class VariablesMap {
     
     /**
      * Clears this instance for reuse.
-     * 
-     * @see #clearConstraintVariables()
      */
     public void clear() {
         declConstraintMapping.clear();

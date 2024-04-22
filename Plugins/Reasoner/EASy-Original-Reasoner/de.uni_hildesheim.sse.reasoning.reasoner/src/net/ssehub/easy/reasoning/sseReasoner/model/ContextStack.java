@@ -50,9 +50,8 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
  * However, due to IVML assignment blocks, a translation context stack is not really straightforward.
  * In assignment blocks, additional implicit constraints to initialize annotations are introduced and
  * translated after the actual variable has been translated, i.e., outside the context of a compound
- * or container variable. Therefore, we allow {@link #setRegisterContexts(boolean) registering contexts} 
- * with their variable in the parent context for later {@link #activate(AbstractVariable) activation} and 
- * {@link #deactivate(AbstractVariable) deactivation} as long as the parent context exists. If re-activated,
+ * or container variable. Therefore, we allow registering contexts 
+ * with their variable in the parent context as long as the parent context exists. If re-activated,
  * an already popped context (which must not be cleaned up then) is pushed back onto the stack. If de-activated,
  * the re-activated context is popped again but not cleaned up. Registered contexts are cleaned up when the
  * parent context is popped. 
@@ -224,9 +223,9 @@ public final class ContextStack {
     /**
      * Pushes a new (compound) context to the stack. No processed types are recorded.
      * 
-     * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
+     * @param decl the variable to register the new context with if enabled, 
      *     may be <b>null</b> to explicitly prevent registration
-     * @param recordProcessedTypes whether processed types indicated by {@link #recordType(IDatatype)} shall be recorded
+     * @param recordProcessedTypes whether processed types shall be recorded
      *     or not (<code>false</code>)
      */
     public void pushContext(AbstractVariable decl, boolean recordProcessedTypes) {
@@ -276,13 +275,12 @@ public final class ContextStack {
     /**
      * Pushes a new container context to the stack. All parameters may be <b>null</b>.
      * 
-     * @param decl the variable to register the new context with if {@link #setRegisterContexts(boolean) enabled}, 
+     * @param decl the variable to register the new context with if enabled, 
      *     may be <b>null</b> to explicitly prevent registration
      * @param container the container expression (may be <b>null</b>)
      * @param iterator a container iterator variable for <code>container</code>, may be <b>null</b> but only if 
      *     <code>container</code> is null
-     * @param recordProcessedTypes whether processed types indicated by {@link #recordType(IDatatype)} shall be recorded
-     *     or not (<code>false</code>)
+     * @param recordProcessedTypes whether processed types shall be recorded or not (<code>false</code>)
      */
     public void pushContext(AbstractVariable decl, ConstraintSyntaxTree container, 
         DecisionVariableDeclaration iterator, boolean recordProcessedTypes) {
@@ -512,9 +510,9 @@ public final class ContextStack {
     /**
      * Registers the given type and the prototypical template variable {@code var} as type in the type cache.
      * As long as the containing context is active, all constraints added through 
-     * {@link #addConstraint(ConstraintList, boolean, Constraint, boolean))} will be related to the created type 
+     * {@link #addConstraint(ConstraintList, boolean, Constraint, boolean)} will be related to the created type 
      * cache entry. Upon 
-     * {@link #transferConstraints(IDatatype, IConstraintTarget, IDecisionVariable, AbstractVariable))} 
+     * {@link #transferConstraints(IDatatype, IConstraintTarget, IDecisionVariable, AbstractVariable)} 
      * all occurrences of {@code var} will be substituted by a given variable. [type cache]
      * 
      * @param type the type to relate to

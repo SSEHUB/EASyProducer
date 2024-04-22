@@ -67,8 +67,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.persistency.StringProvider;
 
 /**
- * Utility methods for reasoning/constraint resolution. Introduced to clean up
- * {@link Resolver}.
+ * Utility methods for reasoning/constraint resolution.
  * 
  * @author Holger Eichelberger
  */
@@ -77,7 +76,7 @@ public class ReasoningUtils {
     public static final boolean DEBUG = true;
     
     /**
-     * A set pool for instances of <code>Set<Compound></code>.
+     * A set pool for instances of <code>Set&lt;Compound&gt;</code>.
      */
     public static final Pool<Set<Compound>> SET_COMPOUND_POOL = new Pool<Set<Compound>>(
         new IPoolManager<Set<Compound>>() {

@@ -557,7 +557,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
 
     /**
      * Extracts, translates and collects the internal constraints of <code>type</code> (if derived or, transitively, a 
-     * reference datatype) and stores the constraints in {@link #derivedTypeConstraints}.
+     * reference datatype) and stores the constraints.
      * 
      * @param decl VariableDeclaration of <code>DerivedDatatype</code>
      * @param type the type to translate
@@ -706,7 +706,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * Translates the (transitive) defaults and type constraints for a declaration. 
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
-     * @param var the instance of <tt>decl</tt> (may be <b>null</b> for type-based translation).
+     * @param var the instance of <code>decl</code> (may be <b>null</b> for type-based translation).
      * @param cAcc if variable is a nested compound.
      */
     private void translateDeclaration(AbstractVariable decl, IDecisionVariable var, ConstraintSyntaxTree cAcc) {
@@ -788,7 +788,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * @param tmp temporary storage structure for default value constraints (usually given, may be <b>null</b>) if no 
      *   transfer (default constraints to block evaluation) shall happen
      * @param enable whether transfer (default constraints to block evaluation) shall happen at all
-     * @param var the instance of <tt>decl</tt> (may be <b>null</b> for type-based translation).
+     * @param var the instance of <code>decl</code> (may be <b>null</b> for type-based translation).
      */
     private void addDefaultConstraint(AbstractVariable decl, ConstraintSyntaxTree defaultValue, DefaultConstraints tmp, 
         boolean enable, IDecisionVariable var) {
@@ -806,9 +806,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     
     /**
      * Temporarily transfers the default constraint lists between {@link #defaultConstraints} and {@code tmp}. After
-     * transferring the lists to {@code constraint} (and {@link #defaultConstraints temporarily into {@code tmp}) 
-     * default constraints to be registered afterwards will be collected in {@link constraint} (rather than in 
-     * {@link #defaultConstraints}) be evaluated as a batch before {@constraint}, e.g., in case of a (refined) compound.
+     * transferring the lists to {@code constraint} (and {@link #defaultConstraints} temporarily into {@code tmp}) 
+     * default constraints to be registered afterwards will be collected and  
+     * evaluated as a batch before {@code constraint}, e.g., in case of a (refined) compound.
      * If {@code constraint} is <b>null</b>, {@link #defaultConstraints} will set with the lists in {@code tmp} and 
      * become active again for collecting further default constraints. If {@code enable} is {@code} false, no transfer
      * will happen at all.  
@@ -864,7 +864,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * Translates the (transitive) defaults and type constraints for a container declaration. 
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
-     * @param var the instance of <tt>decl</tt> (may be <b>null</b> for type-based translation).
+     * @param var the instance of <code>decl</code> (may be <b>null</b> for type-based translation).
      * @param type the (specific) datatype ({@link Container})
      * @param cAcc compound access expression
      */
@@ -953,7 +953,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * {@link ContextStack#alreadyProcessed(IDatatype)} in nested collection/compound types.
      * 
      * @param decl The {@link AbstractVariable} for which the default value should be resolved.
-     * @param variable the instance of <tt>decl</tt> (may be <b>null</b> for based-type translation).
+     * @param variable the instance of <code>decl</code> (may be <b>null</b> for based-type translation).
      * @param cAcc if variable is a nested compound, the access expression to 
      *     <code>decl</code>/<code>variable</code>
      * @param type specific {@link Compound} type.
@@ -1162,7 +1162,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     /**
      * Implements a processor for constraints, for which variables (including the variable mapping) shall be substituted
      * and the result shall be added to {@link Resolver#otherConstraints}. Call 
-     * {@link #setParameter(CompoundAccess, AbstractVariable)} before
+     * {@link #setParameter(ConstraintSyntaxTree, AbstractVariable, IDecisionVariable)} before
      * processing and {@link #clear()} afterwards before reuse.
      * 
      * @author Holger Eichelberger
@@ -1477,9 +1477,8 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
     }
 
     /**
-     * Creates a constraint for a (nested) constraint variable adding the result to 
-     * {@link #constraintVariablesConstraints}. Performs initializers check upon adding if <code>cst</code> is not
-     * a {@link ConstantValue}.
+     * Creates a constraint for a (nested) constraint variable. Performs initializers check upon adding if 
+     * <code>cst</code> is not a {@link ConstantValue}.
      * 
      * @param cst the constraint
      * @param selfEx the expression representing <i>self</i> in <code>cst</code>, both, <code>self</code> and 
@@ -1598,7 +1597,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
 
     /**
      * Method for using {@link SubstitutionVisitor} for constraint transformation. Uses the actual
-     * variable mapping in {@link #varMap} and may consider a mapping for <code>self</code>.
+     * variable mapping and may consider a mapping for <code>self</code>.
      * 
      * @param cst Constraint to be transformed.
      * @param selfEx an expression representing <i>self</i> (ignored if <b>null</b>, <code>self</code> and 
@@ -1701,7 +1700,6 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
      * 
      * @param incremental if reasoning shall happen incrementally
      * @return the old value of the incremental flag before changing to {@code incremental}
-     * @see #setConsiderFrozenConstraints(boolean)
      */
     boolean setIncremental(boolean incremental) {
         boolean old = this.incremental;

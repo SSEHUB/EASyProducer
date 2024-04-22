@@ -36,7 +36,7 @@ import net.ssehub.easy.varModel.model.IvmlKeyWords;
 /**
  * Substitutes variables in a constraint syntax tree by copying the syntax tree. May be 
  * reused after calling {@link #clear()}. {@link #addVariableMapping(AbstractVariable, Variable)}
- * takes precedence over {@link #setMappings(Map)}.
+ * takes precedence over {@link #setMappings(ContextStack)}.
  * 
  * @author Sizonenko
  * @author Holger Eichelberger
@@ -109,8 +109,9 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     }
     
     /**
-     * Adds a variable mapping to be considered during substitution. Takes precedence over {@link #setMappings(Map)}.
-     * If a variable mapping is defined by {@link #setMappings(Map)}, potential transitive mappings of <code>dest</code>
+     * Adds a variable mapping to be considered during substitution. Takes precedence over 
+     * {@link #setMappings(ContextStack)}. If a variable mapping is defined by {@link #setMappings(ContextStack)}, 
+     * potential transitive mappings of <code>dest</code>
      * are considered and instead of <code>orig</code>-<code>dest</code>, a mapping from <code>orig</code> to the 
      * transitive value is registered.
      * 
@@ -150,7 +151,8 @@ public class SubstitutionVisitor extends BasicCopyVisitor {
     }
     
     /**
-     * Adds a variable mapping to be considered during substitution. Takes precedence over {@link #setMappings(Map)}.
+     * Adds a variable mapping to be considered during substitution. Takes precedence over 
+     * {@link #setMappings(ContextStack)}.
      * 
      * @param orig the original variable to be replaced (may be <b>null</b>, ignored)
      * @param ex the expression to replace <code>orig</code>

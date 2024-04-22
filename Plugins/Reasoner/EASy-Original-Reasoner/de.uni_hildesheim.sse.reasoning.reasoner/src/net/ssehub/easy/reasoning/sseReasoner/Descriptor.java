@@ -16,7 +16,6 @@ public class Descriptor extends ReasonerDescriptor {
     
     /**
      * The ID of this bundle.
-     * Maybe used for retrieving {@link de.uni_hildesheim.sse.logger.EASyLoggerFactory.EASyLogger}s.
      */
     public static final String BUNDLE_NAME = "net.ssehub.easy.reasoning.sseReasoner"; 
 

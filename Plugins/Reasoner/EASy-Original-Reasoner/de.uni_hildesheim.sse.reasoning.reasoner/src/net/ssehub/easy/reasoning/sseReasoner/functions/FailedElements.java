@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import net.ssehub.easy.basics.messages.Status;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.cstEvaluation.EvaluationVisitor;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Constraint;
 
 /**
- * Part of the {@link FailedRules}. This class stores violated elements detected during a reasoning process.
+ * Stores violated elements detected during a reasoning process.
  * @author El-Sharkawy
  * @author Sizonenko
  *
@@ -88,7 +89,7 @@ public class FailedElements {
     
     /**
      * Returns whether constraint violations or variable assignment were detected during the related reasoning process.
-     * @return <tt>true</tt> if at least one errors was reported to this instance, <tt>false</tt> otherwise.
+     * @return <code>true</code> if at least one errors was reported to this instance, <code>false</code> otherwise.
      */
     public boolean hasProblems() {
         boolean messageProblem = false;
@@ -100,7 +101,7 @@ public class FailedElements {
     
     /**
      * Returns the total number of failed elements ( {@link Constraint} and {@link AbstractVariable} ).
-     * @return The number of failed elements, 0 if {@link #hasProblems()} was <tt>false</tt>.
+     * @return The number of failed elements, 0 if {@link #hasProblems()} was <code>false</code>.
      */
     public int problemCount() {
         return problemConstraintCount() + problemVariabletCount();

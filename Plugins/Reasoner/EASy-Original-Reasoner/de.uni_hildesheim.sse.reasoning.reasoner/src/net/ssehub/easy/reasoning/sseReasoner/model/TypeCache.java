@@ -56,7 +56,7 @@ public final class TypeCache {
     private transient SubstitutionVisitor substVisitor = new SubstitutionVisitor();
 
     /**
-     * Implements a type cache entry. Variables in an entry are relative to {@link #var}, which must be substituted
+     * Implements a type cache entry. Variables in an entry are relative to {@link #origvar}, which must be substituted
      * finally with the actual top-level variable.
      * 
      * @author Holger Eichelberger

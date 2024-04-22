@@ -48,8 +48,8 @@ public class VariablesInConstraintFinder extends AbstractStateVariablesInConstra
      * Creates a constraint finder for single use directly on <code>cst</code>.
      * 
      * @param cst A constraint where all nested {@link IDecisionVariable}'s should be found.
-     * @param config The related Configuration of the project to where the <tt>cst</tt> belongs to
-     * (must not be <tt>null</tt>).
+     * @param config The related Configuration of the project to where the <code>cst</code> belongs to
+     * (must not be <b>null</b>).
      */
     public VariablesInConstraintFinder(ConstraintSyntaxTree cst, Configuration config) {
         super(cst, config);

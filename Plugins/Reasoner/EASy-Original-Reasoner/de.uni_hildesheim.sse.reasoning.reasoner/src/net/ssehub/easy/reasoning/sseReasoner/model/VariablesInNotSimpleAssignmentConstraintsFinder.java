@@ -73,7 +73,7 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
     }
 
     /**
-     * Combines {@link #accept(Constraint)} and {@link #clear()}.
+     * Combines {@link #accept(Constraint, Configuration)} and {@link #clear()}.
      * 
      * @param constraint the constraint to accept
      * @param config the configuration used to resolve expressions
@@ -83,7 +83,7 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
     }
 
     /**
-     * Combines {@link #accept(Constraint)} and {@link #clear()}.
+     * Combines {@link #accept(Constraint, Configuration)} and {@link #clear()}.
      * 
      * @param constraint the constraint to accept
      * @param config the configuration used to resolve expressions
@@ -96,7 +96,7 @@ public class VariablesInNotSimpleAssignmentConstraintsFinder implements IConstra
     }
 
     /**
-     * Combines {@link #accept(Constraint)} and {@link #clear()} for an iterable of constraints.
+     * Combines {@link #accept(Constraint, Configuration)} and {@link #clear()} for an iterable of constraints.
      * 
      * @param constraints the constraints to accept
      * @param config the configuration used to resolve expressions
