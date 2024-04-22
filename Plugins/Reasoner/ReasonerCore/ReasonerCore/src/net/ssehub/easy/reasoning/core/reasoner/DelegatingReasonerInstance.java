@@ -28,8 +28,7 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 /**
  * Provides a default implementation for reasoner instances by delegating the
  * respective calls to a given delegate reasoner. Use this class to simplify
- * calls for {@link IReasoner#createInstance(
- * net.ssehub.easy.varModel.model.Project, net.ssehub.easy.varModel.confModel.Configuration, ReasonerConfiguration)},
+ * calls for {@link IReasoner#createInstance(Configuration, ReasonerConfiguration)},
  * i.e., to avoid null pointer returns.
  * 
  * @author Holger Eichelberger

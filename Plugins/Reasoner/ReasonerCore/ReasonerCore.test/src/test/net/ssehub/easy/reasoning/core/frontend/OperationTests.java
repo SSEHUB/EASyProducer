@@ -156,7 +156,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests integer < operand on constants.
+     * Tests integer &lt; operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -166,7 +166,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests integer <= operand on constants.
+     * Tests integer &lt;= operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -176,7 +176,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests integer >= operand on constants.
+     * Tests integer &gt;= operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -308,7 +308,7 @@ public abstract class OperationTests extends AbstractTest {
     }
 
     /**
-     * Tests integer > operand on simple variables.
+     * Tests integer &gt; operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */    
@@ -318,7 +318,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests integer < operand on simple variables.
+     * Tests integer &lt; operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */    
@@ -328,7 +328,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests integer <= operand on simple variables.
+     * Tests integer &lt;= operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */    
@@ -338,7 +338,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests integer >= operand on simple variables.
+     * Tests integer &gt;= operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */    
@@ -439,7 +439,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real == and <> operand on constants.
+     * Tests real == and &lt;&gt; operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -449,7 +449,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real > operand on constants.
+     * Tests real &gt; operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -459,7 +459,7 @@ public abstract class OperationTests extends AbstractTest {
     }    
     
     /**
-     * Tests real >= operand on constants.
+     * Tests real &gt;= operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -469,7 +469,7 @@ public abstract class OperationTests extends AbstractTest {
     } 
     
     /**
-     * Tests real > operand on constants.
+     * Tests real &lt; operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -479,7 +479,7 @@ public abstract class OperationTests extends AbstractTest {
     } 
     
     /**
-     * Tests real >= operand on constants.
+     * Tests real &lt;= operand on constants.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -581,7 +581,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real == and <> operand on simple variables.
+     * Tests real == and &lt;&gt; operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -591,7 +591,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real > operand on simple variables.
+     * Tests real &gt; operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -601,7 +601,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real >= operand on simple variables.
+     * Tests real &gt;= operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -611,7 +611,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real < operand on simple variables.
+     * Tests real &lt; operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */
@@ -621,7 +621,7 @@ public abstract class OperationTests extends AbstractTest {
     }
     
     /**
-     * Tests real <= operand on simple variables.
+     * Tests real &lt;= operand on simple variables.
      * 
      * @throws IOException in case of problems reading a model
      */

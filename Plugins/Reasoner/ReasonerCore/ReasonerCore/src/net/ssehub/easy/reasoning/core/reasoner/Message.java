@@ -54,7 +54,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     /**
      * Sole constructor for multiple conflicting elements.
      * @param explanation A textual representation of this message
-     * @param conflictingElements A list of model elements which lead to the current message, or <tt>null</tt>
+     * @param conflictingElements A list of model elements which lead to the current message, or <b>null</b>
      * @param status The status of this message, e. g. Error or Warning
      */
     public Message(String explanation, List<ModelElement> conflictingElements, Status status) {
@@ -406,7 +406,7 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     
     /**
      * Method for adding a list of partial {@link ConstraintSyntaxTree}s that are involved in each failed constraint.
-     * @param constraints List of constraint trees (elements may be <tt>null</tt>). The entries in this 
+     * @param constraints List of constraint trees (elements may be <b>null</b>). The entries in this 
      * list must correspond to {@link #addProblemConstraints(List)}.
      */
     public void addProblemConstraintParts(List<ConstraintSyntaxTree> constraints) {

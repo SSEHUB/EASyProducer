@@ -53,7 +53,7 @@ public class AttributeValuesTest extends AbstractTest<Project> {
     /**
      * Helper method for load an IVML file.
      * @param path The name of the ivml file to load (including the file extension) inside of the
-     *     <tt>reasonerModel</tt> folder.
+     *     {@code reasonerModel} folder.
      * @return The loaded {@link Project} representing the read IVML file.
      */
     protected Project loadProject(String path) {

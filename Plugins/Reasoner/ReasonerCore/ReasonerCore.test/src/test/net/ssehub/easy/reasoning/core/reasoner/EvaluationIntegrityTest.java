@@ -40,7 +40,7 @@ import net.ssehub.easy.varModel.model.values.ValueFactory;
 import net.ssehub.easy.varModel.varModel.testSupport.ProjectTestUtilities;
 
 /**
- * Tests for {@link Resolver}.
+ * General integrity tests.
  * @author El-Sharkawy
  * @author Sizonenko
  *

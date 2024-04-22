@@ -49,7 +49,7 @@ public class AdaptationScenarioTests extends AbstractTest {
     /**
      * Helper method to prepare configuration from a project.
      * @param path The name of the ivml file to load (including the file extension) inside of the
-     *     <tt>reasonerModel</tt> folder.
+     *     {@code reasonerModel} folder.
      */
     private void prepareConfiguration(String path) {
         project = loadProject(path);
@@ -68,8 +68,8 @@ public class AdaptationScenarioTests extends AbstractTest {
 
     /**
      * Asserts that a given variable has the expected value (and state).
-     * @param variable The variable to test (maybe a nested variable, but not <tt>null</tt>).
-     * @param expectedValue The expected value of the variable (must not be <tt>null</tt>).
+     * @param variable The variable to test (maybe a nested variable, but not <b>null</b>).
+     * @param expectedValue The expected value of the variable (must not be <b>null</b>).
      * @param explanation A error message if the Junit test case breaks
      * @param expectedStates Should be one of {@link AssignmentState#ASSIGNED} (if it was initialized by the
      *     configuration, {@link AssignmentState#USER_ASSIGNED} if it was manually overwritten by the user

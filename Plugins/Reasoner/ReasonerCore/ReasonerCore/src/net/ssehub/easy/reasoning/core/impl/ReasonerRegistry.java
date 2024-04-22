@@ -93,7 +93,7 @@ public class ReasonerRegistry implements IReasonerRegistry {
      * @param  index index of the {@link IReasoner} to return
      * @return {@link IReasoner} at the specified position in this list
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= {@link #getReasonerCount} </tt>)
+     *         ({@code index &lt; 0 || index &gt;= {@link #getReasonerCount()}})
      */
     public IReasoner getReasoner(int index) {
         return reasoner.get(index);

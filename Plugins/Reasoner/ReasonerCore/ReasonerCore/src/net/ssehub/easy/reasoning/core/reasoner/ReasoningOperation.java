@@ -1,5 +1,8 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import net.ssehub.easy.varModel.confModel.Configuration;
+import net.ssehub.easy.varModel.model.Project;
+
 /**
  * Specifies which kind of reasoning should be performed by the reasoner.
  * @author El-Sharkawy
@@ -9,19 +12,18 @@ package net.ssehub.easy.reasoning.core.reasoner;
 public enum ReasoningOperation {
     
     /**
-     * Checks whether the {@link de.uni_hildesheim.sse.model.varModel.Project} is satisfiable.
+     * Checks whether the {@link Project} is satisfiable.
      */
     CONSITENCY_CHECK,
     
     /**
-     * Checks whether the {@link de.uni_hildesheim.sse.model.confModel.Configuration} is valid, i.e.
+     * Checks whether the {@link Configuration} is valid, i.e.
      * all constraints are satisfied.
      */
     VALIDATION,
     
     /**
-     * Performs as {@link #VALIDATION} and propagates values (only for variables
-     * which are in state {@link ReasoningState#UNASSIGNED} or {@link ReasoningState#DEFAULT_DIFFERENT}.
+     * Performs as {@link #VALIDATION} and propagates values.
      */
     PROPAGATION;
 

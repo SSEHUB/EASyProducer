@@ -16,6 +16,7 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
 import net.ssehub.easy.varModel.capabilities.IReasonerCapability;
+import net.ssehub.easy.varModel.capabilities.IvmlReasonerCapabilities;
 
 /**
  * Defines general reasoner capabilities.
@@ -34,8 +35,7 @@ public enum GeneralReasonerCapabilities implements IReasonerCapability {
     
     /**
      * Support for incremental reasoning while configuring a product. Declare only if 
-     * {@link IReasoner#initialize(net.ssehub.easy.varModel.model.Project, 
-     * net.ssehub.easy.varModel.confModel.Configuration, ReasonerConfiguration, 
+     * {@link IReasoner#initialize(net.ssehub.easy.varModel.confModel.Configuration, ReasonerConfiguration, 
      * net.ssehub.easy.basics.progress.ProgressObserver)} is implemented properly.
      */
     INCREMENTAL_REASONING,
@@ -50,7 +50,7 @@ public enum GeneralReasonerCapabilities implements IReasonerCapability {
      * Is suitable to perform the initialization of an IVML configuration instance as it provides
      * comprehensive IVML reasoning capabilities. Currently, the reasoner developer declares this
      * capability. However, it might also be derived from the presence of 
-     * {@link de.uni_hildesheim.sse.capabilities.IvmlReasonerCapabilities}.
+     * {@link IvmlReasonerCapabilities}.
      */
     CONFIGURATION_INITIALIZATION,
     

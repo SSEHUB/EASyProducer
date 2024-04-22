@@ -502,7 +502,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * Helper method for load an IVML file.
      * @param testFolder The (sub-) folder where to load the specified IVML test files.
      * @param path The name of the IVML file to load (optional including the file extension) inside of the
-     *     <tt>reasonerModel</tt> folder.
+     *     {@code reasonerModel} folder.
      * @return The loaded {@link Project} representing the read IVML file.
      */
     protected final Project loadProject(File testFolder, String path) {
@@ -597,7 +597,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     /**
      * Helper method for load an IVML file.
      * @param path The name of the IVML file to load (optional including the file extension) inside of the
-     *     <tt>reasonerModel</tt> folder.
+     *     {@code reasonerModel} folder.
      * @return The loaded {@link Project} representing the read IVML file.
      */
     protected Project loadProject(String path) {
@@ -758,13 +758,13 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * 
      * @param config
      *            The configuration containing the variable to be configured
-     *            (Must not be <tt>null</tt>).
+     *            (Must not be <b>null</b>).
      * @param declName
      *            The name of the variable to be configured (Must not be
-     *            <tt>null</tt>).
+     *            <b>null</b>).
      * @param namespace
      *            The namespace of the variable. Can be used if more than one
-     *            variable with the same name exist. If <tt>null</tt> the first
+     *            variable with the same name exist. If <b>null</b> the first
      *            variable with the specified name will be configured.
      * @param value
      *            The new value to be set.

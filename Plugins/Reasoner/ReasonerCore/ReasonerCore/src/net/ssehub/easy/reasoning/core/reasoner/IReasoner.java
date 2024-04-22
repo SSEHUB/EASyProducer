@@ -12,7 +12,7 @@ import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
 
 /**
- * General interface for reasoner, which can be registered to the <tt>ReasonerRegistry</tt>. Please note that 
+ * General interface for reasoner, which can be registered to the {@link IReasonerRegistry}. Please note that 
  * reasoner calls are intended to be state-less. Currently, management over successive reasoner calls on the same model
  * is out of scope. A reasoner shall not produce superfluous output. Use the output methods in {@link ReasoningResult} 
  * instead.

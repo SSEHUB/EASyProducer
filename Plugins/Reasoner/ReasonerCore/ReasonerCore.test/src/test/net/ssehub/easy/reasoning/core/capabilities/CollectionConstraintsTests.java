@@ -2,6 +2,8 @@ package test.net.ssehub.easy.reasoning.core.capabilities;
 
 import org.junit.Test;
 
+import java.io.IOException;
+
 import org.junit.Assert;
 
 import net.ssehub.easy.varModel.confModel.AssignmentState;
@@ -10,6 +12,7 @@ import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
+import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
@@ -84,10 +87,19 @@ public class CollectionConstraintsTests extends AbstractTest {
      * Tests constraints in set.
      */
     @Test
-    public void constraintSetInCompoundDefaultTest() {
+    public void constraintSetInCompoundDefaultTest() throws IOException {
         reasoningTest("constraintSetInCompoundDefault.ivml", 1);
     }
-    
+
+    /**
+     * Tests compound initialization.
+     */
+    @Test
+    public void constraintSetInCompoundDefaultTest2() throws IOException {
+        Project prj = loadCompleteProject("constraintSetInCompoundDefault2");
+        resultHandler(0, 0, prj);
+    }
+
     /**
      * Tests constraints in set.
      */

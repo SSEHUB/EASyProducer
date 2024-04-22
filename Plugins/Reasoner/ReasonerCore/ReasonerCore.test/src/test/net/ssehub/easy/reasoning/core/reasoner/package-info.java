@@ -1,5 +1,5 @@
 /**
- * Tests the classes of the <tt>ReaonerCore.reasoner</tt> package.
+ * Tests the classes of the {@code ReaonerCore.reasoner} package.
  */
 package test.net.ssehub.easy.reasoning.core.reasoner;
 

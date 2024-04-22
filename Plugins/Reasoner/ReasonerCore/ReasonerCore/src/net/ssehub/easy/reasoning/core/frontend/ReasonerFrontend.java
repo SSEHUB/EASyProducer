@@ -10,6 +10,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.reasoning.core.Bundle;
 import net.ssehub.easy.reasoning.core.impl.ReasonerHelper;
 import net.ssehub.easy.reasoning.core.impl.ReasonerRegistry;
+import net.ssehub.easy.reasoning.core.reasoner.DelegatingReasonerInstance;
 import net.ssehub.easy.reasoning.core.reasoner.EvaluationResult;
 import net.ssehub.easy.reasoning.core.reasoner.GeneralReasonerCapabilities;
 import net.ssehub.easy.reasoning.core.reasoner.IChainingReasoner;
@@ -283,7 +284,7 @@ public class ReasonerFrontend {
      * @return The result of this reasoning step. Can have the status
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
-     * @see #check(Project, Configuration, ReasonerConfiguration, ProgressObserver)
+     * @see #check(Configuration, ReasonerConfiguration, ProgressObserver)
      */
     public ReasoningResult check(Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer) {
@@ -314,7 +315,7 @@ public class ReasonerFrontend {
      * @return The result of this reasoning step. Can have the status
      *     {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not support
      *     this operation.
-     * @see #propagate(Project, Configuration, ReasonerConfiguration, ProgressObserver)
+     * @see #propagate(Configuration, ReasonerConfiguration, ProgressObserver)
      */
     public ReasoningResult propagate(Configuration cfg, ReasonerConfiguration reasonerConfiguration, 
         ProgressObserver observer) {
@@ -349,7 +350,7 @@ public class ReasonerFrontend {
      *         status {@link net.ssehub.easy.basics.messages.Status#UNSUPPORTED} if the concrete reasoner does not
      *         support this operation.
      *         
-     * @see #evaluate(Project, Configuration, List, ReasonerConfiguration, ProgressObserver)
+     * @see #evaluate(Configuration, List, ReasonerConfiguration, ProgressObserver)
      */
     public EvaluationResult evaluate(Configuration cfg, List<Constraint> constraints, 
         ReasonerConfiguration reasonerConfiguration, ProgressObserver observer) {
@@ -574,7 +575,7 @@ public class ReasonerFrontend {
 
     /**
      * Checks whether at least one reasoner is present.
-     * @return <tt>true</tt> if at least one reasoner is present and reasoning can be done, otherwise <tt>false</tt>
+     * @return {@code true} if at least one reasoner is present and reasoning can be done, otherwise {@code false}
      */
     public boolean reasoningSupported() {
         return getReadyForUseCount() > 0;
@@ -658,7 +659,7 @@ public class ReasonerFrontend {
      *        may be <b>null</b>)
      * @return a reusable reasoner instance, return a {@link DelegatingReasonerInstance} on this reasoner to
      *     avoid null pointer checking.
-     *@see #createInstance(Project, Configuration, ReasonerConfiguration)
+     *@see #createInstance(Configuration, ReasonerConfiguration)
      */
     public IReasonerInstance createInstance(Configuration cfg, ReasonerConfiguration reasonerConfiguration) {
         IReasonerInstance result;

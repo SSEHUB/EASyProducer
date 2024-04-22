@@ -37,7 +37,7 @@ public abstract class AbstractTestDescriptor implements ITestDescriptor {
     private boolean[] capabilities;
 
     /**
-     * The abstract measurement identifiers for mapping {@link net.ssehub.easy.reasoning.sseReasoner.Measures}.
+     * The abstract measurement identifiers.
      * 
      * @author Holger Eichelberger
      */

@@ -108,7 +108,7 @@ public class ReasoningResult {
 
     /**
      * Denotes whether this reasoning result represents an error/conflict.
-     * @return <tt>true</tt> if the reasoning result represents an error, otherwise <tt>false</tt>.
+     * @return {@code true} if the reasoning result represents an error, otherwise {@code false}.
      * 
      * @see #hasTimeout
      */
@@ -119,7 +119,7 @@ public class ReasoningResult {
     /**
      * Checks whether this result contains any {@link Status#INFO} messages, indicating that the configuration
      * was changed.
-     * @return <tt>true</tt> if this result contains at least one {@link Status#INFO} message, <tt>false</tt> otherwise.
+     * @return {@code true} if this result contains at least one {@link Status#INFO} message, {@code false} otherwise.
      */
     public boolean hasInfo() {
         boolean hasInfo = false;
@@ -135,7 +135,7 @@ public class ReasoningResult {
     /**
      * Returns whether the called reasoning step is supported by this reasoner.
      * 
-     * @return <tt>true</tt> if the reasoning was not supported, otherwise <tt>false</tt>.
+     * @return {@code true} if the reasoning was not supported, otherwise {@code false}.
      */
     public boolean reasoningUnsupported() {
         boolean unsupported = false;

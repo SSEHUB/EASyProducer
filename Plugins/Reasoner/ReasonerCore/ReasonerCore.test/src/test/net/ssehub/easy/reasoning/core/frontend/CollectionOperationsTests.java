@@ -23,7 +23,7 @@ import test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest;
 import test.net.ssehub.easy.reasoning.core.reasoner.ITestDescriptor;
 
 /**
- * Tests collection operations like <tt>collect</tt> or <tt>forall</tt>.
+ * Tests collection operations like {@code collect} or {@code forall}.
  * These tests are additional tests to the {@link OperationTests}.
  * 
  * @author El-Sharkawy

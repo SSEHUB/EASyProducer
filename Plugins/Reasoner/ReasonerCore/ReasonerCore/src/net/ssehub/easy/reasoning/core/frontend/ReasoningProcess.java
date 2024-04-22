@@ -33,7 +33,7 @@ public class ReasoningProcess implements Runnable {
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *     may be <b>null</b>)
      * @param listener A listener which will be called after the reasoning has been finished.
-     *     Can be <tt>null</tt>, if no action shall be executed after the reasoning is finished.
+     *     Can be <b>null</b>, if no action shall be executed after the reasoning is finished.
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated
      */
@@ -54,7 +54,7 @@ public class ReasoningProcess implements Runnable {
      * @param reasonerConfig the reasoner configuration to be used for reasoning (e.g. taken from the UI, 
      *     may be <b>null</b>)
      * @param listener A listener which will be called after the reasoning has been finished.
-     *     Can be <tt>null</tt>, if no action shall be executed after the reasoning is finished.
+     *     Can be <b>null</b>, if no action shall be executed after the reasoning is finished.
      * @param observer a progress observer indicating the progress, use {@link ProgressObserver#NO_OBSERVER} if no
      *        progress shall be indicated   
      */

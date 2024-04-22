@@ -1,5 +1,6 @@
 package net.ssehub.easy.reasoning.core.frontend;
 
+import net.ssehub.easy.reasoning.core.reasoner.IReasoner;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 /**

@@ -1,5 +1,5 @@
 /**
- * All classes and interfaces needed to implement a reasoner.<br/><br/>
+ * All classes and interfaces needed to implement a reasoner.<br><br>
  * 
  * How to write a reasoner:
  * <ul>
@@ -26,14 +26,14 @@
  *   <li>Create a folder named <code>OSGI-INF</code> and put an XML file with the following contents into the new 
  *       folder (let's call that file <code>reasoner.xml</code>).
  *       <code>
- *         &lt;?xml version="1.0" encoding="UTF-8"?&rt;
+ *         &lt;?xml version="1.0" encoding="UTF-8"?&gt;
  *         &lt;scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" 
- *           name="<i>&lt;your descriptive name&rt;</i>"&rt;
- *           &lt;implementation class="<i>&lt;your class name&rt;</i>"/&rt;
- *           &lt;service&rt;
- *           &lt;provide interface="de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner"/&rt;
- *           &lt;/service&rt;
- *         &lt;/scr:component&rt;
+ *           name="<i>&lt;your descriptive name&gt;</i>"&gt;
+ *           &lt;implementation class="<i>&lt;your class name&gt;</i>"/&gt;
+ *           &lt;service&gt;
+ *           &lt;provide interface="de.uni_hildesheim.sse.reasoning.core.reasoner.IReasoner"/&gt;
+ *           &lt;/service&gt;
+ *         &lt;/scr:component&gt;
  *       </code></li>
  *    <li>Link the XML file to the manifest by adding 
  *      <code>Service-Component: OSGI-INF/reasoner.xml</code> (i.e. your specific name).</li>

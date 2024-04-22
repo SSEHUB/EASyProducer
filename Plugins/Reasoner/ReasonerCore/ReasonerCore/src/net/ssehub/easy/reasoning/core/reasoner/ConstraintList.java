@@ -18,6 +18,7 @@ package net.ssehub.easy.reasoning.core.reasoner;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -628,7 +629,6 @@ public class ConstraintList implements Iterable<Constraint> {
      * Links <code>constraint</code> as first constraint.
      * 
      * @param constraint the constraint to be linked
-     * @see #notifyNodeAdded(Constraint, Node)
      */
     private void linkFirst(Constraint constraint) {
         final Node f = first;
@@ -650,7 +650,6 @@ public class ConstraintList implements Iterable<Constraint> {
      * Links <code>constraint</code> as last constraint.
      * 
      * @param constraint the constraint to be linked
-     * @see #notifyNodeAdded(Constraint, Node)
      */
     private void linkLast(Constraint constraint) {
         final Node l = last;
