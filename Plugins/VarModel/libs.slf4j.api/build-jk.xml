@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="org.slf4j.api" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
+	<property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
