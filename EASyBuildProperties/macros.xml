@@ -35,6 +35,7 @@
          <sysproperty key="maven.home" value="${maven.bin.dir}" />
          <sysproperty key="MAVEN_SETTINGS_PATH" value="${maven.settings}" />
          <arg line="-s ${maven.settings}" />
+         <arg line="-gs ${maven.settings}" />
          <arg line="--batch-mode @{options} @{goal}" />
          <args/>
        </java>

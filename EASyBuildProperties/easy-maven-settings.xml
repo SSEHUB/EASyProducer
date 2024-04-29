@@ -15,9 +15,11 @@
                     <url>https://projects.sse.uni-hildesheim.de/qm/maven</url>
                     <releases>
                         <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
                     </releases>
                     <snapshots>
-                        <enabled>true</enabled>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy> <!-- local installs -->
                     </snapshots>
                 </repository>
                 <repository>
@@ -25,22 +27,26 @@
                     <url>https://repo1.maven.org/maven2</url>
                     <releases>
                         <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
                     </releases>
                     <snapshots>
-                        <enabled>true</enabled>
+                        <enabled>false</enabled>
                     </snapshots>
                 </repository>
+                <!-- not the others, query on demand only -->
             </repositories>
             <pluginRepositories>
                 <pluginRepository>
-                    <id>SSE-mvn-plugins</id>
+                    <id>SSE-plugins</id>
                     <name>SSE Maven</name>
                     <url>https://projects.sse.uni-hildesheim.de/qm/maven</url>
                     <releases>
                         <enabled>true</enabled>
+                         <updatePolicy>never</updatePolicy>
                     </releases>
                     <snapshots>
-                        <enabled>true</enabled>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy> <!-- local installs -->
                     </snapshots>                             
                 </pluginRepository>
             </pluginRepositories>
