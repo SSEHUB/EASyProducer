@@ -1,20 +1,20 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.ivml.tests
-Bundle-Vendor: My Company
-Bundle-Version: 0.0.3
+Bundle-Vendor: SSE, University of Hildesheim
+Bundle-Version: 1.3.10.qualifier
 Bundle-SymbolicName: de.uni_hildesheim.sse.ivml.tests; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.ivml.tests
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.ivml,
  org.eclipse.core.runtime,
  org.junit;bundle-version="4.8.2",
- net.ssehub.easy.varModel;bundle-version="0.0.3",
+ net.ssehub.easy.varModel,
  org.eclipse.xtext.junit4,
  org.eclipse.ui.workbench;resolution:=optional,
- net.ssehub.easy.dslCore;bundle-version="0.0.1",
- org.objectweb.asm;bundle-version="[5.0.1,9.0.0)";resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+ net.ssehub.easy.dslCore,
+ org.objectweb.asm;resolution:=optional
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: org.junit.runner;version="4.5.0",
  org.junit.runner.manipulation;version="4.5.0",
  org.junit.runner.notification;version="4.5.0",

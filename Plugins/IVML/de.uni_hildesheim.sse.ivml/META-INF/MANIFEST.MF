@@ -2,37 +2,35 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.ivml
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-SymbolicName: de.uni_hildesheim.sse.ivml;singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.ivml
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
+Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.apache.log4j;bundle-version="1.2.15";visibility:=reexport,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional;visibility:=reexport,
- org.eclipse.xtext.generator;resolution:=optional,
  org.eclipse.emf.codegen.ecore;resolution:=optional,
  org.eclipse.emf.mwe.utils;resolution:=optional,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
  org.eclipse.equinox.common,
- org.antlr.runtime,
+ org.antlr.runtime;bundle-version="3.2.0",
  org.apache.felix.scr;resolution:=optional,
- org.eclipse.osgi.services,
+ org.osgi.service.component,
  org.eclipse.xtext.common.types;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport,
  com.google.guava,
  net.ssehub.easy.varModel;visibility:=reexport,
  net.ssehub.easy.dslCore;visibility:=reexport,
- org.eclipse.emf.mwe2.launch;bundle-version="2.5.0";resolution:=optional,
+ org.eclipse.emf.mwe2.launch;resolution:=optional,
  org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xbase,
- org.objectweb.asm;bundle-version="[5.0.1,9.2.0)";resolution:=optional
+ org.eclipse.xtext.xbase
 Service-Component: OSGI-INF/ivmlParser.xml
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,
  org.eclipse.xtext.xbase.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse,
  de.uni_hildesheim.sse.translation,
  de.uni_hildesheim.sse.services,

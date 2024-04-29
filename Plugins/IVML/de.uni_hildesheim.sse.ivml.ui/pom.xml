@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>de.uni_hildesheim.sse.ivml</artifactId>
+  <artifactId>de.uni_hildesheim.sse.ivml.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
 
   <name>EASy-Producer IVML parser</name>
@@ -32,7 +32,6 @@
                     <configuration>
                         <sources>
                             <source>src-gen</source>
-                            <source>xtend-gen</source>
                         </sources>
                     </configuration>
                 </execution>
@@ -97,14 +96,9 @@
 	 </dependency>
      <dependency>
         <groupId>net.ssehub.easy</groupId>
-        <artifactId>net.ssehub.easy.dslCore</artifactId>
+        <artifactId>de.uni_hildesheim.sse.ivml</artifactId>
         <version>${project.version}</version>
      </dependency>
-     <dependency>
-        <groupId>net.ssehub.easy</groupId>
-        <artifactId>net.ssehub.easy.varModel</artifactId>
-        <version>${project.version}</version>
-     </dependency>     
   </dependencies>
     
  </project>
