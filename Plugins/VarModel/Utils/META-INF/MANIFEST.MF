@@ -3,11 +3,10 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Utils
 Bundle-SymbolicName: net.ssehub.easy.basics;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.basics
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-Vendor: University of Hildesheim, SSE
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: edu.umd.cs.findbugs.annotations,
- net.ssehub.easy.basics,
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: net.ssehub.easy.basics,
  net.ssehub.easy.basics.io,
  net.ssehub.easy.basics.logger,
  net.ssehub.easy.basics.messages,
@@ -16,5 +15,3 @@ Export-Package: edu.umd.cs.findbugs.annotations,
  net.ssehub.easy.basics.pool,
  net.ssehub.easy.basics.progress
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/findbugs-annotations-3.0.0.jar,
- .

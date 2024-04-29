@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>net.ssehub.easy.varModel</artifactId>
+  <artifactId>net.ssehub.easy.libs.commons.io</artifactId>
   <packaging>eclipse-plugin</packaging>
+  <version>2.7.0</version>
   
-  <name>EASy-Producer IVML model libaray</name>
-  <description>The IVML model library of EASy-Producer.</description>
+  <name>EASy-Producer endorsed commons io library</name>
+  <description>The the endorsed commons io library of EASy-Producer (preliminary).</description>
   <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
 
   <parent>
@@ -16,19 +17,6 @@
 
   <build>
     <sourceDirectory>src</sourceDirectory>
-    <directory>bin</directory>
   </build>
-
-  <dependencies>
-    <dependency>
-       <groupId>net.ssehub.easy</groupId>
-       <artifactId>net.ssehub.easy.basics</artifactId>
-       <version>${project.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-     </dependency>
-  </dependencies>
-  
+ 
  </project>

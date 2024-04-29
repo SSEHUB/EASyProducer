@@ -19,7 +19,6 @@
     <directory>bin</directory>
   </build>
 
-<!--  
   <dependencies>
 	<dependency>
 	    <groupId>org.eclipse.platform</groupId>
@@ -35,13 +34,14 @@
     </dependency>
     <dependency>
        <groupId>net.ssehub.easy</groupId>
-       <artifactId>varModel</artifactId>
+       <artifactId>net.ssehub.easy.varModel</artifactId>
        <version>${project.version}</version>
     </dependency>
     <dependency>
        <groupId>net.ssehub.easy</groupId>
-       <artifactId>dslCore</artifactId>
+       <artifactId>net.ssehub.easy.dslCore</artifactId>
        <version>${project.version}</version>
     </dependency>
-  </dependencies>  -->
+  </dependencies>
+  
  </project>

@@ -24,12 +24,10 @@ package net.ssehub.easy.basics.logger;
 public interface ILogger {
     
     /**
-     * Log an INFO message.
-     * <p>
-     * If the logger is currently enabled for the INFO message
+     * Log an INFO message. If the logger is currently enabled for the INFO message
      * level then the given message is forwarded to all the
      * registered output Handler objects.
-     * <p>
+     * 
      * @param   msg     The string message (or a key in the message catalog)
      * @param   clazz   The class where the message was created
      * @param   bundleName  Name of the bundle where the message was created
@@ -37,12 +35,10 @@ public interface ILogger {
     public void info(String msg, Class<?> clazz, String bundleName);
     
     /**
-     * Log an ERROR message.
-     * <p>
-     * If the logger is currently enabled for the ERROR message
+     * Log an ERROR message. If the logger is currently enabled for the ERROR message
      * level then the given message is forwarded to all the
      * registered output Handler objects.
-     * <p>
+     * 
      * @param   msg     The string message (or a key in the message catalog)
      * @param   clazz   The class where the message was created
      * @param   bundleName  Name of the bundle where the message was created
@@ -50,12 +46,10 @@ public interface ILogger {
     public void error(String msg, Class<?> clazz, String bundleName);
     
     /**
-     * Log an WARN message.
-     * <p>
-     * If the logger is currently enabled for the WARN message
+     * Log a WARN message. If the logger is currently enabled for the WARN message
      * level then the given message is forwarded to all the
      * registered output Handler objects.
-     * <p>
+     * 
      * @param   msg     The string message (or a key in the message catalog)
      * @param   clazz   The class where the message was created
      * @param   bundleName  Name of the bundle where the message was created
@@ -63,12 +57,10 @@ public interface ILogger {
     public void warn(String msg, Class<?> clazz, String bundleName);
     
     /**
-     * Log an DEBUG message.
-     * <p>
-     * If the logger is currently enabled for the DEBUG message
+     * Log a DEBUG message. If the logger is currently enabled for the DEBUG message
      * level then the given message is forwarded to all the
      * registered output Handler objects.
-     * <p>
+     * 
      * @param   msg     The string message (or a key in the message catalog)
      * @param   clazz   The class where the message was created
      * @param   bundleName  Name of the bundle where the message was created
@@ -76,12 +68,10 @@ public interface ILogger {
     public void debug(String msg, Class<?> clazz, String bundleName);
     
     /**
-     * Log an EXCEPTION message.
-     * <p>
-     * If the logger is currently enabled for the EXCEPTION message
+     * Log an EXCEPTION message. If the logger is currently enabled for the EXCEPTION message
      * level then the given message is forwarded to all the
      * registered output Handler objects.
-     * <p>
+     *
      * @param   msg     The string message (or a key in the message catalog)
      * @param   clazz   The class where the message was created
      * @param   bundleName  Name of the bundle where the message was created

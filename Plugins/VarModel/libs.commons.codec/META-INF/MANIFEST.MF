@@ -12,5 +12,5 @@ Export-Package: org.apache.commons.codec,
  org.apache.commons.codec.language,
  org.apache.commons.codec.language.bm,
  org.apache.commons.codec.net
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: SSE, University of Hildesheim

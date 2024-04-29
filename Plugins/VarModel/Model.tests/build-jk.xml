@@ -33,13 +33,14 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
-		</javac>
+		</javac>-->
     </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
-        <jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+		<maven pomFile="pom.xml" goal="install"/>
+        <!--<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
     </target>
 </project>

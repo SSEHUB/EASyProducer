@@ -3,11 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SSE Variability Model (IVML)
 Bundle-SymbolicName: net.ssehub.easy.varModel;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.varModel
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Import-Package: org.osgi.framework,
- org.osgi.service.log;version="1.3.0",
- org.osgi.util.tracker;version="1.5.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+ org.osgi.service.log,
+ org.osgi.util.tracker
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: net.ssehub.easy.varModel.capabilities,
  net.ssehub.easy.varModel.confModel,
  net.ssehub.easy.varModel.confModel.paths,
