@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="net.ssehub.easy.reasoning.core.tests" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
@@ -38,20 +40,21 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
-		</javac>
+		</javac>-->
     </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
+        <maven pomFile="pom.xml" goal="deploy"/>
 		<!-- Copy needed non class files -->
-        <copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
+        <!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
             <fileset dir="${basedir}">
                 <include name="testdata/**/*" />
             </fileset>
-        </copy>
+        </copy>-->
         <!--jar destfile="${build.dir}/jar/${ant.project.name}.jar" basedir="${build.dir}" excludes="**/*Activator.class"/-->
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+		<!--<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
     </target>
 </project>

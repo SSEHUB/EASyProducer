@@ -1,0 +1,71 @@
+project IIP {
+
+    enum BindingTime {compile, runtime};
+    annotate BindingTime bindingTime = BindingTime.compile to IIP;
+    
+    compound Field {
+        String name;
+        refTo(DataType) type;
+        Constraint isNameOk = isNameOk(self);
+    }
+
+    @DispatchBasis
+    def Boolean isNameOk(Field f) = 
+        matches(f.name, "^[\\w \\[\\]\\-\\Q$_\\E]+$");
+    
+    typedef Fields sequenceOf(Field) with (Fields->select(f|isRelevant(f))->collect(f|f.name).hasDuplicates() == false);
+    
+    @DispatchBasis
+    def Boolean isRelevant(Field f) = 
+        true;
+
+    compound Integer32TypeType refines NumericPrimitiveType {
+    }
+    Integer32TypeType Integer32Type = {
+        name = "Int32"
+    };
+        
+    compound ModbusField refines Field {
+        Integer offset;
+    };
+ 
+    typedef NonEmptyString String with (size(NonEmptyString) > 0 and isDefined(NonEmptyString));
+    
+    abstract compound DataType {
+        NonEmptyString name;
+        Constraint isNameOk = isNameOk(self);
+    }
+
+    abstract compound PrimitiveType refines DataType {
+    }
+
+    abstract compound NumericPrimitiveType refines PrimitiveType {
+    }
+    
+    @DispatchBasis
+    def Boolean isNameOk(DataType t) = 
+        matches(t.name, "^[\\w \\[\\]\\-\\Q$_\\E]+$");
+    
+    compound AliasType refines DataType {
+        refTo(DataType) represents;
+    }
+    
+    AliasType Modbus_int32 = {
+       name = "Modbus_int32",
+       represents = refBy(Integer32Type)
+    };
+
+    sequenceOf(Field) fieldsTest = {
+        ModbusField {
+            name = "field1",
+            type = refBy(Modbus_int32)
+        }, ModbusField {
+            name = "field2",
+            type = refBy(Modbus_int32)
+        }
+    };
+   
+    freeze {
+        fieldsTest;
+    } but (v | v.bindingTime == BindingTime.runtime);
+}

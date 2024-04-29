@@ -1,0 +1,13 @@
+project constraintSetInCompoundDefault2 {
+
+    version v0;
+    
+    import IIP;
+    
+    compound Pipeline {
+        Integer i;
+        Fields fields;
+    }
+
+    Pipeline pipeline = {i = 1, fields = fieldsTest};
+}
