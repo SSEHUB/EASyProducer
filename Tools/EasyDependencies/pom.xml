@@ -460,7 +460,7 @@
         <version>${tycho.version}</version>
         <configuration>    
           <environments>
-<!--            <environment>
+            <environment>
               <os>linux</os>
               <ws>gtk</ws>
               <arch>x86</arch>
@@ -474,29 +474,18 @@
               <os>win32</os>
               <ws>win32</ws>
               <arch>x86</arch>
-            </environment>-->
+            </environment>
             <environment>
               <os>win32</os>
               <ws>win32</ws>
               <arch>x86_64</arch>
             </environment>
-<!--            <environment>
+            <environment>
               <os>macosx</os>
               <ws>cocoa</ws>
               <arch>x86_64</arch>
-            </environment>-->
+            </environment>
           </environments>
-          <target>
-            <file>eclipse.target</file> <!-- executing project must have target file, alternative: maven project -->
-          </target>
-          <pomDependencies>wrapAsBundle</pomDependencies>
-          <referencedRepositoryMode>ignore</referencedRepositoryMode>
-          <!--<exclusions>
-            <exclusion>
-                <groupId>org.eclipse.ide</groupId>
-                <artifactId>org.antlr.runtime</artifactId>
-            </exclusion>
-          </exclusions>-->
         </configuration>
       </plugin>
       
