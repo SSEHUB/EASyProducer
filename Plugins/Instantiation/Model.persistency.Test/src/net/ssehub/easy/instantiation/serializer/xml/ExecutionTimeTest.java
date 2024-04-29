@@ -28,8 +28,6 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegi
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
-import net.ssehub.easy.instantiation.serializer.xml.ModelDeserializer;
-import net.ssehub.easy.instantiation.serializer.xml.Registration;
 import net.ssehub.easy.instantiation.serializer.xml.loader.IVMLModelLoader;
 import net.ssehub.easy.instantiation.serializer.xml.loader.VILModelLoader;
 import net.ssehub.easy.instantiation.serializer.xml.loader.VTLModelLoader;

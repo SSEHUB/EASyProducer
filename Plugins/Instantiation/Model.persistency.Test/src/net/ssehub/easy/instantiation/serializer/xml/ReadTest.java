@@ -8,7 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
-import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
 import net.ssehub.easy.varModel.model.Constraint;

@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.Version;
-import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;

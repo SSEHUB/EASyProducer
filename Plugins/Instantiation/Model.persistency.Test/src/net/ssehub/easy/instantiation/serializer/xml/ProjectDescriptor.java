@@ -17,10 +17,6 @@ import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Implements a descriptor for the source and target VIL project locations.
- * The {@link #ProjectDescriptor() no-argument constructor}
- * obtains the relevant information for the model itself (i.e., the project
- * it is located in). The {@link #ProjectDescriptor(ProjectDescriptor, File) 
- * second constructor} allows to specify a different target location.
  * 
  * @author Aike Sass
  */
@@ -61,8 +57,7 @@ public class ProjectDescriptor implements IProjectDescriptor {
     /**
      * Allows to instantiate the QM model into a given location.
      * 
-     * @param parent the parent descriptor (also representing the source, to
-     *   be obtained via {@link #ProjectDescriptor()})
+     * @param parent the parent descriptor (also representing the source)
      * @param base the folder to instantiate into
      */
     public ProjectDescriptor(ProjectDescriptor parent, File base) {

@@ -20,7 +20,6 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecutio
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
-import net.ssehub.easy.instantiation.serializer.xml.Registration;
 import net.ssehub.easy.varModel.management.VarModel;
 
 /**

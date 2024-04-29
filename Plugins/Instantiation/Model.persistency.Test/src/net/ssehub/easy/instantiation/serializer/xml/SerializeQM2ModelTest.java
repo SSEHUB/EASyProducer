@@ -33,11 +33,6 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegi
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
-import net.ssehub.easy.instantiation.serializer.xml.Extensions;
-import net.ssehub.easy.instantiation.serializer.xml.ISerializerPlugin;
-import net.ssehub.easy.instantiation.serializer.xml.ModelSerializer;
-import net.ssehub.easy.instantiation.serializer.xml.Registration;
-import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 

@@ -19,7 +19,6 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
-import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 
 /**
  * A simple model write+read test.

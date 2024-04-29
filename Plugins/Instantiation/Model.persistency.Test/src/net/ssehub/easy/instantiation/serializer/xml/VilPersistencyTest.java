@@ -19,7 +19,6 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.serializer.xml.XmlIo;
 
 /**
  * A simple model write+read test.
