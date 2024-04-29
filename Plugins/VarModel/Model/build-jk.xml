@@ -40,7 +40,7 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
-		<maven pomFile="pom.xml" goal="install"/>
+		<maven pomFile="pom.xml" goal="deploy"/>
         <!--jar destfile="${build.dir}/jar/${ant.project.name}.jar" basedir="${build.dir}" excludes="**/*Activator.class"/-->
 		<!--<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
         <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />

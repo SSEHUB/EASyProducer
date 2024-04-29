@@ -17,7 +17,7 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar">
-		<maven pomFile="pom.xml" goal="install"/>
+		<maven pomFile="pom.xml" goal="deploy"/>
 		<!-- Copy needed non class files -->
 		<!--<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" manifest="META-INF/MANIFEST.MF">
