@@ -52,7 +52,7 @@
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
 		<echo file="testdata.dir" append="false">
-			-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata
+			${home.reasonerCore.test.dir}/testdata
 	    </echo>
         <maven pomFile="pom.xml" goal="deploy"/>
         <!-- Copy needed non class files -->
