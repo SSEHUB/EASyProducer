@@ -16,7 +16,7 @@ public @interface ClassNotAssignable {
     
     /**
      * Defines explicitly non-assignable  classes for which assignment compatibility shall
-     * not be possible. {@link #equiv()} takes precedence.<br/>
+     * not be possible. {@link ClassEquivalentTo} takes precedence.<br/>
      * 
      * @return the non assignable classes (none/neutral is the empty array)
      */

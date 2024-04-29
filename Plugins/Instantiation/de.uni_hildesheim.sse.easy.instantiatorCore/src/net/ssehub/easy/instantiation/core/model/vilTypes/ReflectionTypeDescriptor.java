@@ -156,7 +156,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     /**
      * Stores non-assignable classes.
      * 
-     * @see ClassMeta#nAssign()
+     * @see ClassNotAssignable#value()
      */
     private Class<?>[] nAssign;
     
@@ -582,7 +582,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
      * 
      * @param cls the class to be tested
      * @return <code>true</code> if it is non-assignable, <code>false</code> else
-     * @see ClassMeta#nAssign()
+     * @see ClassNotAssignable#value()
      */
     private boolean isNAssign(Class<?> cls) {
         boolean found = false;

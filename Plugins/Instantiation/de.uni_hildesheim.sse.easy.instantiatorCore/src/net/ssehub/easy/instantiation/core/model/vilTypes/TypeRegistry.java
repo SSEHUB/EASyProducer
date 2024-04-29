@@ -389,7 +389,7 @@ public class TypeRegistry {
     }
     
     /**
-     * Registers equivalent classes from {@link ClassMeta#equiv()}.
+     * Registers equivalent classes from {@link ClassEquivalentTo}.
      * 
      * @param type the type being registered
      * @param desc the already created descriptor for <code>type</code>

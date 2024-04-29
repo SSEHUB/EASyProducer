@@ -51,7 +51,7 @@
  * {@link net.ssehub.easy.instantiation.core.model.vilTypes.Set sets} or 
  * {@link net.ssehub.easy.instantiation.core.model.vilTypes.Sequence sequences}. However,
  * an artifact method returning a collection must be annotated by 
- * {@link net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta#returnGenerics()} in order
+ * {@link net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics#value()} in order
  * to defined the actual types used in the collection (this is not available via Java mechanisms). Further, operations 
  * and  classes may be marked by the following annotations:<ul>
  * <li> {@link net.ssehub.easy.instantiation.core.model.vilTypes.Conversion Conversion} to indicate type 
