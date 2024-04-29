@@ -54,7 +54,7 @@ public class AnnotationTests extends AbstractTest {
         Arrays.sort(fields, 
             (f1, f2) -> f1.getName().compareTo(f2.getName()));
         for (Field f : fields) {
-            out.println(" - " + f);
+            out.print(" - " + f + "\r\n"); // even out win/linux -> comparison
             writeAnnotations(out, f.getAnnotations(), "  ");
         }
         Method[] methods = cls.getDeclaredMethods();
@@ -62,7 +62,7 @@ public class AnnotationTests extends AbstractTest {
             (m1, m2) -> SignatureUtils.getJavaSignature(m1).compareTo(SignatureUtils.getJavaSignature(m2))); 
         for (Method m : methods) {
             if (!m.isBridge()) { // JDK 17 bridge defaults
-                out.println(" - " + m);
+                out.print(" - " + m + "\r\n"); // even out win/linux -> comparison
                 writeAnnotations(out, m.getAnnotations(), "  ");
             }
         }
@@ -77,7 +77,7 @@ public class AnnotationTests extends AbstractTest {
      */
     private void writeAnnotations(PrintStream out, Annotation[] annotations, String indent) {
         for (Annotation a : annotations) {
-            out.println(indent  + a);
+            out.print(indent  + a + "\r\n"); // even out win/linux -> comparison
         }
     }
     

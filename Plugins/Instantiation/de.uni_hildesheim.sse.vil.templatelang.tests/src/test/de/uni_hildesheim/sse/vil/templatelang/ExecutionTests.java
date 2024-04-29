@@ -1677,7 +1677,7 @@ public class ExecutionTests extends AbstractExecutionTest {
      */
     @Test
     public void testDynamicImports() throws IOException {
-        assertEqualWithIvml("DynamicImports", "adviceTestVM1");
+        assertEqualWithIvml("dynamicImports", "adviceTestVM1");
     }
 
 
