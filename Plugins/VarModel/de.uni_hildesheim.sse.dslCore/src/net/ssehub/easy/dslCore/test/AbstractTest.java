@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.Version;
@@ -54,10 +56,21 @@ public abstract class AbstractTest<R extends IModel> {
      * @return the actual directory as file
      */
     public static File determineTestDataDir(String property) {
-        File result;
+        File result = null;
         String externalLocation = System.getProperty(property);
         if (null == externalLocation) {
-            result = new File("testdata");
+            File f = new File("testdata.dir");
+            if (f.exists()) {
+                try {
+                    result = new File(new String(Files.readAllBytes(f.toPath())));
+                } catch (IOException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(AbstractTest.class, null).warn(
+                        "Failed reading testdata.dir: " + e.getMessage());
+                }
+            }
+            if (null == result) {
+                result = new File("testdata");
+            }
         } else {
             result = new File(externalLocation);
         }
