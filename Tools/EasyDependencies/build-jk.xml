@@ -13,7 +13,7 @@
        classpathref="maven-ant-tasks.classpath" />-->
 		
 	<target name="maven"> 
-		<maven pomFile="pom.xml" goal="install"/>
+		<maven pomFile="pom.xml" goal="deploy"/>
 	    <mvnDeployPom folderName="EASyDependencies" pomFile="pom.xml" />
 	</target>
 </project>
