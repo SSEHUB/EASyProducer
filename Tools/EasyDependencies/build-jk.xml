@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EASyDependencies" default="maven" basedir=".">
+	<property file="${user.home}/migration.properties"/>
     <!-- xmlns:artifact="antlib:org.apache.maven.artifact.ant" -->
 	<!-- import of the global Jenkins properties -->
 	<property file="${user.home}/global-build.properties"/>
