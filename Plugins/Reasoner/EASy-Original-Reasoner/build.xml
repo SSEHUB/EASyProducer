@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="SSE-Reasoner" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">	
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
 	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="${jacoco.path}/jacocoant.jar"/>
@@ -122,5 +123,6 @@
         <delete dir="${basedir}/${test.eclipse.name}"/>
     </target>
 	
-	<target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/>
+    <!--<target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/>-->
+	<target name="all" depends="init, compile"/>
 </project>

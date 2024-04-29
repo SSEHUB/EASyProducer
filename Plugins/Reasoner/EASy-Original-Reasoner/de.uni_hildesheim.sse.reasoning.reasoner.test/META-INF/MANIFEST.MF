@@ -3,14 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SSE-Reasoner Tests
 Bundle-SymbolicName: net.ssehub.easy.reasoning.sseReasoner.tests
 Automatic-Module-Name: net.ssehub.easy.reasoning.sseReasoner.tests
-Bundle-Version: 0.0.1
+Bundle-Version: 1.3.10.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: de.uni_hildesheim.sse.ivml;bundle-version="0.1.1",
+Require-Bundle: de.uni_hildesheim.sse.ivml,
  org.junit;bundle-version="4.8.2",
- net.ssehub.easy.reasoning.core.tests;bundle-version="0.0.1",
- net.ssehub.easy.reasoning.core;bundle-version="0.0.8",
- net.ssehub.easy.dslCore;bundle-version="0.0.1",
- net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
- net.ssehub.easy.reasoning.sseReasoner;bundle-version="0.0.1"
+ net.ssehub.easy.reasoning.core.tests,
+ net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.dslCore,
+ net.ssehub.easy.varModel.tests,
+ net.ssehub.easy.reasoning.sseReasoner
 Export-Package: test.net.ssehub.easy.reasoning.sseReasoner
