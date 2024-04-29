@@ -51,9 +51,7 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
-		<echo file="testdata.dir" append="false">
-			${home.reasonerCore.test.dir}/testdata
-	    </echo>
+		<echo file="testdata.dir" append="false">${home.reasonerCore.test.dir}/testdata</echo>
         <maven pomFile="pom.xml" goal="deploy"/>
         <!-- Copy needed non class files -->
 		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
