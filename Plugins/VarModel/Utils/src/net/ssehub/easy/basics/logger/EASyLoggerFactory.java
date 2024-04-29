@@ -75,11 +75,10 @@ public class EASyLoggerFactory {
         
         /**
          * Log an DEBUG message.
-         * <p>
          * If the logger is currently enabled for the DEBUG message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param  msg The string message (or a key in the message catalog)
          */
         public void debug(String msg) {
@@ -90,12 +89,11 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an DEBUG message.
-         * <p>
+         * Log a DEBUG message.
          * If the logger is currently enabled for the DEBUG message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param msg The message ({@code msg.toString()} will be used for logging)
          * Should not be <b>null</b>.
          */
@@ -107,12 +105,11 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an DEBUG message.
-         * <p>
+         * Log a DEBUG message.
          * If the logger is currently enabled for the DEBUG message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param msg1 The message ({@code msg1.toString()} will be used for logging)
          * Should not be <b>null</b>.
          * @param msg2 The message ({@code msg2.toString()} will be used for logging)
@@ -125,12 +122,11 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an DEBUG message.
-         * <p>
+         * Log a DEBUG message.
          * If the logger is currently enabled for the DEBUG message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param msg1 The message ({@code msg1.toString()} will be used for logging)
          * Should not be <b>null</b>.
          * @param msg2 The message ({@code msg2.toString()} will be used for logging)
@@ -144,12 +140,11 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an DEBUG message.
-         * <p>
+         * Log a DEBUG message.
          * If the logger is currently enabled for the DEBUG message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param msg1 The message ({@code msg1.toString()} will be used for logging)
          * Should not be <b>null</b>.
          * @param msg2 The message ({@code msg2.toString()} will be used for logging)
@@ -164,12 +159,11 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an DEBUG message.
-         * <p>
+         * Log a DEBUG message.
          * If the logger is currently enabled for the DEBUG message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param msg1 The message ({@code msg1.toString()} will be used for logging)
          * @param msg2 The message ({@code msg2.toString()} will be used for logging)
          * @param msg3 The message ({@code msg3.toString()} will be used for logging)
@@ -192,12 +186,11 @@ public class EASyLoggerFactory {
         }
         
         /**
-         * Log an INFO message.
-         * <p>
+         * Log a INFO message.
          * If the logger is currently enabled for the INFO message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param   msg     The string message (or a key in the message catalog)
          */
         public void info(String msg) {
@@ -208,12 +201,11 @@ public class EASyLoggerFactory {
         }
 
         /**
-         * Log an WARN message.
-         * <p>
+         * Log a WARN message.
          * If the logger is currently enabled for the WARN message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param   msg     The string message (or a key in the message catalog)
          */
         public void warn(String msg) {
@@ -225,11 +217,10 @@ public class EASyLoggerFactory {
         
         /**
          * Log an ERROR message.
-         * <p>
          * If the logger is currently enabled for the ERROR message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param   msg     The string message (or a key in the message catalog)
          */
         public void error(String msg) {
@@ -241,11 +232,10 @@ public class EASyLoggerFactory {
         
         /**
          * Log an EXCEPTION message.
-         * <p>
          * If the logger is currently enabled for the EXCEPTION message
          * level then the given message is forwarded to all the
          * registered output Handler objects.
-         * <p>
+         * 
          * @param   exception     The exception message
          */
         public void exception(Exception exception) {
