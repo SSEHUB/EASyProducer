@@ -9,6 +9,8 @@
 	<property name="javacSource" value="1.6"/>
 	<property name="javacTarget" value="1.6"/>
 	
+	<include file="${user.home}/macros.xml"/>
+	
 	<path id ="includes">
 		<!-- Model -->
 		<pathelement path="${libs.model}"/>
