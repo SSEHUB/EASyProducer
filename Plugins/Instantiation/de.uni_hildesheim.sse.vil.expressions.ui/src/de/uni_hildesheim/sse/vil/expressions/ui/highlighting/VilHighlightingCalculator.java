@@ -62,7 +62,7 @@ public class VilHighlightingCalculator implements ISemanticHighlightingCalculato
      * Check whether the given resource is not <code>null</code> and provides root-node.
      * 
      * @param resource the resource (the actual document in the editor) to be checked.
-     * @return <b>True<b/> if the given resource was parsed successfully and, thus, a root-node exists. <b>False<b/> otherwise.
+     * @return <code>True</code> if the given resource was parsed successfully and, thus, a root-node exists. <code>False</code> otherwise.
      */
     private boolean hasRootNode(XtextResource resource) {
         return resource != null

@@ -30,6 +30,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -79,7 +80,7 @@ public class AspectJ extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case that artifact creation fails
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> aspectJ(Path source, Path target, Map<String, Object> other) 
         throws VilException {
         Set<FileArtifact> result;
@@ -100,7 +101,7 @@ public class AspectJ extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case that artifact creation fails
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> aspectJ(Collection<FileArtifact> source, Path target, Map<String, Object> other) 
         throws VilException {
         return aspectJ(source, null, target, other);

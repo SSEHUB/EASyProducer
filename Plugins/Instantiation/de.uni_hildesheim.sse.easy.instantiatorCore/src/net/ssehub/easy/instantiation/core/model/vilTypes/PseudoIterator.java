@@ -8,7 +8,8 @@ import java.util.Iterator;
  * @param <T> the element type
  * @author Holger Eichelberger
  */
-@ClassMeta(name = Constants.TYPE_ITERATOR, equiv = Iterator.class)
+@ClassEquivalentTo(Iterator.class)
+@ClassMeta(name = Constants.TYPE_ITERATOR)
 public class PseudoIterator<T> implements IVilType, IStringValueProvider {
 
     public static final String STRING_VALUE = "<Iterator>";

@@ -135,7 +135,6 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
      * Returns whether this element is valid.
      * 
      * @return <code>true</code> if this element is valid, <code>false</code> else
-     * @see VariableValueMapping#getValidFlag(AbstractIvmlVariable)
      */
     public boolean isValid() {
         return VariableValueMapping.getInstance().isValid(this);
@@ -145,7 +144,6 @@ public abstract class IvmlElement implements IVilType, IResolvable, IStringValue
      * Returns whether this element is currently enacting.
      * 
      * @return <code>true</code> if this currently in enactment, <code>false</code> else
-     * @see VariableValueMapping#getValidFlag(AbstractIvmlVariable)
      */
     public boolean isEnacting() {
         return VariableValueMapping.getInstance().isEnacting(this);

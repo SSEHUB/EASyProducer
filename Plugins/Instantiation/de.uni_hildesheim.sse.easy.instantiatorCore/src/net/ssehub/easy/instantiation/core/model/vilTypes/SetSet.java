@@ -39,7 +39,7 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
      * Creates a new array collection wrapper using the default type registry.
      * 
      * @param set the set to be wrapped
-     * @param param the only type parameter characterizing <T>
+     * @param param the only type parameter characterizing &lt;T&gt;
      */
     public SetSet(java.util.Set<T> set, Class<?> param) {
         this(set, param, TypeRegistry.DEFAULT);
@@ -50,7 +50,7 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
      * 
      * @param set the set to be wrapped
      * @param registry the type registry to use
-     * @param param the only type parameter characterizing <T>
+     * @param param the only type parameter characterizing &lt;T&gt;
      */
     public SetSet(java.util.Set<T> set, Class<?> param, TypeRegistry registry) {
         this(set, registry.convert(param));
@@ -60,7 +60,7 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
      * Creates a new set wrapper.
      * 
      * @param set the set to be wrapped
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public SetSet(java.util.Set<T> set, TypeDescriptor<?>... params) {
         this.set = set;
@@ -314,7 +314,9 @@ public class SetSet<T> extends AbstractCollectionWrapper<T> implements Set<T> {
     }
 
     @Override
-    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    @NotOclCompliant("sort")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"sortedBy", "sort"})
     public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
         Collection<T> result;
         if (null == set) {

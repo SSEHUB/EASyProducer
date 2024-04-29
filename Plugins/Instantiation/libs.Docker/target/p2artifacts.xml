@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='net.ssehub.easy.libs.docker' version='3.2.7'>
+    <properties size='9'>
+      <property name='artifact.size' value='5157578'/>
+      <property name='download.size' value='5157578'/>
+      <property name='download.checksum.sha-512' value='4b9c47499f9628dd737b3ba4f9c7164f0ded4acb2f4ad0986b2d87e6fba685cd2b6942f85bc457cab012239ddd30516eb9b304b173bcbfc2ce0c1b8c0ec52563'/>
+      <property name='download.checksum.sha-1' value='a60e99fdf2040519353be22f3f06d690f82eb723'/>
+      <property name='download.checksum.sha-256' value='518b5b51823020cfb92165957cf16f1319990ff521a208f41d140106c742a95a'/>
+      <property name='maven-groupId' value='net.ssehub.easy'/>
+      <property name='maven-artifactId' value='net.ssehub.easy.libs.docker'/>
+      <property name='maven-version' value='3.2.7'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+  </artifact>
+</artifacts>

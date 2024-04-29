@@ -7,8 +7,8 @@ import net.ssehub.easy.instantiation.core.model.defaultInstantiators.Zip;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -30,7 +30,7 @@ public class Jar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> jar(Path base, Collection<FileArtifact> artifacts, Path jar) 
         throws VilException {
         return jar(base, artifacts, jar, null);
@@ -47,7 +47,7 @@ public class Jar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> jar(Path base, Collection<FileArtifact> artifacts, Path jar, Path manifest) 
         throws VilException {
         return Zip.add(base, artifacts, jar, createJarHandler(manifest));
@@ -82,9 +82,9 @@ public class Jar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> jar(Path base, Path artifacts, Path jar, 
-        @ParameterMeta(name = "manifest") Path manifest) throws VilException {
+        @ParameterMeta(name = "manifest", generics = {}) Path manifest) throws VilException {
         Set<FileArtifact> result;
         if (manifest == Path.DUMMY) {
             result = jar(base, artifacts.selectAll(), jar, null);
@@ -97,10 +97,10 @@ public class Jar implements IVilType {
     
     /**
      * Creates the JarHandler for creating a new JAR archive.
-     * @param manifest A path for a manifest file which shall be included in the jar. Maybe <tt>null</tt>, than a
+     * @param manifest A path for a manifest file which shall be included in the jar. Maybe <b>null</b>, than a
      * default manifest file will be created.
-     * @return A {@link JarHandler} which will use the given manifest file or create a new one if <tt>manifest</tt>
-     * was <tt>null</tt>.
+     * @return A {@link JarHandler} which will use the given manifest file or create a new one if <code>manifest</code>
+     * was <b>null</b>.
      */
     private static JarHandler createJarHandler(Path manifest) {
         return null == manifest ? new JarHandler() : new JarHandler(manifest.getAbsolutePath(), false);

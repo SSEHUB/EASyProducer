@@ -6,7 +6,7 @@ import java.util.List;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -56,14 +56,14 @@ public class DecisionVariable extends AbstractIvmlVariable {
     }
 
     @Override
-    @OperationMeta(returnGenerics = { Attribute.class } )
+    @ReturnGenerics(Attribute.class)
     public Set<Attribute> attributes() {
         initializeAttributes();
         return new UnmodifiableSet<Attribute>(new ArraySet<Attribute>(attributes, Attribute.class));
     }
     
     @Override
-    @OperationMeta(returnGenerics = { Attribute.class } )
+    @ReturnGenerics(Attribute.class)
     public Set<Attribute> annotations() {
         return attributes();
     }
@@ -157,7 +157,7 @@ public class DecisionVariable extends AbstractIvmlVariable {
      * @return the converted value (may be <b>null</b>, depends on the type of the variable)
      */
     @Conversion
-    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    @ReturnGenerics(DecisionVariable.class)
     public static Sequence<DecisionVariable> convert2Sequence(DecisionVariable val) {
         return val.variables();
     }

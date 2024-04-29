@@ -3,14 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Java Instantiation Support
 Bundle-SymbolicName: net.ssehub.easy.instantiation.java;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.java
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Service-Component: OSGI-INF/instantiator.xml
 Require-Bundle: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.basics,
- org.eclipse.equinox.ds;resolution:=optional,
  org.apache.felix.scr;resolution:=optional,
+ org.eclipse.jface.text,
  org.eclipse.jdt.core;visibility:=reexport,
  org.eclipse.text;visibility:=reexport,
  net.ssehub.easy.libs.commons.io,

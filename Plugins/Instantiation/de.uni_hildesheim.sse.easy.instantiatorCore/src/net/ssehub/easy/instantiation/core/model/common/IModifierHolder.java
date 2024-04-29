@@ -34,9 +34,10 @@ public interface IModifierHolder {
      * 
      * @param index the 0-based index of the modifier to return
      * @return the specified modifier
-     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &get;={@link #getModifierCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 || index &gt;={@link #getModifierCount()}</code>
      */
-    public IModifier getModifier(int index);    
+    public IModifier getModifier(int index);
+    
     /**
      * Returns whether this variable declaration has a given <code>modifier</code>.
      * 

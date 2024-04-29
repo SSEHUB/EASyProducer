@@ -7,7 +7,7 @@ import net.ssehub.easy.basics.modelManagement.Version;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(equiv = Version.class)
+@ClassEquivalentTo(Version.class)
 final class PseudoVersion implements IVilType {
 
     /**
@@ -21,7 +21,7 @@ final class PseudoVersion implements IVilType {
      * 
      * @param v1 the first version to be considered
      * @param v2 the second version to be considered
-     * @return v1 < v2
+     * @return v1 &lt; v2
      */
     @OperationMeta(name = Constants.LESS_THEN, opType = OperationType.INFIX)
     public static boolean lessThan(Version v1, Version v2) {
@@ -33,7 +33,7 @@ final class PseudoVersion implements IVilType {
      * 
      * @param v1 the first version to be considered
      * @param v2 the second version to be considered
-     * @return v1 <= v2
+     * @return v1 &lt;= v2
      */
     @OperationMeta(name = Constants.LESS_THEN_EQUALS, opType = OperationType.INFIX)
     public static boolean lessEqualThan(Version v1, Version v2) {
@@ -45,7 +45,7 @@ final class PseudoVersion implements IVilType {
      * 
      * @param v1 the first version to be considered
      * @param v2 the second version to be considered
-     * @return v1 >= v2
+     * @return v1 &gt;= v2
      */
     @OperationMeta(name = Constants.GREATER_THEN_EQUALS, opType = OperationType.INFIX)
     public static boolean greaterEqualThan(Version v1, Version v2) {
@@ -57,7 +57,7 @@ final class PseudoVersion implements IVilType {
      * 
      * @param v1 the first version to be considered
      * @param v2 the second version to be considered
-     * @return v1 >= v2
+     * @return v1 &gt; v2
      */
     @OperationMeta(name = Constants.GREATER_THEN, opType = OperationType.INFIX)
     public static boolean greaterThan(Version v1, Version v2) {

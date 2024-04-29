@@ -259,7 +259,7 @@ public class TypeRegistry {
                      VilException.ID_ALREADY_REGISTERED);
             }
             if (!registered.getTypeClass().isAssignableFrom(type)) {
-                throw new VilException("type replacement requires subtype relationship", 
+                throw new VilException("type replacement requires subtype relationship " + type, 
                     VilException.ID_TYPE_INCOMPATIBILITY);
             }
         }
@@ -396,9 +396,9 @@ public class TypeRegistry {
      * @param <T> the actual VIL type
      */
     private <T extends IVilType> void registerEquivalentClasses(Class<T> type, TypeDescriptor<T> desc) {
-        ClassMeta meta = type.getAnnotation(ClassMeta.class);
-        if (null != meta && null != meta.equiv()) {
-            for (Class<?> eq : meta.equiv()) {
+        ClassEquivalentTo meta = type.getAnnotation(ClassEquivalentTo.class);
+        if (null != meta && null != meta.value()) {
+            for (Class<?> eq : meta.value()) {
                 if (null != eq) {
                     register(eq.getName(), desc);
                     if (!types.containsKey(eq.getSimpleName())) { // for Java resolution
@@ -967,7 +967,7 @@ public class TypeRegistry {
      * 
      * @param param the class to be converted
      * @return the resulting type descriptors, <code>null</code> if <code>params</code> is <b>null</b> or empty. If a 
-     *     type descriptor cannot be found, {@link TypeDescriptor#VOID} is used instead.
+     *     type descriptor cannot be found, {@link ReflectionTypeDescriptor#VOID} is returned instead.
      */
     public TypeDescriptor<?>[] convert(Class<?> param) {
         TypeDescriptor<?>[] result;
@@ -988,7 +988,7 @@ public class TypeRegistry {
      * 
      * @param params the classes to be converted
      * @return the resulting type descriptors, <code>null</code> if <code>params</code> is <b>null</b> or empty. If a 
-     *     type descriptor cannot be found, {@link TypeDescriptor#VOID} is used instead.
+     *     type descriptor cannot be found, {@link ReflectionTypeDescriptor#VOID} is returned instead.
      */
     public TypeDescriptor<?>[] convert(Class<?>... params) {
         TypeDescriptor<?>[] result;

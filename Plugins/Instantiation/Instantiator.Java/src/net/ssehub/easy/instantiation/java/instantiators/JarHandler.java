@@ -17,8 +17,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.ZipHandler;
 
 /**
@@ -116,7 +116,7 @@ public class JarHandler extends ZipHandler {
                 mf.write(fos);
                 fos.close();
             } catch (IOException e) {
-                IOUtils.closeQuietly(fos);
+                FileUtils.closeQuietly(fos);
                 throw e;
             }
             files.add(file);

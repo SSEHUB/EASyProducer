@@ -65,7 +65,7 @@ public class XVCLInstantiator implements IVilType, IRegistration {
     /**
      * Instantiates the given XVCL specification file via VIL.
      * @param specification The stating point for instantiation with XVCL.
-     * @throws ArtifactException If XVCL detects any errors, while parsing the specification.
+     * @throws VilException If XVCL detects any errors, while parsing the specification.
      */
     public static void xvcl(FileArtifact specification) throws VilException {
         XvclTransformatorEngine instantiator = new XvclTransformatorEngine();

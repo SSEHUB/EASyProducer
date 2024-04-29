@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="de.uni_hildesheim.sse.vil.templatelang.tests" default="jar" basedir=".">
+    <property file="${user.home}/migration.properties"/>
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
@@ -41,14 +43,16 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
             <classpath refid="includes" />	
-		</javac>
+		</javac>-->
     </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
+        <echo file="testdata.dir" append="false">${home.template.tests.dir}/testdata</echo>
+        <maven pomFile="pom.xml" goal="deploy"/>
         <!--jar destfile="${build.dir}/jar/${ant.project.name}.jar" basedir="${build.dir}" excludes="**/*Activator.class"/-->
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+		<!--<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
     </target>
 </project>

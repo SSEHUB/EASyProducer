@@ -395,8 +395,8 @@ public class VilBuildLanguageOutlineTreeProvider extends DefaultOutlineTreeProvi
     /**
      * Creates (further) content nodes.
      * 
-     * @param content
-     *            ScriptContents
+     * @param element
+     *            the element to consider
      * @param parentNode
      *            all Rules and Variables will be displayed under this node
      */

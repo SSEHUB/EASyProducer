@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="net.ssehub.easy.instantiation.xvcl" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
@@ -39,15 +40,16 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<classpath refid="includes" />	
-		</javac>
+		</javac>-->
     </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
+        <maven pomFile="pom.xml" goal="deploy"/>
 		<!-- Copy needed non class files -->
-		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
+		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="OSGI-INF/**/*" />
 				<include name="lib/**/*" />
@@ -61,9 +63,9 @@
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
         <copy todir="${easy.bundles.dir}">
             <fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-        </copy>
+        </copy>-->
 		<!-- XVCL is not in Maven, just bundle it here for now -->
-		<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
+		<!--<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
         <jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF">
             <zipgroupfileset dir="../XVCL" includes="**/*.jar"/>
     	</jar>
@@ -72,7 +74,7 @@
             <classpath refid="includes"/>
         </easyJavadoc>
         <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
+        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>-->
 		<!-- Copy created jar to global EASy Plug-ins directory -->
     </target>
 </project>

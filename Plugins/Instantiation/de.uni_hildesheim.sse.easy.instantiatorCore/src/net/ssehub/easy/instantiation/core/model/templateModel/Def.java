@@ -33,7 +33,7 @@ public class Def extends TemplateBlock implements ITemplateLangElement, IResolva
     /**
      * Constructor for serialization.
      */
-    Def() {
+    public Def() {
         super(null);
     }
     

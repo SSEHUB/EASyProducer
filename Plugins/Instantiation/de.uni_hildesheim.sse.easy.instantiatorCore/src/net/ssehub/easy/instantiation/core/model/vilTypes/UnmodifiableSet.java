@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnType.ReturnTypeKind;
 
 /**
  * Implements an unmodifiable set wrapper. This is just a runtime type.
@@ -49,7 +50,8 @@ public class UnmodifiableSet<T> implements Set<T> {
         return set.isEmpty();
     }
 
-    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
+    @NotOclCompliant("isNotEmpty")
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"})
     @Override
     public boolean isNotEmpty() {
         return set.isNotEmpty();
@@ -101,6 +103,7 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
+    @ReturnGenerics(IVilType.class)
     public Set<T> excluding(Collection<T> set) {
         return this.set.excluding(set);
     }
@@ -111,7 +114,7 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
-    @OperationMeta(genericArgument = {0 })
+    @GenericArguments(0)
     public T add(T element) {
         return element; // do nothing, unmodifiable
     }
@@ -123,11 +126,15 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
     
     @Override
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useGenericParameter = 0, flatten = true)
     public Set<?> flatten() throws VilException {
         return set.flatten();
     }
 
     @Override
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useGenericParameter = 0)
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException {
         return set.select(evaluator);
     }
@@ -317,6 +324,8 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(name = "clone")    
     public Set<T> cloneCollection() {
         return set.cloneCollection();
     }

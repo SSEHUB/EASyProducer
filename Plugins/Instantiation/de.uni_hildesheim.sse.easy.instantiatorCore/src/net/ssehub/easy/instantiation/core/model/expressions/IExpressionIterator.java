@@ -34,7 +34,7 @@ public interface IExpressionIterator {
      * 
      * @param index the 0-based index of the expression
      * @return the expression
-     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionListCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionsCount()}</code>
      */
     public Expression getExpression(int index);
     

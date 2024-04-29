@@ -49,7 +49,7 @@ import net.ssehub.easy.instantiation.core.model.common.StreamGobbler.IMsgManipul
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
@@ -80,7 +80,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root) throws VilException {
         return maven(root, (String) null);
     }    
@@ -93,7 +93,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, boolean updateSnapshots) throws VilException {
         return maven(root, (String) null, updateSnapshots);
     }    
@@ -107,7 +107,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, Sequence<String> mvnArgs, boolean updateSnapshots) 
         throws VilException {
         return maven(root, (String) null, mvnArgs, updateSnapshots);
@@ -121,7 +121,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, String buildFilePath) throws VilException {
         return maven(root, buildFilePath, false);
     }    
@@ -135,7 +135,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, String buildFilePath, boolean updateSnapshots) 
         throws VilException {
         return maven(root, buildFilePath, null, updateSnapshots);
@@ -151,7 +151,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, String buildFilePath, Sequence<String> mvnArgs, 
         boolean updateSnapshots) throws VilException {
         return build(root, buildFilePath, updateSnapshots, new String[] {"clean", "install"}, mvnArgs);
@@ -165,7 +165,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, Sequence<String> buildtargets) 
         throws VilException {
         return maven(root, false, buildtargets);
@@ -180,7 +180,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, boolean updateSnapshots, Sequence<String> buildtargets) 
         throws VilException {
         return maven(root, (Sequence<String>) null, updateSnapshots, buildtargets);
@@ -196,7 +196,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, Sequence<String> mvnArgs, boolean updateSnapshots, 
         Sequence<String> buildtargets) throws VilException {
         return build(root, null, updateSnapshots, toTargets(buildtargets), mvnArgs);
@@ -211,7 +211,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, String buildFilePath, Sequence<String> buildtargets) 
         throws VilException {
         return maven(root, buildFilePath, false, buildtargets);
@@ -227,7 +227,7 @@ public class Maven extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> maven(Path root, String buildFilePath, boolean updateSnapshots, 
         Sequence<String> buildtargets) 
         throws VilException {

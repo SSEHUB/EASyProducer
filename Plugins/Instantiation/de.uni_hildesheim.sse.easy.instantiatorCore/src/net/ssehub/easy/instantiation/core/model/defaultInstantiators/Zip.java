@@ -15,7 +15,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -36,7 +36,7 @@ public class Zip implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> zip(Path base, Path artifacts, Path zip) throws VilException {
         // needed as paths are typically expressed as strings and string->path->collection conversion is not supported
         return add(base, artifacts.selectAll(), zip, new ZipHandler());
@@ -52,7 +52,7 @@ public class Zip implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that processing the JAR file fails for some reason
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> zip(Path base, Collection<FileArtifact> artifacts, Path zip) 
         throws VilException {
         return add(base, artifacts, zip, new ZipHandler());

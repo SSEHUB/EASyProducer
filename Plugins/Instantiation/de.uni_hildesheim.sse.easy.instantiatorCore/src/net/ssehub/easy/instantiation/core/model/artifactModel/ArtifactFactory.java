@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.artifactModel;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -222,13 +223,13 @@ public class ArtifactFactory {
                 LOGGER.error("artifact creator class empty at class " + cls.getName());
             } else {
                 try {
-                    addArtifactCreator(creatorClass.newInstance());
-                } catch (InstantiationException e) {
+                    addArtifactCreator(creatorClass.getDeclaredConstructor().newInstance());
+                } catch (IllegalAccessException | NoSuchMethodException | InstantiationException e) {
                     LOGGER.error("cannot create artifact creator of class " + creatorClass.getName() 
                         + ": " + e.getMessage());
-                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException e) {
                     LOGGER.error("cannot create artifact creator of class " + creatorClass.getName() 
-                        + ": " + e.getMessage());
+                        + ": " + e.getCause().getMessage());
                 }
             }
         }

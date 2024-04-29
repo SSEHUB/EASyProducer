@@ -17,7 +17,7 @@ public class FixedListSet<T> extends ListSet<T> {
      * 
      * @param list the wrapped list
      * @param registry the registry to convert <code>params</code>
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public FixedListSet(List<T> list, TypeRegistry registry, Class<?>... params) {
         super(list, registry.convert(params));
@@ -27,7 +27,7 @@ public class FixedListSet<T> extends ListSet<T> {
      * Creates a new array collection wrapper.
      * 
      * @param list the wrapped list
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public FixedListSet(List<T> list, TypeDescriptor<?>... params) {
         super(list, params);

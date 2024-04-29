@@ -59,9 +59,6 @@ public class XmlIo {
     /**
      * Writes a list of {@link IModel} to the given output stream.
      * 
-     * IF YOU WANT TO WRITE IVML THEN CALL {@link #isIvmlFile()} TO DISABLE CERTAIN
-     * CONVERTERS!
-     * 
      * @param list
      *            the list to be written
      * @param target
@@ -150,9 +147,6 @@ public class XmlIo {
 
     /**
      * Reads a list of {@link IModel} from an input stream.
-     * 
-     * IF YOU WANT TO WRITE IVML THEN CALL {@link #isIvmlFile()} TO DISABLE CERTAIN
-     * CONVERTERS!
      * 
      * @param source
      *            the source to read the project definition from

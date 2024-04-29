@@ -319,7 +319,7 @@ public class SimulatorUi implements ISimulationNotifier {
      * Reads the value bindings argument from the settings file.
      * 
      * @param settings the parsed setting properties
-     * @param argument the argument to be read / modified
+     * @param bindings the argument bindings to be read / modified
      * @param settingsFile the settings file (for logging messages)
      */
     private void readBindingsArgument(Properties settings, Argument bindings, File settingsFile) {

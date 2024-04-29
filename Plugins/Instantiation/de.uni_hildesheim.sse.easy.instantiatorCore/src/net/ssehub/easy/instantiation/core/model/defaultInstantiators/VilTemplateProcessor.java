@@ -47,6 +47,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 
@@ -83,7 +84,8 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
+    @ReturnGenerics(IArtifact.class)
+    @OperationMeta(requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, 
         Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
         return vilTemplateProcessor(template, config, targets, false, other);
@@ -100,7 +102,8 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
+    @ReturnGenerics(IArtifact.class)
+    @OperationMeta(requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, 
         Collection<IArtifact> targets, boolean addAdvice, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
@@ -120,7 +123,8 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
+    @ReturnGenerics(IArtifact.class)
+    @OperationMeta(requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, IArtifact target, 
         Map<String, Object> other) throws VilException {
         return vilTemplateProcessor(template, config, target, false, other);
@@ -137,7 +141,8 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class, requiresDynamicExpressionProcessing = true)
+    @ReturnGenerics(IArtifact.class)
+    @OperationMeta(requiresDynamicExpressionProcessing = true)
     public static Set<IArtifact> vilTemplateProcessor(FileArtifact template, Configuration config, IArtifact target, 
         boolean addAdvice, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
@@ -216,7 +221,7 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(VtlFileArtifact template, Configuration config, 
         Collection<IArtifact> targets, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
@@ -236,7 +241,7 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(VtlFileArtifact template, Configuration config, 
         IArtifact target, Map<String, Object> other) throws VilException {
         List<IArtifact> result = new ArrayList<IArtifact>();
@@ -254,7 +259,7 @@ public class VilTemplateProcessor implements IVilType {
      * @param result the created artifacts (modified as a side effect)
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     private static void process(VtlFileArtifact template, Configuration config, 
         IArtifact target, Map<String, Object> other, List<IArtifact> result) throws VilException {
         // obtaining the model info
@@ -349,7 +354,7 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         Collection<IArtifact> targets,  Map<String, Object> other) throws VilException {
         return vilTemplateProcessor(templateName, config, targets, false, other);
@@ -368,7 +373,7 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         Collection<IArtifact> targets, boolean addAdvice, Map<String, Object> other) throws VilException {
         Set<IArtifact> result = null;
@@ -410,7 +415,7 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         IArtifact target, Map<String, Object> other) throws VilException {
         return vilTemplateProcessor(templateName, config, target, false, other); 
@@ -429,7 +434,7 @@ public class VilTemplateProcessor implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> vilTemplateProcessor(String templateName, Configuration config, 
         IArtifact target, boolean addAdvice, Map<String, Object> other) 
         throws VilException {
@@ -600,7 +605,7 @@ public class VilTemplateProcessor implements IVilType {
      * @param result the created artifacts (modified as a side effect)
      * @throws VilException in case that execution fails
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     private static void process(Template template, Configuration config, 
         IArtifact target, Map<String, Object> other, List<IArtifact> result) throws VilException {
         ITerminator terminator = null;

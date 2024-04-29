@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.defaultInstantiators;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 
 /**
@@ -48,7 +49,7 @@ public class DefaultVtlJavaExtension {
      * @param end the end integer
      * @return a random double number
      */
-    @OperationMeta(returnGenerics = Integer.class)
+    @ReturnGenerics(Integer.class)
     public static Sequence<Integer> createIntegerSequence(int start, int end) {
         return IntegerSequenceConstructors.createIntegerSequence(start, end);
     }

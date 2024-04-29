@@ -30,7 +30,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * Creates a new array collection wrapper using the default type registry.
      * 
      * @param array the array to be wrapped
-     * @param param the only type parameter characterizing <T>
+     * @param param the only type parameter characterizing &lt;T&gt;
      */
     public ArraySet(T[] array, Class<?> param) {
         this(array, param, TypeRegistry.DEFAULT);
@@ -41,7 +41,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * 
      * @param array the array to be wrapped
      * @param registry the type registry to use
-     * @param param the only type parameter characterizing <T>
+     * @param param the only type parameter characterizing &lt;T&gt;
      */
     public ArraySet(T[] array, Class<?> param, TypeRegistry registry) {
         super(removeDuplicates(array), true, registry.convert(param));
@@ -51,7 +51,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * Creates a new array collection wrapper.
      * 
      * @param array the array to be wrapped
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public ArraySet(T[] array, TypeDescriptor<?>... params) {
         super(removeDuplicates(array), true, params);
@@ -60,7 +60,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     /**
      * Returns an empty set for one type parameter using the default type registry.
      * 
-     * @param param the type parameter characterizing <T>
+     * @param param the type parameter characterizing &lt;T&gt;
      * @return an empty set
      * @param <T> the element type
      */
@@ -72,7 +72,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     /**
      * Returns an empty set for one type parameter.
      * 
-     * @param param the type parameter characterizing <T>
+     * @param param the type parameter characterizing &lt;T&gt;
      * @param registry the type registry used for resolution
      * @return an empty set
      * @param <T> the element type
@@ -85,7 +85,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     /**
      * Returns an empty set for one type parameter.
      * 
-     * @param param the type parameter characterizing <T>
+     * @param param the type parameter characterizing &lt;T&gt;
      * @return an empty set
      * @param <T> the element type
      */
@@ -97,31 +97,31 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> selectByType(TypeDescriptor<?> type) {
         return new ListSet<T>(selectByType(this, type, false, false), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> selectByKind(TypeDescriptor<?> type) {
         return new ListSet<T>(selectByType(this, type, true, false), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> typeReject(TypeDescriptor<?> type) {
         return new ListSet<T>(selectByType(this, type, true, true), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> excluding(Collection<T> set) {
         return new ListSet<T>(excluding(this, set), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> including(Collection<T> set) {
         return new ListSet<T>(including(this, set), getGenericParameter());
     }
@@ -200,7 +200,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     }
 
     @Override
-    @OperationMeta(genericArgument = {0 })
+    @GenericArguments(0)
     public T add(T element) {
         extendCapacity(1);
         T[] array = getArray();
@@ -215,7 +215,7 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @return the union of this set and <code>set</code>
      */
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> union(Set<T> set) {
         return new ListSet<T>(union(this, set), getGenericParameter());
     }
@@ -227,13 +227,15 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
      * @return the union of this set and <code>set</code>
      */
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> intersection(Set<T> set) {
         return new ListSet<T>(intersection(this, set), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    @NotOclCompliant("sort")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"sortedBy", "sort"})
     public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
         Collection<T> result;
         if (null == getArray()) {

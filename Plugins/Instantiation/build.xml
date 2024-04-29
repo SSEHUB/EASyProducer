@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Instantiation" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">	
-	<property file="${user.home}/global-build.properties"/>
+    <property file="${user.home}/migration.properties"/>
+    <property file="${user.home}/global-build.properties"/>
 	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="${jacoco.path}/jacocoant.jar"/>
     </taskdef>
@@ -215,10 +216,11 @@
         <echo>##################################</echo>
         <ant dir="de.uni-hildesheim.sse.easy.instantiator.velocity.tests" antfile="${build.script.name}" />
         
-        <echo>#################################################</echo>
+		<!-- tested before, time to say goodbye -->
+        <!--<echo>#################################################</echo>
         <echo>###   Compiling Complete Instantiator Tests   ###</echo>
         <echo>#################################################</echo>
-        <ant dir="de.uni_hildesheim.sse.easy.instantiation.tests" antfile="${build.script.name}" />
+        <ant dir="de.uni_hildesheim.sse.easy.instantiation.tests" antfile="${build.script.name}" />-->
 	</target>
 	
 	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
@@ -471,6 +473,7 @@
         <delete dir="${basedir}/${test.eclipse.name}"/>
     </target>
 		
-	<target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/>
+	<!-- <target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/> -->
+	<target name="all" depends="init, compile"/>
 	<target name="only.compile" depends="init, compile"/>
 </project>

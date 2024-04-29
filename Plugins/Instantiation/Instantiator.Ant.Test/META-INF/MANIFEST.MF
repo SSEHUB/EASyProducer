@@ -3,15 +3,15 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ANT Instantiator Test
 Bundle-SymbolicName: net.ssehub.easy.instantiation.ant.test;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.ant.test
-Bundle-Version: 0.0.1
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests;bundle-version="0.0.1",
- net.ssehub.easy.dslCore;bundle-version="0.5.5",
+Bundle-Version: 1.3.10.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests,
+ net.ssehub.easy.dslCore,
  org.junit;bundle-version="4.8.2",
- net.ssehub.easy.instantiation.core;bundle-version="0.5.5",
- net.ssehub.easy.varModel;bundle-version="0.5.5",
- net.ssehub.easy.varModel.tests;bundle-version="0.0.10",
- net.ssehub.easy.instantiation.ant;bundle-version="0.2.3"
+ net.ssehub.easy.instantiation.core,
+ net.ssehub.easy.varModel,
+ net.ssehub.easy.varModel.tests,
+ net.ssehub.easy.instantiation.ant
 Import-Package: org.apache.tools.ant,
  org.apache.velocity,
  org.apache.velocity.app,

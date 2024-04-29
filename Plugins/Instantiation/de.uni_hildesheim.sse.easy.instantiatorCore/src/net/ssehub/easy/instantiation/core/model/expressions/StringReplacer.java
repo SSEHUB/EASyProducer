@@ -477,7 +477,6 @@ public class StringReplacer<I extends VariableDeclaration, R extends Resolver<I>
      * 
      * @param ex the expression to resolve
      * @return the resolved expression, <b>null</b> if not possible to resolve
-     * @throws VilException in case of resolution problems
      */
     private Expression resolve(VarModelIdentifierExpression ex) {
         Expression result = null;

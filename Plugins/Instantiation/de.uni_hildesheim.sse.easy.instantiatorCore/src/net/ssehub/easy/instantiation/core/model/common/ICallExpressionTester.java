@@ -41,7 +41,7 @@ public interface ICallExpressionTester <M extends IResolvableModel<V, M>, O exte
     public E createAndCheckCall(M model, boolean isSuper, M fromModel);
     
     /**
-     * Returns the last exception produced by {@link #createAndCheckCall(IResolvableModel, boolean)}.
+     * Returns the last exception produced by {@link #createAndCheckCall(IResolvableModel, boolean, IResolvableModel)}.
      * 
      * @return the last exception or <b>null</b>
      */

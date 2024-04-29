@@ -34,7 +34,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * Creates a new array collection wrapper using the default type registry.
      * 
      * @param array the wrapped array
-     * @param param the only type parameter characterizing <T>
+     * @param param the only type parameter characterizing &lt;T&gt;
      */
     public ArraySequence(T[] array, Class<?> param) {
         super(array, TypeRegistry.DEFAULT, false, param);
@@ -44,7 +44,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * Creates a new array collection wrapper.
      * 
      * @param array the wrapped array
-     * @param param the only type parameter characterizing <T>
+     * @param param the only type parameter characterizing &lt;T&gt;
      * @param registry the type registry to be used for conversion of <code>param</code>
      */
     public ArraySequence(T[] array, Class<?> param, TypeRegistry registry) {
@@ -55,7 +55,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
      * Creates a new array collection wrapper.
      * 
      * @param array the wrapped array
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public ArraySequence(T[] array, TypeDescriptor<?>... params) {
         super(array, false, params);
@@ -82,7 +82,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     /**
      * Returns an empty sequence for one type parameter.
      * 
-     * @param param the type parameter characterizing <T>
+     * @param param the type parameter characterizing &lt;T&gt;
      * @param registry the type registry to use
      * @return an empty sequence
      * @param <T> the element type
@@ -95,7 +95,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     /**
      * Returns an empty sequence for one type parameter.
      * 
-     * @param param the type parameter characterizing <T>
+     * @param param the type parameter characterizing &lt;T&gt;
      * @return an empty sequence
      * @param <T> the element type
      */
@@ -107,31 +107,31 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> selectByType(TypeDescriptor<?> type) {
         return new ListSequence<T>(selectByType(this, type, false, false), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> selectByKind(TypeDescriptor<?> type) {
         return new ListSequence<T>(selectByType(this, type, true, false), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> typeReject(TypeDescriptor<?> type) {
         return new ListSequence<T>(selectByType(this, type, true, true), getGenericParameter());
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> excluding(Collection<T> sequence) {
         return new ListSequence<T>(excluding(this, sequence), getGenericParameter());
     }
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> append(Collection<T> sequence) {
         return new ListSequence<T>(append(this, sequence), getGenericParameter());
     }
@@ -205,7 +205,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> sortAlpha() {
         Sequence<T> result;
         if (null == getArray()) {
@@ -217,7 +217,9 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
     
     @Override
-    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    @NotOclCompliant("sort")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"sortedBy", "sort"})
     public Sequence<T> sortedBy(ExpressionEvaluator evaluator) throws VilException {
         Sequence<T> result;
         if (null == getArray()) {
@@ -229,7 +231,9 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
     
     @Override
-    @OperationMeta(name = {"reverse", "revert"}, notOclCompliant = "revert", returnGenerics = IVilType.class)
+    @NotOclCompliant("revert")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"reverse", "revert"})
     public Sequence<T> revert() {
         Sequence<T> result;
         if (null == getArray()) {
@@ -279,7 +283,7 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
 
     @Override
-    @OperationMeta(genericArgument = {0 })
+    @GenericArguments(0)
     public T add(T element) {
         extendCapacity(1);
         T[] array = getArray();
@@ -297,31 +301,31 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
         return SequenceOperations.mapAny(this, other);
     }
 
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     @Override
     public Sequence<T> union(Sequence<T> seq) {
         return new ListSequence<T>(SequenceOperations.union(this, seq), getGenericParameter());
     }
     
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     @Override
     public Sequence<T> append(T object) {
         return new ListSequence<T>(SequenceOperations.append(this, object), getGenericParameter());
     }
 
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     @Override
     public Sequence<T> prepend(T object) {
         return new ListSequence<T>(SequenceOperations.prepend(this, object), getGenericParameter());
     }
 
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     @Override
     public Sequence<T> insertAt(int index, T object) {
         return new ListSequence<T>(SequenceOperations.insertAt(this, index, object), getGenericParameter());
     }
 
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     @Override
     public Sequence<T> subSequence(int lower, int upper) {
         return new ListSequence<T>(SequenceOperations.subSequence(this, lower, upper), getGenericParameter());

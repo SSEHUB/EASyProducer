@@ -89,7 +89,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param c2 the second collection to be considered
      * @return the union of <code>c1</code> and <code>c2</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public static <T> List<T> union(Collection<T> c1, Collection<T> c2) {
         List<T> result = new ArrayList<T>();
         java.util.Set<T> s1 = new HashSet<T>();
@@ -117,7 +117,7 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
      * @param c2 the second collection to be considered
      * @return the intersection of <code>c1</code> and <code>c2</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public static <T> List<T> intersection(Collection<T> c1, Collection<T> c2) {
         List<T> result = new ArrayList<T>();
         java.util.Set<T> s1 = new HashSet<T>();
@@ -744,7 +744,8 @@ public abstract class AbstractCollectionWrapper<T> implements Collection<T> {
         return size() == 0;
     }
 
-    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
+    @NotOclCompliant("isNotEmpty")
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"})
     @Override
     public boolean isNotEmpty() {
         return size() != 0;

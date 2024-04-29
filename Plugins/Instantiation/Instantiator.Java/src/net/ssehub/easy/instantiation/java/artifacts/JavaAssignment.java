@@ -38,7 +38,7 @@ public class JavaAssignment extends AbstractJavaStatement {
      * <code>
      * Object obj = new String();
      * </code>
-     * fromType would be <tt>java.lang.String</tt>.
+     * fromType would be <code>java.lang.String</code>.
      */
     private String fromType;
     
@@ -87,7 +87,7 @@ public class JavaAssignment extends AbstractJavaStatement {
      * <code>
      * Object obj = new String();
      * </code>
-     * getFromType would be <tt>java.lang.String</tt>.
+     * getFromType would be <code>java.lang.String</code>.
      * @return The qualified name of the element which stays on RHS.
      */
     public String getFromType() {

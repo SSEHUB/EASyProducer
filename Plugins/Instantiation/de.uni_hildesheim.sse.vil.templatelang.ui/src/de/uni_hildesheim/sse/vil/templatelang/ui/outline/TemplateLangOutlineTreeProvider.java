@@ -151,10 +151,9 @@ public class TemplateLangOutlineTreeProvider extends DefaultOutlineTreeProvider 
     }
 
     /**
-     * Creates the DefDeclarations and the VariableDeclarations.
+     * Creates the script contents nodes.
      * 
-     * @param varDecls the list of variable declarations
-     * @param subTemps the list of su-template declarations
+     * @param elements the list of elements to process
      * @param parentNode the parent node
      */
     private void createScriptContentNodes(EList<EObject> elements, VirtualOutlineNode parentNode) {

@@ -6,7 +6,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.Unzip;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -26,7 +26,7 @@ public class Unjar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case of unpacking problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> unjar(Path jar, Path target) throws VilException {
         return unjar(jar, target, false);
     }
@@ -40,7 +40,7 @@ public class Unjar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case of unpacking problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> unjar(Path jar, Path target, boolean includeManifest) throws VilException {
         return Unzip.unpack(jar, target, new JarHandler(includeManifest));
     }
@@ -56,7 +56,7 @@ public class Unjar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case of unpacking problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> unjar(Path jar, Path target, String pattern) throws VilException {
         return Unzip.unpack(jar, target, pattern, new JarHandler(false));
     }
@@ -73,7 +73,7 @@ public class Unjar implements IVilType {
      * @return the created artifacts
      * @throws VilException in case of unpacking problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> unjar(Path jar, Path target, String pattern, boolean includeManifest) 
         throws VilException {
         return Unzip.unpack(jar, target, pattern, new JarHandler(includeManifest));

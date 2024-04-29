@@ -3,7 +3,7 @@ package net.ssehub.easy.instantiation.core.model.defaultInstantiators;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -26,7 +26,7 @@ public class IntegerSequenceConstructors implements IVilType {
      * @param end the end integer
      * @return a random double number
      */
-    @OperationMeta(returnGenerics = Integer.class)
+    @ReturnGenerics(Integer.class)
     public static Sequence<Integer> createIntegerSequence(int start, int end) {
         Integer[] values;
         if (end < start) {

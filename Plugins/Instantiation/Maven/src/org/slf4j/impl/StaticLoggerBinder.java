@@ -28,7 +28,7 @@ import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
 /**
- * The binding of {@link LoggerFactory} class with an actual instance of
+ * The binding with an actual instance of
  * {@link ILoggerFactory} is performed using information returned by this class.
  * 
  * @author Ceki G&uuml;lc&uuml;

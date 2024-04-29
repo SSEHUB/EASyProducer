@@ -26,8 +26,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
@@ -66,7 +66,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @throws VilException if element could not be created.
      */
     public static XmlElement create(XmlElement parent, String name, 
-        @ParameterMeta(name = "contents") String contents) throws VilException {
+        @ParameterMeta(name = "contents", generics = {}) String contents) throws VilException {
         XmlElement newElement = null;
         if (null == parent) {
             throw new VilException("Can not append child from NULL element!", VilException.ID_IS_NULL);
@@ -95,7 +95,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @throws VilException if element could not be created.
      */
     public static XmlElement create(XmlFileArtifact parent, String name, 
-        @ParameterMeta(name = "contents") String contents) throws VilException {
+        @ParameterMeta(name = "contents", generics = {}) String contents) throws VilException {
         return create(parent.getRootElement(), name, contents); // notifies change
     }
 
@@ -108,7 +108,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @throws VilException if element could not be created.
      */
     public static XmlElement buildElement(XmlElement parent, String name, 
-        @ParameterMeta(name = "contents") String contents) throws VilException {
+        @ParameterMeta(name = "contents", generics = {}) String contents) throws VilException {
         create(parent, name, contents);
         return parent;
     }
@@ -332,7 +332,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
     }
 
     @Override
-    @OperationMeta(returnGenerics = FragmentArtifact.class)
+    @ReturnGenerics(FragmentArtifact.class)
     public Set<? extends FragmentArtifact> selectAll() throws VilException {
         //checkValidity();
         return new ArraySet<XmlAttribute>(attributes, FragmentArtifact.class);
@@ -355,7 +355,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @return the attributes
      * @throws VilException in case that access is not possible
      */
-    @OperationMeta(returnGenerics = XmlAttribute.class)
+    @ReturnGenerics(XmlAttribute.class)
     public Sequence<XmlAttribute> attributes() throws VilException {
         //checkValidity();
         return new ArraySequence<XmlAttribute>(attributes, XmlAttribute.class);
@@ -367,7 +367,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @return the nodes
      * @throws VilException in case that access is not possible
      */
-    @OperationMeta(returnGenerics = XmlNode.class)
+    @ReturnGenerics(XmlNode.class)
     public Set<XmlNode> nodes() throws VilException {
         //checkValidity();         
         return new ArraySet<XmlNode>(nodes, XmlNode.class);
@@ -377,9 +377,8 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * Returns all nested comments in sequence.
      * 
      * @return the elements
-     * @throws VilException in case that access is not possible
      */
-    @OperationMeta(returnGenerics = XmlComment.class)
+    @ReturnGenerics(XmlComment.class)
     public Sequence<XmlComment> comments() {
         return projectNodes(XmlComment.class);
     }
@@ -390,7 +389,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @return the elements
      * @throws VilException in case that access is not possible
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Sequence<XmlElement> elements() throws VilException {
         return projectNodes(XmlElement.class);
     }
@@ -494,7 +493,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @return the set of attribute, being empty if there is none
      * @throws VilException in case that <code>regEx</code> is invalid
      */
-    @OperationMeta(returnGenerics = XmlAttribute.class)
+    @ReturnGenerics(XmlAttribute.class)
     public Set<XmlAttribute> selectAttributeByRegex(String regEx) throws VilException {
         //checkValidity();
         List<XmlAttribute> result = new ArrayList<XmlAttribute>();
@@ -519,19 +518,19 @@ public class XmlElement extends XmlNode implements IXmlContainer {
     }
     
     @Override
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByName(String name) throws VilException {
         return selectByName(name, true);
     }
     
     @Override
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByPath(String path) throws VilException {
         return PathUtils.selectByPath(this, PathUtils.normalize(path));
     }
     
     @Override
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByXPath(String path) throws VilException {
         return PathUtils.selectByXPath(path, getNode(), this);
     }
@@ -545,7 +544,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @return set with matching XmlElements.
      * @throws VilException in case that invalid Elements are used.
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByName(String name, boolean caseSensitive) throws VilException {
         //checkValidity();
         List<XmlElement> result = new ArrayList<XmlElement>();
@@ -587,7 +586,7 @@ public class XmlElement extends XmlNode implements IXmlContainer {
      * @return Set of XmlElements matching the regEx.
      * @throws VilException in case that invalid Elements are used.
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByRegEx(String regEx) throws VilException {
         //checkValidity();
         List<XmlElement> result = new ArrayList<XmlElement>();

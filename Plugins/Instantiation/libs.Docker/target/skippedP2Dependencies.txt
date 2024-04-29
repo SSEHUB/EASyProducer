@@ -1,0 +1,16 @@
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.fasterxml.jackson.core.jackson-annotations-2.11.4.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.fasterxml.jackson.core.jackson-core-2.11.4.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.fasterxml.jackson.core.jackson-databind-2.11.4.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.github.docker-java.docker-java-api-3.2.7.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.github.docker-java.docker-java-core-3.2.7.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.github.docker-java.docker-java-transport-3.2.7.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:com.github.docker-java.docker-java-transport-httpclient5-3.2.7.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:commons-compress-1.19.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:org.apache.httpcomponents.client5.httpclient5-5.0.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:org.apache.httpcomponents.core5.httpcore5-5.0.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+net.ssehub.easy:net.ssehub.easy.libs.docker:eclipse-plugin:org.bouncycastle.bcpkix-jdk15on-1.64.jar @ W:\offlineFiles\git\EASyProducer\EASyProducer\Plugins\Instantiation\libs.Docker
+p2.eclipse.plugin:com.sun.jna:eclipse-plugin @ C:\Users\eichelberger\.m2\repository\p2\osgi\bundle\com.sun.jna\5.14.0.v20231211-1200\com.sun.jna-5.14.0.v20231211-1200.jar
+p2.eclipse.plugin:net.ssehub.easy.libs.commons.codec:eclipse-plugin:org.apache.commons.codec_1.14.0.jar @ C:\Users\eichelberger\.m2\repository\net\ssehub\easy\net.ssehub.easy.libs.commons.codec\1.14.0-SNAPSHOT\net.ssehub.easy.libs.commons.codec-1.14.0-SNAPSHOT.jar
+p2.eclipse.plugin:net.ssehub.easy.libs.commons.io:eclipse-plugin:org.apache.commons.io_2.7.0.jar @ C:\Users\eichelberger\.m2\repository\net\ssehub\easy\net.ssehub.easy.libs.commons.io\2.7.0\net.ssehub.easy.libs.commons.io-2.7.0.jar
+p2.eclipse.plugin:net.ssehub.easy.libs.commons.lang:eclipse-plugin:org.apache.commons.lang_2.6.0.jar @ C:\Users\eichelberger\.m2\repository\net\ssehub\easy\net.ssehub.easy.libs.commons.lang\2.6.0\net.ssehub.easy.libs.commons.lang-2.6.0.jar
+p2.eclipse.plugin:net.ssehub.easy.libs.slf4j.api:eclipse-plugin:org.slf4j.api_1.7.30.jar @ C:\Users\eichelberger\.m2\repository\net\ssehub\easy\net.ssehub.easy.libs.slf4j.api\1.7.30\net.ssehub.easy.libs.slf4j.api-1.7.30.jar

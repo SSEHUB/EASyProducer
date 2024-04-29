@@ -45,10 +45,10 @@ public class JavaUtilities {
      * Determines the PATH (root folder) of the installed and most used JDK installation.
      * This algorithm will try the following things to detect the JDK installation:
      * <ol>
-     *     <li>Find the JDK via the <tt>JAVA_HOME</tt> system variable</li>
-     *     <li>Find the JDK via the command <tt>where/whereis javac</tt></li>
+     *     <li>Find the JDK via the <code>JAVA_HOME</code> system variable</li>
+     *     <li>Find the JDK via the command <code>where/whereis javac</code></li>
      * </ol>
-     * @return The location of a JDK (top folder) or <tt>null</tt> if it could not be found.
+     * @return The location of a JDK (top folder) or <b>null</b> if it could not be found.
      * @see <a href="http://docs.oracle.com/cd/E19182-01/820-7851/inst_cli_jdk_javahome_t/index.html">
      * JAVA_HOME system variable</a>
      * @see <a href="http://stackoverflow.com/questions/15725601/finding-jdk-path-and-storing-it-as-a-string-in-java">

@@ -178,7 +178,7 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
          * @param method the reflection method to be called
          * @param name optional explicit name of the operation (<b>null</b> to use the name from <code>method</code>)
          * @param isConstructor whether this descriptor shall act as constructor
-         * @param disableExecution if {@link RtVilStorage#isInSimulation()} is set and this parameter is true,
+         * @param disableExecution if simulation is active and this parameter is true,
          *     this operation descriptor will not be executed and return <b>null</b> instead
          */
         public RtReflectionOperationDescriptor(TypeDescriptor<?> declaringType, Method method, String name, 
@@ -659,7 +659,7 @@ public class RtVilTypeRegistry extends TypeRegistry implements IClassNameMapperP
                      VilException.ID_ALREADY_REGISTERED);
             }
             if (!descriptor.getTypeClass().isAssignableFrom(type)) {
-                throw new VilException("type replacement requires subtype relationship", 
+                throw new VilException("type replacement requires subtype relationship " + type, 
                     VilException.ID_TYPE_INCOMPATIBILITY);
             }
         }

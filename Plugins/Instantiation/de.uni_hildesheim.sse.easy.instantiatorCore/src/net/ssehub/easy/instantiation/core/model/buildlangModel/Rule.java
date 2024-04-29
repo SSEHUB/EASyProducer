@@ -51,7 +51,7 @@ public class Rule extends AbstractRule {
     /**
      * Constructor for serialization.
      */
-    Rule() {
+    public Rule() {
         super(null, null);
     }
     

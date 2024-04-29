@@ -29,7 +29,7 @@ Export-Package: com.github.dockerjava.api,
  com.github.dockerjava.core.util,
  com.github.dockerjava.httpclient5,
  com.github.dockerjava.transport
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: SSE, University of Hildesheim
 Require-Bundle: net.ssehub.easy.libs.slf4j.api,
  net.ssehub.easy.libs.commons.io,

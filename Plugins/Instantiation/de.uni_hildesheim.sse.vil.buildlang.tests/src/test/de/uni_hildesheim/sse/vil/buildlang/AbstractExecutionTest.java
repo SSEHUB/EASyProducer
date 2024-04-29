@@ -46,7 +46,7 @@ public abstract class AbstractExecutionTest <M extends Script> extends AbstractT
     }
     
     /**
-     * Creates a file object relative to {@link #DIR} (not a file).
+     * Creates a file object relative to {@link #getTestFolder()} (not a file).
      * 
      * @param name
      *            the name of the file (excluding ".trc")

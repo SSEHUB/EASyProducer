@@ -5,6 +5,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -34,7 +35,7 @@ public interface IFileSystemArtifact extends IArtifact, IStringValueProvider {
      * @return <b>this</b> (for chained operations)
      * @throws VilException in case of serious problems
      */
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class)    
+    @ReturnGenerics(IFileSystemArtifact.class)
     public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws VilException;
 
     /**
@@ -46,13 +47,13 @@ public interface IFileSystemArtifact extends IArtifact, IStringValueProvider {
      * @return <b>this</b> (for chained operations)
      * @throws VilException in case of serious problems
      */
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class)
+    @ReturnGenerics(IFileSystemArtifact.class)
     public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws VilException;
     
     /**
      * Enables the (operation system specific) execution flag for this artifact.
      * 
-     * @param ownerOnly whether all users or just the owner shall be allowed to exectue this artifact
+     * @param ownerOnly whether all users or just the owner shall be allowed to execute this artifact
      * @throws VilException if the executable flag cannot be set.
      */
     @OperationMeta(storeArtifactsBefore = true)

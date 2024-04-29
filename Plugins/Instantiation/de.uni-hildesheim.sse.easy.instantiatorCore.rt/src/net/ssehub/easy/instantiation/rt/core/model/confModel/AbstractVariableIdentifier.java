@@ -46,17 +46,18 @@ public abstract class AbstractVariableIdentifier<V> {
     /**
      * Specifies whether the ID points to a nested elements (of a compound).
      * @param id The ID to check (created via the {@link #variableToID(Object)} method).
-     * @return <tt>true</tt> if the ID indicates a nested element, <tt>false</tt> if it indicates a top level variable.
+     * @return <code>true</code> if the ID indicates a nested element, <code>false</code> if it indicates a top 
+     * level variable.
      */
     protected abstract boolean isNestedVariable(String id);
     
     /**
-     * Returns an iterator to iterate through toplevel and nested variables based on the given ID. <br/>
-     * The first ID points to the top level variable, all succeeding IDs points to the nested variable. <br/>
-     * This is only necessary for nested variables ({@link #isNestedVariable(String)} returns <tt>true</tt>).
+     * Returns an iterator to iterate through toplevel and nested variables based on the given ID. <br>
+     * The first ID points to the top level variable, all succeeding IDs points to the nested variable. <br>
+     * This is only necessary for nested variables ({@link #isNestedVariable(String)} returns <code>true</code>).
      * @param id An ID pointing to a nested variable.
-     * @return An iterator which will return: <tt>&lt;ID for toplevel variable&gt; &lt;Variable nested in toplevel&gt;
-     * &lt;Variable nested in layer 2&gt; ... </tt>
+     * @return An iterator which will return: <code>&lt;ID for toplevel variable&gt; &lt;Variable nested in toplevel&gt;
+     * &lt;Variable nested in layer 2&gt; ... </code>
      * @see #isNestedVariable(String)
      */
     protected abstract Iterator<String> getIDIterator(final String id);
@@ -109,7 +110,7 @@ public abstract class AbstractVariableIdentifier<V> {
      * @param variable The variable for which the value shall be assigned to.
      * @param value The new value to be assigned.
      * @throws ConfigurationException ConfigurationException in case that the types of 
-     *   {@link #getDeclaration()} and <code>value</code> do not comply
+     *   the underlying variable and <code>value</code> do not comply
      */
     protected void assignValue(IDecisionVariable variable, Value value) throws ConfigurationException {
         variable.setValue(value, getAssignmentState());

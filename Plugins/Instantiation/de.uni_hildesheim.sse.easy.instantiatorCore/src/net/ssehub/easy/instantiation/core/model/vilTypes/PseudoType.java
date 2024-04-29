@@ -7,7 +7,8 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(name = "Type", equiv = {Class.class, TypeDescriptor.class})
+@ClassEquivalentTo({Class.class, TypeDescriptor.class})
+@ClassMeta(name = "Type")
 public final class PseudoType implements IVilType {
 
     /**
@@ -45,7 +46,7 @@ public final class PseudoType implements IVilType {
      * 
      * @param type the type to compare
      * @param string the string to compare
-     * @return string != type.getName() && string != type.getQualifiedName()
+     * @return <code>string != type.getName() &amp;&amp; string != type.getQualifiedName()</code>
      */
     @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS}, opType = OperationType.INFIX)
     public static boolean notEquals(TypeDescriptor<?> type, String string) {
@@ -148,7 +149,8 @@ public final class PseudoType implements IVilType {
      * @param type the type to return all instances for
      * @return all instances
      */
-    @OperationMeta(returnGenerics = IVilType.class, useOperandTypeAsParameter = true, opType = OperationType.FUNCTION)
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(useOperandTypeAsParameter = true, opType = OperationType.FUNCTION)
     public static Set<?> allInstances(TypeDescriptor<?> type) {
         Set<?> result = type.allInstances();
         if (null == result) {

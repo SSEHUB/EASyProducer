@@ -23,8 +23,10 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Bundle;
 import net.ssehub.easy.varModel.confModel.Configuration;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.values.Value;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 /**
  * A configuration, which can store additional temporary values. These values are ignored by the configuration and
@@ -153,7 +155,7 @@ public class AdaptiveConfiguration<V> {
      * Adds a temporary value to this configuration. This value won't be used until the take {@link #takeOverValues()}
      * method is used.
      * @param id The id representing the specified variable
-     *     (cf. {@link AbstractVariableIdentifier#variableToID(Object)).
+     *     (cf. {@link AbstractVariableIdentifier#variableToID(Object)}).
      * @param value The object value to save, must be in a form that the {@link ValueFactory} can handle it.
      */
     public void addValue(String id, Object value) {
@@ -189,7 +191,7 @@ public class AdaptiveConfiguration<V> {
     /**
      * Adds an already existing mapping to this configuration.
      * @param mapping An already existing mapping in the form of
-     *   <tt>&lt;id for a (nested) variable, value&gt;</tt>
+     *   <code>&lt;id for a (nested) variable, value&gt;</code>
      *   When using this option, the caller must ensure that the correct mapping was used.
      */
     public void addValues(Map<String, Object> mapping) {

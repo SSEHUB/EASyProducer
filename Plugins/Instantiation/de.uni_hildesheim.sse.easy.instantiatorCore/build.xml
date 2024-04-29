@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="net.ssehub.easy.instantiation.core" default="jar" basedir=".">
+	<!-- Creates a jar file -->
+	<target name="jar">
+		<jar destfile="instantiatorCore.jar" basedir="bin" 
+			manifest="META-INF/MANIFEST.MF">
+		    <fileset dir=".">
+                <include name="META-INF-INF/services/**/*" />
+                <include name="OSGI-INF/**/*" />
+                <include name="lib/**/*.jar" />
+			</fileset>
+		</jar>
+	</target>
+</project>

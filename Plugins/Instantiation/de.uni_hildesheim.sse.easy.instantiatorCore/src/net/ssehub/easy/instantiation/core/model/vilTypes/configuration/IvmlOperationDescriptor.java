@@ -16,8 +16,8 @@ abstract class IvmlOperationDescriptor extends OperationDescriptor {
 
     /**
      * Creates a new operation descriptor. Overriding constructors shall call 
-     * {@link #setCharacteristics(OperationType, AliasType, boolean)} in order to redefined the 
-     * default values.
+     * {@link #setCharacteristics(net.ssehub.easy.instantiation.core.model.vilTypes.OperationType, AliasType, 
+     * boolean, String)} in order to redefine the default values.
      * 
      * @param declaringType the declaring type
      * @param name the alias name (may be <b>null</b> if the original name of <code>method</code> shall be used)

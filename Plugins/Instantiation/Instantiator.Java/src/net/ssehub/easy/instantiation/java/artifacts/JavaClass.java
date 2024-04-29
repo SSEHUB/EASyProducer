@@ -19,7 +19,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -82,7 +82,7 @@ public class JavaClass extends JavaParentFragmentArtifact {
      * @return the annotations
      */
     @SuppressWarnings("unchecked")
-    @OperationMeta(returnGenerics = JavaAnnotation.class)
+    @ReturnGenerics(JavaAnnotation.class)
     public Set<JavaAnnotation> annotations() {
         return annotations(typeDeclaration.modifiers());
     }
@@ -92,7 +92,7 @@ public class JavaClass extends JavaParentFragmentArtifact {
      * 
      * @return the methods
      */
-    @OperationMeta(returnGenerics = JavaMethod.class)
+    @ReturnGenerics(JavaMethod.class)
     public Set<JavaMethod> methods() {
         final List<JavaMethod> list = new ArrayList<JavaMethod>();
         typeDeclaration.accept(new ASTVisitor() {
@@ -194,7 +194,7 @@ public class JavaClass extends JavaParentFragmentArtifact {
      * 
      * @return the attributes
      */
-    @OperationMeta(returnGenerics = JavaAttribute.class)
+    @ReturnGenerics(JavaAttribute.class)
     public Set<JavaAttribute> attributes() {
         final List<JavaAttribute> list = new ArrayList<JavaAttribute>();
         typeDeclaration.accept(new ASTVisitor() {

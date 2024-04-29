@@ -48,8 +48,8 @@ public class XmlComment extends XmlNode {
      * @return The created XmlElement.
      * @throws VilException if element could not be created.
      */
-    public static XmlComment create(XmlElement parent, @ParameterMeta(name = "contents") String contents) 
-        throws VilException {
+    public static XmlComment create(XmlElement parent, 
+        @ParameterMeta(name = "contents", generics = {}) String contents) throws VilException {
         XmlComment newElement = null;
         if (null == parent) {
             throw new VilException("Can not append child from NULL element!", VilException.ID_IS_NULL);

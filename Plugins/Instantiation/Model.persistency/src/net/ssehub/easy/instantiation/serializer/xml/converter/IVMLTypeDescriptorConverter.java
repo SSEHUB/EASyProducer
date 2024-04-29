@@ -15,7 +15,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeD
 
 
 /**
- * Converter for the {@link IVMLTypeDescriptor}.
+ * Converter for the {@link IvmlTypeDescriptor}.
  * 
  * @author Sass
  * 

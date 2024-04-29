@@ -6,7 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marker annotation for classes to rename classes as they shall appear in VIL.
+ * Marker annotation for classes to rename classes as they shall appear in VIL. For detailing information, see 
+ * {@link ClassEquivalentTo} and {@link ClassNotAssignable}. Those detailing annotations can be used without 
+ * {@link ClassMeta}.
  * 
  * @author Holger Eichelberger
  */
@@ -21,23 +23,6 @@ public @interface ClassMeta {
      * @return the name
      */
     String name() default "";
-
-    /**
-     * Defines assignment compatible (equivalent) classes. This is intended for 
-     * basic / primitive types. Primitive types shall be referred by their wrappers
-     * and will be considered transparently.<br/>
-     * 
-     * @return the equivalent classes
-     */
-    Class<?>[] equiv() default { };
-    
-    /**
-     * Defines explicitly non-assignable  classes for which assignment compatibility shall
-     * not be possible. {@link #equiv()} takes precedence.<br/>
-     * 
-     * @return the non assignable classes
-     */
-    Class<?>[] nAssign() default { };
     
     /**
      * Search this class for further operations. This is in particular helpful

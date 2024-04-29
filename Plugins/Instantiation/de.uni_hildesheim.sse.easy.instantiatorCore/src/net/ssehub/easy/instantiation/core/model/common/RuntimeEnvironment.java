@@ -44,7 +44,7 @@ import net.ssehub.easy.varModel.model.values.NullValue;
 /**
  * Provides the runtime environment for executing a VIL models. After
  * creating a runtime environment, first the context must be defined using
- * {@link #switchContext(IModel)}.
+ * {@link #switchContext(IResolvableModel)}.
  * 
  * @param <V> the variable declaration type
  * @param <M> the model type
@@ -111,7 +111,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         }
 
         /**
-         * Returns the actual (potentially more specific runtime model than in {@link #getModel()).
+         * Returns the actual (potentially more specific runtime model than in {@link #getModel()}).
          * 
          * @return {@link #getModel()} or a more specific model determined at runtime
          */
@@ -540,7 +540,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     /**
      * Returns the model assigned to the context.
      * 
-     * @return the model (may be <b>null</b> if {@link #switchContext(IModel)} was 
+     * @return the model (may be <b>null</b> if {@link #switchContext(IResolvableModel)} was 
      *   not called before)
      */
     public IResolvableModel<?, M> getContextModel() {
@@ -823,7 +823,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     }
 
     /**
-     * Appends the model name from {@link modelName} supplier if feasible.
+     * Appends the model name from {@code modelName} supplier if feasible.
      * 
      * @param msg the message to append
      * @param modelName the model name supplier, may be <b>null</b> or return <b>null</b> (ignored then)

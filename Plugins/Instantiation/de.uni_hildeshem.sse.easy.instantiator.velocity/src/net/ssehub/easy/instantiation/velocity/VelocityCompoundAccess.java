@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Context which allows retrieval of nested values of a compound via <tt>getByName(&lt;slot name&gt;)</tt>.
+ * Context which allows retrieval of nested values of a compound via <code>getByName(&lt;slot name&gt;)</code>.
  * @author El-Sharkawy
  */
 public class VelocityCompoundAccess extends VelocityContextItem {
@@ -48,7 +48,7 @@ public class VelocityCompoundAccess extends VelocityContextItem {
     /**
      * Returns the desired member value of the compound.
      * @param slotName The name of the desired slot.
-     * @return The value or <tt>null</tt> if the specified slot does not exist.
+     * @return The value or <b>null</b> if the specified slot does not exist.
      */
     public Object getByName(String slotName) {
         return nestedValues.get(slotName);
@@ -57,7 +57,7 @@ public class VelocityCompoundAccess extends VelocityContextItem {
     /**
      * Returns the desired member value of the compound.
      * @param slotName The name of the desired slot.
-     * @return The value or <tt>null</tt> if the specified slot does not exist.
+     * @return The value or <b>null</b> if the specified slot does not exist.
      */
     public Object byName(String slotName) {
         return getByName(slotName);
@@ -66,12 +66,10 @@ public class VelocityCompoundAccess extends VelocityContextItem {
     /**
      * Returns the desired member value of the compound.
      * @param slotName The name of the desired slot.
-     * @return The value or <tt>null</tt> if the specified slot does not exist.
+     * @return The value or <b>null</b> if the specified slot does not exist.
      */
     public Object value(String slotName) {
         return getByName(slotName);
     }
-    
-    
 
 }

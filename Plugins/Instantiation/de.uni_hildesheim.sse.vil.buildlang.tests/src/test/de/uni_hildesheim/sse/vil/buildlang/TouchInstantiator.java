@@ -14,6 +14,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -31,7 +32,7 @@ public class TouchInstantiator implements IVilType {
      * @return the touched artifact(s)
      * @throws VilException in case that the execution fails
      */
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class)
+    @ReturnGenerics(IFileSystemArtifact.class)
     public static Set<IArtifact> touch(IFileSystemArtifact artifact) throws VilException {
         File file = artifact.getPath().getAbsolutePath();
         try {

@@ -565,7 +565,7 @@ public class ContentFormatter {
      *     {@link FormattingConfiguration#getLineEnding()}
      * @param startPos the line starting position for indentation check/adjustment
      * @return the position advancement, may be 0 for none
-     * @see #adjustIndentation(Profile, StringBuilder, int, int)
+     * @see #adjustIndentation(StringBuilder, int, int)
      */
     private int splitLines(char ch, StringBuilder bld, int splitPos, int startPos) {
         int result = 0;

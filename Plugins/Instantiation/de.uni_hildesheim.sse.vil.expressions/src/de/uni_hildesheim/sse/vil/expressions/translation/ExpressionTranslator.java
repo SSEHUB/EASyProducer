@@ -1516,6 +1516,9 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
         if (null == name) {
             name = getName(cause);
         }
+Throwable t = new Throwable("'" + name + "' of type '" + declType.getVilName() + "' cannot be " 
+                + "initialized with an expression of type '" + initType.getVilName() + "'");
+t.printStackTrace();
         throw new TranslatorException("'" + name + "' of type '" + declType.getVilName() + "' cannot be " 
             + "initialized with an expression of type '" + initType.getVilName() + "'", cause, 
             ExpressionDslPackage.Literals.VARIABLE_DECLARATION__NAME, ErrorCodes.TYPE_CONSISTENCY);

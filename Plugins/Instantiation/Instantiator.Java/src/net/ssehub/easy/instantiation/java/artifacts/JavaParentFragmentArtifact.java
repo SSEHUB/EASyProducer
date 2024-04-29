@@ -15,7 +15,7 @@ import org.eclipse.jdt.core.dom.StringLiteral;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FragmentArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -66,7 +66,7 @@ abstract class JavaParentFragmentArtifact extends JavaFragmentArtifact implement
      * @param modifierList the modifier list to be processed
      * @return An ArraySet with all annotations
      */
-    @OperationMeta(returnGenerics = JavaAnnotation.class)
+    @ReturnGenerics(JavaAnnotation.class)
     public Set<JavaAnnotation> annotations(List<IExtendedModifier> modifierList) {
         List<JavaAnnotation> list = new ArrayList<JavaAnnotation>();
         for (Object modifier : modifierList) {

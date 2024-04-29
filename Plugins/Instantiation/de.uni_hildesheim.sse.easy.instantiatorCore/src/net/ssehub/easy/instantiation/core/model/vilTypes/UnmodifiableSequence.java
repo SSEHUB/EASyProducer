@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnType.ReturnTypeKind;
 
 /**
  * Implements an unmodifiable wrapper for sequences. This is just a runtime type.
@@ -50,7 +51,8 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
         return sequence.isEmpty();
     }
 
-    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
+    @NotOclCompliant("isNotEmpty")
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"})
     @Override
     public boolean isNotEmpty() {
         return sequence.isNotEmpty();
@@ -122,7 +124,7 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
-    @OperationMeta(genericArgument = {0 })
+    @GenericArguments(0)
     public T add(T element) {
         // unmodifiable, do nothing
         return element;
@@ -140,6 +142,8 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useGenericParameter = 0)    
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException {
         return sequence.select(evaluator);
     }
@@ -394,6 +398,8 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     }
 
     @Override
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(name = "clone")    
     public Sequence<T> cloneCollection() {
         return sequence.cloneCollection();
     }

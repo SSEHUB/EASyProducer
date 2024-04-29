@@ -31,7 +31,8 @@ public interface IReasoningHook {
     
     /**
      * May change the configuration before reasoning. Use this only to manipulate trigger variables.
-     * Original values must be restored in {@link #postReasoning(Configuration)}.
+     * Original values must be restored in {@link #postReasoning(Script, IRtVilConcept, IRtValueAccess, Configuration, 
+     * ReasoningResult)}.
      * 
      * @param script the rt-VIL script this method is called within
      * @param concept the specific concept on which the call is being executed
@@ -54,7 +55,8 @@ public interface IReasoningHook {
     public Status analyze(Script script, IRtVilConcept concept, IRtValueAccess values, Message message);
     
     /**
-     * Reverts configuration changes done by {@link #preReasoning(Configuration)} after reasoning.
+     * Reverts configuration changes done by {@link #preReasoning(Script, IRtVilConcept, IRtValueAccess, Configuration)}
+     * after reasoning.
      * 
      * @param script the rt-VIL script this method is called within
      * @param concept the specific concept on which the call is being executed

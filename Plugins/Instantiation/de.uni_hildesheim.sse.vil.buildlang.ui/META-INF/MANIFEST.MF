@@ -2,31 +2,29 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.buildlang.ui
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.buildlang.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.buildlang.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
- org.eclipse.xtext.ui;bundle-version="2.12.0",
- org.eclipse.ui.editors;bundle-version="3.5.0",
- org.eclipse.ui.ide;bundle-version="3.5.0",
+ org.eclipse.xtext.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.ide,
  org.eclipse.xtext.ui.shared,
  org.eclipse.ui,
  org.eclipse.xtext.builder,
- org.antlr.runtime,
- org.eclipse.equinox.ds;resolution:=optional,
  org.apache.felix.scr;resolution:=optional,
- org.eclipse.osgi.services,
+ org.osgi.service.component;visibility:=reexport,
  org.eclipse.xtext.common.types.ui,
  org.eclipse.xtext.ui.codetemplates.ui,
  net.ssehub.easy.varModel,
  net.ssehub.easy.instantiation.core,
- de.uni_hildesheim.sse.vil.expressions.ui;bundle-version="0.0.1",
+ de.uni_hildesheim.sse.vil.expressions.ui,
  net.ssehub.easy.dslCore.ui,
  net.ssehub.easy.basics
 Service-Component: OSGI-INF/vilFactory.xml
 Import-Package: org.apache.log4j
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.contentassist.antlr,
  de.uni_hildesheim.sse.ui.contentassist.antlr.internal,

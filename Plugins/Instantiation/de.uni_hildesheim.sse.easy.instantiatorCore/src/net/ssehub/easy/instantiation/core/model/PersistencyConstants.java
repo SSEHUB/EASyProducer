@@ -18,12 +18,12 @@ public class PersistencyConstants {
     public static final String TEMPLATE_FILE_EXTENSION = "vtl";
     
     /**
-     * Default file ending (<tt>.(file extension></tt>) for build script files.
+     * Default file ending for build script files.
      */
     public static final String SCRIPT_FILE_ENDING = "." + SCRIPT_FILE_EXTENSION;
     
     /**
-     * Default file ending (<tt>.(file extension></tt>) for template files.
+     * Default file ending for template files.
      */
     public static final String TEMPLATE_FILE_ENDING = "." + TEMPLATE_FILE_EXTENSION;
 }

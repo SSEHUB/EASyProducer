@@ -34,9 +34,9 @@ public @interface ParameterMeta {
      * of Java generics cannot be accessed. Generics of complex types are just given in 
      * linear sequence. Empty by default. Might be replaced by new reflection functions in Java 8.
      * 
-     * @return the generic parameters of the parameter/argument type
+     * @return the generic parameters of the parameter/argument type (none/neutral is the empty array)
      */
-    Class<?>[] generics() default { };
+    Class<?>[] generics(); // java 17 does not compile empty non-constant arrays as defaults anymore
     
     /**
      * Indicates a named parameter. The name may be the same as the parameter name but it may also differ.

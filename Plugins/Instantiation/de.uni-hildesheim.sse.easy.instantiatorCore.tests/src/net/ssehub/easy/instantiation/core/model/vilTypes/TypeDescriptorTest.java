@@ -69,7 +69,6 @@ public class TypeDescriptorTest extends AbstractTest {
      * @param cls the VIL type to be tested
      * @param qualified if the qualified class name (pseudo primitives) shall be used or the 
      *   simple name (e.g., artifact classes)
-     * @see #getExpectedSignatures(Class, String)
      * @see OperationsIterator
      */
     private void assertOperations(Class<?> cls, boolean qualified) {
@@ -181,7 +180,7 @@ public class TypeDescriptorTest extends AbstractTest {
                 boolean done = false;
                 if (null != meta) {
                     String[] names = meta.name();
-                    if (null != names) {
+                    if (ReflectionResolver.hasAnnotationValue(names)) {
                         for (int n = 0; n < names.length; n++) {
                             ops.add(SignatureUtils.getJavaSignature(method, names[n], false));
                         }

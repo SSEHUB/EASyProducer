@@ -204,7 +204,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @param key the key for the mapping (<b>null</b> is ignored)
      * @param value the value of the mapping
      */
-    @OperationMeta(genericArgument = {0, 1 })
+    @GenericArguments({0, 1})
     public void add(Object key, V value) {
         Object val = value;
         if (null != key) {
@@ -238,16 +238,16 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @param key the key for the mapping (<b>null</b> is ignored)
      * @param value the value of the mapping
      */
-    @OperationMeta(genericArgument = {0, 1 })
+    @GenericArguments({0, 1})
     public void put(Object key, V value) {
         add(key, value);
     }
 
     /**
-     * Returns whether <code>map</code> is an <Any,Any> map.
+     * Returns whether <code>map</code> is an &lt;Any,Any&gt; map.
      * 
      * @param map the map to test
-     * @return <code>true</code> if it is an <Any,Any> map, <code>false</code> else
+     * @return <code>true</code> if it is an &lt;Any,Any&gt; map, <code>false</code> else
      */
     private static final boolean isAnyMap(Map<?, ?> map) {
         return isAny(map.generics[0]) && isAny(map.generics[1]);

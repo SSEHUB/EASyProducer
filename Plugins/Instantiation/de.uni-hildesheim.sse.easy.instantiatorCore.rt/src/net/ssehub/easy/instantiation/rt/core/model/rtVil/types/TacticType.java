@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.instantiation.rt.core.model.rtVil.types;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.ClassEquivalentTo;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Tactic;
 
@@ -23,7 +24,8 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Tactic;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(name = Constants.TYPE_TACTIC, equiv = Tactic.class)
+@ClassEquivalentTo(Tactic.class)
+@ClassMeta(name = Constants.TYPE_TACTIC)
 public class TacticType extends RtVilConceptType {
     
 }

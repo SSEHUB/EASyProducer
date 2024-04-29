@@ -17,7 +17,7 @@ public class FixedListSequence<T> extends ListSequence<T> {
      * 
      * @param list the wrapped list
      * @param registry the type registry to convert <code>params</code>
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public FixedListSequence(List<T> list, TypeRegistry registry, Class<?>... params) {
         super(list, registry.convert(params));
@@ -27,7 +27,7 @@ public class FixedListSequence<T> extends ListSequence<T> {
      * Creates a new array collection wrapper.
      * 
      * @param list the wrapped list
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public FixedListSequence(List<T> list, TypeDescriptor<?>... params) {
         super(list, params);

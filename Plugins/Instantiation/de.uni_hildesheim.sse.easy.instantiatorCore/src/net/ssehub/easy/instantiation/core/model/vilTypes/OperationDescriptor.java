@@ -69,7 +69,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
 
     /**
      * Creates a new operation descriptor. Overriding constructors shall call 
-     * {@link #setCharacteristics(OperationType, AliasType, boolean)} in order to redefined the 
+     * {@link #setCharacteristics(OperationType, AliasType, boolean, String)} in order to redefine the 
      * default values.
      * 
      * @param declaringType the declaring type
@@ -104,7 +104,7 @@ public abstract class OperationDescriptor implements IMetaOperation {
      * linked descriptor structures which may not have been completely initialized
      * during the constructor execution).
      * 
-     * @see #initializeParameter()
+     * @see #initializeParameters()
      * @see #initializeReturnType()
      */
     private void initialize() {

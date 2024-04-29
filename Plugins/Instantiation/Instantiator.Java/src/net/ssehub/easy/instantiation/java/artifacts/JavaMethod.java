@@ -20,7 +20,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
@@ -180,7 +180,7 @@ public class JavaMethod extends JavaParentFragmentArtifact {
      * @return the annotations
      */
     @SuppressWarnings("unchecked")
-    @OperationMeta(returnGenerics = JavaAnnotation.class)
+    @ReturnGenerics(JavaAnnotation.class)
     public Set<JavaAnnotation> annotations() {
         return annotations(methodDeclaration.modifiers());
     }

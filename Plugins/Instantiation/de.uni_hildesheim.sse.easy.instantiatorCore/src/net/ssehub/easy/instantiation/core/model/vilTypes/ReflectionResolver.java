@@ -215,5 +215,17 @@ public class ReflectionResolver {
         }
         return result;
     }
-
+    
+    /**
+     * Checks for the JDK 17 style of denoting empty string array values, i.e., an array containing a single
+     * empty string.
+     * 
+     * @param value the value
+     * @return if the array has a value, i.e., is not <b>null</b> (backward compatibility), has a positive length  
+     *     and the first value has a positive string length
+     */
+    public static boolean hasAnnotationValue(String[] value) {
+        return null != value && value.length > 0 && value[0].length() > 0; // JDK 17
+    }
+    
 }

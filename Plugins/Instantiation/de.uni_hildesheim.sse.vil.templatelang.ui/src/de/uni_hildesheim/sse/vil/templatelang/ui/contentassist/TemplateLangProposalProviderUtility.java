@@ -29,7 +29,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * A utility class for determining different elements in the VTL build model based on the
  * more generic information provided by the Xtext UI functionalities (typically EObject, etc.)
  * 
- * @auther dernek
+ * @author dernek
  */
 public class TemplateLangProposalProviderUtility {
     
@@ -48,7 +48,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns all variables inside of a statement, ready to display as a proposal.
      * @param node the last complete node, when the content-assist is used.
-     * @return <code>List<StyledString></code> with all variables, to show as a proposal.
+     * @return <code>List&lt;StyledString&gt;</code> with all variables, to show as a proposal.
      * Maybe <b>null</b>, if no variables were found.
      */
     public List<StyledString> getAllVarsInStmt(INode node) {
@@ -81,8 +81,8 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns all variables inside of a statement, which have a specific type, ready to display as a proposal.
      * @param node the last complete node, when the content-assist is used.
-     * @param the list <code>List<String></code> with the specific types.
-     * @return <code>List<StyledString></code> with all variables, to show as a proposal.
+     * @param typeList the list <code>List&lt;String&gt;</code> with the specific types.
+     * @return <code>List&lt;StyledString&gt;</code> with all variables, to show as a proposal.
      * Maybe <b>null</b>, if no variables were found.
      */
     public List<StyledString> getAllVarsInStmtWithType(INode node, List<String> typeList) {
@@ -116,7 +116,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns all variables inside of the LanguageUnit, ready to display as a proposal.
      * @param node the last complete node, when the content-assist is used.
-     * @return <code>List<StyledString></code> with all variables, to show as a proposal.
+     * @return <code>List&lt;StyledString&gt;</code> with all variables, to show as a proposal.
      * Maybe <b>null</b>, if no variables were found.
      */
     public List<StyledString> getAllVarsInLangUnit(INode node) {
@@ -158,7 +158,7 @@ public class TemplateLangProposalProviderUtility {
      * This method should only be used inside of a def-declaration, because proposing the defs outside of the declaration makes no sense.
      * The method removes automatically the def-declaration in which the method is used. 
      * @param node the last complete node.
-     * @return <code>List<StyledString></code> with all def-Declarations.
+     * @return <code>List&lt;StyledString&gt;</code> with all def-Declarations.
      * Maybe <b>null</b>, if no defs were found.
      */
     public List<StyledString> getAllDefs(INode node) {
@@ -203,7 +203,7 @@ public class TemplateLangProposalProviderUtility {
      * Returns all parameters from a def-Declaration, ready to display as a propose.
      * This method should only be called inside of a def-Declaration.
      * @param node the last complete node.
-     * @return <code>List<StyledString></code> with all parameters.
+     * @return <code>List&lt;StyledString&gt;</code> with all parameters.
      * Maybe <b>null</b>, if no parameters were found.
      */
     public List<StyledString> getAllParamsFromDef(INode node) {
@@ -226,7 +226,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns all parameters from the VTL-Template, ready to display as a propose.
      * @param node the last complete node.
-     * @return <code>List<StyledString></code> with all parameters.
+     * @return <code>List&lt;StyledString&gt;</code> with all parameters.
      * Maybe <b>null</b>, if no parameters were found.
      */
     public List<StyledString> getAllParamsFromTemplate(INode node) {
@@ -399,7 +399,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns a list with all def-Declarations inside of an VTL-Script.
      * @param node the last complete node.
-     * @return <code>List<VilDef></code> with all def-Declarations.
+     * @return <code>List&lt;VilDef&gt;</code> with all def-Declarations.
      * Maybe <b>null</b>, if no defs were found.
      */
     private List<VilDef> getDefs(INode node) {
@@ -442,7 +442,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns a list with all parameters the def-Declaration have.
      * @param node the last complete node.
-     * @return <code>EList<Parameter></code> with all parameters.
+     * @return <code>EList&lt;Parameter&gt;</code> with all parameters.
      * Maybe <b>null</b>, if no parameters were found.
      */
     private EList<Parameter> getParamsFromDef(INode node) {
@@ -467,7 +467,7 @@ public class TemplateLangProposalProviderUtility {
     /**
      * Returns a list with all parameters the template have.
      * @param node the last complete node.
-     * @return <code>EList<Parameter></code> with all parameters.
+     * @return <code>EList&lt;Parameter&gt;</code> with all parameters.
      * Maybe <b>null</b>, if no parameters were found.
      */
     private EList<Parameter> getParamsFromTemplate(INode node) {

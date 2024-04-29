@@ -20,7 +20,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.SetSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -237,7 +237,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @return the decision variables
      */
-    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    @ReturnGenerics(DecisionVariable.class )
     public Sequence<DecisionVariable> variables() {
         initializeNested();
         return new ArraySequence<DecisionVariable>(variables, DecisionVariable.class); 
@@ -447,7 +447,7 @@ public class Configuration extends IvmlElement implements IStringValueProvider {
      * 
      * @return the attributes
      */
-    @OperationMeta(returnGenerics = { Attribute.class } )
+    @ReturnGenerics(Attribute.class)
     public Sequence<Attribute> attributes() {
         initializeAttributes();
         return new ArraySequence<Attribute>(attributes, Attribute.class);

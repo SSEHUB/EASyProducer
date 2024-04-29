@@ -12,6 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
@@ -721,7 +722,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
      * 
      * @return the decision variables (unmodifiable)
      */
-    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    @ReturnGenerics(DecisionVariable.class )
     public Sequence<DecisionVariable> variables() {
         initializeNested();
         return new UnmodifiableSequence<DecisionVariable>(
@@ -734,7 +735,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
      * @return the decision variables (unmodifiable)
      */
     @Invisible
-    @OperationMeta(returnGenerics = { DecisionVariable.class } )
+    @ReturnGenerics(DecisionVariable.class )
     public Set<DecisionVariable> variablesSet() {
         initializeNested();
         return new UnmodifiableSet<DecisionVariable>(
@@ -756,7 +757,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
      * 
      * @return the decision variables
      */
-    @OperationMeta(returnGenerics = { Attribute.class } )
+    @ReturnGenerics(Attribute.class)
     public abstract Set<Attribute> attributes();
     // TODO remove -> annotations
     
@@ -765,7 +766,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
      * 
      * @return the decision variables
      */
-    @OperationMeta(returnGenerics = { Attribute.class } )
+    @ReturnGenerics(Attribute.class)
     public abstract Set<Attribute> annotations();
 
     @Override

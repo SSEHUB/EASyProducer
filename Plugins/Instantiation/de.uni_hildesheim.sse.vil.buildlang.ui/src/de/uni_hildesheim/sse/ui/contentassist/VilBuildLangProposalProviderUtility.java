@@ -47,7 +47,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * assist may be wrong!
  * 
  * @author kroeher
- * @auther dernek
+ * @author dernek
  */
 public class VilBuildLangProposalProviderUtility {
 
@@ -450,10 +450,10 @@ public class VilBuildLangProposalProviderUtility {
     }
     
     /**
-     * Returns a <code>List<String></code> with the types of the parameters from the rule, which is searched.
+     * Returns a <code>List&lt;String&gt;</code> with the types of the parameters from the rule, which is searched.
      * @param toSearch the name of the rule, for which we want the types of the parameters.
      * @param node the last complete node which will committed when we start using the content assist in braces.
-     * @return <code>List<String></code> with the parameter types. Can be </code>null</code>.
+     * @return <code>List&lt;String&gt;</code> with the parameter types. Can be <b>null</b>.
      */
     public List<String> searchForRuleParameterTypes(String toSearch, INode node) {
         List<String> parameterTypes = null;
@@ -522,9 +522,9 @@ public class VilBuildLangProposalProviderUtility {
     /**
      * Returns a List with all variables in the document, which have a specified type.
      * @param node the last complete node, when the content assist is used.
-     * @param typeList the <code>List<String></code> with all types.
+     * @param typeList the <code>List&lt;String&gt;</code> with all types.
      * @param completeDefsOnly <b>true</b> if you only want full declared variables, <b>false</b> if you don't.
-     * @return a <code>List<StyledString></code> with all proposals, which are ready to display in the content assist.
+     * @return a <code>List&lt;StyledString&gt;</code> with all proposals, which are ready to display in the content assist.
      * Maybe <b>null</b> if no variables found.
      */
     public List<StyledString> getAllVarsForType(INode node, List<String> typeList, boolean completeDefsOnly) {
@@ -897,8 +897,8 @@ public class VilBuildLangProposalProviderUtility {
      * Get all valid VIL operation for a specific VIL (artefact) type.
      * 
      * @param typeName the name of the VIL element for which the valid operations will be determined
-     * @param registry the type registry to query
-     * @return <code>List<OperationDescriptor></code> which contains the valid operations for the given type. Maybe
+     * @param node the node to query
+     * @return <code>List&lt;OperationDescriptor&gt;</code> which contains the valid operations for the given type. Maybe
      * <b>null</b> if the type is not supported or no operation for this type is defined.
      */
     private List<OperationDescriptor> getValidTypeOperations(String typeName, INode node) {
@@ -919,7 +919,7 @@ public class VilBuildLangProposalProviderUtility {
      * Get all VIL operations currently registered to EASy-Producer.
      *  
      * @param node the last complete node which provides the basic information for retrieving the operations.
-     * @return <code>List<OperationDescriptor</code> which contains all available operations. Maybe an empty list
+     * @return <code>List&lt;OperationDescriptor%gt;</code> which contains all available operations. Maybe an empty list
      * if no operation can be found, but never <b>null</b>.
      */
     private List<OperationDescriptor> getAvailableOperations(INode node) {
@@ -950,7 +950,7 @@ public class VilBuildLangProposalProviderUtility {
     /**
      * Returns a list with all available instantiators.
      * @param node the last complete node which provides the basic information for retrieving the operations.
-     * @return <code>List<OperationDescriptor></code> which contains the available instantiator operations. Can be <b>null</b>.
+     * @return <code>List&lt;OperationDescriptor&gt;</code> which contains the available instantiator operations. Can be <b>null</b>.
      */
     private List<OperationDescriptor> getAvailableInstantiators(INode node) {        
         List<OperationDescriptor> instantiatorOperations = null;
@@ -1048,8 +1048,8 @@ public class VilBuildLangProposalProviderUtility {
     /**
      * Get the name of the type of an VIL element based on the name (identifier) of this element.
      * 
-     * @param ruleImpl <code>RuleElementBlock</code> the rule implementation (complete rule representation) in which the search
-     * for the type will start
+     * @param ruleElBlock <code>RuleElementBlock</code> the rule implementation (complete rule representation) in which the 
+     * search for the type will start
      * @param name <code>String</code> the name of the element as a string for which the type will be determined.
      * @return <code>String</code> name of the type of the VIL element or an empty <code>String</code> if the type
      * could not be determined. Never <b>null</b>.
@@ -1176,7 +1176,7 @@ public class VilBuildLangProposalProviderUtility {
     }
     
     /**
-     * Checks if a <code>List<?></code> has Elements or not.
+     * Checks if a <code>List&lt;?&gt;</code> has Elements or not.
      * 
      * @param list
      * @return <b>true</b> if the List has at least one element, <b>false</b> if it's empty or null.
@@ -1208,7 +1208,7 @@ public class VilBuildLangProposalProviderUtility {
      * Returns the parameters from a rule.
      * 
      * @param node Last complete node, when the content assist is used.
-     * @return a <code>List<Parameter></code> list with the <code>Parameter</code>s from the rule. Maybe <b>null</b>.
+     * @return a <code>List&lt;Parameter&gt;</code> list with the <code>Parameter</code>s from the rule. Maybe <b>null</b>.
      */
     private List<Parameter> getRuleParams(INode node) {
         List<Parameter> result = null;
@@ -1225,7 +1225,7 @@ public class VilBuildLangProposalProviderUtility {
      * Returns the variables from a rule.
      * 
      * @param node Last complete node, when the content assist is used.
-     * @return a <code>List<VariableDeclaration></code> list with the <code>VariableDeclaration</code>s from the rule.
+     * @return a <code>List&lt;VariableDeclaration&gt;</code> list with the <code>VariableDeclaration</code>s from the rule.
      * Maybe <b>null</b>.
      */
     private List<VariableDeclaration> getRuleVars(INode node) {
@@ -1243,7 +1243,7 @@ public class VilBuildLangProposalProviderUtility {
      * Returns all variables from the <code>RuleElementBlock</code>.
      * 
      * @param ruleElementBlock
-     * @return a <code>List<VariableDeclaration></code> with all variables from the <code>RuleElementBlock</code>.
+     * @return a <code>List&lt;VariableDeclaration&gt;</code> with all variables from the <code>RuleElementBlock</code>.
      * Maybe <b>null</b>.
      */
     private List<VariableDeclaration> getRuleElementBlockVars(RuleElementBlock ruleElementBlock) {
@@ -1279,10 +1279,10 @@ public class VilBuildLangProposalProviderUtility {
     }
     
     /**
-     * converts the operationnames into a content assist friendly format, which can be directly used to display.
-     * @param operationsList 
-     * @return a <code>List<StyledString></code> which contains all operations, ready to display in the content assist.
-     * Maybe <b>null</b>, if the List<OperationDescriptor> operationsList is empty.
+     * Converts the operation names into a content assist friendly format, which can be directly used to display.
+     * @param operationsList the operations
+     * @return a <code>List&lt;StyledString&gt;</code> which contains all operations, ready to display in the content assist.
+     * Maybe <b>null</b>, if the List&lt;OperationDescriptor&gt; operationsList is empty.
      */
     private List<StyledString> opsToDisplayString(List<OperationDescriptor> operationsList) {
         List<StyledString> operationStringList = null;
@@ -1311,10 +1311,10 @@ public class VilBuildLangProposalProviderUtility {
     }
     
     /**
-     * converts the variablenames into a content assist friendly format, which can be directly used to display.
-     * @param varDeclList 
-     * @return a <code>List<StyledString></code> which contains all variables, ready to display in the content assist.
-     * Maybe <b>null</b>, if the <code>List<VariableDeclaration></code> varDeclList is empty.
+     * Converts the variable names into a content assist friendly format, which can be directly used to display.
+     * @param varDeclList the variable declarations
+     * @return a <code>List&lt;StyledString&gt;</code> which contains all variables, ready to display in the content assist.
+     * Maybe <b>null</b>, if the <code>List&lt;VariableDeclaration&gt;</code> varDeclList is empty.
      */
     private List<StyledString> varsToDisplayString(List<VariableDeclaration> varDeclList) {
         List<StyledString> varDeclStringList = null;

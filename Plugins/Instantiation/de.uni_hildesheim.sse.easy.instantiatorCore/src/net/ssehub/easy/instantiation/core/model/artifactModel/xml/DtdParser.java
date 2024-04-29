@@ -14,7 +14,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
+import net.ssehub.easy.basics.io.FileUtils;
 
 /**
  * This class is used to read embedded DTDs from XML files and write them back later.
@@ -143,7 +143,7 @@ public class DtdParser {
             result = readFile(fis);
             fis.close();
         } catch (IOException e) {
-            IOUtils.closeQuietly(fis);
+            FileUtils.closeQuietly(fis);
         }
         if (null == result) {
             result = new ArrayList<String>();

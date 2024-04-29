@@ -12,7 +12,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -119,7 +119,7 @@ public class RuleExecutionResult implements IVilType, IStringValueProvider {
      * 
      * @return the immediate result
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public Set<IArtifact> result() {
         return new ListSet<IArtifact>(result, IArtifact.class);
     }
@@ -129,7 +129,7 @@ public class RuleExecutionResult implements IVilType, IStringValueProvider {
      * 
      * @return all results
      */
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public Set<IArtifact> allResults() {
         return new ListSet<IArtifact>(allResults, IArtifact.class);
     }
@@ -216,7 +216,7 @@ public class RuleExecutionResult implements IVilType, IStringValueProvider {
      */
     @Invisible
     @Conversion
-    @OperationMeta(returnGenerics = IArtifact.class)
+    @ReturnGenerics(IArtifact.class)
     public static Set<IArtifact> convert(RuleExecutionResult res) {
         return res.result();
     }

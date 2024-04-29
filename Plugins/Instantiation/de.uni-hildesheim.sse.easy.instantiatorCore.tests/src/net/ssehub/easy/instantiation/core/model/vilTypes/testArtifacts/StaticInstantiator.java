@@ -4,7 +4,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -21,7 +21,7 @@ public class StaticInstantiator implements IVilType {
      * @param file the file to be instantiated
      * @return the instantiated files
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> staticInstantiator(FileArtifact file) {
         return ArraySet.empty(FileArtifact.class);
     }

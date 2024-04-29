@@ -20,6 +20,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IActualValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -28,7 +29,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
  * by this class or by specific subclasses which also shall act as default file artifact.
  * In particular, the following methods shall be overridden by subclasses:
  * <ol>
- *   <li>{@link #artifactChanged()}</li>
+ *   <li>{@link #artifactChanged(Object)}</li>
  *   <li>{@link #selectAll()} without {@link Invisible Invisible annotation}</li>
  * </ol>
  * 
@@ -170,13 +171,15 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     }
 
     @Override
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
+    @ReturnGenerics(IFileSystemArtifact.class)
+    @OperationMeta(storeArtifactsBefore = true)
     public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws VilException {
         return new ListSet<IFileSystemArtifact>(FileUtils.move(this, target), IFileSystemArtifact.class);
     }
 
     @Override
-    @OperationMeta(returnGenerics = IFileSystemArtifact.class, storeArtifactsBefore = true )
+    @ReturnGenerics(IFileSystemArtifact.class)
+    @OperationMeta(storeArtifactsBefore = true)
     public Set<IFileSystemArtifact> copy(IFileSystemArtifact target) throws VilException {
         return new ListSet<IFileSystemArtifact>(FileUtils.copy(this, target), IFileSystemArtifact.class);
     }

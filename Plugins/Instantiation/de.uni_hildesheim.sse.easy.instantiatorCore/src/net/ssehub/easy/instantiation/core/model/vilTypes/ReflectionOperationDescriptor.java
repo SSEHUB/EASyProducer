@@ -77,7 +77,7 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         if (null != meta) {
             opType = meta.opType();
             trace = meta.trace();
-            if (null != meta.name() && meta.name().length > 0) {
+            if (ReflectionResolver.hasAnnotationValue(meta.name())) {
                 aliasType = AliasType.EXPLICIT;
             }
             returnGenericParameterIndex = meta.useGenericParameter();
@@ -136,8 +136,8 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
         }
         boolean considerNamed = considerNamedParameters();
         Class<?>[] params = method.getParameterTypes();
-        OperationMeta meta = method.getAnnotation(OperationMeta.class);
-        int[] argGenericIndex = null == meta ? null : meta.genericArgument();
+        GenericArguments meta = method.getAnnotation(GenericArguments.class);
+        int[] argGenericIndex = null == meta ? null : meta.value();
         TypeDescriptor<?> declaring = getDeclaringType();
         Annotation[][] paramsAnnotations = method.getParameterAnnotations();
         Map<String, Object> defltValues = null;
@@ -288,8 +288,8 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
     public OperationDescriptor specializeFor(TypeDescriptor<?> declaringType) {
         OperationDescriptor result = this;
         if (declaringType.getGenericParameterCount() > 0) {
-            OperationMeta meta = method.getAnnotation(OperationMeta.class);
-            if (null != meta && null != meta.genericArgument() && meta.genericArgument().length > 0) {
+            GenericArguments meta = method.getAnnotation(GenericArguments.class);
+            if (null != meta && null != meta.value() && meta.value().length > 0) {
                 result = new ReflectionOperationDescriptor(declaringType, method, isConstructor());
             }
         }
@@ -299,9 +299,28 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
     @Override
     protected void initializeReturnType() {
         Class<?> returnType = method.getReturnType();
-        OperationMeta meta = method.getAnnotation(OperationMeta.class);
-        if (null != meta && meta.returnType() != void.class && returnType.isAssignableFrom(meta.returnType())) {
-            returnType = meta.returnType();
+        ReturnType meta = method.getAnnotation(ReturnType.class);
+        if (null != meta) {
+            Class<?> metaReturn = null;
+            switch (meta.kind()) {
+            case SEQUENCE:
+                metaReturn = Sequence.class;
+                break;
+            case SET:
+                metaReturn = Set.class;
+                break;
+            default:
+                try {
+                    metaReturn = Class.forName(meta.type());
+                } catch (ClassNotFoundException e) {
+                    EASyLoggerFactory.INSTANCE.getLogger(ReflectionOperationDescriptor.class, 
+                        "returnType class not found: " + meta.type());
+                }
+                break;
+            }
+            if (null != metaReturn && returnType.isAssignableFrom(metaReturn)) {
+                returnType = metaReturn;
+            }
         }
         setReturnType(ReflectionResolver.resolveType(returnType, getReturnGenerics()));
     }
@@ -561,9 +580,9 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
      */
     protected Class<?>[] getReturnGenerics() {
         Class<?>[] result = null;
-        OperationMeta opMeta = method.getAnnotation(OperationMeta.class);
+        ReturnGenerics opMeta = method.getAnnotation(ReturnGenerics.class);
         if (null != opMeta) {
-            result = opMeta.returnGenerics();
+            result = opMeta.value();
         }
         return result;
     }
@@ -618,10 +637,10 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
     @Override
     public boolean isOclCompliant() {
         boolean compliant = true;
-        OperationMeta meta = method.getAnnotation(OperationMeta.class);
+        NotOclCompliant meta = method.getAnnotation(NotOclCompliant.class);
         if (null != meta) {
             String name = getName();
-            String[] not = meta.notOclCompliant();
+            String[] not = meta.value();
             for (int i = 0; compliant && i < not.length; i++) {
                 compliant = !name.equals(not[i]);
             }

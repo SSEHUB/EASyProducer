@@ -5,7 +5,9 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(name = Constants.TYPE_INTEGER, equiv = Integer.class, nAssign = PseudoReal.class)
+@ClassEquivalentTo(Integer.class)
+@ClassNotAssignable(PseudoReal.class)
+@ClassMeta(name = Constants.TYPE_INTEGER)
 public class PseudoInteger extends PseudoReal {
 
     @DefaultValue
@@ -82,7 +84,7 @@ public class PseudoInteger extends PseudoReal {
      * 
      * @param i1 the first integer to be considered
      * @param i2 the second integer to be considered
-     * @return i1 < i2
+     * @return i1 &lt; i2
      */
     @OperationMeta(name = Constants.LESS_THEN, opType = OperationType.INFIX)
     public static boolean lessThan(int i1, int i2) {
@@ -94,7 +96,7 @@ public class PseudoInteger extends PseudoReal {
      * 
      * @param i1 the first integer to be considered
      * @param i2 the second integer to be considered
-     * @return i1 <= i2
+     * @return i1 &lt;= i2
      */
     @OperationMeta(name = Constants.LESS_THEN_EQUALS, opType = OperationType.INFIX)
     public static boolean lessEqualThan(int i1, int i2) {
@@ -106,7 +108,7 @@ public class PseudoInteger extends PseudoReal {
      * 
      * @param i1 the first integer to be considered
      * @param i2 the second integer to be considered
-     * @return i1 >= i2
+     * @return i1 &gt;= i2
      */
     @OperationMeta(name = Constants.GREATER_THEN_EQUALS, opType = OperationType.INFIX)
     public static boolean greaterEqualThan(int i1, int i2) {
@@ -118,7 +120,7 @@ public class PseudoInteger extends PseudoReal {
      * 
      * @param i1 the first integer to be considered
      * @param i2 the second integer to be considered
-     * @return i1 >= i2
+     * @return i1 &gt; i2
      */
     @OperationMeta(name = Constants.GREATER_THEN, opType = OperationType.INFIX)
     public static boolean greaterThan(int i1, int i2) {

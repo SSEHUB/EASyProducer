@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.instantiation.rt.core.model.rtVil.types;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.ClassEquivalentTo;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.IRtVilConcept;
@@ -24,7 +25,8 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.IRtVilConcept;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(name = Constants.TYPE_RT_VIL_CONCEPT, equiv = IRtVilConcept.class)
+@ClassEquivalentTo(IRtVilConcept.class)
+@ClassMeta(name = Constants.TYPE_RT_VIL_CONCEPT)
 public class RtVilConceptType implements IVilType {
 
     /**

@@ -23,7 +23,7 @@ import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFil
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -46,7 +46,7 @@ public class Javac extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case that artifact creation fails
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> javac(Path source, Path target, Map<String, Object> other) 
         throws VilException {
         return javac(source.selectAll(), target, other);
@@ -61,7 +61,7 @@ public class Javac extends AbstractFileInstantiator {
      * @return the created artifacts
      * @throws VilException in case that artifact creation fails
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> javac(Collection<FileArtifact> source, Path target, Map<String, Object> other) 
         throws VilException {
         long timestamp = PathUtils.normalizedTime();
@@ -113,10 +113,10 @@ public class Javac extends AbstractFileInstantiator {
 
     /**
      * Gets the Java&trade; programming language compiler provided
-     * with this platform. <br/>
-     * If Java cannot find the compiler, this method will also try to use the <b><tt>JAVA_HOME</tt></b> variable
+     * with this platform. <br>
+     * If Java cannot find the compiler, this method will also try to use the <b><code>JAVA_HOME</code></b> variable
      * to detect the compiler.
-     * @return The Java&trade; programming language compiler or <tt>null</tt> if the compiler could not be found.
+     * @return The Java&trade; programming language compiler or <b>null</b> if the compiler could not be found.
      */
     private static synchronized JavaCompiler getJavaCompiler() {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();

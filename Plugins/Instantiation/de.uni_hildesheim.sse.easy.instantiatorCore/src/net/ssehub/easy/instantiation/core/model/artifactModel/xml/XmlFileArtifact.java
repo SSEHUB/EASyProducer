@@ -51,6 +51,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -172,7 +173,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
     
     @Override
-    @OperationMeta(returnGenerics = FragmentArtifact.class)
+    @ReturnGenerics(FragmentArtifact.class)
     public Set<? extends FragmentArtifact> selectAll() {
         XmlElement[] elements = null;
         if (this.rootElement != null) {
@@ -223,7 +224,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @return Set of all childs of the root element.
      * @throws VilException 
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<? extends XmlElement> selectChilds() throws VilException {
         XmlElement[] elements = null;
         if (this.rootElement != null) {
@@ -453,7 +454,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             } while (null != line);
             reader.close();
         } catch (IOException e) {
-            IOUtils.closeQuietly(reader);
+            net.ssehub.easy.basics.io.FileUtils.closeQuietly(reader);
             // don't care for exception
         }
         return lineEndedComments;
@@ -645,19 +646,19 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
 
     @Override
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByName(String name) throws VilException {
         return this.rootElement.selectByName(name);
     }
 
     @Override
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByPath(String path) throws VilException {
         return PathUtils.selectByPath(this, PathUtils.normalize(path));
     }
 
     @Override
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByXPath(String path) throws VilException {
         return PathUtils.selectByXPath(path, doc, this);
     }
@@ -671,7 +672,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @return Set of XmlElements matching the regEx.
      * @throws VilException in case that invalid Elements are used.
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByRegEx(String regEx) throws VilException {
         if (this.rootElement == null) {
             throw new VilException("Root Element does not exist", 30003);

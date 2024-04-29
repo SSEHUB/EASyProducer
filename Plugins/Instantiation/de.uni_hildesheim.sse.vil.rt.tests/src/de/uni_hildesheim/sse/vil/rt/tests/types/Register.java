@@ -23,8 +23,8 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegisteredStringValueProvider;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionResolver;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeHelper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -117,8 +117,8 @@ public class Register {
 
         @Override
         public Class<?>[] getReturnGenerics(Method method) {
-            OperationMeta annotation = method.getAnnotation(OperationMeta.class);
-            return null == annotation ? null : annotation.returnGenerics();
+            ReturnGenerics annotation = method.getAnnotation(ReturnGenerics.class);
+            return null == annotation ? null : annotation.value();
         }
 
         @Override

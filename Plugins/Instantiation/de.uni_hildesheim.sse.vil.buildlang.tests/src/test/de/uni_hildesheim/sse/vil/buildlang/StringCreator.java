@@ -26,6 +26,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
@@ -60,7 +61,7 @@ public class StringCreator implements IVilType, IStringValueProvider {
      * 
      * @return the iterator
      */
-    @OperationMeta(returnGenerics = String.class)
+    @ReturnGenerics(String.class)
     public Iterator<String> strings() {
         List<String> tmp = new ArrayList<String>();
         tmp.add("1");
@@ -81,7 +82,7 @@ public class StringCreator implements IVilType, IStringValueProvider {
      * @param weights unused
      * @return combination of strings and weights
      */
-    @OperationMeta(returnGenerics = {String.class, Map.class, String.class, Double.class})
+    @ReturnGenerics({String.class, Map.class, String.class, Double.class})
     public Map<String, Map<String, Double>> mapStrings(String string, 
         @ParameterMeta(generics = {String.class, Double.class})
         Map<String, Double> weights) {

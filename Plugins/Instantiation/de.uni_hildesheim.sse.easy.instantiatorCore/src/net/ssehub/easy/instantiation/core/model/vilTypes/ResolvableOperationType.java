@@ -20,7 +20,7 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(equiv = IMetaOperation.class)
+@ClassEquivalentTo(IMetaOperation.class)
 public class ResolvableOperationType implements IVilType {
     
 }

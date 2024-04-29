@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnType.ReturnTypeKind;
 
 /**
  * Defines the interface representing a sequence. The iterator
@@ -56,15 +57,19 @@ public interface Sequence<T> extends Collection<T> {
     public T get(int index);
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class, returnType = Sequence.class)
+    @ReturnGenerics(IVilType.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
     public Sequence<T> selectByType(TypeDescriptor<?> type);
 
     @Override
-    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"})
     public Sequence<T> selectByKind(TypeDescriptor<?> type);
 
     @Override
-    @OperationMeta(returnGenerics = IVilType.class, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> typeReject(TypeDescriptor<?> type);
 
     /**
@@ -72,7 +77,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param sequence the elements to be excluded
      * @return this set without the elements in <code>set</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> excluding(Collection<T> sequence);
 
     /**
@@ -80,7 +85,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param set the elements to be appended
      * @return this set including the elements in <code>set</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> append(Collection<T> set);
 
     /**
@@ -88,7 +93,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param seq the elements to be appended
      * @return this set including the elements in <code>seq</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> union(Sequence<T> seq);
 
     /**
@@ -97,7 +102,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param element the element to be added
      * @return <code>element</code>
      */
-    @OperationMeta(genericArgument = {0 })
+    @GenericArguments(0)
     public T add(T element);
     
     /**
@@ -109,23 +114,28 @@ public interface Sequence<T> extends Collection<T> {
     public boolean remove(T element);
     
     @Override
-    @OperationMeta(useGenericParameter = 0, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(useGenericParameter = 0)
     public Sequence<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useGenericParameter = 0, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(useGenericParameter = 0)
     public Sequence<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useParameter = 0, flatten = true, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useParameter = 0, flatten = true)
     public Set<?> closure(ExpressionEvaluator evaluator) throws VilException; // always set
     
     @Override
-    @OperationMeta(useParameter = 0, flatten = true, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(useParameter = 0, flatten = true)
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = Integer.MAX_VALUE, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(useParameter = Integer.MAX_VALUE)
     public Sequence<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
     
     /**
@@ -141,7 +151,7 @@ public interface Sequence<T> extends Collection<T> {
      * 
      * @return the sorted sequence
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> sortAlpha();
 
     /**
@@ -151,7 +161,9 @@ public interface Sequence<T> extends Collection<T> {
      * @return the selected elements
      * @throws VilException in case that selection fails
      */
-    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    @NotOclCompliant("sort")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"sortedBy", "sort"})
     public Sequence<T> sortedBy(ExpressionEvaluator evaluator) throws VilException;
 
     /**
@@ -159,7 +171,9 @@ public interface Sequence<T> extends Collection<T> {
      * 
      * @return the reverted sequence
      */
-    @OperationMeta(name = {"reverse", "revert"}, notOclCompliant = "revert", returnGenerics = IVilType.class)
+    @NotOclCompliant("revert")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"reverse", "revert"})
     public Sequence<T> revert();
     
     /**
@@ -192,7 +206,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param other the second sequence to map against
      * @return the mapping (key is taken from this sequence, value from <code>other</code>)
      */
-    @OperationMeta(returnGenerics = {IVilType.class, IVilType.class })
+    @ReturnGenerics({IVilType.class, IVilType.class })
     public Map<T, T> mapSequence(Sequence<T> other);
 
     /**
@@ -203,7 +217,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param other the second sequence to map against
      * @return the mapping (key is taken from this sequence, value from <code>other</code>)
      */
-    @OperationMeta(returnGenerics = {IVilType.class, IVilType.class })
+    @ReturnGenerics({IVilType.class, IVilType.class })
     public Map<T, T> mapAny(Sequence<T> other);
     
     /**
@@ -214,7 +228,8 @@ public interface Sequence<T> extends Collection<T> {
     @Invisible
     public java.util.List<T> toMappedList();
 
-    @OperationMeta(useGenericParameter = 0, flatten = true, returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(useGenericParameter = 0, flatten = true)
     @Override
     public Sequence<?> flatten() throws VilException;
 
@@ -224,7 +239,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param object the object to append
      * @return the combined sequence
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> append(T object);
     
     /**
@@ -233,7 +248,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param object the object to prepend
      * @return the combined sequence
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> prepend(T object);
 
     /**
@@ -243,7 +258,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param object the object to insert
      * @return the combined sequence
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> insertAt(int index, T object);
     
     /**
@@ -253,7 +268,7 @@ public interface Sequence<T> extends Collection<T> {
      * @param upper the end index where the sub-sequence shall end
      * @return the sub-sequence
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Sequence<T> subSequence(int lower, int upper); 
 
     /**
@@ -321,7 +336,8 @@ public interface Sequence<T> extends Collection<T> {
     public T removeLast();
 
     @Override
-    @OperationMeta(name = "clone", returnType = Sequence.class)
+    @ReturnType(kind = ReturnTypeKind.SEQUENCE)
+    @OperationMeta(name = "clone")
     public Sequence<T> cloneCollection();
 
 }

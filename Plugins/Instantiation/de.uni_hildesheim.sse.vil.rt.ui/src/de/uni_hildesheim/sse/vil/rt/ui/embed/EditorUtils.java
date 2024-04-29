@@ -132,7 +132,7 @@ public class EditorUtils implements IEditorCreator {
      * 
      * @param file the file representing the resource
      * @param parent the parent UI component
-     * @param the editor viewer
+     * @return the editor viewer
      */
     public static IEmbeddedEditor embedRtVilEditor(final java.net.URI file, Composite parent) {
         RtVilActivator activator = RtVilActivator.getInstance();

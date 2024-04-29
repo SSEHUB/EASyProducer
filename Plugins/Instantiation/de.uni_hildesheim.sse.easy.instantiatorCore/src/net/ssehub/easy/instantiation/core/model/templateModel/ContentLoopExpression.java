@@ -121,7 +121,7 @@ public class ContentLoopExpression extends InContentExpression implements IExpre
      * 
      * @param index the 0-based index of the expression
      * @return the expression
-     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getBodyExpressionsCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionsCount()}</code>
      */
     @Override
     public Expression getExpression(int index) {

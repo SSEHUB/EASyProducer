@@ -6,7 +6,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -54,7 +54,7 @@ public class ClassFileArtifact extends FileArtifact {
      * 
      * @return the annotations
      */
-    @OperationMeta(returnGenerics = JavaClass.class)
+    @ReturnGenerics(JavaClass.class)
     public Set<JavaClass> classes() {
         return new ArraySet<JavaClass>(null, JavaClass.class);
     }

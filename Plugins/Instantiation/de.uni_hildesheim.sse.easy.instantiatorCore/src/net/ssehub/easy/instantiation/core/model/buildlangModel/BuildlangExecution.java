@@ -94,6 +94,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReflectionTypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -101,9 +102,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configura
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes;
 
 /**
- * Executes a build language project. Please note that for full
- * functionality, {@link #setExpressionParser(IExpressionParser)}
- * must be called appropriately.
+ * Executes a build language project.
  * 
  * @author Holger Eichelberger
  */
@@ -261,7 +260,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     }
     
     /**
-     * Does common initializations based on already set values (requires {@link #environment) to be set properly).
+     * Does common initializations based on already set values (requires {@link #environment} to be set properly).
      */
     private void initialize() {
         this.matchResolver = new MatchResolver(environment, getExpressionParser(), this);
@@ -1482,7 +1481,8 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
      * Creates the actual result of executing a {@link MapExpression}.
      * 
      * @param mapType the type of the map expression 
-     * @param result the collected results (may be <b>null</b> if <code>type</code> is {@link TypeDescriptor#VOID})
+     * @param result the collected results (may be <b>null</b> if <code>type</code> is 
+     * {@link ReflectionTypeDescriptor#VOID})
      * @param failed whether the actual execution failed
      * @return the return object for the map
      */

@@ -58,7 +58,7 @@ public class CompositeExpression extends Expression implements IExpressionIterat
      * 
      * @param index the 0-based index of the expression
      * @return the expression
-     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionListCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionsCount()}</code>
      */
     public Expression getExpression(int index) {
         return expressionList.get(index);
@@ -69,7 +69,7 @@ public class CompositeExpression extends Expression implements IExpressionIterat
      * 
      * @param index the 0-based index of the expression
      * @param expr the replacing expression
-     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionListCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index&lt;0 || index&gt;={@link #getExpressionsCount()}</code>
      */
     public void setExpression(int index, Expression expr) {
         expressionList.set(index, expr);

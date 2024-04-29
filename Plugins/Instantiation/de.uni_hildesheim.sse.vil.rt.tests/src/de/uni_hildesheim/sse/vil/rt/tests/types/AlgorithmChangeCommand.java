@@ -17,7 +17,7 @@ package de.uni_hildesheim.sse.vil.rt.tests.types;
 
 import java.util.Map;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 
 /**
  * Represents an algorithm change command.
@@ -91,7 +91,7 @@ public class AlgorithmChangeCommand extends Command {
      * 
      * @return the map
      */
-    @OperationMeta(returnGenerics = {Integer.class, String.class })
+    @ReturnGenerics({Integer.class, String.class})
     public Map<Integer, String> getMap() {
         return map;
     }

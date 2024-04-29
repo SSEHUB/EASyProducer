@@ -210,7 +210,7 @@ public class CallExpression extends AbstractCallExpression implements IArgumentP
     }
     
     /**
-     * Returns whether the field meta type shall be checked in {@link #resolveOperation()}.
+     * Returns whether the field meta type shall be checked.
      * 
      * @return <code>true</code>
      */

@@ -18,6 +18,7 @@ import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFil
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -45,7 +46,7 @@ public class Ant extends AbstractFileInstantiator {
      * @return the created artefacts
      * @throws VilException in case of artifact / parameter problems
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> ant(Path root, String buildFilePath, String buildtarget) 
         throws VilException {
 

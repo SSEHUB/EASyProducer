@@ -105,7 +105,7 @@ public class Project implements IVilType, IStringValueProvider {
      * 
      * @return all files
      */
-    @OperationMeta(returnGenerics = { FileArtifact.class } )
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> selectAllFiles() {
         return artifactModel.selectByType(FileArtifact.class, false);
     }
@@ -115,7 +115,7 @@ public class Project implements IVilType, IStringValueProvider {
      * 
      * @return all folders
      */
-    @OperationMeta(returnGenerics = { FolderArtifact.class } )
+    @ReturnGenerics(FolderArtifact.class)
     public Set<FolderArtifact> selectAllFolders() {
         return artifactModel.selectAllFolders();
     }
@@ -157,7 +157,7 @@ public class Project implements IVilType, IStringValueProvider {
      * 
      * @return the local artifacts
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> getLocalProjectArtifacts() {
         return getPath().selectAll();
     }
@@ -169,7 +169,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> selectByType(Class<?> type) {
         return artifactModel.selectByType(type, false);
     }
@@ -181,7 +181,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> selectByKind(Class<?> type) {
         return artifactModel.selectByKind(type, false);
     }
@@ -193,7 +193,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> typeReject(Class<?> type) {
         return artifactModel.selectByKind(type, true);
     }
@@ -204,7 +204,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @param name the regular name pattern for artifact selection
      * @return the selected artifacts
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> selectByName(String name) {
         return artifactModel.selectByName(name);
     }
@@ -240,7 +240,7 @@ public class Project implements IVilType, IStringValueProvider {
      * @return the predecessors
      * @throws VilException in case that creating / scanning the project base fails
      */
-    @OperationMeta(returnGenerics = Project.class)
+    @ReturnGenerics(Project.class)
     public Set<Project> predecessors() throws VilException {
         Project[] tmp;
         if (null != descriptor) {

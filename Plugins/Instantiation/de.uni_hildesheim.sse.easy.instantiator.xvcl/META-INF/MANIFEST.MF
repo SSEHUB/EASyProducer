@@ -3,14 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: XVCL instantiator
 Bundle-SymbolicName: net.ssehub.easy.instantiation.xvcl;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.xvcl
-Bundle-Version: 3.3.0.4
+Bundle-Version: 1.3.10.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/instantiator.xml
 Bundle-ClassPath: .
-Require-Bundle: net.ssehub.easy.instantiation.core;bundle-version="0.0.1",
+Require-Bundle: net.ssehub.easy.instantiation.core,
  org.eclipse.core.runtime,
- net.ssehub.easy.varModel;bundle-version="0.5.5",
+ net.ssehub.easy.varModel,
  net.ssehub.easy.libs.xvcl;visibility:=reexport
 Import-Package: org.osgi.service.component
 Bundle-ActivationPolicy: lazy

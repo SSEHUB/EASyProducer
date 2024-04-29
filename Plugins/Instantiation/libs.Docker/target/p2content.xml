@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='net.ssehub.easy.libs.docker' version='3.2.7' singleton='false' generation='2'>
+    <update id='net.ssehub.easy.libs.docker' range='[0.0.0,3.2.7)' severity='0'/>
+    <properties size='6'>
+      <property name='org.eclipse.equinox.p2.name' value='Docker'/>
+      <property name='org.eclipse.equinox.p2.provider' value='SSE, University of Hildesheim'/>
+      <property name='maven-groupId' value='net.ssehub.easy'/>
+      <property name='maven-artifactId' value='net.ssehub.easy.libs.docker'/>
+      <property name='maven-version' value='3.2.7'/>
+      <property name='maven-type' value='eclipse-plugin'/>
+    </properties>
+    <provides size='18'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='net.ssehub.easy.libs.docker' version='3.2.7'/>
+      <provided namespace='osgi.bundle' name='net.ssehub.easy.libs.docker' version='3.2.7'/>
+      <provided namespace='java.package' name='com.github.dockerjava.api' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.api.async' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.api.command' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.api.exception' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.api.model' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core.async' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core.command' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core.dockerfile' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core.exception' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core.exec' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.core.util' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.httpclient5' version='0.0.0'/>
+      <provided namespace='java.package' name='com.github.dockerjava.transport' version='0.0.0'/>
+      <provided namespace='osgi.identity' name='net.ssehub.easy.libs.docker' version='3.2.7'>
+        <properties size='1'>
+          <property name='type' value='osgi.bundle'/>
+        </properties>
+      </provided>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='8'>
+      <required namespace='osgi.bundle' name='net.ssehub.easy.libs.slf4j.api' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='net.ssehub.easy.libs.commons.io' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='net.ssehub.easy.libs.commons.lang' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='com.google.guava' range='27.1.0'/>
+      <required namespace='osgi.bundle' name='net.ssehub.easy.libs.commons.codec' range='1.14.0'/>
+      <required namespace='osgi.bundle' name='com.sun.jna' range='5.6.0'/>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.8))'>
+        <description>
+          net.ssehub.easy.libs.docker
+        </description>
+      </requiredProperties>
+      <required namespace='org.eclipse.equinox.p2.iu' name='net.ssehub.easy.libs.docker.source' range='[3.2.7,3.2.7]' optional='true'>
+        <filter>
+          (org.eclipse.update.install.sources=true)
+        </filter>
+      </required>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='net.ssehub.easy.libs.docker' version='3.2.7'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: net.ssehub.easy.libs.docker&#xA;Bundle-Version: 3.2.7&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>

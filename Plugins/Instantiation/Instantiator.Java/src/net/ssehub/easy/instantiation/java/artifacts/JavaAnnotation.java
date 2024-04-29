@@ -9,8 +9,8 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Tex
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -100,7 +100,7 @@ public class JavaAnnotation extends JavaFragmentArtifact {
      * 
      * @return the fields
      */
-    @OperationMeta(returnGenerics = String.class)
+    @ReturnGenerics(String.class)
     public Set<String> fields() {
         java.util.Set<String> fields = this.fields.keySet();
         return new ArraySet<String>(fields.toArray(new String[fields.size()]), PseudoString.class);

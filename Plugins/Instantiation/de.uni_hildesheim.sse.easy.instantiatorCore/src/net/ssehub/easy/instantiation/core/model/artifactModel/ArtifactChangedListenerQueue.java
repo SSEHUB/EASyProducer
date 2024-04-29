@@ -27,7 +27,7 @@ public class ArtifactChangedListenerQueue implements IArtifactChangedListenerQue
     }
     
     /**
-     * Triggers the {@link IArtifactChangedListener#artifactChanged()} method on all
+     * Triggers the {@link IArtifactChangedListener#artifactChanged(Object)} method on all
      * registered listeners.
      * 
      * @param cause the cause for the event

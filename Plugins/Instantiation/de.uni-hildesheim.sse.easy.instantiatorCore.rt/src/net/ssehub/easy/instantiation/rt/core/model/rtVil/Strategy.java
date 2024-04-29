@@ -120,7 +120,8 @@ public class Strategy extends Rule implements IVariableDeclarationReceiver<Varia
      * 
      * @param index the 0-based index of the variable declaration to be returned
      * @return the specified variable declaration
-     * @throws IndexOutOfBoundsException if <code>index < 0 || index &gt;= {@link #getVariableDeclarationCount()}</code>
+     * @throws IndexOutOfBoundsException if <code>index &lt; 0 
+     * || index &gt;= {@link #getVariableDeclarationCount()}</code>
      */
     public VariableDeclaration getVariableDeclaration(int index) {
         if (null == declarations) {

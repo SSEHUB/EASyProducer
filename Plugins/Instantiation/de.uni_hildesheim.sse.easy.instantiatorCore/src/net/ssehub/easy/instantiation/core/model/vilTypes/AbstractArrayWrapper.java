@@ -26,7 +26,7 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
      * @param array the wrapped array
      * @param set does this type  represent a set or a sequence
      * @param registry the type registry to use for the conversion of <code>param</code>
-     * @param param the type parameter characterizing <T>
+     * @param param the type parameter characterizing &lt;T&gt;
      */
     public AbstractArrayWrapper(T[] array, TypeRegistry registry, boolean set, Class<?> param) {
         this.array = array;
@@ -39,7 +39,7 @@ public abstract class AbstractArrayWrapper<T> extends AbstractCollectionWrapper<
      * 
      * @param array the wrapped array
      * @param set does this type represent a set or a sequence
-     * @param params the type parameter characterizing <T>
+     * @param params the type parameter characterizing &lt;T&gt;
      */
     public AbstractArrayWrapper(T[] array, boolean set, TypeDescriptor<?>... params) {
         this.array = array;

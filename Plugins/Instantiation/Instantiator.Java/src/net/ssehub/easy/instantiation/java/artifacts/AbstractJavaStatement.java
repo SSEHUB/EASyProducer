@@ -26,11 +26,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * Super class for nested elements of a {@link JavaMethod}.
- * Should not be visible in VIL, thus, do not register this class.
+ * 
  * @author El-Sharkawy
- *
  */
-abstract class AbstractJavaStatement extends JavaParentFragmentArtifact {
+public abstract class AbstractJavaStatement extends JavaParentFragmentArtifact { // public for JDK 17 reflection
 
     private String attributeName;
     private ExpressionStatement expression;

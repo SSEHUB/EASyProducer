@@ -344,9 +344,9 @@ public class Executor {
     /**
      * Adds a custom argument. If possible, this method maps automatically
      * <ul>
-     *  <li><i>java.util.Set<T></i> to <code>setOf<T></code></li>
-     *  <li><i>java.util.List<T></i> to <code>sequenceOf<T></code></li>
-     *  <li><i>java.util.Map<K, V></i> to <code>mapOf<K, V></code></li>
+     *  <li><i>java.util.Set&lt;T&gt;</i> to <code>setOf&lt;T&gt;</code></li>
+     *  <li><i>java.util.List&lt;T&gt;</i> to <code>sequenceOf&lt;T&gt;</code></li>
+     *  <li><i>java.util.Map&lt;K, V&gt;</i> to <code>mapOf&lt;K, V&gt;</code></li>
      * </ul>
      * 
      * @param name the name of the argument
@@ -481,7 +481,7 @@ public class Executor {
     }
     
     /**
-     * Returns the configuration form {@value args}.
+     * Returns the configuration form {@code args}.
      * 
      * @param args the (actual) execution arguments
      * @return the configuration
@@ -588,7 +588,7 @@ public class Executor {
      * @param tracer the actual tracer instance
      * @param executor the executor, which emitted the execution result
      * @throws VilException can be thrown to indicate in a hard way that artifact operations or script execution failed
-     * @see #completeExecutionError(StringBuilder)
+     * @see #completeExecutionError(StringBuilder, RuleExecutionResult)
      */
     protected void handleExecutionResult(RuleExecutionResult result, ITracer tracer, BuildlangExecution executor) 
         throws VilException {

@@ -36,7 +36,7 @@ import net.ssehub.easy.varModel.varModel.testSupport.DefaultConfiguration;
 public abstract class AbstractExecutionTest extends AbstractTest {
 
     /**
-     * Creates a file object relative to {@link #DIR} (not a file).
+     * Creates a file object relative to {@link #getTestFolder()} (not a file).
      * 
      * @param name the name of the file (excluding ".trc")
      * @return the file

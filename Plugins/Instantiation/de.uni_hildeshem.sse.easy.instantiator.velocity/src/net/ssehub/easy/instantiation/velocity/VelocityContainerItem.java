@@ -27,7 +27,7 @@ public class VelocityContainerItem extends VelocityContextItem {
     /**
      * Single constructor for this class.
      * @param variableName The name of the container.
-     * @param values the nested values, must not be <tt>null</tt>.
+     * @param values the nested values, must not be <b>null</b>.
      */
     public VelocityContainerItem(String variableName, List<Object> values) {
         super(variableName, values);

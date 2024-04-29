@@ -7,7 +7,7 @@
  * <ul>
  *   <li>{@link 
  *   net.ssehub.easy.instantiation.core.model.artifactModel.Path path expressions} for 
- *   denoting file system and language-specific paths.
+ *   denoting file system and language-specific paths.</li>
  *   <li>{@link 
  *   net.ssehub.easy.instantiation.core.model.artifactModel.SimpleArtifact simple artifacts},
  *   which cannot be decomposed. Typically, generic folders and simple generic components shall be represented
@@ -53,20 +53,20 @@
  * an artifact method returning a collection must be annotated by 
  * {@link net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta#returnGenerics()} in order
  * to defined the actual types used in the collection (this is not available via Java mechanisms). Further, operations 
- * and  classes may be marked by the following annotations:<li>
- * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.Conversion Conversion} to indicate type 
+ * and  classes may be marked by the following annotations:<ul>
+ * <li> {@link net.ssehub.easy.instantiation.core.model.vilTypes.Conversion Conversion} to indicate type 
  *      conversion operations considered for automatic type conversion when calling methods from a VIL expression. These
- *      methods must be static, take one parameter of the source type and return the target type.</ul>
- * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta OperationMeta} for renaming
+ *      methods must be static, take one parameter of the source type and return the target type.</li>
+ * <li> {@link net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta OperationMeta} for renaming
  *      operations (for operator implementations), determining their operator type or, as mentioned above, making the 
- *      type parameters of a generic return type explicit. Basically, all three information types are optional.</ul>
- * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta ClassMeta} for renaming the 
- *      annotated class, i.e., hiding the Java implementation name.</ul>
- * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta ParameterMeta} for specifying the 
- *      generics of a parameter or turning a parameter into a named parameter with default values.</ul>
- * <ul> {@link net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue DefaultValue} for specifying the
- *      default values of parameters or the default value of a type.</ul>
- * </li>
+ *      type parameters of a generic return type explicit. Basically, all three information types are optional.</li>
+ * <li> {@link net.ssehub.easy.instantiation.core.model.vilTypes.ClassMeta ClassMeta} for renaming the 
+ *      annotated class, i.e., hiding the Java implementation name.</li>
+ * <li> {@link net.ssehub.easy.instantiation.core.model.vilTypes.ParameterMeta ParameterMeta} for specifying the 
+ *      generics of a parameter or turning a parameter into a named parameter with default values.</li>
+ * <li> {@link net.ssehub.easy.instantiation.core.model.vilTypes.DefaultValue DefaultValue} for specifying the
+ *      default values of parameters or the default value of a type.</li>
+ * </ul>
  * Collections may define generic iterator operations such as checking a condition or applying a 
  * transformation expression to each element. Therefore, a non-static operation on a collection receiving 
  * (at the moment exactly) one ExpressionEvaluator instance as parameter (possibly more parameters) will be
@@ -83,8 +83,8 @@
  * Basically, artifact or instantiator operations are identified by their name, the number, sequence and type of their 
  * parameter. However, some operations such as template processors may require an unlimited number of not previously
  * defined parameters. In this case, VIL allows to pass in named parameters. In the respective artifact or
- * instantiator operations, named parameters are represented by a <code>Map<String, Object></code> as last parameter 
- * which receives the names and the actual values of given named VIL parameters.
+ * instantiator operations, named parameters are represented by a <code>Map&lt;String, Object&gt;</code> as last 
+ * parameter which receives the names and the actual values of given named VIL parameters.
  * The interpretation of named parameters belongs to the respective method.<br>
  * Types implementing {@link net.ssehub.easy.instantiation.core.model.vilTypes.IActualTypeProvider} may
  * determine a more recent type during dynamic dispatch.

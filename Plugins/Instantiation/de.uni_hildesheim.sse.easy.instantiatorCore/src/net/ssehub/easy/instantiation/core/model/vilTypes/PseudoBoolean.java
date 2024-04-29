@@ -6,7 +6,8 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
  * @author Holger Eichelberger
  *
  */
-@ClassMeta(name = Constants.TYPE_BOOLEAN, equiv = Boolean.class)
+@ClassEquivalentTo(Boolean.class)
+@ClassMeta(name = Constants.TYPE_BOOLEAN)
 public class PseudoBoolean implements IVilType {
 
     @DefaultValue
@@ -23,7 +24,7 @@ public class PseudoBoolean implements IVilType {
      * 
      * @param b1 the first boolean to be considered
      * @param b2 the second boolean to be considered
-     * @return b1 & b2
+     * @return b1 &amp; b2
      */
     @OperationMeta(opType = OperationType.INFIX)
     public static boolean and(boolean b1, boolean b2) {

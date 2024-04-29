@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="net.ssehub.easy.libs.aspectj.tools" default="jar" basedir=".">
+    <property file="${user.home}/migration.properties"/>
 	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
@@ -16,15 +17,16 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar">
+        <maven pomFile="pom.xml" goal="deploy"/>
 		<!-- Copy needed non class files -->
-        <delete file="${build.jar.dir}/${ant.project.name}.jar"/>
+        <!--<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
 		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" manifest="META-INF/MANIFEST.MF">
             <fileset dir="." includes="**/*.jar"/>
-	    </jar>
+	    </jar>-->
 		<!-- Copy created jar to global EASy Plug-ins directory -->
-		<copy todir="${easy.bundles.dir}">
+		<!--<copy todir="${easy.bundles.dir}">
 			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
 		</copy>
-		<echo message="ASPECTJ-LIB ${build.jar.dir}/${ant.project.name}.jar"/>
+		<echo message="ASPECTJ-LIB ${build.jar.dir}/${ant.project.name}.jar"/>-->
     </target>
 </project>

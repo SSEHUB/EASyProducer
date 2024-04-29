@@ -90,7 +90,7 @@ public class VtlEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, IL
     /**
      * Tries finding <code>element</code> in the defs of <code>unit</code>.
      * 
-     * @param defs the unit to search
+     * @param unit the unit to search
      * @param element the element to search for
      * @return the found EObject or <b>null</b>
      */

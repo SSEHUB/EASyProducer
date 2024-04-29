@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="de.uni_hildesheim.sse.vil.expressions.ui" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Einstellungen fuer dieses Projekt -->
 	<property name="src.dir" value="src"/>
@@ -41,23 +43,24 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<echo> message="${toString:libs.dslCore.ui}" </echo>
+		<!--<echo> message="${toString:libs.dslCore.ui}" </echo>
 		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<src path="${src.gen.dir}" />
 			<classpath refid="includes" />	
-		</javac>
+		</javac>-->
     </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
+        <maven pomFile="pom.xml" goal="deploy"/>
         <!-- Copy needed non class files -->
-		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
+		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
 				<include name="plugin.xml" />
 				<include name="icons/**/*" />
 				<include name="lib/**/*" />
 			</fileset>
 		</copy>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
+		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
     </target>
 </project>

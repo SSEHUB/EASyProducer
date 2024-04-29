@@ -38,7 +38,7 @@ public class ConsoleTracerFactory extends TracerFactory {
      * Constructs a new tracer factory which may emit tracer texts. Does not change the default
      * factory as opposed to {@link #ConsoleTracerFactory()}.
      * 
-     * @param emitTraceText whether text passed to {@link #trace(String)} shall be emitted
+     * @param emitTraceText whether text passed to {@link #tracer} shall be emitted
      */
     public ConsoleTracerFactory(boolean emitTraceText) {
         tracer = new StreamVilTracer(emitTraceText);

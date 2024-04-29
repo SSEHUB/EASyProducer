@@ -21,7 +21,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Bin
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 
@@ -95,7 +95,7 @@ public class JavaAttribute extends JavaParentFragmentArtifact {
      * @return An ArraySet with all annotations
      */
     @SuppressWarnings("unchecked")
-    @OperationMeta(returnGenerics = JavaAnnotation.class)
+    @ReturnGenerics(JavaAnnotation.class)
     public Set<JavaAnnotation> annotations() {
         return annotations(fieldDeclaration.modifiers());
     }

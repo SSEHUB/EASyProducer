@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="de.uni_hildesheim.sse.vil.buildlang" default="jar" basedir=".">
 	<!-- import von globalen Properties Einstellungen -->
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
@@ -40,17 +41,18 @@
 	
 	<!-- Compile all files without test classes -->
 	<target name="compile" depends="init">
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
+		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
 			<src path="${src.gen.dir}" />
 			<src path="${xtend.gen.dir}" />
 			<classpath refid="includes" />	
-		</javac>
+		</javac>-->
     </target>
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
+        <maven pomFile="pom.xml" goal="deploy"/>
         <!-- Copy needed xtext files -->
-		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
+		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
             <fileset dir="${basedir}">
                 <include name="OSGI-INF/**/*" />
                 <include name="plugin.xml" />
@@ -74,10 +76,10 @@
             <classpath path="${build.classes.dir}"/>
         </easyJavadoc>
         <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
+        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>-->
 		<!-- Copy created jar to global EASy Plug-ins directory -->
-		<copy todir="${easy.bundles.dir}">
+		<!--<copy todir="${easy.bundles.dir}">
 			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-		</copy>
+		</copy>-->
     </target>
 </project>

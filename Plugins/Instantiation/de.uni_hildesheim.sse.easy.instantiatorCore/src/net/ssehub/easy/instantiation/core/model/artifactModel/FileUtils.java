@@ -340,7 +340,7 @@ public class FileUtils {
         
         /**
          * Default handling of collected errors. If errors occurred, put them into a 
-         * combined {@link ArtifactException}.
+         * combined {@link VilException}.
          * 
          * @throws VilException thrown if errors were collected
          */
@@ -400,18 +400,18 @@ public class FileUtils {
     }
     
     /**
-     * Determines the destination of an artefact, which shall be copied/moved from a given source path (e.g. a pattern)
+     * Determines the destination of an artifact, which shall be copied/moved from a given source path (e.g. a pattern)
      * to a given target (folder). Considers sub folder structures, will not consider constant parts at the beginning of
      * a pattern. For instance:<br/>
      * 
-     * Elements of <tt>"src/foo/**&#47;/bar/*.java"</tt> will be copied to
-     * <tt>"targetFile/**&#47;/bar/*.java"</tt>
+     * Elements of <code>"src/foo/**&#47;/bar/*.java"</code> will be copied to
+     * <code>"targetFile/**&#47;/bar/*.java"</code>
      * 
      * <br/>
      * Part of the {@link #copyOrMove(Path, IFileSystemArtifact, boolean)} method.
-     * @param sourcePath The sourcepath, containing the sourceArtefact (may be a pattern). Must not be <tt>null</tt>.
-     * @param sourceArtefakt An artefact inside the given sourcePath. Must not be <tt>null</tt>
-     * @param targetFile The destination, should be a folder. Must not be <tt>null</tt>
+     * @param sourcePath The sourcepath, containing the sourceArtefact (may be a pattern). Must not be <b>null</b>.
+     * @param sourceArtefakt An artifact inside the given sourcePath. Must not be <b>null</b>
+     * @param targetFile The destination, should be a folder. Must not be <b>null</b>
      * @return The destination of the the file to be copied/moved.
      */
     private static File determineDestination(Path sourcePath, FileArtifact sourceArtefakt, File targetFile) {

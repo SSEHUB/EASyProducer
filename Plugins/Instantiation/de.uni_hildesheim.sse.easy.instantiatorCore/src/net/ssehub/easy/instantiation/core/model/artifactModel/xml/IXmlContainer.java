@@ -1,7 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.artifactModel.xml;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -18,7 +18,7 @@ public interface IXmlContainer {
      * @return the matching elements (may be empty)
      * @throws VilException in case invalid XmlElements are used.
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByPath(String path) throws VilException;
 
     /**
@@ -28,7 +28,7 @@ public interface IXmlContainer {
      * @return the matching elements (may be empty)
      * @throws VilException in case invalid XmlElements are used.
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByXPath(String path) throws VilException;
     
     /**
@@ -39,7 +39,7 @@ public interface IXmlContainer {
      * @return set with matching XmlElements.
      * @throws VilException in case that invalid Elements are used.
      */
-    @OperationMeta(returnGenerics = XmlElement.class)
+    @ReturnGenerics(XmlElement.class)
     public Set<XmlElement> selectByName(String name) throws VilException;
 
 }

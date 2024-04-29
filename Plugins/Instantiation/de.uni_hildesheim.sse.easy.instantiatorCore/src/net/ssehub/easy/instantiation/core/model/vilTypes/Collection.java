@@ -65,7 +65,8 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return <code>false</code> if it is empty, <code>true</code> else
      */
-    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
+    @NotOclCompliant("isNotEmpty")
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"})
     public boolean isNotEmpty();
     
     /**
@@ -230,7 +231,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the selected elements (the type will be adjusted to the actual
      *   type for <code>type</code>)
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Collection<T> selectByType(TypeDescriptor<?> type);
 
     /**
@@ -240,7 +241,8 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the selected elements (the type will be adjusted to the actual
      *   type for <code>type</code>)
      */
-    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"})
     public Collection<T> selectByKind(TypeDescriptor<?> type);
 
     /**
@@ -250,7 +252,7 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the selected elements (the type will be adjusted to the actual
      *   type for <code>type</code>)
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Collection<T> typeReject(TypeDescriptor<?> type);
 
     /**
@@ -310,7 +312,8 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return the set containing the elements of this collection
      */
-    @OperationMeta(name = {"asSequence", "toSequence"}, notOclCompliant = "asSequence")
+    @NotOclCompliant("asSequence")
+    @OperationMeta(name = {"asSequence", "toSequence"})
     public Sequence<T> asSequence();
 
     /**
@@ -318,7 +321,8 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * 
      * @return the set containing the elements of this collection (excluding duplicates)
      */
-    @OperationMeta(name = {"asSet", "toSet"}, notOclCompliant = "asSet")
+    @NotOclCompliant("asSet")
+    @OperationMeta(name = {"asSet", "toSet"})
     public Set<T> asSet();
     
     /**
@@ -337,7 +341,9 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the selected elements
      * @throws VilException in case that selection fails
      */
-    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    @NotOclCompliant("sort")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"sortedBy", "sort"})
     public Collection<T> sortedBy(ExpressionEvaluator evaluator) throws VilException;
 
     /**
@@ -347,7 +353,8 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
      * @return the aggregated value, <b>null</b> in case of no aggregation
      * @throws VilException in case that selection fails
      */
-    @OperationMeta(name = {"apply", "iterate"}, notOclCompliant = "apply", allowsAggregation = true)
+    @NotOclCompliant("apply")
+    @OperationMeta(name = {"apply", "iterate"}, allowsAggregation = true)
     public Object apply(ExpressionEvaluator evaluator) throws VilException;
     
     /**

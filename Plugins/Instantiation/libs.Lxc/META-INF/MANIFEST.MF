@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: LXC
 Bundle-SymbolicName: net.ssehub.easy.libs.lxc
 Automatic-Module-Name: net.ssehub.easy.libs.docker
-Bundle-Version: 1.1
+Bundle-Version: 1.1.0
 Bundle-ClassPath: commons-lang3-3.4.jar,
  gson-2.6.2.jar,
  hamcrest-core-1.3.jar,
@@ -32,5 +32,5 @@ Export-Package: au.com.jcloud.lxd,
  au.com.jcloud.lxd.service,
  au.com.jcloud.lxd.service.impl,
  au.com.jcloud.lxd.util
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: SSE, University of Hildesheim

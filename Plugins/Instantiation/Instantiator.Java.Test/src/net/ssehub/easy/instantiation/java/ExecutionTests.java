@@ -82,7 +82,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
 
     /**
      * Will test whether EASy is able to retrieve the Java&trade; compiler even
-     * if the <tt>java.home</tt> property is pointing to a wrong location.
+     * if the <code>java.home</code> property is pointing to a wrong location.
      * 
      * @throws IOException
      *             should not occur

@@ -14,7 +14,8 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(name = Constants.TYPE_STRING, equiv = String.class)
+@ClassEquivalentTo(String.class)
+@ClassMeta(name = Constants.TYPE_STRING)
 public class PseudoString implements IVilType {
 
     @DefaultValue
@@ -117,7 +118,7 @@ public class PseudoString implements IVilType {
      * @param regEx the delimiting regular expression
      * @return the splitted string
      */
-    @OperationMeta(returnGenerics = String.class)
+    @ReturnGenerics(String.class)
     public static Sequence<String> split(String string, String regEx) {
         Sequence<String> result;
         if (null == string || null == regEx) {
@@ -182,7 +183,7 @@ public class PseudoString implements IVilType {
      * Returns whether <code>string</code> represents an Integer value. (QVT)
      * 
      * @param string the string to test
-     * @return <code>true</code> if <code>string</code> represents an Integer value, <code>false</code else>
+     * @return <code>true</code> if <code>string</code> represents an Integer value, <code>false</code> else
      * @see #toInteger(String)
      */
     public static boolean matchInteger(String string) {
@@ -583,7 +584,7 @@ public class PseudoString implements IVilType {
      *     be treated as tokens.
      * @return the tokens in sequence of occurrence
      */
-    @OperationMeta(returnGenerics = String.class)
+    @ReturnGenerics(String.class)
     public static Sequence<String> tokenize(String string, String delimiters) {
         Sequence<String> result;
         if (null != string) {
@@ -790,7 +791,8 @@ public class PseudoString implements IVilType {
      * @param string the string to be turned into characters
      * @return the characters of <code>string</code> as string sequence
      */
-    @OperationMeta(returnGenerics = {String.class}, opType = OperationType.FUNCTION)
+    @ReturnGenerics(String.class)
+    @OperationMeta(opType = OperationType.FUNCTION)
     public static Sequence<String> characters(String string) {
         String[] res = new String[string.length()];
         for (int i = 0; i < res.length; i++) {
@@ -829,7 +831,7 @@ public class PseudoString implements IVilType {
      * 
      * @param string the string to compare
      * @param type the type to compare
-     * @return string != type.getName() && string != type.getQualifiedName()
+     * @return string != type.getName() &amp;&amp; string != type.getQualifiedName()
      */
     @OperationMeta(name = {Constants.UNEQUALITY, Constants.UNEQUALITY_ALIAS}, opType = OperationType.INFIX)
     public static boolean notEquals(String string, TypeDescriptor<?> type) {

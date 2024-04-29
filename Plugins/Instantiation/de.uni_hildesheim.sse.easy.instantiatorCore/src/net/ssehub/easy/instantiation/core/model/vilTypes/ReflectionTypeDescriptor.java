@@ -194,11 +194,14 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
             resolveFields();
             processInner(cls);
             ClassMeta meta = cls.getAnnotation(ClassMeta.class);
+            ClassNotAssignable metaNAssign = cls.getAnnotation(ClassNotAssignable.class);
             Instantiator inst = cls.getAnnotation(Instantiator.class);
             setName(getAlias(meta));
             Class<?> further = null;
+            if (null != metaNAssign) {
+                nAssign = metaNAssign.value();
+            }
             if (null != meta) {
-                nAssign = meta.nAssign();
                 further = meta.furtherOperations();
             }
             java.util.Map<String, OperationDescriptor> tmp = new HashMap<String, OperationDescriptor>();
@@ -236,7 +239,8 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 }
                 fd.add(new ReflectionFieldDescriptor(this, fields[f], name, null));
             }
-            if (null != field.getAnnotation(DefaultValue.class) && Modifier.isStatic(field.getModifiers())) {
+            if (null != field.getAnnotation(DefaultValue.class) 
+                    && Modifier.isStatic(field.getModifiers())) {
                 try {
                     defltValue = field.get(null);
                 } catch (IllegalArgumentException e) {
@@ -271,7 +275,9 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 Method method = methods[m];
                 int mod = method.getModifiers();
                 Conversion conv = method.getAnnotation(Conversion.class);
-                if (null != conv && !Modifier.isAbstract(mod) && Modifier.isStatic(mod) && Modifier.isPublic(mod)) {
+                boolean isOk = !Modifier.isAbstract(mod) && Modifier.isStatic(mod) && Modifier.isPublic(mod) 
+                    && !method.isBridge(); // no JDK 17 bridge defaults
+                if (null != conv && isOk) { 
                     if (Void.TYPE == method.getReturnType()) {
                         LOGGER.warn("conversion operations must return a value (" + method + "). Ignored.");
                     } else {
@@ -331,7 +337,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
                 Method[] methods = cls.getDeclaredMethods();
                 for (int m = 0; m < methods.length; m++) {
                     Method method = methods[m];
-                    if (enableMethod(method)) {
+                    if (enableMethod(method) && !method.isBridge()) { // no JDK 17 bridge defaults
                         addMethod(operations, method, instantiatorName);
                     }
                 }
@@ -443,7 +449,7 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
         OperationMeta meta = method.getAnnotation(OperationMeta.class);
         if (null != meta) {
             String[] names = meta.name();
-            if (null != names) {
+            if (ReflectionResolver.hasAnnotationValue(names)) {
                 for (int n = 0; n < names.length; n++) {
                     OperationDescriptor desc = createDescriptor(method, names[n], considerAsConstructor(method));
                     addOperation(operations, desc.getJavaSignature(), desc);
@@ -739,9 +745,9 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
     public boolean isInstance(Object object) {
         boolean ok = cls.isInstance(object);
         if (!ok) {
-            ClassMeta meta = cls.getAnnotation(ClassMeta.class);
-            if (null != meta && null != meta.equiv()) {
-                Class<?>[] equiv = meta.equiv();
+            ClassEquivalentTo meta = cls.getAnnotation(ClassEquivalentTo.class);
+            if (null != meta && null != meta.value()) {
+                Class<?>[] equiv = meta.value();
                 for (int e = 0; !ok && e < equiv.length; e++) {
                     ok = equiv[e].isInstance(object);
                 }
@@ -759,9 +765,9 @@ public class ReflectionTypeDescriptor <T> extends TypeDescriptor <T> {
             Class<?> resClass = object.getClass();
             ok = resClass == cls;
             if (!ok) {
-                ClassMeta meta = cls.getAnnotation(ClassMeta.class);
-                if (null != meta && null != meta.equiv()) {
-                    Class<?>[] equiv = meta.equiv();
+                ClassEquivalentTo meta = cls.getAnnotation(ClassEquivalentTo.class);
+                if (null != meta && null != meta.value()) {
+                    Class<?>[] equiv = meta.value();
                     for (int e = 0; !ok && e < equiv.length; e++) {
                         ok = resClass == equiv[e];
                     }

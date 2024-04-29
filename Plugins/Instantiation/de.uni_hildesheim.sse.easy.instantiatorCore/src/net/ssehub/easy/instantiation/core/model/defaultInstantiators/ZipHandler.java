@@ -70,7 +70,7 @@ public class ZipHandler {
                     IOUtils.copy(in, zos);
                     in.close();
                 } catch (IOException e1) {
-                    IOUtils.closeQuietly(in);
+                    net.ssehub.easy.basics.io.FileUtils.closeQuietly(in);
                     throw e1;
                 }
                 zos.closeEntry();
@@ -82,7 +82,7 @@ public class ZipHandler {
             }
             zos.close();
         } catch (IOException e) {
-            IOUtils.closeQuietly(zos);
+            net.ssehub.easy.basics.io.FileUtils.closeQuietly(zos);
             throw e;
         }
         List<File> result = new ArrayList<File>();
@@ -179,7 +179,7 @@ public class ZipHandler {
                                 files.add(out);
                             }
                         } catch (IOException e1) {
-                            IOUtils.closeQuietly(fos);
+                            net.ssehub.easy.basics.io.FileUtils.closeQuietly(fos);
                             throw e1;
                         }
                     }
@@ -188,7 +188,7 @@ public class ZipHandler {
                 additionalUnpacking(zis, target, files);
                 fis.close();
             } catch (IOException e) {
-                IOUtils.closeQuietly(fis);
+                net.ssehub.easy.basics.io.FileUtils.closeQuietly(fis);
                 throw e;
             }
         }
@@ -261,7 +261,7 @@ public class ZipHandler {
                         IOUtils.copy(fis, out);
                         fis.close();
                     } catch (IOException e) {
-                        IOUtils.closeQuietly(fis);
+                        net.ssehub.easy.basics.io.FileUtils.closeQuietly(fis);
                         throw e;
                     }
                     out.closeEntry();

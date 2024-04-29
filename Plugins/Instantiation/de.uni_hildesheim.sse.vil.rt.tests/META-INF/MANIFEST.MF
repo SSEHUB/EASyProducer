@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.rt.tests
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 0.0.1
+Bundle-Version: 1.3.10.qualifier
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt.tests; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.rt.tests
 Bundle-ActivationPolicy: lazy
@@ -20,14 +20,13 @@ Require-Bundle: de.uni_hildesheim.sse.vil.rt,
  de.uni_hildesheim.sse.vil.templatelang,
  de.uni_hildesheim.sse.vil.templatelang.tests,
  de.uni_hildesheim.sse.ivml,
- net.ssehub.easy.instantiation.velocity;bundle-version="1.7.12";visibility:=reexport,
+ net.ssehub.easy.instantiation.velocity;visibility:=reexport,
  net.ssehub.easy.libs.commons.io;visibility:=reexport,
  net.ssehub.easy.libs.commons.lang,
  de.uni-hildesheim.sse.easy.instantiatorCore.rt,
- net.ssehub.easy.reasoning.core;bundle-version="0.10.3",
- net.ssehub.easy.reasoning.sseReasoner;bundle-version="0.0.2",
- org.objectweb.asm;bundle-version="[5.0.1,9.0.0)";resolution:=optional,
- net.ssehub.easy.instantiation.serializer.xml;bundle-version="0.9.0",
+ net.ssehub.easy.reasoning.core,
+ net.ssehub.easy.reasoning.sseReasoner,
+ net.ssehub.easy.instantiation.serializer.xml,
  net.ssehub.easy.reasoning.sseReasoner.tests,
  net.ssehub.easy.reasoning.core.tests
 Import-Package: org.apache.log4j,
@@ -42,5 +41,5 @@ Import-Package: org.apache.log4j,
  org.junit.runner.notification;version="4.5.0",
  org.junit.runners;version="4.5.0",
  org.junit.runners.model;version="4.5.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.vil.rt.tests

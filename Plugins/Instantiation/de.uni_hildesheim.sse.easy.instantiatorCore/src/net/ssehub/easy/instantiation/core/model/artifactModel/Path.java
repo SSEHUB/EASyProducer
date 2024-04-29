@@ -19,6 +19,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -378,7 +379,8 @@ public class Path implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"})
     public Set<FileArtifact> selectByType(Class<?> type) { 
         return ArtifactFactory.selectByType(this, type, false, false); // TODO check IFileSystemArtifact
     }
@@ -390,7 +392,7 @@ public class Path implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> selectByKind(Class<?> type) { 
         return ArtifactFactory.selectByType(this, type, true, false); // TODO check IFileSystemArtifact
     }
@@ -402,7 +404,7 @@ public class Path implements IVilType, IStringValueProvider {
      * @return the selected artifacts (the type will be adjusted to the actual
      *   type of <code>type</code>)
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> typeReject(Class<?> type) { 
         return ArtifactFactory.selectByType(this, type, true, true); // TODO check IFileSystemArtifact
     }
@@ -412,7 +414,7 @@ public class Path implements IVilType, IStringValueProvider {
      * 
      * @return all file artifacts represented by path
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public Set<FileArtifact> selectAll() {
         List<FileArtifact> result = new LinkedList<FileArtifact>();
         model.selectByType(this, null, result, true, false); // TODO check IFileSystemArtifact

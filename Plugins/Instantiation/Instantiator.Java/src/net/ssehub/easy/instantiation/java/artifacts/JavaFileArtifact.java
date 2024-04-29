@@ -47,7 +47,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.java.Bundle;
 import net.ssehub.easy.instantiation.java.JavaSettings;
@@ -265,7 +265,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * 
      * @return the annotations
      */
-    @OperationMeta(returnGenerics = JavaClass.class)
+    @ReturnGenerics(JavaClass.class)
     public Set<JavaClass> classes() {
         if (null == classList) {
             initialize();
@@ -458,7 +458,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
      * @return all imports
      */
     @SuppressWarnings("unchecked")
-    @OperationMeta(returnGenerics = JavaImport.class)
+    @ReturnGenerics(JavaImport.class)
     public Set<JavaImport> imports() {
         if (null == unitNode) {
             initialize();

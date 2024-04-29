@@ -5,7 +5,8 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
  * 
  * @author Holger Eichelberger
  */
-@ClassMeta(name = Constants.TYPE_REAL, equiv = Double.class)
+@ClassEquivalentTo(Double.class)
+@ClassMeta(name = Constants.TYPE_REAL)
 public class PseudoReal implements IVilType {
 
     @DefaultValue
@@ -70,7 +71,7 @@ public class PseudoReal implements IVilType {
      * 
      * @param r1 the first real to be considered
      * @param r2 the second real to be considered
-     * @return r1 < r2
+     * @return r1 &lt; r2
      */
     @OperationMeta(name = Constants.LESS_THEN, opType = OperationType.INFIX)
     public static boolean lessThan(double r1, double r2) {
@@ -82,7 +83,7 @@ public class PseudoReal implements IVilType {
      * 
      * @param r1 the first real to be considered
      * @param r2 the second real to be considered
-     * @return r1 <= r2
+     * @return r1 &lt;= r2
      */
     @OperationMeta(name = Constants.LESS_THEN_EQUALS, opType = OperationType.INFIX)
     public static boolean lessEqualThen(double r1, double r2) {
@@ -94,7 +95,7 @@ public class PseudoReal implements IVilType {
      * 
      * @param r1 the first real to be considered
      * @param r2 the second real to be considered
-     * @return r1 >= r2
+     * @return r1 &gt;= r2
      */
     @OperationMeta(name = Constants.GREATER_THEN_EQUALS, opType = OperationType.INFIX)
     public static boolean greaterEqualThen(double r1, double r2) {
@@ -106,7 +107,7 @@ public class PseudoReal implements IVilType {
      * 
      * @param r1 the first real to be considered
      * @param r2 the second real to be considered
-     * @return r1 >= r2
+     * @return r1 &gt; r2
      */
     @OperationMeta(name = Constants.GREATER_THEN, opType = OperationType.INFIX)
     public static boolean greaterThan(double r1, double r2) {

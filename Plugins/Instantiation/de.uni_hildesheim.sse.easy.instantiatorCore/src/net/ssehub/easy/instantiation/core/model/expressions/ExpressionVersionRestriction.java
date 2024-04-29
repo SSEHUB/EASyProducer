@@ -47,8 +47,8 @@ public abstract class ExpressionVersionRestriction implements IVersionRestrictio
     }
     
     /**
-     * Creates a typical single restriction from the given variable (see {@link #createRestrictionVars(String)}, the
-     * operator and the version.
+     * Creates a typical single restriction from the given variable (see 
+     * {@link #createSingleRestriction(VariableDeclaration, String, Version)}, the operator and the version.
      * 
      * @param var the variable to use
      * @param operator the operator

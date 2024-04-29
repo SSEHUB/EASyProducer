@@ -9,8 +9,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Project;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 
@@ -33,7 +33,7 @@ public class CocktailInstantiator implements IVilType {
      * @return the created artifacts
      * @throws VilException in case that something fails
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> cocktailInstantiator(Project target) throws VilException {
         FileArtifact[] result = new FileArtifact[1];
         // just pretend that something was created - otherwise script will fail
@@ -49,7 +49,7 @@ public class CocktailInstantiator implements IVilType {
      * @param resolution the cocktail resolution file
      * @return the created artifacts
      */
-    @OperationMeta(returnGenerics = FileArtifact.class)
+    @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> cocktailInstantiator(Collection<JavaFileArtifact> artifacts, 
         FileArtifact resolution) {
         return ArraySet.empty(FileArtifact.class);

@@ -2,17 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.templatelang
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.templatelang; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.templatelang
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
+Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.xtext.xbase;resolution:=optional;visibility:=reexport,
- org.eclipse.xtext.generator;resolution:=optional,
  org.apache.commons.logging;bundle-version="1.0.4";resolution:=optional,
  org.eclipse.emf.codegen.ecore;resolution:=optional,
  org.eclipse.emf.mwe.utils;resolution:=optional,
- net.ssehub.easy.dslCore;bundle-version="0.0.1";visibility:=reexport,
+ net.ssehub.easy.dslCore;visibility:=reexport,
  org.eclipse.xtext.util,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
@@ -20,17 +19,16 @@ Require-Bundle: org.eclipse.xtext;bundle-version="2.5.0";visibility:=reexport,
  org.antlr.runtime,
  org.eclipse.xtext.common.types,
  org.apache.felix.scr;resolution:=optional,
- org.eclipse.osgi.services,
- net.ssehub.easy.instantiation.core;bundle-version="0.5.0",
+ org.osgi.service.component,
+ net.ssehub.easy.instantiation.core,
  de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
  org.eclipse.emf.mwe2.launch;bundle-version="2.3.0";resolution:=optional,
  org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xbase,
- org.objectweb.asm;bundle-version="[5.0.1,9.2.0)";resolution:=optional
+ org.eclipse.xtext.xbase
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Service-Component: OSGI-INF/vilParser.xml
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.vil.templatelang,
  de.uni_hildesheim.sse.vil.templatelang.services,
  de.uni_hildesheim.sse.vil.templatelang.templateLang,

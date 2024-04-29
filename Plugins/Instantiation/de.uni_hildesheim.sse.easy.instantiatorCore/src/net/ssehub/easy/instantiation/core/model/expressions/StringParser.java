@@ -119,12 +119,12 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @return the modified <code>text</code>
      * @throws VilException in case that something goes wrong while resolving variables
      *             
-     * @see #handleVariableStartExpression(int)
-     * @see #handleVariableStartVariable(int)
-     * @see #handleEndOfText(int, State)
-     * @see #handleExpression(int)
-     * @see #handleVariable(int)
-     * @see #createParseResult(State)
+     * @see #handleVariableStartExpression(int, int)
+     * @see #handleVariableStartVariable(int, int)
+     * @see #handleEndOfText(int, int, State)
+     * @see #handleExpression(int, int)
+     * @see #handleVariable(int, int)
+     * @see #createParseResult()
      */
     public P parse() throws VilException {
         pos = 0;
@@ -249,7 +249,6 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @param curStart the start position of the current concept
      * @param pos the end position of parsing
      * @return the remaining expression string
-     * @throws VilException in case of parsing problems
      */
     private String handleInPlaceForStart(String expressionString, int curStart, int pos) {
         String result;
@@ -300,7 +299,6 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @param curStart the start position of the current concept
      * @param pos the end position of parsing
      * @return the remaining expression string
-     * @throws VilException in case of parsing problems
      */
     private String handleInPlaceVarDecl(String expressionString, int curStart, int pos) {
         String result;
@@ -333,7 +331,6 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @param curStart the start position of the current concept
      * @param pos the end position of parsing
      * @return the remaining expression string
-     * @throws VilException in case of parsing problems
      */
     private String handleInPlaceImport(final String expressionString, int curStart, int pos) {
         String result;
@@ -373,11 +370,11 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
     }
 
     /**
-     * Joins the results from {@link #handleInPlaceCommands(String)} with the current command stack. 
+     * Joins the results from {@link #handleInPlaceCommands(String, int, int)} with the current command stack. 
      * For temporary use only, as the result may be a {@link CompositeExpression}, which leads to specific
      * code formattings.
      * 
-     * @param expr the expression returned by {@link #handleInPlaceCommands(String)}
+     * @param expr the expression returned by {@link #handleInPlaceCommands(String, int, int)}
      * @return <code>expr</code> or the result from the command stack
      */
     protected Expression join(Expression expr) {
@@ -720,8 +717,8 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * @param start the start position (inclusive)
      * @param end the end position (exclusive)
      * @return the character
-     * @throws IndexOutOfBoundsException if <code>start&lt;0 || start&gt;={@link #getTextLength()} || end&lt;0 
-     *     || end&gt;={@link #getTextLength()}</code>
+     * @throws IndexOutOfBoundsException if <code>start&lt;0 || start&gt;={@link #length()} || end&lt;0 
+     *     || end&gt;={@link #length()}</code>
      */
     protected String substring(int start, int end) {
         return text.substring(start, end);
@@ -731,7 +728,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * Deletes the given character from the internal parse buffer.
      * 
      * @param pos the position to delete the character at
-     * @throws IndexOutOfBoundsException if <code>pos&lt;0 || pos&gt;={@link #getTextLength()}</code>
+     * @throws IndexOutOfBoundsException if <code>pos&lt;0 || pos&gt;={@link #length()}</code>
      */
     protected void deleteCharAt(int pos) {
         text.deleteCharAt(pos);
@@ -742,8 +739,8 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * 
      * @param start the start position to delete, inclusive
      * @param end the end position to delete, exclusive
-     * @throws IndexOutOfBoundsException if <code>start&lt;0 || start&gt;={@link #getTextLength()} 
-     *     || end&lt;0 || end&gt;={@link #getTextLength()}</code>
+     * @throws IndexOutOfBoundsException if <code>start&lt;0 || start&gt;={@link #length()} 
+     *     || end&lt;0 || end&gt;={@link #length()}</code>
      */
     protected void delete(int start, int end) {
         text.delete(start, end);
@@ -763,7 +760,7 @@ public abstract class StringParser<P, I extends VariableDeclaration, R extends R
      * 
      * @param pos the position
      * @return the character
-     * @throws IndexOutOfBoundsException if <code>pos&lt;0 || pos&gt;={@link #getTextLength()}</code>
+     * @throws IndexOutOfBoundsException if <code>pos&lt;0 || pos&gt;={@link #length()}</code>
      */
     protected char charAt(int pos) {
         return text.charAt(pos);

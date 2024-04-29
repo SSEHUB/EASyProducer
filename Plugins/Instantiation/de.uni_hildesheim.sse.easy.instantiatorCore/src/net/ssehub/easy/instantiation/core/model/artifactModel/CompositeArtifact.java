@@ -3,7 +3,7 @@ package net.ssehub.easy.instantiation.core.model.artifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
 /**
@@ -23,7 +23,7 @@ public abstract class CompositeArtifact implements IArtifact, IArtifactChangedLi
      * 
      * @return all fragments
      */
-    @OperationMeta(returnGenerics = FragmentArtifact.class)
+    @ReturnGenerics(FragmentArtifact.class)
     public abstract Set<? extends FragmentArtifact> selectAll();
     
     @Override

@@ -5,9 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
+
 /**
  * Marker annotation for providing details for a VIL operation implementation. For detailing
- * operation parameters, see {@link ParameterMeta}.
+ * operation parameters, see {@link ParameterMeta}, {@link ReturnGenerics}, {@link GenericArguments}, 
+ * {@link NotOclCompliant}. Those detailing annotations can be used without {@link OperationMeta}.
  * 
  * @author Holger Eichelberger
  */
@@ -19,16 +22,9 @@ public @interface OperationMeta {
      * The actual names of the operation as it shall appear in VIL. This supersedes the 
      * original operation name.
      * 
-     * @return the name
+     * @return the name (none/neutral is the empty array)
      */
-    String[] name() default { };
-    
-    /**
-     * Which names from {@link #name()} is not OCL compliant. Only aliases shall be given here.
-     * 
-     * @return the names
-     */
-    String[] notOclCompliant() default {};
+    String[] name() default ""; // java 17 does not compile empty non-constant arrays as defaults anymore
     
     /**
      * The type of this operation.<br/>
@@ -37,24 +33,6 @@ public @interface OperationMeta {
      * @return the type
      */
     OperationType opType() default OperationType.NORMAL;
-
-    /**
-     * The generic parameters of the return type. This is required as the type parameters
-     * of Java generics cannot be accessed. Generics of complex types are just given in 
-     * linear sequence. Empty by default. 
-     * 
-     * @return the generic parameter types
-     */
-    Class<?>[] returnGenerics() default { };
-    
-    /**
-     * Allows overriding the actual return type, e.g., to nail down covariant return types that may be resolved in
-     * reflection to the type of the overridden base method. Must be compliant to the method declaration. Default
-     * value is the {@code void.class}.
-     *  
-     * @return the actual return type
-     */
-    Class<?> returnType() default void.class;
     
     /**
      * Whether a generic parameter (index) of the operand shall be used as return type. 
@@ -105,15 +83,6 @@ public @interface OperationMeta {
      * @return whether tracing is enabled (default <code>true</code>)
      */
     boolean trace() default true;
-    
-    /**
-     * Denotes the index values of the generic parameters to be replaced by the given argument types. Negative values
-     * indicate that the given argument types shall be used. May be required to force / enable automatic conversion.
-     * <br/>
-     * 
-     * @return the generic arguments as 0-based indexes
-     */
-    int[] genericArgument() default { };
     
     /**
      * Whether iterator aggregation (first declarator with default value denotes result value and type) is supported

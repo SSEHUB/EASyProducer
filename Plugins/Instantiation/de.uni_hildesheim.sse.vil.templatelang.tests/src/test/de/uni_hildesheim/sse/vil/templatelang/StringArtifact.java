@@ -11,8 +11,8 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Tex
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.Configuration;
 
@@ -37,7 +37,7 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
      * 
      * @return all file artifacts represented by path
      */
-    @OperationMeta(returnGenerics = String.class)
+    @ReturnGenerics(String.class)
     public Set<String> selectAll() {
         String[] results = new String[3];
         for (int i = 0; i < results.length; i++) {
@@ -112,7 +112,7 @@ public class StringArtifact extends SimpleArtifact implements IStringValueProvid
      * 
      * @return the iterator
      */
-    @OperationMeta(returnGenerics = String.class)
+    @ReturnGenerics(String.class)
     public Iterator<String> values() {
         List<String> tmp = new ArrayList<String>();
         tmp.add("1");

@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnType.ReturnTypeKind;
 
 /**
  * Defines the interface representing a set. The iterator
@@ -37,15 +38,19 @@ public interface Set<T> extends Collection<T> {
     public static final java.util.Set<?> DEFAULT = new java.util.HashSet<Object>();
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @ReturnGenerics(IVilType.class)
     public Set<T> selectByType(TypeDescriptor<?> type);
 
     @Override
-    @OperationMeta(name = {"selectByKind", "typeSelect"}, returnGenerics = IVilType.class, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"selectByKind", "typeSelect"})
     public Set<T> selectByKind(TypeDescriptor<?> type);
     
     @Override
-    @OperationMeta(returnGenerics = IVilType.class, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @ReturnGenerics(IVilType.class)
     public Set<T> typeReject(TypeDescriptor<?> type);
 
     /**
@@ -53,7 +58,7 @@ public interface Set<T> extends Collection<T> {
      * @param set the elements to be excluded
      * @return this set without the elements in <code>set</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> excluding(Collection<T> set);
 
     /**
@@ -62,7 +67,7 @@ public interface Set<T> extends Collection<T> {
      * @param set the elements to be excluded
      * @return this set without the elements in <code>set</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> including(Collection<T> set);
 
     /**
@@ -71,7 +76,7 @@ public interface Set<T> extends Collection<T> {
      * @param set the elements to be unified with this set
      * @return the union of this set and <code>set</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> union(Set<T> set);
 
     /**
@@ -80,7 +85,7 @@ public interface Set<T> extends Collection<T> {
      * @param set the elements to be unified with this set
      * @return the intersection of this set and <code>set</code>
      */
-    @OperationMeta(returnGenerics = IVilType.class)
+    @ReturnGenerics(IVilType.class)
     public Set<T> intersection(Set<T> set);
     
     /**
@@ -89,7 +94,7 @@ public interface Set<T> extends Collection<T> {
      * @param element the element to be added
      * @return <code>element</code>
      */
-    @OperationMeta(genericArgument = {0 })
+    @GenericArguments(0)
     public T add(T element);
     
     /**
@@ -101,23 +106,28 @@ public interface Set<T> extends Collection<T> {
     public boolean remove(T element);
     
     @Override
-    @OperationMeta(useGenericParameter = 0, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useGenericParameter = 0)
     public Set<T> select(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useGenericParameter = 0, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useGenericParameter = 0)
     public Set<T> reject(ExpressionEvaluator evaluator) throws VilException;
 
     @Override
-    @OperationMeta(useParameter = 0, flatten = true, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useParameter = 0, flatten = true)
     public Set<?> closure(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = 0, flatten = true, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useParameter = 0, flatten = true)
     public Set<?> collect(ExpressionEvaluator evaluator) throws VilException;
     
     @Override
-    @OperationMeta(useParameter = Integer.MAX_VALUE, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useParameter = Integer.MAX_VALUE)
     public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException;
     
     /**
@@ -142,7 +152,8 @@ public interface Set<T> extends Collection<T> {
     @Invisible
     public java.util.Set<T> toMappedSet();
 
-    @OperationMeta(useGenericParameter = 0, flatten = true, returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(useGenericParameter = 0, flatten = true)
     @Override
     public Set<?> flatten() throws VilException;
 
@@ -164,7 +175,8 @@ public interface Set<T> extends Collection<T> {
     public Set<T> symmetricDifference(Set<T> set);
 
     @Override
-    @OperationMeta(name = "clone", returnType = Set.class)
+    @ReturnType(kind = ReturnTypeKind.SET)
+    @OperationMeta(name = "clone")
     public Set<T> cloneCollection();
     
 }

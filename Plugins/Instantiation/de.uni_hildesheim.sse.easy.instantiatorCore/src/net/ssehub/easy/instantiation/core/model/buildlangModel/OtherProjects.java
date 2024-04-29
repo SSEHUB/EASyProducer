@@ -15,7 +15,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
+import net.ssehub.easy.instantiation.core.model.vilTypes.NotOclCompliant;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 import net.ssehub.easy.instantiation.core.model.vilTypes.SetSet;
@@ -71,7 +73,8 @@ class OtherProjects implements Set<IArtifact> {
         return data.isEmpty();
     }
 
-    @OperationMeta(name = {"notEmpty", "isNotEmpty"}, notOclCompliant = "isNotEmpty")
+    @NotOclCompliant("isNotEmpty")
+    @OperationMeta(name = {"notEmpty", "isNotEmpty"})
     @Override
     public boolean isNotEmpty() {
         return !data.isEmpty();
@@ -123,6 +126,7 @@ class OtherProjects implements Set<IArtifact> {
     }
 
     @Override
+    @ReturnGenerics(IVilType.class)
     public Set<IArtifact> excluding(Collection<IArtifact> set) {
         return new ListSet<IArtifact>(AbstractCollectionWrapper.excluding(this, set), parameter);
     }
@@ -296,7 +300,9 @@ class OtherProjects implements Set<IArtifact> {
     }
 
     @Override
-    @OperationMeta(name = {"sortedBy", "sort"}, notOclCompliant = "sort", returnGenerics = IVilType.class)
+    @NotOclCompliant("sort")
+    @ReturnGenerics(IVilType.class)
+    @OperationMeta(name = {"sortedBy", "sort"})
     public Collection<IArtifact> sortedBy(ExpressionEvaluator evaluator) throws VilException {
         Collection<IArtifact> result;
         if (null == data) {
