@@ -51,9 +51,10 @@
 	
 	<!-- Creates a jar file -->
 	<target name="jar" depends="compile">
-        <maven pomFile="pom.xml" goal="deploy">
-            <arg value='-DargLine="-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata"'/>
-    	</maven>
+		<echo file="testdata.dir" append="false">
+			-DreasonerCore.testdata.home=${home.reasonerCore.test.dir}/testdata
+	    </echo>
+        <maven pomFile="pom.xml" goal="deploy"/>
         <!-- Copy needed non class files -->
 		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
 			<fileset dir="${basedir}">
