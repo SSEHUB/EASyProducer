@@ -67,7 +67,7 @@
          <artifactId>org.apache.felix.scr</artifactId>
      </dependency>
      <dependency>
-       <groupId>org.eclipse.platform</groupId>
+       <groupId>org.osgi</groupId>
        <artifactId>org.osgi.service.component</artifactId>
      </dependency>
      <dependency>
