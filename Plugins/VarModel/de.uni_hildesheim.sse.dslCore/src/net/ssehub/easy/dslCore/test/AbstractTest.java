@@ -62,7 +62,7 @@ public abstract class AbstractTest<R extends IModel> {
             File f = new File("testdata.dir");
             if (f.exists()) {
                 try {
-                    result = new File(new String(Files.readAllBytes(f.toPath())));
+                    result = new File(new String(Files.readAllBytes(f.toPath())).trim());
                 } catch (IOException e) {
                     EASyLoggerFactory.INSTANCE.getLogger(AbstractTest.class, null).warn(
                         "Failed reading testdata.dir: " + e.getMessage());
