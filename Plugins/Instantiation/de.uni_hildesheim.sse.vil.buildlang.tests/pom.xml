@@ -3,8 +3,8 @@
   <artifactId>de.uni_hildesheim.sse.vil.buildlang.tests</artifactId>
   <packaging>eclipse-test-plugin</packaging>
   
-  <name>EASy-Producer IVML model libaray</name>
-  <description>The IVML model library of EASy-Producer.</description>
+  <name>EASy-Producer VIL tests</name>
+  <description>The VIL tests of EASy-Producer.</description>
   <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
 
   <parent>
@@ -29,12 +29,12 @@
      </dependency>     
      <dependency>
         <groupId>net.ssehub.easy</groupId>
-        <artifactId>de.uni_hildesheim.sse.vil.templateLang</artifactId>
+        <artifactId>de.uni_hildesheim.sse.vil.templatelang</artifactId>
         <version>${project.version}</version>
      </dependency>     
      <dependency>
         <groupId>net.ssehub.easy</groupId>
-        <artifactId>de.uni_hildesheim.sse.vil.templateLang.tests</artifactId>
+        <artifactId>de.uni_hildesheim.sse.vil.templatelang.tests</artifactId>
         <version>${project.version}</version>
      </dependency>     
   </dependencies>

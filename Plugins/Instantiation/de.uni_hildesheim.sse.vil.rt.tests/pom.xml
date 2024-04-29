@@ -29,12 +29,12 @@
      </dependency>     
      <dependency>
         <groupId>net.ssehub.easy</groupId>
-        <artifactId>de.uni_hildesheim.sse.vil.templateLang</artifactId>
+        <artifactId>de.uni_hildesheim.sse.vil.templatelang</artifactId>
         <version>${project.version}</version>
      </dependency>     
      <dependency>
         <groupId>net.ssehub.easy</groupId>
-        <artifactId>de.uni_hildesheim.sse.vil.templateLang.tests</artifactId>
+        <artifactId>de.uni_hildesheim.sse.vil.templatelang.tests</artifactId>
         <version>${project.version}</version>
      </dependency>  
      <dependency>
