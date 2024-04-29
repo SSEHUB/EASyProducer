@@ -1,0 +1,7 @@
+nimbus.host: 192.168.0.1
+supervisor.childopts: -Djava.net.preferIPv4Stack=true
+storm.local.dir: /app/storm
+storm.zookeeper.port: 2181
+worker.childopts: -Xmx768m -Djava.net.preferIPv4Stack=true
+nimbus.thrift.port: 6627
+storm.zookeeper.servers: [192.168.0.101, 192.168.0.102, 192.168.0.103]
