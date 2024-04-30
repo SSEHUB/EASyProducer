@@ -5,7 +5,7 @@
 	<groupId>net.ssehub.easy.producer.external</groupId>
 	<artifactId>jlxd-cli-boot</artifactId>
 	<packaging>jar</packaging>
-	<version>1.1</version>
+	<version>1.2</version>
 	<name>Java LXD CLI Spring Boot (IIP-Ecosphere Clone)</name>
 	<url>http://jcloud.com.au</url>
     <description>Java LXD Boot/Dependencies.</description>
@@ -153,14 +153,14 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.6.2</version>
+            <version>2.8.9</version>
 		</dependency>
 
 		<!-- Testing -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.13.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
