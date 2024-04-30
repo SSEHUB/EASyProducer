@@ -34,7 +34,7 @@
        <version>${project.version}</version>
     </dependency>
     <dependency>
-       <groupId>log4j</groupId>
+       <groupId>org.apache</groupId>
        <artifactId>log4j</artifactId>
     </dependency>
   </dependencies>
