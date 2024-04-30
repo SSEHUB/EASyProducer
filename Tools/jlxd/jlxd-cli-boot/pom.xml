@@ -32,6 +32,15 @@
 	<scm>
 		<url>https://github.com/SSEHUB/EASyProducer.git</url>
 	</scm>
+	
+  <repositories>       
+    <repository>
+      <id>SSE-mvn</id> <!-- same ID as in easy-maven-settings.xml -->
+      <name>SSE</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+      <layout>default</layout>
+    </repository>
+   </repositories>  	
 
 	<developers>
 		<developer>
@@ -183,11 +192,11 @@
 		</dependency>
 
 		<!-- Logging -->
-		<dependency>
-		  <groupId>log4j</groupId>
-		  <artifactId>log4j</artifactId>
-		  <version>1.2.17</version>
-		</dependency>
+        <dependency>
+          <groupId>org.apache.log4j</groupId>
+          <artifactId>log4j</artifactId>
+          <version>1.2.25</version>
+        </dependency>
 	
 		<!-- Apache Commons -->
 		<dependency>
