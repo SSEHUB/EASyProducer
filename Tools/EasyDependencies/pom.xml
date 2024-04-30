@@ -214,9 +214,9 @@
            <version>[2.34.0]</version>
         </dependency>
 	    <dependency>
-	       <groupId>log4j</groupId>
+	       <groupId>org.apache</groupId>
 	       <artifactId>log4j</artifactId>
-	       <version>[1.2.17]</version> <!-- eclipse has 1.2.25, also outdated -->
+	       <version>[1.2.25]</version> <!-- eclipse has 1.2.25, also outdated -->
            <exclusions>
             <exclusion>
              <groupId>javax.jms</groupId>
@@ -513,7 +513,7 @@
             <configuration>
               <includes><include>**/AllTests*.class</include></includes>
               <!--<test>**/AllTests*.java</test>-->
-              <forkedProcessTimeoutInSeconds>240000</forkedProcessTimeoutInSeconds>
+              <forkedProcessTimeoutInSeconds>400000</forkedProcessTimeoutInSeconds> <!-- scenario tests! -->
               <argLine>-Xmx1024m</argLine> 
               <argLine>-Dosgi.arch=x86</argLine> 
               <useUIHarness>false</useUIHarness>
