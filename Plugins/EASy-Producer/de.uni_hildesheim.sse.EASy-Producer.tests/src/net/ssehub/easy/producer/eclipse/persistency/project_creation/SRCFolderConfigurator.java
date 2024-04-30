@@ -5,7 +5,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.junit.Assert;
 
 import net.ssehub.easy.producer.eclipse.ProjectConstants;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.IEASyProjectConfigurator;
 
 /**
  * Simple {@link IEASyProjectConfigurator} for creating an SRC folder.

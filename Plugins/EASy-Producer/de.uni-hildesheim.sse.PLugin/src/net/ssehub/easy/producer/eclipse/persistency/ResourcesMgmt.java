@@ -86,7 +86,7 @@ public class ResourcesMgmt {
     /**
      * Returns a representation of the current used workspace.
      * 
-     * @return A representation of the current used workspace or <tt>null</tt> if no workspace was loaded
+     * @return A representation of the current used workspace or <code>null</code> if no workspace was loaded
      * (this may happen if the responsible Eclipse plug-in was not loaded and started, e.g. when EASy runs as
      * a command line tool).
      */
@@ -102,7 +102,8 @@ public class ResourcesMgmt {
     
     /**
      * Returns the workspace as a {@link File} object.
-     * @return The location of the workspace inside the file system or <tt>null</tt> if the workspace was not loaded.
+     * @return The location of the workspace inside the file system or <code>null</code> if the workspace 
+     *     was not loaded.
      * @see #getWorkspace()
      */
     public File getWorspaceFolder() {
@@ -194,10 +195,10 @@ public class ResourcesMgmt {
     }
     
     /**
-     * Retrieves the absolute path of an <tt>IProject</tt> inside the file system.
+     * Retrieves the absolute path of an <code>IProject</code> inside the file system.
      * @param projectname The name of the project, which location shall be determined.
-     * @return The location inside the file system or <tt>workspace/projectname</tt> if the specified <tt>IProject</tt>
-     * does not exist.
+     * @return The location inside the file system or <code>workspace/projectname</code> if the specified 
+     * <code>IProject</code> does not exist.
      */
     public File getProjectLocation(String projectname) {
         File projectLocation = null;
@@ -253,12 +254,12 @@ public class ResourcesMgmt {
      * Will also add all another relevant information needed to work with EASy if not existent, these are:
      * <ul>
      *   <li>The Xtext nature to open use its editors for IVML, VIL, VTL, ...</li>
-     *   <li>EASy Folder with default configuration files:</li>
+     *   <li>EASy Folder with default configuration files:
      *   <ul>
      *     <li>Main IVML file</li>
      *     <li>Main VIL file</li>
      *     <li>.EASyConfig</li>
-     *   </ul>
+     *   </ul></li>
      * </ul>
      * @param project A project from the workspace.
      * @param natures Must be the Xtext and the EASy nature (unfortunately, they are provided by UI packages).

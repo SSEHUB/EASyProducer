@@ -30,7 +30,7 @@ public class IOButton extends Composite {
     /**
      * Sole constructor for this class.
      * @param parent The parent holding this button.
-     * @param description An optional description, can be empty but not <tt>null</tt>.
+     * @param description An optional description, can be empty but not <code>null</code>.
      */
     public IOButton(Composite parent, String description) {
         super(parent, SWT.NONE);
@@ -47,7 +47,7 @@ public class IOButton extends Composite {
     
     /**
      * changes the state (and the displayed image) of this {@link IOButton}.
-     * @param activate <tt>true</tt> to indicate that the related functionality was enabled.
+     * @param activate <code>true</code> to indicate that the related functionality was enabled.
      */
     public void setActivated(boolean activate) {
         if (activate) {

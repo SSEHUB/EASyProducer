@@ -33,9 +33,7 @@ public class ImageProvider {
      * 
      * @param node the {@link TreeNode} for which an {@link Image} should be returned.
      * @return the the corresponding {@link Image} for the given {@link TreeNode}. May
-     * return <code>null</code> if the given <code>node</code> is <code>null</code> or
-     * the {@link Device} was not set before.
-     * @see {@link #setDevice(Device)}
+     * return <code>null</code> if the given <code>node</code> is <code>null</code>
      */
     public Image getImage(TreeNode node) {
         Image nodeImage = null;

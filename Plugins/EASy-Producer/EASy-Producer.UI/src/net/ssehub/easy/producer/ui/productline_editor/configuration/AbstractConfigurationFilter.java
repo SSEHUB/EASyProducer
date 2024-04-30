@@ -29,9 +29,9 @@ public abstract class AbstractConfigurationFilter extends ViewerFilter {
      * Depending on the given parameter, nested elements of a shown variable will also be filtered.
      * @param showAllNestedElements
      * <ul>
-     * <li><tt>true</tt>: If the parent is shown, than all nested elements will be shown.
+     * <li><code>true</code>: If the parent is shown, than all nested elements will be shown.
      * Same behavior as {@link #AbstractConfigurationFilter()} </li>
-     * <li><tt>false</tt>: If the parent is shown, than the filter is also applied to nested elements.
+     * <li><code>false</code>: If the parent is shown, than the filter is also applied to nested elements.
      * Consequently, not all nested elements must be shown.</li>
      * </ul>
      */
@@ -49,7 +49,7 @@ public abstract class AbstractConfigurationFilter extends ViewerFilter {
      * Determines whether a given variable should be shown inside the editor or not.
      * This function ensures that parents of of displayed nested elements will <b>not</b> be filtered.
      * @param variable The variable which should be tested whether it should be displayed inside the editor
-     * @return <tt>true</tt> if the variable should be displayed, <tt>false</tt> otherwise.
+     * @return <code>true</code> if the variable should be displayed, <code>false</code> otherwise.
      * @see #checkVariable(GUIVariable)
      */
     private boolean recursiveCheck(GUIVariable variable) {
@@ -69,15 +69,15 @@ public abstract class AbstractConfigurationFilter extends ViewerFilter {
      * This method must also ensure that nested elements of a shown variable are also displayed.
      * Therefore, this method should also be written in a recursive manner to check nested elements of
      * displayed variables. This should be done in the following way:<br/>
-     * <tt>
+     * <code>
      * if(checkVariable(variable)) {<br/>
      * &nbsp;&nbsp;for(GUIVariable nestedVariable : variable.getNestedVars()) {<br/>
      * &nbsp;&nbsp;&nbsp;&nbsp;checkVariable(nestedVariable);<br/>
      * &nbsp;&nbsp;}<br/>
      * }
-     * </tt>
+     * </code>
      * @param variable The variable which should be tested whether it should be displayed inside the editor
-     * @return <tt>true</tt> if the variable should be displayed, <tt>false</tt> otherwise.
+     * @return <code>true</code> if the variable should be displayed, <code>false</code> otherwise.
      */
     protected abstract boolean checkVariable(GUIVariable variable);
 
@@ -85,7 +85,7 @@ public abstract class AbstractConfigurationFilter extends ViewerFilter {
      * Calls {@link #checkVariable(GUIVariable)} recursively on <code>variable</code>.
      * 
      * @param variable the variable to check
-     * @return <tt>true</tt> if the variable should be displayed, <tt>false</tt> otherwise.
+     * @return <code>true</code> if the variable should be displayed, <code>false</code> otherwise.
      */
     protected boolean checkVariableRecursivley(GUIVariable variable) {
         boolean matches = false;

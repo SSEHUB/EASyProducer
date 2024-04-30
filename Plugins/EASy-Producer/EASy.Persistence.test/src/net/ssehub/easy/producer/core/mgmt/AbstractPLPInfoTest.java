@@ -19,7 +19,6 @@ import org.junit.Assert;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.producer.core.AllTests;
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
@@ -144,8 +143,9 @@ class AbstractPLPInfoTest {
     
     /**
      * Runs the java compiler and checks whether the given folder is compilable.
-     * @param folder A java project folder containing a <tt>src</tt> and a <tt>bin</tt> folder.
-     * @param compilable Specification, whether the project should be compilable (<tt>true</tt>) or not(<tt>false</tt>).
+     * @param folder A java project folder containing a <code>src</code> and a <code>bin</code> folder.
+     * @param compilable Specification, whether the project should be compilable (<code>true</code>) or 
+     * not(<code>false</code>).
      */
     void compile(File folder, boolean compilable) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();

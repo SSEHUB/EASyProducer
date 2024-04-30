@@ -40,7 +40,7 @@ public class Model {
      * @param index a 0-based index specifying entity to be returned
      * @return all existing entities of this model
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     *         (<code>index &lt; 0 || index &gt;= size()</code>)
      */
     public Entity getEntity(int index) {       
         return entities.get(index);

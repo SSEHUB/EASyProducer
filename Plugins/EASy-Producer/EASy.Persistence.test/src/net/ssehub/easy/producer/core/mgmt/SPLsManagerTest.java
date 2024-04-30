@@ -6,9 +6,6 @@ import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
-import net.ssehub.easy.producer.core.mgmt.SPLsManager;
-
 /**
  * Tests the correct behavior of the {@link SPLsManager}.
  * @author El-Sharkawy

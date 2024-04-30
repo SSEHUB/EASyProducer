@@ -193,11 +193,11 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
      * Sole constructor for this class.
      * 
      * @param parent
-     *            the parent control (must not be <tt>null</tt>).
+     *            the parent control (must not be <code>null</code>).
      * @param plp
-     *            Current configured project holding the configuration (must not be <tt>null</tt>).
+     *            Current configured project holding the configuration (must not be <code>null</code>).
      * @param parentPage
-     *            The page bearing this menu item (must not be <tt>null</tt>).
+     *            The page bearing this menu item (must not be <code>null</code>).
      */
     public ConfigurationHeaderMenu(Composite parent, ProductLineProject plp, AbstractEASyEditorPage parentPage) {
 
@@ -264,7 +264,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
      * @param operation
      *            the desired reasoning operation
      * @param listener
-     *            A listener which will be called after the reasoning has been finished. Can be <tt>null</tt>, if no
+     *            A listener which will be called after the reasoning has been finished. Can be <code>null</code>, if no
      *            action shall be executed after the reasoning is finished.
      */
     private void createReasoningProgressObserver(ReasoningOperation operation,
@@ -411,8 +411,8 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     }
     
     /**
-     * Method for preparing a <tt>RasonerResult</tt> for showing a warnings dialog. It filters only warnings out of the
-     * <tt>RasonerResult</tt> and creates a dialog which displays the warnings.
+     * Method for preparing a <code>RasonerResult</code> for showing a warnings dialog. It filters only warnings 
+     * out of the <code>RasonerResult</code> and creates a dialog which displays the warnings.
      * 
      * @param result
      *            The result of an reasoning step, may containing warnings.

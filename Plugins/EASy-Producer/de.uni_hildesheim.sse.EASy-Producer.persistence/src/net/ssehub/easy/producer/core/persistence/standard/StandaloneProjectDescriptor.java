@@ -11,8 +11,6 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IProjectDescriptor;
 
 /**
  * Implements a descriptor for the source and target VIL project locations.
- * The {@link #ProjectDescriptor(StandaloneProjectDescriptor, File) 
- * second constructor} allows to specify a different target location.
  * 
  * @author Holger Eichelberger
  */
@@ -53,8 +51,7 @@ public class StandaloneProjectDescriptor implements IProjectDescriptor {
     /**
      * Allows to instantiate into a given location.
      * 
-     * @param parent the parent descriptor (also representing the source, to
-     *   be obtained via {@link #ProjectDescriptor()})
+     * @param parent the parent descriptor (also representing the source)
      * @param base the folder to instantiate into
      */
     public StandaloneProjectDescriptor(IProjectDescriptor parent, File base) {

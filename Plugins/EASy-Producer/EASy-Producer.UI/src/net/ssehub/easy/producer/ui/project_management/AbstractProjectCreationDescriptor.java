@@ -30,13 +30,13 @@ public abstract class AbstractProjectCreationDescriptor implements Comparable<Ab
     
     /**
      * The name of supported Eclipse projects.
-     * @return The type of Eclipse projects, e.g., <tt>Java Project</tt>.
+     * @return The type of Eclipse projects, e.g., <code>Java Project</code>.
      */
     public abstract String getProjectType();
     
     /**
      * Factory: The configurator to configure the new EASy project.
-     * @return The configurator to configure the new EASy project, if <tt>null</tt> an Eclipsem project without any
+     * @return The configurator to configure the new EASy project, if <code>null</code> an Eclipsem project without any
      * natures will be created.
      */
     public abstract IEASyProjectConfigurator getProjectConfigurator();

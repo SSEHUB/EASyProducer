@@ -82,8 +82,8 @@ public class EclipseConsole {
      * separator string.
      * 
      * @param text message to display
-     * @param lineBreak <tt>true</tt> if a linebreak shall be inserted after the message.
-     * @return <tt>true</tt> if the message was successfully displayed inside the console.
+     * @param lineBreak <code>true</code> if a linebreak shall be inserted after the message.
+     * @return <code>true</code> if the message was successfully displayed inside the console.
      */
     public boolean writeToConsole(String text, boolean lineBreak) {
         boolean isWritten = false;
@@ -119,7 +119,7 @@ public class EclipseConsole {
     
     /**
      * Tries to show the console inside the GUI.
-     * @return <tt>true</tt> if the console could be displayed inside the GUI.
+     * @return <code>true</code> if the console could be displayed inside the GUI.
      */
     public boolean displayConsole() {
         boolean isDisplayed = false;

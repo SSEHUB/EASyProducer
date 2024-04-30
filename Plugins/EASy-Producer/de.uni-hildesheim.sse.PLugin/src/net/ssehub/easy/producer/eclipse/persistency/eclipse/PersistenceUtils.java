@@ -33,7 +33,7 @@ public class PersistenceUtils {
     
     /**
      * Returns the specified location folder for the given <code>project</code>. This is a convenience 
-     * method for {@link Configuration#getPath(PathKind)}.
+     * method for {@link Configuration#getPath(PathKind, int)}.
      * 
      * @param project the project to return the folder for
      * @param kind the path kind

@@ -34,7 +34,7 @@ public class InterfaceFilter extends AbstractConfigurationFilter {
     /**
      * Sole constructor for this class.
      * @param pInterface A project interface defined in the currently displayed project, or
-     * <tt>null</tt> to deactivate this filter.
+     * <code>null</code> to deactivate this filter.
      */
     InterfaceFilter(ProjectInterface pInterface) {
         this.pInterface = pInterface;

@@ -22,8 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import net.ssehub.easy.producer.core.AllTests;
-import net.ssehub.easy.producer.core.persistence.Configuration;
-import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
 import net.ssehub.easy.producer.core.persistence.internal.util.FileUtils;
 import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;

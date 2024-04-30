@@ -30,8 +30,8 @@ class NewProjectCreator extends AbstractProjectCreator {
      * Sole constructor for creating a new EASy project, without a predecessor.
      * @param projectName The name of the new project (should already be checked, whether the name is valid).
      * @param lazy if <code>true</code>, create only required parts, else assume that project does not exist before.
-     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
-     *     The configurators whill be applied in the ordering of the array.
+     * @param configurators Optional list of configurators to configure the newly created project, 
+     *   maybe <code>null</code>. The configurators whill be applied in the ordering of the array.
      */
     NewProjectCreator(String projectName, boolean lazy, IEASyProjectConfigurator... configurators) {
         super(projectName, lazy, configurators);

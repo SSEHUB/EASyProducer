@@ -149,8 +149,8 @@ public class EASyUtils {
      * @param plp the product line project to add the import to
      * @param predecessor A predecessor project of plp, where the {@link net.ssehub.easy.varModel.model.Project}
      *     <b>and</b> the {@link Script} should be included.
-     * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
-     *     <tt>false</tt> otherwise
+     * @param considerVIL <code>true</code> if the parent project has also a build script which should be considered,
+     *     <code>false</code> otherwise
      */
     public static final void addImport(PLPInfo plp, PLPInfo predecessor, boolean considerVIL) {
         net.ssehub.easy.producer.core.persistence.PersistenceUtils.addImport(plp, predecessor, considerVIL);

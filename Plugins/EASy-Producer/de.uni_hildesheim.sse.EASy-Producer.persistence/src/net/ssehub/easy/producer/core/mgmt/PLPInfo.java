@@ -88,8 +88,8 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     /**
      * Specification whether further debug information should be saved.
      * <ul>
-     * <li><tt>true</tt>: Debug information will be saved.</li>
-     * <li><tt>false</tt>: Debug information will <b>not</b> be saved (default value).</li>
+     * <li><code>true</code>: Debug information will be saved.</li>
+     * <li><code>false</code>: Debug information will <b>not</b> be saved (default value).</li>
      * </ul>
      */
     private boolean saveDebugInformation;
@@ -142,8 +142,8 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * Specification whether further debug information should be saved.
      * @return
      * <ul>
-     * <li><tt>true</tt>: Debug information will be saved.</li>
-     * <li><tt>false</tt>: Debug information will <b>not</b> be saved (default value).</li>
+     * <li><code>true</code>: Debug information will be saved.</li>
+     * <li><code>false</code>: Debug information will <b>not</b> be saved (default value).</li>
      * </ul>
      */
     public boolean getSaveDebugInformation() {
@@ -154,8 +154,8 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * Specification whether further debug information should be saved.
      * @param saveDebugInformation
      * <ul>
-     * <li><tt>true</tt>: Debug information will be saved.</li>
-     * <li><tt>false</tt>: Debug information will <b>not</b> be saved.</li>
+     * <li><code>true</code>: Debug information will be saved.</li>
+     * <li><code>false</code>: Debug information will <b>not</b> be saved.</li>
      * </ul>
      */
     public void setSaveDebugInformation(boolean saveDebugInformation) {
@@ -435,7 +435,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     /**
      * Instantiates the whole project in a separate thread (asynchronous behavior).
-     * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
+     * @param observer The observer to inform about the current progress (in case of <code>null</code>
      * {@link ProgressObserver#NO_OBSERVER} will be used).
      * @see #instantiate(ProgressObserver, boolean)
      * @see #abortInstantiation()
@@ -446,10 +446,11 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     /**
      * Instantiates the whole project in a separate thread.
-     * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
+     * @param observer The observer to inform about the current progress (in case of <code>null</code>
      * {@link ProgressObserver#NO_OBSERVER} will be used).
-     * @param waitFor <tt>true</tt> This method will wait until the script was processed completely (blocking method),
-     *   <tt>false</tt> script will be processed in an asynchronous manner (usually used in an GUI environment).
+     * @param waitFor <code>true</code> This method will wait until the script was processed completely (blocking 
+     *   method), <code>false</code> script will be processed in an asynchronous manner (usually used in an GUI 
+     *   environment).
      * @see #instantiate(ProgressObserver)
      * @see #abortInstantiation()
      */
@@ -459,7 +460,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     /**
      * Aborts the current execution of the VIL script at the next possible point (that is not any time possible, e.g.,
-     * during the execution of third party tools like embedded <tt>maven</tt> scripts).
+     * during the execution of third party tools like embedded <code>maven</code> scripts).
      * @see #instantiate(ProgressObserver)
      */
     public void abortInstantiation() {
@@ -579,7 +580,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * Starts the reasoning.
      * @param desiredOperation  Specifies which reasoning operation should be performed.
      * @param listener listener A listener which will be called after the reasoning has been finished.
-     *     Can be <tt>null</tt>, if no action shall be executed after the reasoning is finished.
+     *     Can be <code>null</code>, if no action shall be executed after the reasoning is finished.
      */
     public void reason(ReasoningOperation desiredOperation, IReasonerListener listener) {
         createReasoningProcess(desiredOperation, listener).run();
@@ -589,7 +590,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * Creates a reasoning process.
      * @param desiredOperation  Specifies which reasoning operation should be performed.
      * @param listener listener A listener which will be called after the reasoning has been finished.
-     *     Can be <tt>null</tt>, if no action shall be executed after the reasoning is finished.
+     *     Can be <code>null</code>, if no action shall be executed after the reasoning is finished.
      * @return A {@link ReasoningProcess} which can be used for reasoning (cf. {@link ReasoningProcess#run()}). 
      */
     protected final ReasoningProcess createReasoningProcess(ReasoningOperation desiredOperation,
@@ -636,8 +637,8 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     /**
      * Checks whether the models and can be saved, or if a dummy was used to avoid {@link NullPointerException}s.
-     * @return <tt>true</tt> if loaded models are used and can be saved, <tt>false</tt> if at least one dummy was used,
-     * which should not be saved.
+     * @return <code>true</code> if loaded models are used and can be saved, <code>false</code> if at least one dummy 
+     * was used, which should not be saved.
      */
     public boolean isSaveable() {
         return varModel.isSaveable();
@@ -687,8 +688,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     /**
      * This method copies the variability model, configuration,
      * and build scripts/templates from the predecessors to this project..
-     * 
-     * @throws VarModelConflictException
      */
     public void pullConfigFromPredecessors() {
         EASyConfigFileImporter importer = new EASyConfigFileImporter(this);

@@ -72,9 +72,9 @@ public class EclipseProgressObserver extends BasicProgressObserver {
     }
 
     /**
-     * Sets this monitor to <tt>null</tt> if the current monitor is the same as the specified monitor.
+     * Sets this monitor to <code>null</code> if the current monitor is the same as the specified monitor.
      * @param monitor If the given monitor is the same monitor as the monitor of this observer instance
-     * the monitor of this observer will be set to <tt>null</tt> otherwise will nothing happen.
+     * the monitor of this observer will be set to <code>null</code> otherwise will nothing happen.
      */
     public void unregister(org.eclipse.core.runtime.IProgressMonitor monitor) {
         if (null != this.monitor && this.monitor.getMonitor() == monitor) {

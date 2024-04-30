@@ -20,7 +20,6 @@ import java.io.File;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.basics.modelManagement.ModelLocations;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
@@ -53,7 +52,7 @@ import net.ssehub.easy.varModel.model.Project;
 /**
  * This class represents an interlayer between persistency-layer and model. It provides functions
  * for loading a model from the storage or saving it to storage. Therefore it performs a conversion
- * between the persistency model and the application model. Uses {@link UrlResolver}.  
+ * between the persistency model and the application model.  
  * 
  * @author El-Sharkawy
  */
@@ -231,7 +230,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
 
     /**
      * Writes debug data to file system, if and only if {@link PLPInfo#getSaveDebugInformation()} was set
-     * to <tt>true</tt>. Part of the {@link #save(PLPInfo)} method. 
+     * to <code>true</code>. Part of the {@link #save(PLPInfo)} method. 
      * @param plp the information, which should be saved.
      * @throws PersistenceException If the file cannot be written to the file system.
      */

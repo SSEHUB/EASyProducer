@@ -53,7 +53,7 @@ import net.ssehub.easy.varModel.model.Project;
  * <ol>
  *   <li>{@link #setupLocations()}</li>
  *   <li>{@link #loadIvmlModel()}</li>
- *   <li>{@link #reasonOnIvmlModel()}</li>
+ *   <li>{@link #propagateOnIvmlModel()}</li>
  *   <li>{@link #executeVil()}</li>
  *   <li>{@link #discardLocations()}</li>
  * </ol>

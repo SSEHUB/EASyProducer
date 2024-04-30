@@ -91,7 +91,7 @@ public class ProductLineProject extends PLPInfo {
     /**
      * Sets the given projectIDs as predecessor projects of this project.
      * @param predecessorIDs A list of predecessors projects.
-     * @return <tt>true</tt> if at least one ID was removed or added, <tt>false</tt> otherwise.
+     * @return <code>true</code> if at least one ID was removed or added, <code>false</code> otherwise.
      */
     public boolean setPredecessors(List<String> predecessorIDs) {
         boolean changed = false;
@@ -130,9 +130,6 @@ public class ProductLineProject extends PLPInfo {
     /**
      * This method copies the variability model, configuration,
      * and instantiator settings of the predecessor projects to this project.
-     * 
-     * @throws VarModelConflictException
-     * @since 23.07.2012
      */
     @Override
     public void pullConfigFromPredecessors() {
@@ -193,7 +190,6 @@ public class ProductLineProject extends PLPInfo {
      * found and whether at least one associated predecessor is located in the current workspace. Note: a complete
      * Instantiation might still not be possible due to missing instantiator engines
      * 
-     * @see FileInstantiator#getOperationalPath()
      * @return true, if it should be possible
      */
     public boolean isTransformable() {

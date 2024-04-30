@@ -65,7 +65,7 @@ public class EclipsePersistencer implements IPersistencer {
      * directly into the workspace (no linking supported). If the project shall not be stored directly into the
      * workspace, than please use the other constructor.
      * @param projectName The name of the project (which must be stored inside the workspace).
-     * @param monitor A progress monitor, or <tt>null</tt> if progress reporting is not desired
+     * @param monitor A progress monitor, or <code>null</code> if progress reporting is not desired
      */
     public EclipsePersistencer(String projectName, IProgressMonitor monitor) {
         this(new File(WORKSPACE_FOLDER, projectName), monitor);
@@ -74,7 +74,7 @@ public class EclipsePersistencer implements IPersistencer {
     /**
      * This constructor can be used if a project shall be/is stored outside the workspace (e.g. is only linked).
      * @param projectFolder The top level folder of the project.
-     * @param monitor A progress monitor, or <tt>null</tt> if progress reporting is not desired
+     * @param monitor A progress monitor, or <code>null</code> if progress reporting is not desired
      */
     public EclipsePersistencer(File projectFolder, IProgressMonitor monitor) {
         this.projectFolder = projectFolder;
@@ -95,7 +95,7 @@ public class EclipsePersistencer implements IPersistencer {
     /**
      * Creates an empty IProject inside the Eclipse workspace which is suitable for EASy.
      * @param projectID The unique ID of the project which should be created.
-     * If <tt>null</tt> is inserted, a random ID will be generated
+     * If <code>null</code> is inserted, a random ID will be generated
      * @param natures Additional natures which shall be added to the newly created IProject.
      * @param lazy if <code>true</code>, create only required parts, else assume that project does not exist before
      * @throws PersistenceException Will be thrown if the System cannot create folders and files in the parentFolder.
@@ -137,7 +137,7 @@ public class EclipsePersistencer implements IPersistencer {
     /**
      * Creates an empty IProject inside the Eclipse workspace which is suitable for EASy.
      * @param projectID The unique ID of the project which should be created.
-     * If <tt>null</tt> is inserted, a random ID will be generated
+     * If <code>null</code> is inserted, a random ID will be generated
      * @param lazy if <code>true</code>, create only required parts, else assume that project does not exist before
      * @param natures Additional natures which shall be added to the newly created IProject.
      * @throws PersistenceException Will be thrown if the System cannot create folders and files in the parentFolder.
@@ -157,7 +157,7 @@ public class EclipsePersistencer implements IPersistencer {
     /**
      * Creates an empty IProject inside the Eclipse workspace which is suitable for EASy.
      * @param projectID The unique ID of the project which should be created.
-     * If <tt>null</tt> is inserted, a random ID will be generated
+     * If <code>null</code> is inserted, a random ID will be generated
      * @param varModel An already existing varmodel, which should be integrated into the newly created project.
      * @param natures Additional natures which shall be added to the newly created IProject.
      * @throws PersistenceException Will be thrown if the System cannot create folders and files in the parentFolder.

@@ -69,10 +69,10 @@ public class EASyProjectCreatorFactory {
      * Creates a new EASy project.
      * @param name The name of the EASy project.
      * @param predecessorID Optional: The projectID of a predecessor for the new project.
-     *     If <tt>null</tt> a new (not derived) project without a predecessor will be created.
+     *     If <code>null</code> a new (not derived) project without a predecessor will be created.
      * @param lazy if <code>true</code>, create only required parts, else assume that project does not exist before.
-     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
-     *     The configurators will be applied in the ordering of the array.
+     * @param configurators Optional list of configurators to configure the newly created project, 
+     *     maybe <code>null</code>. The configurators will be applied in the ordering of the array.
      * @return The newly created {@link ProductLineProject} with the specified project name,
      *     created inside the workspace.
      * @throws ProjectCreationException If a name was used, which could not be used for creating a new EASy project.

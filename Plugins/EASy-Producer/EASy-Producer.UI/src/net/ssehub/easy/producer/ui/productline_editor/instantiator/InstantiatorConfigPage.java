@@ -56,8 +56,8 @@ import net.ssehub.easy.producer.ui.productline_editor.instantiator.TreeNode.Inse
  * <li>See informations about the instantiator that is currently shown</li>
  * <li>See the filetype an instantiator will handle, after clicking save, if there are multiple filetypes to be handled,
  * the type will be shown as "various"</li>
- * </ul>
  * <li>To check for files that might be instantiated by multiple instantiator engines</li>
+ * </ul>
  * 
  * @author gawenda
  * @author El-Sharkawy

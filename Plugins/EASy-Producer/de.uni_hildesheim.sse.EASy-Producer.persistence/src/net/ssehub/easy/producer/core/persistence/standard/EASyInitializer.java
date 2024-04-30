@@ -68,8 +68,8 @@ public abstract class EASyInitializer {
     /**
      * Changes the {@link net.ssehub.easy.dslCore.IResourceInitializer} of all
      * {@link net.ssehub.easy.dslCore.ModelUtility}s.
-     * @param runsInEclipse <tt>true</tt> if the {@link EclipseResourceInitializer} should be used,
-     *     <tt>false</tt> if the {@link StandaloneInitializer} should be used.
+     * @param runsInEclipse <code>true</code> if the {@link EclipseResourceInitializer} should be used,
+     *     <code>false</code> if the {@link StandaloneInitializer} should be used.
      */
     public static void setInitializer(boolean runsInEclipse) {
         if (runsInEclipse) {

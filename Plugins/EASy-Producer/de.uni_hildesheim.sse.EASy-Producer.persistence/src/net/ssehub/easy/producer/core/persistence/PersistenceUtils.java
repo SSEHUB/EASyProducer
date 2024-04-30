@@ -353,7 +353,7 @@ public class PersistenceUtils {
      * @param projectName The qualified name of the model project which should be read/saved
      * @param projectVersion The version of the model project which should be read/saved, can be <code>null</code>.
      * @param storagePath The location (top level folder) of the configuration files
-     * @param extension The file extension (<tt>".ivml"</tt> for IVML files, or <tt>".vil"</tt>)
+     * @param extension The file extension (<code>".ivml"</code> for IVML files, or <code>".vil"</code>)
      * @return The absolute path for the file to be written/read.
      */
     public static final String modelFileLocation(String projectName, String projectVersion, String storagePath,
@@ -441,7 +441,7 @@ public class PersistenceUtils {
      * {@link net.ssehub.easy.producer.core.persistence.datatypes.PersistentProject} to the file system.
      * @param project The IVML {@link Project} which should be saved.
      * @param storagePath The folder, where the file should be saved.
-     * @param debug If <tt>true</tt> The String "_debug" will be added to the file's name.
+     * @param debug If <code>true</code> The String "_debug" will be added to the file's name.
      * @throws PersistenceException If the file cannot be written to the file system.
      */
     public static void writeIVMLProject(Project project, String storagePath, boolean debug)
@@ -606,8 +606,8 @@ public class PersistenceUtils {
     }
     
     /**
-     * Creates a (new) build script inside <tt>plp</tt>. This build script will only call build script from all
-     * predecessor projects and will instantiate their stuff into <tt>plp</tt>.<br/>
+     * Creates a (new) build script inside <code>plp</code>. This build script will only call build script from all
+     * predecessor projects and will instantiate their stuff into <code>plp</code>.<br/>
      * In this case, this method tries to add a "instantiate all predecessors" call to the main rule.
      * @param plp The newly created Project where a new main build script shall be created.
      * @param parentPLPs Predecessor projects which shall be instantiated into the newly created project.
@@ -689,8 +689,8 @@ public class PersistenceUtils {
      * @param plp the product line project to add the import to
      * @param predecessor A predecessor project of plp, where the {@link net.ssehub.easy.varModel.model.Project}
      *     <b>and</b> the {@link Script} should be included.
-     * @param considerVIL <tt>true</tt> if the parent project has also a build script which should be considered,
-     *     <tt>false</tt> otherwise
+     * @param considerVIL <code>true</code> if the parent project has also a build script which should be considered,
+     *     <code>false</code> otherwise
      */
     public static final void addImport(PLPInfo plp, PLPInfo predecessor, boolean considerVIL) {
         String projectName = (null != predecessor.getProject()) ? predecessor.getProject().getName()

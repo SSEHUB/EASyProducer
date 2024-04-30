@@ -71,7 +71,7 @@ public class EASyConfigFileImporter {
      * sourceLocation to the specified targedLocation, while keeping sub directories. 
      * @param plpSource The predecessor project from where all EASy config files and sub folders should be copied from.
      * @param namespace A namespace, where to copy the files of the sourceLocation into a sub folder
-     * inside the destination. Maybe <tt>null</tt> if no namespace should be used.
+     * inside the destination. Maybe <code>null</code> if no namespace should be used.
      */
     public void copyConfigFiles(PLPInfo plpSource, String namespace) {        
         // The three targets, maybe same, maybe not

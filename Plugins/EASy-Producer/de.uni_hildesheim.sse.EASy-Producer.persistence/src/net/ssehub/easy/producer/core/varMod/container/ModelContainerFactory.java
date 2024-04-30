@@ -31,7 +31,7 @@ public class ModelContainerFactory {
      * Creates a {@link ModelContainer} for a successfully loaded {@link IModel}.
      * @param model The loaded model, either one of {@link Project} or {@link Script}.
      * @param location The location from the model.
-     * @return The {@link ModelContainer} or <tt>null</tt> not one of {@link Project} or {@link Script} was passed
+     * @return The {@link ModelContainer} or <code>null</code> not one of {@link Project} or {@link Script} was passed
      *     as a model.
      */
     public static ModelContainer<?> createContainer(IModel model, Configuration location) {
@@ -52,10 +52,10 @@ public class ModelContainerFactory {
      * Creates a {@link ModelContainer} for a loaded {@link IModel}, which contain {@link SemanticErrorDescription}s.
      * @param model The loaded model, either one of {@link Project} or {@link Script}.
      * @param description description A description of an occurred semantic error while parsing the {@link IModel}.
-     *     Can be <tt>null</tt>, then this constructor has the same behavior as
+     *     Can be <code>null</code>, then this constructor has the same behavior as
      *     {@link ModelContainerFactory#createContainer(IModel, Configuration)}.
      * @param location The location from the model.
-     * @return The {@link ModelContainer} or <tt>null</tt> not one of {@link Project} or {@link Script} was passed
+     * @return The {@link ModelContainer} or <code>null</code> not one of {@link Project} or {@link Script} was passed
      *     as a model.
      */
     public static ModelContainer<?> createContainer(IModel model, SemanticErrorDescription description,

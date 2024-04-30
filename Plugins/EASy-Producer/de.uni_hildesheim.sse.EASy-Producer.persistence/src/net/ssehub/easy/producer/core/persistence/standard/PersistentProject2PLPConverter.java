@@ -99,7 +99,7 @@ public class PersistentProject2PLPConverter implements PersistenceConstants {
     /**
      * Creates ReasoningConfiguration.
      * @param model A model of type {@link ModelType#INSTANTIATORS} holding all instantiator information.
-     * @param plp The {@link ProductLineProject} where the instantiators should be saved
+     * @param plp The {@link PLPInfo} where the instantiators should be saved
      */
     private void createReasonerConfiguration(PLPInfo plp, Model model) {
         ReasonerConfiguration reasonerConfig = new ReasonerConfiguration();

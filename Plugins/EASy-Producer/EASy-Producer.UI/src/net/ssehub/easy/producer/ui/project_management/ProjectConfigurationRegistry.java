@@ -31,8 +31,8 @@ public class ProjectConfigurationRegistry {
 
     /**
      * Registers a new {@link AbstractProjectCreationDescriptor}.
-     * @param descriptor A new {@link AbstractProjectCreationDescriptor}, must not be <tt>null</tt> or added multiple
-     * times.
+     * @param descriptor A new {@link AbstractProjectCreationDescriptor}, must not 
+     * be <code>null</code> or added multiple times.
      */
     public static synchronized void registerProjectDescriptor(AbstractProjectCreationDescriptor descriptor) {
         descriptors.add(descriptor);

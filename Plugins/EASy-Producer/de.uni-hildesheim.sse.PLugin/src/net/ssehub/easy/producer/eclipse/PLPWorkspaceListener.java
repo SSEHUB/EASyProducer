@@ -100,8 +100,8 @@ public class PLPWorkspaceListener implements IResourceChangeListener {
     /**
      * This method checks whether the  closed/deleted resource was an EASy project.
      * If the  closed/deleted resource was an EASy project, the included plp will be added to the {@link SPLsManager}.
-     * @param preChangeEvent A <tt>IResourceChangeEvent.PRE_CLOSE</tt> or <tt>IResourceChangeEvent.PRE_DELETE</tt> event
-     * triggered by the workspace.
+     * @param preChangeEvent A <code>IResourceChangeEvent.PRE_CLOSE</code> or 
+     *   <code>IResourceChangeEvent.PRE_DELETE</code> event triggered by the workspace.
      */
     private void handleRemovedResource(IResourceChangeEvent preChangeEvent) {
         IResource deletedResource = preChangeEvent.getResource();
@@ -135,7 +135,7 @@ public class PLPWorkspaceListener implements IResourceChangeListener {
     /**
      * This method checks whether the opened/imported resource was an EASy project.
      * If the opened/imported resource was an EASy project, the included plp will be added to the {@link SPLsManager}.
-     * @param postChangeEvent A <tt>IResourceChangeEvent.POST_CHANGE</tt> event triggered by the workspace.
+     * @param postChangeEvent A <code>IResourceChangeEvent.POST_CHANGE</code> event triggered by the workspace.
      */
     private void handleOpenedResource(IResourceChangeEvent postChangeEvent) {
         IResourceDelta openedDelta = postChangeEvent.getDelta();

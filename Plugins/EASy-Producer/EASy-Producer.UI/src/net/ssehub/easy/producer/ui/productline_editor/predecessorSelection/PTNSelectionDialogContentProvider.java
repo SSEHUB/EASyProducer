@@ -20,7 +20,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 /**
  * Content Provider for the {@link PredecessorSelectionDialog}.
- * Returns the selected <tt>ProductLineProject</tt>s as Object Array.
+ * Returns the selected <code>ProductLineProject</code>s as Object Array.
  * @author Crowder, Schniedermeyer, Hundt
  *
  */

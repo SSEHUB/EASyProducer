@@ -198,9 +198,9 @@ class ComboboxGUIVariable extends GUIVariable {
     /**
      * Compares the current value of the {@link IDecisionVariable} with an element of the possible value from the
      * combo box.
-     * @param currentValue The current value of the {@link IDecisionVariable}, maybe <tt>null</tt>.
+     * @param currentValue The current value of the {@link IDecisionVariable}, maybe <code>null</code>.
      * @param possibleItem An item of {@link #values}.
-     * @return <tt>true</tt> if the <tt>currentValue</tt> matches the given <tt>possibleItem</tt>
+     * @return <code>true</code> if the <code>currentValue</code> matches the given <code>possibleItem</code>
      */
     private boolean isEqual(Object currentValue, ComboItem possibleItem) {
         boolean isEqual = false;
@@ -225,7 +225,7 @@ class ComboboxGUIVariable extends GUIVariable {
      * Returns {@link Value#getValue()} considering {@link ReferenceValue}s, which are also
      * handled by this {@link GUIVariable}.
      * @param value A value from which the value should be extracted from.
-     * @return The {@link Value#getValue()} or maybe <tt>null</tt> if no value is set.
+     * @return The {@link Value#getValue()} or maybe <code>null</code> if no value is set.
      */
     private Object toObjectValue(Value value) {
         Object oValue = value.getValue();

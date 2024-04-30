@@ -3,8 +3,6 @@ package net.ssehub.easy.producer.core.mgmt;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.producer.core.AllTests;
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
-import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 import net.ssehub.easy.producer.core.persistence.Configuration;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.producer.core.persistence.datatypes.IProjectCreationResult;

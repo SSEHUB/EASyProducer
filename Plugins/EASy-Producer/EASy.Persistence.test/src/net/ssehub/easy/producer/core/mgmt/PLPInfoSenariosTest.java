@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.producer.core.AllTests;
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;

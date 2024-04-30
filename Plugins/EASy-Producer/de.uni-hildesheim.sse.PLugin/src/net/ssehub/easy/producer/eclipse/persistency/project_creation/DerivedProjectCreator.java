@@ -38,10 +38,10 @@ class DerivedProjectCreator extends AbstractProjectCreator {
     /**
      * Creates a new derived {@link ProductLineProject}.
      * @param projectName The name of the new project (should already be checked, whether the name is valid).
-     * @param predecessorID The projectID of a predecessor for the new project, must not be <tt>null</tt>.
+     * @param predecessorID The projectID of a predecessor for the new project, must not be <code>null</code>.
      * @param lazy if <code>true</code>, create only required parts, else assume that project does not exist before.
-     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
-     *     The configurators whill be applied in the ordering of the array.
+     * @param configurators Optional list of configurators to configure the newly created project, maybe 
+     *   <code>null</code>. The configurators whill be applied in the ordering of the array.
      */
     DerivedProjectCreator(String projectName, String predecessorID, boolean lazy,
         IEASyProjectConfigurator[] configurators) {

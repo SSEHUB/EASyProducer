@@ -69,7 +69,7 @@ public class GUIHistory {
     /**
      * Returns the latest inserted {@link GUIHistoryItem}.
      * 
-     * @return The latest inserted {@link GUIHistoryItem} or <tt>null</tt> if nothing was inserted yet.
+     * @return The latest inserted {@link GUIHistoryItem} or <code>null</code> if nothing was inserted yet.
      */
     public GUIHistoryItem getLastHistoryItem() {
         GUIHistoryItem lastHistoryItem = null;

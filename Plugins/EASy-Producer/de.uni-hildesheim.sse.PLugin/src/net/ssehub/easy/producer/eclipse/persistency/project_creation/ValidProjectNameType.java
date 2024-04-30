@@ -16,7 +16,7 @@
 package net.ssehub.easy.producer.eclipse.persistency.project_creation;
 
 /**
- * Returns types for {@link EASyProjectCreatorFactory#isValidProjectName()}.
+ * Returns types for {@link EASyProjectCreatorFactory#isValidProjectName(String)}.
  * @author El-Sharkawy
  *
  */

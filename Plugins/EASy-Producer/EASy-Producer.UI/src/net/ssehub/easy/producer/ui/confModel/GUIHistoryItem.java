@@ -32,7 +32,7 @@ public class GUIHistoryItem implements Comparable<GUIHistoryItem> {
 
     /**
      * Getter for the value.
-     * @return the value (must not be <tt>null</tt>).
+     * @return the value (must not be <code>null</code>).
      */
     public Value getValue() {
         return value;
@@ -40,7 +40,7 @@ public class GUIHistoryItem implements Comparable<GUIHistoryItem> {
 
     /**
      * Getter for the assignment state.
-     * @return the state (must not be <tt>null</tt>).
+     * @return the state (must not be <code>null</code>).
      */
     public IAssignmentState getState() {
         return state;
@@ -48,7 +48,7 @@ public class GUIHistoryItem implements Comparable<GUIHistoryItem> {
 
     /**
      * Getter for the variable. 
-     * @return the variable (must not be <tt>null</tt>).
+     * @return the variable (must not be <code>null</code>).
      */
     public IDecisionVariable getVariable() {
         return variable;

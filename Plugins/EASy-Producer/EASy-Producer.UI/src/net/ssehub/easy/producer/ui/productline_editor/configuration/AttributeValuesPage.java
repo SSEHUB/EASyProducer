@@ -180,7 +180,7 @@ public class AttributeValuesPage extends AbstractEASyEditorPage implements IConf
         }
 
         /**
-         * Creates and adds an <tt>SelectionListener</tt> to the checkGroup button.
+         * Creates and adds a <code>SelectionListener</code> to the checkGroup button.
          */
         private void createCheckGroupListener() {
             checkGroup.addSelectionListener(new SelectionAdapter() {
@@ -336,7 +336,7 @@ public class AttributeValuesPage extends AbstractEASyEditorPage implements IConf
         
         /**
          * Creates a new configuration for the given project. <br/>
-         * Please take a look in <tt>VarModel#addProject(Project)</tt> for more information.
+         * Please take a look in <code>VarModel#addProject(Project)</code> for more information.
          * @param project The project, where this configuration belongs to.
          * This project should already be registered at the VarModel
          * @param values the attributes with values

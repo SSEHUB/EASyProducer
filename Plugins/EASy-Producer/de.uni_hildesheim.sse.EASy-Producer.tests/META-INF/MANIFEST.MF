@@ -3,10 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: net.ssehub.easy.producer.eclipse.tests;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.producer.eclipse.tests
-Bundle-Version: 0.0.1
+Bundle-Version: 1.3.10.qualifier
 Bundle-Vendor: University of Hildesheim
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Fragment-Host: net.ssehub.easy.producer.eclipse;bundle-version="0.7.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Fragment-Host: net.ssehub.easy.producer.eclipse
 Require-Bundle: org.junit;bundle-version="4.8.1",
- net.ssehub.easy.libs.commons.io
+ net.ssehub.easy.libs.commons.io,
+ net.ssehub.easy.reasoning.sseReasoner,
+ org.eclipse.core.resources,
+ org.eclipse.ui,
+ org.eclipse.xtext,
+ org.eclipse.xtext.builder,
+ org.eclipse.xtext.ui.shared
 

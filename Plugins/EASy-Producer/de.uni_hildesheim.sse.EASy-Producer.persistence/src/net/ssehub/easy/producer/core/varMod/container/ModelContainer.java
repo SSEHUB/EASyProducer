@@ -83,7 +83,7 @@ public abstract class ModelContainer<M extends IModel> implements IModelListener
      * The model can be used but not be saved, as long the semantic error is not solved.
      * @param model The model, which should be managed by this container.
      * @param description A description of an occurred semantic error while parsing the model.
-     *     Can be <tt>null</tt>, then this constructor has the same behavior as {@link #ModelContainer(IModel)}.
+     *     Can be <code>null</code>.
      * @param modelManager The container holding and managing all models of type &lt;M&gt;.
      * @param location The location (folder) of the managed model.
      */
@@ -141,7 +141,7 @@ public abstract class ModelContainer<M extends IModel> implements IModelListener
     
     /**
      * Getter for the {@link SemanticErrorDescription} (describing a caught exception).
-     * @return The {@link SemanticErrorDescription} (describing a caught exception), or <tt>null</tt> if the model
+     * @return The {@link SemanticErrorDescription} (describing a caught exception), or <code>null</code> if the model
      * has no semantic errors (i.e. parser errors).
      */
     public SemanticErrorDescription getDescription() {
@@ -150,8 +150,8 @@ public abstract class ModelContainer<M extends IModel> implements IModelListener
     
     /**
      * Checks whether the model works and can be saved, or if a dummy was used to avoid {@link NullPointerException}s.
-     * @return <tt>true</tt> if a loaded model is used and can be saved, <tt>false</tt> if a dummy was used, which
-     * should not be saved.
+     * @return <code>true</code> if a loaded model is used and can be saved, <code>false</code> if a dummy was used, 
+     * which should not be saved.
      */
     public boolean isSaveable() {
         return null == description;
@@ -159,7 +159,7 @@ public abstract class ModelContainer<M extends IModel> implements IModelListener
     
     /**
      * {@inheritDoc}
-     * If this method is called, the stored {@link #getDescription()} will be set to <tt>null</tt> as this is
+     * If this method is called, the stored {@link #getDescription()} will be set to <code>null</code> as this is
      * usually only called if the parser has parsed the model successfully.
      */
     public void notifyReplaced(M oldModel, M newModel) {
@@ -175,7 +175,7 @@ public abstract class ModelContainer<M extends IModel> implements IModelListener
     /**
      * Returns the highest Version that is available for the managed model.
      * @return The highest version that exists within all models stored at the same configFolder
-     *     (or <tt>null</tt> if no model exists).
+     *     (or <code>null</code> if no model exists).
      * @see #listAvailableModels()
      */
     public Version getHighestVersion() {

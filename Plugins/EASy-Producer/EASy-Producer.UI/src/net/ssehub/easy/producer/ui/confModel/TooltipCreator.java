@@ -50,7 +50,7 @@ class TooltipCreator implements IDatatypeVisitor {
     /**
      * Getter for the generated tooltip.
      * @return Returns the datatype of the given variable as string. This can be used as a tooltip inside the GUI.
-     * This string must not be <tt>null</tt>.
+     * This string must not be <code>null</code>.
      */
     String getTooltip() {
         return tooltip.toString();

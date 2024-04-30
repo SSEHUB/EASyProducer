@@ -348,9 +348,9 @@ public class FilterMenu extends AbstractConfigMenu {
     
     /**
      * Part of the {@link SelectionListener} of the interface selection combo box.
-     * Reads the current selection of the combo box. If <tt>[all]</tt> was selected (index = 0),
+     * Reads the current selection of the combo box. If <code>[all]</code> was selected (index = 0),
      * no filter is set, otherwise the selected interface is used to filter the configuration.
-     * @param iface The selected propject interface or <tt>null</tt> if no interface was selected.
+     * @param iface The selected propject interface or <code>null</code> if no interface was selected.
      */
     private void selectInterfaceFilter(final ProjectInterface iface) {
         InterfaceFilter interfacefilter = (null != iface) ? new InterfaceFilter(iface) : null;

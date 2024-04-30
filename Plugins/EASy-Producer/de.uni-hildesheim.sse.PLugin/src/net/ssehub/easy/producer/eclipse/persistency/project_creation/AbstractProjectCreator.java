@@ -58,7 +58,7 @@ abstract class AbstractProjectCreator {
    
     /**
      * Configurators to configure the project during creation.
-     * Maybe <tt>null</tt>.
+     * Maybe <code>null</code>.
      */
     private IEASyProjectConfigurator[] configurators;
 
@@ -66,7 +66,8 @@ abstract class AbstractProjectCreator {
      * Sole constructor for creating new EASy projects.
      * @param projectName The name of the new project (should already be checked, whether the name is valid).
      * @param lazy if <code>true</code>, create only required parts, else assume that project does not exist before
-     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
+     * @param configurators Optional list of configurators to configure the newly created project, 
+     *   maybe <code>null</code>.
      *     The configurators whill be applied in the ordering of the array.
      */
     protected AbstractProjectCreator(String projectName, boolean lazy, IEASyProjectConfigurator... configurators) {
@@ -79,7 +80,7 @@ abstract class AbstractProjectCreator {
     
     /**
      * Returns the newly created {@link ProductLineProject}.
-     * @return The newly created {@link ProductLineProject} or <tt>null</tt> if this method was called before the
+     * @return The newly created {@link ProductLineProject} or <code>null</code> if this method was called before the
      *     creation was finished. 
      */
     protected final ProductLineProject getCreatedProject() {
@@ -117,31 +118,33 @@ abstract class AbstractProjectCreator {
         
         monitor.beginTask("Create Java Project", 10);
 
-        // Create the project (SE: unsure whether this is needed)
-        try {
-            if (!project.exists()) {
-                IProjectDescription desc = project.getWorkspace().newProjectDescription(project.getName());
-                desc.setLocationURI(null);
-                project.create(desc, monitor);
-                monitor = null;
+        if (null != project) {
+            // Create the project (SE: unsure whether this is needed)
+            try {
+                if (!project.exists()) {
+                    IProjectDescription desc = project.getWorkspace().newProjectDescription(project.getName());
+                    desc.setLocationURI(null);
+                    project.create(desc, monitor);
+                    monitor = null;
+                }
+                if (!project.isOpen()) {
+                    project.open(monitor);
+                    monitor = null;
+                }
+            } catch (CoreException e) {
+                LOGGER.exception(e);
+            } finally {
+                if (monitor != null) {
+                    monitor.done();
+                }
             }
-            if (!project.isOpen()) {
-                project.open(monitor);
-                monitor = null;
-            }
-        } catch (CoreException e) {
-            LOGGER.exception(e);
-        } finally {
-            if (monitor != null) {
-                monitor.done();
-            }
-        }
-        
-        // Configure project to java Project
-        if (null != configurators) {
-            for (IEASyProjectConfigurator configurator : configurators) {
-                if (null != configurator) {
-                    configureProject(project, configurator);
+            
+            // Configure project to java Project
+            if (null != configurators) {
+                for (IEASyProjectConfigurator configurator : configurators) {
+                    if (null != configurator) {
+                        configureProject(project, configurator);
+                    }
                 }
             }
         }
@@ -207,12 +210,14 @@ abstract class AbstractProjectCreator {
      * Sets persistence properties for the newly created project and refreshes the workspace/models.
      */
     protected final void setPersistenceProperties() {
-        QualifiedName qname = new QualifiedName(ProjectConstants.UUID_PROPERTY_QNAME, "projectid");
-        try {
-            project.setPersistentProperty(qname, newPLP.getProjectID());
-            EASyPersistencer.refreshModels(newPLP);
-        } catch (CoreException e) {
-            e.printStackTrace();
+        if (null != project) {
+            QualifiedName qname = new QualifiedName(ProjectConstants.UUID_PROPERTY_QNAME, "projectid");
+            try {
+                project.setPersistentProperty(qname, newPLP.getProjectID());
+                EASyPersistencer.refreshModels(newPLP);
+            } catch (CoreException e) {
+                e.printStackTrace();
+            }
         }
     }
     

@@ -9,7 +9,7 @@ import net.ssehub.easy.producer.core.persistence.standard.ProjectCreationResult;
 
 /**
  * This result will be returned after calling the
- * <tt>EclipsePersistencer#createEASyProject(String, String, String...)</tt> method.
+ * <code>EclipsePersistencer#createEASyProject(String, String, String...)</code> method.
  * @author El-Sharkawy
  *
  */

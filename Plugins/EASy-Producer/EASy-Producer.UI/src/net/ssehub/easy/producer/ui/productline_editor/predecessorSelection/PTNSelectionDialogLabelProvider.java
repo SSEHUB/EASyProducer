@@ -25,7 +25,7 @@ import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 
 /**
  * LabelProvider for the {@link PredecessorSelectionDialog}.
- * Returns converts the <tt>ProductLineProject</tt>s displayed in this dialog into readable Strings.
+ * Returns converts the <code>ProductLineProject</code>s displayed in this dialog into readable Strings.
  * @author Crowder, Schniedermeyer, Hundt
  *
  */

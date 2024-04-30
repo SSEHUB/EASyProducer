@@ -205,7 +205,7 @@ public class GUIConfiguration implements IGUIConfigurableElement {
      * Deletes all error messages for the {@link GUIVariable}'s of this configuration and adds the
      * given messages to variables affected variables.
      * @param warnings A list of error/warning messages, produced by a reasoning step.
-     * <tt>warnings[i].getConflicts()</tt> must return a list containing only constraints.
+     * <code>warnings[i].getConflicts()</code> must return a list containing only constraints.
      */
     public void setErrorMessages(Message[] warnings) {        
         // Add all new messages
@@ -258,7 +258,7 @@ public class GUIConfiguration implements IGUIConfigurableElement {
     /**
      * Converts the nested {@link GUIVariable}'s into a temporary {@link Map}.
      * This is used inside the {@link #setErrorMessages(Message[])} method to reduce the
-     * complexity (<tt>O(2n)</tt> instead of <tt>O(n^2)</tt>).
+     * complexity (<code>O(2n)</code> instead of <code>O(n^2)</code>).
      * This also removes all stored error messages.
      * @return A map in the form of ({@link AbstractVariable}, {@link GUIVariable}).
      */

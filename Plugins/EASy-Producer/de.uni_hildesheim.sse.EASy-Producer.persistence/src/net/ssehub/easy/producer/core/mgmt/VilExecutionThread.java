@@ -31,13 +31,13 @@ import net.ssehub.easy.producer.core.persistence.internal.Activator;
  * Usage:
  * <ol>
  *   <li>Create new thread (one per {@link PLPInfo} object, should be called by the PLPInfo):<br/>
- *     <tt>vilExecutor = new VilExecutionThread(this);</tt></li>
+ *     <code>vilExecutor = new VilExecutionThread(this);</code></li>
  *   <li>Register listener to get informed when the instantiation is finished/aborted:<br/>
- *     <tt>vilExecutor.addListener(newListener);</tt></li>
+ *     <code>vilExecutor.addListener(newListener);</code></li>
  *   <li>Start the instantiation:<br/>
- *     <tt>vilExecutor.startInstantiation(observer);</tt></li>
+ *     <code>vilExecutor.startInstantiation(observer);</code></li>
  *   <li>Abort the instantiation if necessary, e.g. in an endless loop:<br/>
- *     <tt>vilExecutor.abortInstantiation(observer);</tt></li>
+ *     <code>vilExecutor.abortInstantiation(observer);</code></li>
  * </ol>
  * @author El-Sharkawy
  */
@@ -52,7 +52,7 @@ public class VilExecutionThread implements Runnable {
     
     /**
      * Creates a new VIL execution thread for the given {@link PLPInfo}, but will not start the instantiation.
-     * @param plp The {@link PLPInfo}, which may be instantiated (must <b>not</b> be <tt>null</tt>).
+     * @param plp The {@link PLPInfo}, which may be instantiated (must <b>not</b> be <code>null</code>).
      */
     public VilExecutionThread(PLPInfo plp) {
         this.plp = plp;
@@ -110,10 +110,11 @@ public class VilExecutionThread implements Runnable {
     
     /**
      * Starts the execution of the underlying VIL script ({@link PLPInfo#getBuildScript()}) in an own thread. 
-     * @param observer The observer to inform about the current progress (in case of <tt>null</tt>
+     * @param observer The observer to inform about the current progress (in case of <code>null</code>
      * {@link ProgressObserver#NO_OBSERVER} will be used).
-     * @param waitFor <tt>true</tt> This method will wait until the script was processed completely (blocking method),
-     *   <tt>false</tt> script will be processed in an asynchronous manner (usually used in an GUI environment).
+     * @param waitFor <code>true</code> This method will wait until the script was processed completely (blocking 
+     *   method), <code>false</code> script will be processed in an asynchronous manner (usually used in an GUI 
+     *   environment).
      * @see #abortInstantiation()
      */
     public void startInstantiation(ProgressObserver observer, boolean waitFor) {
@@ -135,8 +136,8 @@ public class VilExecutionThread implements Runnable {
     
     /**
      * Aborts the current execution of the VIL script at the next possible point (that is not any time possible, e.g.,
-     * during the execution of third party tools like embedded <tt>maven</tt> scripts).
-     * @see #startInstantiation(ProgressObserver)
+     * during the execution of third party tools like embedded <code>maven</code> scripts).
+     * @see #startInstantiation(ProgressObserver, boolean)
      */
     public void abortInstantiation() {
         if (null != executor) {

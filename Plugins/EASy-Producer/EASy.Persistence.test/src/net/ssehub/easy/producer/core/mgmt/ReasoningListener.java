@@ -1,6 +1,5 @@
 package net.ssehub.easy.producer.core.mgmt;
 
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
@@ -30,7 +29,7 @@ abstract class ReasoningListener implements IReasonerListener {
     
     /**
      * Returns whether the reasoning was performed successfully.
-     * @return <tt>true</tt> if the reasoning was applied sucessfully, otherwise <tt>false</tt>.
+     * @return <code>true</code> if the reasoning was applied successfully, otherwise <code>false</code>.
      */
     boolean didReasoning() {
         return reasoningFinished;

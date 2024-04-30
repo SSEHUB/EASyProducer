@@ -41,7 +41,7 @@ public interface IOverridingEditor extends IRefreshableEditor {
      * 
      * @param value An object given by the Eclipse GUI.
      * 
-     * @return A {@link Value} representation of the object, maybe <tt>null</tt>.
+     * @return A {@link Value} representation of the object, maybe <code>null</code>.
      * @throws ValueDoesNotMatchTypeException in case of <code>value</code> cannot be converted to
      * the related data type of the wrapped {@link net.ssehub.easy.varModel.confModel.IDecisionVariable}.
      */
@@ -51,7 +51,7 @@ public interface IOverridingEditor extends IRefreshableEditor {
      * Returns a string representation of the current value.
      * This is used when <b>no</b> cursor is inside the cell (if the user is <b>not</b> editing the variable).
      * 
-     * @return A string representation of the current value or <tt>null</tt>.
+     * @return A string representation of the current value or <code>null</code>.
      */
     public abstract String getValueText();
     

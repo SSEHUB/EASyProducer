@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>net.ssehub.easy.producer.ui</artifactId>
+  <packaging>eclipse-plugin</packaging>
+
+  <name>EASy-Producer core library for Eclipse</name>
+  <description>The functional core of EASy-Producer utilizing IVML, VIL and VTL.</description>
+  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+ 
+  <parent>
+     <groupId>net.ssehub.easy</groupId>
+     <artifactId>dependencies</artifactId>
+     <version>1.3.10-SNAPSHOT</version>
+     <relativePath/>
+  </parent>
+  
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <directory>bin</directory>
+  </build>  
+  
+  <dependencies>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.ui</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.core.runtime</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.jdt</groupId>
+          <artifactId>org.eclipse.jdt.ui</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.ui.forms</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.jdt</groupId>
+          <artifactId>org.eclipse.jdt.core</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.ui.navigator.resources</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.ui.ide</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.jface</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.ui.workbench</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.xtext</groupId>
+          <artifactId>org.eclipse.xtext.ui</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>net.ssehub.easy.producer.eclipse</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>net.ssehub.easy.reasoning.core</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.platform</groupId>
+          <artifactId>org.eclipse.ui.console</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>net.ssehub.easy.varModel</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>net.ssehub.easy.dslCore.ui</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId> de.uni_hildesheim.sse.vil.buildlang.ui</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId> net.ssehub.easy.dslCore</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>de.uni_hildesheim.sse.vil.buildlang</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      
+      <!-- required for eclipse -->
+      <dependency>
+        <groupId>javax</groupId>
+        <artifactId>servlet</artifactId>
+      </dependency> 
+      <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.w3c.css</groupId>
+        <artifactId>sac</artifactId>
+      </dependency>
+    <dependency>
+        <groupId>org.eclipse.ide</groupId>
+        <artifactId>org.antlr.runtime</artifactId>
+    </dependency>
+  </dependencies>  
+ </project>

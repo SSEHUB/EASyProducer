@@ -32,14 +32,14 @@ public interface IEASyProjectConfigurator {
 
     /**
      * Configures the given {@link IProject}.
-     * @param project The project to configure. Should be a new created project, must not be <tt>null</tt>.
+     * @param project The project to configure. Should be a new created project, must not be <code>null</code>.
      */
     public void configure(IProject project);
     
     /**
      * Configures the given {@link IProject}, while deriving a new product line member project.
-     * @param project The project to configure. Should be a new created project, must not be <tt>null</tt>.
-     * @param parentProject The project from which <tt>project</tt> was derived. This should be used as a template.
+     * @param project The project to configure. Should be a new created project, must not be <code>null</code>.
+     * @param parentProject The project from which <code>project</code> was derived. This should be used as a template.
      */
     public void configure(IProject project, IProject parentProject);
 }

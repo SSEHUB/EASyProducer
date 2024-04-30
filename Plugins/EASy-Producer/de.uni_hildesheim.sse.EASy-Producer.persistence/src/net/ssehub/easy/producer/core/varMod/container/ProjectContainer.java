@@ -33,7 +33,7 @@ public class ProjectContainer extends ModelContainer<Project> {
      * The {@link Project} can be used but not be saved, as long the semantic error is not solved.
      * @param project The {@link Project}, which should be managed by this container.
      * @param description description A description of an occurred semantic error while parsing the {@link Project}.
-     *     Can be <tt>null</tt>, then this constructor has the same behavior as {@link #ProjectContainer(Project)}.
+     *     Can be <code>null</code>.
      * @param location The location (folder) of the managed project.
      */
     public ProjectContainer(Project project, SemanticErrorDescription description,

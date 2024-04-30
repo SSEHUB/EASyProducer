@@ -50,7 +50,7 @@ public class EditorContextMenuListener implements SelectionListener {
      * Sole constructor for this listener.
      * @param viewer The {@link ConfigurationTableEditor} having a context menu.
      * @param action Specifies the action which shall be performed
-     * by the specific menu item (must not be <tt>null</tt>).
+     * by the specific menu item (must not be <code>null</code>).
      */
     public EditorContextMenuListener(StructuredViewer viewer, Action action) {
         this.viewer = viewer;

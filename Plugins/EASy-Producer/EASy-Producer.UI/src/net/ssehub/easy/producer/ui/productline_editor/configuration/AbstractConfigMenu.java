@@ -33,7 +33,7 @@ public abstract class AbstractConfigMenu extends AbstractHeaderMenu implements I
      * Setter for the {@link IGUIConfigurationContainer}.
      * 
      * @param guiConfigContainer
-     *            Sets the {@link IGUIConfigurationContainer} (Can be <tt>null</tt>, but than errorMessages from the
+     *            Sets the {@link IGUIConfigurationContainer} (Can be <code>null</code>, but than errorMessages from the
      *            reasoning steps will not be passed to the {@link IGUIConfigurationContainer}, also ViewerFilters will
      *            not be handled).
      */
@@ -57,7 +57,7 @@ public abstract class AbstractConfigMenu extends AbstractHeaderMenu implements I
     
     /**
      * Returns the {@link IGUIConfigurationContainer} which will be manipulated by this menu.
-     * @return The related {@link IGUIConfigurationContainer}, can be <tt>null</tt> if no container
+     * @return The related {@link IGUIConfigurationContainer}, can be <code>null</code> if no container
      *     was set via the {@link #setGUIConfiguration(IGUIConfigurationContainer)} method.
      */
     protected final IGUIConfigurationContainer getConfigContainer() {
@@ -68,7 +68,8 @@ public abstract class AbstractConfigMenu extends AbstractHeaderMenu implements I
      * Sets the filters, replacing any previous filters, and triggers
      * refiltering and resorting of the elements.
      * 
-     * @param filters A set of filters which shall be applied to the current configuration, must not be <tt>null</tt>
+     * @param filters A set of filters which shall be applied to the current configuration, must not be 
+     * <code>null</code>
      * @see IGUIConfigurationContainer#setFilters(org.eclipse.jface.viewers.ViewerFilter[])
      */
     protected final void setFilter(GUIConfigurationFilter filters) {

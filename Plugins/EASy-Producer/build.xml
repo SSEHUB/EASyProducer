@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="EasyAll" default="test.without.gui" basedir=".">
+<project name="EasyAll" default="only.compile" basedir=".">
     <!-- GUI tests are currently disabled, because we have no appropriate GUI-Test-Eclipse -->
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
 	<path id="emma.lib" >    		
 		<pathelement location="${emma.path}/emma.jar" />	
@@ -31,9 +32,9 @@
 	</target>
 	
 	<target name="compile">
-		<echo>###################################</echo>
-        <echo>###  Compiling EASy-Persistence ###</echo>
-        <echo>###################################</echo>
+		<echo>############################</echo>
+        <echo>###  Compiling EASy-Core ###</echo>
+        <echo>############################</echo>
         <ant dir="${home.easy.persistence.dir}" antfile="${build.script.name}" />
         
         <echo>###################################</echo>
@@ -41,14 +42,14 @@
         <echo>###################################</echo>
         <ant dir="${home.easy.easy-producer.core.tests.dir}" antfile="${build.script.name}" />
 		
-        <echo>############################</echo>
-        <echo>###  Compiling EASy-Core ###</echo>
-        <echo>############################</echo>
+        <echo>####################################</echo>
+        <echo>###  Compiling EASy-Eclipse-Core ###</echo>
+        <echo>####################################</echo>
         <ant dir="${home.easy.PLugin.dir}" antfile="${build.script.name}" />
 		
-        <echo>##########################</echo>
-        <echo>###  Compiling EASy-UI ###</echo>
-        <echo>##########################</echo>
+        <echo>##################################</echo>
+        <echo>###  Compiling EASy-Eclipse-UI ###</echo>
+        <echo>##################################</echo>
         <ant dir="${home.easy.easy-producer.ui.dir}" antfile="${build.script.name}" /> 
 
         <echo>############################</echo>
@@ -317,6 +318,6 @@
 	</target>	
 	
 	<target name="only.compile" depends="init, compile"/>
-	<target name="test.without.gui" depends="only.compile, test, storeJars"/>
-	<target name="all" depends="test.without.gui, test.gui"/>
+	<!--<target name="test.without.gui" depends="only.compile, test, storeJars"/>
+	<target name="all" depends="test.without.gui, test.gui"/>-->
 </project>

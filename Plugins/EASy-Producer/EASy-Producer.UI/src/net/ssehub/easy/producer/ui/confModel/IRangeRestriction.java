@@ -27,8 +27,8 @@ public interface IRangeRestriction {
     /**
      * Specifies which variables are restricted by this filter.
      * @param variable A variable for which a {@link GUIVariable} shall be generated.
-     * @return <tt>true</tt> if the values of this variables shall be filtered, <tt>false</tt> if all assignable filters
-     * shall be presented to the user.
+     * @return <code>true</code> if the values of this variables shall be filtered,
+     * <code>false</code> if all assignable filters shall be presented to the user.
      */
     public boolean appliesTo(IDecisionVariable variable);
     
@@ -37,7 +37,7 @@ public interface IRangeRestriction {
      * @param value {@link net.ssehub.easy.varModel.model.values.Value#getValue()} of possible value,
      *     which may be filtered.
      * @param label Optional parameter for a displayable label
-     * @return <tt>true</tt> value should be omitted, <tt>false</tt> keep value.
+     * @return <code>true</code> value should be omitted, <code>false</code> keep value.
      */
     public boolean filterValue(Object value, String label);
 }

@@ -146,7 +146,7 @@ public class PersistentProject {
      * @param index a 0-based index specifying model to be returned
      * @return all models of the project
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     *         (<code>index &lt; 0 || index &gt;= size()</code>)
      */
     public Model getModel(int index) {
         return models[index];
@@ -201,7 +201,7 @@ public class PersistentProject {
     
     /**
      * Setter for the ivml project, which should be read/saved.
-     * @param project A ivml project (must not be <tt>null</tt>).
+     * @param project A ivml project (must not be <code>null</code>).
      * @param location The folder storing the loaded project.
      */
     public void setProject(Project project, Configuration location) {
@@ -210,7 +210,7 @@ public class PersistentProject {
     
     /**
      * Setter for the ivml project, which should be read/saved.
-     * @param varModel A managed {@link Project} in a {@link ProjectContainer} (must not be <tt>null</tt>).
+     * @param varModel A managed {@link Project} in a {@link ProjectContainer} (must not be <code>null</code>).
      */
     public void setVarModel(ProjectContainer varModel) {
         this.project = varModel;
@@ -218,7 +218,7 @@ public class PersistentProject {
     
     /**
      * Setter for the main VIL build script file.
-     * @param mainBuildScript The entry point for the build script definition (must not be <tt>null</tt>).
+     * @param mainBuildScript The entry point for the build script definition (must not be <code>null</code>).
      * @param location The folder storing the loaded project.
      */
     public void setScript(Script mainBuildScript, Configuration location) {
@@ -227,7 +227,7 @@ public class PersistentProject {
     
     /**
      * Setter for the main VIL build script file.
-     * @param mainBuildScript A managed {@link Script} in a {@link ScriptContainer} (must not be <tt>null</tt>).
+     * @param mainBuildScript A managed {@link Script} in a {@link ScriptContainer} (must not be <code>null</code>).
      */
     public void setScript(ScriptContainer mainBuildScript) {
         this.mainBuildScript = mainBuildScript;

@@ -16,8 +16,8 @@ class CompoundGUIVariable extends AbstractExpandableGUIVariable {
      * @param variable The {@link IDecisionVariable} represented by this GUIVariable
      * @param parent The controlling composite, needed for the creation of CellEditors
      * @param config The {@link GUIConfiguration} holding this GUIVariable
-     * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this variable
-     * is a top level variable stored inside the configuration.
+     * @param varParent The parent GUIVariable holding this variable. Can be <code>null</code> if and only 
+     * if this variable is a top level variable stored inside the configuration.
      */
     CompoundGUIVariable(IDecisionVariable variable, Composite parent, GUIConfiguration config, GUIVariable varParent) {
         super(variable, parent, config, varParent);

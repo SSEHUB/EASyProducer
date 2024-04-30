@@ -143,7 +143,7 @@ public class TypeSelectionDialog {
     }
 
     /**
-     * Returns "(actual: <valueType>)" if <code>value</code> is not <b>null</b>, <code>deflt</code> else. Can be 
+     * Returns "(actual: &lt;valueType&gt;)" if <code>value</code> is not <b>null</b>, <code>deflt</code> else. Can be 
      * used to compose the title of a type selection dialog. [utility]
      * 
      * @param value the value to return the type string for
@@ -155,7 +155,7 @@ public class TypeSelectionDialog {
     }
 
     /**
-     * Returns "(actual: <type>)" if <code>type</code> is not <b>null</b>, <code>deflt</code> else. Can be 
+     * Returns "(actual: &lt;type&gt;)" if <code>type</code> is not <b>null</b>, <code>deflt</code> else. Can be 
      * used to compose the title of a type selection dialog. [utility]
      * 
      * @param type the value to return the type string for

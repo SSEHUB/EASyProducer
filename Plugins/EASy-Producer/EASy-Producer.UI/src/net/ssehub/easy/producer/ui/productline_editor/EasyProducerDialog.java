@@ -70,7 +70,7 @@ public class EasyProducerDialog {
      * 
      * @param parent The caller of this dialog.
      * @param messages The error messages
-     * @return <b>SWT.OK</b> after the dialog is confirmed or <tt>0</tt>.
+     * @return <b>SWT.OK</b> after the dialog is confirmed or <code>0</code>.
      */
     public static int showReasonerErrorDialog(Shell parent, Message... messages) {
         StringBuffer errorMsg = new StringBuffer("Following errors occured:");
@@ -83,7 +83,7 @@ public class EasyProducerDialog {
      * 
      * @param parent The caller of this dialog.
      * @param messages The warning messages
-     * @return <b>SWT.OK</b> after the dialog is confirmed or <tt>0</tt>.
+     * @return <b>SWT.OK</b> after the dialog is confirmed or <code>0</code>.
      */
     public static int showReasonerWarningDialog(Shell parent, Message... messages) {
         StringBuffer warningMsg = new StringBuffer("Following warnings occured:");
@@ -96,19 +96,19 @@ public class EasyProducerDialog {
      * @param parent The caller of this dialog.
      * @param messageBoxStyle
      * <ul>
-     * <li><tt>SWT.ICON_ERROR</tt></li>
-     * <li><tt>SWT.ICON_INFORMATION</tt></li>
+     * <li><code>SWT.ICON_ERROR</code></li>
+     * <li><code>SWT.ICON_INFORMATION</code></li>
      * <li>...</li>
      * </ul>
      * @param title Should match to the given icon.
      * <ul>
-     * <li><tt>EASyProducerConstants.EASY_PRODUCER_ERROR</tt></li>
-     * <li><tt>EASyProducerConstants.EASY_PRODUCER_INFO</tt></li>
+     * <li><code>EASyProducerConstants.EASY_PRODUCER_ERROR</code></li>
+     * <li><code>EASyProducerConstants.EASY_PRODUCER_INFO</code></li>
      * <li>...</li>
      * </ul>
      * @param msg The beginning of the message, which shall be displayed.
      * @param messages The messages to be displayed
-     * @return <b>SWT.OK</b> after the dialog is confirmed or <tt>0</tt>.
+     * @return <b>SWT.OK</b> after the dialog is confirmed or <code>0</code>.
      */
     private static int showReasonerDialog(Shell parent, int messageBoxStyle, String title, StringBuffer msg,
         Message... messages) {
@@ -151,12 +151,12 @@ public class EasyProducerDialog {
     
     /**
      * Creates a dialog box, from where the error message can be copy-pasted to somewhere.
-     * @param parent The caller of this dialog, maybe <tt>null</tt>.
+     * @param parent The caller of this dialog, maybe <code>null</code>.
      * @param title The title of the dialog, should be either {@link EASyProducerConstants#EASY_PRODUCER_ERROR} or
      *     {@link EASyProducerConstants#EASY_PRODUCER_INFO}
      * @param message The message to display on the dialog.
      * @param isError Specification whether the displayed message is an error or only an information.
-     *     <tt>true</tt> a read error icon will be shown, <tt>false</tt>an info icon will be shown
+     *     <code>true</code> a read error icon will be shown, <code>false</code>an info icon will be shown
      * @return A window's return codes are window-specific, although two standard return codes are predefined:
      * <code>Window.OK</code> and <code>Window.CANCEL</code>.
      */

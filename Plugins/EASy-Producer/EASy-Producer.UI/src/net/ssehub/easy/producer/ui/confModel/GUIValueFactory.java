@@ -57,7 +57,7 @@ public class GUIValueFactory {
          * @param variable The {@link IDecisionVariable} represented by this GUIVariable
          * @param parent The controlling composite, needed for the creation of CellEditors
          * @param config The {@link GUIConfiguration} holding this BasisGUIVariable
-         * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this
+         * @param varParent The parent GUIVariable holding this variable. Can be <code>null</code> if and only if this
          * variable is a top level variable stored inside the configuration.
          */
         private VariableVisitor(IDecisionVariable variable, Composite parent, GUIConfiguration config,
@@ -71,7 +71,7 @@ public class GUIValueFactory {
          * @param variable The {@link IDecisionVariable} represented by this GUIVariable
          * @param parent The controlling composite, needed for the creation of CellEditors
          * @param config The {@link GUIConfiguration} holding this BasisGUIVariable
-         * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this
+         * @param varParent The parent GUIVariable holding this variable. Can be <code>null</code> if and only if this
          * variable is a top level variable stored inside the configuration.
          * @param rangeRestrictors Optional list to restrict values of some {@link GUIVariable},
          *     e.g., to restrict values of combo box based variables.
@@ -215,8 +215,8 @@ public class GUIValueFactory {
      * @param variable The {@link IDecisionVariable} represented by this GUIVariable
      * @param parent The controlling composite, needed for the creation of CellEditors
      * @param config The {@link GUIConfiguration} holding this BasisGUIVariable
-     * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this variable
-     * is a top level variable stored inside the configuration.
+     * @param varParent The parent GUIVariable holding this variable. Can be <code>null</code> 
+     * if and only if this variable is a top level variable stored inside the configuration.
      * @return A GUI representation of the {@link IDecisionVariable}
      */
     public static GUIVariable createVariable(IDecisionVariable variable, Composite parent, GUIConfiguration config,
@@ -231,8 +231,8 @@ public class GUIValueFactory {
      * @param variable The {@link IDecisionVariable} represented by this GUIVariable
      * @param parent The controlling composite, needed for the creation of CellEditors
      * @param config The {@link GUIConfiguration} holding this BasisGUIVariable
-     * @param varParent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this variable
-     * is a top level variable stored inside the configuration.
+     * @param varParent The parent GUIVariable holding this variable. Can be <code>null</code> 
+     * if and only if this variable is a top level variable stored inside the configuration.
      * @param rangeRestrictors Optional list to restrict values of some {@link GUIVariable}, e.g., to restrict values of
      *     combo box based variables.
      * @return A GUI representation of the {@link IDecisionVariable}

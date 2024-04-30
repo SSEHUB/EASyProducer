@@ -126,7 +126,7 @@ public class Activator extends AbstractUIPlugin {
     /**
      * Returns the version of the specified bundle as specified in its manifest.
      * 
-     * @return The version in the following format: <tt>&lt;number&gt;.&lt;number&gt;.&lt;number&gt;</tt>
+     * @return The version in the following format: <code>&lt;number&gt;.&lt;number&gt;.&lt;number&gt;</code>
      */
     public static String getVersion() {
         Bundle bundle = Platform.getBundle(PLUGIN_ID);

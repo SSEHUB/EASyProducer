@@ -107,8 +107,8 @@ public class EditProductLineAction implements IObjectActionDelegate {
     }
 
     /**
-     * Returns an adaptable object or <tt>null</tt> if the Object adaptable is neither an instance of the Class
-     * <tt>clazz</tt> nor an instance of IAdaptable.
+     * Returns an adaptable object or <code>null</code> if the Object adaptable is neither an instance of the Class
+     * <code>clazz</code> nor an instance of IAdaptable.
      * 
      * @param adaptable the object in queston
      * @param clazz the comparing class

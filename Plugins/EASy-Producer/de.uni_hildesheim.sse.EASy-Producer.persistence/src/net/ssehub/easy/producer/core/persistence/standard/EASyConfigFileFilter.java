@@ -20,7 +20,7 @@ public class EASyConfigFileFilter implements FileFilter {
     /**
      * Sole constructor for the {@link EASyConfigFileFilter}.
      * @param elementsToCopy Specification which IVML, VIL, VTL files should be considered.
-     *     If <tt>null</tt> or an empty array, all config files will be considered.
+     *     If <code>null</code> or an empty array, all config files will be considered.
      */
     public EASyConfigFileFilter(PathKind... elementsToCopy) {
         if (null == elementsToCopy || 0 == elementsToCopy.length) {
@@ -50,8 +50,8 @@ public class EASyConfigFileFilter implements FileFilter {
     /**
      * Checks whether the given file is an IVML file and should be considered.
      * @param file The name of the file (in lower case).
-     * @return <tt>true</tt> if IVML files should be considered <b>and</b> the file is an IVML file,
-     *     <tt>false</tt> otherwise.
+     * @return <code>true</code> if IVML files should be considered <b>and</b> the file is an IVML file,
+     *     <code>false</code> otherwise.
      */
     private boolean considerIVMLFiles(String file) {
         return copyIVML && (file.endsWith(PersistencyConstants.PROJECT_FILE_ENDING)
@@ -61,8 +61,8 @@ public class EASyConfigFileFilter implements FileFilter {
     /**
      * Checks whether the given file is an VIL file and should be considered.
      * @param file The name of the file (in lower case).
-     * @return <tt>true</tt> if VIL files should be considered <b>and</b> the file is an VIL file,
-     *     <tt>false</tt> otherwise.
+     * @return <code>true</code> if VIL files should be considered <b>and</b> the file is an VIL file,
+     *     <code>false</code> otherwise.
      */
     private boolean considerVILFiles(String file) {
         return copyVIL && file.endsWith(
@@ -72,8 +72,8 @@ public class EASyConfigFileFilter implements FileFilter {
     /**
      * Checks whether the given file is an VTL file and should be considered.
      * @param file The name of the file (in lower case).
-     * @return <tt>true</tt> if VTL files should be considered <b>and</b> the file is an VTL file,
-     *     <tt>false</tt> otherwise.
+     * @return <code>true</code> if VTL files should be considered <b>and</b> the file is an VTL file,
+     *     <code>false</code> otherwise.
      */
     private boolean considerVTLFiles(String file) {
         return copyVTL && file.endsWith(
@@ -83,8 +83,8 @@ public class EASyConfigFileFilter implements FileFilter {
     /**
      * Denotes whether a given filename is an IVML file.
      * @param filename The name of the file, which should be checked.
-     * @return <tt>true</tt> if the ending of the filename matches to a specified ivml file type,
-     * otherwise <tt>false</tt>.
+     * @return <code>true</code> if the ending of the filename matches to a specified ivml file type,
+     * otherwise <code>false</code>.
      */
     private boolean isEASyConfigFile(String filename) {
         String file = filename.toLowerCase();

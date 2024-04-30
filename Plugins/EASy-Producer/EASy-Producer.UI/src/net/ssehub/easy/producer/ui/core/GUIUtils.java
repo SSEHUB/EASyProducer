@@ -56,7 +56,7 @@ public class GUIUtils {
     }
 
     /**
-     * Opens the specified <tt>file</tt> inside an appropriate editor, e.g. a IVML file inside the IVML editor.
+     * Opens the specified <code>file</code> inside an appropriate editor, e.g. a IVML file inside the IVML editor.
      * The file must be located inside the workspace.
      * @param file The file which shall be opened in an IVML-Editor.
      * @throws PartInitException if the editor could not be created or initialized

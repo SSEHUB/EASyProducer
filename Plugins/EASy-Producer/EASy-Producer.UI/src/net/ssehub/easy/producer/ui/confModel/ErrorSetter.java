@@ -53,7 +53,7 @@ class ErrorSetter implements IModelVisitor {
     /**
      * For specifying a readable error message.
      * @param errorMsg A error message which can be ready by a normal user.
-     * <tt>null</tt> deletes the error message (should be done before handling the next conflict).
+     * <code>null</code> deletes the error message (should be done before handling the next conflict).
      */
     void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
@@ -149,7 +149,7 @@ class ErrorSetter implements IModelVisitor {
      * Recursive part of {@link #visitConstraint(Constraint)}: Maps a (nested) {@link IDecisionVariable} to the correct
      * (nested) {@link GUIVariable}.
      * @param variable The {@link IDecisionVariable} for which the {@link GUIVariable} shall be retrieved.
-     * @return The wrapping {@link GUIVariable} for the given {@link IDecisionVariable} or <tt>null</tt> if it could
+     * @return The wrapping {@link GUIVariable} for the given {@link IDecisionVariable} or <code>null</code> if it could
      * not be found.
      */
     private GUIVariable getVariable(IDecisionVariable variable) {

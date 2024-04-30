@@ -149,7 +149,7 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
      * @param description
      *            The description of the section (will be shown directly under the title)
      * @param gridStyle A GridData constants for configuring the behavior of the section.
-     *     Usually,  <tt>GridData.FILL_HORIZONTAL</tt> should be appropriate.
+     *     Usually,  <code>GridData.FILL_HORIZONTAL</code> should be appropriate.
      * @return A new composite where new elements can be added to.
      *     The newly created composite must be configured with a {@link GridLayout} otherwise
      *     nested elements will not be displayed.
@@ -173,7 +173,7 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
      *            The description of the section (will be shown directly under the title)
      * @param style the section style (use SWT constants).
      * @param gridStyle A GridData constants for configuring the behavior of the section.
-     *     Usually,  <tt>GridData.FILL_HORIZONTAL</tt> should be appropriate.
+     *     Usually,  <code>GridData.FILL_HORIZONTAL</code> should be appropriate.
      * @return A new composite where new elements can be added to.
      *     The newly created composite must be configured with a {@link GridLayout} otherwise
      *     nested elements will not be displayed.

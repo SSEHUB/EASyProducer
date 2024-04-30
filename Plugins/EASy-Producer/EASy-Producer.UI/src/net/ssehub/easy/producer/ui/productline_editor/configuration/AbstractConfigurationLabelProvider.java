@@ -23,7 +23,7 @@ import net.ssehub.easy.varModel.confModel.IAssignmentState;
 /**
  * Super class for configuration label provider. This label provider is capable of determining correct:
  * <ul>
- * <li>Text (<tt>String</tt>)</li>
+ * <li>Text (<code>String</code>)</li>
  * <li>Images</li>
  * </ul>
  * for every cell of a configuration editor.

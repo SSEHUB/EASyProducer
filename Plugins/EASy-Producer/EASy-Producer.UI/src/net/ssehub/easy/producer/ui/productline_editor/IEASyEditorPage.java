@@ -32,7 +32,7 @@ public interface IEASyEditorPage  {
     /**
      * Returns the text label for the editor page.
      * This is for creating labels/tabs in an editor.
-     * @return The text label for the editor page (must not be <tt>null</tt>).
+     * @return The text label for the editor page (must not be <code>null</code>).
      */
     public String getPageText();
     

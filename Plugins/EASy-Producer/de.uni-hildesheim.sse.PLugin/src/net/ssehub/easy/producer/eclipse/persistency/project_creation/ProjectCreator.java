@@ -78,10 +78,9 @@ public class ProjectCreator {
     
     /**
      * Creates a new productline member with all necessarily files and folders. The new created project will be a
-     * successor of an existing project. This method acts as a frontend for 
-     * {@link #deriveNewPLP(String)}.
-     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
-     *     The configurators will be applied in the ordering of the array.
+     * successor of an existing project.
+     * @param configurators Optional list of configurators to configure the newly created project, maybe 
+     *   <code>null</code>. The configurators will be applied in the ordering of the array.
      * 
      * @see ProjectCreator#newPLP(IEASyProjectConfigurator...)
      * @param predecessor On predecessor of the new project
@@ -101,8 +100,8 @@ public class ProjectCreator {
     
     /**
      * Creates a new product line project with all necessarily files and folders.
-     * @param configurators Optional list of configurators to configure the newly created project, maybe <tt>null</tt>.
-     *     The configurators will be applied in the ordering of the array.
+     * @param configurators Optional list of configurators to configure the newly created project, 
+     *   maybe <code>null</code>. The configurators will be applied in the ordering of the array.
      * @see #deriveNewMember(String, IEASyProjectConfigurator...)
      * @return The newly created product line project
      */

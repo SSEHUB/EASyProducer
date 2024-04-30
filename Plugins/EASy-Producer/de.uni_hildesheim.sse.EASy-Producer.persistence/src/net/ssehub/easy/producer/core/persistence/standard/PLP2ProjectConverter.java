@@ -91,7 +91,7 @@ public class PLP2ProjectConverter implements PersistenceConstants {
     }
     
     /**
-     * Converts a <tt>ReasonerConfiguration</tt> to a persistent model.
+     * Converts a <code>ReasonerConfiguration</code> to a persistent model.
      * @param reasonerModel The persistent model, where the configuration should be stored to.
      * @param reasonerConfig The origin data which should be saved persistently.
      */

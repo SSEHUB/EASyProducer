@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: de.uni-hildesheim.sse.easy.help
+Bundle-Name: net.ssehub.easy.producer.help
 Bundle-SymbolicName: net.ssehub.easy.producer.help;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.producer.help
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-Activator: net.ssehub.easy.producer.help.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: University of Hildesheim - SSE

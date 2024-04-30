@@ -69,7 +69,7 @@ public abstract class Contributions {
         /**
          * Creates a new UI element constant.
          * 
-         * @param enabled <tt>true</tt> if contribution shall be present by default, otherwise <tt>false</tt>.
+         * @param enabled <code>true</code> if contribution shall be present by default, otherwise <code>false</code>.
          * @param coreFunction depending core function, may be <b>null</b>
          */
         private UIElement(boolean enabled, CoreFunction coreFunction) {

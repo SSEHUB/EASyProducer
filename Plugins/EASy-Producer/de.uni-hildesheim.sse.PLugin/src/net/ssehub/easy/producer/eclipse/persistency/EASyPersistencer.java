@@ -68,7 +68,7 @@ public class EASyPersistencer implements PersistenceConstants {
     /**
      * Returns the location of the main ivml file for the given {@link ProductLineProject}.
      * @param plp The {@link ProductLineProject} holding the ivml file for which this method looks for.
-     * @return The location of the ivml file or <tt>null</tt> if the location could not be determined.
+     * @return The location of the ivml file or <code>null</code> if the location could not be determined.
      */
     public static File projectPath(PLPInfo plp) {
         //File configFolder = configLocation(plp.getProjectLocation());

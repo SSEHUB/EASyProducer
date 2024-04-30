@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer - Eclipse
 Bundle-SymbolicName: net.ssehub.easy.producer.eclipse;singleton:=true
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-Activator: net.ssehub.easy.producer.eclipse.Activator
 Require-Bundle: 
  org.eclipse.core.runtime,
@@ -13,7 +13,7 @@ Require-Bundle:
  net.ssehub.easy.instantiation.core;visibility:=reexport,
  org.eclipse.jdt.core
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: net.ssehub.easy.producer.eclipse
 Bundle-Vendor: University of Hildesheim - SSE
 Export-Package: net.ssehub.easy.producer.eclipse,

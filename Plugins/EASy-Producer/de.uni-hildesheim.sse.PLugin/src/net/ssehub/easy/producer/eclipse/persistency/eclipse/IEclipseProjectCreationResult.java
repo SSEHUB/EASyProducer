@@ -6,7 +6,7 @@ import net.ssehub.easy.producer.core.persistence.datatypes.IProjectCreationResul
 
 /**
  * An instance of this class will be returned after calling
- * <tt>EclipsePersistencer.createProject(String, File, String)</tt>.
+ * <code>EclipsePersistencer.createProject(String, File, String)</code>.
  * @author El-Sharkawy
  *
  */

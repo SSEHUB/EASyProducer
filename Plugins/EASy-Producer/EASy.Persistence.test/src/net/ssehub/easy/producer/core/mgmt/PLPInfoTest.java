@@ -25,7 +25,6 @@ import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.producer.core.AllTests;
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
@@ -512,7 +511,7 @@ public class PLPInfoTest extends AbstractPLPInfoTest {
      * a = 5;
      * b = (a + 1);
      * </pre>
-     * The reasoner should find a value for <tt>b</tt>.
+     * The reasoner should find a value for <code>b</code>.
      * @throws PersistenceException Must not occur, otherwise the config files inside the toplevel location are corrupt.
      */
     @Ignore("Configuration is already propagating such values autmatically...")

@@ -126,7 +126,7 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
     }
     
     /**
-     * <tt>IReasonerListener</tt> for validating the variability model (perform satisfiability check).
+     * <code>IReasonerListener</code> for validating the variability model (perform satisfiability check).
      * @author El-Sharkawy
      *
      */

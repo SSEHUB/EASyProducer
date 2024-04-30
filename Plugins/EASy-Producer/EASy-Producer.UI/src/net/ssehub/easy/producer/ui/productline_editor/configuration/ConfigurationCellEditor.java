@@ -38,7 +38,7 @@ public class ConfigurationCellEditor extends EditingSupport {
     /**
      * Returns if the column can be edited.
      * 
-     * @return <tt>true</tt> if editable
+     * @return <code>true</code> if editable
      * @param element The {@link GUIVariable} which is assigned to the current row
      */
     @Override

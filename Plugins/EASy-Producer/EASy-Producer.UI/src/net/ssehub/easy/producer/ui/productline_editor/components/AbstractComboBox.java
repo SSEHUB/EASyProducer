@@ -29,7 +29,7 @@ import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.varModel.model.Project;
 
  /**
-  * Super class for combox box working with information of a {@link PLPInfo} object.
+  * Super class for combo box working with information of a {@link PLPInfo} object.
   * @author Sascha El-Sharkawy
   * @param <Value> The kind of model elements, which shall be selected by this combo box.
   */
@@ -45,7 +45,7 @@ public abstract class AbstractComboBox<Value> {
         
         /**
          * Will be called if a new value was selected.
-         * @param selectedValue The selected value or <tt>null</tt> if
+         * @param selectedValue The selected value or <code>null</code> if
          * {@link AbstractComboBox#NO_SELECTION_VALUE} was selected.
          */
         public void valueSelected(Value selectedValue);
@@ -192,8 +192,8 @@ public abstract class AbstractComboBox<Value> {
     }
     
     /**
-     * Returns the selected value or <tt>null</tt> if {@link #NO_SELECTION_VALUE} was selected.
-     * @return The selected value or <tt>null</tt> if {@link #NO_SELECTION_VALUE} was selected
+     * Returns the selected value or <code>null</code> if {@link #NO_SELECTION_VALUE} was selected.
+     * @return The selected value or <code>null</code> if {@link #NO_SELECTION_VALUE} was selected
      */
     public Value getSelectedValue() {
         int selectedIndex = combobox.getSelectionIndex();
@@ -211,7 +211,7 @@ public abstract class AbstractComboBox<Value> {
     
     /**
      * Part of the individual sub class: Calculates elements which may be selected by this combo box.
-     * @return A list of items which may be selected by this combo box, must not be <tt>null</tt>.
+     * @return A list of items which may be selected by this combo box, must not be <code>null</code>.
      */
     protected abstract List<Value> calculateValues();
     
@@ -224,11 +224,11 @@ public abstract class AbstractComboBox<Value> {
     
     /**
      * Compare method to check whether the old selection is equal to one of the new elements calculated inside
-     * the {@link #update()} method, e.q. <tt>return value1.equals(value2)</tt>.<br/>
-     * Sometimes the exiting <tt>equals</tt> method are not sufficient for this combo box.
-     * @param value1 On value to compare with the other, maybe <tt>null</tt>.
-     * @param value2 On value to compare with the other, maybe <tt>null</tt>.
-     * @return <tt>true</tt> if value1 and value2 are equal in the context of this combo box.
+     * the {@link #update()} method, e.q. <code>return value1.equals(value2)</code>.<br/>
+     * Sometimes the exiting <code>equals</code> method are not sufficient for this combo box.
+     * @param value1 On value to compare with the other, maybe <code>null</code>.
+     * @param value2 On value to compare with the other, maybe <code>null</code>.
+     * @return <code>true</code> if value1 and value2 are equal in the context of this combo box.
      */
     protected abstract boolean equals(Value value1, Value value2);
     

@@ -110,7 +110,7 @@ public class NewEASyProjectWizardPage extends WizardPage {
 
     /**
      * Returns the selected {@link IEASyProjectConfigurator}.
-     * @return The selected {@link IEASyProjectConfigurator}, maybe <tt>null</tt> only in case of errors.
+     * @return The selected {@link IEASyProjectConfigurator}, maybe <code>null</code> only in case of errors.
      */
     IEASyProjectConfigurator getProjectConfigurator() {
         AbstractProjectCreationDescriptor projectDescriptor = null;

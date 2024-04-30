@@ -35,7 +35,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     private Composite composite;
     
     /**
-     * The parent holding this variable. Can be <tt>null</tt> in case of top level elements.
+     * The parent holding this variable. Can be <code>null</code> in case of top level elements.
      */
     private GUIVariable parent;
 
@@ -43,7 +43,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * Sole constructor for this class.
      * @param variable The {@link IDecisionVariable} represented by this GUIVariable
      * @param parentConfig The {@link GUIConfiguration} holding this GUIVariable
-     * @param parent The parent GUIVariable holding this variable. Can be <tt>null</tt> if and only if this variable
+     * @param parent The parent GUIVariable holding this variable. Can be <code>null</code> if and only if this variable
      * is a top level variable stored inside the configuration.
      * @param composite The controlling composite, needed for the creation of editors.
      */
@@ -79,7 +79,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns the parent Variable holding this variable.
-     * @return The parent or <tt>null</tt> if this variable is a top level variable nested directly inside the
+     * @return The parent or <code>null</code> if this variable is a top level variable nested directly inside the
      * configuration.
      */
     public GUIVariable getParent() {
@@ -88,7 +88,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns the TopLevelParent Variable holding this variable or the variable itself if it is a top level variable.
-     * @return The TopLevelParent or <tt>this</tt> if this variable is a top level variable.
+     * @return The TopLevelParent or <code>this</code> if this variable is a top level variable.
      */
     public GUIVariable getTopLevelParent() {
         GUIVariable topLevel = this;
@@ -109,7 +109,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     /**
      * Returns how many parent {@link IDecisionVariable}s exist for this variable.
      * @return 0 if the Configuration is the direct parent of this {@link IDecisionVariable}, otherwise
-     * a number greater than 0 indicating how many {@link IDecisionVariable}s between the <tt>Configuration</tt> and
+     * a number greater than 0 indicating how many {@link IDecisionVariable}s between the <code>Configuration</code> and
      * this variable exist. 
      */
     public final int getNestedDepth() {
@@ -166,7 +166,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     /**
      * Converts the given object into a {@link Value}.
      * @param value An object given by the Eclipse GUI.
-     * @return A {@link Value} representation of the object, maybe <tt>null</tt>.
+     * @return A {@link Value} representation of the object, maybe <code>null</code>.
      * @throws ValueDoesNotMatchTypeException in case of <code>value</code> cannot be converted to
      * the related data type of the wrapped {@link IDecisionVariable}.
      */
@@ -174,7 +174,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns the name of the {@link IDecisionVariable}.
-     * @return The name of the {@link IDecisionVariable}, must not be <tt>null</tt>.
+     * @return The name of the {@link IDecisionVariable}, must not be <code>null</code>.
      */
     public String getName() {
         return variable.getDeclaration().getUniqueName();
@@ -190,7 +190,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns whether the wrapped {@link IDecisionVariable} can be edited.
-     * @return <tt>true</tt> if the variable can be edited, otherwise <tt>false</tt>.
+     * @return <code>true</code> if the variable can be edited, otherwise <code>false</code>.
      */
     public boolean isEditable() {
         boolean result = true;
@@ -204,14 +204,14 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     /**
      * Returns a string representation of the current value.
      * This is used when <b>no</b> cursor is inside the cell (if the user is <b>not</b> editing the variable).
-     * @return A string representation of the current value or <tt>null</tt>.
+     * @return A string representation of the current value or <code>null</code>.
      */
     public abstract String getValueText();
     
     /**
      * Returns whether is variable can be expanded. Subclasses may override this method.
      * 
-     * @return <tt>true</tt> if this variable is expandable, otherwise <tt>false</tt>.
+     * @return <code>true</code> if this variable is expandable, otherwise <code>false</code>.
      */
     public boolean isExpandable() {
         return false;
@@ -220,7 +220,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     /**
      * Returns whether is variable can be extended (insert new empty values). Subclasses may override this method.
      * 
-     * @return <tt>true</tt> if this variable is extendable, otherwise <tt>false</tt>.
+     * @return <code>true</code> if this variable is extendable, otherwise <code>false</code>.
      * @see #extend()
      */
     public boolean isExtendable() {
@@ -306,7 +306,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * @param index The 0-based index of the nested element.
      * @return The specified nestedvariable.
      * @throws ArrayIndexOutOfBoundsException if this variable has no nested elements, is not expanded,
-     * or if the index is out of range (<tt>index &lt; 0 || index &gt;= size()</tt>)
+     * or if the index is out of range (<code>index &lt; 0 || index &gt;= size()</code>)
      * 
      */
     public GUIVariable getNestedElement(int index) {
@@ -324,7 +324,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns whether the current variable is already frozen.
-     * @return <tt>true</tt> if the variable is frozen, otherwise <tt>false</tt>.
+     * @return <code>true</code> if the variable is frozen, otherwise <code>false</code>.
      */
     public boolean isFrozen() {
         return null != getVariable() && getVariable().getState() == AssignmentState.FROZEN;
@@ -334,7 +334,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * Returns whether this variable can be frozen.
      * In case of some nested variables it is not possible to freeze only the nested variable
      * (e.g. a nested set variable).
-     * @return <tt>true</tt> if the nested variable can be frozen, otherwise <tt>false</tt>.
+     * @return <code>true</code> if the nested variable can be frozen, otherwise <code>false</code>.
      */
     public final boolean isFreezable() {
         boolean freezable = !isFrozen() && getAssignmentState() != AssignmentState.UNDEFINED;
@@ -393,7 +393,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns a tooltip which can be displayed inside the GUI.
-     * @return The datatype of the variable (must not be <tt>null</tt>).
+     * @return The datatype of the variable (must not be <code>null</code>).
      */
     public final String getTooltip() {
         return tooltip;
@@ -401,7 +401,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Checks whether error messages are stored to this {@link GUIVariable}.
-     * @return <tt>true</tt> if this variable has stored error messages, <tt>false</tt> otherwise.
+     * @return <code>true</code> if this variable has stored error messages, <code>false</code> otherwise.
      * @see #getErrorMessages()
      */
     public final boolean hasErrors() {
@@ -410,7 +410,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns the stored error messages as a string.
-     * @return The error messages stored at this variable or <tt>null</tt> if no errors are stored.
+     * @return The error messages stored at this variable or <code>null</code> if no errors are stored.
      * @see #hasErrors()
      */
     public final String getErrorMessages() {
@@ -431,7 +431,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
      * Adds a new error message to this {@link GUIVariable}.
      * @param conflictingElement A {@link ContainableModelElement} which lead to the conflict and where 
      * {@link #getVariable()} is included.
-     * @param userMessage Optional: A error message which can be ready by a normal user. If <tt>null</tt>,
+     * @param userMessage Optional: A error message which can be ready by a normal user. If <code>null</code>,
      * the constraint will be used for displaying an error message.
      */
     final void addErrorMessage(ContainableModelElement conflictingElement, String userMessage) {
@@ -474,7 +474,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Checks whether the variable has a configured {@link Value}.
-     * @return <tt>true</tt> if the variable has a value, <tt>false</tt> otherwise.
+     * @return <code>true</code> if the variable has a value, <code>false</code> otherwise.
      */
     public boolean hasValue() {
         return getVariable().hasValue();
@@ -483,7 +483,7 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     /**
      * Checks whether the variable has a {@link NullValue}.
      * Note: this method does not check whether the variable <b>has</b> a value.
-     * @return <tt>true</tt> if the variable has a {@link NullValue}, <tt>false</tt> otherwise.
+     * @return <code>true</code> if the variable has a {@link NullValue}, <code>false</code> otherwise.
      */
     public boolean hasNullValue() {
         return getVariable().hasNullValue();
@@ -539,7 +539,8 @@ public abstract class GUIVariable implements IGUIConfigurableElement, Comparable
     
     /**
      * Returns whether the variable has any annotations.
-     * @return <tt>true</tt> The variable has at least one annotation, <tt>false</tt> the variable has no annotations.
+     * @return <code>true</code> The variable has at least one annotation, 
+     * <code>false</code> the variable has no annotations.
      */
     public boolean isAnnotated() {
         return null != variable ? variable.getAttributesCount() > 0 : false;

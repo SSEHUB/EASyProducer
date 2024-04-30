@@ -85,8 +85,8 @@ public class EASyProjectCreatorFactoryTest {
      * Helping method for creating a new {@link ProductLineProject}.
      * Use this method only for testing and only with valid project names.
      * @param name The name of the project to create.
-     * @param predecessorID Optional: The projectID for a predecessor. If <tt>null</tt> a project without a predecessor
-     *     will be created.
+     * @param predecessorID Optional: The projectID for a predecessor. If <code>null</code> a project without a 
+     *     predecessor will be created.
      * @return The newly created {@link ProductLineProject}.
      */
     private ProductLineProject createProject(String name, String predecessorID) {

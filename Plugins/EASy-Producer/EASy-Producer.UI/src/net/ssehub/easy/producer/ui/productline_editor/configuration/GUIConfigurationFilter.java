@@ -21,7 +21,7 @@ class GUIConfigurationFilter {
 
     /**
      * Sets the attribute filter.
-     * @param filter an {@link AttributeFilter} or <tt>null</tt> to delete an existing filter.
+     * @param filter an {@link AttributeFilter} or <code>null</code> to delete an existing filter.
      */
     void setAttributeFilter(AbstractConfigurationFilter filter) {
         filters[0] = filter;
@@ -29,7 +29,7 @@ class GUIConfigurationFilter {
     
     /**
      * Sets the name filter.
-     * @param filter an {@link ConfigNameFilter} or <tt>null</tt> to delete an existing filter.
+     * @param filter an {@link ConfigNameFilter} or <code>null</code> to delete an existing filter.
      */
     void setNameFilter(AbstractConfigurationFilter filter) {
         filters[1] = filter;
@@ -37,7 +37,7 @@ class GUIConfigurationFilter {
     
     /**
      * Sets the namespace filter.
-     * @param filter an {@link NamespaceFilter} or <tt>null</tt> to delete an existing filter.
+     * @param filter an {@link NamespaceFilter} or <code>null</code> to delete an existing filter.
      */
     void setNamespaceFilter(AbstractConfigurationFilter filter) {
         filters[2] = filter;
@@ -45,7 +45,7 @@ class GUIConfigurationFilter {
     
     /**
      * Sets the Assignmentfilter.
-     * @param filter an {@link AssignmentStateFilter} or <tt>null</tt> to delete an existing filter.
+     * @param filter an {@link AssignmentStateFilter} or <code>null</code> to delete an existing filter.
      */
     void setAssignmentStateFilter(AbstractConfigurationFilter filter) {
         filters[3] = filter;
@@ -53,7 +53,7 @@ class GUIConfigurationFilter {
     
     /**
      * Sets the {@link InterfaceFilter}.
-     * @param filter an {@link InterfaceFilter} or <tt>null</tt> to delete an existing filter.
+     * @param filter an {@link InterfaceFilter} or <code>null</code> to delete an existing filter.
      */
     void setInterfaceFilter(AbstractConfigurationFilter filter) {
         filters[4] = filter;
@@ -61,7 +61,7 @@ class GUIConfigurationFilter {
     
     /**
      * Determines how many active filters are set.
-     * @return <tt>0</tt> if no filter was set, otherwise a number greater than 0.
+     * @return <code>0</code> if no filter was set, otherwise a number greater than 0.
      */
     private int countElements() {
         int elements = 0;
@@ -75,7 +75,7 @@ class GUIConfigurationFilter {
     }
     
     /**
-     * Returns only the configured (not <tt>null</tt>) filters as an array.
+     * Returns only the configured (not <code>null</code>) filters as an array.
      * @return A array of filter, if now filter was specified an empty array will be returned.
      */
     ViewerFilter[] getFilters() {

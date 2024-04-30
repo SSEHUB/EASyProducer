@@ -21,7 +21,7 @@ class AttributeFilter extends AbstractConfigurationFilter {
      * These item allows to differentiate between:
      * <ul>
      * <li>Nothing was specified for a certain attribute</li>
-     * <li>An attribute with value <tt>null</tt> was specified</li>
+     * <li>An attribute with value <code>null</code> was specified</li>
      * </ul>
      * @author El-Sharkawy
      *
@@ -32,7 +32,7 @@ class AttributeFilter extends AbstractConfigurationFilter {
         /**
          * Sole constructor for this item.
          * @param value The value for a specific attribute (the attribute's name will be saved inside
-         *     the map). This value can be <tt>null</tt>.
+         *     the map). This value can be <code>null</code>.
          */
         private AttributeFilterItem(Value value) {
             this.value = value;
@@ -40,7 +40,7 @@ class AttributeFilter extends AbstractConfigurationFilter {
 
         /**
          * Getter for the attribute.
-         * @return the value (can be <tt>null</tt>).
+         * @return the value (can be <code>null</code>).
          */
         private Value getValue() {
             return value;
@@ -59,7 +59,7 @@ class AttributeFilter extends AbstractConfigurationFilter {
     /**
      * Creates a key based on a given attribute.
      * If the same attribute is applied on different elements than the same key should be returned.
-     * @param attr The attribute for which a key (String) shall be created (must not be <tt>null</tt>.
+     * @param attr The attribute for which a key (String) shall be created (must not be <code>null</code>.
      * @return A key to identify the attribute.
      */
     private static String attributeToKey(Attribute attr) {
@@ -69,8 +69,8 @@ class AttributeFilter extends AbstractConfigurationFilter {
     /**
      * Adds an attribute to this filter. Filtered items must have the same attribute and the same value set.
      * @param attribute The Attribute which other variables should have.
-     * @param value The value of the attribute which the variables should have. Can be <tt>null</tt>,
-     *     than the variable's attribute value must also be <tt>null</tt>.
+     * @param value The value of the attribute which the variables should have. Can be <code>null</code>,
+     *     than the variable's attribute value must also be <code>null</code>.
      */
     public void add(Attribute attribute, Value value) {
         if (attribute.getType().isAssignableFrom(value.getType())) {

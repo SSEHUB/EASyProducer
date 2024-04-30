@@ -26,7 +26,7 @@ import net.ssehub.easy.varModel.model.values.ContainerValue;
 import net.ssehub.easy.varModel.model.values.Value;
 
 /**
- * This class is part of the <tt>ConfigurationCellEditor.getValue(Object)</tt> and converts a given
+ * This class is part of the <code>ConfigurationCellEditor.getValue(Object)</code> and converts a given
  * {@link IDecisionVariable} to an Object so that the Eclipse editors are able to handle it.
  * @author El-Sharkawy
  *
@@ -47,7 +47,7 @@ class ConfigEditorValueRetriever implements IDatatypeVisitor {
     
     /**
      * Returns the value of the given {@link IDecisionVariable} so that it can be used as return value for
-     * the <tt>ConfigurationCellEditor.getValue(Object)</tt> method.
+     * the <code>ConfigurationCellEditor.getValue(Object)</code> method.
      * @return A value as needed by the Eclipse UI.
      */
     Object getValue() {

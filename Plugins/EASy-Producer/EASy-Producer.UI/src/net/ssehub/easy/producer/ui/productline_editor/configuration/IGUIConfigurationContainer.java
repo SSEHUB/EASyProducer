@@ -38,7 +38,7 @@ interface IGUIConfigurationContainer {
      * Sets the filters, replacing any previous filters, and triggers
      * refiltering and resorting of the elements.
      * 
-     * @param filters An array of viewer filters, must not be <tt>null</tt>
+     * @param filters An array of viewer filters, must not be <code>null</code>
      */
     public void setFilters(ViewerFilter[] filters);
     
