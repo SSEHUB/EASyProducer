@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="IntegrationAll" default="all" basedir=".">	
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
 	<path id="emma.lib" >    		
 		<pathelement location="${emma.path}/emma.jar" />	
@@ -31,21 +32,22 @@
         <echo>###  Compiling Integration Eclipse ###</echo>
         <echo>######################################</echo>
         <ant dir="de.uni_hildesheim.sse.integration.common.eclipse" antfile="${build.script.name}" /> 
-		
+
+        <echo>##########################################</echo>
+        <echo>###  Compiling Integration Common Imple###</echo>
+        <echo>##########################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common.impl" antfile="${build.script.name}" />
+
+        <echo>###########################################</echo>
+        <echo>###  Compiling Integration Common Tests ###</echo>
+        <echo>###########################################</echo>
+        <ant dir="de.uni_hildesheim.sse.integration.common.tests" antfile="${build.script.name}" />
+
         <echo>############################################</echo>
         <echo>###  Compiling Integration Eclipse Tests ###</echo>
         <echo>############################################</echo>
         <ant dir="de.uni_hildesheim.sse.integration.common.eclipse.tests" antfile="${build.script.name}" />
 		
-        <echo>##########################################</echo>
-        <echo>###  Compiling Integration Common Imple###</echo>
-        <echo>##########################################</echo>
-        <ant dir="de.uni_hildesheim.sse.integration.common.impl" antfile="${build.script.name}" />
-		
-        <echo>###########################################</echo>
-        <echo>###  Compiling Integration Common Tests ###</echo>
-        <echo>###########################################</echo>
-        <ant dir="de.uni_hildesheim.sse.integration.common.tests" antfile="${build.script.name}" />
     </target>
 	
 	<target name="instrumment">
@@ -167,5 +169,6 @@
     </javadoc>
   </target>
 	
-	<target name="all" depends="init, compile, javadoc"/>
+	<!--<target name="all" depends="init, compile, javadoc"/>-->
+	<target name="all" depends="init, compile"/>
 </project>

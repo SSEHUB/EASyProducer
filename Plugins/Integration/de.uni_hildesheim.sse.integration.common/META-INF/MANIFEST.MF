@@ -3,8 +3,8 @@ Bundle-ManifestVersion: 2
 Bundle-Name: IVML integration commons
 Bundle-SymbolicName: net.ssehub.easy.integration.common;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.integration.common
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: net.ssehub.easy.integration.common
 Require-Bundle: net.ssehub.easy.varModel;visibility:=reexport
