@@ -34,6 +34,7 @@ public class CollectionTestUtils {
      * @param actual actual the actual elements
      * @param expected the expected elements
      */
+    @SafeVarargs
     public static <T> void assertContains(Collection<T> actual, T... expected) {
         Assert.assertEquals("sizes do not match", expected.length, actual.size());
         for (int e = 0; e < expected.length; e++) {

@@ -154,7 +154,7 @@ public class TextTestUtils {
      *    and end and with reduced whitespaces (multiples to one)
      */
     protected static final String normalizeText(String text) {
-        text = text.replaceAll("(\\r|\\n)", "");
+        text = text.replace("\\r\\n", "").replaceAll("(\\r|\\n)", "");
         text = text.replaceAll("\\t", " ");
         text = text.trim();
         StringBuffer tmp = new StringBuffer(text);
