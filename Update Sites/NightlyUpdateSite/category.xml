@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly">
+      Nightly builds of EASy-Producer 2.0
+   </description>
+   <bundle id="net.ssehub.easy.producer.ui">
+      <category name="EASy.Nightly"/>
+   </bundle>
+   <category-def name="EASy.Nightly" label="EASy Nightly Builds"/>
+</site>

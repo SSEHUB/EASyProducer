@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>net.ssehub.easy.producer.EasyProducer</artifactId>
+  <packaging>eclipse-repository</packaging>
+  
+  <name>EASy-Producer Nightly update site</name>
+  <description>The nightly update site of EASy-Producer.</description>
+  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+ 
+  <parent>
+     <groupId>net.ssehub.easy</groupId>
+     <artifactId>dependencies</artifactId>
+     <version>1.3.10-SNAPSHOT</version>
+     <relativePath/>
+  </parent>
+  
+  <properties>
+    <maven.install.skip>true</maven.install.skip>
+    <maven.test.skip>true</maven.test.skip>
+    <jacoco.skip>true</jacoco.skip>
+    <maven.javadoc.skip>true</maven.javadoc.skip>
+    <tycho.debug.resolver>true</tycho.debug.resolver>
+  </properties>
+  
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <directory>bin</directory>
+    
+    <plugins>
+      <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.3.2</version>
+          <configuration>
+            <skip>true</skip>
+          </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho.version}</version>
+        <configuration>    
+          <environments>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment>
+          </environments>
+          <target>
+            <file>eclipse.target</file> <!-- executing project must have target file, alternative: maven project -->
+          </target>
+          <pomDependencies>wrapAsBundle</pomDependencies>
+          <referencedRepositoryMode>ignore</referencedRepositoryMode>
+        </configuration>
+      </plugin>
+      
+      <!-- unclear how to get rid of timestamps already here, "qualifier" not documented -->
+      <plugin>
+         <groupId>org.eclipse.tycho</groupId>
+         <artifactId>tycho-p2-repository-plugin</artifactId>
+         <version>${tycho.version}</version>
+         <configuration>
+            <includeAllDependencies>true</includeAllDependencies>
+            <buildDirectory>bin</buildDirectory>
+            <finalName>EASy</finalName>
+         </configuration>
+         <executions>
+            <execution>
+                <id>assemble-repository</id>
+                <phase>package</phase>
+                <goals>
+                    <goal>assemble-repository</goal>
+                </goals>
+            </execution>
+         </executions>
+      </plugin>
+
+     <!-- emulate publish-features-and-bundles which changes the timestamps -->
+     <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>bin/targetPlatformRepository</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>bin/repository/binary</directory>
+                  <filtering>false</filtering>
+                </resource>
+                <resource>
+                  <directory>bin/repository/features</directory>
+                  <filtering>false</filtering>
+                </resource>
+                <resource>
+                  <directory>bin/repository/plugins</directory>
+                  <filtering>false</filtering>
+                </resource>
+                <resource>
+                  <directory>bin/repository</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>artifacts.jar</include>
+                    <include>content.jar</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>         
+        </executions>
+      </plugin>
+      
+      <plugin>
+         <groupId>org.eclipse.tycho</groupId>
+         <artifactId>tycho-p2-director-plugin</artifactId>
+         <version>${tycho.version}</version>
+         <configuration>
+            <destination>bin</destination>
+         </configuration>
+         <executions>
+            <execution>
+               <id>create-product-distributions</id>
+               <phase>package</phase>
+               <goals>
+                  <goal>materialize-products</goal>
+                  <goal>archive-products</goal>
+               </goals>
+            </execution>
+         </executions>
+      </plugin>
+      
+   </plugins>
+  </build>
+  
+  <dependencies>
+    <dependency>
+      <groupId>net.ssehub.easy</groupId>
+      <artifactId>net.ssehub.easy.producer.ui</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+    
+ </project>

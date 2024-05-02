@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EASy-Nightly-UpdateSite" default="createUpdateSite" basedir="." xmlns:plugins="antlib:de.uni_hildesheim.sse.easy.standalone.versionReplacement">
-    <property file="${user.home}/global-build.properties"/>
+	<property file="${user.home}/migration.properties"/>
+	<property file="${user.home}/global-build.properties"/>
     <property name="configs" value="gtk.linux.x86_64,win32.win32.x86_64" />
     <include file="${user.home}/macros.xml"/>
+	
+	<property name="repo" value="${basedir}/bin/repository"/>
+	<property name="products" value="${basedir}/bin/products"/>
 	
     <path id ="task.libs">
 		<!-- Libs of the Task -->
@@ -14,7 +18,51 @@
     <taskdef resource="VersionReplacement.properties" classpathref="task.libs" />
     
 	<target name="createUpdateSite">
-        <delete dir="gen"/>
+		<maven pomFile="pom.xml" goal="deploy"/>
+
+		<echo file="${basedir}/bin/generated.html">
+            <![CDATA[
+                <b>Build from</b>: ${GENERATED_TIME}
+            ]]>
+        </echo>
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -R /var/www/eclipse/update-sites/easy/nightly/*"/>
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/binary"/>
+		<osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/plugins"/>
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/features"/>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${repo}">
+                <include name="artifacts.jar"/>
+                <include name="artifacts.xml.xz"/>
+                <include name="content.jar"/>
+            	<include name="content.xml.xz"/>
+            	<include name="p2.index"/>
+            </fileset>
+        </oscp>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/binary" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${repo}/binary">
+                <include name="**/*"/>
+            </fileset>
+        </oscp>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/plugins" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${repo}/plugins">
+                <include name="**/*"/>
+            </fileset>
+        </oscp>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly/features" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${repo}/features">
+                <include name="**/*"/>
+            </fileset>
+        </oscp>
+
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -R /var/www/eclipse/easy-nightly/*"/>
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/easy-nightly"/>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/easy-nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="${products}">
+                <include name="*"/>
+            </fileset>
+        </oscp>
+		
+		<!--<delete dir="gen"/>
         <mkdir dir="gen"/>
         <mkdir dir="gen/intermediate"/>
         <mkdir dir="gen/intermediate/plugins"/>
@@ -30,14 +78,14 @@
         
         <antcall target="replacePlugins"/>
         <antcall target="createFeature"/>
-        <antcall target="createSiteXML"/>
+        <antcall target="createSiteXML"/>-->
 		<!-- fails with Eclipse 4.19 -->
-        <antcall target="createArtifactJars"/>
+        <!--<antcall target="createArtifactJars"/>-->
         <!--<touch file="gen/final/empty.txt"/>  something so that Jenkins does not fail -->
-		<antcall target="zip.Site"/>
+		<!--<antcall target="zip.Site"/>
 		<antcall target="publish"/>
 		<antcall target="createProducts"/>
-        <delete dir="gen"/>
+        <delete dir="gen"/>-->
     </target>
     
     <target name="replacePlugins">
