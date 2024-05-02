@@ -202,8 +202,8 @@
         Create Distribution for standard EASyCommandLine
         (correct libs are already included, since they are gathered for compiling)
         -->
-        <mkdir dir="build/generatedLibs/dist"/>
-        <dist target="build/generatedLibs"/>
+        <!--<mkdir dir="build/generatedLibs/dist"/>
+        <dist target="build/generatedLibs"/>-->
     </target>
     
     <target name="zip">
