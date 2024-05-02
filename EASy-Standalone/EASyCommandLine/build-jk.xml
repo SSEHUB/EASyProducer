@@ -1,91 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EASyCommandLine" default="all" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
-	<property file="${user.home}/global-build.properties"/>
+    <property file="${user.home}/migration.properties"/>
+    <property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.8"/>
-	<property name="javacTarget" value="1.8"/>
-	
-	<path id="includes.local">
-	    <fileset dir="lib">
-	        <include name="**/*.jar" />
-	    </fileset>
-	</path>	
-		
-	<path id ="includes">
-		<pathelement path="${libs.utils}"/>
-		<pathelement path="${libs.instantiator.core}"/>
-		<pathelement path="${libs.model}"/>
-		<pathelement path="${libs.reasonerCore}"/>
-        <pathelement path="${libs.easy.PLugin}"/>
-        <pathelement path="${libs.easy.persistence}"/>
-		<pathelement path="${libs.libs.common.io}"/>
-        <!-- Lib -->
-        <fileset dir="lib">
-            <include name="**/*.jar" />
-        </fileset>
-    </path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-        <mkdir dir="${build.base.dir}/bundle"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-		<echo>${toString:includes}</echo>
-		<javac srcdir="${src.dir}" debug="on" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />	
-		</javac>
-    </target>
-	
-	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}"/>
-    </target>
-    
-    <target name="create.bundle">
-        <mkdir dir="${build.base.dir}/bundle/lib"/>
-        <copy todir="${build.base.dir}/bundle/lib" failonerror="true" overwrite="true" flatten="false">
-			<fileset dir="lib">
-				<include name="**/*.jar" />
-			</fileset>
-        </copy>
-        <copy todir="${build.base.dir}/bundle/" failonerror="true" overwrite="true" flatten="false">
-            <fileset dir="res">
-				<include name="*" />
-			</fileset>
-		</copy>
-        <manifestclasspath property="manifest_cp" jarfile="${build.base.dir}/bundle/${ant.project.name}.jar">
-            <classpath refid="includes.local" />
-        </manifestclasspath>        	
-        <jar destfile="${build.base.dir}/bundle/${ant.project.name}.jar" basedir="${build.classes.dir}">
-            <manifest>
-                <attribute name="Main-Class" value="net.ssehub.easy.standalone.cmd.CommandLineExecuter"/>
-                <attribute name="Class-Path" value="${manifest_cp}"/>
-            </manifest>
-        </jar>
-    	<jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
-            <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
-                <classpath refid="includes"/>
-        </easyJavadoc>
-    	<jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-    	<mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>
-        <zip destfile="${build.base.dir}/EASyCommandLine.zip" basedir="${build.base.dir}/bundle" />
-    </target>
-	
 	<target name="all">
-		<antcall target="jar" />
-		<antcall target="create.bundle" />
+        <maven pomFile="pom.xml" goal="deploy"/>
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>   
 	</target>
+	
 </project>
