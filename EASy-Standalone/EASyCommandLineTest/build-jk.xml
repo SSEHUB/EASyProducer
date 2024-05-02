@@ -5,7 +5,7 @@
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="all">
-        <maven pomFile="pom.xml" goal="deploy"/>
+        <maven pomFile="pom.xml" goal="install"/>
 
         <delete failonerror="false" dir="bin"/>
         <delete failonerror="false" dir=".m2"/>     
