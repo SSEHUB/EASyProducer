@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Project name must not contain whitespaces -->
 <project name="EASy ANT-Tasks" default="compile" basedir=".">	
+	<property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
 
 	<target name="compile">
