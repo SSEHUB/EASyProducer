@@ -8,7 +8,7 @@
 	<property name="products" value="${basedir}/bin/products"/>
     
 	<target name="createUpdateSite">
-		<maven pomFile="pom.xml" goal="deploy"/>
+		<maven pomFile="pom.xml" goal="install"/>
 
 		<echo file="${basedir}/bin/generated.html">
             <![CDATA[
@@ -19,6 +19,11 @@
         <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/binary"/>
 		<osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/plugins"/>
         <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir /var/www/eclipse/update-sites/easy/nightly/features"/>
+		<oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="bin">
+                <include name="generated.html"/>
+            </fileset>
+	    </oscp>	
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/update-sites/easy/nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${repo}">
                 <include name="artifacts.jar"/>
