@@ -8,6 +8,9 @@
 	<property name="products" value="${basedir}/bin/products"/>
     
 	<target name="createUpdateSite">
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
+		
 		<maven pomFile="pom.xml" goal="install"/>
 
 		<echo file="${basedir}/bin/generated.html">
@@ -56,6 +59,9 @@
                 <include name="*"/>
             </fileset>
         </oscp>
+		
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>		
     </target>
     
 </project>
