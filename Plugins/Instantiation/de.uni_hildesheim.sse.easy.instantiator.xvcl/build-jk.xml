@@ -1,80 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.ssehub.easy.instantiation.xvcl" default="jar" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
+<project name="net.ssehub.easy.instantiation.xvcl" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.8"/>
-	<property name="javacTarget" value="1.8"/>
-	
-	<path id ="includes">
-		<!-- Model -->
-		<pathelement path="${libs.model}"/>
-		<pathelement path="${libs.utils}"/>
-        <!-- Lib -->
-		<fileset dir="../XVCL">
-			<include name="**/*.jar" />
-		</fileset>
-		<!-- Instantiation Copy Core -->
-		<pathelement path="${libs.instantiator.core}"/>
-		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<echo>${libs.instantiator.core}</echo>
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />	
-		</javac>-->
-    </target>
-	
-	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
-		<!-- Copy needed non class files -->
-		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="OSGI-INF/**/*" />
-				<include name="lib/**/*" />
-				<include name="about.html" />
-				<include name="about_files/**/*" />
-				<include name="processor.properties" />
-				<include name="logging.properties" />
-				<include name="default" />
-			</fileset>
-		</copy>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
-        <copy todir="${easy.bundles.dir}">
-            <fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-        </copy>-->
-		<!-- XVCL is not in Maven, just bundle it here for now -->
-		<!--<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
-        <jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF">
-            <zipgroupfileset dir="../XVCL" includes="**/*.jar"/>
-    	</jar>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}"/>
-        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
-            <classpath refid="includes"/>
-        </easyJavadoc>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>-->
-		<!-- Copy created jar to global EASy Plug-ins directory -->
+
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
     </target>
+	
 </project>

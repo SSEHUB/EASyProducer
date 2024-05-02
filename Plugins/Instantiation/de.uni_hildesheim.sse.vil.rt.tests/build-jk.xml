@@ -1,75 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildesheim.sse.vil.rt.tests" default="jar" basedir=".">
+<project name="de.uni_hildesheim.sse.vil.rt.tests" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
-	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.8"/>
-	<property name="javacTarget" value="1.8"/>
-	
-	<path id ="includes">
-		<!-- Model -->
-        <pathelement path="${libs.utils}"/>
-        <pathelement path="${libs.libs.common.io}"/>
-        <pathelement path="${libs.model}"/>
-        <pathelement path="${libs.model.tests}"/>
-        <pathelement path="${libs.vil.core}"/>
-        <pathelement path="${libs.template.core}"/>
-        <pathelement path="${libs.template.tests}"/>
-        <!-- DSL core common classes -->
-        <pathelement path="${libs.dslCore}"/>       
-        <!-- Instantiation -->
-        <pathelement path="${libs.instantiator.core}"/>
-        <pathelement path="${libs.instantiator.velocity}"/>
-        <pathelement path="${libs.instantiatorCore.rt.core}"/>
-        <!-- IVML Core -->
-        <pathelement path="${libs.ivml}"/>
-        <!-- reasonerCore -->
-        <pathelement path="${libs.reasonerCore}"/>
-        <pathelement path="${libs.sseReasoner}"/>
-        <pathelement path="${libs.reasonerCore.test}"/>
-        <pathelement path="${libs.sseReasoner.test}"/>
-        <!-- VIL -->
-		<pathelement path="${libs.vil.core}"/>
-		<pathelement path="${libs.vil.ui}"/>
-		<pathelement path="${libs.vil.tests}"/>
-		<pathelement path="${libs.template.core}"/>
-		<pathelement path="${libs.template.ui}"/>
-		<pathelement path="${libs.template.tests}"/>
-		<pathelement path="${libs.vil.rt.core}"/>
-		<!-- libs.vil.rt.ui -->
-		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-            <classpath refid="includes" />	
-		</javac>-->
-    </target>
-	
 	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
         <echo file="testdata.dir" append="false">${home.vil.rt.tests.dir}/testdata</echo>
         <maven pomFile="pom.xml" goal="deploy"/>
-		<!--copy todir="${build.classes.dir}" failonerror="true" overwrite="true"/-->
-		<!--<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
+
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
     </target>
 </project>

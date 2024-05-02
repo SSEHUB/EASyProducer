@@ -48,13 +48,13 @@
 	<dependency>
 	  <groupId>xalan</groupId>
 	  <artifactId>xalan</artifactId>
-	  <version>2.7.1</version>
+	  <version>2.7.3</version>
 	</dependency>
 	<!-- the serializer ships with an older xml-apis dependency which downgrades the one required by xerces... --> 
 	<dependency>
 	  <groupId>xalan</groupId>
 	  <artifactId>serializer</artifactId>
-	  <version>2.7.1</version>
+	  <version>2.7.3</version>
       <exclusions>
         <exclusion>
           <groupId>xml-apis</groupId>

@@ -1,66 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildesheim.sse.vil.expressions.ui" default="jar" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
+<project name="de.uni_hildesheim.sse.vil.expressions.ui" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="src.gen.dir" value="src-gen"/>
-	<property name="javacSource" value="11"/>
-	<property name="javacTarget" value="11"/>
-	
-	<path id ="includes">
-        <pathelement path="${libs.utils}"/>
-        <pathelement path="${libs.dslCore}"/>       
-	    <!-- DSL core ui common classes -->
-		<pathelement path="${libs.dslCore.ui}"/> 
-        <!-- Model -->
-        <pathelement path="${libs.model}"/>
-	    <!-- VIL -->
-		<pathelement path="${libs.vil.expressions.core}"/>
-        <!-- DSL core common classes -->
-        <pathelement path="${libs.dslCore}"/>
-        <!-- Instantiation -->
-        <pathelement path="${libs.instantiator.core}"/>
-		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-		<!--<echo> message="${toString:libs.dslCore.ui}" </echo>
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<src path="${src.gen.dir}" />
-			<classpath refid="includes" />	
-		</javac>-->
-    </target>
-	
-	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
-        <!-- Copy needed non class files -->
-		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="plugin.xml" />
-				<include name="icons/**/*" />
-				<include name="lib/**/*" />
-			</fileset>
-		</copy>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
+
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
     </target>
 </project>

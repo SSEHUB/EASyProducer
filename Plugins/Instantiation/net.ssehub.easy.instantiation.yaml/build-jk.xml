@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.ssehub.easy.instantiation.aspectj.tests" default="all" basedir=".">
+<project name="net.ssehub.easy.instantiation.yaml" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
-    <property file="${user.home}/global-build.properties"/>
+	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="all">
-        <echo file="testdata.dir" append="false">${home.instantiator.aspectj.test.dir}/testdata</echo>
         <maven pomFile="pom.xml" goal="deploy"/>
 
         <delete failonerror="false" dir="bin"/>

@@ -1,32 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.ssehub.easy.libs.xvcl" default="jar" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
+<project name="net.ssehub.easy.libs.xvcl" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Creates a jar file -->
-	<target name="jar">
+	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
-		<!-- Copy needed non class files -->
-        <!--<delete file="${build.jar.dir}/${ant.project.name}.jar"/>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" manifest="META-INF/MANIFEST.MF">
-            <fileset dir="." includes="**/*.jar"/>
-	    </jar>-->
-		<!-- Copy created jar to global EASy Plug-ins directory -->
-		<!--<copy todir="${easy.bundles.dir}">
-			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-		</copy>
-		<echo message="XVCL-LIB ${build.jar.dir}/${ant.project.name}.jar"/>-->
+
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
     </target>
 </project>

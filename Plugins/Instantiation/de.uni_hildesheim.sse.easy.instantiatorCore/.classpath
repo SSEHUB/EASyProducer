@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.12.1.jar"/>
-	<classpathentry kind="lib" path="lib/serializer-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/xalan-2.7.1.jar" sourcepath="lib/xalan-j_2_7_1-src.zip"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17">
@@ -10,5 +8,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/xalan-2.7.3.jar"/>
+	<classpathentry kind="lib" path="lib/serializer-2.7.3.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

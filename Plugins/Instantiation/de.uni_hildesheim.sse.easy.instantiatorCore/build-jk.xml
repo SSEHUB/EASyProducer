@@ -1,89 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.ssehub.easy.instantiation.core" default="jar" basedir=".">
+<project name="net.ssehub.easy.instantiation.core" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
-	<!-- import von globalen Properties Einstellungen -->
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.8"/>
-	<property name="javacTarget" value="1.8"/>
-	
-	<path id ="includes">
-		<!-- to be on the safe side -->
-        <fileset dir="./lib">
-            <include name="**/xml-apis-*.jar" />
-        </fileset>
-		<!-- Model -->
-		<pathelement path="${libs.utils}"/>
-        <pathelement path="${libs.libs.common.io}"/>
-		<pathelement path="${libs.model}"/>
-        <pathelement path="${libs.dslCore}"/>
-		<!-- Adaptation events -->
-		<pathelement path="${libs.adaptation.events.core}"/>
-		<!-- Reasoning -->
-		<pathelement path="${libs.reasonerCore}"/>
-		<!-- Instantiation Copy Core -->
-		<pathelement path="${libs.instantiator.copy.core}"/>
-        <!-- Reasoner Core -->
-        <pathelement path="${libs.reasonerCore}"/>
-		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-			<exclude name="**/commons-io-*.jar"/>
-		</fileset>
-		<!-- local xalan, xerces -->
-	    <fileset dir="./lib">
-	    	<include name="**/*.jar" />
-	    	<exclude name="**/xml-apis-*.jar"/>
-	    </fileset>
-	</path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-	    <!--
-	    <echo message="${toString:includes}"/>
-        
-		<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />
-		</javac>-->
-    </target>
-	
 	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
-		<!-- Copy needed non class files -->
-		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
-			<fileset dir="${basedir}">
-                <include name="META-INF-INF/services/**/*" />
-				<include name="OSGI-INF/**/*" />
-                <include name="lib/**/*.jar" />
-				<include name="src.zip" />
-				<include name="javadoc.zip" />
-			</fileset>
-		</copy>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
-        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
-            <classpath refid="includes"/>
-        </easyJavadoc>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>-->
-		<!-- Copy created jar to global EASy Plug-ins directory -->
-		<!--<copy todir="${easy.bundles.dir}">
-			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-		</copy>-->
+
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
 	</target>
 </project>
