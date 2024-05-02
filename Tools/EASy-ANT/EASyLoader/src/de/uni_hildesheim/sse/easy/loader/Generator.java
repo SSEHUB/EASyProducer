@@ -121,7 +121,7 @@ public class Generator extends AbstractLoader {
     /**
      * Checks whether the given url belongs to an Eclipse bundle/plug-in.
      * @param bundleURL The url/path of a jar file.
-     * @return <tt>true</tt> if it belongs to Eclipse.
+     * @return <code>true</code> if it belongs to Eclipse.
      */
     private boolean isEclipseBundle(URL bundleURL) {
         boolean result = false;
@@ -232,7 +232,7 @@ public class Generator extends AbstractLoader {
     /**
      * Deletes the content of a folder.
      * @param folder The folder to delete.
-     * @param deleteFolder If <tt>true</tt> also the folder itself will be deleted.
+     * @param deleteFolder If <code>true</code> also the folder itself will be deleted.
      */
     private static void deleteFolder(File folder, boolean deleteFolder) {
         File[] files = folder.listFiles();
@@ -261,7 +261,7 @@ public class Generator extends AbstractLoader {
      * @param baseDir The baseDir for the bootstrap. Will be used if eclipsePath and/or pluginPath do not exist.
      * @param binFolder Where to find the compiled classes, relative to basePath
      * @param libsFolder Where to find the special libs required for the build.
-     * @return List<BundleInfo> a list containing all needed Bundles.
+     * @return List&lt;BundleInfo&gt; a list containing all needed Bundles.
      */
     public static List<BundleInfo> generate(List<Feature> features, List<Feature> additionalFeatures,
         boolean forceBuild, String pluginPath, String eclipsePath, String target, String baseDir, String binFolder, 
@@ -443,7 +443,7 @@ public class Generator extends AbstractLoader {
      * Collects all required features.
      * @param features A list of features.
      * @param additionalFeatures A list of additional Features that maybe required by the main features.
-     * @return Map<String, EasyDependency> a map with all required dependencies.
+     * @return Map&lt;String, EasyDependency&gt; a map with all required dependencies.
      */
     private static List<Feature> collectFeatures(List<Feature> features, List<Feature> additionalFeatures) {
         List<Feature> result = features;
@@ -491,7 +491,7 @@ public class Generator extends AbstractLoader {
      * Collects all required dependencies for a list of features.
      * @param features A list of features.
      * @param additionalFeatures A list of additional Features that maybe required by the main features.
-     * @return Map<String, EasyDependency> a map with all required dependencies.
+     * @return Map&lt;String, EasyDependency&gt; a map with all required dependencies.
      */
     private static Map<String, EasyDependency> collectDependencies(
         List<Feature> features, List<Feature> additionalFeatures) {

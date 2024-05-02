@@ -95,9 +95,9 @@ public class Version {
     
     /**
      * Compares two versions and results in:
-     * -1 : this is smaller <=> given version and this is bigger.
+     * -1 : this is smaller &lt;=&gt; given version and this is bigger.
      *  0 : given version and this are equal.
-     * +1 : this is bigger <=> given version is smaller.
+     * +1 : this is bigger &lt;=&gt; given version is smaller.
      * 
      * @param version version to compare.
      * @return result in {-1, 0, 1}.

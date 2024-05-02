@@ -61,7 +61,7 @@ public class BundleInfo {
      * @param file the JAR file resolving this bundle
      * @param manifest the JAR manifest to analyze
      * @throws BundleException if a non-OSGi manifest shall be analyzed, i.e., information in missing (or if the 
-     *     bundle shall be ignored, see {@link BundleException#dueTognored()})
+     *     bundle shall be ignored)
      */
     private BundleInfo(File file, Manifest manifest) throws BundleException {
         resolve(file, manifest);
@@ -73,8 +73,7 @@ public class BundleInfo {
      * 
      * @param name the name of the bundle
      * @param versionRestriction the version restriction specification
-     * @throws BundleException in case that the name is illegal (or if the bundle shall be ignored, 
-     *     see {@link BundleException#dueTognored()})
+     * @throws BundleException in case that the name is illegal (or if the bundle shall be ignored)
      */
     private BundleInfo(String name, EasyDependency versionRestriction) throws BundleException {
         if (null == name || 0 == name.length()) {
@@ -351,7 +350,6 @@ public class BundleInfo {
      * Parses the attributes whether the current bundle is a singleton.
      * 
      * @param attributes the Manifest attributes to be analyzed
-     * @param 
      * @return <code>true</code> if this bundle is a singleton, <code>false</code> else
      * @throws BundleException in case that the analysis fails, in particular if no symbolic name is given
      */

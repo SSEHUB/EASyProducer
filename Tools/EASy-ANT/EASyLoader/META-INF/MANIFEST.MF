@@ -3,8 +3,12 @@ Bundle-ManifestVersion: 2
 Bundle-Name: EASy standalone loader
 Bundle-SymbolicName: net.ssehub.easy.loader;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.loader
-Bundle-Version: 1.2.0
+Bundle-Version: 1.3.10.qualifier
 Export-Package: de.uni_hildesheim.sse.easy.ant,
  de.uni_hildesheim.sse.easy.loader,
  de.uni_hildesheim.sse.easy.loader.framework
 Bundle-Vendor: University of Hildesheim - SSE
+Require-Bundle: org.eclipse.osgi,
+ org.osgi.service.component,
+ org.junit;bundle-version="4.8.2" 
+Bundle-ClassPath: .
