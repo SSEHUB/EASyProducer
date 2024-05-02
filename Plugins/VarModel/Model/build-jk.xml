@@ -2,6 +2,7 @@
 <project name="net.ssehub.easy.varModel" default="all" basedir=".">
 	<property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<target name="all">
 		<maven pomFile="pom.xml" goal="deploy"/>
