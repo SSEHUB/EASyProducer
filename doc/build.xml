@@ -3,7 +3,6 @@
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="publish">
-        <ant dir="javadoc" antfile="build.xml" />        
 		<oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs-git" trust="true" keyfile="${user.home}/.ssh/id_rsa">
 			     <fileset dir="${basedir}/web">
 			         <include name="**/*"/>
