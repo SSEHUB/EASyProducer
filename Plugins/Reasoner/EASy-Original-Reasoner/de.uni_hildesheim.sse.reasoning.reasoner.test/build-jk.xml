@@ -1,73 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.ssehub.easy.reasoning.sseReasoner.tests" default="jar" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
+<project name="net.ssehub.easy.reasoning.sseReasoner.tests" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="test"/>
-	<property name="javacSource" value="1.6"/>
-	<property name="javacTarget" value="1.6"/>
-	
-	<path id ="includes">
-		<!-- Reasoner Core -->
-		<pathelement path="${libs.reasonerCore}"/>
-		<!-- Reasoner Core Test -->
-		<pathelement path="${libs.reasonerCore.test}"/>
-		<!-- Var Model -->
-		<pathelement path="${libs.utils}"/>
-        <pathelement path="${libs.model}"/>
-        <pathelement path="${libs.model.tests}"/>
-        <!-- DSL core common classes -->
-        <pathelement path="${libs.dslCore}"/>        
-		<pathelement path="${libs.ivml}"/>
-		<!-- Var Model -->
-		<pathelement path="${libs.sseReasoner}"/>
-		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-	    <!-- <echo> message="${toString:includes}" </echo> -->
-		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />	
-		</javac>-->
-    </target>
-	
 	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
 		<echo file="testdata.dir" append="false">${home.reasonerCore.test.dir}/testdata</echo>
         <maven pomFile="pom.xml" goal="deploy"/>
-        <!-- Copy needed non class files -->
-		<!--<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="OSGI-INF/**/*" />
-				<include name="lib/**/*" />
-				<include name="about_files/**/*" />
-				<include name="about.html" />
-			</fileset>
-            <fileset dir="${basedir}">
-                <include name="testdata/**/*" />
-            </fileset>
-            <fileset dir="${home.reasonerCore.test.dir}">
-                <include name="testdata/**/*" />
-            </fileset>
-        </copy>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>-->
+        
+	    <delete failonerror="false" dir="bin"/>
+	    <delete failonerror="false" dir=".m2"/>     
     </target>
 </project>

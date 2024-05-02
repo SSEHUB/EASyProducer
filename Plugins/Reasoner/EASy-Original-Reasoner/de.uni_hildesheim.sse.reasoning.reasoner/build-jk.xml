@@ -1,99 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="net.ssehub.easy.reasoning.sseReasoner" default="jar" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
+<project name="net.ssehub.easy.reasoning.sseReasoner" default="all" basedir=".">
     <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="1.6"/>
-	<property name="javacTarget" value="1.6"/>
-	<property name="easyLibs.dir" value="easyLibs"/>
-	
-	<path id ="includes">
-		<!-- Reasoner Core -->
-		<pathelement path="${libs.reasonerCore}"/>
-		<!-- Var Model -->
-		<pathelement path="${libs.utils}"/>
-		<pathelement path="${libs.model}"/>
-		<!-- Included libs -->
-		<!-- <fileset dir="lib">
-			<include name="**/*.jar" />
-		</fileset>-->
-		<!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	
-	<!-- Targets  -->
-	<target name="init">
-	  <!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		<delete dir="${easyLibs.dir}"/>
-
-		<!-- Prepare EASy standalone ANT Lib (copy libraries to avoid problems with building the standalone libs) 
-		     It's ok to fail (initial/standalone failed), but then do not pre-process the reaoner through condition. -->
-		<mkdir dir="${easyLibs.dir}"/>
-	    <copy todir="${easyLibs.dir}" failonerror="false">
-			<fileset dir="${home.base.dir}/${projects.standalone.dir}/build/generatedLibs/dist">
-	            <include name="**/*.*"/>
-	        </fileset>
-	    </copy>
-		<available file="${easyLibs.dir}/easy.touch" property="easy.exists"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<target name="preprocess" if="easy.exists">
-        <!-- collect the standalone libraries -->
-        <path id="easyTaskDef.lib">
-            <fileset dir="${easyLibs.dir}">
-                <include name="*.jar"/>
-            </fileset>
-        </path>
-	    <!-- Create EASy task -->
-        <taskdef name="easy" classname="net.ssehub.easy.standalone.ant.EASy" classpathref="easyTaskDef.lib"/>
-        <!-- pre-process the reasoner code - get rid of log statements -->
-        <easy source="${basedir}" target="${basedir}" projectName="Reasoner"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init, preprocess">
-		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />	
-		</javac>-->
-    </target>
-	
 	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
-<!-- Copy needed non class files -->
-<!--		<copy todir="${build.classes.dir}" failonerror="true" overwrite="true">
-			<fileset dir="${basedir}">
-				<include name="OSGI-INF/**/*" />
-				<include name="lib/**/*" />
-				<include name="about_files/**/*" />
-				<include name="about.html" />
-			</fileset>
-		</copy>
-		<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
-        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
-            <classpath refid="includes"/>
-        </easyJavadoc>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>-->
-		<!-- Copy created jar to global EASy Plug-ins directory -->
-	<!--	<copy todir="${easy.bundles.dir}">
-			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-		</copy>-->
-        <!-- save space on Jenkins, just leave the jars -->
-        <!--<delete dir="${doc.dir}"/>-->
+		
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
     </target>
 </project>
