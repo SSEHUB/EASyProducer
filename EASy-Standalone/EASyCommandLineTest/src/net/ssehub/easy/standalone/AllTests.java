@@ -51,7 +51,7 @@ public class AllTests {
      * @return The folder from where to start the AUT.
      */
     private static File determineAUTDir() {        
-        return determineDir("EASyCommandline.binFolder", "../EASyCommandLine/bin");
+        return determineDir("EASyCommandline.binFolder", "../EASyCommandLine/bin/classes");
     }
     
     /**

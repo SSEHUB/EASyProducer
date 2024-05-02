@@ -359,6 +359,8 @@
     </target>
 
 	<!--target name="all" depends="init, gather.easy.plugins, createLibs, compile"/-->
-	<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn, cleanup"/>
-	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn, cleanup"/>
+	<!--<target name="all" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn, cleanup"/>
+	<target name="all.runtime" depends="init, createLibs, compile, zip, createLibs.ex, createLibs.runtime, createLibs.runtimeNoXtext, deploy, testMvn, cleanup"/>-->
+	<target name="all" depends="init, compile"/>
+	<target name="all.runtime" depends="init, compile"/>
 </project>

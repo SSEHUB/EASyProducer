@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 /**
  * Helper class for testing commandline comands.
@@ -58,9 +61,13 @@ class ProcessExecuter {
      */
     public ProcessExecuter(String command, boolean logAll) throws IOException{
         List<String> commands = new ArrayList<String>();
-        commands.add("java");
-        commands.add("-cp");
-        commands.add("." + File.pathSeparatorChar + AllTests.AUT_LIBS.getCanonicalPath() + File.separator + "*");
+        File java = new File(System.getProperties().getProperty("java.home") + "/bin/java");
+        String classpath = FileUtils.readFileToString(new File(AllTests.AUT_DIR, "../classpath.cp"), 
+            Charset.defaultCharset());
+        commands.add(java.getAbsolutePath());
+        if (classpath.length() > 0) {
+            commands.add("-cp ." + File.pathSeparator + classpath);
+        }
         if (!logAll) {
             commands.add("-Dde.uni_hildesheim.sse.easy.logging.level=WARN");
         }
