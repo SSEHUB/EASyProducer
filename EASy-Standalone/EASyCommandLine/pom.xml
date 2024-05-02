@@ -61,8 +61,25 @@
                     </configuration>
                   </execution>
                 </executions>
-              </plugin>            
+              </plugin> 
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.1.1</version>
+              </plugin>              
+                         
         </plugins>
+        
+    <extensions>
+      <!-- Enabling the use of SSH -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-beta-6</version>
+      </extension>
+    </extensions>        
+        
   </build>
     
   <repositories>       
@@ -85,6 +102,17 @@
         </dependency>            
     </dependencies>
   </dependencyManagement>
+  
+  <distributionManagement>
+    <repository>
+      <id>sse-projects</id>
+      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+    </repository>
+    <snapshotRepository>
+      <id>sse-projects</id>
+      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+    </snapshotRepository>
+  </distributionManagement>  
  
  <dependencies>
     <dependency>
