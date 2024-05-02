@@ -1,62 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="de.uni_hildesheim.sse.dslCore.ui" default="jar" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
+<project name="de.uni_hildesheim.sse.dslCore.ui" default="all" basedir=".">
 	<property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
-	<!-- Einstellungen fuer dieses Projekt -->
-	<property name="src.dir" value="src"/>
-	<property name="javacSource" value="11"/>
-	<property name="javacTarget" value="11"/>
-	
-	<path id ="includes">
-        <!-- Model -->
-        <pathelement path="${libs.utils}"/>
-        <pathelement path="${libs.model}"/>
-        <pathelement path="${libs.dslCore}"/>       
-        <!-- Eclipse-Plugins -->
-		<fileset dir="${eclipse.plugins.dir}">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- Targets  -->
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="${build.base.dir}"/>
-		
-		<!-- Create folders -->
-        <mkdir dir="${build.base.dir}"/>
-		<mkdir dir="${build.classes.dir}"/>
-		<mkdir dir="${build.jar.dir}"/>
-	</target>
-	
-	<!-- Compile all files without test classes -->
-	<target name="compile" depends="init">
-		<!--<javac srcdir="${src.dir}" debug="true" destdir="${build.classes.dir}" includeAntRuntime="no" failonerror="true" source="${javacSource}" target="${javacTarget}" encoding="${javac.encoding}">
-			<classpath refid="includes" />	
-		</javac>-->
-    </target>
-	
-	<!-- Creates a jar file -->
-	<target name="jar" depends="compile">
+	<target name="all">
 		<maven pomFile="pom.xml" goal="deploy"/>
-        <!--jar destfile="${build.dir}/jar/${ant.project.name}.jar" basedir="${build.dir}" excludes="**/*Activator.class"/-->
-		<!--<jar destfile="${build.jar.dir}/${ant.project.name}.jar" basedir="${build.classes.dir}" manifest="META-INF/MANIFEST.MF"/>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-sources.jar" basedir="${src.dir}" />
-        <easyJavadoc sourcepath="${src.dir}" source="${javacSource}" destdir="${doc.dir}">
-            <classpath refid="includes"/>
-        </easyJavadoc>
-        <jar destfile="${build.jar.dir}/${ant.project.name}-javadoc.jar" basedir="${doc.dir}" />
-        <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/>-->
-		<!-- Copy created jar to global EASy Plug-ins directory -->
-		<!--<copy todir="${easy.bundles.dir}">
-			<fileset dir="${build.jar.dir}" includes="**/*.jar"/>
-		</copy>-->
-        <!-- save space on Jenkins, just leave the jars -->
-        <!--<delete dir="${build.classes.dir}"/>
-        <delete dir="${doc.dir}"/>-->
+ 
+		<delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
     </target>
 
 </project>
