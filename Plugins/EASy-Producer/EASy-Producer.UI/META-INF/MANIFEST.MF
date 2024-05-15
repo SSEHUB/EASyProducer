@@ -25,7 +25,14 @@ Require-Bundle:
  net.ssehub.easy.dslCore.ui,
  de.uni_hildesheim.sse.vil.buildlang.ui,
  net.ssehub.easy.dslCore,
- de.uni_hildesheim.sse.vil.buildlang
+ de.uni_hildesheim.sse.vil.buildlang,
+ net.ssehub.easy.reasoning.sseReasoner;resolution:=optional,
+ net.ssehub.easy.instantiation.maven;resolution:=optional,
+ net.ssehub.easy.instantiation.java;resolution:=optional,
+ net.ssehub.easy.instantiation.docker;resolution:=optional,
+ net.ssehub.easy.instantiation.lxc;resolution:=optional,
+ net.ssehub.easy.instantiation.aspectj;resolution:=optional,
+ net.ssehub.easy.instantiation.xvcl;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
