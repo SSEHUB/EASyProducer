@@ -13,6 +13,11 @@
 		
 		<maven pomFile="pom.xml" goal="install"/>
 
+        <tstamp>
+            <format property="DAY" pattern="yyyyMMdd" locale="de,DE"/>
+            <format property="TIME" pattern="HHmm" locale="de,DE"/>
+            <format property="GENERATED_TIME" pattern="HH:mm, dd. MMMM yyyy" locale="en,EN"/>
+        </tstamp>
 		<echo file="${basedir}/bin/generated.html">
             <![CDATA[
                 <b>Build from</b>: ${GENERATED_TIME}
