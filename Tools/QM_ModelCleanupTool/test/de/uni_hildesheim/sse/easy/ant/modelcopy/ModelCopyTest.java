@@ -17,6 +17,7 @@ package de.uni_hildesheim.sse.easy.ant.modelcopy;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
@@ -136,8 +137,16 @@ public class ModelCopyTest {
             Assert.assertTrue("Expected file \"" + expectedFile.getAbsolutePath() + "\" does not exist.",
                 expectedFile.exists());
             Assert.assertTrue("File \"" + copiedFile.getAbsolutePath() + "\" was not created.", copiedFile.exists());
-            String expectedContents = FileUtils.readFileToString(expectedFile).replace("\r", "").trim();
-            String copiedContents = FileUtils.readFileToString(copiedFile).replace("\r", "").trim();
+            String expectedContents = FileUtils.readFileToString(expectedFile, Charset.defaultCharset())
+                .replace("\r", "").trim();
+            String copiedContents = FileUtils.readFileToString(copiedFile, Charset.defaultCharset())
+                .replace("\r", "").trim();
+            System.out.println(">> expected");
+            System.out.println(expectedContents);
+            System.out.println("<< expected");
+            System.out.println(">> copied");
+            System.out.println(copiedContents);
+            System.out.println("<< copied");
             Assert.assertEquals("Configuration file was not filtered correctly.", expectedContents, copiedContents);
         } catch (IOException e) {
             Assert.fail("IVML files could not be read: " + e.getMessage());
