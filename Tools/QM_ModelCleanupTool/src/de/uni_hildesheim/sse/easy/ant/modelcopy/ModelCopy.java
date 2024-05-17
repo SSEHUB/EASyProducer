@@ -69,9 +69,8 @@ public class ModelCopy extends AbstractModelTask {
     /**
      * Constructor for testing
      * @param orgFolder A folder containing the source artifacts for copying.
-     * @param cpyfolder The folder must exist and empty or not exist (must not be <tt>null</tt>).
-     * @param mainProject
-     * @throws Exception
+     * @param cpyfolder The folder must exist and empty or not exist (must not be <code>null</code>).
+     * @param mainProject the main project
      */
     public ModelCopy(String orgFolder, String cpyfolder, String mainProject) {
         super();

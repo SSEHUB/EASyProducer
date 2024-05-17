@@ -127,7 +127,7 @@ public class ModelCopyTest {
 
     /**
      * Compares a generated IVML file with another IVML file for specifying the desired output.
-     * @param sampleFile The relative file name inside the {@value #ORIGINAL_FOLDER}.
+     * @param sampleFile The relative file name inside the {@link #ORIGINAL_FOLDER}.
      */
     private void assertIVMLConfigFile(String sampleFile) {
         try {

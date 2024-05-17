@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="ModelCopyTask" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">
-	<!-- Global settings (needed for Junit and Jacoco) -->
+    <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
 	
 	<!-- Settings for this project-->
 	<property name="src.dir" value="src"/>
@@ -120,9 +121,16 @@
 		<zip destfile="${build.base.dir}/${ant.project.name}.zip" basedir="${build.jar.dir}"/>
 	</target>
 
-	<target name="all">
+	<target name="all-old">
 	   <antcall target="compile"/>
 	   <antcall target="test"/>
 	   <antcall target="dist"/>
-  </target>
+    </target>
+	
+    <target name="all">
+        <maven pomFile="pom.xml" goal="deploy"/>
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>   
+    </target>
+	
 </project>

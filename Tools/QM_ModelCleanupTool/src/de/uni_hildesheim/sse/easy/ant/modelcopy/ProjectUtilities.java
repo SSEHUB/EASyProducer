@@ -51,8 +51,7 @@ public class ProjectUtilities {
     /**
      * Load an IVML File as project.
      * 
-     * @param path
-     *            of the ivml file to load
+     * @param projectName of the project file to load
      * @return the loaded ivml file as project.
      * @throws IOException
      *             if an error occurred due reading the ivml file

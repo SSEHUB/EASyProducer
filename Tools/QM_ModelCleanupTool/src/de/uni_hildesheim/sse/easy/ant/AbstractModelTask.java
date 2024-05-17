@@ -49,7 +49,7 @@ public abstract class AbstractModelTask extends Task {
     
     /**
      * The target folder where the copied models shall be stored.
-     * @param destinationFolder The folder must exist and empty or not exist (must not be <tt>null</tt>).
+     * @param destinationFolder The folder must exist and empty or not exist (must not be <code>null</code>).
      */
     public void setDestinationFolder(String destinationFolder) {
         this.destinationFolder = new File(destinationFolder);
@@ -65,15 +65,15 @@ public abstract class AbstractModelTask extends Task {
    
     /**
      * Enables/disables additional logging.
-     * @param verbose <tt>true</tt> enables some debugging output (enabled by default), <tt>false</tt> disables it.
+     * @param verbose <code>true</code> enables some debugging output (enabled by default), <code>false</code> disables it.
      */
     public void setVebose(boolean verbose) {
         this.verbose = verbose;
     }
     
     /**
-     * Specifies if the destination maybe cleaned up during running the task (default is <tt>false</tt>).
-     * @param allowDestDeletion <tt>true</tt> deletes the destination if it exists, <tt>false</tt> throws an error if
+     * Specifies if the destination maybe cleaned up during running the task (default is <code>false</code>).
+     * @param allowDestDeletion <code>true</code> deletes the destination if it exists, <code>false</code> throws an error if
      * the destination exists.
      */
     public void setAllowDestDeletion(boolean allowDestDeletion) {
@@ -82,8 +82,8 @@ public abstract class AbstractModelTask extends Task {
     
     /**
      * Specifies if the result shall be validated
-     * @param valitate <tt>true</tt> an inconsistent result will lead in an crash (default),
-     * <tt>false</tt> prints errors but will not lead to a buid stop.
+     * @param valitate <code>true</code> an inconsistent result will lead in an crash (default),
+     * <code>false</code> prints errors but will not lead to a buid stop.
      */
     public void setValidate(boolean valitate) {
         this.validate = valitate;
@@ -115,15 +115,15 @@ public abstract class AbstractModelTask extends Task {
 
     /**
      * Returns whether additional debugging output is desired.
-     * @param <tt>true</tt> output is desired.
+     * @return <code>true</code> output is desired.
      */
     protected final boolean getVebose() {
         return verbose;
     }
     
     /**
-     * Specifies if the destination maybe cleaned up during running the task (default is <tt>false</tt>).
-     * @param <tt>true</tt> folder may be deleted, <tt>false</tt> throw an error if destination exists.
+     * Specifies if the destination maybe cleaned up during running the task (default is <code>false</code>).
+     * @return <code>true</code> folder may be deleted, <code>false</code> throw an error if destination exists.
      */
     protected final boolean getAllowDestDeletion() {
         return allowDestDeletion;
@@ -131,7 +131,7 @@ public abstract class AbstractModelTask extends Task {
     
     /**
      * Returns whether validation of the result should stop the build or only output an error.
-     * @param <tt>true</tt> An flawed result will stop the whole built.
+     * @return <code>true</code> An flawed result will stop the whole built.
      */
     protected final boolean getValidate() {
         return validate;
@@ -152,7 +152,7 @@ public abstract class AbstractModelTask extends Task {
      * Removed or adds a (temporary) folder for loading models from this locations.
      * @param modelManagement {@link VarModel#INSTANCE}, {@link BuildModel#INSTANCE}, or {@link TemplateModel#INSTANCE}
      * @param folder The folder to (un-)register
-     * @param add <tt>true</tt> the folder will be added as possible location for models, <tt>false</tt> the folder
+     * @param add <code>true</code> the folder will be added as possible location for models, <code>false</code> the folder
      *     will be removed.
      * @throws ModelManagementException If model files could not be parsed
      */

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.ssehub.easy</groupId>
+  <artifactId>QmModelCleanupTool</artifactId>
+  <packaging>jar</packaging>
+  <version>1.3.10-SNAPSHOT</version>
+
+  <name>EASy-Producer QualiMaster Model Cleanup Tool</name>
+  <description>EASy-Producer QualiMaster Model Cleanup Tool.</description>
+  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+  
+  <properties>
+    <org.apache.maven.surefire.version>3.0.0-M3</org.apache.maven.surefire.version>
+    <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+  </properties>
+ 
+  <build>
+      <sourceDirectory>${basedir}/src</sourceDirectory>
+      <testSourceDirectory>${basedir}/test</testSourceDirectory>
+      <outputDirectory>bin/classes</outputDirectory>
+      <testOutputDirectory>bin/test-classes</testOutputDirectory>
+      <resources>
+         <resource>
+           <directory>res</directory>
+         </resource>
+      </resources>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.3.1</version>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>compile</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/classes</outputDirectory>
+                  <resources>          
+                    <resource>
+                      <directory>${basedir}/resources</directory>
+                      <filtering>true</filtering>
+                    </resource>
+                  </resources>              
+                </configuration>            
+              </execution>
+            </executions>
+          </plugin>        
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+
+           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.3</version>
+            <configuration>
+              <show>private</show>
+              <encoding>${project.build.sourceEncoding}</encoding>
+              <failOnError>false</failOnError>
+              <detectJavaApiLink>false</detectJavaApiLink> 
+              <detectOfflineLinks>false</detectOfflineLinks>
+              <doclint>all,-missing</doclint>
+              <additionalOptions>--allow-script-in-comments</additionalOptions> <!-- occurs in some parts, no details where -->
+              <legacyMode>true</legacyMode> <!-- some dependencies do not have module infos -->
+            </configuration>
+            <executions>
+              <execution>
+                <id>default-cli</id>
+                <goals>
+                  <goal>javadoc</goal>
+                  <goal>test-javadoc</goal>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>                
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.6.1</version>
+            <executions>
+              <execution>
+                <id>build-classpath</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>build-classpath</goal>
+                </goals>
+                <configuration>
+                    <outputFile>bin/classpath.cp</outputFile>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${org.apache.maven.surefire.version}</version>
+            <configuration>
+              <reuseForks>false</reuseForks> <!-- run each suite in an own JVM (Spring binders) -->
+              <includes> <!-- suites only, allow for multiple suites (Spring binders)  -->
+                <include>**/ModelCopyTest*.class</include>
+              </includes>
+              <forkedProcessTimeoutInSeconds>300000</forkedProcessTimeoutInSeconds>
+            </configuration>
+            <dependencies>
+              <!-- Force using the latest JUnit 47 provider, consider also in lib dependencies; seems also to work with
+                   jUnit 4.12, but not with 4.13 ;)  -->
+              <dependency>
+                <groupId>org.apache.maven.surefire</groupId>
+                <artifactId>surefire-junit47</artifactId>
+                <version>${org.apache.maven.surefire.version}</version>
+              </dependency>
+            </dependencies>        
+          </plugin>            
+
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.8</version>
+            <executions>
+                <execution>
+                    <phase>pre-integration-test</phase>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>report</id>
+                    <phase>post-integration-test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-deploy-plugin</artifactId>
+            <version>3.1.1</version>
+          </plugin>
+                         
+        </plugins>
+        
+    <extensions>
+      <!-- Enabling the use of SSH -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-beta-6</version>
+      </extension>
+    </extensions>        
+        
+  </build>
+    
+  <repositories>       
+    <repository>
+      <id>SSE-mvn</id>
+      <name>sse</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories> 
+  
+  <dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>net.ssehub.easy</groupId>
+            <artifactId>dependencies</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>            
+    </dependencies>
+  </dependencyManagement>
+  
+  <distributionManagement>
+    <repository>
+      <id>sse-projects</id>
+      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+    </repository>
+    <snapshotRepository>
+      <id>sse-projects</id>
+      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+    </snapshotRepository>
+  </distributionManagement>  
+ 
+ <dependencies>
+    <dependency>
+        <groupId>org.apache.ant</groupId>
+        <artifactId>ant</artifactId>
+    </dependency>    
+    <dependency>
+      <groupId>eu.qualimaster</groupId>
+      <artifactId>QualiMaster.Extension</artifactId>
+      <version>0.5.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.producer.eclipse</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.producer.core</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>de.uni-hildesheim.sse.easy.instantiatorCore.rt</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+   <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.reasoning.sseReasoner</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.loader</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.1</version>
+        <scope>test</scope>
+    </dependency>    
+ </dependencies>
+  
+  </project>
