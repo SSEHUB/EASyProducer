@@ -1,2 +1,0 @@
-Infrastructure::pipeline = active pipeline
-Infrastructure::workerportCheck = All pipeline number of workers should be less then reserved ports for all machines

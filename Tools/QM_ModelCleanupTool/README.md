@@ -1,1 +1,0 @@
-Model copy and pruning - for QualiMaster models. Shall not be part of EASy. May be moved in the future.
