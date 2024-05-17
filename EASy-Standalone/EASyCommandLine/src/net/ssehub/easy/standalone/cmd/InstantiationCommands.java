@@ -256,19 +256,19 @@ public final class InstantiationCommands {
     }
 
     /**
-     * Instantiates the project <tt>projectTarget</tt>, while using source files (and IVML/VIL information) provided
-     * by <tt>projectSource</tt>.
+     * Instantiates the project <code>projectTarget</code>, while using source files (and IVML/VIL information) provided
+     * by <code>projectSource</code>.
      * The following conditions must be hold:
      * <ol>
      * <li>Both projects must exist and have a valid EASy project structure with the usual configuration files, IDs,
      *     and folders.</li>
-     * <li><tt>projectTarget</tt> must contain a contain a frozen configuration.</li>
-     * <li><tt>projectTarget</tt> must contain VIL script.</li>
-     * <li><tt>projectSource</tt> must contain a infrastructure, which cen be instantiated, e.g. annotated source files.
-     *     </li>
+     * <li><code>projectTarget</code> must contain a contain a frozen configuration.</li>
+     * <li><code>projectTarget</code> must contain VIL script.</li>
+     * <li><code>projectSource</code> must contain a infrastructure, which cen be instantiated, e.g. annotated 
+     *   source files.</li>
      * </ol>
-     * If <tt>projectTarget</tt> does not exist, this method will create the folder. In this case, 2.) and 3.) must be
-     * included in <tt>projectSource</tt>.
+     * If <code>projectTarget</code> does not exist, this method will create the folder. In this case, 2.) and 3.) 
+     *   must be included in <code>projectSource</code>.
      * This method is a convenience wrapper for {@link #instantiate(File, File, Map)} with <b>null</b> as arguments.
      * 
      * @param projectSource The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
@@ -287,19 +287,19 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Instantiates the project <tt>projectTarget</tt>, while using source files (and IVML/VIL information) provided
-     * by <tt>projectSource</tt>.
+     * Instantiates the project <code>projectTarget</code>, while using source files (and IVML/VIL information) provided
+     * by <code>projectSource</code>.
      * The following conditions must be hold:
      * <ol>
      * <li>Both projects must exist and have a valid EASy project structure with the usual configuration files, IDs,
      *     and folders.</li>
-     * <li><tt>projectTarget</tt> must contain a contain a frozen configuration.</li>
-     * <li><tt>projectTarget</tt> must contain VIL script.</li>
-     * <li><tt>projectSource</tt> must contain a infrastructure, which cen be instantiated, e.g. annotated source files.
-     *     </li>
+     * <li><code>projectTarget</code> must contain a contain a frozen configuration.</li>
+     * <li><code>projectTarget</code> must contain VIL script.</li>
+     * <li><code>projectSource</code> must contain a infrastructure, which cen be instantiated, e.g. annotated 
+     *     source files.</li>
      * </ol>
-     * If <tt>projectTarget</tt> does not exist, this method will create the folder. In this case, 2.) and 3.) must be
-     * included in <tt>projectSource</tt>.
+     * If <code>projectTarget</code> does not exist, this method will create the folder. In this case, 2.) and 3.) 
+     * must be included in <code>projectSource</code>.
      * 
      * @param projectSource The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
      *     serves as a basis for instantiation.
@@ -360,16 +360,16 @@ public final class InstantiationCommands {
     }
 
     /**
-     * Instantiates the project <tt>projectTarget</tt>, while using source files (and IVML/VIL information) provided
-     * by <tt>projectSource</tt>.
+     * Instantiates the project <code>projectTarget</code>, while using source files (and IVML/VIL information) provided
+     * by <code>projectSource</code>.
      * The following conditions must be hold:
      * <ul>
      * <li>Both projects must exist and have a valid EASy project structure with the usual configuration files, IDs,
      *     and folders.</li>
-     * <li><tt>projectTarget</tt> must contain a contain a frozen configuration.</li>
-     * <li><tt>projectTarget</tt> must contain VIL script.</li>
-     * <li><tt>projectSource</tt> must contain a infrastructure, which cen be instantiated, e.g. annotated source files.
-     *     </li>
+     * <li><code>projectTarget</code> must contain a contain a frozen configuration.</li>
+     * <li><code>projectTarget</code> must contain VIL script.</li>
+     * <li><code>projectSource</code> must contain a infrastructure, which can be instantiated, e.g. annotated source 
+     *     files.</li>
      * </ul>
      * 
      * @param projectSource The toplevel absolute folder of an EASy project (must have a valid EASy structure), which 
@@ -409,8 +409,8 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Uses <tt>projectSource</tt> to instantiate <tt>projectTarget</tt>.
-     * The folder <tt>projectTarget</tt> will be created, if it does not exist. This method is a convenience wrapper 
+     * Uses <code>projectSource</code> to instantiate <code>projectTarget</code>.
+     * The folder <code>projectTarget</code> will be created, if it does not exist. This method is a convenience wrapper
      * for {@link #instantiate(File, File, File, File, Map)} with <b>null</b> as arguments.
      * 
      * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
@@ -418,13 +418,13 @@ public final class InstantiationCommands {
      * @param projectTarget An absolute folder/project where the files should be instantiated in. The folder will be 
      *     created if it does not exist.
      * @param ivmlFile The model definition including its frozen configuration, which should be used for instantiation.
-     *     (Must be inside either of <tt>projectSource</tt> or <tt>projectTarget</tt>).
+     *     (Must be inside either of <code>projectSource</code> or <code>projectTarget</code>).
      * @param scriptFile The main build script (starting point) which should be used for instantiation.
-     *     (Must be inside either of <tt>projectSource</tt> or <tt>projectTarget</tt>).
+     *     (Must be inside either of <code>projectSource</code> or <code>projectTarget</code>).
      * 
-     * @throws SecurityException If <tt>projectTarget</tt> does not exist, a security manager exists,
+     * @throws SecurityException If <code>projectTarget</code> does not exist, a security manager exists,
      *     and its <code>{@link java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
-     *     method does not permit <tt>projectTarget</tt> directory to be created
+     *     method does not permit <code>projectTarget</code> directory to be created
      * @throws ModelManagementException In case that the available information
      *   may become inconsistent due to this update
      * @throws VilException In case that artifact operations or script execution fails
@@ -437,23 +437,23 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Uses <tt>projectSource</tt> to instantiate <tt>projectTarget</tt>.
-     * The folder <tt>projectTarget</tt> will be created, if it does not exist.
+     * Uses <code>projectSource</code> to instantiate <code>projectTarget</code>.
+     * The folder <code>projectTarget</code> will be created, if it does not exist.
      * 
      * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files 
      *     to instantiate.
      * @param projectTarget An absolute folder/project where the files should be instantiated in. The folder will be 
      *     created if it does not exist.
      * @param ivmlFile The model definition including its frozen configuration, which should be used for instantiation.
-     *     (Must be inside either of <tt>projectSource</tt> or <tt>projectTarget</tt>).
+     *     (Must be inside either of <code>projectSource</code> or <code>projectTarget</code>).
      * @param scriptFile The main build script (starting point) which should be used for instantiation.
-     *     (Must be inside either of <tt>projectSource</tt> or <tt>projectTarget</tt>).
+     *     (Must be inside either of <code>projectSource</code> or <code>projectTarget</code>).
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
-     * @throws SecurityException If <tt>projectTarget</tt> does not exist, a security manager exists,
+     * @throws SecurityException If <code>projectTarget</code> does not exist, a security manager exists,
      *     and its <code>{@link java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
-     *     method does not permit <tt>projectTarget</tt> directory to be created
+     *     method does not permit <code>projectTarget</code> directory to be created
      * @throws ModelManagementException In case that the available information
      *   may become inconsistent due to this update
      * @throws VilException In case that artifact operations or script execution fails
@@ -505,8 +505,9 @@ public final class InstantiationCommands {
      * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
      *     instantiate.
      * @param projectTarget An existing absolute folder/project where the files should be instantiated in.
-     * @param ivmlProject A loaded configuration, which should be used for instantiation (Must not be <tt>null</tt>).
-     * @param buildScript A loaded build script, which should be used for instantiation (Must not be <tt>null</tt>).
+     * @param ivmlProject A loaded configuration, which should be used for instantiation (Must not be 
+     *   <code>null</code>).
+     * @param buildScript A loaded build script, which should be used for instantiation (Must not be <code>null</code>).
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
@@ -541,8 +542,8 @@ public final class InstantiationCommands {
     }
 
     /**
-     * Uses <tt>projectSource</tt> to instantiate <tt>projectTarget</tt>.
-     * The folder <tt>projectTarget</tt> will be created, if it does not exist. This method is a convenience wrapper 
+     * Uses <code>projectSource</code> to instantiate <code>projectTarget</code>.
+     * The folder <code>projectTarget</code> will be created, if it does not exist. This method is a convenience wrapper
      * for {@link #instantiate(File, File, ModelLoadDefinition, ModelLoadDefinition, Map)} with <b>null</b> 
      * as arguments.
      * 
@@ -552,16 +553,15 @@ public final class InstantiationCommands {
      *     created if it does not exist.
      * @param ivmlDefinition A (model name, version) pair for specifying which {@link Project} should be used for
      *     instantantion.
-     *     The {@link Project} must be located inside of <tt>projectTarget</tt> or <tt>projectSource</tt>.
+     *     The {@link Project} must be located inside of <code>projectTarget</code> or <code>projectSource</code>.
      *     This method first
-     *     tries to load the {@link Project} from the <tt>projectTarget</tt> before it tries to load the {@link Project}
-     *     from the <tt>projectSource</tt>.
+     *     tries to load the {@link Project} from the <code>projectTarget</code> before it tries to load the 
+     *     {@link Project} from the <code>projectSource</code>.
      * @param vilDefinition A (model name, version) pair for specifying which {@link Script} should be used for
      *     instantantion.
-     *     The {@link Script} must be located inside of <tt>projectTarget</tt> or <tt>projectSource</tt>.
-     *     This method first
-     *     tries to load the {@link Script} from the <tt>projectTarget</tt> before it tries to load the {@link Script}
-     *     from the <tt>projectSource</tt>.
+     *     The {@link Script} must be located inside of <code>projectTarget</code> or <code>projectSource</code>.
+     *     This method first tries to load the {@link Script} from the <code>projectTarget</code> before it tries to 
+     *     load the {@link Script} from the <code>projectSource</code>.
      * 
      * @throws PersistenceException Will be thrown if at least one of the IVML or VIL files could not be loaded.
      * @throws IOException If source or destination is invalid, or if an IO error occurs during copying
@@ -576,8 +576,8 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Uses <tt>projectSource</tt> to instantiate <tt>projectTarget</tt>.
-     * The folder <tt>projectTarget</tt> will be created, if it does not exist.
+     * Uses <code>projectSource</code> to instantiate <code>projectTarget</code>.
+     * The folder <code>projectTarget</code> will be created, if it does not exist.
      * 
      * @param projectSource An absolute folder/project, which contains the product line infrastructure, i.e. files to 
      *     instantiate.
@@ -585,16 +585,15 @@ public final class InstantiationCommands {
      *     created if it does not exist.
      * @param ivmlDefinition A (model name, version) pair for specifying which {@link Project} should be used for
      *     instantantion.
-     *     The {@link Project} must be located inside of <tt>projectTarget</tt> or <tt>projectSource</tt>.
-     *     This method first
-     *     tries to load the {@link Project} from the <tt>projectTarget</tt> before it tries to load the {@link Project}
-     *     from the <tt>projectSource</tt>.
+     *     The {@link Project} must be located inside of <code>projectTarget</code> or <code>projectSource</code>.
+     *     This method first tries to load the {@link Project} from the <code>projectTarget</code> before it tries to 
+     *     load the {@link Project} from the <code>projectSource</code>.
      * @param vilDefinition A (model name, version) pair for specifying which {@link Script} should be used for
      *     instantantion.
-     *     The {@link Script} must be located inside of <tt>projectTarget</tt> or <tt>projectSource</tt>.
+     *     The {@link Script} must be located inside of <code>projectTarget</code> or <code>projectSource</code>.
      *     This method first
-     *     tries to load the {@link Script} from the <tt>projectTarget</tt> before it tries to load the {@link Script}
-     *     from the <tt>projectSource</tt>.
+     *     tries to load the {@link Script} from the <code>projectTarget</code> before it tries to load the 
+     *     {@link Script} from the <code>projectSource</code>.
      * @param arguments a name-element mapping specifying the top-level parameter of a VIL instantiation (may 
      *   be <b>null</b>)
      * 
@@ -632,12 +631,12 @@ public final class InstantiationCommands {
     }
 
     /**
-     * Checks whether <tt>maybeChild</tt> is nested inside of <tt>possibleParent</tt>.
+     * Checks whether <code>maybeChild</code> is nested inside of <code>possibleParent</code>.
      * 
-     * @param possibleParent A folder which may contain <tt>maybeChild</tt>.
-     * @param maybeChild A file or folder which should be located inside of <tt>possibleParent</tt>.
-     * @return <tt>true</tt> if <tt>maybeChild</tt> is nested inside of <tt>possibleParent</tt>,
-     *     <tt>false</tt> otherwise.
+     * @param possibleParent A folder which may contain <code>maybeChild</code>.
+     * @param maybeChild A file or folder which should be located inside of <code>possibleParent</code>.
+     * @return <code>true</code> if <code>maybeChild</code> is nested inside of <code>possibleParent</code>,
+     *     <code>false</code> otherwise.
      * 
      * @see <a href=
      * "http://stackoverflow.com/questions/4746671/how-to-check-if-a-given-path-is-possible-child-of-another-path">
@@ -666,8 +665,8 @@ public final class InstantiationCommands {
     }
     
     /**
-     * Creates <tt>projectTarget</tt> if it does not exist. Copies also all configuration files, i.e. the EASy folder
-     * from <tt>projectSource</tt> to <tt>projectTarget</tt>.
+     * Creates <code>projectTarget</code> if it does not exist. Copies also all configuration files, i.e. the EASy 
+     * folder from <code>projectSource</code> to <code>projectTarget</code>.
      * 
      * @param projectSource A EASy project which contains a EASy folder with IVML/VIL files.
      * @param projectTarget The folder which shall be created.

@@ -9,6 +9,10 @@
   <description>The optional command line of EASy-Producer.</description>
   <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
  
+  <properties>
+      <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+  </properties>
+ 
   <build>
       <sourceDirectory>${basedir}/src</sourceDirectory>
       <outputDirectory>bin/classes</outputDirectory>
@@ -63,6 +67,49 @@
                 </executions>
               </plugin> 
 
+           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.3</version>
+            <configuration>
+              <show>private</show>
+              <encoding>${project.build.sourceEncoding}</encoding>
+              <failOnError>false</failOnError>
+              <detectJavaApiLink>false</detectJavaApiLink> 
+              <detectOfflineLinks>false</detectOfflineLinks>
+              <doclint>all,-missing</doclint>
+              <additionalOptions>--allow-script-in-comments</additionalOptions> <!-- occurs in some parts, no details where -->
+              <legacyMode>true</legacyMode> <!-- some dependencies do not have module infos -->
+            </configuration>
+            <executions>
+              <execution>
+                <id>default-cli</id>
+                <goals>
+                  <goal>javadoc</goal>
+                  <goal>test-javadoc</goal>
+                  <goal>jar</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>    
+      
               <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>

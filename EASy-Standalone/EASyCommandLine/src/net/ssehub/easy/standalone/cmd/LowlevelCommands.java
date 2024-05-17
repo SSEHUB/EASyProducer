@@ -62,7 +62,7 @@ public class LowlevelCommands {
      * For this reason, the {@link #loadProject(File)} or {@link #loadWorkspace(File)} method should
      * be called before this method is called.
      * @param projectName The name of the project to be loaded.
-     * @return Returns a loaded {@link PLPInfo} or <tt>null</tt> if no project was loaded with the specified
+     * @return Returns a loaded {@link PLPInfo} or <code>null</code> if no project was loaded with the specified
      *     projectName.
      */
     public static PLPInfo getProject(String projectName) {

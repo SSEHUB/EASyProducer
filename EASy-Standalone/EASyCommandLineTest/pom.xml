@@ -11,7 +11,7 @@
  
   <properties>
     <org.apache.maven.surefire.version>3.0.0-M3</org.apache.maven.surefire.version>
-    <java.encoding>Cp1252</java.encoding>
+    <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
   </properties>
  
   <build>
@@ -19,6 +19,7 @@
       <testSourceDirectory>${basedir}/src</testSourceDirectory>
       <outputDirectory>bin/classes</outputDirectory>
         <plugins>
+
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-resources-plugin</artifactId>
@@ -42,6 +43,7 @@
               </execution>
             </executions>
           </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -49,9 +51,9 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                    <encoding>${java.encoding}</encoding>
                 </configuration>
             </plugin>
+            
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
@@ -73,7 +75,26 @@
                 <version>${org.apache.maven.surefire.version}</version>
               </dependency>
             </dependencies>        
-      </plugin>            
+          </plugin>            
+          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                  <goal>test-jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>    
+          
+          
+          
         </plugins>
   </build>
     

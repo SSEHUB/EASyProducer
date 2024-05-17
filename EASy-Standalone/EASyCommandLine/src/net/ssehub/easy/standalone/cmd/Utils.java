@@ -31,7 +31,7 @@ class Utils {
 
     /**
      * Loads a model with the specified (model name, version) pair from the given {@link ModelManagement} instance.
-     * The model will only be loaded, if it can be loaded from the given <tt>locations</tt>
+     * The model will only be loaded, if it can be loaded from the given <code>locations</code>
      * (ordering of parameters will be considered).
      * 
      * @param modelMgmt The {@link ModelManagement} instance from where the {@link IModel} should be loaded from, i.e.
@@ -42,7 +42,7 @@ class Utils {
      * @param <M> The specific model type, will be derived from the {@link ModelManagement} instance.
      *     Will be {@link net.ssehub.easy.varModel.model.Project}
      *     or {@link net.ssehub.easy.instantiation.core.model.buildlangModel.Script}.
-     * @return A loaded {@link IModel} or <tt>null</tt>.
+     * @return A loaded {@link IModel} or <code>null</code>.
      * 
      * @throws ModelManagementException In case that the available information
      *     may become inconsistent due to this update
