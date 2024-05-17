@@ -141,12 +141,12 @@ public class ModelCopyTest {
                 .replace("\r", "").trim();
             String copiedContents = FileUtils.readFileToString(copiedFile, Charset.defaultCharset())
                 .replace("\r", "").trim();
-            System.out.println(">> expected");
+            /*System.out.println(">> expected");
             System.out.println(expectedContents);
             System.out.println("<< expected");
             System.out.println(">> copied");
             System.out.println(copiedContents);
-            System.out.println("<< copied");
+            System.out.println("<< copied");*/
             Assert.assertEquals("Configuration file was not filtered correctly.", expectedContents, copiedContents);
         } catch (IOException e) {
             Assert.fail("IVML files could not be read: " + e.getMessage());

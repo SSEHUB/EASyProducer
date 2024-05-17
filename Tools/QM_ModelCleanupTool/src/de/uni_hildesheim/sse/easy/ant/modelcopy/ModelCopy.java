@@ -18,7 +18,7 @@ package de.uni_hildesheim.sse.easy.ant.modelcopy;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -51,6 +51,7 @@ public class ModelCopy extends AbstractModelTask {
     private static final String DATAMGT_CONFIG = "DataManagementCfg";
     private static final String FAMILIES_CONFIG = "FamiliesCfg";
     private static final String HARDWARE_CONFIG = "HardwareCfg";
+    @SuppressWarnings("unused")
     private static final String INFRASTRUCTURE_CONFIG = "InfrastructureCfg";
     private static final String RECONFIGURABLE_HW_CONFIG = "ReconfigurableHardwareCfg";
     private static final String REMOVEABLE_CONFIG_EXTENSION = "^.*(_\\p{Digit}*|prioritypip)" + CONFIG_FILE_EXTENSION + "$";
@@ -89,9 +90,11 @@ public class ModelCopy extends AbstractModelTask {
     private void copy() throws ModelManagementException, IOException {
         // Initialize
         loadProject(getSourceFolder(), getMainProject());
-        Collection<File> originalFiles = FileUtils.listFiles(getSourceFolder(), new EASyModelFilter(),
-            TrueFileFilter.INSTANCE);
-        
+        List<File> originalFiles = new ArrayList<>(FileUtils.listFiles(getSourceFolder(), new EASyModelFilter(),
+            TrueFileFilter.INSTANCE));
+        // cave: works here (close to Windows sequence) because "infrastructure/" goes before "meta/" and
+        // PipelinesCfg*.ivml with deepest model dependencies comes after all others
+        Collections.sort(originalFiles, (f1, f2) -> f1.getAbsolutePath().compareTo(f2.getAbsolutePath()));
         // Copy all files
         for (File file : originalFiles) {
             String relativeFileName = getSourceFolder().toURI().relativize(file.toURI()).getPath();
