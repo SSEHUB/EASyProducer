@@ -976,13 +976,15 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
         for (int c = 0; Status.SUCCESS == status && c < rhsCondCount; c++) {
             AbstractRuleMatchExpression cond = rule.getRuleCondition(Side.RHS, c);
             rhsValues[c] = cond.accept(this);
-            // has elements; actual - if not, check further
-            assert cond.inferType().isCollection();
-            assert rhsValues[c] instanceof Collection;
-            if (!checkConditionResult(rhsValues[c], rule, ConditionTest.DONT_CARE)) {
-                rhsValues[c] = executableRules.buildContributing(cond, this);
-                if (!checkConditionResult(rhsValues[c], cond, ConditionTest.DONT_CARE)) {
-                    status = Status.NOT_APPLICABLE;
+            if (rhsValues[c] != null) {
+                // has elements; actual - if not, check further
+                assert cond.inferType().isCollection();
+                assert rhsValues[c] instanceof Collection;
+                if (!checkConditionResult(rhsValues[c], rule, ConditionTest.DONT_CARE)) {
+                    rhsValues[c] = executableRules.buildContributing(cond, this);
+                    if (!checkConditionResult(rhsValues[c], cond, ConditionTest.DONT_CARE)) {
+                        status = Status.NOT_APPLICABLE;
+                    }
                 }
             }
         }
