@@ -898,16 +898,18 @@ public class ProjectCopyVisitor extends AbstractProjectVisitor {
             boolean success = false;
             if (cstCopy.translatedCompletely()) {
                 ConstraintSyntaxTree copiedTree = cstCopy.getResult();
-                try {
-                    copiedTree.inferDatatype();
-                    CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
-                            copiedOperandType, copiedTree, copiedParameters);
-                    copiedOP.setOperation(copiedCustomOp);
-                    success = true;
-                } catch (CSTSemanticException e) {
-                    // No copy of OperationDefinition was created -> Retry it later
-                    copiedOP.setOperation(orgCustomOp);
-                    incompleteElements.addIncompleteOperation(copiedOP);
+                if (null != copiedTree) {
+                    try {
+                        copiedTree.inferDatatype();
+                        CustomOperation copiedCustomOp = new CustomOperation(copiedReturnType, orgCustomOp.getName(),
+                                copiedOperandType, copiedTree, copiedParameters);
+                        copiedOP.setOperation(copiedCustomOp);
+                        success = true;
+                    } catch (CSTSemanticException e) {
+                        // No copy of OperationDefinition was created -> Retry it later
+                        copiedOP.setOperation(orgCustomOp);
+                        incompleteElements.addIncompleteOperation(copiedOP);
+                    }
                 }
             } else {
                 // No copy of OperationDefinition was created -> Retry it later
