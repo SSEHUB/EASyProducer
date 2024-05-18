@@ -409,4 +409,9 @@ class CSTCopyVisitor extends CopyVisitor {
         }
     }
 
+    @Override
+    protected void setResult(ConstraintSyntaxTree cst) {
+        super.setResult(inferDatatype(cst)); // as not done in here
+    }    
+    
 }
