@@ -76,7 +76,7 @@ class ExecutableRules {
      * 
      * @param expression the failing expression which shall match after the contributing ones are built
      * @param visitor the execution visitor
-     * @return the result of <code>expression</code> after the contributing ones are considered
+     * @return the result of <code>expression</code> after the contributing ones are considered, may be <b>null</b>
      * @throws VilException in case of any execution error
      */
     public Object buildContributing(AbstractRuleMatchExpression expression, BuildlangExecution visitor) 
@@ -103,7 +103,7 @@ class ExecutableRules {
         }
         Object value = expression.accept(visitor);
         assert expression.inferType().isCollection();
-        assert value instanceof Collection;
+        //assert value instanceof Collection; // not needed, subsequent calls can handle null
         return value;
     }
     

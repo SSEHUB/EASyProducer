@@ -316,7 +316,7 @@ public class BuildlangExecution extends ExecutionVisitor<Script, AbstractRule, V
     /**
      * Checks the results of an evaluation of a condition.
      * 
-     * @param value the evaluation result
+     * @param value the evaluation result (may be <b>null</b>)
      * @param element the element to check on
      * @param test how to test individual artifacts
      * @return <code>true</code> if the condition is fulfilled, <code>false</code> else
