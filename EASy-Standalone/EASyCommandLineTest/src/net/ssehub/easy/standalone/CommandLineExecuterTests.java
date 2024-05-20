@@ -69,7 +69,7 @@ public class CommandLineExecuterTests {
      * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
      */
     @Test
-    public void testInstantiateElevatorA1() throws IOException {
+    public void testInstantiateElevatorA1() throws IOException, InterruptedException {
         // Projects used for instantiation
         File src = new File(AllTests.ELEVATOR_DIR, "PL_SimElevator");
         File trg = new File(AllTests.ELEVATOR_DIR, "New_Product");
@@ -81,6 +81,7 @@ public class CommandLineExecuterTests {
             + " " + trg.getCanonicalPath(), false);
         
         String errMsg = executer.execute();
+        executer.waitFor();
         if (null != errMsg) {
             Assert.fail(errMsg);
         }

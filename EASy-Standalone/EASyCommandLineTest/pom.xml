@@ -64,7 +64,6 @@
                 <include>**/AllTests*.class</include>
               </includes>
               <forkedProcessTimeoutInSeconds>300000</forkedProcessTimeoutInSeconds>
-              <skip>true</skip> <!-- tests start but don't terminate -->
             </configuration>
             <dependencies>
               <!-- Force using the latest JUnit 47 provider, consider also in lib dependencies; seems also to work with

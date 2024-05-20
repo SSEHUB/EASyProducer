@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({CommandLineExecuterTests.class, ReasoningTests.class})
+@SuiteClasses({/*CommandLineExecuterTests.class,*/ ReasoningTests.class})
 public class AllTests {
 
     /**

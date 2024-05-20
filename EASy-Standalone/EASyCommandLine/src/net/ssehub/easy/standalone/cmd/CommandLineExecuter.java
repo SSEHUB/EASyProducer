@@ -46,7 +46,6 @@ public class CommandLineExecuter {
             ListLoader loader = new ListLoader();
             //loader.setVerbose(true);
             loader.startup();
-
             if (null != args && args.length > 1) {
                 Map<String, String> options = new HashMap<String, String>();
                 args = pruneArguments(args, options);

@@ -3,3 +3,9 @@ DS:net.ssehub.easy.instantiation.core.model.BuiltIn
 DS:de.uni_hildesheim.sse.IvmlParser
 DS:de.uni_hildesheim.sse.vil.templatelang.VtlExpressionParser
 DS:de.uni_hildesheim.sse.VilExpressionParser
+DS:net.ssehub.easy.instantiation.maven.Registration
+DS:net.ssehub.easy.instantiation.velocity.VelocityInstantiator
+DS: net.ssehub.easy.instantiation.xvcl.XVCLInstantiator
+DS: net.ssehub.easy.instantiation.ant.Registration
+DS: net.ssehub.easy.instantiation.aspectj.Registration
+DS:net.ssehub.easy.instantiation.java.Registration

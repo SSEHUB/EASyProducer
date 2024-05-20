@@ -182,6 +182,36 @@
         <artifactId>net.ssehub.easy.loader</artifactId>
         <version>${project.version}</version>
     </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.xvcl</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.velocity</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.maven</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.ant</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.aspectj</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.java</artifactId>
+        <version>${project.version}</version>
+    </dependency>
  </dependencies>
   
   </project>

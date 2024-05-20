@@ -2,11 +2,12 @@ package net.ssehub.easy.standalone;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -66,7 +67,7 @@ class ProcessExecuter {
             Charset.defaultCharset());
         commands.add(java.getAbsolutePath());
         if (classpath.length() > 0) {
-            commands.add("-cp ." + File.pathSeparator + classpath);
+            commands.add("-cp " + AllTests.AUT_DIR.getAbsolutePath() + File.pathSeparator + classpath);
         }
         if (!logAll) {
             commands.add("-Dde.uni_hildesheim.sse.easy.logging.level=WARN");
@@ -75,10 +76,26 @@ class ProcessExecuter {
         for (int i = 0; i < cmdsAsArray.length; i++) {
             commands.add(cmdsAsArray[i]);
         }
-        System.out.println(Arrays.toString(commands.toArray()));
+        File argsFile = new File("./testdata/temp/args");
+        try {
+            String jdk = commands.remove(0);
+            PrintStream args = new PrintStream(new FileOutputStream(argsFile));
+            for (String s : commands) {
+                args.print(s);
+                args.print(" ");
+            }
+            args.close();
+            commands.clear();
+            commands.add(jdk);
+            commands.add("@" + argsFile.getAbsolutePath());
+        } catch (IOException e) {
+            System.err.println("Cannot write args file " + argsFile + ": " + e.getMessage());
+        }
+        System.out.println("Executing: " + String.join(" ", commands));
         
         ProcessBuilder builder = new ProcessBuilder(commands);
         builder.directory(AllTests.AUT_DIR);   
+        builder.inheritIO();
         process = builder.start();
         inStream = new BufferedReader( new InputStreamReader(process.getInputStream()));
         errStream = new BufferedReader( new InputStreamReader(process.getErrorStream()));
@@ -112,6 +129,7 @@ class ProcessExecuter {
         
         // Collect all normal messages, before collecting all errors.
         while((line = getInStream().readLine()) != null) {
+System.out.println(line);            
             msg.append(line);
             msg.append("\n");
         }
@@ -120,6 +138,7 @@ class ProcessExecuter {
         //Collect and return all errors
         msg = new StringBuffer();
         while((line = getErrStream().readLine()) != null) {
+System.out.println(line);            
             msg.append(line);
             msg.append("\n");
         }

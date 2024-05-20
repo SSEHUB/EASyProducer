@@ -393,7 +393,6 @@ public final class InstantiationCommands {
         LowlevelCommands.loadProject(projectTarget);
         String projectName =  ProjectNameMapper.getInstance().getName(projectTarget);
         PLPInfo plp = LowlevelCommands.getProject(projectName);
-        
         if (null != plp) {
             InstantiationListener listener = new InstantiationListener();
             plp.addVilExecutionListener(listener);
