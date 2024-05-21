@@ -315,7 +315,6 @@ public final class InstantiationCommands {
      */
     public static void instantiate(File projectSource, File projectTarget, Map<String, Object> arguments) 
         throws PersistenceException, VilException, IOException {
-        
         if (projectSource.exists() && projectTarget.exists()) {
             // This is the usual way:
             instantiateEASyProjects(projectSource, projectTarget, arguments);

@@ -11,6 +11,7 @@ vilScript PL_SimElevator (Project source, Configuration conf, Project target) {
     }
 
     main(Project source, Configuration conf, Project target) = : {
+        println("MAIN");
         copySRCFiles();
         copyRESFiles();
         velocity("$target/**/*.java", conf);

@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({/*CommandLineExecuterTests.class,*/ ReasoningTests.class})
+@SuiteClasses({CommandLineExecuterTests.class, ReasoningTests.class})
 public class AllTests {
 
     /**
@@ -94,16 +94,15 @@ public class AllTests {
     private static void initTestdata() {
         if (TESTDATA_DIR.exists()) {
             try {
+                System.out.println("Deleting " + TESTDATA_DIR);
                 FileUtils.deleteDirectory(TESTDATA_DIR);
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         try {
             System.out.println(TESTDATA_DIR.getCanonicalPath());
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         TESTDATA_DIR.mkdir();
@@ -118,7 +117,6 @@ public class AllTests {
                         FileFilter filter = FileFilterUtils.notFileFilter(FileFilterUtils.nameFileFilter(".svn"));
                         FileUtils.copyDirectory(src, dest, filter);
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }

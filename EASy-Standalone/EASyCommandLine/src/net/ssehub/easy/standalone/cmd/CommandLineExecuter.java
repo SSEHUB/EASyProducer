@@ -11,10 +11,13 @@ import java.util.Map;
 
 import de.uni_hildesheim.sse.easy.loader.ListLoader;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.LoggingLevel;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
 
 /**
@@ -30,6 +33,7 @@ public class CommandLineExecuter {
         Utils.BUNDLE_ID);
     private static final List<String> OPTIONS = new ArrayList<String>();
     private static final String OPT_RESULTFILE = "--resultFile"; 
+    private static final boolean DEBUG = true;
     
     static {
         OPTIONS.add(OPT_RESULTFILE);
@@ -44,8 +48,14 @@ public class CommandLineExecuter {
         int result = CmdConstants.SYSTEM_OK;
         try {
             ListLoader loader = new ListLoader();
-            //loader.setVerbose(true);
+            if (DEBUG) {
+                loader.setVerbose(true);
+            }
             loader.startup();
+            if (DEBUG) {
+                EASyLoggerFactory.INSTANCE.setLoggingLevel(LoggingLevel.DEBUG);
+                TracerFactory.setDefaultInstance(ConsoleTracerFactory.INSTANCE);
+            }
             if (null != args && args.length > 1) {
                 Map<String, String> options = new HashMap<String, String>();
                 args = pruneArguments(args, options);

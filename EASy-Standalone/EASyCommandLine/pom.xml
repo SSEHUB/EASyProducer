@@ -49,23 +49,6 @@
                     <target>17</target>
                 </configuration>
             </plugin>
-              <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.6.1</version>
-                <executions>
-                  <execution>
-                    <id>build-classpath</id>
-                    <phase>generate-sources</phase>
-                    <goals>
-                      <goal>build-classpath</goal>
-                    </goals>
-                    <configuration>
-                        <outputFile>bin/classpath.cp</outputFile>
-                    </configuration>
-                  </execution>
-                </executions>
-              </plugin> 
 
            <plugin>
             <groupId>org.apache.maven.plugins</groupId>

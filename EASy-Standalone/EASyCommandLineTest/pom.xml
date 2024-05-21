@@ -92,7 +92,23 @@
             </executions>
           </plugin>    
           
-          
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.6.1</version>
+            <executions>
+              <execution>
+                <id>build-classpath</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>build-classpath</goal>
+                </goals>
+                <configuration>
+                    <outputFile>bin/classpath.cp</outputFile>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin> 
           
         </plugins>
   </build>
@@ -121,11 +137,6 @@
  <dependencies>
     <dependency>
         <groupId>net.ssehub.easy</groupId>
-        <artifactId>net.ssehub.easy.producer.eclipse</artifactId>
-        <version>${project.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>net.ssehub.easy</groupId>
         <artifactId>net.ssehub.easy.producer.core</artifactId>
         <version>${project.version}</version>
     </dependency>
@@ -137,6 +148,41 @@
     <dependency>
         <groupId>net.ssehub.easy.producer</groupId>
         <artifactId>CommandLine</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+   <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.reasoning.sseReasoner</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.xvcl</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.velocity</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.maven</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.ant</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.aspectj</artifactId>
+        <version>${project.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>net.ssehub.easy.instantiation.java</artifactId>
         <version>${project.version}</version>
     </dependency>
     <dependency>

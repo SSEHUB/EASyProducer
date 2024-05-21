@@ -67,6 +67,7 @@ public class CommandLineExecuterTests {
      * Tests the <tt>instantiate</tt> method with two EASy projects (the elevator example).
      * These projects are already configured by Eclipse and contain all necessary information.
      * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
+     * @throws InterruptedException if instantiation is being interrupted
      */
     @Test
     public void testInstantiateElevatorA1() throws IOException, InterruptedException {
@@ -94,9 +95,10 @@ public class CommandLineExecuterTests {
      * The first folder is an valid EASy project, which contains a variability model
      * and all files needed for instantiation.
      * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
+     * @throws InterruptedException if instantiation is being interrupted
      */
     @Test
-    public void testInstantiateElevatorA2() throws IOException {
+    public void testInstantiateElevatorA2() throws IOException, InterruptedException {
         // Projects used for instantiation
         File src = new File(AllTests.ELEVATOR_DIR, "PL_SimElevator_frozen");
         File trg = new File(AllTests.ELEVATOR_DIR, "New_Product3");
@@ -108,6 +110,7 @@ public class CommandLineExecuterTests {
             + " " + trg.getCanonicalPath(), false);
         
         String errMsg = executer.execute();
+        executer.waitFor();
         if (null != errMsg) {
             Assert.fail(errMsg);
         }
@@ -122,9 +125,10 @@ public class CommandLineExecuterTests {
      * The second folder does not exist and should be created during the instantiation process.
      * The configuration and build script will be loaded from outside of the projects/folders as additional parameters.
      * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
+     * @throws InterruptedException if instantiation is being interrupted
      */
     @Test
-    public void testInstantiateElevatorB() throws IOException {
+    public void testInstantiateElevatorB() throws IOException, InterruptedException {
         // Projects used for instantiation
         File src = new File(AllTests.ELEVATOR_DIR, "PL_SimElevator2");
         File trg = new File(AllTests.ELEVATOR_DIR, "New_Product2");
@@ -141,6 +145,7 @@ public class CommandLineExecuterTests {
             + " " + vilFile.getCanonicalPath(), false);
         
         String errMsg = executer.execute();
+        executer.waitFor();
         if (null != errMsg) {
             Assert.fail(errMsg);
         }
@@ -156,9 +161,10 @@ public class CommandLineExecuterTests {
      * The second folder does not exist and should be created during the instantiation process.
      * The configuration and build script will be loaded from outside of the projects/folders as additional parameters.
      * @throws IOException If an I/O error occurs while passing the command to the shell/command line.
+     * @throws InterruptedException if instantiation is being interrupted
      */
     @Test
-    public void testInstantiateElevatorC() throws IOException {
+    public void testInstantiateElevatorC() throws IOException, InterruptedException {
         // Projects used for instantiation
         File src = new File(AllTests.ELEVATOR_DIR, "PL_SimElevator2");
         File trg = new File(AllTests.ELEVATOR_DIR, "New_Product4");
@@ -171,6 +177,7 @@ public class CommandLineExecuterTests {
             + " " + trg.getCanonicalPath() + " " + "New_Product2 0 New_Product 0", false);
         
         String errMsg = executer.execute();
+        executer.waitFor();
         if (null != errMsg) {
             Assert.fail(errMsg);
         }

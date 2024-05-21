@@ -63,7 +63,7 @@ class ProcessExecuter {
     public ProcessExecuter(String command, boolean logAll) throws IOException{
         List<String> commands = new ArrayList<String>();
         File java = new File(System.getProperties().getProperty("java.home") + "/bin/java");
-        String classpath = FileUtils.readFileToString(new File(AllTests.AUT_DIR, "../classpath.cp"), 
+        String classpath = FileUtils.readFileToString(new File("bin/classpath.cp"), 
             Charset.defaultCharset());
         commands.add(java.getAbsolutePath());
         if (classpath.length() > 0) {
