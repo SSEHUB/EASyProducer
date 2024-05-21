@@ -65,7 +65,7 @@ class ProcessExecuter {
         File java = new File(System.getProperties().getProperty("java.home") + "/bin/java");
         String classpath = FileUtils.readFileToString(new File("bin/classpath.cp"), 
             Charset.defaultCharset());
-        commands.add(java.getAbsolutePath());
+        commands.add(java.getName());
         if (classpath.length() > 0) {
             commands.add("-cp " + AllTests.AUT_DIR.getAbsolutePath() + File.pathSeparator + classpath);
         }
@@ -77,7 +77,7 @@ class ProcessExecuter {
             commands.add(cmdsAsArray[i]);
         }
         File argsFile = new File("./testdata/temp/args");
-        try {
+        try { // too long command line (for Windows) with all required Maven dependencies
             String jdk = commands.remove(0);
             PrintStream args = new PrintStream(new FileOutputStream(argsFile));
             for (String s : commands) {
@@ -91,11 +91,20 @@ class ProcessExecuter {
         } catch (IOException e) {
             System.err.println("Cannot write args file " + argsFile + ": " + e.getMessage());
         }
-        System.out.println("Executing: " + String.join(" ", commands));
         
         ProcessBuilder builder = new ProcessBuilder(commands);
         builder.directory(AllTests.AUT_DIR);   
+        java.util.Map<String, String> envs = builder.environment(); // abs java path fails in Linux
+        String path = java.getParentFile().getAbsolutePath();
+        String pathEnvName = "PATH";
+        if (envs.get(pathEnvName) != null) {
+            path = path + File.pathSeparator + path;
+        }
+        envs.put(pathEnvName, path);
         builder.inheritIO();
+
+        System.out.println("Executing: " + String.join(" ", commands) +" with " + pathEnvName 
+            + "=" + path + " in work directory " + AllTests.AUT_DIR);
         process = builder.start();
         inStream = new BufferedReader( new InputStreamReader(process.getInputStream()));
         errStream = new BufferedReader( new InputStreamReader(process.getErrorStream()));
