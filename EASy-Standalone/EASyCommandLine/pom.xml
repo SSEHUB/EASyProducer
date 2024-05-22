@@ -16,6 +16,7 @@
   <build>
       <sourceDirectory>${basedir}/src</sourceDirectory>
       <outputDirectory>bin/classes</outputDirectory>
+      <resources><resource><directory>res</directory></resource></resources>
         <plugins>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>

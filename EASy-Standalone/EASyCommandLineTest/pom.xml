@@ -18,6 +18,8 @@
       <sourceDirectory>${basedir}/src</sourceDirectory>
       <testSourceDirectory>${basedir}/src</testSourceDirectory>
       <outputDirectory>bin/classes</outputDirectory>
+      <testOutputDirectory>bin/test-classes</testOutputDirectory>
+      <testResources><testResource><directory>res</directory></testResource></testResources>
         <plugins>
 
           <plugin>

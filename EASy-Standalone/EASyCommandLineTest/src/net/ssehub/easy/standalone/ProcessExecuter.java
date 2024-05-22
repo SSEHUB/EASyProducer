@@ -65,9 +65,9 @@ class ProcessExecuter {
         File java = new File(System.getProperties().getProperty("java.home") + "/bin/java");
         String classpath = FileUtils.readFileToString(new File("bin/classpath.cp"), 
             Charset.defaultCharset());
-        commands.add(java.getName());
+        commands.add(java.getAbsolutePath());
         if (classpath.length() > 0) {
-            commands.add("-cp " + AllTests.AUT_DIR.getAbsolutePath() + File.pathSeparator + classpath);
+            commands.add("-cp ." + File.pathSeparator + classpath);
         }
         if (!logAll) {
             commands.add("-Dde.uni_hildesheim.sse.easy.logging.level=WARN");
@@ -93,18 +93,10 @@ class ProcessExecuter {
         }
         
         ProcessBuilder builder = new ProcessBuilder(commands);
-        builder.directory(AllTests.AUT_DIR);   
-        java.util.Map<String, String> envs = builder.environment(); // abs java path fails in Linux
-        String path = java.getParentFile().getAbsolutePath();
-        String pathEnvName = "PATH";
-        if (envs.get(pathEnvName) != null) {
-            path = path + File.pathSeparator + path;
-        }
-        envs.put(pathEnvName, path);
+        builder.directory(new File("./bin/test-classes").getAbsoluteFile());   
         builder.inheritIO();
 
-        System.out.println("Executing: " + String.join(" ", commands) +" with " + pathEnvName 
-            + "=" + path + " in work directory " + AllTests.AUT_DIR);
+        System.out.println("Executing: " + String.join(" ", commands) + " in " + builder.directory());
         process = builder.start();
         inStream = new BufferedReader( new InputStreamReader(process.getInputStream()));
         errStream = new BufferedReader( new InputStreamReader(process.getErrorStream()));
@@ -138,7 +130,6 @@ class ProcessExecuter {
         
         // Collect all normal messages, before collecting all errors.
         while((line = getInStream().readLine()) != null) {
-System.out.println(line);            
             msg.append(line);
             msg.append("\n");
         }
@@ -147,7 +138,6 @@ System.out.println(line);
         //Collect and return all errors
         msg = new StringBuffer();
         while((line = getErrStream().readLine()) != null) {
-System.out.println(line);            
             msg.append(line);
             msg.append("\n");
         }
