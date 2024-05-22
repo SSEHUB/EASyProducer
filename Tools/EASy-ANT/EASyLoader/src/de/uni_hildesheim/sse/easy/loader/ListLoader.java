@@ -32,7 +32,7 @@ public class ListLoader implements ILoader {
     public ListLoader() throws IOException {
         this((File) null);
     }
-    
+
     /**
      * Creates a list loader that reads the startup sequence from the given file.
      * 
@@ -41,9 +41,20 @@ public class ListLoader implements ILoader {
      * @throws IOException in case of loading the startup sequence fails
      */
     public ListLoader(File listFile) throws IOException {
+        this(listFile, ListLoader.class.getClassLoader());
+    }
+
+    /**
+     * Creates a list loader that reads the startup sequence from the given file.
+     * 
+     * @param listFile the file to consider (may be <b>null</b> for reading information from {@code loader})
+     * @param loader the class loader to load from
+     * @throws IOException in case of loading the startup sequence fails
+     */
+    public ListLoader(File listFile, ClassLoader loader) throws IOException {
         InputStream is;
         if (null == listFile) {
-            is = getClass().getClassLoader().getResourceAsStream(EASY_STARTUP_FILE_NAME);
+            is = loader.getResourceAsStream(EASY_STARTUP_FILE_NAME);
         } else {
             is = new FileInputStream(listFile);
         }

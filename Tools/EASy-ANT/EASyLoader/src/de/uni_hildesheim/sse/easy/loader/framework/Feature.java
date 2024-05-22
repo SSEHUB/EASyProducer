@@ -107,7 +107,7 @@ public class Feature {
         if (node.getNodeName().equalsIgnoreCase("import") 
                 || node.getNodeName().equalsIgnoreCase("include")) {
     
-            boolean isImport = node.getNodeName().equalsIgnoreCase("import") ? true : false;
+            boolean isImport = node.getNodeName().equalsIgnoreCase("import");
             EasyDependency newDependency = new EasyDependency();
             
             try {

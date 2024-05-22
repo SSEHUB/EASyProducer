@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EASyLoader" default="all" basedir=".">
-	<!-- import von globalen Properties Einstellungen -->
     <property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
-        <delete dir="bin"/>
-        <delete dir=".m2"/>
+
+		<delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
 	</target>
 	
 </project>

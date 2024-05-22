@@ -32,7 +32,7 @@ public class FakeComponentContext implements ComponentContext {
     }
 
     @Override
-    public ComponentInstance getComponentInstance() {
+    public <S> ComponentInstance<S> getComponentInstance() {
         return null;
     }
 
@@ -54,13 +54,12 @@ public class FakeComponentContext implements ComponentContext {
     }
 
     @Override
-    public Object locateService(String arg0) {
+    public <S> S locateService(String arg0) {
         return null;
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public Object locateService(String arg0, ServiceReference arg1) {
+    public <S> S locateService(String arg0, ServiceReference<S> arg1) {
         return null;
     }
 
