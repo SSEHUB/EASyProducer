@@ -32,7 +32,8 @@ Require-Bundle:
  net.ssehub.easy.instantiation.docker,
  net.ssehub.easy.instantiation.lxc,
  net.ssehub.easy.instantiation.aspectj,
- net.ssehub.easy.instantiation.xvcl
+ net.ssehub.easy.instantiation.xvcl,
+ net.ssehub.easy.instantiation.velocity
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
