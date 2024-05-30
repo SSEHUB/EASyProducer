@@ -3,10 +3,15 @@
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="publish">
-		<oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs-git" trust="true" keyfile="${user.home}/.ssh/id_rsa">
-			     <fileset dir="${basedir}/web">
-			         <include name="**/*"/>
-			     </fileset>
+		<oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs-git/docPreview" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+		     <fileset dir="${basedir}/web/docPreview">
+		         <include name="**/*"/>
+		     </fileset>
 		</oscp>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs-git/docRelease" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+             <fileset dir="${basedir}/web/docRelease">
+                 <include name="**/*"/>
+             </fileset>
+        </oscp>
 	</target>
 </project>
