@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Maven
 Bundle-SymbolicName: net.ssehub.easy.libs.maven
 Automatic-Module-Name: net.ssehub.easy.libs.maven
-Bundle-Version: 3.9.6
+Bundle-Version: 3.9.7
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  lib/aopalliance-1.0.jar,
@@ -54,7 +54,37 @@ Bundle-ClassPath: .,
  lib/wagon-http-3.5.3.jar,
  lib/wagon-http-shared-3.5.3.jar,
  lib/wagon-provider-api-3.5.3.jar,
- lib/plexus-classworlds-2.7.0.jar
+ lib/plexus-classworlds-2.7.0.jar,
+ lib/commons-cli-1.7.0.jar,
+ lib/commons-codec-1.16.1.jar,
+ lib/commons-lang3-3.14.0.jar,
+ lib/failureaccess-1.0.2.jar,
+ lib/guava-33.2.0-jre.jar,
+ lib/jansi-2.4.1.jar,
+ lib/maven-artifact-3.9.7.jar,
+ lib/maven-builder-support-3.9.7.jar,
+ lib/maven-compat-3.9.7.jar,
+ lib/maven-core-3.9.7.jar,
+ lib/maven-embedder-3.9.7.jar,
+ lib/maven-model-3.9.7.jar,
+ lib/maven-model-builder-3.9.7.jar,
+ lib/maven-plugin-api-3.9.7.jar,
+ lib/maven-repository-metadata-3.9.7.jar,
+ lib/maven-resolver-api-1.9.20.jar,
+ lib/maven-resolver-connector-basic-1.9.20.jar,
+ lib/maven-resolver-impl-1.9.20.jar,
+ lib/maven-resolver-named-locks-1.9.20.jar,
+ lib/maven-resolver-provider-3.9.7.jar,
+ lib/maven-resolver-spi-1.9.20.jar,
+ lib/maven-resolver-transport-file-1.9.20.jar,
+ lib/maven-resolver-transport-http-1.9.20.jar,
+ lib/maven-resolver-transport-wagon-1.9.20.jar,
+ lib/maven-resolver-util-1.9.20.jar,
+ lib/maven-settings-3.9.7.jar,
+ lib/maven-settings-builder-3.9.7.jar,
+ lib/maven-shared-utils-3.4.2.jar,
+ lib/maven-slf4j-provider-3.9.7.jar,
+ lib/plexus-interpolation-1.27.jar
 Bundle-Vendor: SSE, University of Hildesheim
 Export-Package: net.ssehub.easy.libs.maven,
  org.apache.maven,
