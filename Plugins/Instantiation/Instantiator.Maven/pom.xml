@@ -34,13 +34,13 @@
      <dependency>
 	    <groupId>org.apache.maven</groupId>
 	    <artifactId>maven-core</artifactId>
-	    <version>3.6.3</version>
+	    <version>3.9.6</version>
 	    <optional>true</optional>
      </dependency>
  	 <dependency>
 	    <groupId>org.apache.maven</groupId>
 	    <artifactId>maven-embedder</artifactId>
-	    <version>3.6.3</version>
+	    <version>3.9.6</version>
         <optional>true</optional>
 	 </dependency>     
   </dependencies>  

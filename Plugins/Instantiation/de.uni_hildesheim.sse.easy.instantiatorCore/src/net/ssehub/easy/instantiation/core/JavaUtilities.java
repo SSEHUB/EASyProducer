@@ -56,8 +56,10 @@ public class JavaUtilities {
      */
     private static String determineJDKDir() {
         // Try to resolve JDK path via JAVA_HOME system variable (should be the fastest method, but not reliable
-        String jdkPath = System.getenv("JAVA_HOME");
-        
+        String jdkPath = System.getProperty("java.home"); // take the one of the current JVM
+        if (null == jdkPath || jdkPath.length() == 0) { // if not present, why ever, take the user specified
+            jdkPath = System.getenv("JAVA_HOME");
+        }
         //checkstyle: stop exception type check 
         try {
             if (jdkPath == null || !(new File(jdkPath).exists())) {

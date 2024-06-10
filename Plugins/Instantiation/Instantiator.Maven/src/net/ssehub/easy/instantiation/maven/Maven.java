@@ -45,6 +45,7 @@ import net.ssehub.easy.instantiation.core.model.common.CommandLineProgramRegistr
 import net.ssehub.easy.instantiation.core.model.common.ICommandLineProgram;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.common.StreamGobbler.GobblerConfigurer;
 import net.ssehub.easy.instantiation.core.model.common.StreamGobbler.IMsgManipulator;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
@@ -61,7 +62,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @Instantiator("maven")
 public class Maven extends AbstractFileInstantiator {
 
-    private static final String TMP_FOLDER = "easy-maven363";
+    private static final String TMP_FOLDER = "easy-maven369";
+    private static final boolean FILTER_SLF4J = true;
     private static final boolean CMD_TEST = true;
     // folder without /lib!
     private static final boolean AS_PROCESS = Boolean.valueOf(System.getProperty("easy.maven.asProcess", "true"));
@@ -607,7 +609,17 @@ public class Maven extends AbstractFileInstantiator {
         
         builder.directory(new File(buildFilePath));
         Process proc = builder.start();
-        StreamGobbler.gobble(proc, manipulator);
+        
+        GobblerConfigurer[] configurers;
+        if (FILTER_SLF4J) { // there might be multiple logger implementations; if stable, filter out
+            configurers = new GobblerConfigurer[1];
+            configurers[0] = g -> {
+                g.addExcludeFilter(s -> s.startsWith("SLF4J: "));
+            };
+        } else {
+            configurers = new GobblerConfigurer[0];
+        }
+        StreamGobbler.gobble(proc, manipulator, configurers);
         return proc.waitFor();
     }
     

@@ -5,6 +5,9 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
@@ -24,6 +27,7 @@ public class StreamGobbler extends Thread {
     private boolean isErrorStream;
     private IMsgManipulator manipulator;
     private TracerFactory tracers;
+    private List<Predicate<String>> excludeFilters;
 
     /**
      * Allows to manipulate messages.
@@ -79,14 +83,74 @@ public class StreamGobbler extends Thread {
      * 
      * @param proc the process to gobble
      * @param manipulator an optional message manipulator
+     * @param configurers optional gobbler configurers
      */
-    public static void gobble(Process proc, IMsgManipulator manipulator) {
+    public static void gobble(Process proc, IMsgManipulator manipulator, GobblerConfigurer... configurers) {
         StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream(), true, manipulator);
+        for (GobblerConfigurer c : configurers) {
+            c.configure(errorGobbler);
+        }
         errorGobbler.start();
         StreamGobbler outGobbler = new StreamGobbler(proc.getInputStream(), false, manipulator);
         outGobbler.start();
+        for (GobblerConfigurer c : configurers) {
+            c.configure(outGobbler);
+        }
     }
-
+    
+    /**
+     * In-place configuration of stream gobblers, e.g., with filters.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface GobblerConfigurer {
+        
+        /**
+         * Configures the given {@link gobbler}.
+         * 
+         * @param gobbler the gobbler instance to configure
+         */
+        public void configure(StreamGobbler gobbler);
+    }
+    
+    /**
+     * Adds an exclusion filter.
+     * 
+     * @param filter the filter, ignored if <b>null</b>
+     */
+    public void addExcludeFilter(Predicate<String> filter) {
+        if (null != filter) {
+            if (null == excludeFilters) {
+                excludeFilters = new ArrayList<>();
+            }
+            excludeFilters.add(filter);
+        }
+    }
+    
+    /**
+     * Returns whether a {@code line} to be logged is ok for passing it on to the tracers.
+     * 
+     * @param line the line to be tested
+     * @return {@code true} for output, {@code false} for skip
+     */
+    private boolean isOkForFilter(String line) {
+        boolean ok = true;
+        int size = null == excludeFilters ? 0 : excludeFilters.size();
+        for (int i = 0; ok && i < size; i++) {
+            ok = !excludeFilters.get(i).test(line);
+        }
+        return ok;
+    }
+    
+    /**
+     * Returns whether this gobbler is receiving an error or an output stream.
+     * 
+     * @return {@code true} for error, {@code false} for output
+     */
+    public boolean isErrorStream() {
+        return isErrorStream;
+    }
+    
     @Override
     public void run() {
         TracerFactory.setInstance(tracers); // set thread-based
@@ -99,7 +163,7 @@ public class StreamGobbler extends Thread {
                 if (null != manipulator) {
                     line = manipulator.manipulate(line);
                 }
-                if (null != line) {
+                if (null != line && isOkForFilter(line)) {
                     if (isErrorStream) {
                         tracer.traceError(line);
                     } else {
