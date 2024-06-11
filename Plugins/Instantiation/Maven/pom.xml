@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>net.ssehub.easy.libs.maven</artifactId>
   <packaging>eclipse-plugin</packaging>
-  <version>3.6.3</version>
+  <version>3.9.7</version>
   
   <name>EASy-Producer endorsed Maven library</name>
   <description>The the endorsed Maven library of EASy-Producer.</description>
