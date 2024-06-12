@@ -106,11 +106,12 @@ public class StreamGobbler extends Thread {
     public interface GobblerConfigurer {
         
         /**
-         * Configures the given {@link gobbler}.
+         * Configures the given {@code gobbler}.
          * 
          * @param gobbler the gobbler instance to configure
          */
         public void configure(StreamGobbler gobbler);
+        
     }
     
     /**

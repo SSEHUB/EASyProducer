@@ -34,7 +34,7 @@ Export-Package: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.instantiation.core.model.vilTypes,
  net.ssehub.easy.instantiation.core.model.vilTypes.configuration
 Bundle-ClassPath: .,
- lib/xercesImpl-2.12.1.jar,
+ lib/xercesImpl-2.12.2.jar,
  lib/serializer-2.7.3.jar,
  lib/xalan-2.7.3.jar
 Import-Package: net.ssehub.easy.dslCore.translation,
