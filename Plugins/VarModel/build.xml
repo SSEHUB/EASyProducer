@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Project name must not contain whitespaces -->
-<project name="VariabilityModel" default="all" basedir="." xmlns:jacoco="antlib:org.jacoco.ant">	
+<project name="VariabilityModel" default="all" basedir=".">	
 	<property file="${user.home}/migration.properties"/>
 	<property file="${user.home}/global-build.properties"/>
-    
-    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
-        <classpath path="${jacoco.path}/jacocoant.jar"/>
-    </taskdef>
-
-	<target name="init">
-		<!-- Delete generated folders -->
-		<delete dir="junitResults"/>
-		<delete dir="${coverage.base.dir}"/>
-		<delete dir="${doc.dir}"/>
-		
-		<!-- Create folders -->
-		<mkdir dir="junitResults"/>
-		<mkdir dir="${coverage.base.dir}"/>
-		<mkdir dir="${coverage.instr.dir}"/>
-		<mkdir dir="${coverage.results.dir}"/>
-		<mkdir dir="${doc.dir}"/>
-	</target>
 	
-	<target name="compile">
+	<target name="mvn">
 		<echo>###############################</echo>
         <echo>###  Assembling commons.io  ###</echo>
         <echo>###############################</echo>
@@ -70,104 +52,6 @@
         
     </target>
 	
-	<target name="prepareTestEclipse" if="${unzipNewEclipse}">
-		<delete dir="${test.eclipse.name}"/>
-		<mkdir dir="${test.eclipse.name}"/>
-		<mkdir dir="${test.eclipse.workspace.dir}"/>
-		<unzip src="${test.eclipse.zip}" dest="${test.eclipse.name}"/>
-	</target>
-	
-	<target name="copy.to.eclipse">
-		<condition property="test.eclipse.path" value="${basedir}/${test.eclipse.name}">
-			<istrue value="${unzipNewEclipse}"/>
-		</condition>
-		<condition property="test.eclipse.path" value="${alternative.test.eclipse.dir}">
-			<isfalse value="${unzipNewEclipse}"/>
-		</condition>
-		<antcall target="prepareTestEclipse"/>
-		
-        <!-- Copy Plugins, which shall be tested -->
-		<copy todir="${test.eclipse.path}/plugins" failonerror="true" overwrite="true" flatten="true">
-			<fileset dir="${basedir}" includes="**/${build.jar.dir}/*.jar" />
-		</copy>
-	</target>
-	
-	<target name="coreTest" depends="copy.to.eclipse">
-        <property name="eclipse-home" value="${test.eclipse.path}"/>
-        <ant target="core-test" antfile="plugins/${test.eclipse.testFW.dir}/library.xml" dir="${test.eclipse.path}">       
-          <property name="data-dir" value="${test.eclipse.workspace.dir} -clean"/>
-          <property name="plugin-name" value="net.ssehub.easy.varModel.tests"/>
-          <property name="classname" value="net.ssehub.easy.varModel.AllTests"/>
-          <property name="extraVMargs" value="-javaagent:${jacoco.path}/jacocoagent.jar=append=true,destfile=${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
-          <property name="os" value="${test.eclipse.os}"/>
-		  <property name="ws" value="${test.eclipse.ws}"/>
-		  <property name="arch" value="${test.eclipse.arch}"/>
-          <property name="timeout" value="240000"/>
-        </ant>
-	</target>
-    
-	<target name="report">
-        <jacoco:report>                 
-            <executiondata>
-                <file file="${basedir}/${coverage.results.dir}/${ant.project.name}.exec"/>
-            </executiondata>
-                                
-            <structure name="${ant.project.name}">
-                <group name="Utils">
-                    <classfiles>
-                        <fileset dir="${home.utils.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    </classfiles>
-                    <sourcefiles encoding="UTF-8">
-                        <fileset dir="${home.utils.dir}/src" />
-                    </sourcefiles>
-                </group>
-                <group name="VarModel">
-                    <classfiles>
-                        <fileset dir="${home.model.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                        <fileset dir="${home.model.tests.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    </classfiles>
-                    <sourcefiles encoding="UTF-8">
-                        <fileset dir="${home.model.dir}/src" />
-                        <fileset dir="${home.model.tests.dir}/src" />
-                    </sourcefiles>
-                </group>
-                <group name="DSL-Core">
-                    <classfiles>
-                        <fileset dir="${home.dslCore.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                        <fileset dir="${home.dslCore.ui.dir}/${build.jar.dir}/" includes="**/*.jar" />
-                    </classfiles>
-                    <sourcefiles encoding="UTF-8">
-                        <fileset dir="${home.dslCore.dir}/src" />
-                        <fileset dir="${home.dslCore.ui.dir}/src" />
-                    </sourcefiles>
-                </group>
-            </structure>
-                                
-            <html destdir="${basedir}/${coverage.results.dir}"/>                        
-        </jacoco:report>
-	</target> 
-	
-	<target name="test" depends="coreTest, report">
-		<!-- Gather Junit results -->
-		<copy todir="junitResults" failonerror="true" overwrite="true">
-			<fileset dir="${test.eclipse.path}/results/">
-				<include name="**/*.xml" />
-			</fileset>
-		</copy>
-	</target>		
-	
-	<target name="storeJars">
-		<copy todir="${easy.bundles.dir}" failonerror="true" overwrite="true" flatten="true">
-			<fileset dir=".">
-				<include name="**/build/jar/*.jar" />
-			</fileset>
-		</copy>
-	</target>
-    
-    <target name="remove.testeclipse.instance">
-        <delete dir="${basedir}/${test.eclipse.name}"/>
-    </target>
-	
-	<target name="all" depends="init, compile"/> <!-- , test, storeJars, remove.testeclipse.instance -->
-	<target name="only.compile" depends="init, compile"/>
+	<target name="all" depends="mvn"/>
+	<target name="only.compile" depends="mvn"/>
 </project>
