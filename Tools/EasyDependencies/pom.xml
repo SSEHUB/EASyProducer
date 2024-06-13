@@ -81,7 +81,7 @@
         <dependency>
           <groupId>org.apache.ant</groupId>
           <artifactId>ant</artifactId>
-          <version>[1.10.10]</version>
+          <version>[1.10.11]</version> <!-- eclipse is 1.10.10, due to security issues, 1.10.11 -->
         </dependency>
 		<dependency>
 		    <groupId>org.apache.ant</groupId>
@@ -558,6 +558,12 @@
          <artifactId>wagon-ssh-external</artifactId>
          <version>1.0-beta-6</version>
       </extension>
+      
+      <extension>
+        <groupId>org.apache.maven.extensions</groupId>
+        <artifactId>maven-build-cache-extension</artifactId>
+        <version>1.2.0</version>
+      </extension>         
     </extensions>
     
   </build>
