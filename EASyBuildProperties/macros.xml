@@ -2,6 +2,7 @@
 <project name="QualiMaster.Macros" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
  
    <property file="${user.home}/global-build.properties"/>
+   <property name="maven.repository.local" value="${user.home}${file.separator}.m2${file.separator}repository"/>
    
    <!--  <mvnDeploy folderName="${ant.project.name}" jarFolder="${build.jar.dir}" jarFile="${ant.project.name}.jar"/> -->
    
@@ -286,6 +287,41 @@
            <arg value="@{host}"/>
            <arg value="@{command}"/>
          </exec>
+      </sequential>
+   </macrodef>
+	
+   <!-- turns property src to a property with "." replaced by file separator -->
+   <macrodef name="propToFolder">
+     <attribute name="src" />
+     <attribute name="tgt" />
+     <sequential>
+         <!-- https://stackoverflow.com/questions/1176071/replacing-characters-in-ant-property -->
+         <loadresource property="@{tgt}">
+           <propertyresource name="@{src}"/>
+           <filterchain>
+             <tokenfilter>
+               <filetokenizer/>
+               <replacestring from="." to="${file.separator}"/>
+             </tokenfilter>
+           </filterchain>
+         </loadresource>
+     </sequential>
+   </macrodef>
+
+   <!-- estimates whether the component in pom has been deployed -->
+   <macrodef name="mvnIsDeployed">
+      <attribute name="pom" />
+      <attribute name="property" /> <!-- target property to change if deployment folder exists -->
+      <attribute name="prefix" /> <!-- property prefix when loading pom -->
+      <sequential>
+        <xmlproperty file="@{pom}" prefix="@{prefix}"/>
+        <local name="groupId"/>
+        <propToFolder src="@{prefix}.project.parent.groupId" tgt="groupId"/>
+        <local name="path"/>
+        <property name="path" value="${maven.repository.local}${file.separator}${groupId}${file.separator}${@{prefix}.project.artifactId}${file.separator}${@{prefix}.project.version}"/>
+        <condition property="@{property}">
+          <available file="${path}" type="dir"/>
+        </condition>    
       </sequential>
    </macrodef>
       
