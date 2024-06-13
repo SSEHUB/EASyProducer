@@ -18,8 +18,8 @@ package de.uni_hildesheim.sse.ant.versionReplacement;
 import java.io.File;
 
 /**
- * This task will transform a <tt>site.xml</tt>, set the version numbers, and will save it again as
- * <tt>site.xml</tt>.
+ * This task will transform a <code>site.xml</code>, set the version numbers, and will save it again as
+ * <code>site.xml</code>.
  * 
  * @author El-Sharkawy
  *
@@ -28,7 +28,7 @@ public class UpdateSiteTask extends AbstractVersionReplacementTask {
 
     /**
      * Default constructor of this task.
-     * Will only transform <tt>site.xml</tt> artifacts.
+     * Will only transform <code>site.xml</code> artifacts.
      */
     public UpdateSiteTask() {
         super("^site.xml$");

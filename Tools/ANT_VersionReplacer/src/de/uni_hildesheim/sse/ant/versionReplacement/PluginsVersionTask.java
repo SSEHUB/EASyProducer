@@ -20,7 +20,7 @@ import java.io.File;
 /**
  * 
  * This task will unzip existing plug-ins/fragments, set the version numbers, re-pack them
- * and will save them as a <tt>JAR</tt>.
+ * and will save them as a <code>JAR</code>.
  * 
  * @author El-Sharkawy
  *
@@ -30,7 +30,7 @@ public class PluginsVersionTask extends AbstractVersionReplacementTask {
     
     /**
      * Default constructor of this task.
-     * Will only transform <tt>*.jar</tt> artifacts.
+     * Will only transform <code>*.jar</code> artifacts.
      */
     public PluginsVersionTask() {
         super("^.*jar$");
@@ -38,7 +38,7 @@ public class PluginsVersionTask extends AbstractVersionReplacementTask {
     
     /**
      * Specification of a temporary folder where the plug-ins/fragments can be unpacked for transformation.
-     * @param tempFolder An exsiting folder which can be used for transformation, must not be <tt>null</tt>.
+     * @param tempFolder An exsiting folder which can be used for transformation, must not be <code>null</code>.
      */
     public void setTempFolder(String tempFolder) {
         this.tmpFolder = new File(tempFolder);

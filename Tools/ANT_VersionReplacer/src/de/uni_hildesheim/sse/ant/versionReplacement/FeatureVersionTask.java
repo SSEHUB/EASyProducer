@@ -20,9 +20,9 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 /**
- * This task will transform <tt>XML</tt> files, set the version numbers, and will save them as a
- * <tt>JAR</tt>. Please note that: <tt>example.xml</tt> will be saved as <tt>example.jar</tt> containing
- * a transformed <tt>feature.xml</tt>.
+ * This task will transform <code>XML</code> files, set the version numbers, and will save them as a
+ * <code>JAR</code>. Please note that: <code>example.xml</code> will be saved as <code>example.jar</code> containing
+ * a transformed <code>feature.xml</code>.
  * 
  * @author El-Sharkawy
  *
@@ -31,7 +31,7 @@ public class FeatureVersionTask extends AbstractVersionReplacementTask {
     
     /**
      * Default constructor of this task.
-     * Will only transform <tt>*.xml</tt> artifacts.
+     * Will only transform <code>*.xml</code> artifacts.
      */
     public FeatureVersionTask() {
         super("^.*xml$");

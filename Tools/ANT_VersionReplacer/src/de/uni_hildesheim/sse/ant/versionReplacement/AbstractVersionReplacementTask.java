@@ -36,7 +36,7 @@ abstract class AbstractVersionReplacementTask extends Task {
     /**
      * Sole constructor for this task.
      * @param inclusionPattern Optional parameter to specify which kind of files shall be transformed.
-     * If <tt>null</tt> all files in the given folder will be transformed.
+     * If {@code null} all files in the given folder will be transformed.
      */
     protected AbstractVersionReplacementTask(String inclusionPattern) {
         this.inclusionPattern = inclusionPattern;
@@ -45,7 +45,7 @@ abstract class AbstractVersionReplacementTask extends Task {
     /**
      * The version number to set.
      * @param version Should be in the following format:<br/>
-     * <tt>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</tt>
+     * <code>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</code>
      */
     public void setVersion(String version) {
         this.version = version;
@@ -61,7 +61,7 @@ abstract class AbstractVersionReplacementTask extends Task {
     
     /**
      * The target folder where the transformed artifacts hall be stored.
-     * @param destinationFolder The folder must exist (must not be <tt>null</tt>).
+     * @param destinationFolder The folder must exist (must not be {@code null}).
      */
     public void setDestinationFolder(String destinationFolder) {
         this.destinationFodler = new File(destinationFolder);
@@ -70,7 +70,7 @@ abstract class AbstractVersionReplacementTask extends Task {
     /**
      * An optional file name pattern for artifacts in {@link #setSourceFolder(String)}, which shall not be considered.
      * @param exclusionPattern For instance:<br/>
-     * <tt>^.*(test|tests).jar$</tt><br/>
+     * <code>^.*(test|tests).jar$</code><br/>
      * to avoid consideration of test artifacts.
      */
     public void setExclusionPattern(String exclusionPattern) {
@@ -141,8 +141,8 @@ abstract class AbstractVersionReplacementTask extends Task {
     /**
      * Checks whether an artifact of {@link #getSourceFolder()} should be considered.
      * @param artifactName The name of the artifact.
-     * @return <tt>true</tt> if the artifact should be transformed (no inclusion pattern or name matches inclusion
-     * pattern), <tt>false</tt> otherwise.
+     * @return <code>true</code> if the artifact should be transformed (no inclusion pattern or name matches inclusion
+     * pattern), <code>false</code> otherwise.
      */
     private boolean includeArtifact(String artifactName) {
         return !(null != inclusionPattern && !artifactName.matches(inclusionPattern));
@@ -151,8 +151,8 @@ abstract class AbstractVersionReplacementTask extends Task {
     /**
      * Checks whether an artifact of {@link #getSourceFolder()} should <b>not</b> be considered.
      * @param artifactName The name of the artifact.
-     * @return <tt>true</tt> if the artifact should <b>not</b> be transformed (artifact name matches exclusion
-     * pattern), <tt>false</tt> otherwise.
+     * @return <code>true</code> if the artifact should <b>not</b> be transformed (artifact name matches exclusion
+     * pattern), <code>false</code> otherwise.
      */
     private boolean excludeArtifact(String artifactName) {
         return null != exclusionPattern && artifactName.matches(exclusionPattern);
@@ -160,7 +160,7 @@ abstract class AbstractVersionReplacementTask extends Task {
     
     /**
      * This method should transform one artifact of {@link #getSourceFolder()}.
-     * @param artifact The artifact to transform, should not be <tt>null</tt>.
+     * @param artifact The artifact to transform, should not be {@code null}.
      * @throws Exception Maybe thrown in any case of an error which stops the transformation.
      */
     // checkstyle: stop exception type check

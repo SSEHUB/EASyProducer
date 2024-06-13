@@ -33,7 +33,7 @@ import org.eclipse.pde.internal.build.tasks.GenericVersionReplacer;
  * Utility class for the {@link PluginsVersionTask}.
  * Static methods for:
  * <ul>
- * <li>Unzipping a <tt>JAR</tt> file.</li>
+ * <li>Unzipping a <code>JAR</code> file.</li>
  * <li>Changing the version number inside an unpackaged plug-in/fragment</li>
  * <li>Re-Jarring the plug-in/fragment</li>
  * </ul>
@@ -73,8 +73,8 @@ class PluginVersionReplacer {
     /**
      * Recursive method for adding contents (also sub folders) of a folder to a Zip file.
      * Code comes from:
-     * <tt>http://www.java2s.com/Code/Java/File-Input-Output/
-     * Makingazipfileofdirectoryincludingitssubdirectoriesrecursively.htm</tt>.
+     * <code>http://www.java2s.com/Code/Java/File-Input-Output/
+     * Makingazipfileofdirectoryincludingitssubdirectoriesrecursively.htm</code>.
      * @param basePath The base path of the Zip folder (for creating relative folders inside the Zip archive).
      * @param directory The current directory which shall be zipped into the Zip archive.
      * @param out A Zip archive.

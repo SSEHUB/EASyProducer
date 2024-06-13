@@ -38,7 +38,7 @@ public class BinaryVersionTask extends Task {
     /**
      * The version number to set.
      * @param version Should be in the following format:<br/>
-     * <tt>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</tt>
+     * <code>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</code>
      */
     public void setVersion(String version) {
         this.version = version;

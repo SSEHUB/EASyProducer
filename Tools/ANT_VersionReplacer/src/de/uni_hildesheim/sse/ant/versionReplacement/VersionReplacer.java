@@ -50,13 +50,13 @@ import org.xml.sax.SAXException;
 class VersionReplacer {
 
     /**
-     * Changes the version numbers inside a Feature <tt>XML</tt> file.
-     * @param sourceFeature A source <tt>xml</tt> file to transform. It's not necessary that the name is
-     * <tt>feature.xml</tt>.
+     * Changes the version numbers inside a Feature <code>XML</code> file.
+     * @param sourceFeature A source <code>xml</code> file to transform. It's not necessary that the name is
+     * <code>feature.xml</code>.
      * @param version The version number to set. Should be in the following format:<br/>
-     * <tt>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</tt>
-     * @param destination The destination <tt>JAR</tt> file where the transformed <tt>feature.xml</tt> shall be saved.
-     * This file must not exist.
+     * <code>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</code>
+     * @param destination The destination <code>JAR</code> file where the transformed <code>feature.xml</code> shall 
+     * be saved. This file must not exist.
      * @throws ParserConfigurationException If a DocumentBuilder
      * cannot be created which satisfies the configuration requested.
      * @throws SAXException If any parse errors occur.
@@ -108,12 +108,12 @@ class VersionReplacer {
     }
 
     /**
-     * Changes the version numbers inside a <tt>XML</tt> file.
-     * @param sourceXML A source <tt>xml</tt> file to transform. It's not necessary that the name is
-     * <tt>site.xml</tt>.
+     * Changes the version numbers inside a <code>XML</code> file.
+     * @param sourceXML A source <code>xml</code> file to transform. It's not necessary that the name is
+     * <code>site.xml</code>.
      * @param version The version number to set. Should be in the following format:<br/>
-     * <tt>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</tt>
-     * @param destinationXML The destination <tt>XML</tt> file where the transformed content shall be saved.
+     * <code>&lt;number&gt;'.'&lt;number&gt;['.'&lt;number&gt;]</code>
+     * @param destinationXML The destination <code>XML</code> file where the transformed content shall be saved.
      * This file must not exist.
      * @throws ParserConfigurationException If a DocumentBuilder
      * cannot be created which satisfies the configuration requested.
