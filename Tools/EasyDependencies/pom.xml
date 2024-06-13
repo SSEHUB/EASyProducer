@@ -559,11 +559,11 @@
          <version>1.0-beta-6</version>
       </extension>
       
-      <extension>
+      <!-- <extension> fails, detects cyclic dependencies that are not there
         <groupId>org.apache.maven.extensions</groupId>
         <artifactId>maven-build-cache-extension</artifactId>
         <version>1.2.0</version>
-      </extension>         
+      </extension> -->         
     </extensions>
     
   </build>
