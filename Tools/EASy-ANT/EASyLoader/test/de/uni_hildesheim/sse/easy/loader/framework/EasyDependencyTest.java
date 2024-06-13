@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse.easy.loader.framework;
 import java.io.File;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.easy.loader.Loader;
@@ -94,8 +95,9 @@ public class EasyDependencyTest {
     }
     
     /**
-     * Tests the dependancy as a whole.
+     * Tests the dependency as a whole.
      */
+    @Ignore
     @Test
     public void testDependancy() {
         

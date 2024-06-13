@@ -1,6 +1,7 @@
 package de.uni_hildesheim.sse.easy.loader.framework;
 
 import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,44 +40,16 @@ public class Utils {
      */
     private Utils() {
     }
-
-    /**
-     * Closes the given JAR file without throwing an exception.
-     * 
-     * @param file the JAR file to be closed, may be <b>null</b>
-     */
-    public static void closeQuietly(JarFile file) {
-        if (null != file) {
-            try {
-                file.close();
-            } catch (IOException e) {
-            }
-        }
-    }
     
     /**
-     * Closes the given input stream without throwing an exception.
+     * Closes the given {@code closeable} without throwing an exception.
      * 
-     * @param is the input stream to be closed, may be <b>null</b>
+     * @param closeable the closeable to be closed, may be <b>null</b>
      */
-    public static void closeQuietly(InputStream is) {
-        if (null != is) {
+    public static void closeQuietly(Closeable closeable) {
+        if (null != closeable) {
             try {
-                is.close();
-            } catch (IOException e) {
-            }
-        }
-    }
-    
-    /**
-     * Closes the given output stream without throwing an exception.
-     * 
-     * @param os the output stream to be closed, may be <b>null</b>
-     */
-    public static void closeQuietly(OutputStream os) {
-        if (null != os) {
-            try {
-                os.close();
+                closeable.close();
             } catch (IOException e) {
             }
         }

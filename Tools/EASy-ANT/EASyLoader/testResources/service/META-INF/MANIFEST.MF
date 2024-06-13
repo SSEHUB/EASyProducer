@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: LXC Instantiation Support
+Bundle-SymbolicName: net.ssehub.easy.instantiation.lxc;singleton:=true
+Automatic-Module-Name: net.ssehub.easy.instantiation.lxc
+Bundle-Version: 1.3.10.qualifier
+Bundle-Vendor: University of Hildesheim, SSE
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Service-Component: OSGI-INF/instantiator.xml
+Require-Bundle: net.ssehub.easy.instantiation.core,
+ net.ssehub.easy.basics,
+ org.apache.felix.scr;resolution:=optional,
+ org.eclipse.jdt.core,
+ org.eclipse.jface.text,
+ org.eclipse.text;visibility:=reexport,
+ net.ssehub.easy.libs.lxc;bundle-version="1.1.0",
+ net.ssehub.easy.libs.commons.lang,
+ net.ssehub.easy.libs.slf4j.api
+Import-Package: org.eclipse.jdt.core,
+ org.eclipse.jdt.core.dom,
+ org.eclipse.jface.text,
+ org.osgi.service.component
+Export-Package: net.ssehub.easy.instantiation.lxc
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .

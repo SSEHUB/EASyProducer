@@ -23,31 +23,48 @@ import de.uni_hildesheim.sse.easy.loader.framework.Utils;
  * 
  * @author Holger Eichelberger
  */
-class StartupInfo {
+public class StartupInfo {
 
     private InitType type;
     private String className;
-    private boolean verbose;
     
     /**
      * Creates a startup information object.
      * 
      * @param type the startup / shutdown type
      * @param className the class to be started / stopped
-     * @param verbose be verbose
      */
-    StartupInfo(InitType type, String className, boolean verbose) {
-        this.verbose = verbose;
+    StartupInfo(InitType type, String className) {
         this.type = type;
         this.className = className;
     }
     
     /**
+     * Returns the type of the startup unit.
+     * 
+     * @return the type
+     */
+    public InitType getType() {
+        return type;
+    }
+    
+    /**
+     * Returns the qualified class name of the startup unit.
+     * 
+     * @return the class name
+     */
+    public String getClassName() {
+        return className;
+    }
+    
+    
+    /**
      * Starts up the associated class according to the startup type.
      * 
+     * @param verbose {@code true} for verbose output, {@code false} else
      * @return <code>true</code> in case of success, <code>false</code> else
      */
-    public boolean start() {
+    public boolean start(boolean verbose) {
         boolean result;
         if (InitType.ACTIVATOR == type) {
             if (verbose) {
@@ -68,9 +85,10 @@ class StartupInfo {
     /**
      * Stops the associated class according to the shutdown type.
      * 
+     * @param verbose {@code true} for verbose output, {@code false} else
      * @return <code>true</code> in case of success, <code>false</code> else
      */
-    public boolean stop() {
+    public boolean stop(boolean verbose) {
         boolean result;
         if (InitType.ACTIVATOR == type) {
             if (verbose) {
@@ -88,13 +106,9 @@ class StartupInfo {
         return result;
     }
     
-    /**
-     * Changes the verbose flag.
-     * 
-     * @param verbose the new state of the verbose flag
-     */
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
+    @Override
+    public String toString() {
+        return "StartupInfo(" + type + ": " + className + ")";
     }
     
 }

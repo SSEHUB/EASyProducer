@@ -18,6 +18,11 @@
     <sourceDirectory>src</sourceDirectory>
     <directory>bin</directory>
     <testSourceDirectory>test</testSourceDirectory>
+    <testResources>
+        <testResource>
+            <directory>testResources</directory>
+        </testResource>
+    </testResources>
   </build>  
 
   <dependencies>

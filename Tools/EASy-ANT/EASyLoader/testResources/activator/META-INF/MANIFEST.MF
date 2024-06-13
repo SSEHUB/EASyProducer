@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: IVML User Interface (Editor)
+Bundle-Vendor: University of Hildesheim - SSE
+Bundle-Version: 1.3.10.qualifier
+Bundle-SymbolicName: de.uni_hildesheim.sse.ivml.ui; singleton:=true
+Automatic-Module-Name: de.uni_hildesheim.sse.ivml.ui
+Bundle-ActivationPolicy: lazy
+Require-Bundle: de.uni_hildesheim.sse.ivml;visibility:=reexport,
+ org.eclipse.xtext.ui;visibility:=reexport,
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.xtext.ui.codetemplates.ui,
+ org.eclipse.xtext.common.types.ui,
+ org.eclipse.ui.ide,
+ org.eclipse.xtext.builder,
+ org.eclipse.compare,
+  net.ssehub.easy.varModel,
+ net.ssehub.easy.dslCore,
+ net.ssehub.easy.dslCore.ui
+Import-Package: org.apache.commons.logging,
+ org.apache.log4j
+aService-Component: OSGI-INF/contribution.xml
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: de.uni_hildesheim.sse.ui.contentassist,
+ de.uni_hildesheim.sse.ui.contentassist.antlr,
+ de.uni_hildesheim.sse.ui.embed,
+ de.uni_hildesheim.sse.ui.internal,
+ de.uni_hildesheim.sse.ui.quickfix,
+ de.uni_hildesheim.sse.ui.contentassist.antlr.internal
+Bundle-Activator: de.uni_hildesheim.sse.ui.Activator
