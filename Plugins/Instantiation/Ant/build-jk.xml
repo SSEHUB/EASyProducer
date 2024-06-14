@@ -5,6 +5,11 @@
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="all">
+		<mvnIsDeployed pom="pom.xml" property="lib.deployed" prefix="mvn"/>
+		<antcall target="build"/>
+	</target>
+	
+	<target name="build" unless="lib.deployed">
         <maven pomFile="pom.xml" goal="deploy"/>
 
 		<delete failonerror="false" dir="bin"/>
