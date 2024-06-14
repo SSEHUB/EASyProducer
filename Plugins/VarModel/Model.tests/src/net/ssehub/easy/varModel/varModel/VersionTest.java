@@ -25,7 +25,7 @@ public class VersionTest {
             Version ver = new Version("a");
             Assert.fail();
         } catch (VersionFormatException e) {
-            Assert.assertEquals("a" + "is not valid", e.getMessage());
+            Assert.assertEquals("a" + " is not valid", e.getMessage());
         }
     }
     
