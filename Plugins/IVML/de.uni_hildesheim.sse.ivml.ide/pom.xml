@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>de.uni_hildesheim.sse.ivml.ide</artifactId>
+  <packaging>eclipse-plugin</packaging>
+
+  <name>EASy-Producer IVML parser IDE</name>
+  <description>The IDE part IVML parser of EASy-Producer.</description>
+  <url>https://sse.uni-hildesheim.de/forschung/projekte/easy-producer/</url>
+ 
+  <parent>
+     <groupId>net.ssehub.easy</groupId>
+     <artifactId>dependencies</artifactId>
+     <version>1.3.10-SNAPSHOT</version>
+     <relativePath/>
+  </parent>
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <directory>bin</directory>
+    
+    <plugins>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                        <sources>
+                            <source>src-gen</source>
+                            <source>xtend-gen</source>
+                        </sources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+    
+  </build>
+    
+  <dependencies>
+	 <dependency>
+       <groupId>commons-logging</groupId>
+       <artifactId>commons-logging</artifactId>
+	 </dependency>
+     <dependency>
+       <groupId>org.eclipse.platform</groupId>
+       <artifactId>org.eclipse.osgi</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.eclipse.xtext</groupId>
+         <artifactId>org.eclipse.xtext</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.eclipse.xtext</groupId>
+         <artifactId>org.eclipse.xtext.util</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.eclipse.emf</groupId>
+         <artifactId>org.eclipse.emf.ecore</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.antlr</groupId>
+         <artifactId>antlr-runtime</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.apache.felix</groupId>
+         <artifactId>org.apache.felix.scr</artifactId>
+     </dependency>
+     <dependency>
+       <groupId>org.osgi</groupId>
+       <artifactId>org.osgi.service.component</artifactId>
+     </dependency>
+     <dependency>
+       <groupId>org.eclipse.xtext</groupId>
+       <artifactId>org.eclipse.xtext.common.types</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.eclipse.platform</groupId>
+         <artifactId>org.eclipse.equinox.common</artifactId>
+     </dependency>
+     <dependency>
+         <groupId>org.eclipse.platform</groupId>
+         <artifactId>org.eclipse.core.runtime</artifactId>
+     </dependency>
+     <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+     </dependency>
+	 <dependency>
+        <groupId>org.eclipse.xtext</groupId>
+        <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
+	 </dependency>
+	 <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+	 </dependency>
+     <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>de.uni_hildesheim.sse.ivml</artifactId>
+        <version>${project.version}</version>
+     </dependency>
+  </dependencies>
+    
+ </project>

@@ -9,7 +9,6 @@ import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import de.uni_hildesheim.sse.ui.embed.EditorUtils;
-import de.uni_hildesheim.sse.ui.internal.IvmlActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory.IEditorCreator;

@@ -7,7 +7,7 @@
     <package 
        uri = "http://www.uni_hildesheim.de/sse/Ivml" 
        class = "de.uni_hildesheim.sse.ivml.IvmlPackage"
-       genModel = "de/uni_hildesheim/sse/Ivml.genmodel" /> 
+       genModel = "model/generated/Ivml.genmodel" /> 
 	   
   </extension>
 

@@ -8,6 +8,11 @@
 		<echo>###  Compiling IVML Parser  ###</echo>
 		<echo>###############################</echo>
 		<ant dir="${home.ivml.dir}" antfile="${build.script.name}"/>
+
+		<echo>############################</echo>
+		<echo>###  Compiling IVML IDE  ###</echo>
+		<echo>############################</echo>
+		<ant dir="de.uni-hildesheim.sse.ivml.ide" antfile="${build.script.name}"/>
 		
         <echo>#################################</echo>
 		<echo>###  Compiling IVML Comments  ###</echo>

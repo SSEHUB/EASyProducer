@@ -6,7 +6,7 @@ import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.ui.internal.IvmlActivator;
+import de.uni_hildesheim.sse.ui.IvmlActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.editors.EmbeddingHelper;
 import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;

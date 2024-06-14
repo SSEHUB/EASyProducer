@@ -23,8 +23,10 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  net.ssehub.easy.varModel;visibility:=reexport,
  net.ssehub.easy.dslCore;visibility:=reexport,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xbase
+ org.eclipse.xtext.xbase.lib;bundle-version="2.34.0",
+ org.eclipse.xtext.xbase,
+ org.objectweb.asm;bundle-version="[9.6.0,9.7.0)";resolution:=optional,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Service-Component: OSGI-INF/ivmlParser.xml
 Import-Package: org.apache.log4j,
  org.apache.commons.logging,
@@ -42,5 +44,6 @@ Export-Package: de.uni_hildesheim.sse,
  de.uni_hildesheim.sse.validation,
  de.uni_hildesheim.sse.scoping,
  de.uni_hildesheim.sse.generator,
- de.uni_hildesheim.sse.formatting
+ de.uni_hildesheim.sse.formatting,
+ de.uni_hildesheim.sse.formatting2
 Bundle-ClassPath: .

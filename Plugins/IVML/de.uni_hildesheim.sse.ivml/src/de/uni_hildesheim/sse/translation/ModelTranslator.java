@@ -322,7 +322,11 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
         result.setComments(CommentUtils.toStructuredComment(project, result));
         if (null != project.getVersion()) {
             try {
-                Version version = new Version(project.getVersion().getVersion());
+                String vString = project.getVersion().getVersion();
+                if (null != vString && vString.startsWith("v")) {
+                    vString = vString.substring(1);
+                }
+                Version version = new Version(vString);
                 result.setVersion(version);
                 assignProjectComment(result, version, CommentUtils.toComment(project.getVersion(), result));
             } catch (VersionFormatException e) {

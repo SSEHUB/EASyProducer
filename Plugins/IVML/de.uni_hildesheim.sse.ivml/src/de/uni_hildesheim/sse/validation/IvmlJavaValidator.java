@@ -20,7 +20,7 @@ import net.ssehub.easy.varModel.model.Project;
 /**
  * The on-the-fly validator calling the model transformation mechanism.
  */
-public class IvmlJavaValidator extends AbstractIvmlJavaValidator {
+public class IvmlJavaValidator extends AbstractIvmlValidator {
 
     private IModelValidationCallback<VariabilityUnit, Project> callback = new IModelValidationCallback<VariabilityUnit, 
         Project>() {
