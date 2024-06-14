@@ -51,7 +51,7 @@ public class Version implements Comparable<Version> {
                 try {
                     segments[i] = Integer.parseInt(tmp[i]);
                 } catch (NumberFormatException e) {
-                    throw new VersionFormatException(version + "is not valid", 
+                    throw new VersionFormatException(version + " is not valid", 
                         VersionFormatException.INVALID_VERSION);
                 }
             }
