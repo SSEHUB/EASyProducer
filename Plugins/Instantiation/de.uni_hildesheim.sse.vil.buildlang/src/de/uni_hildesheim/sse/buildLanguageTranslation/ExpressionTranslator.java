@@ -10,16 +10,16 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
-import de.uni_hildesheim.sse.vilBuildLanguage.Alternative;
-import de.uni_hildesheim.sse.vilBuildLanguage.Join;
-import de.uni_hildesheim.sse.vilBuildLanguage.JoinVariable;
-import de.uni_hildesheim.sse.vilBuildLanguage.LoopVariable;
-import de.uni_hildesheim.sse.vilBuildLanguage.PrimaryExpression;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.StatementOrBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.SystemExecution;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.Alternative;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.Join;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.JoinVariable;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LoopVariable;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.PrimaryExpression;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElement;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElementBlock;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.StatementOrBlock;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.SystemExecution;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.VilBuildLanguagePackage;
 import net.ssehub.easy.basics.modelManagement.IVersionRestriction;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
@@ -105,7 +105,7 @@ public class ExpressionTranslator
      * @return
      * @throws TranslatorException
      */
-    private InstantiateExpression processInstantiate(de.uni_hildesheim.sse.vilBuildLanguage.Instantiate inst, 
+    private InstantiateExpression processInstantiate(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.Instantiate inst, 
         Resolver resolver) throws TranslatorException {
         InstantiateExpression result;
         List<CallArgument> arguments = new ArrayList<CallArgument>();
@@ -186,7 +186,7 @@ public class ExpressionTranslator
      * @return the translated object in terms of the build language model
      * @throws TranslatorException in case that the translation fails
      */
-    private WhileStatement processWhileStatement(de.uni_hildesheim.sse.vilBuildLanguage.While stmt, Resolver resolver) 
+    private WhileStatement processWhileStatement(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.While stmt, Resolver resolver) 
         throws TranslatorException {
         Expression expr = processExpression(stmt.getExpr(), resolver);
         expr = assertBooleanExpression(expr, stmt, VilBuildLanguagePackage.Literals.MAP__EXPR);
@@ -208,7 +208,7 @@ public class ExpressionTranslator
      * @return the translated object in terms of the build language model
      * @throws TranslatorException in case that the translation fails
      */
-    private ForStatement processForStatement(de.uni_hildesheim.sse.vilBuildLanguage.For stmt, Resolver resolver) 
+    private ForStatement processForStatement(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.For stmt, Resolver resolver) 
         throws TranslatorException {
         Expression expr = processExpression(stmt.getExpr(), resolver);
         TypeDescriptor<?> type = null;
@@ -269,7 +269,7 @@ public class ExpressionTranslator
      * @return the translated object in terms of the build language model
      * @throws TranslatorException in case that the translation fails
      */
-    private MapExpression processMap(de.uni_hildesheim.sse.vilBuildLanguage.Map map, Resolver resolver) 
+    private MapExpression processMap(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.Map map, Resolver resolver) 
         throws TranslatorException {
         Expression expr = processExpression(map.getExpr(), resolver);
         TypeDescriptor<?> type = null;
@@ -425,7 +425,7 @@ public class ExpressionTranslator
      * @throws TranslatorException in case that the translation fails due to semantic reasons
      */
     public ExpressionStatement processExpressionStatement(
-        de.uni_hildesheim.sse.vilBuildLanguage.ExpressionStatement expr, Resolver resolver) 
+        de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ExpressionStatement expr, Resolver resolver) 
         throws TranslatorException {
         ExpressionStatement result;
         if (null != expr.getAlt()) {

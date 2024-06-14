@@ -100,6 +100,11 @@
         <echo>###  Compiling Expressions Core  ###</echo>
         <echo>####################################</echo>
         <ant dir="${home.vil.expressions.core.dir}" antfile="${build.script.name}" />
+
+        <echo>###################################</echo>
+        <echo>###  Compiling Expressions IDE  ###</echo>
+        <echo>###################################</echo>
+        <ant dir="de.uni_hildesheim.sse.vil.expressions.ide" antfile="${build.script.name}" />
        
         <echo>####################################</echo>
         <echo>###   Compiling Expressions UI   ###</echo>
@@ -111,11 +116,21 @@
         <echo>############################</echo>
         <ant dir="${home.vil.core.dir}" antfile="${build.script.name}" />
 
+        <echo>###################################</echo>
+        <echo>###  Compiling Expressions IDE  ###</echo>
+        <echo>###################################</echo>
+        <ant dir="de.uni_hildesheim.sse.vil.buildlang.ide" antfile="${build.script.name}" />
+
         <echo>###############################</echo>
         <echo>###  Compiling rt-VIL Core  ###</echo>
         <echo>###############################</echo>
         <ant dir="${home.vil.rt.core.dir}" antfile="${build.script.name}" />
         
+        <echo>##############################</echo>
+        <echo>###  Compiling rt-VIL IDE  ###</echo>
+        <echo>##############################</echo>
+        <ant dir="de.uni_hildesheim.sse.vil.rt.ide" antfile="${build.script.name}" />
+		
         <echo>############################</echo>
         <echo>###   Compiling VIL UI   ###</echo>
         <echo>############################</echo>
@@ -131,6 +146,11 @@
         <echo>#################################</echo>
         <ant dir="${home.template.core.dir}" antfile="${build.script.name}" />
        
+	    <echo>################################</echo>
+        <echo>###  Compiling Template IDE  ###</echo>
+        <echo>################################</echo>
+        <ant dir="de.uni_hildesheim.sse.vil.templatelang.ide" antfile="${build.script.name}" />
+	   
         <echo>#################################</echo>
         <echo>###   Compiling Template UI   ###</echo>
         <echo>#################################</echo>

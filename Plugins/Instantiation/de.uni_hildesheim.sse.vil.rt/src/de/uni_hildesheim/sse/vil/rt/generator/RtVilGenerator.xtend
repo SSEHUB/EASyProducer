@@ -4,21 +4,31 @@
 package de.uni_hildesheim.sse.vil.rt.generator
 
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IGenerator
-import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IGenerator2
+import org.eclipse.xtext.generator.IFileSystemAccess2
+import org.eclipse.xtext.generator.IGeneratorContext
 
 /**
  * Generates code from your model files on save.
  * 
  * see http://www.eclipse.org/Xtext/documentation.html#TutorialCodeGeneration
  */
-class RtVilGenerator implements IGenerator {
-	
-	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(typeof(Greeting))
-//				.map[name]
-//				.join(', '))
-	}
+class RtVilGenerator implements IGenerator2 {
+
+    override afterGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        // TODO implement
+    }
+    
+    override beforeGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        // TODO implement
+    }
+    
+    override doGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        //      fsa.generateFile('greetings.txt', 'People to greet: ' + 
+        //          resource.allContents
+        //              .filter(typeof(Greeting))
+        //              .map[name]
+        //              .join(', '))
+    }
+
 }

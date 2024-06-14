@@ -22,8 +22,9 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  net.ssehub.easy.instantiation.core,
  de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
  org.eclipse.emf.mwe2.launch;bundle-version="2.3.0";resolution:=optional,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xbase
+ org.eclipse.xtext.xbase.lib;bundle-version="2.34.0",
+ org.eclipse.xtext.xbase,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Service-Component: OSGI-INF/vilParser.xml
@@ -40,4 +41,3 @@ Export-Package: de.uni_hildesheim.sse.vil.templatelang,
  de.uni_hildesheim.sse.vil.templatelang.scoping,
  de.uni_hildesheim.sse.vil.templatelang.generator,
  de.uni_hildesheim.sse.vil.templatelang.formatting
-

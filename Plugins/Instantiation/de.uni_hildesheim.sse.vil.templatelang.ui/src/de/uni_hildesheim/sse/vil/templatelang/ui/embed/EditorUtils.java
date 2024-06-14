@@ -10,7 +10,7 @@ import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
 import de.uni_hildesheim.sse.vil.templatelang.ui.TemplateModelListener;
-import de.uni_hildesheim.sse.vil.templatelang.ui.internal.TemplateLangActivator;
+import de.uni_hildesheim.sse.vil.templatelang.ui.internal.TemplatelangActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory.IEditorCreator;
@@ -45,9 +45,9 @@ public class EditorUtils implements IEditorCreator, IModelEditorConfigurer {
      * @return the editor viewer
      */
     public static IEmbeddedEditor embedVtlEditor(final java.net.URI file, Composite parent) {
-        TemplateLangActivator activator = TemplateLangActivator.getInstance();
+        TemplatelangActivator activator = TemplatelangActivator.getInstance();
         Injector injector = activator.getInjector(
-            TemplateLangActivator.DE_UNI_HILDESHEIM_SSE_VIL_TEMPLATELANG_TEMPLATELANG);
+            TemplatelangActivator.DE_UNI_HILDESHEIM_SSE_VIL_TEMPLATELANG_TEMPLATELANG);
         return EmbeddingHelper.embedEditor(file, parent, injector);
     }
 

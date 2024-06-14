@@ -22,8 +22,9 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  org.eclipse.equinox.common,
  org.eclipse.xtext.common.types,
  de.uni-hildesheim.sse.easy.instantiatorCore.rt,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xbase
+ org.eclipse.xtext.xbase.lib;bundle-version="2.34.0",
+ org.eclipse.xtext.xbase,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Service-Component: OSGI-INF/rtVilParser.xml
@@ -39,5 +40,4 @@ Export-Package: de.uni_hildesheim.sse.vil.rt,
  de.uni_hildesheim.sse.vil.rt.scoping,
  de.uni_hildesheim.sse.vil.rt.generator,
  de.uni_hildesheim.sse.vil.rt.formatting,
- de.uni_hildesheim.sse.vil.rt.parseTreeConstruction
-
+ de.uni_hildesheim.sse.vil.rt.serializer

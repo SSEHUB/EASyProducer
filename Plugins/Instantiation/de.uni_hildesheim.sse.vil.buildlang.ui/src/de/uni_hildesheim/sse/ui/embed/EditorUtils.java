@@ -10,7 +10,7 @@ import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.ui.BuildModelListener;
-import de.uni_hildesheim.sse.ui.internal.VilBuildLanguageActivator;
+import de.uni_hildesheim.sse.ui.VilBuildLanguageActivator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory.IEditorCreator;

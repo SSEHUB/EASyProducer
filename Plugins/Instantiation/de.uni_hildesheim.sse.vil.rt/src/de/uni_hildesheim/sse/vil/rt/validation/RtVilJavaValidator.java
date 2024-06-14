@@ -25,7 +25,7 @@ import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
  *
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
-public class RtVilJavaValidator extends de.uni_hildesheim.sse.vil.rt.validation.AbstractRtVilJavaValidator {
+public class RtVilJavaValidator extends de.uni_hildesheim.sse.vil.rt.validation.AbstractRtVilValidator {
 
     
     private IModelValidationCallback<ImplementationUnit, Script> callback = new IModelValidationCallback<
@@ -66,9 +66,8 @@ public class RtVilJavaValidator extends de.uni_hildesheim.sse.vil.rt.validation.
         
     };
 
-    @Override
     @Check
-    public void checkModel(de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit unit) {
+    public void checkModel(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit unit) {
         // no action, overwrite VIL
     }
     

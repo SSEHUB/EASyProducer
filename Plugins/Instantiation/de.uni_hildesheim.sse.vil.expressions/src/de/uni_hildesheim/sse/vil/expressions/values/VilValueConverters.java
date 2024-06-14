@@ -19,8 +19,7 @@ import net.ssehub.easy.dslCore.values.VersionValueConverter;
  * @author Holger Eichelberger
  */
 @Singleton
-public class VilValueConverters extends
-        AbstractDeclarativeValueConverterService {
+public class VilValueConverters extends AbstractDeclarativeValueConverterService {
 
     @Inject
     private AbstractIDValueConverter idValueConverter;

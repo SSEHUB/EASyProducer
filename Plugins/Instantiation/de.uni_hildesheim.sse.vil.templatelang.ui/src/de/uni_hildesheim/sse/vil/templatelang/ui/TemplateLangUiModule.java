@@ -6,7 +6,7 @@ package de.uni_hildesheim.sse.vil.templatelang.ui;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
-import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingCalculator;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConfiguration;

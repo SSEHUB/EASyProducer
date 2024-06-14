@@ -25,11 +25,11 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeDef;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VersionStmt;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LoadProperties;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleDeclaration;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.VilBuildLanguagePackage;
 
 /**
  * customization of the default outline structure.

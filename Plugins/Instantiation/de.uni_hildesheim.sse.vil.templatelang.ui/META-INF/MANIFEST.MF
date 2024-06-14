@@ -7,6 +7,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.vil.templatelang.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.templatelang.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.templatelang;visibility:=reexport,
+ de.uni_hildesheim.sse.vil.templatelang.ide,
  org.eclipse.xtext.ui,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
@@ -26,8 +27,6 @@ Service-Component: OSGI-INF/vtlFactory.xml
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.vil.templatelang.ui.contentassist,
- de.uni_hildesheim.sse.vil.templatelang.ui.contentassist.antlr,
  de.uni_hildesheim.sse.vil.templatelang.ui.internal,
- de.uni_hildesheim.sse.vil.templatelang.ui.quickfix,
- de.uni_hildesheim.sse.vil.templatelang.ui.contentassist.antlr.internal
-Bundle-Activator: de.uni_hildesheim.sse.vil.templatelang.ui.internal.TemplateLangActivator
+ de.uni_hildesheim.sse.vil.templatelang.ui.quickfix
+Bundle-Activator: de.uni_hildesheim.sse.vil.templatelang.ui.internal.TemplatelangActivator

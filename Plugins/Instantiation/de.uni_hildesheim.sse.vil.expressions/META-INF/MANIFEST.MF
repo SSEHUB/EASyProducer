@@ -20,8 +20,9 @@ Require-Bundle: org.eclipse.xtext;visibility:=reexport,
  net.ssehub.easy.instantiation.core,
  org.eclipse.emf.mwe2.launch;resolution:=optional,
  net.ssehub.easy.varModel,
- org.eclipse.xtext.xbase.lib,
- org.eclipse.xtext.xbase
+ org.eclipse.xtext.xbase.lib;bundle-version="2.34.0",
+ org.eclipse.xtext.xbase,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.xbase.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-17
@@ -39,4 +40,3 @@ Export-Package: de.uni_hildesheim.sse.vil.expressions,
  de.uni_hildesheim.sse.vil.expressions.translation,
  de.uni_hildesheim.sse.vil.expressions.validation,
  de.uni_hildesheim.sse.vil.expressions.values
-

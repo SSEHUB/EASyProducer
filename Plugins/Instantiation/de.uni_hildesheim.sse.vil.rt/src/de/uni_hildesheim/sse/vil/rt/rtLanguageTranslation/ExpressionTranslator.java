@@ -23,7 +23,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTranslation.ExpressionTranslator {
 
     @Override
-    protected IRuleElement resolveRuleElement(de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, 
+    protected IRuleElement resolveRuleElement(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElement elt, 
         Resolver resolver) throws TranslatorException {
         IRuleElement result = null;
         if (elt instanceof RuleElement) {
@@ -51,7 +51,7 @@ public class ExpressionTranslator extends de.uni_hildesheim.sse.buildLanguageTra
      * @throws TranslatorException in case that translation fails
      */
     private net.ssehub.easy.instantiation.rt.core.model.rtVil.FailStatement createFailStatement(
-        de.uni_hildesheim.sse.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
+        de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElement elt, FailStatement fStmt, Resolver resolver) 
         throws TranslatorException{
         net.ssehub.easy.instantiation.core.model.expressions.Expression reasonEx = 
             resolveFailExpression(fStmt.getReason(), TypeRegistry.stringType(), fStmt, 

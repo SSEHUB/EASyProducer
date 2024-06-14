@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: de.uni_hildesheim.sse.vil.rt.ide
+Bundle-SymbolicName: de.uni_hildesheim.sse.vil.rt.ide;singleton:=true
+Bundle-Vendor: University of Hildesheim - SSE
+Bundle-Version: 1.3.10.qualifier
+Automatic-Module-Name: de.uni.hildesheim.sse.ide
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Require-Bundle: de.uni_hildesheim.sse.vil.rt,
+ de.uni_hildesheim.sse.vil.buildlang,
+ de.uni_hildesheim.sse.vil.expressions,
+ org.eclipse.xtext.ide,
+ org.eclipse.xtext.xbase.ide,
+ org.eclipse.xtext.util, 
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Export-Package: 
+ de.uni_hildesheim.sse.vil.rt.ide.contentassist.antlr.internal,
+ de.uni_hildesheim.sse.vil.rt.ide.contentassist.antlr

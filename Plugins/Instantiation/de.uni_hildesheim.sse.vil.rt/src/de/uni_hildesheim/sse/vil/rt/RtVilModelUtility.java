@@ -70,7 +70,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
      */
     protected void initializeAfterResourceInitializer() {
         if (getResourceInitializer().forEclipse()) {
-            setInjector(createInjector(new de.uni_hildesheim.sse.VilBuildLanguageRuntimeModule()));
+            setInjector(createInjector(new de.uni_hildesheim.sse.vil.buildlang.VilBuildLanguageRuntimeModule()));
         } else {
             setInjector(new RtVilStandaloneSetup().createInjectorAndDoEMFRegistration());
         }
@@ -245,7 +245,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
         ImplementationUnit root = parse(uri, true, null, ImplementationUnit.class);
         List<ModelInfo<Script>> result = new ArrayList<ModelInfo<Script>>();
         if (null != root) {
-            for (de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script : root.getScripts()) {
+            for (de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit script : root.getScripts()) {
                 Version version = ModelTranslator.convert(script.getVersion());
                 ArrayList<ModelImport<Script>> imports = new ArrayList<ModelImport<Script>>();
                 for (Import imp : script.getImports()) {

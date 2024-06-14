@@ -7,6 +7,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.vil.buildlang.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.buildlang.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
+ de.uni_hildesheim.sse.vil.buildlang.ide,
  org.eclipse.xtext.ui,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
@@ -21,16 +22,17 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
  net.ssehub.easy.instantiation.core,
  de.uni_hildesheim.sse.vil.expressions.ui,
  net.ssehub.easy.dslCore.ui,
- net.ssehub.easy.basics
+ net.ssehub.easy.basics,
+ org.eclipse.compare
 Service-Component: OSGI-INF/vilFactory.xml
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.ui.contentassist,
- de.uni_hildesheim.sse.ui.contentassist.antlr,
- de.uni_hildesheim.sse.ui.contentassist.antlr.internal,
  de.uni_hildesheim.sse.ui.hyperlinking,
- de.uni_hildesheim.sse.ui.internal,
  de.uni_hildesheim.sse.ui.outline,
  de.uni_hildesheim.sse.ui.quickfix,
- de.uni_hildesheim.sse.vil.buildlang.ui.resources
-Bundle-Activator: de.uni_hildesheim.sse.ui.internal.VilBuildLanguageActivator
+ de.uni_hildesheim.sse.vil.buildlang.ui.resources,
+ de.uni_hildesheim.sse.vil.buildlang.ui.internal,
+ de.uni_hildesheim.sse.vil.buildlang.ui.contentassist,
+ de.uni_hildesheim.sse.vil.buildlang.ui.quickfix
+Bundle-Activator: de.uni_hildesheim.sse.ui.VilBuildLanguageActivator

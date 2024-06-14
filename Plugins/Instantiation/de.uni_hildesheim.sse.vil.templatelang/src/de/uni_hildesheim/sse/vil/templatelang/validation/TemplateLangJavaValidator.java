@@ -17,7 +17,7 @@ import net.ssehub.easy.dslCore.validation.ValidationUtils.MessageType;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
  
-public class TemplateLangJavaValidator extends AbstractTemplateLangJavaValidator {
+public class TemplateLangJavaValidator extends AbstractTemplateLangValidator {
 
     private IModelValidationCallback<LanguageUnit, Template> callback = new IModelValidationCallback<LanguageUnit, 
         Template>() {

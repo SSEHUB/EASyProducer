@@ -29,6 +29,11 @@
      </dependency>     
      <dependency>
         <groupId>net.ssehub.easy</groupId>
+        <artifactId>de.uni_hildesheim.sse.vil.buildlang.ide</artifactId>
+        <version>${project.version}</version>
+     </dependency>     
+     <dependency>
+        <groupId>net.ssehub.easy</groupId>
         <artifactId>de.uni_hildesheim.sse.vil.templatelang</artifactId>
         <version>${project.version}</version>
      </dependency>     

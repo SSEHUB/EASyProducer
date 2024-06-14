@@ -4,12 +4,22 @@
 package de.uni_hildesheim.sse.vil.templatelang.generator
 
 import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IGenerator
-import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IGenerator2
+import org.eclipse.xtext.generator.IFileSystemAccess2
+import org.eclipse.xtext.generator.IGeneratorContext
 
-class TemplateLangGenerator implements IGenerator {
+class TemplateLangGenerator implements IGenerator2 {
 	
-	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-		//TODO implement me
-	}
+    override afterGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        //TODO implement me
+    }
+    
+    override beforeGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        //TODO implement me
+    }
+    
+    override doGenerate(Resource input, IFileSystemAccess2 fsa, IGeneratorContext context) {
+        //TODO implement me
+    }
+
 }

@@ -1583,11 +1583,11 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_VERSION;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5715:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
-            // InternalTemplateLang.g:5715:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
+            // InternalTemplateLang.g:5786:14: ( 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )* )
+            // InternalTemplateLang.g:5786:16: 'v' ( '0' .. '9' )+ ( '.' ( '0' .. '9' )+ )*
             {
             match('v'); 
-            // InternalTemplateLang.g:5715:20: ( '0' .. '9' )+
+            // InternalTemplateLang.g:5786:20: ( '0' .. '9' )+
             int cnt1=0;
             loop1:
             do {
@@ -1601,7 +1601,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // InternalTemplateLang.g:5715:21: '0' .. '9'
+            	    // InternalTemplateLang.g:5786:21: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -1617,7 +1617,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 cnt1++;
             } while (true);
 
-            // InternalTemplateLang.g:5715:32: ( '.' ( '0' .. '9' )+ )*
+            // InternalTemplateLang.g:5786:32: ( '.' ( '0' .. '9' )+ )*
             loop3:
             do {
                 int alt3=2;
@@ -1630,10 +1630,10 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt3) {
             	case 1 :
-            	    // InternalTemplateLang.g:5715:33: '.' ( '0' .. '9' )+
+            	    // InternalTemplateLang.g:5786:33: '.' ( '0' .. '9' )+
             	    {
             	    match('.'); 
-            	    // InternalTemplateLang.g:5715:37: ( '0' .. '9' )+
+            	    // InternalTemplateLang.g:5786:37: ( '0' .. '9' )+
             	    int cnt2=0;
             	    loop2:
             	    do {
@@ -1647,7 +1647,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
             	        switch (alt2) {
             	    	case 1 :
-            	    	    // InternalTemplateLang.g:5715:38: '0' .. '9'
+            	    	    // InternalTemplateLang.g:5786:38: '0' .. '9'
             	    	    {
             	    	    matchRange('0','9'); 
 
@@ -1688,8 +1688,8 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5717:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // InternalTemplateLang.g:5717:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalTemplateLang.g:5788:9: ( ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // InternalTemplateLang.g:5788:11: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '$' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
             if ( input.LA(1)=='$'||(input.LA(1)>='A' && input.LA(1)<='Z')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -1700,7 +1700,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalTemplateLang.g:5717:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalTemplateLang.g:5788:39: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop4:
             do {
                 int alt4=2;
@@ -1749,10 +1749,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5719:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
-            // InternalTemplateLang.g:5719:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // InternalTemplateLang.g:5790:13: ( ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT ) )
+            // InternalTemplateLang.g:5790:15: ( '-' )? ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             {
-            // InternalTemplateLang.g:5719:15: ( '-' )?
+            // InternalTemplateLang.g:5790:15: ( '-' )?
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -1761,7 +1761,7 @@ public class InternalTemplateLangLexer extends Lexer {
             }
             switch (alt5) {
                 case 1 :
-                    // InternalTemplateLang.g:5719:15: '-'
+                    // InternalTemplateLang.g:5790:15: '-'
                     {
                     match('-'); 
 
@@ -1770,14 +1770,14 @@ public class InternalTemplateLangLexer extends Lexer {
 
             }
 
-            // InternalTemplateLang.g:5719:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
+            // InternalTemplateLang.g:5790:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )
             int alt13=3;
             alt13 = dfa13.predict(input);
             switch (alt13) {
                 case 1 :
-                    // InternalTemplateLang.g:5719:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // InternalTemplateLang.g:5790:21: ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     {
-                    // InternalTemplateLang.g:5719:21: ( '0' .. '9' )+
+                    // InternalTemplateLang.g:5790:21: ( '0' .. '9' )+
                     int cnt6=0;
                     loop6:
                     do {
@@ -1791,7 +1791,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt6) {
                     	case 1 :
-                    	    // InternalTemplateLang.g:5719:22: '0' .. '9'
+                    	    // InternalTemplateLang.g:5790:22: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1807,7 +1807,7 @@ public class InternalTemplateLangLexer extends Lexer {
                         cnt6++;
                     } while (true);
 
-                    // InternalTemplateLang.g:5719:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
+                    // InternalTemplateLang.g:5790:33: ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )?
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
@@ -1816,10 +1816,10 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     switch (alt9) {
                         case 1 :
-                            // InternalTemplateLang.g:5719:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
+                            // InternalTemplateLang.g:5790:34: '.' ( '0' .. '9' )* ( RULE_EXPONENT )?
                             {
                             match('.'); 
-                            // InternalTemplateLang.g:5719:38: ( '0' .. '9' )*
+                            // InternalTemplateLang.g:5790:38: ( '0' .. '9' )*
                             loop7:
                             do {
                                 int alt7=2;
@@ -1832,7 +1832,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                                 switch (alt7) {
                             	case 1 :
-                            	    // InternalTemplateLang.g:5719:39: '0' .. '9'
+                            	    // InternalTemplateLang.g:5790:39: '0' .. '9'
                             	    {
                             	    matchRange('0','9'); 
 
@@ -1844,7 +1844,7 @@ public class InternalTemplateLangLexer extends Lexer {
                                 }
                             } while (true);
 
-                            // InternalTemplateLang.g:5719:50: ( RULE_EXPONENT )?
+                            // InternalTemplateLang.g:5790:50: ( RULE_EXPONENT )?
                             int alt8=2;
                             int LA8_0 = input.LA(1);
 
@@ -1853,7 +1853,7 @@ public class InternalTemplateLangLexer extends Lexer {
                             }
                             switch (alt8) {
                                 case 1 :
-                                    // InternalTemplateLang.g:5719:50: RULE_EXPONENT
+                                    // InternalTemplateLang.g:5790:50: RULE_EXPONENT
                                     {
                                     mRULE_EXPONENT(); 
 
@@ -1872,10 +1872,10 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalTemplateLang.g:5719:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
+                    // InternalTemplateLang.g:5790:67: '.' ( '0' .. '9' )+ ( RULE_EXPONENT )?
                     {
                     match('.'); 
-                    // InternalTemplateLang.g:5719:71: ( '0' .. '9' )+
+                    // InternalTemplateLang.g:5790:71: ( '0' .. '9' )+
                     int cnt10=0;
                     loop10:
                     do {
@@ -1889,7 +1889,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt10) {
                     	case 1 :
-                    	    // InternalTemplateLang.g:5719:72: '0' .. '9'
+                    	    // InternalTemplateLang.g:5790:72: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1905,7 +1905,7 @@ public class InternalTemplateLangLexer extends Lexer {
                         cnt10++;
                     } while (true);
 
-                    // InternalTemplateLang.g:5719:83: ( RULE_EXPONENT )?
+                    // InternalTemplateLang.g:5790:83: ( RULE_EXPONENT )?
                     int alt11=2;
                     int LA11_0 = input.LA(1);
 
@@ -1914,7 +1914,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     switch (alt11) {
                         case 1 :
-                            // InternalTemplateLang.g:5719:83: RULE_EXPONENT
+                            // InternalTemplateLang.g:5790:83: RULE_EXPONENT
                             {
                             mRULE_EXPONENT(); 
 
@@ -1927,9 +1927,9 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // InternalTemplateLang.g:5719:98: ( '0' .. '9' )+ RULE_EXPONENT
+                    // InternalTemplateLang.g:5790:98: ( '0' .. '9' )+ RULE_EXPONENT
                     {
-                    // InternalTemplateLang.g:5719:98: ( '0' .. '9' )+
+                    // InternalTemplateLang.g:5790:98: ( '0' .. '9' )+
                     int cnt12=0;
                     loop12:
                     do {
@@ -1943,7 +1943,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // InternalTemplateLang.g:5719:99: '0' .. '9'
+                    	    // InternalTemplateLang.g:5790:99: '0' .. '9'
                     	    {
                     	    matchRange('0','9'); 
 
@@ -1982,8 +1982,8 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_EXPONENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5721:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
-            // InternalTemplateLang.g:5721:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
+            // InternalTemplateLang.g:5792:15: ( ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+ )
+            // InternalTemplateLang.g:5792:17: ( 'e' | 'E' ) ( '+' | '-' )? ( '0' .. '9' )+
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1994,7 +1994,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalTemplateLang.g:5721:27: ( '+' | '-' )?
+            // InternalTemplateLang.g:5792:27: ( '+' | '-' )?
             int alt14=2;
             int LA14_0 = input.LA(1);
 
@@ -2020,7 +2020,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
             }
 
-            // InternalTemplateLang.g:5721:38: ( '0' .. '9' )+
+            // InternalTemplateLang.g:5792:38: ( '0' .. '9' )+
             int cnt15=0;
             loop15:
             do {
@@ -2034,7 +2034,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt15) {
             	case 1 :
-            	    // InternalTemplateLang.g:5721:39: '0' .. '9'
+            	    // InternalTemplateLang.g:5792:39: '0' .. '9'
             	    {
             	    matchRange('0','9'); 
 
@@ -2066,10 +2066,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5723:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
-            // InternalTemplateLang.g:5723:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // InternalTemplateLang.g:5794:13: ( ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' ) )
+            // InternalTemplateLang.g:5794:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             {
-            // InternalTemplateLang.g:5723:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // InternalTemplateLang.g:5794:15: ( '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"' | '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\'' )
             int alt18=2;
             int LA18_0 = input.LA(1);
 
@@ -2087,10 +2087,10 @@ public class InternalTemplateLangLexer extends Lexer {
             }
             switch (alt18) {
                 case 1 :
-                    // InternalTemplateLang.g:5723:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
+                    // InternalTemplateLang.g:5794:16: '\"' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // InternalTemplateLang.g:5723:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
+                    // InternalTemplateLang.g:5794:20: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\"' ) ) )*
                     loop16:
                     do {
                         int alt16=3;
@@ -2106,7 +2106,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt16) {
                     	case 1 :
-                    	    // InternalTemplateLang.g:5723:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // InternalTemplateLang.g:5794:21: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -2122,7 +2122,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalTemplateLang.g:5723:66: ~ ( ( '\\\\' | '\"' ) )
+                    	    // InternalTemplateLang.g:5794:66: ~ ( ( '\\\\' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -2147,10 +2147,10 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalTemplateLang.g:5723:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
+                    // InternalTemplateLang.g:5794:86: '\\'' ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // InternalTemplateLang.g:5723:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
+                    // InternalTemplateLang.g:5794:91: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' ) | ~ ( ( '\\\\' | '\\'' ) ) )*
                     loop17:
                     do {
                         int alt17=3;
@@ -2166,7 +2166,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                         switch (alt17) {
                     	case 1 :
-                    	    // InternalTemplateLang.g:5723:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
+                    	    // InternalTemplateLang.g:5794:92: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | 'u' | '\"' | '\\'' | '\\\\' )
                     	    {
                     	    match('\\'); 
                     	    if ( input.LA(1)=='\"'||input.LA(1)=='\''||input.LA(1)=='\\'||input.LA(1)=='b'||input.LA(1)=='f'||input.LA(1)=='n'||input.LA(1)=='r'||(input.LA(1)>='t' && input.LA(1)<='u') ) {
@@ -2182,7 +2182,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalTemplateLang.g:5723:137: ~ ( ( '\\\\' | '\\'' ) )
+                    	    // InternalTemplateLang.g:5794:137: ~ ( ( '\\\\' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='[')||(input.LA(1)>=']' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -2225,12 +2225,12 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5725:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
-            // InternalTemplateLang.g:5725:19: '/*' ( options {greedy=false; } : . )* '*/'
+            // InternalTemplateLang.g:5796:17: ( '/*' ( options {greedy=false; } : . )* '*/' )
+            // InternalTemplateLang.g:5796:19: '/*' ( options {greedy=false; } : . )* '*/'
             {
             match("/*"); 
 
-            // InternalTemplateLang.g:5725:24: ( options {greedy=false; } : . )*
+            // InternalTemplateLang.g:5796:24: ( options {greedy=false; } : . )*
             loop19:
             do {
                 int alt19=2;
@@ -2255,7 +2255,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt19) {
             	case 1 :
-            	    // InternalTemplateLang.g:5725:52: .
+            	    // InternalTemplateLang.g:5796:52: .
             	    {
             	    matchAny(); 
 
@@ -2285,12 +2285,12 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5727:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // InternalTemplateLang.g:5727:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // InternalTemplateLang.g:5798:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // InternalTemplateLang.g:5798:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // InternalTemplateLang.g:5727:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // InternalTemplateLang.g:5798:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop20:
             do {
                 int alt20=2;
@@ -2303,7 +2303,7 @@ public class InternalTemplateLangLexer extends Lexer {
 
                 switch (alt20) {
             	case 1 :
-            	    // InternalTemplateLang.g:5727:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // InternalTemplateLang.g:5798:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -2323,7 +2323,7 @@ public class InternalTemplateLangLexer extends Lexer {
                 }
             } while (true);
 
-            // InternalTemplateLang.g:5727:40: ( ( '\\r' )? '\\n' )?
+            // InternalTemplateLang.g:5798:40: ( ( '\\r' )? '\\n' )?
             int alt22=2;
             int LA22_0 = input.LA(1);
 
@@ -2332,9 +2332,9 @@ public class InternalTemplateLangLexer extends Lexer {
             }
             switch (alt22) {
                 case 1 :
-                    // InternalTemplateLang.g:5727:41: ( '\\r' )? '\\n'
+                    // InternalTemplateLang.g:5798:41: ( '\\r' )? '\\n'
                     {
-                    // InternalTemplateLang.g:5727:41: ( '\\r' )?
+                    // InternalTemplateLang.g:5798:41: ( '\\r' )?
                     int alt21=2;
                     int LA21_0 = input.LA(1);
 
@@ -2343,7 +2343,7 @@ public class InternalTemplateLangLexer extends Lexer {
                     }
                     switch (alt21) {
                         case 1 :
-                            // InternalTemplateLang.g:5727:41: '\\r'
+                            // InternalTemplateLang.g:5798:41: '\\r'
                             {
                             match('\r'); 
 
@@ -2375,10 +2375,10 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5729:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // InternalTemplateLang.g:5729:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalTemplateLang.g:5800:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // InternalTemplateLang.g:5800:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // InternalTemplateLang.g:5729:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalTemplateLang.g:5800:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt23=0;
             loop23:
             do {
@@ -2432,8 +2432,8 @@ public class InternalTemplateLangLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalTemplateLang.g:5731:16: ( . )
-            // InternalTemplateLang.g:5731:18: .
+            // InternalTemplateLang.g:5802:16: ( . )
+            // InternalTemplateLang.g:5802:18: .
             {
             matchAny(); 
 
@@ -3070,7 +3070,7 @@ public class InternalTemplateLangLexer extends Lexer {
             this.transition = DFA13_transition;
         }
         public String getDescription() {
-            return "5719:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
+            return "5790:20: ( ( '0' .. '9' )+ ( '.' ( '0' .. '9' )* ( RULE_EXPONENT )? )? | '.' ( '0' .. '9' )+ ( RULE_EXPONENT )? | ( '0' .. '9' )+ RULE_EXPONENT )";
         }
     }
     static final String DFA24_eotS =

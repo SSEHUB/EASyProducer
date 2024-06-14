@@ -1,4 +1,4 @@
-grammar de.uni_hildesheim.sse.vil.rt.RtVil with de.uni_hildesheim.sse.VilBuildLanguage
+grammar de.uni_hildesheim.sse.vil.rt.RtVil with de.uni_hildesheim.sse.vil.buildlang.VilBuildLanguage
 
 generate rtVil "http://www.uni_hildesheim.de/sse/vil/rt/RtVil"
 

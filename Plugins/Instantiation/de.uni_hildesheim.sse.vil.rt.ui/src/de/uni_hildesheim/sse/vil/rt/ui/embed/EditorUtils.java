@@ -11,7 +11,7 @@ import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.ui.RtVilModelListener;
-import de.uni_hildesheim.sse.vil.rt.ui.internal.RtVilActivator;
+import de.uni_hildesheim.sse.vil.rt.ui.internal.RtActivator;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
@@ -135,8 +135,8 @@ public class EditorUtils implements IEditorCreator {
      * @return the editor viewer
      */
     public static IEmbeddedEditor embedRtVilEditor(final java.net.URI file, Composite parent) {
-        RtVilActivator activator = RtVilActivator.getInstance();
-        Injector injector = activator.getInjector(RtVilActivator.DE_UNI_HILDESHEIM_SSE_VIL_RT_RTVIL);
+        RtActivator activator = RtActivator.getInstance();
+        Injector injector = activator.getInjector(RtActivator.DE_UNI_HILDESHEIM_SSE_VIL_RT_RTVIL);
         return EmbeddingHelper.embedEditor(file, parent, injector);
     }
 

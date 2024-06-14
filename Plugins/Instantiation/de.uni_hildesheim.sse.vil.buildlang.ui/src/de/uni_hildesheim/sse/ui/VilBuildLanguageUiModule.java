@@ -6,7 +6,7 @@ package de.uni_hildesheim.sse.ui;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
-import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
 import de.uni_hildesheim.sse.ui.hyperlinking.VilHyperlinkHelper;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingCalculator;
@@ -15,7 +15,7 @@ import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConf
 /**
  * Use this class to register components to be used within the IDE.
  */
-public class VilBuildLanguageUiModule extends de.uni_hildesheim.sse.ui.AbstractVilBuildLanguageUiModule {
+public class VilBuildLanguageUiModule extends de.uni_hildesheim.sse.vil.buildlang.ui.AbstractVilBuildLanguageUiModule {
 	
     public VilBuildLanguageUiModule(AbstractUIPlugin plugin) {
 		super(plugin);

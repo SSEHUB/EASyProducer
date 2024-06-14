@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.0"?>
-
 <plugin>
-
-  <extension point="org.eclipse.emf.ecore.generated_package">
-    <package 
-       uri = "http://www.uni_hildesheim.de/sse/vil/expressions/ExpressionDsl" 
-       class = "de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage"
-       genModel = "de/uni_hildesheim/sse/vil/expressions/ExpressionDsl.genmodel" /> 
-	
-  </extension>
-
-
-
-
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package
+			uri = "http://www.uni_hildesheim.de/sse/vil/expressions/ExpressionDsl"
+			class = "de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage"
+			genModel = "model/generated/ExpressionDsl.genmodel" />
+	</extension>
 </plugin>

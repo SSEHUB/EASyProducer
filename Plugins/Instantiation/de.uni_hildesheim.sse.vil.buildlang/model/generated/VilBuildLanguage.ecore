@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="vilBuildLanguage" nsURI="http://www.uni_hildesheim.de/sse/VilBuildLanguage"
+    nsPrefix="vilBuildLanguage">
+  <eClassifiers xsi:type="ecore:EClass" name="ImplementationUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Import"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//Require" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scripts" upperBound="-1"
+        eType="#//LanguageUnit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Require">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versionSpec" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//VersionSpec"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LanguageUnit" eSuperTypes="platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//LanguageUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//ParameterList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ScriptParentDecl"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadProperties" upperBound="-1"
+        eType="#//LoadProperties" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" eType="#//ScriptContents"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptParentDecl">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoadProperties">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptContents">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//AnnotationDeclarations"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifier" eType="#//RuleModifier"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Type"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramList" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//ParameterList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" eType="#//RuleConditions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleConditions">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postcondition" upperBound="-1"
+        eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//LogicalExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preconditions" upperBound="-1"
+        eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//LogicalExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleElementBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//RuleElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varDecl" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//VariableDeclaration"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprStmt" eType="#//ExpressionStatement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="while" eType="#//While"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="for" eType="#//For" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleModifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="protected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionStatement" eSuperTypes="platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//ExpressionStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alt" eType="#//Alternative"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimaryExpression" eSuperTypes="platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//PrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sysEx" eType="#//SystemExecution"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="map" eType="#//Map" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="join" eType="#//Join" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instantiate" eType="#//Instantiate"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instantiate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ruleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//ArgumentList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versionSpec" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//VersionSpec"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoopVariable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Type"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="var" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Map">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" upperBound="-1" eType="#//LoopVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="separator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="For">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" upperBound="-1" eType="#//LoopVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="separator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="While">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternative">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="#//StatementOrBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//StatementOrBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StatementOrBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exStmt" eType="#//ExpressionStatement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//RuleElementBlock"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Join">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var1" eType="#//JoinVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var2" eType="#//JoinVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="var" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemExecution">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="call" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Call"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calls" upperBound="-1"
+        eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//SubCall"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

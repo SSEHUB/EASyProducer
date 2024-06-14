@@ -7,6 +7,7 @@ Bundle-SymbolicName: de.uni_hildesheim.sse.vil.expressions.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.expressions.ui
 Bundle-ActivationPolicy: lazy
 Require-Bundle: de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
+ de.uni_hildesheim.sse.vil.expressions.ide,
  org.eclipse.xtext.ui,
  org.eclipse.ui.editors,
  org.eclipse.ui.ide,
@@ -23,10 +24,8 @@ Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.vil,
  de.uni_hildesheim.sse.vil.expressions.ui.contentassist,
- de.uni_hildesheim.sse.vil.expressions.ui.contentassist.antlr,
- de.uni_hildesheim.sse.vil.expressions.ui.contentassist.antlr.internal,
  de.uni_hildesheim.sse.vil.expressions.ui.highlighting,
  de.uni_hildesheim.sse.vil.expressions.ui.hyperlinking,
  de.uni_hildesheim.sse.vil.expressions.ui.internal,
  de.uni_hildesheim.sse.vil.expressions.ui.quickfix
-Bundle-Activator: de.uni_hildesheim.sse.vil.expressions.ui.internal.ExpressionDslActivator
+Bundle-Activator: de.uni_hildesheim.sse.vil.expressions.ui.internal.ExpressionsActivator

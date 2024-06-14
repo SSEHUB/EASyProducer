@@ -15,7 +15,7 @@ import org.eclipse.xtext.parser.IParseResult;
 import de.uni_hildesheim.sse.buildLanguageTranslation.ExpressionTranslator;
 import de.uni_hildesheim.sse.buildLanguageTranslation.ModelTranslator;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
@@ -69,9 +69,9 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
      */
     protected void initializeAfterResourceInitializer() {
         if (getResourceInitializer().forEclipse()) {
-            setInjector(createInjector(new de.uni_hildesheim.sse.VilBuildLanguageRuntimeModule()));
+            setInjector(createInjector(new de.uni_hildesheim.sse.vil.buildlang.VilBuildLanguageRuntimeModule()));
         } else {
-            setInjector(new VilBuildLanguageStandaloneSetup().createInjectorAndDoEMFRegistration());
+            setInjector(new de.uni_hildesheim.sse.vil.buildlang.VilBuildLanguageStandaloneSetup().createInjectorAndDoEMFRegistration());
         }
     }
 
@@ -116,7 +116,7 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
     
     @Override
     protected String getLanguageName() {
-        return "de.uni_hildesheim.sse.VilBuildLanguage";
+        return "de.uni_hildesheim.sse.vil.buildlang.VilBuildLanguage";
     }
 
     @Override
@@ -198,7 +198,7 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
         ImplementationUnit root = parse(uri, true, null, ImplementationUnit.class);
         List<ModelInfo<Script>> result = new ArrayList<ModelInfo<Script>>();
         if (null != root) {
-            for (de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script : root.getScripts()) {
+            for (de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit script : root.getScripts()) {
                 Version version = ModelTranslator.convert(script.getVersion());
                 ArrayList<ModelImport<Script>> imports = new ArrayList<ModelImport<Script>>();
                 for (Import imp : script.getImports()) {

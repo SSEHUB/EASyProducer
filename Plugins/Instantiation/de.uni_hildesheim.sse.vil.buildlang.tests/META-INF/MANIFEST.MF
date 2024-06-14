@@ -8,6 +8,7 @@ Automatic-Module-Name: de.uni_hildesheim.sse.vil.buildlang.tests
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
+ de.uni_hildesheim.sse.vil.buildlang.ide,
  org.eclipse.core.runtime,
  org.junit;bundle-version="4.8.2",
  org.eclipse.xtext.junit4,
@@ -19,7 +20,10 @@ Require-Bundle: de.uni_hildesheim.sse.vil.buildlang;visibility:=reexport,
  de.uni_hildesheim.sse.vil.templatelang.tests;visibility:=reexport,
  de.uni_hildesheim.sse.ivml;visibility:=reexport,
  net.ssehub.easy.libs.commons.io;visibility:=reexport,
- net.ssehub.easy.libs.commons.lang;visibility:=reexport
+ net.ssehub.easy.libs.commons.lang;visibility:=reexport,
+ org.eclipse.xtext.xbase.testing,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.34.0",
+ org.eclipse.xtext.testing
 Import-Package: org.apache.log4j,
  org.apache.tools.ant.types.selectors,
  org.hamcrest.core,
@@ -30,4 +34,6 @@ Import-Package: org.apache.log4j,
  org.junit.runners;version="4.5.0",
  org.junit.runners.model;version="4.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: test.de.uni_hildesheim.sse.vil.buildlang
+Export-Package: test.de.uni_hildesheim.sse.vil.buildlang,
+ de.uni_hildesheim.sse.tests;x-internal=true,
+ de.uni_hildesheim.sse.vil.buildlang.tests;x-internal=true

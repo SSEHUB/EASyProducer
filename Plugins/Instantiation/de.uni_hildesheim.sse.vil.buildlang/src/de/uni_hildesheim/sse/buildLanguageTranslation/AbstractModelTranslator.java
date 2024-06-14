@@ -28,18 +28,16 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Import;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ParameterList;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.Require;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.Require;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleConditions;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleDeclaration;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElementBlock;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.VilBuildLanguagePackage;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
-import net.ssehub.easy.basics.modelManagement.Version;
-import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.dslCore.translation.StringUtils;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
@@ -130,16 +128,9 @@ public abstract class AbstractModelTranslator<M extends Script, L extends Langua
         Resolver resolver = getResolver();
         M result = createScript(script.getName(), parent, desc, resolver.getTypeRegistry());
         resolver.pushModel(result);
-        if (null != script.getVersion()) {
-            try {
-                result.setVersion(new Version(script.getVersion().getVersion()));
-            } catch (VersionFormatException e) {
-                error(e.getMessage(), script, ExpressionDslPackage.Literals.LANGUAGE_UNIT__VERSION, 
-                    ErrorCodes.FORMAT_ERROR);
-            }
-        }
+        result.setVersion(convert(script.getVersion()));
         if (null != script.getLoadProperties()) {
-            for (de.uni_hildesheim.sse.vilBuildLanguage.LoadProperties prop : script.getLoadProperties()) {
+            for (de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LoadProperties prop : script.getLoadProperties()) {
                 result.addLoadProperties(new LoadProperties(StringUtils.convertString(prop.getPath()), result));
             }
         }

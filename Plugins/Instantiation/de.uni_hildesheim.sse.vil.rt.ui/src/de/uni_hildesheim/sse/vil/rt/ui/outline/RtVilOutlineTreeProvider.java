@@ -12,7 +12,7 @@ import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
 import de.uni_hildesheim.sse.vil.rt.ui.resources.Images;
-import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.VilBuildLanguagePackage;
 
 /**
  * Customization of the default outline structure.
@@ -22,14 +22,14 @@ import de.uni_hildesheim.sse.vilBuildLanguage.VilBuildLanguagePackage;
 public class RtVilOutlineTreeProvider extends VilBuildLanguageOutlineTreeProvider {
 
     @Override
-    protected void createScriptContentNodes(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script, 
+    protected void createScriptContentNodes(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit script, 
         VirtualOutlineNode parentNode) {
         LanguageUnit rtScript = (LanguageUnit) script;
         createScriptContentNodes(rtScript.getRtContents().getElements(), parentNode);
     }
 
     @Override
-    protected boolean hasContents(de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit script) {
+    protected boolean hasContents(de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit script) {
         LanguageUnit rtScript = (LanguageUnit) script;
         return rtScript.getRtContents() != null && !isEmpty(rtScript.getRtContents().getElements());
     }

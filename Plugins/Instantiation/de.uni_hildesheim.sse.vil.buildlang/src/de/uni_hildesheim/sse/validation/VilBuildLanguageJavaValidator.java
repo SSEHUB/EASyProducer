@@ -9,7 +9,8 @@ import org.eclipse.xtext.validation.Check;
 
 import de.uni_hildesheim.sse.BuildLangConfig;
 import de.uni_hildesheim.sse.BuildLangModelUtility;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vil.buildlang.validation.AbstractVilBuildLanguageValidator;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.IModelValidationCallback;
@@ -17,7 +18,7 @@ import net.ssehub.easy.dslCore.validation.ValidationUtils.MessageType;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
  
-public class VilBuildLanguageJavaValidator extends AbstractVilBuildLanguageJavaValidator {
+public class VilBuildLanguageJavaValidator extends AbstractVilBuildLanguageValidator {
 
     private IModelValidationCallback<ImplementationUnit, Script> callback = new IModelValidationCallback<
         ImplementationUnit, Script>() {

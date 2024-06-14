@@ -19,9 +19,9 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleDeclaration;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElement;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleDeclaration;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElement;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElementBlock;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.Compound;

@@ -22,9 +22,9 @@ import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.resource.XtextResource;
 
 import de.uni_hildesheim.sse.vil.expressions.ui.hyperlinking.AbstractEcoreModelQuery;
-import de.uni_hildesheim.sse.vilBuildLanguage.ImplementationUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
-import de.uni_hildesheim.sse.vilBuildLanguage.ScriptContents;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ScriptContents;
 import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
 import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 

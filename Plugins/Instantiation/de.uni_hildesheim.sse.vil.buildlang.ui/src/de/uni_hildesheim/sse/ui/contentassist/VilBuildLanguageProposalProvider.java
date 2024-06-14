@@ -18,6 +18,7 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
 
 import com.google.inject.Inject;
 
+import de.uni_hildesheim.sse.vil.buildlang.ui.contentassist.AbstractVilBuildLanguageProposalProvider;
 import de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.EqualityExpressionPartImpl;

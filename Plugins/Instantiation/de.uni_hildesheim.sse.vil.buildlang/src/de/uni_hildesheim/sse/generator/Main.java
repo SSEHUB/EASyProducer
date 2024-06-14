@@ -27,7 +27,7 @@ public class Main {
 			System.err.println("Aborting: no path to EMF resource provided!");
 			return;
 		}
-		Injector injector = new de.uni_hildesheim.sse.VilBuildLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
+		Injector injector = new de.uni_hildesheim.sse.vil.buildlang.VilBuildLanguageStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		Main main = injector.getInstance(Main.class);
 		main.runGenerator(args[0]);
 	}

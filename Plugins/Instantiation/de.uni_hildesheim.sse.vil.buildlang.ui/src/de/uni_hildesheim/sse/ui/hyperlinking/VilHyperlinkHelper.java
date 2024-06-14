@@ -1,6 +1,6 @@
 package de.uni_hildesheim.sse.ui.hyperlinking;
 
-import de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit;
 import net.ssehub.easy.dslCore.ui.hyperlinking.GenericHyperlinkHelper;
 
 /**

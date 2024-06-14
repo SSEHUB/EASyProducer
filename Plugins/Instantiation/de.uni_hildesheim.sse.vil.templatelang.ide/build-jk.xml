@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="de.uni_hildesheim.sse.vil.templatelang.ide" default="all" basedir=".">
+	<property file="${user.home}/migration.properties"/>
+	<property file="${user.home}/global-build.properties"/>
+    <include file="${user.home}/macros.xml"/>
+	
+	<target name="all">
+		<maven pomFile="pom.xml" goal="deploy"/>
+
+        <delete failonerror="false" dir="bin"/>
+        <delete failonerror="false" dir=".m2"/>     
+    </target>
+</project>

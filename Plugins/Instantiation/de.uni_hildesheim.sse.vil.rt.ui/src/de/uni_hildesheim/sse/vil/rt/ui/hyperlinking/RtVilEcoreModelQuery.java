@@ -50,7 +50,7 @@ public class RtVilEcoreModelQuery extends AbstractEcoreModelQuery<LanguageUnit, 
             ImplementationUnit topUnit = (ImplementationUnit) rootNode.getSemanticElement();
             // Only one project per resource (file) allowed, thus, take the first element of the list
             if (topUnit.getScripts() != null && !topUnit.getScripts().isEmpty()) {
-                de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit tmp = topUnit.getScripts().get(0);
+                de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit tmp = topUnit.getScripts().get(0);
                 if (tmp instanceof LanguageUnit) {
                     result = (LanguageUnit) tmp;
                 }

@@ -5,8 +5,9 @@ import java.util.regex.Pattern;
 
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightedPositionAcceptor;
-import org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.util.CancelIndicator;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.IHighlightedPositionAcceptor;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
 
 /**
@@ -31,7 +32,8 @@ public class VilHighlightingCalculator implements ISemanticHighlightingCalculato
     private static final String SIMPLE_HIGHLIGHT_REGEX = "\\$\\s*.*?[/\"]"; 
 
     @Override
-    public void provideHighlightingFor(XtextResource resource, IHighlightedPositionAcceptor acceptor) {
+    public void provideHighlightingFor(XtextResource resource, IHighlightedPositionAcceptor acceptor, 
+        CancelIndicator indicator) {
         if (hasRootNode(resource)) {
             provideStringPatternHighlight(resource.getParseResult().getRootNode(), acceptor);
         }

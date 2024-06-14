@@ -29,8 +29,8 @@ import de.uni_hildesheim.sse.vil.rt.rtVil.RtVilPackage;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.WeightingStatement;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleConditions;
-import de.uni_hildesheim.sse.vilBuildLanguage.RuleElementBlock;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleConditions;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElementBlock;
 import net.ssehub.easy.basics.messages.IMessage;
 import net.ssehub.easy.basics.modelManagement.IModelLoader;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
@@ -117,7 +117,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.buildLanguageTranslat
             } catch (TranslatorException e) {
                 error(e);
             }
-            for (de.uni_hildesheim.sse.vilBuildLanguage.LanguageUnit s : unit.getScripts()) {
+            for (de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit s : unit.getScripts()) {
                 LanguageUnit script = (LanguageUnit) s;
                 String name = script.getName();
                 if (!names.contains(name)) {
