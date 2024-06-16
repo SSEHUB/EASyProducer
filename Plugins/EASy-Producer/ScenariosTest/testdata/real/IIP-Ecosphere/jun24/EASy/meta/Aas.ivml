@@ -1,0 +1,107 @@
+project Aas {
+
+    import DataTypes;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    annotate String semanticId = "" to .;
+    
+    // enum for now
+    enum AasImpl { BaSyx };
+    AasImpl aas = AasImpl::BaSyx;
+    isDefined(aas);
+
+    // AAS implementation protocols - extensible in code, enum not sufficient here
+
+    abstract compound AasProtocol {
+        AasSchema schema;
+    }
+    
+    compound AasProtocolDefault refines AasProtocol {
+        AasSchema schema = AasSchema::TCP; // as implemented
+    }
+    
+    compound AasProtocolVabTcp refines AasProtocol {
+        AasSchema schema = AasSchema::TCP;
+    }
+    
+    compound AasProtocolVabHttp refines AasProtocol {
+        AasSchema schema = AasSchema::HTTP;
+    }
+        
+    // TODO missing VAB-HTTPS -> keystoreKey
+    
+    AasProtocol aasProtocol = AasProtocolVabTcp{}; // the global default protocol
+    isDefined(aasProtocol);
+    String aasPluginId;
+    
+    enum AasSchema {HTTP, HTTPS, TCP};
+    enum Persistency {INMEMORY, MONGO};
+    
+    // global AAS network addresses, so far no discovery protocol available 
+
+    compound EphemeralServerAddress {
+    	AasSchema schema = AasSchema::HTTPS;
+        NonEmptyString host;
+        NonEmptyEphemeralPort port;
+    }
+
+    compound ServerAddress refines EphemeralServerAddress {
+        NonEmptyPort port;
+    }
+
+    compound EndpointAddress refines EphemeralServerAddress {
+        String path = "";
+        String serverHost = null; // overwrites host on the server, e.g., to allow for multiple IP listening
+    }
+
+    // host "127.0.0.1" replaced by host IP if possible
+    compound ImplAddress refines EphemeralServerAddress {
+        AasProtocol protocol = aasProtocol;
+        AasSchema schema = aasProtocol.schema;
+        NonEmptyString host = "127.0.0.1";
+        Boolean devicesAsEphemeral = true; // AAS container ports via svcMgr and container descriptor; else use device aasImplPort or as fallback aasImplServer.port
+        String netmask = "";
+    	isDefined(protocol);
+    }
+    
+    EndpointAddress aasServer;
+    isDefined(aasServer);
+    EndpointAddress aasRegistryServer;
+    isDefined(aasRegistryServer);
+    ImplAddress aasImplServer;
+    isDefined(aasImplServer);
+    Persistency aasPersistency = Persistency::INMEMORY;
+    isDefined(aasPersistency);
+    String aasAccessControlAllowOrigin = "*";
+    assign (semanticId = Eclass_Unit_ms) to {
+        Integer aasStartupTimeout = 120000;
+    }
+    
+    // ------------------------ semanticIds -------------------------------
+    
+    abstract compound AasSemanticIdResolver {
+        NonEmptyString class;
+        ArtifactString artifact = ""; // built in
+    }
+    
+    compound EclassYamlAasSemanticIdResolver refines AasSemanticIdResolver {
+        NonEmptyString class = "de.iip_ecosphere.platform.support.iip_aas.EclassYamlSemanticIdResolverDescriptor";
+    }
+
+    compound AdminShellYamlAasSemanticIdResolver refines AasSemanticIdResolver {
+        NonEmptyString class = "de.iip_ecosphere.platform.support.iip_aas.AdminShellYamlSemanticIdResolverDescriptor";
+    }
+    
+    compound EclassWebServiceSemanticIdResolver refines AasSemanticIdResolver {
+        NonEmptyString class = "de.iip_ecosphere.platform.support.semanticId.eclass.EclassSemanticIdResolverDescriptor";
+        NonEmptyString artifact = "de.iip-ecosphere.platform:support.semanticId.eclass:" + iipVer; // built in
+        // requires user certificate in identityStore
+    }
+    
+    // may be null -> use this as default
+    setOf(AasSemanticIdResolver) aasSemanticIdResolver = {
+        EclassYamlAasSemanticIdResolver{},
+        AdminShellYamlAasSemanticIdResolver{}
+    };
+    
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=IIP-Ecosphere Management Web UI
+After=iip-platform.service
+Requires=iip-platform.service
+
+[Service]
+WorkingDirectory=/opt/iip/gen
+Type=simple
+Restart=on-failure
+ExecStart=/usr/bin/bash ./mgtUi.sh
+
+[Install]
+WantedBy=multi-user.target

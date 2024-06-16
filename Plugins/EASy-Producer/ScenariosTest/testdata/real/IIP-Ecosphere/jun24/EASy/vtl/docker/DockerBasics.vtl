@@ -1,0 +1,191 @@
+import JavaBasics;
+import Basics;
+
+@advice(IIPEcosphere)
+template DockerBasics(Configuration config, FileArtifact target) {
+
+    def brokerSettings(TransportProtocol protocol) {
+        ''
+    }
+
+    def brokerSettings(TransportProtocolAMQP protocol) {
+        'ENV QPID_WORK=/tmp/qpidwork'
+    }
+
+    def containerSettings(IIPEcosphere cfg, ContainerType containerType, EcsDevice device) {
+        '${brokerSettings(cfg.transportProtocol)|e}'   
+        if (useFixedPort(cfg, device)) {
+            Integer port;
+            if (isDefined(device.aasImplPort) and device.aasImplPort <> null) {
+                port = device.aasImplPort;
+            } else {
+                port = cfg.aasImplServer.port;
+            }
+            ''
+            'ENV iip.port=${port}'
+            if (containerType == ContainerType::Ecs_Svc_App) {
+                'ENV iip.port.svgMgr=${port + 1}'
+            }
+            'EXPOSE ${port}'
+            if (containerType == ContainerType::Ecs_Svc_App) {
+                'EXPOSE ${port + 1}'
+            }
+        } else {
+            ''
+        }
+    }
+    
+    def Boolean useFixedPort(IIPEcosphere cfg, EcsDevice device) {
+        not(cfg.aasImplServer.devicesAsEphemeral);
+    }
+
+    // abstraction workaround, this is a docker descriptor -> generalize?
+    def String getRegistryName(ContainerManager mgr) {
+        "";
+    }
+    
+    def String getRegistryName(DockerContainerManager mgr) {
+        String registryName = "";
+        if (isDefined(mgr.registry) and mgr.registry.length() > 0) {
+            registryName = mgr.registry + "/";
+        }
+        registryName;
+    }
+        
+    def toDockerImageName(String repo, String registry, String tag) {
+        toDockerImageName("${repo}/${registry}:${tag}");
+    }
+    
+    def toDockerImageName(String name) {
+        name.toLowerCase();
+    }
+    
+    def setOf(Dependency) collectDependencies(sequenceOf(MeshElement) elements) {
+        collectDependencies(elements->collect(e|e.impl));
+    }
+
+    def setOf(Dependency) collectDependencies(sequenceOf(ServiceBase) services) {
+        setOf(Dependency) result = {};
+        for (ServiceBase s: services) {
+            result = collectDependenciesSvc(s, result);
+        }
+        result;
+    }
+    
+    def setOf(Dependency) addDependenciesRec(setOf(Dependency) deps, setOf(Dependency) result) {
+         for (Dependency d: deps) {
+            result.add(d);
+             result = collectDependenciesDep(d, result);
+         }
+         result;
+    }
+
+    // allow for dynamic dispatch override
+    def setOf(Dependency) collectDependenciesSvc(ServiceBase service, setOf(Dependency) result) {
+         addDependenciesRec(service.dependencies, result);
+    }
+
+    // dynamic dispatch base
+    def setOf(Dependency) collectDependenciesDep(Dependency dep, setOf(Dependency) result) {
+        result.add(dep);
+        result;
+    }
+
+    // dynamic dispatch base
+    def setOf(Dependency) collectDependenciesDep(PythonDependency dep, setOf(Dependency) result) {
+        result.add(dep);
+        addDependenciesRec(dep.dependencies, result);
+    }
+    
+    def genServersExpose(Application app) {
+        for (Server s: app.servers) {
+            'EXPOSE ${s.port}'
+        }
+    }
+
+    def genTestingMode(IIPEcosphere config, String BaseImage) {
+        if (getContainerTestingModeSafe(config.containerTestingMode)) {
+            if (config.linuxTestingDependencies.size() > 0){
+                if (BaseImage == "Python"){
+                    'RUN apt-get install software-properties-common -y'
+                    'RUN apt-add-repository "deb  http://deb.debian.org/debian  stretch main"' 
+                }           
+                for (LinuxSystemDependency dep: config.linuxTestingDependencies) {
+                    if (BaseImage == "Python"){
+                        'RUN apt-get install -y ${dep.name}'
+                    } else if (BaseImage == "Alpine") {
+                        'RUN apk add ${dep.name}'
+                    } else if (BaseImage == "Docker") {
+                        'RUN apk add ${dep.name}'
+                    }
+                }
+            }
+            if (config.linuxTestingSoftware.size() > 0){       
+                for (SystemDependency dep: config.linuxTestingSoftware) {
+                    if (dep.key == "mvn"){
+                        if (BaseImage == "Python"){
+                            'RUN apt-get install -y wget'
+                        } else if (BaseImage == "Alpine") {
+                            'RUN apk add wget'
+                        } else if (BaseImage == "Docker") {
+                            'RUN apk add wget'
+                        }
+                        'RUN wget https://archive.apache.org/dist/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz'
+                        'RUN tar xzpvf apache-maven-3.6.3-bin.tar.gz'
+                        'RUN ln -s $PWD/apache-maven-3.6.3/bin/mvn /usr/bin/mvn'
+                    }
+                }
+            }
+        }
+    }
+    
+    def genCondePythonEnv(sequenceOf(PythonService) services, Boolean condaInstallMode) {
+        for (PythonService pyService : services) {
+            if (isDefined(pyService.condaEnv) and pyService.condaEnv.length() > 0) {
+                setOf(Dependency) deps = pyService.dependencies;
+                String pythonCondaVersion = "";
+                for (Dependency s : deps) {
+                    if (genDependency(s) == 'PYTHON38') {
+                        pythonCondaVersion = "3.8";
+                    } else if (genDependency(s) == 'PYTHON39') {
+                        pythonCondaVersion = "3.9";
+                    } 
+                }
+                
+                if (condaInstallMode) {
+                    'RUN apt-get -qq update -y && apt-get -qq -y install curl bzip2 && curl -sSL https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -o /tmp/miniconda.sh && bash /tmp/miniconda.sh -bfp /usr/local && rm -rf /tmp/miniconda.sh && conda install -y python=${pythonCondaVersion} && conda update conda && apt-get -qq -y remove curl bzip2 && apt-get -qq -y autoremove && apt-get autoclean && rm -rf /var/lib/apt/lists/* /var/log/dpkg.log && conda clean --all --yes'
+                    'ENV PATH=/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+                    'RUN conda create --name ${pyService.condaEnv} python=${pythonCondaVersion}'
+                }
+                
+                'SHELL ["conda", "run", "-n", "${pyService.condaEnv}", "/bin/bash", "-c"]'
+                'COPY conda.${pyService.condaEnv}.requirements.txt conda.${pyService.condaEnv}.requirements.txt'
+                'RUN python3 -m pip install -r conda.${pyService.condaEnv}.requirements.txt'
+            }
+        }
+    }
+    
+    def genDependency(Dependency d) {
+        '';
+    }
+    
+    def genDependency(SystemDependency d) {
+        '${d.key}';
+    }
+    
+    def installBeforePip(Dependency d, sequenceOf(String) result) {
+    }
+
+    def installBeforePip(LinuxSystemDependency d, sequenceOf(String) result) {
+        result.add('RUN apt-get install -y ${d.name}');
+    }
+    
+    def installBeforePip(LinuxCommandBasedSystemDependency d, sequenceOf(String) result) {
+         // TODO downloads
+         // TODO bashSetups
+        for (String c: d.installCommands) {
+            result.add('RUN ${c}');
+        }
+    }
+    
+}

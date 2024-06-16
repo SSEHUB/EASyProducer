@@ -1,0 +1,15 @@
+[Unit]
+Description=IIP-Ecosphere Platform Monitoring Services
+After=iip-platform.service
+Requires=iip-platform.service
+
+[Service]
+WorkingDirectory=/opt/iip/gen
+Type=simple
+Restart=on-failure
+KillMode=control-group
+PIDFile=/run/iip-monitoring.pid
+ExecStart=/opt/iip/java -cp @monJars/classpath.ux -Dio.netty.tryReflectionSetAccessible=true -Dlog4j2.formatMsgNoLookups=true --add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED -Diip.pid.dir=/run "de.iip_ecosphere.platform.support.LifecycleHandler$WaitingStarter"
+
+[Install]
+WantedBy=multi-user.target

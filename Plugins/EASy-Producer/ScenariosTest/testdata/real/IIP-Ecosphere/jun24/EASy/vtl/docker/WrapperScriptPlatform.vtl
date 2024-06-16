@@ -1,0 +1,26 @@
+import Basics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template WrapperScriptPlatform(IIPEcosphere config, FileArtifact target) {
+
+    def main(IIPEcosphere config, FileArtifact target) {
+        Integer BrokerPort = config.transportProtocol.port;
+        '#!/bin/bash'
+        ''
+        'bash broker.sh ${BrokerPort} &'
+        'sleep 5;'
+        'echo ""'
+        'echo ""'
+        'bash platform.sh &'
+        'sleep 70;'
+        'echo ""'
+        'echo ""'
+        'bash mgtUi.sh &'
+        'sleep 20;'
+        'echo ""'
+        'echo ""'
+        'bash monitoring.sh'
+        'sleep 20;'
+    }
+}

@@ -259,6 +259,15 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         public String getTempFolderName(String projectName);
         
         /**
+         * Optional name of the sub-folder the model is located within.
+         * 
+         * @return may be <b>null</b> for none
+         */
+        public default String getModelSubFolder() {
+            return null;
+        }
+        
+        /**
          * Returns the VIL output folder to use.
          * 
          * @param temp the (temporary) folder where the model to test is located
@@ -372,17 +381,21 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             System.out.println("Copying " + sBase + " to " + sourceProjectFolder);
             FileUtils.copyDirectory(sBase, sourceProjectFolder);
         }
-        if (null != modifier) {
-            modifier.postCopy(temp);
-        }
         File ivmlFolder = getIvmlFolderIn(temp);
         File vilFolder = getVilFolderIn(temp);
         File vtlFolder = getVtlFolderIn(temp);
+        File modelFolder = ivmlFolder;
+        if (null != modifier) {
+            modifier.postCopy(temp);
+            if (null != modifier.getModelSubFolder()) {
+                modelFolder = new File(modelFolder, modifier.getModelSubFolder());
+            }
+        }
         activateBuildProperties(vilFolder);
         System.out.println("Registering model location...");
         doLocations(ivmlFolder, vilFolder, vtlFolder, true);
         System.out.println("Loading IVML...");
-        net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), ivmlFolder);
+        net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), modelFolder);
         Configuration config = assertConfiguration(iModel, mode);
         File targetFile = null;
         if (instantiate && mode.doInstantiate()) {
@@ -410,23 +423,34 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             Script script = obtainVilModel(vModelName, project(versions, 1), vilFolder);
             Executor executor = new Executor(script, param);
             executor.addBase(targetFile);
-            if (null != modifier) {
-                executor.addStartRuleName(modifier.getVilStartRuleName());
-            }
-            try {
-                executor.execute();
-            } catch (VilException e) {
-                System.out.println(tFactory);
-                e.printStackTrace(System.out);
-                Assert.fail("VIL execution issue " + e);
-            }
-            println(tFactory, debug);
+            execute(executor, modifier, tFactory);
             TracerFactory.setDefaultInstance(current);
         }
         doLocations(ivmlFolder, vilFolder, vtlFolder, false);
         return targetFile;
     }
-    
+
+    /**
+     * Executes the configured executor.
+     * 
+     * @param executor the executor
+     * @param modifier optional modifier for start rule name
+     * @param tFactory the tracer factory to use
+     */
+    private void execute(Executor executor, ITestModifier modifier, TracerFactory tFactory) {
+        if (null != modifier) {
+            executor.addStartRuleName(modifier.getVilStartRuleName());
+        }
+        try {
+            executor.execute();
+        } catch (VilException e) {
+            System.out.println(tFactory);
+            e.printStackTrace(System.out);
+            Assert.fail("VIL execution issue " + e);
+        }
+        println(tFactory, debug);
+    }
+
     /**
      * Operate on the locations.
      * 

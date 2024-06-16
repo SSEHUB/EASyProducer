@@ -546,18 +546,29 @@ public class RealTests extends AbstractRealTests {
 
         private String vilFolderName;
         private String vilStartRuleName;
+        private String subFolder;
 
         private IipTestModifier(String vilFolderName) {
             this(vilFolderName, "main");
         }
-        
+
         private IipTestModifier(String vilFolderName, String vilStartRuleName) {
+            this(vilFolderName, vilStartRuleName, null);
+        }
+
+        private IipTestModifier(String vilFolderName, String vilStartRuleName, String subFolder) {
             this.vilFolderName = vilFolderName;
             this.vilStartRuleName = vilStartRuleName;
+            this.subFolder = subFolder;
         }
         
         @Override
         public void postCopy(File target) {
+        }
+        
+        @Override
+        public String getModelSubFolder() {
+            return subFolder;
         }
 
         @Override
@@ -624,16 +635,32 @@ public class RealTests extends AbstractRealTests {
     }
 
     /**
-     * Tests the IIP-Ecosphere model / instantiation (Mar 23).
+     * Tests the IIP-Ecosphere model / instantiation (for debugging).
      * 
      * @throws IOException shall not occur
      */
-    @Ignore
+    @Ignore("debugging model")
     @Test
-    public void testIipEcosphereMar23() throws IOException {
+    public void testIipEcosphereTest() throws IOException {
         org.junit.Assume.assumeTrue(System.getProperty("os.name").startsWith("Windows")); // comparison fails on linux
         final String folder = "mar23";
         executeIipCase(folder, "PlatformConfiguration", "generateApps");
+    }
+
+    /**
+     * Tests the oktoflow model / instantiation (June 24).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testOktoflowJun24() throws IOException {
+        final String folder = "jun24";
+        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "test/api");
+        executeIipCase(folder, "SimpleMesh3PlatformConfiguration", "generateApps", "test/simpleMesh3");
+        executeIipCase(folder, "SerializerConfig1", "main", "test/single");
+        executeIipCase(folder, "SerializerConfig1Old", "generateApps", "test/single");
+        executeIipCase(folder, "KodexMesh", "generateApps", "test/single");
+        executeIipCase(folder, "Modbus", "generateApps", "test/modbus");
     }
 
     /**
@@ -645,11 +672,25 @@ public class RealTests extends AbstractRealTests {
      * @throws IOException if execution/comparison fails
      */
     private void executeIipCase(String folder, String modelName, String vilStartRuleName) throws IOException {
+        executeIipCase(folder, modelName, vilStartRuleName, null);
+    }
+
+    /**
+     * Executes an IIP-Ecosphere case.
+     * 
+     * @param folder the case folder
+     * @param modelName the name of the model to load and execute (expected files/created files in folder of same name)
+     * @param vilStartRuleName the name of the VIL start rule to execute
+     * @param subFolder additional sub folder where the model is located within
+     * @throws IOException if execution/comparison fails
+     */
+    private void executeIipCase(String folder, String modelName, String vilStartRuleName, 
+        String subFolder) throws IOException {
         String vilFolderName = modelName; // assumed same in expected
         String[] versions = null;
         String[] names = {folder, modelName, "IIPEcosphere"};
         File base = executeCase(names, versions, "IIP-Ecosphere/", null, Mode.REASON_INSTANTIATE, 
-            new IipTestModifier(vilFolderName, vilStartRuleName));
+            new IipTestModifier(vilFolderName, vilStartRuleName, subFolder));
         assertFileEqualityRec(new File(new File(base, "expected"), vilFolderName), new File(base, vilFolderName), 
             new FileFilter() {
             

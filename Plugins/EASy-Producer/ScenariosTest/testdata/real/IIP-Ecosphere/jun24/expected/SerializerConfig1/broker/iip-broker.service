@@ -1,0 +1,14 @@
+[Unit]
+Description=IIP-Ecosphere communication broker (AMQP)
+
+[Service]
+WorkingDirectory=/opt/iip/gen/broker
+Type=simple
+Restart=on-failure
+KillMode=control-group
+Requires=multi-user.target
+After=multi-user.target
+ExecStart=/opt/iip/java -Xmx440M -cp "brokerJars/*" test.de.iip_ecosphere.platform.test.amqp.qpid.TestQpidServer 8883
+
+[Install]
+WantedBy=multi-user.target

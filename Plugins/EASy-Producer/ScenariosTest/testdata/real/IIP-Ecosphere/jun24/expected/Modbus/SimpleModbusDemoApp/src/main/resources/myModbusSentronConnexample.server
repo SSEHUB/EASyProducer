@@ -1,0 +1,8 @@
+{
+ "BrightnessDuration" : {"offset" : 50061, "type" : "long"},
+ "CurrentL1" : {"offset" : 13, "type" : "float"},
+ "DisplayBrightness" : {"offset" : 50057, "type" : "long"},
+ "DisplayContrast" : {"offset" : 50055, "type" : "long"},
+ "Frequency" : {"offset" : 55, "type" : "float"},
+ "VoltageL1N" : {"offset" : 1, "type" : "float"}
+}

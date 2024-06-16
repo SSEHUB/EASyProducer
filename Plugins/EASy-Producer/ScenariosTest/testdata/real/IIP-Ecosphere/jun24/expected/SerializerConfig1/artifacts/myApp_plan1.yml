@@ -1,0 +1,32 @@
+application: This is plan1
+id: plan1
+appId: myApp
+version: 1.2.3
+description: My Deployment Plan
+artifact: MyAppExample-0.1.0-SNAPSHOT-bin.jar
+parallelize: true
+allowMultiExecution: true
+onUndeployRemoveArtifact: true
+disabled: false
+ensembles:
+  mySource: myAnonymizer
+assignments:
+  - resource: res1
+    services:
+    - mySource
+    - myAnonymizer
+    - myMqttConn
+    - myOpcConn
+  - resource: res2
+    services:
+    - myKiFamily
+    - myRtsa
+    - aasSink
+arguments:
+  - --a=5
+  - --b=6
+servers:
+  - test-pyServer: res1
+serviceParams:
+    myAnonymizer:
+        passThrough : true

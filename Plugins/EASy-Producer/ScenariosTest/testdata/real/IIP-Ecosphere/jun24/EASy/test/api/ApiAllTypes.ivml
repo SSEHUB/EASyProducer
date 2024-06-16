@@ -1,0 +1,11 @@
+project ApiAllTypes {
+
+    import ApiAllTypesPart*; 
+    import ApiAllConstants;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    freeze {
+        .;
+    }
+}

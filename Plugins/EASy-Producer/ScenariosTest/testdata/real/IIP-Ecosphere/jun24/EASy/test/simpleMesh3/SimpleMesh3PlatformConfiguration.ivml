@@ -1,0 +1,13 @@
+project SimpleMesh3PlatformConfiguration {
+
+    import SimpleMesh3TechnicalSetup;
+    import SimpleMesh3AllServices;
+    import SimpleMesh3AllTypes;
+    import ApplicationPart*;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    freeze {
+        .;
+    }
+}

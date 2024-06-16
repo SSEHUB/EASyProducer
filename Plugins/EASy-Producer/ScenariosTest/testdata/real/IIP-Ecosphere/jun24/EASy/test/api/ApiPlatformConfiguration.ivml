@@ -1,0 +1,13 @@
+project ApiPlatformConfiguration {
+
+    import ApiTechnicalSetup;
+    import ApiAllServices;
+    import ApiAllTypes;
+    import ApiApplicationPart*;
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    freeze {
+        .;
+    }
+}

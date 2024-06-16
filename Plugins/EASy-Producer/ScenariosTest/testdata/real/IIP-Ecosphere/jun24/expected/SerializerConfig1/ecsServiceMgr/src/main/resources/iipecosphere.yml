@@ -1,0 +1,90 @@
+transport:
+    host: localhost
+    port: 8883
+    actionTimeout: 1000
+    authenticationKey: amqp
+    gatewayPort: -1
+    netmask : 
+docker:
+    dockerHost: unix:///var/run/docker.sock
+    dockerImageYamlFilename: image-info.yml
+    deleteWhenUndeployed: false
+    registry: 
+    authenticationKey: docker
+monitoringUpdatePeriod: 2000
+aas:
+  server:
+    port: 9001
+    host: 127.0.0.1
+    schema: HTTP
+    path: 
+  registry:
+    port: 9002
+    host: 127.0.0.1
+    schema: HTTP
+    path: registry
+  implementation:
+    port: -1
+    host: 127.0.0.1
+    netmask: 
+    schema: TCP
+    protocol: VAB-TCP
+  accessControlAllowOrigin: "*"
+netMgr:
+    netmask: 
+
+logging:
+    level:
+        root: INFO
+spring:
+    main:
+        banner-mode: off
+        web-application-type: none
+    cloud:
+        deployer:
+            local:
+                deleteFilesOnExit: true
+service-mgr:
+    deleteArtifacts: true
+    waitingTime: 60000
+    brokerHost: localhost
+    brokerPort: 8883
+    availabilityRetryDelay: 500
+    serviceProtocol: VAB-TCP
+    transport:
+        host: localhost
+        port: 8883
+        actionTimeout: 1000
+        authenticationKey: amqp
+        gatewayPort: -1
+        netmask : 
+    docker:
+        dockerHost: unix:///var/run/docker.sock
+        dockerImageYamlFilename: image-info.yml
+        deleteWhenUndeployed: false
+        registry: 
+        authenticationKey: docker
+    monitoringUpdatePeriod: 2000
+    aas:
+      server:
+        port: 9001
+        host: 127.0.0.1
+        schema: HTTP
+        path: 
+      registry:
+        port: 9002
+        host: 127.0.0.1
+        schema: HTTP
+        path: registry
+      implementation:
+        port: -1
+        host: 127.0.0.1
+        netmask: 
+        schema: TCP
+        protocol: VAB-TCP
+      accessControlAllowOrigin: "*"
+    netMgr:
+        netmask: 
+metricsprovider:
+    schedulerrate: 2000
+    

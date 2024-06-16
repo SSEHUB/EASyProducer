@@ -1,0 +1,123 @@
+id: ModbusApp
+name: Simple Modbus Demo App
+version: 0.1.0
+application:
+  id: ModbusApp
+  name: Simple Modbus Demo App
+  version: 0.1.0
+types:
+    - name: ModbusPhoenixEEM
+      fields:
+        - name: Day
+          type: short
+        - name: Month
+          type: short
+        - name: Year
+          type: short
+        - name: U1
+          type: float
+        - name: frequency
+          type: float
+        - name: I1
+          type: float
+    - name: ModbusPhoenixRwEEM
+      fields:
+        - name: Day
+          type: short
+        - name: Month
+          type: short
+        - name: Year
+          type: short
+    - name: ModbusSiemensRwSentron
+      fields:
+        - name: DisplayContrast
+          type: long
+        - name: DisplayBrightness
+          type: long
+        - name: BrightnessDuration
+          type: long
+    - name: ModbusSiemensSentron
+      fields:
+        - name: DisplayContrast
+          type: long
+        - name: DisplayBrightness
+          type: long
+        - name: BrightnessDuration
+          type: long
+        - name: Frequency
+          type: float
+        - name: VoltageL1N
+          type: float
+        - name: CurrentL1
+          type: float
+services:
+   - id: ModbusReceiver
+     applicationId: ModbusApp
+     name: Modbus Receiver
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SINK_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.mqtt.port=${port} --spring.cloud.stream.binders.properties.external.environment.mqtt.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.mqtt.host=${host} --spring.cloud.stream.binders.properties.external.environment.mqtt.host=${host}
+       - channel: receiveModbusPhoenixEEM_ModbusReceiver-in-0
+         direction: IN
+         id: myModbusConn -> ModbusReceiver
+         type: ModbusPhoenixEEM
+         function: receiveModbusPhoenixEEM_ModbusReceiver
+         service: myModbusConn
+       - channel: receiveModbusSiemensSentron_ModbusReceiver-in-0
+         direction: IN
+         id: myModbusSentronConn -> ModbusReceiver
+         type: ModbusSiemensSentron
+         function: receiveModbusSiemensSentron_ModbusReceiver
+         service: myModbusSentronConn
+   - id: myModbusConn
+     applicationId: ModbusApp
+     name: myModbusConn example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.mqtt.port=${port} --spring.cloud.stream.binders.properties.external.environment.mqtt.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.mqtt.host=${host} --spring.cloud.stream.binders.properties.external.environment.mqtt.host=${host}
+       - channel: receiveModbusPhoenixEEM_ModbusReceiver-out-0
+         direction: OUT
+         id: myModbusConn -> ModbusReceiver
+         type: ModbusPhoenixEEM
+         function: 
+         service: ModbusReceiver
+   - id: myModbusSentronConn
+     applicationId: ModbusApp
+     name: myModbusSentronConn example
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.mqtt.port=${port} --spring.cloud.stream.binders.properties.external.environment.mqtt.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.mqtt.host=${host} --spring.cloud.stream.binders.properties.external.environment.mqtt.host=${host}
+       - channel: receiveModbusSiemensSentron_ModbusReceiver-out-0
+         direction: OUT
+         id: myModbusSentronConn -> ModbusReceiver
+         type: ModbusSiemensSentron
+         function: 
+         service: ModbusReceiver
+
