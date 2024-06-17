@@ -328,12 +328,8 @@ public class Project implements IVilType, IStringValueProvider {
             ArtifactFactory.release(artifactModel);
         }
     }
-    
-    @Override
-    protected void finalize() throws Throwable {
-        release();
-        super.finalize();
-    }
+
+    // finalize is deprecated, release is called explicitly
     
     /**
      * Returns the underlying artifact model.

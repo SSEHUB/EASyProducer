@@ -57,12 +57,7 @@ public class ChangeHistory implements IVilType, IStringValueProvider {
         this.configuration.getConfiguration().register(changeListener);
     }
     
-    @Override
-    protected void finalize() throws Throwable {
-        // for now
-        this.configuration.getConfiguration().unregister(changeListener);
-        super.finalize();
-    }
+    // finalize is deprecated; change history is bound against creating configuration and GCed with configuration
     
     /**
      * Defines the type of a change set.
