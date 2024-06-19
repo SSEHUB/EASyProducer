@@ -313,5 +313,70 @@ public class Utils {
         }
         sequence.add(model);
     }
+    
+    /**
+     * Prints the import resolution of the given {@code model} to {@code System.out}.
+     * 
+     * @param <M> the model type
+     * @param model the model
+     * @param mgt the optional model management if also model locations shall be emitted, may be <b>null</b>
+     */
+    public static <M extends IModel> void printResolution(M model, ModelManagement<M> mgt) {
+        if (null != model) {
+            System.out.print("Import resolution:");
+            printResolution(model, mgt, new HashSet<M>(), "");
+        }
+    }
+    
+    /**
+     * Prints the resolution information of the given {@code model} to {@code System.out}.
+     * 
+     * @param <M> the model type
+     * @param model the model
+     * @param mgt the optional model management if also model locations shall be emitted, may be <b>null</b>
+     */
+    private static <M extends IModel> void printModelInfo(M model, ModelManagement<M> mgt) {
+        System.out.print(model.getName());
+        if (model.getVersion() != null) {
+            System.out.print(" " + model.getVersion());
+        }
+        if (null != mgt) {
+            ModelInfo<M> info = mgt.availableModels().getModelInfo(model);
+            if (null != info) {
+                System.out.print(" -> " + info.getLocation());
+            }
+        }
+        System.out.println();
+    }
+
+    /**
+     * Prints the import resolution of the given {@code model} to {@code System.out}.
+     * 
+     * @param <M> the model type
+     * @param model the model
+     * @param mgt the optional model management if also model locations shall be emitted, may be <b>null</b>
+     * @param done already done/visited models
+     * @param indent characters to be emitted before model information
+     */
+    @SuppressWarnings("unchecked")
+    private static <M extends IModel> void printResolution(M model, ModelManagement<M> mgt, Set<M> done, 
+        String indent) {
+        boolean isDone = done.contains(model);
+        String marker = isDone ? "~" : "-";
+        System.out.print(indent + marker + " ");
+        printModelInfo(model, mgt);
+        if (!isDone) {
+            done.add(model);
+            if (null != model.getSuper()) {
+                System.out.println(indent + "- super:");
+                printResolution((M) model.getSuper().getResolved(), mgt, done, indent + "  ");
+            }
+            for (int m = 0; m < model.getImportsCount(); m++) {
+                ModelImport<M> imp = (ModelImport<M>) model.getImport(m);
+                System.out.println(indent + "- import:" + imp.getName());
+                printResolution(imp.getResolved(), mgt, done, indent + "  ");
+            }
+        }
+    }
 
 }
