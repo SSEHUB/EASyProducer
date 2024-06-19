@@ -1,4 +1,4 @@
-project ApiTechnicalSetup {
+project TechnicalSetup {
 
     import CommonSetupNoMonUi;
 

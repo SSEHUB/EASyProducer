@@ -1,4 +1,4 @@
-project ApiAllServices {
+project AllServices {
 
     import AllServicesPart*; 
     import IDTA_02002_ContactInformations with (IDTA_02002_ContactInformations.version == v1.0);

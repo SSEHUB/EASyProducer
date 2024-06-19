@@ -1,6 +1,6 @@
-project SimpleMesh3AllTypes {
+project AllServices {
 
-    import SimpleMesh3AllTypesPart*; 
+    import AllServicesPart*; 
     
     // unusual for managed model structure but required for reuse in testing/evaluation environment
     

@@ -1,6 +1,6 @@
 project AllTypes {
 
-    import IIPEcosphere; 
+    import AllTypesPart*; 
     import AllConstants;
     
     annotate BindingTime bindingTime = BindingTime::compile to .;

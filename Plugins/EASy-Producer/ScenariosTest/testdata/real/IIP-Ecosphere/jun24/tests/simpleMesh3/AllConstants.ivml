@@ -1,4 +1,4 @@
-project SimpleMesh3AllConstants {
+project AllConstants {
 
     import IIPEcosphere; 
     

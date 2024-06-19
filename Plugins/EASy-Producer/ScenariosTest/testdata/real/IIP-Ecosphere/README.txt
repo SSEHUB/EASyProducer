@@ -5,7 +5,6 @@ Per version:
   - If there, in IIPEcosphere.vil set Boolean tests = false;
   
 Since jun24
-  - Renamed managed platform configuration IVMLs to unique application names
   - Maven, Docker, LXC disabled in VIL
   - ZIP files removed
   - target folders removed

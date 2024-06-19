@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.junit.Assert;
 
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.modelManagement.Utils;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
@@ -53,7 +55,7 @@ import static test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.NUM_FULL
  */
 public abstract class AbstractScenarioTest extends AbstractTest<Script> {
 
-    protected static boolean debug = false;
+    protected static boolean debug = true;
     // enable/switch of instantiation by default, helpful for reasoning performance experiments
     protected static boolean instantiate = Boolean.valueOf(System.getProperty("easy.scenario.instantiate", "true"));
 
@@ -259,11 +261,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         public String getTempFolderName(String projectName);
         
         /**
-         * Optional name of the sub-folder the model is located within.
+         * Optional folder containing the actual configuration.
          * 
          * @return may be <b>null</b> for none
          */
-        public default String getModelSubFolder() {
+        public default String[] getConfigurationFolder() {
             return null;
         }
         
@@ -385,16 +387,17 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
         File vilFolder = getVilFolderIn(temp);
         File vtlFolder = getVtlFolderIn(temp);
         File modelFolder = ivmlFolder;
+        File[] cfgFolder = null;
         if (null != modifier) {
             modifier.postCopy(temp);
-            if (null != modifier.getModelSubFolder()) {
-                modelFolder = new File(modelFolder, modifier.getModelSubFolder());
+            String[] cfg = modifier.getConfigurationFolder();
+            if (null != cfg && cfg.length > 0) {
+                cfgFolder = Arrays.stream(cfg).map(f -> new File(temp, f)).toArray(File[]::new);
+                modelFolder = cfgFolder[0];
             }
         }
         activateBuildProperties(vilFolder);
-        System.out.println("Registering model location...");
-        doLocations(ivmlFolder, vilFolder, vtlFolder, true);
-        System.out.println("Loading IVML...");
+        doLocations(ivmlFolder, vilFolder, vtlFolder, cfgFolder, true);
         net.ssehub.easy.varModel.model.Project iModel = obtainIvmlModel(iModelName, project(versions, 0), modelFolder);
         Configuration config = assertConfiguration(iModel, mode);
         File targetFile = null;
@@ -417,6 +420,10 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             param.put(Executor.PARAM_CONFIG, config);
             configureExecution(projectName, param);
             System.out.println("Executing VIL...");
+            for (Project p : tmp) {
+                System.out.println(" Source: " + p.getPath());
+            }
+            System.out.println(" Target: " + target.getPath());
             TracerFactory current = TracerFactory.getInstance();
             TracerFactory tFactory = getTracerFactory();
             TracerFactory.setDefaultInstance(tFactory);
@@ -426,7 +433,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             execute(executor, modifier, tFactory);
             TracerFactory.setDefaultInstance(current);
         }
-        doLocations(ivmlFolder, vilFolder, vtlFolder, false);
+        doLocations(ivmlFolder, vilFolder, vtlFolder, cfgFolder, false);
         return targetFile;
     }
 
@@ -457,14 +464,22 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @param ivmlFolder the IVML folder
      * @param vilFolder the VIL folder
      * @param vtlFolder the VTL folder
+     * @param cfgFolder optional IVML folder (usually containing the configuration, may be <b>null</b> for none) 
      * @param add <code>true</code> for adding as locations, <code>false</code> for removing
      */
-    private void doLocations(File ivmlFolder, File vilFolder, File vtlFolder, boolean add) {
+    private void doLocations(File ivmlFolder, File vilFolder, File vtlFolder, File[] cfgFolder, boolean add) {
+        System.out.println("Registering model location...");
         try {
             // those loaders shall already be registered through subclassing AbstractTest
             if (add) {
                 System.out.println(" Adding IVML location " + ivmlFolder);
                 VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                if (null != cfgFolder) {
+                    for (File c : cfgFolder) {
+                        System.out.println(" Adding IVML config location " + c);
+                        VarModel.INSTANCE.locations().addLocation(c, ProgressObserver.NO_OBSERVER);
+                    }
+                }
                 System.out.println(" Adding VIL location " + vilFolder);
                 BuildModel.INSTANCE.locations().addLocation(vilFolder, ProgressObserver.NO_OBSERVER);
                 System.out.println(" Adding VTL location " + vtlFolder);
@@ -472,6 +487,12 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             } else {
                 System.out.println(" Removing IVML location " + ivmlFolder);
                 VarModel.INSTANCE.locations().removeLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                if (null != cfgFolder) {
+                    for (File c : cfgFolder) {
+                        System.out.println(" Adding IVML config location " + c);
+                        VarModel.INSTANCE.locations().removeLocation(c, ProgressObserver.NO_OBSERVER);    
+                    }
+                }
                 System.out.println(" Removing VIL location " + vilFolder);
                 BuildModel.INSTANCE.locations().removeLocation(vilFolder, ProgressObserver.NO_OBSERVER);
                 System.out.println(" Removing VTL location " + vtlFolder);
@@ -560,7 +581,11 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      * @return the tracer factory
      */
     protected TracerFactory getTracerFactory() {
-        return new MyTracerFactory();
+        if (debug) {
+            return net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory.INSTANCE;
+        } else {
+            return new MyTracerFactory();
+        }
     }
     
     /**
@@ -602,6 +627,7 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
      */
     protected static net.ssehub.easy.varModel.model.Project obtainIvmlModel(String projectName, String ivmlVersion,
         File ivmlFolder) {
+        System.out.println("Loading IVML...");
         String versionSuffix = "";
         if (null != ivmlVersion) {
             versionSuffix = "_" + ivmlVersion;
@@ -613,6 +639,9 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
                 VarModel.INSTANCE.availableModels().getModelInfo(projectName, ivmlVersion, modelURI);
             Assert.assertNotNull("IVML model " + projectName + " cannot be found", info);
             ivmlModel = VarModel.INSTANCE.load(info);
+            if (debug) {
+                Utils.printResolution(ivmlModel, VarModel.INSTANCE);
+            }
         } catch (VersionFormatException e) {
             Assert.fail("version information invalid (IVML)");
         } catch (ModelManagementException e) {

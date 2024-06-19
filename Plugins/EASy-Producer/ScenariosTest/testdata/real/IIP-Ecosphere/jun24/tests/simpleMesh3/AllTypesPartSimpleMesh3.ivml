@@ -1,4 +1,4 @@
-project SimpleMesh3AllTypesPartSimpleMesh3 {
+project AllTypesPartSimpleMesh3 {
 
     import IIPEcosphere; 
     

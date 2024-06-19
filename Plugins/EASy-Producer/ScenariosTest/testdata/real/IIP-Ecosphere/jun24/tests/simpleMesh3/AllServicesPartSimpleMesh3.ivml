@@ -1,6 +1,6 @@
-project SimpleMesh3AllServicesPartSimpleMesh3 {
+project AllServicesPartSimpleMesh3 {
 
-    import SimpleMesh3AllTypes; 
+    import AllTypes; 
     
     annotate BindingTime bindingTime = BindingTime::compile to .;
 

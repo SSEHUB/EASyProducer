@@ -1,4 +1,4 @@
-project SimpleMesh3TechnicalSetup {
+project TechnicalSetup {
 
     import CommonSetupNoMonUi;
 
