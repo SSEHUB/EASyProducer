@@ -73,6 +73,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
      * Adds the test data locations. Override to avoid.
      */
     protected void addTestDataLocations() {
+        System.out.println("Adding default testdata locations: " + getTestDataDir());
         try {
             VarModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
             configurer.getModelManagement().locations().addLocation(getTestDataDir(), OBSERVER);
