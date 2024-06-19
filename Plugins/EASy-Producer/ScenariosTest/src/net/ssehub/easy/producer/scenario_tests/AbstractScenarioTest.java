@@ -55,7 +55,7 @@ import static test.net.ssehub.easy.reasoning.core.reasoner.AbstractTest.NUM_FULL
  */
 public abstract class AbstractScenarioTest extends AbstractTest<Script> {
 
-    protected static boolean debug = true;
+    protected static boolean debug = false;
     // enable/switch of instantiation by default, helpful for reasoning performance experiments
     protected static boolean instantiate = Boolean.valueOf(System.getProperty("easy.scenario.instantiate", "true"));
 
