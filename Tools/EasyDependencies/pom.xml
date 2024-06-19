@@ -508,6 +508,7 @@
               <argLine>-Dosgi.arch=x86</argLine> 
               <useUIHarness>false</useUIHarness>
               <useUIThread>false</useUIThread>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
             </configuration>
           </execution>        
         </executions>
