@@ -72,6 +72,12 @@
       <layout>p2</layout>
       <url>https://download.eclipse.org/eclipse/updates/4.31/</url>
     </repository>
+    <repository>
+      <id>SSE-mvn</id> <!-- same ID as in easy-maven-settings.xml -->
+      <name>SSE</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+      <layout>default</layout>
+    </repository>
   </repositories>  
 
   <!-- Versions are basically determined by the underlying Eclipse version. Be as restrictive as you can 
