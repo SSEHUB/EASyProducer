@@ -41,6 +41,7 @@ public class RealTests extends AbstractRealTests {
     
     @Override
     protected void addTestDataLocations() {
+        // prevent testdata dir as default IVML location
     }
 
     /**
@@ -656,7 +657,6 @@ public class RealTests extends AbstractRealTests {
      */
     @Test
     public void testOktoflowJun24() throws IOException {
-        org.junit.Assume.assumeTrue(System.getProperty("os.name").startsWith("Windows")); // resolution fails on linux
         final String folder = "jun24";
         executeIipCase(folder, "PlatformConfiguration", "generateApi", "tests/api", "tests/common");
         executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");

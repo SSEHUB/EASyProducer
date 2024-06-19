@@ -10,8 +10,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
-    ScenarioRampUpTest.class, // must be first
-    RealTests.class, 
+    ScenarioRampUpTest.class, // must be first as it disables testdata as default IVML location
+    RealTests.class, // must be second as it disables testdata as default IVML location
     DynamicFreezeTest.class, 
     ConceptsTests.class, 
     ExperimentsTests.class, 

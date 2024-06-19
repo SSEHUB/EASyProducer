@@ -61,5 +61,10 @@ public class RampUpTest extends AbstractEasyScenarioTest {
         rResult.logInformation(cfg.getProject(), rConfig, false);
         Assert.assertFalse(rResult.hasConflict());
     }
+    
+    @Override
+    protected void addTestDataLocations() {
+        // prevent testdata dir as default IVML location
+    }
 
 }
