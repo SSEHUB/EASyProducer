@@ -20,7 +20,7 @@
     </target>
 
 	<target name="all" depends="mvn">
-        <ant antfile="../build.xml" dir="pom-deps" target="subDirTarget"
+        <ant antfile="${basedir}/build.xml" dir="pom-deps" target="subDirTarget"
           inheritAll="true" inheritRefs="true" />
 	</target>
 	<target name="all.runtime" depends="mvn"/>
