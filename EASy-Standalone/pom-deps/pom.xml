@@ -166,7 +166,7 @@
 	          <version>${project.version}</version>
 	      </dependency>
 	      <dependency>
-	          <groupId>net.ssehub.easy.runtime</groupId>
+	          <groupId>net.ssehub.easy</groupId>
 	          <artifactId>net.ssehub.easy.loader</artifactId>
 	          <version>${project.version}</version>
 	      </dependency>
