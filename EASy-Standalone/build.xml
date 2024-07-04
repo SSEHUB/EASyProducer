@@ -20,7 +20,14 @@
     </target>
 
 	<target name="all" depends="mvn">
-		<mvnDeployPom folderName="poms" pomFile="pom-deps.xml" />
+        <ant antfile="../build.xml" dir="pom-deps" target="subDirTarget"
+          inheritAll="true" inheritRefs="true" />
 	</target>
 	<target name="all.runtime" depends="mvn"/>
+	
+    <target name="subDirTarget">
+        <echo message="Deploying selected poms in: ${basedir}" />
+        <maven pomFile="pom.xml" goal="deploy"/>
+    </target>
+	
 </project>

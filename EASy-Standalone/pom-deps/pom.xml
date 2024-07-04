@@ -49,6 +49,49 @@
   <scm>
     <url>https://github.com/SSEHUB/EASyProducer.git</url>
   </scm>
+  
+  <repositories>       
+    <repository>
+      <id>sse</id>
+      <name>sse</name>
+      <url>https://projects.sse.uni-hildesheim.de/qm/maven/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories> 
+  
+  <distributionManagement>
+    <repository>
+      <id>sse-projects</id>
+      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+    </repository>
+    <snapshotRepository>
+      <id>sse-projects</id>
+      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+      
+    </plugins>
+
+    <extensions>
+      <!-- Enabling the use of SSH -->
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+         <artifactId>wagon-ssh-external</artifactId>
+         <version>1.0-beta-6</version>
+      </extension>
+      
+    </extensions>
+    
+  </build>    
 
   <!-- declares all EASy parts for library/command line execution via POM as dependencies for importing them into a 
        using POM without declaring the versions. -->
