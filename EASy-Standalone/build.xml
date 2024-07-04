@@ -19,6 +19,8 @@
         <ant dir="EASyCommandLineTest" antfile="${build.script.name}" />
     </target>
 
-	<target name="all" depends="mvn"/>
+	<target name="all" depends="mvn">
+		<mvnDeployPom folderName="poms" pomFile="pom-deps.xml" />
+	</target>
 	<target name="all.runtime" depends="mvn"/>
 </project>
