@@ -62,7 +62,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @Instantiator("maven")
 public class Maven extends AbstractFileInstantiator {
 
-    private static final String TMP_FOLDER = "easy-maven369";
+    private static final String TMP_FOLDER = "easy-maven367";
     private static final boolean FILTER_SLF4J = true;
     private static final boolean CMD_TEST = true;
     // folder without /lib!

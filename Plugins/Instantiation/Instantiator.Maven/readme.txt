@@ -3,4 +3,4 @@ Updating Maven:
   - copy new files from maven dist 
   - Execute "dir /B > ..\dir.list" in lib
   - Ensure that all new files are in build.properties
-  
+  - run Main in maven, once with OSGI maven dependency, once without  
