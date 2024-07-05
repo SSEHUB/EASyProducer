@@ -433,13 +433,14 @@ public class Maven extends AbstractFileInstantiator {
     
     /**
      * Tries to unpack the Maven libraries to <i>tmpDir</i>{@link #TMP_FOLDER} by reading <code>lib/dir.list</code>.
+     * Update on Windows: Execute {@code dir /B > ..\dir.list} in lib, don't forget plexus-classworlds
      * 
      * @param classpath the classpath (assuming a single entry) as fallback result
      * @return the folder with the unpacked libraries or the fallback folder based on <code>classpath</code>
      */
     private static File tryUnpack(String classpath) {
         File result = new File(classpath).getParentFile();
-        InputStream list = getResourceAsStream("/lib/dir.list");
+        InputStream list = getResourceAsStream("/dir.list");
         if (list != null) {
             result = new File(FileUtils.getTempDirectory(), TMP_FOLDER);
             File target = new File(result, "lib");
@@ -672,12 +673,12 @@ public class Maven extends AbstractFileInstantiator {
                 // ignore
             }
         }
-        String classpath = getClasspath();       
+        String classpath = getClasspath();
         URL[] urls = Activator.getJars(); // null if not OSGi or not found
         if (null == classpath && null == urls && contextClassLoader instanceof URLClassLoader) {
             // for running EASy in standalone mode
             urls = ((URLClassLoader) contextClassLoader).getURLs();
-        } 
+        } // JDK 17: we could use ClassGraph, but this delivers too much information, also the included JARs
         if (null == classpath && null != urls) {
             classpath = "";
             for (URL u : urls) {
