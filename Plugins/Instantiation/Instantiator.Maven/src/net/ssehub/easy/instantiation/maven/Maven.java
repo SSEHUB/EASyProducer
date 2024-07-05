@@ -433,7 +433,6 @@ public class Maven extends AbstractFileInstantiator {
     
     /**
      * Tries to unpack the Maven libraries to <i>tmpDir</i>{@link #TMP_FOLDER} by reading <code>lib/dir.list</code>.
-     * Update on Windows: Execute {@code dir /B > ..\dir.list} in lib, don't forget plexus-classworlds
      * 
      * @param classpath the classpath (assuming a single entry) as fallback result
      * @return the folder with the unpacked libraries or the fallback folder based on <code>classpath</code>
