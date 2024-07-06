@@ -38,5 +38,13 @@ public interface ILoader {
      * @param verbose shall we be verbose?
      */
     public void setVerbose(boolean verbose);
+    
+    /**
+     * Sets the class loader for loading EASy bundles. By default, the class loader of the implementing
+     * class is used.
+     * 
+     * @param loader the loader, ignored if <b>null</b> 
+     */
+    public void setLoader(ClassLoader loader);
 
 }

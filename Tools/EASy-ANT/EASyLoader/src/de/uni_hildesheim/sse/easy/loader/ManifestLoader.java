@@ -60,18 +60,43 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
      * @throws IOException if loading fails
      */
     public ManifestLoader(boolean verbose) throws IOException {
-        super(loadManifests(verbose));
+        this(verbose, null);
+    }
+
+    /**
+     * Creates a manifest loader.
+     * 
+     * @param verbose whether verbose output shall be produced
+     * @param loader the resource/bundle loader, may be <b>null</b> for default (this class/this thread context)
+     * @throws IOException if loading fails
+     */
+    public ManifestLoader(boolean verbose, ClassLoader loader) throws IOException {
+        super(loadManifests(verbose, loader));
         setVerbose(verbose);
+        super.setLoader(loader); // otherwise reloads
+    }
+
+    @Override
+    public void setLoader(ClassLoader loader) {
+        super.setLoader(loader);
+        if (null != loader) {
+            try {
+                setStartupSequence(loadManifests(isVerbose(), loader));
+            } catch (IOException e) {
+                System.err.println("Error reading manifests: " + e.getMessage());
+            }
+        }
     }
     
     /**
      * Loads the available manifests.
      * 
      * @param verbose whether verbose output shall be produced
+     * @param loader the classloader to get the manifest resources from, may be <b>null</b> for this thread context
      * @return information instances about the loaded services/activators
      * @throws IOException if loading fails
      */
-    public static List<StartupInfo> loadManifests(boolean verbose) throws IOException {
+    public static List<StartupInfo> loadManifests(boolean verbose, ClassLoader loader) throws IOException {
         try {
             List<StartupInfo> reasoning = new ArrayList<>();
             List<StartupInfo> ivml = new ArrayList<>();
@@ -79,8 +104,8 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
             List<StartupInfo> vilVtl = new ArrayList<>();
             List<StartupInfo> instantiators = new ArrayList<>();
             List<StartupInfo> rest = new ArrayList<>();
-            final Enumeration<URL> resources = Thread.currentThread()
-                .getContextClassLoader()
+            ClassLoader resourceLoader = null == loader ? Thread.currentThread().getContextClassLoader() : loader;
+            final Enumeration<URL> resources =  resourceLoader
                 .getResources(MF_PATH);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();

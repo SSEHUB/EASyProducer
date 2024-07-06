@@ -27,6 +27,7 @@ public class Loader extends AbstractLoader implements ILoader {
 
     private List<BundleInfo> data;
     private ClassLoader loader;
+    private ClassLoader parentLoader;
     
     /*private static final IBundleFilter FILTER_EASY_BUNDLES 
         = new SimpleManifestNameFilter(EASY_NAME_PATTERN);*/
@@ -121,7 +122,8 @@ public class Loader extends AbstractLoader implements ILoader {
      */
     public ClassLoader loadAndInitialize(List<URL> urls, List<BundleInfo> infos) {
         if (!urls.isEmpty()) {
-            loader = new URLClassLoader(Utils.toArray(urls));
+            URL[] urlsArray = Utils.toArray(urls);
+            loader = null == parentLoader ? new URLClassLoader(urlsArray) : new URLClassLoader(urlsArray, parentLoader);
             for (int i = 0; i < infos.size(); i++) {
                 BundleInfo info = infos.get(i);
                 System.out.println("activating " + info.getName() + " " + info.getTag());
@@ -192,6 +194,11 @@ public class Loader extends AbstractLoader implements ILoader {
     @Override
     public void setVerbose(boolean verbose) {
         // ignored
+    }
+
+    @Override
+    public void setLoader(ClassLoader loader) {
+        this.parentLoader = loader;
     }
     
 }

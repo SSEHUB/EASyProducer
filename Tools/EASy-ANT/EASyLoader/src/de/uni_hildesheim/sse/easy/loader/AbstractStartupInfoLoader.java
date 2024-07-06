@@ -26,6 +26,7 @@ public abstract class AbstractStartupInfoLoader implements ILoader {
 
     private boolean verbose = false;
     private List<StartupInfo> startupSequence;
+    private ClassLoader loader = AbstractStartupInfoLoader.class.getClassLoader();
     
     /**
      * Creates an instance with given startup sequence.
@@ -33,6 +34,15 @@ public abstract class AbstractStartupInfoLoader implements ILoader {
      * @param startupSequence the startup sequence to use
      */
     protected AbstractStartupInfoLoader(List<StartupInfo> startupSequence) {
+        setStartupSequence(startupSequence);
+    }
+    
+    /**
+     * Sets the startup sequence.
+     * 
+     * @param startupSequence the startup sequence
+     */
+    protected void setStartupSequence(List<StartupInfo> startupSequence) {
         this.startupSequence = startupSequence;
     }
     
@@ -40,7 +50,7 @@ public abstract class AbstractStartupInfoLoader implements ILoader {
     public void startup() {
         final boolean verbose = isVerbose();
         for (StartupInfo info : startupSequence) {
-            info.start(verbose);
+            info.start(verbose, loader);
         }
     }
 
@@ -48,7 +58,7 @@ public abstract class AbstractStartupInfoLoader implements ILoader {
     public void shutdown() {
         final boolean verbose = isVerbose();
         for (StartupInfo info : startupSequence) {
-            info.stop(verbose);
+            info.stop(verbose, loader);
         }
     }
 
@@ -64,6 +74,22 @@ public abstract class AbstractStartupInfoLoader implements ILoader {
      */
     public boolean isVerbose() {
         return verbose;
+    }
+
+    @Override
+    public void setLoader(ClassLoader loader) {
+        if (null != loader) {
+            this.loader = loader;
+        }
+    }
+
+    /**
+     * Returns the class loader to use.
+     * 
+     * @return the class laoder
+     */
+    protected ClassLoader getLoader() {
+        return loader;
     }
 
 }

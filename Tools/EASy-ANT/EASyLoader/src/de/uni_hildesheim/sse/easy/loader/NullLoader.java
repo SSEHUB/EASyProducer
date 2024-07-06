@@ -35,4 +35,8 @@ public class NullLoader implements ILoader {
     public void setVerbose(boolean verbose) {
     }
 
+    @Override
+    public void setLoader(ClassLoader loader) {
+    }
+
 }

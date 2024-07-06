@@ -45,7 +45,7 @@ public class ManifestLoaderTest {
      */
     @Test
     public void testManifestLoader() throws IOException, ParserConfigurationException {
-        List<StartupInfo> mfInfos = ManifestLoader.loadManifests(true);
+        List<StartupInfo> mfInfos = ManifestLoader.loadManifests(true, null);
         System.out.println(mfInfos);
         
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

@@ -62,20 +62,21 @@ public class StartupInfo {
      * Starts up the associated class according to the startup type.
      * 
      * @param verbose {@code true} for verbose output, {@code false} else
+     * @param loader the class loader to use
      * @return <code>true</code> in case of success, <code>false</code> else
      */
-    public boolean start(boolean verbose) {
+    public boolean start(boolean verbose, ClassLoader loader) {
         boolean result;
         if (InitType.ACTIVATOR == type) {
             if (verbose) {
                 Log.info("START activator " + className);
             }
-            result = Utils.startBundle(getClass().getClassLoader(), className);
+            result = Utils.startBundle(loader, className);
         } else if (InitType.DS == type) {
             if (verbose) {
                 Log.info("START DS " + className);
             }
-            result = Utils.activateDsInstance(getClass().getClassLoader(), className);
+            result = Utils.activateDsInstance(loader, className);
         } else {
             result = false;
         }
@@ -86,20 +87,21 @@ public class StartupInfo {
      * Stops the associated class according to the shutdown type.
      * 
      * @param verbose {@code true} for verbose output, {@code false} else
+     * @param loader the class loader to use
      * @return <code>true</code> in case of success, <code>false</code> else
      */
-    public boolean stop(boolean verbose) {
+    public boolean stop(boolean verbose, ClassLoader loader) {
         boolean result;
         if (InitType.ACTIVATOR == type) {
             if (verbose) {
                 Log.info("STOP activator " + className);
             }
-            result = Utils.stopBundle(getClass().getClassLoader(), className);
+            result = Utils.stopBundle(loader, className);
         } else if (InitType.DS == type) {
             if (verbose) {
                 Log.info("STOP DS " + className);
             }
-            result = Utils.deactivateDsInstance(getClass().getClassLoader(), className);
+            result = Utils.deactivateDsInstance(loader, className);
         } else {
             result = false;
         }
