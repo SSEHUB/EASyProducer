@@ -32,6 +32,17 @@ public class ListLoader extends AbstractStartupInfoLoader {
     }
 
     /**
+     * Creates a list loader that reads the startup sequence from the given class loader, i.e., 
+     * from {@link #EASY_STARTUP_FILE_NAME}.
+     * 
+     * @param loader the class loader to load from
+     * @throws IOException in case of loading the startup sequence fails
+     */
+    public ListLoader(ClassLoader loader) throws IOException {
+        this((File) null, loader);
+    }
+
+    /**
      * Creates a list loader that reads the startup sequence from the given file.
      * 
      * @param listFile the file to consider (may be <b>null</b> for reading information from the defailt

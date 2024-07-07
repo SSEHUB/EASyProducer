@@ -54,6 +54,16 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
     }
 
     /**
+     * Creates a manifest loader with initially non-verbose output.
+     * 
+     * @param loader the resource/bundle loader, may be <b>null</b> for default (this class/this thread context)
+     * @throws IOException if loading fails
+     */
+    public ManifestLoader(ClassLoader loader) throws IOException {
+        this(false, loader);
+    }
+
+    /**
      * Creates a manifest loader.
      * 
      * @param verbose whether verbose output shall be produced
