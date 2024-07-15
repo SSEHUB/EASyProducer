@@ -1,0 +1,10 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+    f <- JCATest.java
+    -> addClass(JavaCodeArtifact, String) with (JCATest.java, JCATest) = JavaClass: JCATest
+    cls <- JavaClass: JCATest
+    -> addAttribute(JavaCodeClass, String, String) with (JavaClass: JCATest, int, myInt) = JavaAttribute: myInt
+    -> addMethod(JavaCodeClass, String, String, String) with (JavaClass: JCATest, java.util.List<Integer>, getIntegerList, Returns an integer list.) = JavaMethod: getIntegerList
+    -> addParameter(JavaCodeMethod, String, String, String) with (JavaMethod: getIntegerList, int, length, the length) = JavaParameter int length
+    -> addClass(JavaCodeArtifact, String) with (JCATest.java, MyInterface) = JavaClass: MyInterface
+    cls <- JavaClass: MyInterface
+    -> asInterface(JavaCodeClass) with (JavaClass: MyInterface) = JavaClass: MyInterface

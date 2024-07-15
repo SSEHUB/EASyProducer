@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="VIL UI">
-   <implementation class="de.uni_hildesheim.sse.ui.embed.EditorUtils"/>
+   <implementation class="de.uni_hildesheim.sse.vil.buildlang.ui.embed.EditorUtils"/>
    <service>
       <provide interface="de.uni_hildesheim.sse.dslcore.ui.EditorEmbedderFactory.IEditorCreator"/>
    </service>

@@ -1,0 +1,86 @@
+/*
+ * Copyright 2009-2024 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.ssehub.easy.instantiation.java.codeArtifacts;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
+
+public class JavaCodeAnnotation implements IJavaCodeElement {
+
+    private String type;
+    private IJavaCodeElement annotated;
+    private List<JavaCodeAnnotationArgument> arguments;
+    
+    JavaCodeAnnotation(String type, IJavaCodeElement annotated) {
+        this.annotated = annotated;
+        this.type = getArtifact().validateType(type);
+    }
+    
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "JavaAnnotation " + type;
+    }
+
+    /**
+     * Adds an annotation argument.
+     * 
+     * @param name the name
+     * @param value the value
+     */
+    public void addArgument(String name, String value) {
+        addArgument(name, value);
+    }
+    
+    /**
+     * Adds an annotation argument.
+     * 
+     * @param name the name
+     * @param value the value
+     * @param valueAsString shall the value be escaped and surrounded by quotes if not already given?
+     */
+    public void addArgument(String name, String value, boolean valueAsString) {
+        if (null == arguments) {
+            arguments = new ArrayList<>();
+        }
+        if (valueAsString) {
+            value = StringEscapeUtils.escapeJava(value);
+            if (!value.startsWith("\"")) {
+                value += "\"";
+            }
+            if (!value.endsWith("\"")) {
+                value += "\"";
+            }
+        }
+        IJavaCodeElement.add(arguments, new JavaCodeAnnotationArgument(name, value, this));
+    }
+
+    @Override
+    public void store(CodeWriter out) {
+        out.printwi("@");
+        out.print(type);
+        out.print("(");
+        IJavaCodeElement.storeList(arguments, ", ", out);
+        out.println(")");
+    }
+
+    @Override
+    public IJavaCodeArtifact getArtifact() {
+        return annotated.getArtifact();
+    }
+
+}

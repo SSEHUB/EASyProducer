@@ -46,7 +46,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     /**
      * Default constructor for {@link IActualValueProvider actual value provider template}.
      */
-    FileArtifact() {
+    public FileArtifact() {
     }
     
     /**

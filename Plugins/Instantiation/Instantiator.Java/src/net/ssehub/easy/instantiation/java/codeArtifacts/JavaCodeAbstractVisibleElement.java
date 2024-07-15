@@ -1,0 +1,88 @@
+/*
+ * Copyright 2009-2024 University of Hildesheim, Software Systems Engineering
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package net.ssehub.easy.instantiation.java.codeArtifacts;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+
+public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElement {
+
+    private boolean isAbstract;
+    private List<String> generics;
+    
+    protected JavaCodeAbstractVisibleElement(String name, Visibility visibility, String comment) {
+        super(name, visibility, comment);
+    }
+
+    /**
+     * Sets this element's abstract state.
+     * 
+     * @param isAbstract if the element is abstract
+     */
+    @OperationMeta(name = {"abstract"})
+    public void setAbstract(boolean isAbstract) {
+        this.isAbstract = isAbstract;
+    }
+
+    /**
+     * Sets this element to abstract.
+     */
+    @OperationMeta(name = {"abstract"})
+    public void setAbstract() {
+        setAbstract(true);
+    }
+
+    /**
+     * Returns whether the element is abstract.
+     * 
+     * @return {@code true} for abstract, {@code false} for not abstract
+     */
+    public boolean isAbstract() {
+        return isAbstract;
+    }
+    
+    /**
+     * Adds a generic.
+     * 
+     * @param generic the generic
+     */
+    public void addGeneric(String generic) {
+        if (null == generics) {
+            generics = new ArrayList<>();
+        }
+        generics.add(generic);
+    }
+
+    @Invisible
+    @Override
+    protected String insertModifier(String text) {
+        String result = text;
+        if (isAbstract) {
+            result = IJavaCodeElement.appendWhitespace(text) + "abstract";
+        }
+        return result;
+    }
+
+    @Invisible
+    @Override
+    protected String insertGenerics(String text) {
+        return IJavaCodeElement.toList(generics, ", ");
+    }
+
+}

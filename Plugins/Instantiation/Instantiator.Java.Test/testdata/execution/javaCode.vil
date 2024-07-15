@@ -1,0 +1,14 @@
+vilScript JavaCode (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {
+        JavaCodeArtifact f = "$target/JCATest.java";
+        JavaCodeClass cls = f.addClass("JCATest");
+        cls.addAttribute("int", "myInt");
+        cls.addMethod("java.util.List<Integer>", "getIntegerList", "Returns an integer list.").addParameter("int", "length", "the length");
+        cls = f.addClass("MyInterface");
+        cls.asInterface();
+    }
+
+}

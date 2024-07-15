@@ -6,7 +6,7 @@
     <extension
             point="org.eclipse.ui.editors">
         <editor
-              class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:de.uni_hildesheim.sse.ui.XtextEditor"
+              class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
               contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
               default="true"
               extensions="vil"
@@ -18,7 +18,7 @@
     <extension
         point="org.eclipse.ui.handlers">
         <handler
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
             commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
             <activeWhen>
                 <reference
@@ -27,7 +27,7 @@
             </activeWhen>
         </handler>
         <handler
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
             commandId="de.uni_hildesheim.sse.VilBuildLanguage.validate">
          <activeWhen>
             <reference
@@ -52,21 +52,21 @@
             point="org.eclipse.ui.preferencePages">
         <page
             category="de.uni_hildesheim.sse.EASy"
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage"
             name="Variability Implementation Language (VIL)">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.VilBuildLanguage"
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            category="de.uni_hildesheim.sse.VilBuildLanguage"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.VilBuildLanguage"
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            category="de.uni_hildesheim.sse.VilBuildLanguage"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage.templates"
             name="Templates">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
@@ -76,7 +76,7 @@
             point="org.eclipse.ui.propertyPages">
         <page
             category="de.uni_hildesheim.sse.EASy"
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.VilBuildLanguage"
             name="Variability Implementation Language (VIL)">
             <keywordReference id="de.uni_hildesheim.sse.ui.keyword_VilBuildLanguage"/>
@@ -127,7 +127,7 @@
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 	    <handler
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
             commandId="org.eclipse.xtext.ui.editor.FindReferences">
             <activeWhen>
                 <reference
@@ -142,13 +142,13 @@
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
 		<parser
-			class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
 			type="vil">
 		</parser>
 	</extension>
 	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
         <resourceServiceProvider
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
             uriExtension="vil">
         </resourceServiceProvider>
     </extension>
@@ -180,7 +180,7 @@
    <extension
          point="org.eclipse.xtext.builder.participant">
       <participant
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
       </participant>
    </extension>
    <!-- disable the compiler settings
@@ -213,7 +213,7 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
-			class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
 			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
 			<activeWhen>
 				<reference
@@ -246,7 +246,7 @@
     <extension
             point="org.eclipse.ui.ide.markerResolution">
         <markerResolutionGenerator
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
             markerType="de.uni_hildesheim.sse.ui.vilbuildlanguage.check.fast">
             <attribute
                 name="FIXABLE_KEY"
@@ -254,7 +254,7 @@
             </attribute>
         </markerResolutionGenerator>
         <markerResolutionGenerator
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
             markerType="de.uni_hildesheim.sse.ui.vilbuildlanguage.check.normal">
             <attribute
                 name="FIXABLE_KEY"
@@ -262,7 +262,7 @@
             </attribute>
         </markerResolutionGenerator>
         <markerResolutionGenerator
-            class="de.uni_hildesheim.sse.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            class="de.uni_hildesheim.sse.vil.buildlang.ui.VilBuildLanguageExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
             markerType="de.uni_hildesheim.sse.ui.vilbuildlanguage.check.expensive">
             <attribute
                 name="FIXABLE_KEY"
@@ -270,7 +270,7 @@
             </attribute>
         </markerResolutionGenerator>
     </extension>
-    <extension
+    <!--<extension
         point="org.eclipse.ui.newWizards">
       <wizard
             name="Instantiation Build Specification (VIL)"
@@ -283,5 +283,5 @@
             id="de.uni_hildesheim.sse.EASy_Producer"
             name="EASy-Producer">
       </category>        
-  </extension>
+  </extension>-->
 </plugin>
