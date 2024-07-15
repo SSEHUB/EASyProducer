@@ -6,7 +6,7 @@ import com.google.inject.Injector;
 
 import de.uni_hildesheim.sse.ConstraintSyntaxException;
 import de.uni_hildesheim.sse.ModelUtility;
-import de.uni_hildesheim.sse.ui.IvmlActivator;
+import de.uni_hildesheim.sse.ui.Activator;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.editors.EmbeddingHelper;
 import net.ssehub.easy.dslCore.ui.editors.IEmbeddedEditor;
@@ -42,8 +42,8 @@ public class EditorUtils {
     }
     
     private static Injector getInjector() {
-        IvmlActivator activator = IvmlActivator.getInstance();
-        return activator.getInjector(IvmlActivator.DE_UNI_HILDESHEIM_SSE_IVML);
+        Activator activator = Activator.getInstance();
+        return activator.getInjector(Activator.DE_UNI_HILDESHEIM_SSE_IVML);
     }
 
     /**

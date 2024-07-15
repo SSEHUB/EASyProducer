@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.BundleContext;
 
 import de.uni_hildesheim.sse.ModelUtility;
+import de.uni_hildesheim.sse.ivml.ui.internal.IvmlActivator;
 import de.uni_hildesheim.sse.ui.embed.EditorUtils;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.ui.EditorEmbedderFactory;
@@ -30,6 +31,10 @@ public class Activator extends IvmlActivator implements IEditorCreator, IModelEd
     public static final String PLUGIN_ID = "de.uni_hildesheim.sse.ivml.ui"; //$NON-NLS-1$
     public static final String EXTENSION = ModelUtility.INSTANCE.getExtension();
 
+    public static Activator getInstance() {
+        return (Activator) IvmlActivator.getInstance();
+    }
+    
     /**
      * Returns an image descriptor for the image file at the given
      * plug-in relative path

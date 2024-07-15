@@ -24,9 +24,15 @@ Import-Package: org.apache.commons.logging,
  org.apache.log4j
 aService-Component: OSGI-INF/contribution.xml
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Export-Package: de.uni_hildesheim.sse.ui.contentassist,
- de.uni_hildesheim.sse.ui.embed,
- de.uni_hildesheim.sse.ui.quickfix,
+Export-Package: de.uni_hildesheim.sse.ivml.ui.internal,
+ de.uni_hildesheim.sse.ivml.ui.wizards,
+ de.uni_hildesheim.sse.ui,
  de.uni_hildesheim.sse.ui.contentassist,
- de.uni_hildesheim.sse.ivml.ui.internal
+ de.uni_hildesheim.sse.ui.embed,
+ de.uni_hildesheim.sse.ui.hyperlinking,
+ de.uni_hildesheim.sse.ui.labeling,
+ de.uni_hildesheim.sse.ui.outline,
+ de.uni_hildesheim.sse.ui.quickfix,
+ de.uni_hildesheim.sse.ui.resources,
+ de.uni_hildesheim.sse.validation
 Bundle-Activator: de.uni_hildesheim.sse.ui.Activator
