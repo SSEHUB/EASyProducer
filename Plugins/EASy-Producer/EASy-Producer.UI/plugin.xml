@@ -143,7 +143,7 @@
             name="VTL Argument Provider">
       </page>
       <page
-            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.Ivml"
+            category="de.uni_hildesheim.sse.Ivml"
             class="net.ssehub.easy.producer.ui.configuration.IvmlIndentationPreferencePage"
             id="de.uni_hildesheim.sse.easy.ui.configuration.IvmlIndentationPreferencePage"
             name="Indentation">
