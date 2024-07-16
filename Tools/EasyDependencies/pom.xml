@@ -206,12 +206,12 @@
 	    </dependency>
         <dependency>
            <groupId>org.eclipse.xtext</groupId>
-           <artifactId>org.eclipse.xtext.ui</artifactId>
+           <artifactId>org.eclipse.xtext.ui</artifactId> <!-- self-deployed, not available -->
            <version>[2.35.0]</version>
         </dependency>
         <dependency>
            <groupId>org.eclipse.xtext</groupId>
-           <artifactId>org.eclipse.xtext.ui.shared</artifactId>
+           <artifactId>org.eclipse.xtext.ui.shared</artifactId> <!-- self-deployed, not available -->
            <version>[2.35.0]</version>
         </dependency>
         <dependency>
@@ -385,8 +385,8 @@
             <version>3.1.0</version>
         </dependency>         
         <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk18on</artifactId>
+            <groupId>org.bouncycastle</groupId> <!-- self-deployed, else fails with director -->
+            <artifactId>bcprov</artifactId>
             <version>1.78.1</version>
         </dependency>
         <dependency>
