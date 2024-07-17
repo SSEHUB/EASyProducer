@@ -49,8 +49,8 @@ public class Environment {
             result = (null != System.getProperty("eclipse.product", null)
                 || null != System.getProperty("eclipse.home.location", null)) 
                 && null != System.getProperty("eclipse.pde.launch");
-            result |= (null != System.getProperty("eclipse.vmargs") // early PDE startup
-                || null != System.getProperty("equinox.init.uuid"));
+            result |= (null != System.getProperty("eclipse.vmargs") // PDE startup, does not seem to be both in tests
+                && null != System.getProperty("equinox.init.uuid"));
             if (major >= 4 && minor >= 7) {
                 // however, the rule seems to be different here and PDE does not seem to work with EclipseResources
                 result &= System.getProperty("eclipse.product", "").indexOf("junit") < 0;
