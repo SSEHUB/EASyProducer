@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import net.ssehub.easy.basics.Environment;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.Bundle;
@@ -36,6 +37,7 @@ public class TypeRegistry {
     public static final TypeRegistry DEFAULT = new TypeRegistry();
 
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(TypeRegistry.class, Bundle.ID);
+    private static List<Runnable> deferredRegistrations = new ArrayList<>();
 
     /**
      * Caches the operations vs. inheriting invisible methods.
@@ -1141,6 +1143,31 @@ public class TypeRegistry {
             success = true;
         }
         return success;
+    }
+
+    /**
+     * Considers a deferred potentially problematic registration of types, e.g., as they implicitly would
+     * require an Eclipse workspace which is not ready at the time of execution, e.g., during service loading.
+     * If it is safe (not {@link Environment#runsInEclipse()}), then the {@code runnable} is executed immediately,
+     * else on request by {@link #runDeferredRegistrations()}.
+     * 
+     * @param runnable the runnable
+     */
+    public static void considerDeferredRegistration(Runnable runnable) {
+        if (Environment.runsInEclipse()) {
+            deferredRegistrations.add(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+    
+    /**
+     * Processes all deferred registrations.
+     */
+    public static void runDeferredRegistrations() {
+        for (Runnable r: deferredRegistrations) {
+            r.run();
+        }
     }
 
 }

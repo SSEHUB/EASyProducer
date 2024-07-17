@@ -32,26 +32,28 @@ public class Registration implements IRegistration {
      * Registers the Java artifacts and instantiators.
      */
     public static final void register() {
-        if (!registered) {
-            registered = true;
-            TypeRegistry.DEFAULT.register(Javac.class);
-            TypeRegistry.DEFAULT.register(Jar.class);
-            TypeRegistry.DEFAULT.register(Unjar.class);
+        TypeRegistry.considerDeferredRegistration(() -> {
+            if (!registered) {
+                registered = true;
+                TypeRegistry.DEFAULT.register(Javac.class);
+                TypeRegistry.DEFAULT.register(Jar.class);
+                TypeRegistry.DEFAULT.register(Unjar.class);
 
-            TypeRegistry.DEFAULT.register(CocktailInstantiator.class);
+                TypeRegistry.DEFAULT.register(CocktailInstantiator.class);
 
-            TypeRegistry.DEFAULT.register(ClassFileArtifact.class);
-            TypeRegistry.DEFAULT.register(JavaFileArtifact.class);
-            TypeRegistry.DEFAULT.register(JavaClass.class);
-            TypeRegistry.DEFAULT.register(JavaMethod.class);
-            TypeRegistry.DEFAULT.register(JavaAttribute.class);
-            TypeRegistry.DEFAULT.register(JavaAnnotation.class);
-            TypeRegistry.DEFAULT.register(JavaCall.class);
-            TypeRegistry.DEFAULT.register(JavaAssignment.class);
-            SettingsInitializerRegistry.register(new JavaSettingsInitializer());
-            TypeRegistry.DEFAULT.register(JavaSettings.class);
-            TypeRegistry.DEFAULT.register(JavaImport.class);
-        }
+                TypeRegistry.DEFAULT.register(ClassFileArtifact.class);
+                TypeRegistry.DEFAULT.register(JavaFileArtifact.class);
+                TypeRegistry.DEFAULT.register(JavaClass.class);
+                TypeRegistry.DEFAULT.register(JavaMethod.class);
+                TypeRegistry.DEFAULT.register(JavaAttribute.class);
+                TypeRegistry.DEFAULT.register(JavaAnnotation.class);
+                TypeRegistry.DEFAULT.register(JavaCall.class);
+                TypeRegistry.DEFAULT.register(JavaAssignment.class);
+                SettingsInitializerRegistry.register(new JavaSettingsInitializer());
+                TypeRegistry.DEFAULT.register(JavaSettings.class);
+                TypeRegistry.DEFAULT.register(JavaImport.class);
+            }
+        });
     }
     
     /**
