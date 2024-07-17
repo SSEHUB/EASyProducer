@@ -169,10 +169,10 @@
          point="org.eclipse.core.runtime.products">
       <product
             application="org.eclipse.ui.ide.workbench"
-            name="%productName">
+            name="EASy-Producer">
          <property
                name="appName"
-               value="%productName">
+               value="EASy-Producer">
          </property>
          <property
                name="startupForegroundColor"

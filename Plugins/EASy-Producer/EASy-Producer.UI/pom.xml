@@ -100,7 +100,7 @@
           <version>${project.version}</version>
       </dependency>
       
-      <!-- required for eclipse -->
+      <!-- required for eclipse/RCP import -->
       <dependency>
         <groupId>javax</groupId>
         <artifactId>servlet</artifactId>
@@ -116,6 +116,14 @@
     <dependency>
         <groupId>org.eclipse.ide</groupId>
         <artifactId>org.antlr.runtime</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.cm</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.metatype</artifactId>
     </dependency>
   </dependencies>  
  </project>
