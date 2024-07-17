@@ -18,7 +18,7 @@ Germany
    </configIni>
 
    <launcherArgs>
-      <programArgs>-consoleLog -debug -clean
+      <programArgs>-debug -clean
       </programArgs>
       <vmArgs>-Xms180m -Xmx6036m --add-modules=ALL-SYSTEM -Djava.security.manager=allow -Deasy.logging.level=DEBUG
       </vmArgs>
