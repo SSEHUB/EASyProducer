@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2024 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ public class Environment {
     
     /**
      * Checks whether EASy runs inside of Eclipse. Overridden to non-eclipse if system 
-     * property <code>easy.notInEclipse</code> is somehow set.
+     * property <code>easy.notInEclipse</code> is somehow set. There seems to be no safe way,
+     * so this method is based on observations and heuristics and may need adjustments over time.
      * 
      * @return {@code true} if EASy runs inside of Eclipse, {@code false} otherwise.
      */
@@ -48,6 +49,8 @@ public class Environment {
             result = (null != System.getProperty("eclipse.product", null)
                 || null != System.getProperty("eclipse.home.location", null)) 
                 && null != System.getProperty("eclipse.pde.launch");
+            result |= (null != System.getProperty("eclipse.vmargs") // early PDE startup
+                || null != System.getProperty("equinox.init.uuid"));
             if (major >= 4 && minor >= 7) {
                 // however, the rule seems to be different here and PDE does not seem to work with EclipseResources
                 result &= System.getProperty("eclipse.product", "").indexOf("junit") < 0;
