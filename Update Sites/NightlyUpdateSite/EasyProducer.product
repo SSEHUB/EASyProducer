@@ -20,7 +20,7 @@ Germany
    <launcherArgs>
       <programArgs>-consoleLog -debug -clean
       </programArgs>
-      <vmArgs>-Xms180m -Xmx6036m -Deasy.logging.level=DEBUG
+      <vmArgs>-Xms180m -Xmx6036m --add-modules=ALL-SYSTEM -Djava.security.manager=allow -Deasy.logging.level=DEBUG
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -32,7 +32,7 @@ Germany
       startupProgressRect="2,290,450,10"
       startupMessageRect="7,265,320,25"
       startupForegroundColor="ffffff" />
-   <launcher>
+   <launcher name="easy">
       <win useIco="false">
          <bmp/>
       </win>
@@ -784,13 +784,13 @@ APPENDIX: How to apply the Apache License to your work.
    </plugins>
 
    <configurations>
-      <plugin id="net.ssehub.easy.producer.ui" autoStart="true" startLevel="10" />
+      <plugin id="net.ssehub.easy.producer.ui" autoStart="false" startLevel="10" />
       <plugin id="org.apache.felix.scr" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.core.resources" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
-      <plugin id="org.eclipse.jdt" autoStart="true" startLevel="4" />
+      <plugin id="org.eclipse.jdt" autoStart="false" startLevel="9" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="-1" />
    </configurations>
 
