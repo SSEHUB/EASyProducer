@@ -1168,6 +1168,7 @@ public class TypeRegistry {
         for (Runnable r: deferredRegistrations) {
             r.run();
         }
+        deferredRegistrations.clear();
     }
 
 }
