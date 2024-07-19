@@ -15,21 +15,67 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
+/**
+ * Represents a Java method parameter (specification).
+ * 
+ * @author Holger Eichelberger
+ */
 public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
 
     private String name;
-    
+    private List<JavaCodeAnnotation> annotations;
+
+    /**
+     * Creates a parameter specification.
+     * 
+     * @param type the type of the parameter
+     * @param name the name of the parameter
+     * @param method the owning method
+     */
     protected JavaCodeParameterSpecification(String type, String name, JavaCodeMethod method) {
         super(type, method.getEnclosing());
         this.name = name;
     }
     
+    /**
+     * Creates a parameter specification.
+     * 
+     * @param type the type of the parameter
+     * @param name the name of the parameter
+     * @param method the owning method
+     */
+    protected JavaCodeParameterSpecification(JavaCodeTypeSpecification type, String name, JavaCodeMethod method) {
+        super(type, method.getEnclosing());
+        this.name = name;
+    }
+
+    /**
+     * Adds an annotation.
+     * 
+     * @param type the annotation type, may be fully qualified
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addAnnotation(String type) {
+        if (null == annotations) {
+            annotations = new ArrayList<>();
+        }
+        return IJavaCodeElement.add(annotations, 
+            new JavaCodeAnnotation(new JavaCodeTypeSpecification(type, getEnclosing()), this));
+    }
+
     @Invisible
     @Override
     public void store(CodeWriter out) {
-        // TODO annotation
+        if (null != annotations) {
+            for (JavaCodeAnnotation a : annotations) {
+                a.storeNoLn(out);
+            }
+        }
         super.store(out);
         out.print(" ");
         out.print(name);

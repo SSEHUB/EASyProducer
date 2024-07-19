@@ -15,57 +15,45 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-
 /**
- * Represents raw text.
+ * Represents a variable assignment.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeText implements IJavaCodeElement {
+public class JavaCodeSingleLineComment implements IJavaCodeElement {
 
+    private IJavaCodeElement parent;
     private String text;
-    private boolean indent;
-    private boolean endWithNewline;
-
-    /**
-     * Creates a raw text instance.
-     * 
-     * @param text the text
-     * @param indent does the text include an indentation or shall the text be indended by default
-     * @param endWithNewline end the text with a newline
-     */
-    JavaCodeText(String text, boolean indent, boolean endWithNewline) {
-        this.text = text;
-        this.indent = indent;
-        this.endWithNewline = endWithNewline;
-    }
     
+    /**
+     * Creates a variable assignment.
+     * 
+     * @param parent the parent
+     * @param text the comment text
+     */
+    public JavaCodeSingleLineComment(IJavaCodeElement parent, String text) {
+        this.parent = parent;
+        this.text = text;
+    }
+
     @Override
     public void store(CodeWriter out) {
-        if (indent) {
-            out.printIndent();
-        } 
-        out.print(text);
-        if (endWithNewline) {
-            out.println();
-        }
+        out.printlnwi("// " + text);
     }
 
-    @Invisible
     @Override
     public IJavaCodeArtifact getArtifact() {
-        return null;
+        return parent.getArtifact();
     }
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return "JavaText";
+        return "JavaCodeSLComment";
     }
 
     @Override
     public IJavaCodeElement getParent() {
-        return null;
+        return parent;
     }
 
 }

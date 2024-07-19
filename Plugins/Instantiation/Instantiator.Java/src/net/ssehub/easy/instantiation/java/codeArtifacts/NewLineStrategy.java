@@ -15,46 +15,39 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintWriter;
-import java.nio.charset.Charset;
-
 /**
- * Specialized code writer collecting the results in a String.
+ * Strategy for determining newlines in a class.
  * 
  * @author Holger Eichelberger
  */
-public class CodeToStringWriter extends CodeWriter {
-
-    private ByteArrayOutputStream bos;
+public interface NewLineStrategy {
 
     /**
-     * Creates an instance with default stream.
+     * Called when class elements visiting starts.
      */
-    public CodeToStringWriter() {
-        this(new ByteArrayOutputStream());
+    public default void start() {
     }
 
     /**
-     * Collects to the given stream (for reuse).
+     * Returns whether a newline shall be emitted before {@code elt}.
      * 
-     * @param bos the target stream
+     * @param elt the element
+     * @return {@code true} for emitting a newline, {@code false} for no newline
      */
-    public CodeToStringWriter(ByteArrayOutputStream bos) {
-        super(new PrintWriter(bos));
-        this.bos = bos;
-    }
+    public boolean emitNewlineBefore(IJavaCodeElement elt);
     
     /**
-     * Returns the collected results as String.
+     * Returns whether a newline shall be emitted after {@code elt}.
      * 
-     * @return the results
+     * @param elt the element
+     * @return {@code true} for emitting a newline, {@code false} for no newline
      */
-    public String getString() {
-        flush();
-        String result = bos.toString(Charset.defaultCharset());
-        bos.reset();
-        return result;
+    public boolean emitNewlineAfter(IJavaCodeElement elt);
+
+    /**
+     * Called when class elements visiting ends.
+     */
+    public default void end() {
     }
- 
+
 }

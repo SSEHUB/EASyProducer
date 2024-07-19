@@ -2,11 +2,12 @@ package de.uni_hildesheim.sse.ui;
 
 import java.io.File;
 
-import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 import de.uni_hildesheim.sse.ModelUtility;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -26,17 +27,23 @@ import net.ssehub.easy.varModel.management.VarModel;
  */
 public class StandaloneActivator extends Activator {
 
+    private BundleContext context;
+    
     /**
      * Returns the workspace root as file.
      * 
      * @return the workspace root as file
      */
     private File getWorkspaceRoot() {
-        return ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();
+        ServiceTracker<IWorkspace, IWorkspace> workspaceTracker = new ServiceTracker<>(context, IWorkspace.class, null);
+        workspaceTracker.open();
+        IWorkspace workspace = workspaceTracker.getService();        
+        return workspace.getRoot().getLocation().toFile();
     }
     
     @Override
     public void start(BundleContext context) throws Exception {
+        this.context = context;
         super.start(context);
         // now done automatically ModelUtility.setResourceInitializer(new EclipseResourceInitializer());
         ObservableWorkspaceJob job = new ObservableWorkspaceJob("IVML startup task") {

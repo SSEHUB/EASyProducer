@@ -20,6 +20,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.java.codeArtifacts.CodeToStringWriter;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTypeSpecification;
 
 /**
@@ -34,24 +37,37 @@ public class JavaCodeTests {
      */
     @Test
     public void testParseGenerics() {
-        Assert.assertNull(JavaCodeTypeSpecification.parseGenerics(""));
-        Assert.assertNull(JavaCodeTypeSpecification.parseGenerics("int"));
+        JavaCodeArtifact art = new JavaCodeArtifact();
+        JavaCodeClass cls = art.addClass("MyClass");
+        
+        Assert.assertNull(JavaCodeTypeSpecification.parseGenerics("", cls));
+        Assert.assertNull(JavaCodeTypeSpecification.parseGenerics("int", cls));
 
-        List<String> gen = JavaCodeTypeSpecification.parseGenerics("List<Integer>");
+        List<JavaCodeTypeSpecification> gen = JavaCodeTypeSpecification.parseGenerics("List<Integer>", cls);
         Assert.assertNotNull(gen);
-        Assert.assertArrayEquals(new String[] {"Integer"}, gen.toArray());
+        Assert.assertArrayEquals(new String[] {"Integer"}, toArray(gen));
 
-        gen = JavaCodeTypeSpecification.parseGenerics("Map<Integer, Long>");
+        gen = JavaCodeTypeSpecification.parseGenerics("Map<Integer, Long>", cls);
         Assert.assertNotNull(gen);
-        Assert.assertArrayEquals(new String[] {"Integer", "Long"}, gen.toArray());
+        Assert.assertArrayEquals(new String[] {"Integer", "Long"}, toArray(gen));
 
-        gen = JavaCodeTypeSpecification.parseGenerics("Map<String, MyData<Integer, Long>>");
+        gen = JavaCodeTypeSpecification.parseGenerics("Map<String, MyData<Integer, Long>>", cls);
         Assert.assertNotNull(gen);
-        Assert.assertArrayEquals(new String[] {"String", "MyData<Integer, Long>"}, gen.toArray());
+        Assert.assertArrayEquals(new String[] {"String", "MyData<Integer, Long>"}, toArray(gen));
 
-        gen = JavaCodeTypeSpecification.parseGenerics("Map<MyData<Integer, Long>, String>");
+        gen = JavaCodeTypeSpecification.parseGenerics("Map<MyData<Integer, Long>, String>", cls);
         Assert.assertNotNull(gen);
-        Assert.assertArrayEquals(new String[] {"MyData<Integer, Long>", "String"}, gen.toArray());
+        Assert.assertArrayEquals(new String[] {"MyData<Integer, Long>", "String"}, toArray(gen));
+    }
+    
+    private static String[] toArray(List<JavaCodeTypeSpecification> specs) {
+        CodeToStringWriter writer = new CodeToStringWriter();
+        return specs
+            .stream()
+            .map(t -> {
+                t.store(writer); 
+                return writer.getString();
+            }).toArray(String[]::new);
     }
 
     /**

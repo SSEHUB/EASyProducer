@@ -19,29 +19,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass.Kind;
 
+/**
+ * Represents a Java code method.
+ * 
+ * @author Holger Eichelberger
+ */
 public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
 
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
-    private List<IJavaCodeElement> elements = new ArrayList<>();
+    //private List<IJavaCodeElement> elements = new ArrayList<>();
+    private JavaCodeBlock block;
     private List<JavaCodeParameterSpecification> parameter;
     private List<JavaCodeTypeSpecification> exceptions;
 
+    /**
+     * Creates a void method without comment.
+     * 
+     * @param name the name of the method
+     * @param enclosing the enclosing class
+     */
     protected JavaCodeMethod(String name, JavaCodeClass enclosing) {
         this(JavaCodeTypeSpecification.VOID, name, enclosing);
     }
 
+    /**
+     * Creates a method without comment.
+     * 
+     * @param type the return type
+     * @param name the name of the method
+     * @param enclosing the enclosing class
+     */
     protected JavaCodeMethod(JavaCodeTypeSpecification type, String name, JavaCodeClass enclosing) {
         this(type, name, enclosing, null);
     }
 
+    /**
+     * Creates a method.
+     * 
+     * @param type the return type
+     * @param name the name of the method
+     * @param enclosing the enclosing class
+     * @param comment the method comment, substring after {@code &commat;return} is considered as return comment
+     */
     protected JavaCodeMethod(JavaCodeTypeSpecification type, String name, JavaCodeClass enclosing, String comment) {
-        super(name, Visibility.PUBLIC, comment);
+        super(name, JavaCodeVisibility.PUBLIC, comment);
         this.enclosing = enclosing;
         this.type = type;
+        this.block = new JavaCodeBlock(this, true, true);
     }
 
     @Invisible
@@ -70,7 +97,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * 
      * @param type the type of the parameter
      * @param name the name of the parameter
-     * @param comment the Javadoc comment to be linked to this parameter (just the text)
+     * @param comment the Javadoc comment to be linked to this parameter (just the text), may be <b>null</b> for none
      * @return the parameter instance
      */
     public JavaCodeParameterSpecification addParameter(String type, String name, String comment) {
@@ -83,10 +110,41 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         return IJavaCodeElement.add(parameter, new JavaCodeParameterSpecification(type, name, this));
     }
 
+    /**
+     * Adds a (formal) method parameter.
+     * 
+     * @param type the type of the parameter
+     * @param name the name of the parameter
+     * @param comment the Javadoc comment to be linked to this parameter (just the text), may be <b>null</b> for none
+     * @return the parameter instance
+     */
+    public JavaCodeParameterSpecification addParameter(JavaCodeTypeSpecification type, String name, String comment) {
+        if (null == parameter) {
+            parameter = new ArrayList<>();
+        }
+        if (null != comment && getJavadocComment() != null) {
+            getJavadocComment().addParameterComment(name, comment);
+        }
+        return IJavaCodeElement.add(parameter, new JavaCodeParameterSpecification(type, name, this));
+    }
+
+    /**
+     * Adds an exception without (Javadoc) comment.
+     * 
+     * @param type the exception type
+     * @return the type specification of the exception
+     */
     public JavaCodeTypeSpecification addException(String type) {
         return addException(type, null);
     }
 
+    /**
+     * Adds an exception with comment.
+     * 
+     * @param type the exception type
+     * @param comment Javadoc comment of the exception
+     * @return the type specification of the exception
+     */
     public JavaCodeTypeSpecification addException(String type, String comment) {
         if (null == exceptions) {
             exceptions = new ArrayList<>();
@@ -103,7 +161,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * @param text the text
      */
     public void add(String text) {
-        elements.add(new JavaCodeText(text, true));
+        block.add(text);
     }
     
     /**
@@ -112,9 +170,255 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * @param text the text
      */
     public void addRaw(String text) {
-        elements.add(new JavaCodeText(text, false));
+        block.addRaw(text);
     }
     
+    /**
+     * Adds a return statement without javadoc comment.
+     * 
+     * @param value the return value
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod addReturn(String value) {
+        return addReturn(value, null);
+    }
+    
+    /**
+     * Adds a do-loop block.
+     * 
+     * @param condition the loop condition
+     * @return the loop block
+     */
+    public JavaCodeDoLoop addDoLoop(String condition) {
+        return block.addDoLoop(condition);
+    }
+
+    /**
+     * Adds a do-loop block.
+     * 
+     * @param condition the loop condition
+     * @return the loop block
+     */
+    public JavaCodeWhileLoop addWhileLoop(String condition) {
+        return block.addWhileLoop(condition);
+    }
+
+    /**
+     * Creates an interable-based for-loop.
+     * 
+     * @param type the type of the iterator variable
+     * @param variableName the name of the iterator variable
+     * @param expression the expression determining the iterable to loop over
+     * @return the for loop block
+     */
+    public JavaCodeForLoop addForLoop(String type, String variableName, String expression) {
+        return block.addForLoop(type, variableName, expression);
+    }
+    
+    /**
+     * Creates an interable-based for-loop.
+     * 
+     * @param type the type of the iterator variable
+     * @param variableName the name of the iterator variable
+     * @param expression the expression determining the iterable to loop over
+     * @return the for loop block
+     */
+    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
+        String expression) {
+        return block.addForLoop(type, variableName, expression);
+    }
+
+    /**
+     * Creates a traditional for-loop.
+     * 
+     * @param type the type of the iterator variable
+     * @param variableName the name of the iterator variable (optional, may be <b>null</b> or empty)
+     * @param initializer the iterator variable initializer
+     * @param condition the loop condition (optional, may be <b>null</b> or empty)
+     * @param update the iterator variable update, e.g., increment, decrement (may be <b>null</b> or empty)
+     * @return the for loop block
+     */
+    public JavaCodeForLoop addForLoop(String type, String variableName, String initializer, 
+        String condition, String update) {
+        return block.addForLoop(type, variableName, initializer, condition, update);
+    }
+
+    /**
+     * Creates a traditional for-loop.
+     * 
+     * @param type the type of the iterator variable
+     * @param variableName the name of the iterator variable (optional, may be <b>null</b> or empty)
+     * @param initializer the iterator variable initializer
+     * @param condition the loop condition (optional, may be <b>null</b> or empty)
+     * @param update the iterator variable update, e.g., increment, decrement (may be <b>null</b> or empty)
+     * @return the for loop block
+     */
+    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
+        String initializer, String condition, String update) {
+        return block.addForLoop(type, variableName, initializer, condition, update);
+    }
+    
+    /**
+     * Adds a if-then-else block.
+     * 
+     * @param condition the loop condition
+     * @return the if-then-else block
+     */
+    public JavaCodeAlternative addIf(String condition) {
+        return block.addIf(condition);
+    }
+    
+    /**
+     * Adds a switch block.
+     * 
+     * @param expression the switch expression
+     * @return the switch block
+     */
+    public JavaCodeSwitch addSwitch(String expression) {
+        return block.addSwitch(expression);
+    }
+
+    /**
+     * Adds a synchronized block.
+     * 
+     * @return the synchronized block
+     */
+    public JavaCodeSynchronizedBlock addSynchronized() {
+        return block.addSynchronized();
+    }
+
+    /**
+     * Adds a synchronized block.
+     * 
+     * @return the synchronized block
+     */
+    public JavaCodeTryBlock addTry() {
+        return block.addTry();
+    }
+
+    /**
+     * Adds an assignment.
+     * 
+     * @param variable the variable to change
+     * @param expression the expression determining the value
+     * @return the assignment
+     */
+    public JavaCodeAssignment addAssignment(String variable, String expression) {
+        return block.addAssignment(variable, expression);
+    }
+    
+    /**
+     * Adds an empty line.
+     * 
+     * @return <b>this</b>
+     */
+    public JavaCodeMethod addEmptyLine() {
+        block.addEmptyLine();
+        return this;
+    }
+
+    /**
+     * Adds a single-line comment.
+     * 
+     * @param text the comment text
+     * @return <b>this</b>
+     */
+    public JavaCodeMethod addSLComment(String text) {
+        block.addSLComment(text);
+        return this;
+    }
+    
+    /**
+     * Adds a non-static method call.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addCall(String methodName) {
+        return block.addCall(methodName);
+    }
+
+    /**
+     * Adds a method call.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @param isStatic whether the call is static
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addCall(String methodName, boolean isStatic) {
+        return block.addCall(methodName, isStatic);
+    }
+
+    /**
+     * Creates a variable declaration.
+     * 
+     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param variableName the variable name
+     * @param initializer the initializer, may be <b>null</b> for none
+     * @return the variable declaration (for chaining)
+     */
+    public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
+        String initializer) {
+        return block.addVariable(type, variableName, initializer);
+    }
+
+    /**
+     * Creates a variable declaration.
+     * 
+     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param variableName the variable name
+     * @param initializer the initializer, may be <b>null</b> for none
+     * @return the variable declaration (for chaining)
+     */
+    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+        String initializer) {        
+        return block.addVariable(type, variableName, initializer);
+    }
+
+    /**
+     * Creates a variable declaration.
+     * 
+     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param variableName the variable name
+     * @param isFinal whether the variable shall be final
+     * @param initializer the initializer, may be <b>null</b> for none
+     * @return the variable declaration (for chaining)
+     */
+    public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
+        boolean isFinal, String initializer) {
+        return block.addVariable(type, variableName, isFinal, initializer);
+    }
+
+    /**
+     * Creates a variable declaration.
+     * 
+     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param variableName the variable name
+     * @param isFinal whether the variable shall be final
+     * @param initializer the initializer, may be <b>null</b> for none
+     * @return the variable declaration (for chaining)
+     */
+    public JavaCodeVariableDeclaration addVar(JavaCodeTypeSpecification type, String variableName, 
+        boolean isFinal, String initializer) {
+        return block.addVariable(type, variableName, isFinal, initializer);
+    }
+    
+    /**
+     * Adds a return statement with javadoc comment.
+     * 
+     * @param value the return value
+     * @param comment the javadoc comment for the return
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod addReturn(String value, String comment) {
+        add("return " + value + ";"); // preliminary, may also become a class
+        if (null != comment) {
+            ensureJavadocComment("");
+            getJavadocComment().addReturnComment(comment);
+        }
+        return this;
+    }
+
     @Invisible
     @Override
     public void store(CodeWriter out) {
@@ -128,13 +432,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         out.print(")");
         IJavaCodeElement.storeList(" ", exceptions, ", ", out);
         if (!isAbstract() || enclosing.getKind() == Kind.INTERFACE) {
-            out.println(" {");
-            out.increaseIndent();
-            for (IJavaCodeElement attr: elements) {
-                attr.store(out);
-            }
-            out.decreaseIndent();
-            out.printlnwi("}");
+            block.store(out);
         } else {
             out.println(";");
         }
@@ -146,59 +444,56 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     }
     
     @Override
-    @OperationMeta(name = {"visibility"})
     public JavaCodeMethod setVisibility(String visibility) {
         super.setVisibility(visibility);
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"visibility"})
-    public JavaCodeMethod setVisibility(Visibility visibility) {
+    public JavaCodeMethod setVisibility(JavaCodeVisibility visibility) {
         super.setVisibility(visibility);
         return this;
     }
     
     @Override
-    @OperationMeta(name = {"public"})
     public JavaCodeMethod setPublic() {
         super.setPublic();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"private"})
     public JavaCodeMethod setPrivate() {
         super.setPrivate();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"protected"})
     public JavaCodeMethod setProtected() {
         super.setProtected();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"package"})
     public JavaCodeMethod setPackage() {
         super.setPackage();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"static"})
     public JavaCodeMethod setStatic(boolean isStatic) {
         super.setStatic(isStatic);
         return this;
     }
 
-    @OperationMeta(name = {"static"})
     @Override
     public JavaCodeMethod setStatic() {
         super.setStatic();
         return this;
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return enclosing;
     }
 
 }

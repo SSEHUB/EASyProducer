@@ -29,12 +29,19 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     
     JavaCodeJavadocComment(String comment, IJavaCodeElement attachedTo) {
         this.comment = comment;
+        final String marker = Tag.RETURN.getTag();
+        int pos = comment.lastIndexOf(marker);
+        if (pos > 0) {
+            addReturnComment(comment.substring(pos + marker.length()).trim());
+            this.comment = comment.substring(0, pos);
+        }
         this.attachedTo = attachedTo;
     }
     
     private enum Tag {
         
         PARAM("param"),
+        RETURN("return"),
         THROWS("throws");
         
         private String tag;
@@ -62,7 +69,11 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         }
 
         public void store(CodeWriter out) {
-            out.printlnwi(" * " + tag.getTag() + " " + name + " " + comment);            
+            String middle = "";
+            if (name != null && name.length() > 0) {
+                middle = " " + name;
+            }
+            out.printlnwi(" * " + tag.getTag() + middle + " " + comment);            
         }
 
     }
@@ -77,6 +88,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
                 if (attachedTo instanceof JavaCodeMethod) {
                     out.printlnwi(" *");
                     streamByTag(Tag.PARAM).forEach(t -> t.store(out));
+                    streamByTag(Tag.RETURN).forEach(t -> t.store(out));
                     if (streamByTag(Tag.THROWS).count() > 0) {
                         out.printlnwi(" *");
                         streamByTag(Tag.THROWS).forEach(t -> t.store(out));
@@ -105,6 +117,10 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         return addTaggedPart(Tag.PARAM, name, comment);
     }
 
+    public JavaCodeJavadocComment addReturnComment(String comment) {
+        return addTaggedPart(Tag.RETURN, "", comment);
+    }
+
     public JavaCodeJavadocComment addExceptionComment(String type, String comment) {
         return addTaggedPart(Tag.THROWS, type, comment);        
     }
@@ -118,6 +134,11 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "JavaComment";
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return null;
     }
 
 }

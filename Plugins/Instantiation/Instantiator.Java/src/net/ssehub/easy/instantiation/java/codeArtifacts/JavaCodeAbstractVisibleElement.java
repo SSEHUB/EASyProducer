@@ -21,12 +21,24 @@ import java.util.List;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
+/**
+ * Potentially abstract or visible code element.
+ * 
+ * @author Holger Eichelberger
+ */
 public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElement {
 
     private boolean isAbstract;
     private List<String> generics;
-    
-    protected JavaCodeAbstractVisibleElement(String name, Visibility visibility, String comment) {
+
+    /**
+     * Creates an element.
+     * 
+     * @param name the element name
+     * @param visibility the visibility
+     * @param comment the optional comment for this element, may be <b>null</b>
+     */
+    protected JavaCodeAbstractVisibleElement(String name, JavaCodeVisibility visibility, String comment) {
         super(name, visibility, comment);
     }
 
@@ -82,7 +94,7 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
     @Invisible
     @Override
     protected String insertGenerics(String text) {
-        return IJavaCodeElement.toList(generics, ", ");
+        return text + IJavaCodeElement.toList(generics, ", "); // TODO SEPARATOR
     }
 
 }

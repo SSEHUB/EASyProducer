@@ -19,11 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
+/**
+ * Representes a Java code class.
+ * 
+ * @author Holger Eichelberger
+ */
 public class JavaCodeClass extends JavaCodeVisibleElement {
 
     static final JavaCodeClass EMPTY = new JavaCodeClass("", JavaCodeArtifact.EMPTY);
+    private static NewLineStrategy newLineStrategy = new ConditionalAttributeNewLineStrategy();
     
     private Kind kind = Kind.CLASS;
     private List<IJavaCodeElement> elements = new ArrayList<>();
@@ -50,12 +55,12 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
     
     JavaCodeClass(String name, JavaCodeArtifact artifact) {
-        super(name, Visibility.PUBLIC, null);
+        super(name, JavaCodeVisibility.PUBLIC, null);
         this.artifact = artifact;
     }
 
     JavaCodeClass(String name, JavaCodeClass enclosing) {
-        super(name, Visibility.PUBLIC, null);
+        super(name, JavaCodeVisibility.PUBLIC, null);
         this.enclosing = enclosing;
     }
     
@@ -68,6 +73,12 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             return artifact;
         }
     }
+    
+    @Invisible
+    @Override
+    protected JavaCodeClass getEnclosing() {
+        return enclosing;
+    }
 
     /**
      * Creates a protected class with given {@code name}.
@@ -79,17 +90,23 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         return IJavaCodeElement.add(elements, new JavaCodeClass(name, this).setProtected());
     }
     
-    public JavaCodeAttribute addAttribute(String name) {
-        return IJavaCodeElement.add(elements, new JavaCodeAttribute(name, this));
-    }
-
     public JavaCodeAttribute addAttribute(String type, String name) {
         return IJavaCodeElement.add(elements, 
-            new JavaCodeAttribute(JavaCodeTypeSpecification.create(type, this), name, this));
+            new JavaCodeAttribute(JavaCodeTypeSpecification.create(type, this), name, this), 
+            lastAttribute(elements));
     }
 
     public JavaCodeAttribute addAttribute(JavaCodeTypeSpecification type, String name) {
-        return IJavaCodeElement.add(elements, new JavaCodeAttribute(type, name, this));
+        return IJavaCodeElement.add(elements, new JavaCodeAttribute(type, name, this), 
+            lastAttribute(elements));
+    }
+    
+    private static int lastAttribute(List<IJavaCodeElement> elements) {
+        int pos = 0;
+        while (pos < elements.size() && elements.get(pos).isAttribute()) {
+            pos++;
+        }
+        return pos;
     }
     
     public JavaCodeClass addExtends(String type) {
@@ -125,61 +142,76 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         return IJavaCodeElement.add(elements, 
             new JavaCodeMethod(JavaCodeTypeSpecification.create(type, this), name, this, comment));
     }
+    public JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name, String comment) {
+        return IJavaCodeElement.add(elements, new JavaCodeMethod(type, name, this, comment));
+    }
 
     public JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name) {
         return IJavaCodeElement.add(elements, new JavaCodeMethod(type, name, this));
     }
     
+    /**
+     * Adds an extensible default getter for {@code attribute}.
+     * 
+     * @param attribute the attribute to add the getter for
+     * @return the getter
+     */
+    public JavaCodeMethod addGetter(JavaCodeAttribute attribute) {
+        return attribute.addGetter();
+    }
+
+    /**
+     * Adds an extensible default setter for {@code attribute}.
+     * 
+     * @param attribute the attribute to add the setter for
+     * @return the setter
+     */
+    public JavaCodeMethod addSetter(JavaCodeAttribute attribute) {
+        return attribute.addSetter();
+    }
+
     @Override
-    @OperationMeta(name = {"visibility"})
     public JavaCodeClass setVisibility(String visibility) {
         super.setVisibility(visibility);
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"visibility"})
-    public JavaCodeClass setVisibility(Visibility visibility) {
+    public JavaCodeClass setVisibility(JavaCodeVisibility visibility) {
         super.setVisibility(visibility);
         return this;
     }
     
     @Override
-    @OperationMeta(name = {"public"})
     public JavaCodeClass setPublic() {
         super.setPublic();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"private"})
     public JavaCodeClass setPrivate() {
         super.setPrivate();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"protected"})
     public JavaCodeClass setProtected() {
         super.setProtected();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"package"})
     public JavaCodeClass setPackage() {
         super.setPackage();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"static"})
     public JavaCodeClass setStatic(boolean isStatic) {
         super.setStatic(isStatic);
         return this;
     }
 
-    @OperationMeta(name = {"static"})
     @Override
     public JavaCodeClass setStatic() {
         super.setStatic();
@@ -212,8 +244,18 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         IJavaCodeElement.storeList(" ", implementedInterfaces, ", ", out);
         out.println(" {");
         out.increaseIndent();
-        for (IJavaCodeElement e: elements) {
-            e.store(out);
+        if (elements.size() > 0) {
+            out.println();
+            newLineStrategy.start();
+            for (IJavaCodeElement e: elements) {
+                if (newLineStrategy.emitNewlineBefore(e)) {
+                    out.println();
+                }
+                e.store(out);
+                if (newLineStrategy.emitNewlineAfter(e)) {
+                    out.println();
+                }
+            }
         }
         out.decreaseIndent();
         out.printlnwi("}");
@@ -222,6 +264,11 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "JavaClass: " + getName();
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return null;
     }
 
 }

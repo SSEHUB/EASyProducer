@@ -4,6 +4,7 @@ import static net.ssehub.easy.varModel.varModel.testSupport.TextTestUtils.assert
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
@@ -326,5 +327,36 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
 
         });
     }
-    
+
+    /**
+     * Test the JavaCode artifact in VIL.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testJavaCode() throws IOException {
+        assertSelfInstantiate("javaCode", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "javaCode");
+            }
+
+            @Override
+            public void assertIn(File base) {
+                File expectedMethodClass2 = new File(getArtifactsFolder(),
+                        "javaCode/JCATest.java");
+                File tempFileMethodClass2 = new File(base, "JCATest.java");
+                // for debugging
+                try { 
+                    System.out.println(FileUtils.readFileToString(tempFileMethodClass2, Charset.defaultCharset()));
+                } catch (IOException e) {
+                }
+                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
+            }
+
+        });
+    }
+
 }

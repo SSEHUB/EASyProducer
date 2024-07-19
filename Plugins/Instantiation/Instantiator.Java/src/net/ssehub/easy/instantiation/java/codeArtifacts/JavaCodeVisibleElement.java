@@ -19,57 +19,110 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
+/**
+ * Potentially visible code element.
+ * 
+ * @author Holger Eichelberger
+ */
 public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
 
     private boolean isStatic;
     private String name;
-    private Visibility visibility;
+    private JavaCodeVisibility visibility;
     private List<JavaCodeAnnotation> annotations;
     private JavaCodeJavadocComment comment;
 
-    protected JavaCodeVisibleElement(String name, Visibility visibility, String comment) {
+    /**
+     * Creates an element.
+     * 
+     * @param name the element name
+     * @param visibility the visibility
+     * @param comment the optional comment for this element, may be <b>null</b>
+     */
+    protected JavaCodeVisibleElement(String name, JavaCodeVisibility visibility, String comment) {
         this.name = name;
         this.visibility = visibility;
         if (null != comment) {
+            ensureJavadocComment(comment);
+        }
+    }
+
+    /**
+     * Ensures that this element has a comment.
+     * 
+     * @param comment the comment text, may be empty
+     */
+    protected void ensureJavadocComment(String comment) {
+        if (null == this.comment) {
             this.comment = new JavaCodeJavadocComment(comment, this); 
         }
     }
-    
-    @OperationMeta(name = {"visibility"})
+
+    @Override
+    public boolean hasJavadocComment() {
+        return comment != null;
+    }
+
+    /**
+     * Changes the visibility.
+     * 
+     * @param visibility the new visibility using Java or UML keywords
+     * @return <b>this</b> (for chaining)
+     */
     public JavaCodeVisibleElement setVisibility(String visibility) {
-        this.visibility = Visibility.match(visibility);
+        this.visibility = JavaCodeVisibility.match(visibility);
         return this;
     }
 
-    @OperationMeta(name = {"visibility"})
-    public JavaCodeVisibleElement setVisibility(Visibility visibility) {
+    /**
+     * Changes the visibility.
+     * 
+     * @param visibility the new visibility using Java or UML keywords
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeVisibleElement setVisibility(JavaCodeVisibility visibility) {
         this.visibility = visibility;
         return this;
     }
-    
-    @OperationMeta(name = {"public"})
+
+    /**
+     * Sets the visibility of this element to public.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
     public JavaCodeVisibleElement setPublic() {
-        setVisibility(Visibility.PUBLIC);
+        setVisibility(JavaCodeVisibility.PUBLIC);
         return this;
     }
 
-    @OperationMeta(name = {"private"})
+    /**
+     * Sets the visibility of this element to private.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
     public JavaCodeVisibleElement setPrivate() {
-        setVisibility(Visibility.PRIVATE);
+        setVisibility(JavaCodeVisibility.PRIVATE);
         return this;
     }
 
-    @OperationMeta(name = {"protected"})
+    /**
+     * Sets the visibility of this element to protected.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
     public JavaCodeVisibleElement setProtected() {
-        setVisibility(Visibility.PROTECTED);
+        setVisibility(JavaCodeVisibility.PROTECTED);
         return this;
     }
 
-    @OperationMeta(name = {"package"})
+    /**
+     * Sets the visibility of this element to package.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
     public JavaCodeVisibleElement setPackage() {
-        setVisibility(Visibility.PACKAGE);
+        setVisibility(JavaCodeVisibility.PACKAGE);
         return this;
     }
 
@@ -79,7 +132,6 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
      * @param isStatic if the element is static
      * @return <b>this</b>
      */
-    @OperationMeta(name = {"static"})
     public JavaCodeVisibleElement setStatic(boolean isStatic) {
         this.isStatic = isStatic;
         return this;
@@ -90,7 +142,6 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
      * 
      * @return <b>this</b>
      */
-    @OperationMeta(name = {"static"})
     public JavaCodeVisibleElement setStatic() {
         setStatic(true);
         return this;
@@ -106,8 +157,16 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
         if (null == annotations) {
             annotations = new ArrayList<>();
         }
-        return IJavaCodeElement.add(annotations, new JavaCodeAnnotation(type, this));
+        return IJavaCodeElement.add(annotations, 
+            new JavaCodeAnnotation(new JavaCodeTypeSpecification(type, getEnclosing()), this));
     }
+
+    /**
+     * Returns the enclosing class.
+     * 
+     * @return the enclosing class
+     */
+    protected abstract JavaCodeClass getEnclosing();
 
     /**
      * Returns the visibility.
@@ -115,7 +174,7 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
      * @return the visibility
      */
     @Invisible
-    Visibility getVisibility() {
+    JavaCodeVisibility getVisibility() {
         return visibility;
     }
     
@@ -137,16 +196,35 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
         return isStatic;
     }
     
+    /**
+     * Inserts additional modifiers after the visibility of the {@link #getModifier() modifiers}.
+     * 
+     * @param text the text collected for modifiers so far
+     * @return the composed text, by default {@code text}
+     */
     @Invisible
     protected String insertModifier(String text) {
         return text;
     }
 
+    /**
+     * Inserts additional modifiers after the optional static modifier of the {@link #getModifier() modifiers}.
+     * 
+     * @param text the text collected for modifiers so far
+     * @return the composed text, by default {@code text}
+     */
     @Invisible
     protected String insertGenerics(String text) {
         return text;
     }
 
+    /**
+     * Returns the modifier(s) as text.
+     * 
+     * @return the modifiers
+     * @see #insertModifier(String)
+     * @see #insertGenerics(String)
+     */
     @Invisible
     protected String getModifier() {
         String result = getVisibility().getPrefix();
@@ -158,6 +236,7 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
         return IJavaCodeElement.appendWhitespace(result);
     }
 
+    @Override
     @Invisible
     public void store(CodeWriter out) {
         if (null != comment) {

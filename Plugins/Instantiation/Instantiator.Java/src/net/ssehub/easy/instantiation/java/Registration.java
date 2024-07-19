@@ -14,6 +14,22 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaClass;
 import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 import net.ssehub.easy.instantiation.java.artifacts.JavaImport;
 import net.ssehub.easy.instantiation.java.artifacts.JavaMethod;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAlternative;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAttribute;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSwitch;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVisibility;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeWhileLoop;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTryBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSynchronizedBlock;
 import net.ssehub.easy.instantiation.java.instantiators.CocktailInstantiator;
 import net.ssehub.easy.instantiation.java.instantiators.Jar;
 import net.ssehub.easy.instantiation.java.instantiators.Javac;
@@ -27,6 +43,7 @@ import net.ssehub.easy.instantiation.java.instantiators.Unjar;
 public class Registration implements IRegistration {
 
     private static boolean registered = false;
+    private static boolean plainRegistered = false;
     
     /**
      * Registers the Java artifacts and instantiators.
@@ -41,6 +58,7 @@ public class Registration implements IRegistration {
 
                 TypeRegistry.DEFAULT.register(CocktailInstantiator.class);
 
+                // JDT, causes too early access to workspace
                 TypeRegistry.DEFAULT.register(ClassFileArtifact.class);
                 TypeRegistry.DEFAULT.register(JavaFileArtifact.class);
                 TypeRegistry.DEFAULT.register(JavaClass.class);
@@ -54,6 +72,28 @@ public class Registration implements IRegistration {
                 TypeRegistry.DEFAULT.register(JavaImport.class);
             }
         });
+        
+        // plain Java
+        if (!plainRegistered) {
+            plainRegistered = true;
+            TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
+            TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
+            TypeRegistry.DEFAULT.register(JavaCodeClass.class);
+            TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);
+            TypeRegistry.DEFAULT.register(JavaCodeBlock.class);
+            TypeRegistry.DEFAULT.register(JavaCodeDoLoop.class);
+            TypeRegistry.DEFAULT.register(JavaCodeWhileLoop.class);
+            TypeRegistry.DEFAULT.register(JavaCodeForLoop.class);
+            TypeRegistry.DEFAULT.register(JavaCodeAlternative.class);
+            TypeRegistry.DEFAULT.register(JavaCodeSwitch.class);
+            TypeRegistry.DEFAULT.register(JavaCodeTryBlock.JavaCodeCatchBlock.class);
+            TypeRegistry.DEFAULT.register(JavaCodeTryBlock.class);
+            TypeRegistry.DEFAULT.register(JavaCodeSynchronizedBlock.class);
+            TypeRegistry.DEFAULT.register(JavaCodeAssignment.class);
+            TypeRegistry.DEFAULT.register(JavaCodeImport.class);
+            TypeRegistry.DEFAULT.register(JavaCodeMethod.class);
+            TypeRegistry.DEFAULT.register(JavaCodeMethodCall.class);
+        }
     }
     
     /**

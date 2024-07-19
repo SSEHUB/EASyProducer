@@ -15,12 +15,24 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+/**
+ * Represents a argument in a {@link JavaCodeAnnotation annotation}.
+ * 
+ * @author Holger Eichelberger
+ */
 public class JavaCodeAnnotationArgument implements IJavaCodeElement {
 
     private String name;
     private String value;
     private JavaCodeAnnotation annotation;
     
+    /**
+     * Creates an annotation argument.
+     * 
+     * @param name the name of the argument
+     * @param value the value of the argument
+     * @param annotation the annotated annotation
+     */
     JavaCodeAnnotationArgument(String name, String value, JavaCodeAnnotation annotation) {
         this.name = name;
         this.value = value;
@@ -42,6 +54,11 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
     @Override
     public IJavaCodeArtifact getArtifact() {
         return annotation.getArtifact();
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return null;
     }
 
 }

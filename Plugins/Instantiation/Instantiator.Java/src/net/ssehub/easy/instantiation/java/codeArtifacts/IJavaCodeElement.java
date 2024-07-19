@@ -26,15 +26,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public interface IJavaCodeElement extends IVilType, IStringValueProvider {
-    
-    /**
-     * Stores the element at the current position in {@code out}.
-     * 
-     * @param out the output writer
-     */
-    @Invisible
-    public void store(CodeWriter out);
+public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storable {
     
     /**
      * Returns the containing artifact.
@@ -42,16 +34,81 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider {
      * @return the artifact
      */
     public IJavaCodeArtifact getArtifact();
+    
+    /**
+     * Returns the parent.
+     * 
+     * @return the parent
+     */
+    public IJavaCodeElement getParent();
+    
+    /**
+     * Returns whether this code element has a Javadoc comment.
+     * 
+     * @return {@code true} for comment, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean hasJavadocComment() {
+        return false;
+    }
+    
+    /**
+     * Returns whether this element is an attribute.
+     * 
+     * @return {@code true} for attribute, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isAttribute() {
+        return false;
+    }
 
+    /**
+     * Adds an element to {@code list} and returns the element.
+     * 
+     * @param <L> the list type
+     * @param <E> the element type
+     * @param list the list to modify
+     * @param element the element
+     * @return the element
+     */
     static <L, E extends L> E add(List<L> list, E element) {
         list.add(element);
         return element;
     }
 
+    /**
+     * Adds an element to {@code list} and returns the element.
+     * 
+     * @param <L> the list type
+     * @param <E> the element type
+     * @param list the list to modify
+     * @param element the element
+     * @param pos the index position where to add {@code element}
+     * @return the element
+     */
+    static <L, E extends L> E add(List<L> list, E element, int pos) {
+        list.add(pos, element);
+        return element;
+    }
+
+    /**
+     * Appends a whitespace to {@code text} if {@code text} is not empty.
+     * 
+     * @param text the text to append to
+     * @return {@code text} or {@code text} suffixed with whitespace
+     * @see #appendSeparator(String, String)
+     */
     static String appendWhitespace(String text) {
         return appendSeparator(text, "");
     }
 
+    /**
+     * Appends {@code separator} to {@code text} if {@code text} is not empty.
+     * 
+     * @param text the text to append to
+     * @param separator the separator
+     * @return {@code text} or {@code text} suffixed with {@code separator}
+     */
     static String appendSeparator(String text, String separator) {
         if (text.length() > 0) {
             text += separator;
@@ -59,10 +116,25 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider {
         return text;
     }
 
+    /**
+     * Applies {@link IJavaCodeElement#store(CodeWriter)} to all elements of the list, joining them by "," as separator.
+     * 
+     * @param elements the elements to join
+     * @param separator the separator
+     * @param out the target code writer
+     */
     static void storeList(List<? extends IJavaCodeElement> elements, String separator, CodeWriter out) {
         storeList("", elements, separator, out);
     }
 
+    /**
+     * Applies {@link IJavaCodeElement#store(CodeWriter)} to all elements of the list, joining them by "," as separator.
+     * 
+     * @param prefix part to be prepended
+     * @param elements the elements to join
+     * @param separator the separator
+     * @param out the target code writer
+     */
     static void storeList(String prefix, List<? extends IJavaCodeElement> elements, String separator, CodeWriter out) {
         if (null != elements) {
             if (prefix != null && prefix.length() > 0) {
@@ -77,6 +149,13 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider {
         }
     }
 
+    /**
+     * Turns the given string elements to a string separated by {@code separator}.
+     * 
+     * @param elements the elements
+     * @param separator the separator
+     * @return the joined string
+     */
     static String toList(List<String> elements, String separator) {
         String result = "";
         if (null != elements) {

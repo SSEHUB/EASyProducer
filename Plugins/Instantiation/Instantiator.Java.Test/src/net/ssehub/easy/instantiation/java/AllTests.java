@@ -11,6 +11,9 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifactTest;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ExecutionTests.class, JavaFileArtifactTest.class })
+@Suite.SuiteClasses({
+    ExecutionTests.class, 
+    JavaFileArtifactTest.class, 
+    JavaCodeTests.class })
 public class AllTests {
 }

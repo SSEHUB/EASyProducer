@@ -18,34 +18,38 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
- * Basic interface for the code artifact (to reduce dependencies).
- * 
+ * Represents a do-loop.
+ *
  * @author Holger Eichelberger
  */
-public interface IJavaCodeArtifact {
+public class JavaCodeDoLoop extends JavaCodeBlock {
+
+    private String condition;
     
     /**
-     * Validates a given {@code type} and considers it for the imports. May modify the output type name of {@code type}
-     * using {@link IJavaCodeTypeSpecification#setOutputTypeName(String)}.
+     * Creates a do-loop.
      * 
-     * @param type the type
+     * @param parent the parent instance
+     * @param condition the loop condition
      */
-    public void validateType(IJavaCodeTypeSpecification type);
-    
-    /**
-     * Validates a qualified static method call.
-     * 
-     * @param name the name
-     * @return the name, potentially without qualification if statically imported
-     */
-    public String validateStaticMethodCall(String name);
-    
-    /**
-     * Internal call to register an import.
-     * 
-     * @param imp the import
-     */
+    public JavaCodeDoLoop(IJavaCodeElement parent, String condition) {
+        super(parent, true, false);
+        this.condition = condition;
+    }
+
     @Invisible
-    public void registerImport(IJavaCodeImport imp);
+    @Override
+    public void store(CodeWriter out) {
+        out.printwi("do");
+        super.store(out);
+        out.print(" while (");
+        out.print(condition);
+        out.println(");");
+    }
+
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "JavaCodeDoLoop";
+    }
 
 }

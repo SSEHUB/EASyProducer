@@ -15,57 +15,42 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-
 /**
- * Represents raw text.
+ * Represents an empty line in code.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeText implements IJavaCodeElement {
+public class JavaCodeEmptyLine implements IJavaCodeElement {
 
-    private String text;
-    private boolean indent;
-    private boolean endWithNewline;
-
-    /**
-     * Creates a raw text instance.
-     * 
-     * @param text the text
-     * @param indent does the text include an indentation or shall the text be indended by default
-     * @param endWithNewline end the text with a newline
-     */
-    JavaCodeText(String text, boolean indent, boolean endWithNewline) {
-        this.text = text;
-        this.indent = indent;
-        this.endWithNewline = endWithNewline;
-    }
+    private IJavaCodeElement parent;
     
+    /**
+     * Creates an empty line.
+     * 
+     * @param parent the parent
+     */
+    public JavaCodeEmptyLine(IJavaCodeElement parent) {
+        this.parent = parent;
+    }
+
     @Override
     public void store(CodeWriter out) {
-        if (indent) {
-            out.printIndent();
-        } 
-        out.print(text);
-        if (endWithNewline) {
-            out.println();
-        }
+        out.println();
     }
 
-    @Invisible
     @Override
     public IJavaCodeArtifact getArtifact() {
-        return null;
+        return parent.getArtifact();
     }
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return "JavaText";
+        return "JavaCodeEmptyLine";
     }
 
     @Override
     public IJavaCodeElement getParent() {
-        return null;
+        return parent;
     }
 
 }

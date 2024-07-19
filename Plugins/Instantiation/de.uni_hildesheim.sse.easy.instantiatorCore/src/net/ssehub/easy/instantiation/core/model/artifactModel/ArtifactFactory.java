@@ -132,7 +132,8 @@ public class ArtifactFactory {
             model = findModel(real);
         }
         IArtifact artifact = model.getArtifact(real);
-        if (null == artifact) {
+        // no artifact or kind requests something more specific
+        if (null == artifact || !kind.isAssignableFrom(artifact.getClass())) {
             IArtifactCreator creator = findCreator(kind, real);
             if (null == creator) {
                 throw new VilException("no artifact creator handles " + real.getClass().getName() + " " + real, 

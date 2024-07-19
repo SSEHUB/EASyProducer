@@ -16,19 +16,54 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
-public class JavaCodeImport implements IJavaCodeElement {
+/**
+ * Represents a Java import.
+ * 
+ * @author Holger Eichelberger
+ */
+public class JavaCodeImport implements IJavaCodeImport {
 
+    public static final JavaCodeImport DEFAULT = new JavaCodeImport();
+    
     private boolean isStatic;
     private String name;
     private IJavaCodeArtifact artifact;
+    private boolean isWildcard;
     
+    /**
+     * Creates an instance for the default import.
+     */
+    private JavaCodeImport() {
+        this.name = "java.lang";
+    }
+
+    /**
+     * Creates a non-static import.
+     * 
+     * @param name the name/wildcard to import
+     * @param artifact the containing artifact
+     */
     JavaCodeImport(String name, IJavaCodeArtifact artifact) {
-        this.name = name;
-        this.artifact = artifact;
+        this(name, artifact, false);
     }
     
+    /**
+     * Creates an import.
+     * 
+     * @param name the name/wildcard to import
+     * @param artifact the containing artifact
+     * @param isStatic is the import static or non-static
+     */
+    JavaCodeImport(String name, IJavaCodeArtifact artifact, boolean isStatic) {
+        this.name = name;
+        this.artifact = artifact;
+        this.isWildcard = name.endsWith("*");
+        this.isStatic = isStatic;
+        artifact.registerImport(this);
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -38,7 +73,6 @@ public class JavaCodeImport implements IJavaCodeElement {
      * 
      * @param isStatic if the element is static
      */
-    @OperationMeta(name = {"static"})
     public void setStatic(boolean isStatic) {
         this.isStatic = isStatic;
     }
@@ -46,16 +80,11 @@ public class JavaCodeImport implements IJavaCodeElement {
     /**
      * Sets this element to static.
      */
-    @OperationMeta(name = {"static"})
     public void setStatic() {
         setStatic(true);
     }
 
-    /**
-     * Returns whether the element is static.
-     * 
-     * @return {@code true} for static, {@code false} for instance
-     */
+    @Override
     public boolean isStatic() {
         return isStatic;
     }
@@ -79,6 +108,16 @@ public class JavaCodeImport implements IJavaCodeElement {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "JavaImport: " + getName();
+    }
+
+    @Override
+    public boolean isWildcard() {
+        return isWildcard;
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return null;
     }
 
 }

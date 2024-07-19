@@ -18,34 +18,18 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
- * Basic interface for the code artifact (to reduce dependencies).
+ * A storable element, an element that can be stored through a {@link CodeWriter}.
  * 
  * @author Holger Eichelberger
  */
-public interface IJavaCodeArtifact {
-    
+public interface Storable {
+
     /**
-     * Validates a given {@code type} and considers it for the imports. May modify the output type name of {@code type}
-     * using {@link IJavaCodeTypeSpecification#setOutputTypeName(String)}.
+     * Stores the element at the current position in {@code out}.
      * 
-     * @param type the type
-     */
-    public void validateType(IJavaCodeTypeSpecification type);
-    
-    /**
-     * Validates a qualified static method call.
-     * 
-     * @param name the name
-     * @return the name, potentially without qualification if statically imported
-     */
-    public String validateStaticMethodCall(String name);
-    
-    /**
-     * Internal call to register an import.
-     * 
-     * @param imp the import
+     * @param out the output writer
      */
     @Invisible
-    public void registerImport(IJavaCodeImport imp);
+    public void store(CodeWriter out);
 
 }

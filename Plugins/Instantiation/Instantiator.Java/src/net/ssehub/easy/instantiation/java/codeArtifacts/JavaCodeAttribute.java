@@ -16,27 +16,47 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 
+/**
+ * Represents an attribute of a class in Java.
+ * 
+ * @author Holger Eichelberger
+ */
 public class JavaCodeAttribute extends JavaCodeVisibleElement {
 
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
 
-    protected JavaCodeAttribute(String name, JavaCodeClass enclosing) {
-        this(JavaCodeTypeSpecification.VOID, name, enclosing);
-    }
-
+    /**
+     * Creates an attribute.
+     * 
+     * @param type the type of the attribute; the type is validated/potentially registered as import in the 
+     *   containing artifact
+     * @param name the name
+     * @param enclosing the enclosing class
+     */
     protected JavaCodeAttribute(JavaCodeTypeSpecification type, String name, JavaCodeClass enclosing) {
-        super(name, Visibility.PRIVATE, null);
+        super(name, JavaCodeVisibility.PRIVATE, null);
         this.enclosing = enclosing;
         this.type = type;
+    }
+
+    @Override
+    public boolean isAttribute() {
+        return true;
     }
 
     @Invisible
     @Override
     public IJavaCodeArtifact getArtifact() {
         return enclosing.getArtifact();
+    }
+    
+    @Invisible
+    @Override
+    protected JavaCodeClass getEnclosing() {
+        return enclosing;
     }
 
     @Invisible
@@ -55,59 +75,83 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     }
     
     @Override
-    @OperationMeta(name = {"visibility"})
     public JavaCodeAttribute setVisibility(String visibility) {
         super.setVisibility(visibility);
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"visibility"})
-    public JavaCodeAttribute setVisibility(Visibility visibility) {
+    public JavaCodeAttribute setVisibility(JavaCodeVisibility visibility) {
         super.setVisibility(visibility);
         return this;
     }
     
     @Override
-    @OperationMeta(name = {"public"})
     public JavaCodeAttribute setPublic() {
         super.setPublic();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"private"})
     public JavaCodeAttribute setPrivate() {
         super.setPrivate();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"protected"})
     public JavaCodeAttribute setProtected() {
         super.setProtected();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"package"})
     public JavaCodeAttribute setPackage() {
         super.setPackage();
         return this;
     }
 
     @Override
-    @OperationMeta(name = {"static"})
     public JavaCodeAttribute setStatic(boolean isStatic) {
         super.setStatic(isStatic);
         return this;
     }
 
-    @OperationMeta(name = {"static"})
     @Override
     public JavaCodeAttribute setStatic() {
         super.setStatic();
         return this;
+    }
+    
+    /**
+     * Adds an extensible default getter for this attribute.
+     * 
+     * @return the getter
+     */
+    public JavaCodeMethod addGetter() {
+        final String attribute = getName();
+        JavaCodeMethod method = enclosing.addMethod(type, 
+            "get" + PseudoString.firstToUpperCase(attribute), "Returns the value of " + attribute + ".");
+        method.addReturn(getName(), "the value of " + attribute);
+        return method;
+    }
+    
+    /**
+     * Adds an extensible default setter for this attribute.
+     * 
+     * @return the setter
+     */
+    public JavaCodeMethod addSetter() {
+        final String attribute = getName();
+        JavaCodeMethod method = enclosing.addMethod(JavaCodeTypeSpecification.VOID, 
+            "set" + PseudoString.firstToUpperCase(attribute), "Changes the value of " + attribute + ".");
+        method.addParameter(type, attribute, "the new value");
+        method.add("this." + attribute + " = " + attribute + ";");
+        return method;
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return enclosing;
     }
     
 }
