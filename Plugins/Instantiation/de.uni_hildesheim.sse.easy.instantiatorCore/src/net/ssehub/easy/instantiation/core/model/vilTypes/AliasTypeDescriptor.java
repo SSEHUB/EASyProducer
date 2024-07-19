@@ -193,7 +193,7 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
      * @param type the type
      * @return the unalised type
      */
-    static IMetaType unalias(IMetaType type) {
+    public static IMetaType unalias(IMetaType type) {
         if (type instanceof AliasTypeDescriptor) {
             type = ((AliasTypeDescriptor<?>) type).getAliasedType();
         }        
@@ -206,7 +206,7 @@ class AliasTypeDescriptor <T> extends TypeDescriptor<T> {
      * @param type the type
      * @return the unalised type
      */
-    static TypeDescriptor<?> unalias(TypeDescriptor<?> type) {
+    public static TypeDescriptor<?> unalias(TypeDescriptor<?> type) {
         if (type instanceof AliasTypeDescriptor) {
             type = ((AliasTypeDescriptor<?>) type).getAliasedType();
         }        

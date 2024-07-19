@@ -8,6 +8,12 @@ vilScript vtl4 (Project source, Project target, Configuration config) {
         expressionTest cfg = config;
         String s = asName("a");
         String s2 = asName(cfg.var.name);
+        VtlTestType tt = new VtlTestType();
+        tt.count = 1;
+        setOf(VtlTestType) tests = {};
+        tests.add(tt);
+        addTestType(tests, "myValue");
+        addTestType(tests, "next", count=27);
     }
 
 }

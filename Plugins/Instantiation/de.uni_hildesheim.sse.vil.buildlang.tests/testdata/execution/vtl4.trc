@@ -5,4 +5,21 @@
 -> asName(String) with (a)
     s <- a
 -> asName(String) with (test)
-    s2 <- test    
+    s2 <- test
+    -> create VtlTestType() with ({}) = {}
+    tt <- {{count, 0}}
+    tt.count <- 1
+    tests <- {}
+    -> add(Set, VtlTestType) with ({}, {{count, 1}}) = {{count, 1}}
+-> addTestType(setOf(VtlTestType), String, Integer) with ({{{count, 1}}}, myValue, 0)
+    -> create VtlTestType() with ({}) = {}
+    tt <- {{count, 0}}
+    tt.value <- myValue
+    tt.count <- 0
+    -> add(Set, VtlTestType) with ({{{count, 1}}}, {{count, 0}, {value, myValue}}) = {{count, 0}, {value, myValue}}
+-> addTestType(setOf(VtlTestType), String, Integer) with ({{{count, 0}, {value, myValue}}, {{count, 1}}}, next, 27)
+    -> create VtlTestType() with ({}) = {}
+    tt <- {{count, 0}}
+    tt.value <- next
+    tt.count <- 27
+    -> add(Set, VtlTestType) with ({{{count, 0}, {value, myValue}}, {{count, 1}}}, {{count, 27}, {value, next}}) = {{count, 27}, {value, next}}    

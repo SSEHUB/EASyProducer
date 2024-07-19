@@ -47,7 +47,8 @@ public class VtlRule extends AbstractRule {
         this.parameter = new VariableDeclaration[def.getParameterCount()];
         for (int p = 0; p < this.parameter.length; p++) {
             net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration para = def.getParameter(p);
-            this.parameter[p] = new VariableDeclaration(para.getName(), para.getType());
+            this.parameter[p] = new VariableDeclaration(para.getName(), para.getType(), para.isConstant(), 
+                para.getExpression());
         }
         this.namedParams = VariableDeclaration.mapDefaultedParameters(this.namedParams, this.parameter);
     }

@@ -8,7 +8,6 @@ import java.util.Set;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule.Side;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ruleMatch.AbstractRuleMatchExpression;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 
 /**
  * Stores information about executable rules.

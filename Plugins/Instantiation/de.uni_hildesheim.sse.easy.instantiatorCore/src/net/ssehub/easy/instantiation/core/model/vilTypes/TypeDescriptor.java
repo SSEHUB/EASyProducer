@@ -637,8 +637,9 @@ public abstract class TypeDescriptor <T> implements IMetaType {
                     } else {
                         ok = reqParam == 0;
                     }
-                    if (ok && op.isConstructor()) { // prevent "accidental" overriding, constuctors must fit type
-                        ok = op.getDeclaringType() == type;
+                    if (ok && op.isConstructor()) { // prevent "accidental" overriding, constructors must fit type
+                        IMetaType tp = AliasTypeDescriptor.unalias(type); // if imported from VTL
+                        ok = op.getDeclaringType() == tp;
                     }
                 } else {
                     ok = false;

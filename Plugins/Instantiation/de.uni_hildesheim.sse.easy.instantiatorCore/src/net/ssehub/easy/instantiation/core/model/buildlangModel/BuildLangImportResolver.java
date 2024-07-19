@@ -50,6 +50,12 @@ public class BuildLangImportResolver extends DefaultImportResolver<Script> {
                         tmpScript.addRule(new VtlRule(def, tmpScript));
                     }
                 }
+                for (int t = 0; t < template.getTypedefCount(); t++) {
+                    tmpScript.addTypedef(template.getTypedef(t));
+                }
+                for (int c = 0; c < template.getCompoundCount(); c++) {
+                    tmpScript.addCompound(template.getCompound(c));
+                }
                 imp.setResolved(tmpScript);
             } else {
                 super.cannotResolveImport(imp, messages, modelURI, context);

@@ -950,7 +950,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
-     * Tests some VTL cases (re-using VTL in VIL).
+     * Tests some VTL cases (importing, re-using VTL in VIL).
      * 
      * @throws IOException should not occur
      */
