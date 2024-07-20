@@ -3,6 +3,7 @@ template vtlLib(Configuration config, FileArtifact target) {
     compound VtlTestType {
         String value;
         Integer count = 0;
+        Boolean test = false;
     }
     
     def Boolean doSomething() {
@@ -17,10 +18,11 @@ template vtlLib(Configuration config, FileArtifact target) {
         s;
     }
 
-    def addTestType(setOf(VtlTestType) tests, String value, Integer count = 0) {
+    def addTestType(setOf(VtlTestType) tests, String value, Integer count = 0, Boolean test = false) {
         VtlTestType tt = new VtlTestType();
         tt.value = value;
         tt.count = count;
+        tt.test = test;
         tests.add(tt);
     }
 

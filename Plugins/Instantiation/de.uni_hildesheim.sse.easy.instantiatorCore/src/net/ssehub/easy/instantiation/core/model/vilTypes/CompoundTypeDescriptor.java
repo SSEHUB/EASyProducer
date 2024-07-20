@@ -347,6 +347,7 @@ public class CompoundTypeDescriptor extends TypeDescriptor<CompoundInstance> {
     @Override
     public boolean isAssignableFrom(IMetaType type) {
         boolean result = false;
+        type = AliasTypeDescriptor.unalias(type);
         if (type instanceof CompoundTypeDescriptor) {
             result = isAssignableFrom((CompoundTypeDescriptor) type);
         }
@@ -435,6 +436,7 @@ public class CompoundTypeDescriptor extends TypeDescriptor<CompoundInstance> {
     @Override
     public boolean isAssignableFrom(TypeDescriptor<?> desc) {
         boolean isAssignable = false;
+        desc = AliasTypeDescriptor.unalias(desc);
         if (desc instanceof CompoundTypeDescriptor) {
             CompoundTypeDescriptor iter = (CompoundTypeDescriptor) desc;
             while (null != iter && !isAssignable) {

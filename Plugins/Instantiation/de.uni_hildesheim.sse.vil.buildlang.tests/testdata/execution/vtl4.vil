@@ -10,10 +10,22 @@ vilScript vtl4 (Project source, Project target, Configuration config) {
         String s2 = asName(cfg.var.name);
         VtlTestType tt = new VtlTestType();
         tt.count = 1;
+        workOn(tt);
         setOf(VtlTestType) tests = {};
         tests.add(tt);
         addTestType(tests, "myValue");
-        addTestType(tests, "next", count=27);
+        addTestType(tests, "next", count=27, test=true);
+        workOnSet("", tests);
+    }
+
+    workOn(VtlTestType type) = : {
+        type.count = type.count + 1;
+    }
+
+    workOnSet(String something, setOf(VtlTestType) tst) = : {
+        for(VtlTestType t:tst) {
+            workOn(t);
+        };
     }
 
 }

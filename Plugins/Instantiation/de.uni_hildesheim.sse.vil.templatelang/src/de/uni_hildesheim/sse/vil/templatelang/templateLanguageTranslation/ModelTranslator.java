@@ -119,10 +119,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
             Imports<Template> imports = processImports(tpl.getImports());
             desc.setImports(imports);
             desc.setAdvices(processAdvices(tpl.getAdvices(), uri));
-            
             processJavaExtensions(tpl, desc);
-            desc.setParameter(resolveParameters(tpl.getParam(), tpl, 
-                TemplateLangPackage.Literals.LANGUAGE_UNIT__PARAM,  resolver), resolver);
             ModelImport<Template> extension = getExtensionImport(tpl.getExt(), imports, tpl, 
                 TemplateLangPackage.Literals.LANGUAGE_UNIT__EXT);
             if (null != tpl.getIndent()) {
@@ -132,11 +129,14 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                 desc.setFormattingConfiguration(processFormattingHint(tpl.getFormatting()));
             }
             result = new Template(tpl.getName(), extension, desc, resolver.getTypeRegistry());
-            resolver.pushModel(result);
-            pushed = true;
             result.setVersion(convert(tpl.getVersion()));
             resolveImports(tpl, ExpressionDslPackage.Literals.LANGUAGE_UNIT__IMPORTS, result, uri, 
                 new ArrayList<de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit>(), impResolver);
+            resolver.pushModel(result);
+            desc.setParameter(resolveParameters(tpl.getParam(), tpl, 
+                TemplateLangPackage.Literals.LANGUAGE_UNIT__PARAM,  resolver), resolver);
+            result.setParams(desc);
+            pushed = true;
             resolver.enumerateImports(result);
             List<EObject> elts = copy(tpl.getElements());
             if (null != elts) {

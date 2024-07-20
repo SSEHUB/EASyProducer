@@ -62,10 +62,20 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
         this.name = name;
         this.extension = extension;
         this.javaExtensions = descriptor.getJavaExtensions();
-        this.param = descriptor.getParameter();
-        this.namedParams = VariableDeclaration.mapDefaultedParameters(this.namedParams, this.param);
         this.indentationConfiguration = descriptor.getIndentationConfiguration();
         this.formattingConfiguration = descriptor.getFormattingConfiguration();
+        setParams(descriptor);
+    }
+
+    /**
+     * Sets the parameters, in particular if a (type) resolution after creation of the model is required, 
+     * e.g. to feed the type resolver properly.
+     * 
+     * @param descriptor the descriptor
+     */
+    public void setParams(TemplateDescriptor descriptor) {
+        this.param = descriptor.getParameter();
+        this.namedParams = VariableDeclaration.mapDefaultedParameters(this.namedParams, this.param);
         adjustParents();
     }
 
