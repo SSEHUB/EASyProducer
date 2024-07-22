@@ -120,4 +120,8 @@ public class JavaCodeImport implements IJavaCodeImport {
         return null;
     }
 
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+    }
+
 }

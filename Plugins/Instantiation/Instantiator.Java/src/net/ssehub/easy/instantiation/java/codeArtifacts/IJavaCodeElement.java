@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
@@ -41,6 +42,15 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
      * @return the parent
      */
     public IJavaCodeElement getParent();
+    
+    /**
+     * Changes the parent, e.g., after late addition of an element. This may lead to transitive adjustments of the
+     * parents of contained elements.
+     * 
+     * @param parent the parent
+     */
+    @Invisible(inherit = true)
+    public void setParent(IJavaCodeElement parent);
     
     /**
      * Returns whether this code element has a Javadoc comment.
@@ -167,6 +177,20 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
             }
         }
         return result;
+    }
+
+    /**
+     * Sets a parent instance via {@code setter} if {@code parent} complies with {@code cls}.
+     * 
+     * @param <T> the required type of the parent
+     * @param parent the parent instance
+     * @param cls the class stating the required type
+     * @param setter the actual setter
+     */
+    static <T extends IJavaCodeElement> void setParent(IJavaCodeElement parent, Class<T> cls, Consumer<T> setter) {
+        if (cls.isInstance(parent)) {
+            setter.accept(cls.cast(parent));
+        }
     }
 
 }

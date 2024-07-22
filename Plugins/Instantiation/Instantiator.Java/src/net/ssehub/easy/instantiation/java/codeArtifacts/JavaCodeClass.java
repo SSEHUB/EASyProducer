@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
@@ -268,7 +269,23 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
 
     @Override
     public IJavaCodeElement getParent() {
-        return null;
+        return enclosing;
+    }
+
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        setParent(parent, p -> this.enclosing = p);
+    }
+
+    /**
+     * Helper to set a parent of required type {@link JavaCodeClass}.
+     * 
+     * @param parent the parent
+     * @param consumer the setter consumer
+     */
+    static void setParent(IJavaCodeElement parent, Consumer<JavaCodeClass> consumer) {
+        IJavaCodeElement.setParent(parent, JavaCodeClass.class, consumer);
     }
 
 }

@@ -235,4 +235,10 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
         return enclosing;
     }
 
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        JavaCodeClass.setParent(parent, p -> this.enclosing = p);
+    }
+
 }

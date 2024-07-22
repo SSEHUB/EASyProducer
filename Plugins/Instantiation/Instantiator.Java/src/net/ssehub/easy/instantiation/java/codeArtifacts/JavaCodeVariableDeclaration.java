@@ -20,9 +20,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeVariableDeclaration implements IJavaCodeElement {
+public class JavaCodeVariableDeclaration extends JavaCodeStatement {
 
-    private IJavaCodeElement parent;
     private JavaCodeTypeSpecification type;
     private String variableName;
     private boolean isFinal;
@@ -40,7 +39,7 @@ public class JavaCodeVariableDeclaration implements IJavaCodeElement {
      */
     public JavaCodeVariableDeclaration(IJavaCodeElement parent, JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, String initializer) {
-        this.parent = parent;
+        super(parent);
         this.type = type;
         this.variableName = variableName;
         this.isFinal = isFinal;
@@ -102,18 +101,8 @@ public class JavaCodeVariableDeclaration implements IJavaCodeElement {
     }
 
     @Override
-    public IJavaCodeArtifact getArtifact() {
-        return parent.getArtifact();
-    }
-
-    @Override
     public String getStringValue(StringComparator comparator) {
         return "MethodCall";
-    }
-
-    @Override
-    public IJavaCodeElement getParent() {
-        return parent;
     }
 
 }

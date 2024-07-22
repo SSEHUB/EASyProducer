@@ -23,9 +23,8 @@ import java.util.List;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeMethodCall implements IJavaCodeElement {
+public class JavaCodeMethodCall extends JavaCodeStatement {
 
-    private IJavaCodeElement parent;
     private String methodName;
     private List<IJavaCodeElement> arguments = new ArrayList<>();
     
@@ -37,7 +36,7 @@ public class JavaCodeMethodCall implements IJavaCodeElement {
      * @param considerStatic whether the call is static
      */
     public JavaCodeMethodCall(IJavaCodeElement parent, String methodName, boolean considerStatic) {
-        this.parent = parent;
+        super(parent);
         this.methodName = methodName;
         if (considerStatic && methodName.contains(".")) { // else methodName may be qualified but not by class
             parent.getArtifact().validateStaticMethodCall(methodName);
@@ -63,7 +62,7 @@ public class JavaCodeMethodCall implements IJavaCodeElement {
      * @return the created method call for chaining
      */
     public JavaCodeMethodCall addArgument(String methodName, boolean considerStatic) {
-        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(parent, methodName, considerStatic));
+        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(getParent(), methodName, considerStatic));
     }
 
     @Override
@@ -75,18 +74,8 @@ public class JavaCodeMethodCall implements IJavaCodeElement {
     }
 
     @Override
-    public IJavaCodeArtifact getArtifact() {
-        return parent.getArtifact();
-    }
-
-    @Override
     public String getStringValue(StringComparator comparator) {
         return "MethodCall";
-    }
-
-    @Override
-    public IJavaCodeElement getParent() {
-        return parent;
     }
 
 }

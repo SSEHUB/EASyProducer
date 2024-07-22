@@ -21,12 +21,23 @@ import java.util.stream.Stream;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
+/**
+ * Represents a Javadoc comment.
+ * 
+ * @author Holger Eichelberger
+ */
 public class JavaCodeJavadocComment implements IJavaCodeElement {
 
     private String comment;
     private IJavaCodeElement attachedTo;
     private List<NameTaggedComment> taggedParts;
     
+    /**
+     * Creates an instance.
+     * 
+     * @param comment the comment text
+     * @param attachedTo the element this comment is attached to.
+     */
     JavaCodeJavadocComment(String comment, IJavaCodeElement attachedTo) {
         this.comment = comment;
         final String marker = Tag.RETURN.getTag();
@@ -139,6 +150,10 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     @Override
     public IJavaCodeElement getParent() {
         return null;
+    }
+
+    @Override
+    public void setParent(IJavaCodeElement parent) {
     }
 
 }

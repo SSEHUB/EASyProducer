@@ -153,5 +153,11 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     public IJavaCodeElement getParent() {
         return enclosing;
     }
+
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        JavaCodeClass.setParent(parent, p -> this.enclosing = p);    
+    }
     
 }

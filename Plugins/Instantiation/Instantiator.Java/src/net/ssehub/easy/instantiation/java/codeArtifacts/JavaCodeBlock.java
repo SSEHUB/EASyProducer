@@ -26,10 +26,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeBlock implements IJavaCodeElement {
+public class JavaCodeBlock extends JavaCodeStatement {
 
     private List<IJavaCodeElement> elements = new ArrayList<>();
-    private IJavaCodeElement parent;
     private boolean outputWhitespaceBefore;
     private boolean outputLnAfter;
     private boolean isStatic;
@@ -58,16 +57,27 @@ public class JavaCodeBlock implements IJavaCodeElement {
      */
     public JavaCodeBlock(IJavaCodeElement parent, boolean outputWhitespaceBefore, boolean outputLnAfter, 
         boolean isStatic, boolean withBrackets) {
-        this.parent = parent;
+        super(parent);
         this.outputWhitespaceBefore = isStatic ? true : outputWhitespaceBefore;
         this.outputLnAfter = outputLnAfter;
         this.isStatic = isStatic;
         this.withBrackets = isStatic ? true : withBrackets;
     }
-    
-    @Override
-    public IJavaCodeElement getParent() {
-        return parent;
+
+    /**
+     * VIL constructor for unlinked code blocks.
+     * 
+     * @param outputWhitespaceBefore whether a whitespace shall be printed before the opening curly bracket
+     * @param outputLnAfter whether a newline shall be emitted after the closing curly bracket
+     * @param isStatic shall this be a static initializer block (supersedes {@code outputWhitespaceBefore} 
+     *   and {@code withBrackets})
+     * @param withBrackets shall brackets be emitted
+     * @return the code block
+     */
+    public static JavaCodeBlock create(boolean outputWhitespaceBefore, boolean outputLnAfter, 
+        boolean isStatic, boolean withBrackets) {
+        return new JavaCodeBlock(new DummyJavaCodeElement(), outputWhitespaceBefore, outputLnAfter, isStatic, 
+            withBrackets);
     }
     
     /**
@@ -77,10 +87,10 @@ public class JavaCodeBlock implements IJavaCodeElement {
      */
     protected JavaCodeClass getParentClass() {
         JavaCodeClass result = null;
-        if (parent instanceof JavaCodeClass) {
-            result = (JavaCodeClass) parent;
-        } else if (parent instanceof JavaCodeBlock) {
-            result = ((JavaCodeBlock) parent).getParentClass();
+        if (getParent() instanceof JavaCodeClass) {
+            result = (JavaCodeClass) getParent();
+        } else if (getParent() instanceof JavaCodeBlock) {
+            result = ((JavaCodeBlock) getParent()).getParentClass();
         } else {
             IJavaCodeElement iter = this;
             while (iter != null && !(iter instanceof JavaCodeClass)) {
@@ -385,6 +395,49 @@ public class JavaCodeBlock implements IJavaCodeElement {
     public void addReturn(String value) {
         add("return " + value + ";"); // preliminary, may also become a class
     }
+    
+    /**
+     * Adds a nested block.
+     * 
+     * @param outputWhitespaceBefore whether a whitespace shall be printed before the opening curly bracket
+     * @param outputLnAfter whether a newline shall be emitted after the closing curly bracket
+     * @param isStatic shall this be a static initializer block (supersedes {@code outputWhitespaceBefore} 
+     *   and {@code withBrackets})
+     * @param withBrackets shall brackets be emitted
+     * @return the code block
+     */
+    public JavaCodeBlock addBlock(boolean outputWhitespaceBefore, boolean outputLnAfter, 
+        boolean isStatic, boolean withBrackets) {
+        return IJavaCodeElement.add(elements, new JavaCodeBlock(this, outputWhitespaceBefore, outputLnAfter, 
+            isStatic, withBrackets));
+    }
+    
+    /**
+     * Adds a nested block.
+     * 
+     * @param block the added block
+     * @return {@code block} for chaining
+     */
+    public JavaCodeBlock addBlock(JavaCodeBlock block) {
+        return IJavaCodeElement.add(elements, block);
+    }
+
+    /**
+     * Replaces all elements in this block by those from {@code block}. This allows for separating creation of 
+     * {@link JavaCodeBlock} and contained code as well as for delayed decision how to handle collected code. 
+     * Does not take over formatting settings from {@code block}.
+     * 
+     * @param block the block containing the statements
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeBlock setBlock(JavaCodeBlock block) {
+        elements.clear();
+        for (IJavaCodeElement e : block.elements) {
+            e.setParent(this);
+            elements.add(e);
+        }
+        return this;
+    }
 
     @Invisible
     @Override
@@ -418,11 +471,6 @@ public class JavaCodeBlock implements IJavaCodeElement {
     @Override
     public String getStringValue(StringComparator comparator) {
         return "JavaBlock";
-    }
-
-    @Override
-    public IJavaCodeArtifact getArtifact() {
-        return parent.getArtifact();
     }
 
 }

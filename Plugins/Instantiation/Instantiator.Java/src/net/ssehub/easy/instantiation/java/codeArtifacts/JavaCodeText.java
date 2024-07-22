@@ -68,4 +68,9 @@ public class JavaCodeText implements IJavaCodeElement {
         return null;
     }
 
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+    }
+
 }

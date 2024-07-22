@@ -16,33 +16,37 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 /**
- * Represents a variable assignment.
+ * Internal code element for explicitly created instances and delayed adding/linking. Prevents/handles 
+ * {@link NullPointerException}.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeSingleLineComment extends JavaCodeElement {
+class DummyJavaCodeElement implements IJavaCodeElement {
 
-    private String text;
+    private IJavaCodeElement parent;
     
-    /**
-     * Creates a variable assignment.
-     * 
-     * @param parent the parent
-     * @param text the comment text
-     */
-    public JavaCodeSingleLineComment(IJavaCodeElement parent, String text) {
-        super(parent);
-        this.text = text;
+    @Override
+    public String getStringValue(StringComparator comparator) {
+        return "Dummy";
     }
 
     @Override
     public void store(CodeWriter out) {
-        out.printlnwi("// " + text);
     }
 
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeSLComment";
+    public IJavaCodeArtifact getArtifact() {
+        return null == parent ? DummyJavaCodeArtifact.INSTANCE : parent.getArtifact();
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return parent;
+    }
+
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        this.parent = parent;
     }
 
 }

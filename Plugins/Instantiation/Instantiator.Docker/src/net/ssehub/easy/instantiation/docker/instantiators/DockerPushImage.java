@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.docker.instantiators;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.github.dockerjava.api.async.ResultCallback;
 import com.github.dockerjava.api.command.PushImageCmd;
@@ -72,6 +73,7 @@ public class DockerPushImage extends AbstractDockerInstantiator {
             final String taskDescription = "Docker push";
             TracerFactory.ensureTasks(taskDescription);
             final AtomicInteger count = new AtomicInteger(0);
+            final AtomicReference<Throwable> cbThrowable = new AtomicReference<>();
             cmd.exec(new ResultCallback.Adapter<PushResponseItem>() {
                 
                 @Override
@@ -83,21 +85,33 @@ public class DockerPushImage extends AbstractDockerInstantiator {
                     TracerFactory.progressSubTask(cnt, cnt + 1, taskDescription);
                 }
                 
+                @Override
+                public void onError(Throwable th) {
+                    cbThrowable.set(th);
+                }                
+                
             }).awaitCompletion();
             TracerFactory.closeTasks(taskDescription);
-            tracer.traceMessage("Pushing docker image " + imageName + " completed in " 
+            handleThrowable(cbThrowable.get(), tracer, getTask(imageName));
+            tracer.traceMessage(getTask(imageName) + " completed in " 
                 + (System.currentTimeMillis() - start) + " ms.");
             return true;
         } catch (Exception e) {
-            if (FAIL_ON_ERROR) {
-                tracer.traceMessage("Pushing docker image " + imageName + "failed: " + e.getMessage());
-                throw new VilException(e, VilException.ID_RUNTIME);
-            } else {
-                return false;
-            }
+            handleThrowable(e, tracer, getTask(imageName));
+            return false;
         }
     }
     
     // checkstyle: resume exception type check
+    
+    /**
+     * Returns the task at hands.
+     * 
+     * @param name the name of the task
+     * @return the composed name
+     */
+    private static String getTask(String name) {
+        return "Pushing docker image " + name;
+    }    
     
 }

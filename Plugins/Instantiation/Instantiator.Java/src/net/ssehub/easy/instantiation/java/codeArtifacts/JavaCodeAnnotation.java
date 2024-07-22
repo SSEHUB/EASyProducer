@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
  * Represents a Java annotation.
  * 
@@ -111,6 +113,12 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
     @Override
     public IJavaCodeElement getParent() {
         return annotated;
+    }
+
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        this.annotated = parent;
     }
 
 }

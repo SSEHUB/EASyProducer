@@ -20,17 +20,15 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeEmptyLine implements IJavaCodeElement {
+public class JavaCodeEmptyLine extends JavaCodeElement {
 
-    private IJavaCodeElement parent;
-    
     /**
      * Creates an empty line.
      * 
      * @param parent the parent
      */
     public JavaCodeEmptyLine(IJavaCodeElement parent) {
-        this.parent = parent;
+        super(parent);
     }
 
     @Override
@@ -39,18 +37,8 @@ public class JavaCodeEmptyLine implements IJavaCodeElement {
     }
 
     @Override
-    public IJavaCodeArtifact getArtifact() {
-        return parent.getArtifact();
-    }
-
-    @Override
     public String getStringValue(StringComparator comparator) {
         return "JavaCodeEmptyLine";
-    }
-
-    @Override
-    public IJavaCodeElement getParent() {
-        return parent;
     }
 
 }

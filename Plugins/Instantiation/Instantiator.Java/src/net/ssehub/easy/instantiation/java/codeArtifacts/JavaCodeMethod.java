@@ -418,6 +418,43 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         }
         return this;
     }
+    
+    /**
+     * Adds a nested block.
+     * 
+     * @param outputWhitespaceBefore whether a whitespace shall be printed before the opening curly bracket
+     * @param outputLnAfter whether a newline shall be emitted after the closing curly bracket
+     * @param isStatic shall this be a static initializer block (supersedes {@code outputWhitespaceBefore} 
+     *   and {@code withBrackets})
+     * @param withBrackets shall brackets be emitted
+     * @return the code block
+     */
+    public JavaCodeBlock addBlock(boolean outputWhitespaceBefore, boolean outputLnAfter, 
+        boolean isStatic, boolean withBrackets) {
+        return block.addBlock(outputWhitespaceBefore, outputLnAfter, isStatic, withBrackets);
+    }
+    
+    /**
+     * Adds a nested block.
+     * 
+     * @param block the added block
+     * @return {@code block} for chaining
+     */
+    public JavaCodeBlock addBlock(JavaCodeBlock block) {
+        return block.addBlock(block);
+    }
+
+    /**
+     * Replaces all elements in this block by those from {@code block}. This allows for separating creation of 
+     * {@link JavaCodeBlock} and contained code as well as for delayed decision how to handle collected code. 
+     * Does not take over formatting settings from {@code block}.
+     * 
+     * @param block the block containing the statements
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeBlock setBlock(JavaCodeBlock block) {
+        return block.setBlock(block);
+    }
 
     @Invisible
     @Override
@@ -494,6 +531,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     @Override
     public IJavaCodeElement getParent() {
         return enclosing;
+    }
+
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        JavaCodeClass.setParent(parent, p -> this.enclosing = p);
     }
 
 }

@@ -15,6 +15,20 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-public abstract class JavaCodeStatement {
+/**
+ * Basic implementation for statements.
+ * 
+ * @author Holger Eichelberger
+ */
+public abstract class JavaCodeStatement extends JavaCodeElement {
 
+    /**
+     * Creates an instance.
+     *
+     * @param parent the parent
+     */
+    protected JavaCodeStatement(IJavaCodeElement parent) {
+        super(parent);
+    }
+    
 }

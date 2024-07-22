@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
  * Represents a argument in a {@link JavaCodeAnnotation annotation}.
  * 
@@ -58,7 +60,13 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
 
     @Override
     public IJavaCodeElement getParent() {
-        return null;
+        return annotation;
+    }
+
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        IJavaCodeElement.setParent(parent, JavaCodeAnnotation.class, p -> this.annotation = p);
     }
 
 }

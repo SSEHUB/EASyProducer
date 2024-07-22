@@ -20,9 +20,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeAssignment implements IJavaCodeElement {
+public class JavaCodeAssignment extends JavaCodeStatement {
 
-    private IJavaCodeElement parent;
     private String variableName;
     private String expression;
     private JavaCodeMethodCall expressionCall;
@@ -35,7 +34,7 @@ public class JavaCodeAssignment implements IJavaCodeElement {
      * @param expression the value expression
      */
     public JavaCodeAssignment(IJavaCodeElement parent, String variableName, String expression) {
-        this.parent = parent;
+        super(parent);
         this.variableName = variableName;
         this.expression = expression;
     }
@@ -76,18 +75,8 @@ public class JavaCodeAssignment implements IJavaCodeElement {
     }
 
     @Override
-    public IJavaCodeArtifact getArtifact() {
-        return parent.getArtifact();
-    }
-
-    @Override
     public String getStringValue(StringComparator comparator) {
         return "JavaCodeAssignment";
-    }
-
-    @Override
-    public IJavaCodeElement getParent() {
-        return parent;
     }
 
 }

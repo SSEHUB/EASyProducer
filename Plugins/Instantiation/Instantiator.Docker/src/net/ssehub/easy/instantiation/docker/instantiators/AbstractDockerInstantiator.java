@@ -25,7 +25,9 @@ import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.transport.SSLConfig;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.defaultInstantiators.AbstractFileInstantiator;
+import net.ssehub.easy.instantiation.core.model.execution.IInstantiatorTracer;
 
 /**
  * Abstract reusable docker instantiator, basic implementation for the individual commands.
@@ -55,6 +57,22 @@ public abstract class AbstractDockerInstantiator extends AbstractFileInstantiato
             .sslConfig((SSLConfig) standardConfig.getSSLConfig())
             .build();
         return DockerClientImpl.getInstance(standardConfig, httpClient);        
+    }
+
+    /**
+     * Handles a throwable depending on {@link #FAIL_ON_ERROR}.
+     * 
+     * @param th the throwable (may be <b>null</b> for none)
+     * @param tracer the tracer to inform
+     * @param task a task description to include into the message
+     * @throws VilException if not {@link #FAIL_ON_ERROR} and {@code th} is given, {@code th} is turned into 
+     *     a {@link VilException} 
+     */
+    static void handleThrowable(Throwable th, IInstantiatorTracer tracer, String task) throws VilException {
+        if (null != th && FAIL_ON_ERROR) {
+            tracer.traceMessage(task + "failed: " + th.getMessage());
+            throw new VilException(th.getMessage(), VilException.ID_RUNTIME);
+        }
     }
 
 }

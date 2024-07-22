@@ -15,34 +15,45 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
- * Represents a variable assignment.
+ * Basic implementation for elements with parent.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeSingleLineComment extends JavaCodeElement {
+public abstract class JavaCodeElement implements IJavaCodeElement {
 
-    private String text;
+    private IJavaCodeElement parent;
     
     /**
-     * Creates a variable assignment.
-     * 
+     * Creates an instance.
+     *
      * @param parent the parent
-     * @param text the comment text
      */
-    public JavaCodeSingleLineComment(IJavaCodeElement parent, String text) {
-        super(parent);
-        this.text = text;
+    protected JavaCodeElement(IJavaCodeElement parent) {
+        this.parent = parent;
     }
-
+    
     @Override
-    public void store(CodeWriter out) {
-        out.printlnwi("// " + text);
+    public IJavaCodeArtifact getArtifact() {
+        return parent.getArtifact();
     }
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return "JavaCodeSLComment";
+        return getClass().getSimpleName();
+    }
+
+    @Override
+    public IJavaCodeElement getParent() {
+        return parent;
+    }
+
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        this.parent = parent;
     }
 
 }

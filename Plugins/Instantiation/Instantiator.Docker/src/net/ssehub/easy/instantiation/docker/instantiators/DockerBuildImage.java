@@ -19,6 +19,7 @@ package net.ssehub.easy.instantiation.docker.instantiators;
 import java.io.File;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.github.dockerjava.api.command.BuildImageCmd;
 import com.github.dockerjava.api.command.BuildImageResultCallback;
@@ -77,6 +78,7 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
             final String taskDescription = "Docker build";
             TracerFactory.ensureTasks(taskDescription);
             final AtomicInteger count = new AtomicInteger(0);
+            final AtomicReference<Throwable> cbThrowable = new AtomicReference<>();
             String imageId = cmd.exec(new BuildImageResultCallback() {
                 
                 @Override
@@ -87,20 +89,32 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
                     int cnt = count.incrementAndGet(); // preliminary, unknown number of subtasks
                     TracerFactory.progressSubTask(cnt, cnt + 1, taskDescription);
                 }
+                
+                @Override
+                public void onError(Throwable th) {
+                    cbThrowable.set(th);
+                }
 
             }).awaitImageId();
             TracerFactory.closeTasks(taskDescription);
-            tracer.traceMessage("Building docker image " + name + " completed " + imageId + " in " 
+            handleThrowable(cbThrowable.get(), tracer, getTask(name));
+            tracer.traceMessage(getTask(name) + " completed " + imageId + " in " 
                 + (System.currentTimeMillis() - start) + " ms");
             return imageId;        
         } catch (Exception e) {
-            if (FAIL_ON_ERROR) {
-                tracer.traceMessage("Building docker image " + name + "failed: " + e.getMessage());
-                throw new VilException(e.getMessage(), VilException.ID_RUNTIME);
-            } else {
-                return null;
-            }
+            handleThrowable(e, tracer, getTask(name));
+            return null;
         }
+    }
+
+    /**
+     * Returns the task at hands.
+     * 
+     * @param name the name of the task
+     * @return the composed name
+     */
+    private static String getTask(String name) {
+        return "Building docker image " + name;
     }
     
     // checkstyle: resume exception type check
