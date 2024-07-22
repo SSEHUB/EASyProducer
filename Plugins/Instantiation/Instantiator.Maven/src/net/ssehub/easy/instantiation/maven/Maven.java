@@ -68,6 +68,7 @@ public class Maven extends AbstractFileInstantiator {
     // folder without /lib!
     private static final boolean AS_PROCESS = Boolean.valueOf(System.getProperty("easy.maven.asProcess", "true"));
     private static final String MAVEN_HOME = System.getProperty("easy.maven.home", null);
+    private static final boolean SKIP = Boolean.valueOf(System.getProperty("easy.maven.skip", "false"));
     private static final String CLASSPATH = System.getProperty("easy.maven.classpath", null);
     private static final String SETTINGS = System.getProperty("easy.maven.settings", 
         System.getenv("MAVEN_SETTINGS_PATH"));
@@ -287,48 +288,50 @@ public class Maven extends AbstractFileInstantiator {
      */
     private static Set<FileArtifact> build(Path root, String buildFilePath, boolean updateSnapshots, String[] targets, 
         Sequence<String> mvnArgs) throws VilException {
-        File targetPath = determineTargetPath(root);
-        if (null != buildFilePath) {
-            buildFilePath = new File(targetPath, buildFilePath).toString();
-        } else {
-            buildFilePath = targetPath.toString();
-        }
-        long timestamp = PathUtils.normalizedTime();
-        int cliResult = -1;
-        boolean asProcess = AS_PROCESS;
-        if (!AS_PROCESS) {
-            ICommandLineProgram prg = CommandLineProgramRegistry.getRegisteredProgram("mvn");
-            if (null != prg) {
-                List<String> arguments = new ArrayList<String>();
-                addArguments(arguments, updateSnapshots, mvnArgs);
-                for (String t: targets) {
-                    arguments.add(t);
-                }
-                splitArgs(System.getenv("MAVEN_ARGS"), arguments);
-                String[] args = new String[arguments.size()];
-                cliResult = prg.prepare().execute(arguments.toArray(args), buildFilePath, System.out, System.out);
-            } else {
-                getLogger().warn(
-                    "Cannot obtain Maven command line instance. Trying to run Maven as process (fallback).");
-                asProcess = true;
-            }
-        }
-        if (asProcess) {
-            try {
-                cliResult = runAsProcess(buildFilePath, updateSnapshots, targets, mvnArgs);
-            } catch (IOException | InterruptedException e) {
-                throw new VilException("maven build failed: " + e.getMessage(), 
-                    VilException.ID_RUNTIME_EXECUTION);
-            }
-        }
-        if (0 != cliResult) {
-            throw new VilException("maven build failed", VilException.ID_RUNTIME_EXECUTION);
-        }
         List<FileArtifact> result = new ArrayList<FileArtifact>();
-        ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
-        FileUtils.scan(targetPath.getAbsoluteFile(), root.getArtifactModel(), timestamp, scanResult, 
-            FileArtifact.class);
-        scanResult.checkForException();
+        if (!SKIP) {
+            File targetPath = determineTargetPath(root);
+            if (null != buildFilePath) {
+                buildFilePath = new File(targetPath, buildFilePath).toString();
+            } else {
+                buildFilePath = targetPath.toString();
+            }
+            long timestamp = PathUtils.normalizedTime();
+            int cliResult = -1;
+            boolean asProcess = AS_PROCESS;
+            if (!AS_PROCESS) {
+                ICommandLineProgram prg = CommandLineProgramRegistry.getRegisteredProgram("mvn");
+                if (null != prg) {
+                    List<String> arguments = new ArrayList<String>();
+                    addArguments(arguments, updateSnapshots, mvnArgs);
+                    for (String t: targets) {
+                        arguments.add(t);
+                    }
+                    splitArgs(System.getenv("MAVEN_ARGS"), arguments);
+                    String[] args = new String[arguments.size()];
+                    cliResult = prg.prepare().execute(arguments.toArray(args), buildFilePath, System.out, System.out);
+                } else {
+                    getLogger().warn(
+                        "Cannot obtain Maven command line instance. Trying to run Maven as process (fallback).");
+                    asProcess = true;
+                }
+            }
+            if (asProcess) {
+                try {
+                    cliResult = runAsProcess(buildFilePath, updateSnapshots, targets, mvnArgs);
+                } catch (IOException | InterruptedException e) {
+                    throw new VilException("maven build failed: " + e.getMessage(), 
+                        VilException.ID_RUNTIME_EXECUTION);
+                }
+            }
+            if (0 != cliResult) {
+                throw new VilException("maven build failed", VilException.ID_RUNTIME_EXECUTION);
+            }
+            ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
+            FileUtils.scan(targetPath.getAbsoluteFile(), root.getArtifactModel(), timestamp, scanResult, 
+                FileArtifact.class);
+            scanResult.checkForException();
+        }
         return new ListSet<FileArtifact>(result, FileArtifact.class);
     }
 
