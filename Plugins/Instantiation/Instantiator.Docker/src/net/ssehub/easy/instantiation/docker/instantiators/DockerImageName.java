@@ -40,6 +40,9 @@ public class DockerImageName extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static String dockerImageName(String id) throws VilException {
+        if (skip()) {
+            return SKIP_ID;
+        }
         String name = null;
         try {
             List<Image> imgs = (List<Image>) createClient().listImagesCmd().withShowAll(true).exec();

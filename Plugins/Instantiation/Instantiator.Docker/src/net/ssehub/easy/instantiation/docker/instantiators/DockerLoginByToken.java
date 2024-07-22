@@ -55,6 +55,9 @@ public class DockerLoginByToken extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static boolean dockerLoginByToken(String registry, String user, String token) throws VilException {
+        if (skip()) {
+            return true;
+        }
         try {
             AuthConfig tmp = new AuthConfig()
                 .withRegistryAddress(registry)

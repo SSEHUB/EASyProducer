@@ -36,6 +36,9 @@ public class DockerRemoveImage extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static boolean dockerRemoveImage(String id) throws VilException {
+        if (skip()) {
+            return true;
+        }
         try {
             createClient().removeImageCmd(id).withForce(true).exec();
             return true;

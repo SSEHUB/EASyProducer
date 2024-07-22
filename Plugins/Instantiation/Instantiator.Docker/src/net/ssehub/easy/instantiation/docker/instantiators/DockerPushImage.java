@@ -51,6 +51,9 @@ public class DockerPushImage extends AbstractDockerInstantiator {
      */
     public static boolean dockerPushImage(String imageName, String registry, String repository, String tag) 
         throws VilException {
+        if (skip()) {
+            return true;
+        }
 
         IInstantiatorTracer tracer = TracerFactory.getInstance().createInstantiatorTracerImpl();
         try {

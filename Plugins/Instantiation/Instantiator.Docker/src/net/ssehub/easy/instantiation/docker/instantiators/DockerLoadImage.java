@@ -42,6 +42,9 @@ public class DockerLoadImage extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static boolean dockerLoadImage(Path archive) throws VilException {
+        if (skip()) {
+            return true;
+        }
         boolean ok = false;
         File tarFile = archive.getAbsolutePath();
         try {
@@ -53,7 +56,7 @@ public class DockerLoadImage extends AbstractDockerInstantiator {
             if (FAIL_ON_ERROR) {
                 throw new VilException(e, VilException.ID_RUNTIME);
             }
-        }            
+        }
         return ok;
     }
     

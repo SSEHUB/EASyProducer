@@ -38,6 +38,8 @@ public abstract class AbstractDockerInstantiator extends AbstractFileInstantiato
 
     protected static final boolean FAIL_ON_ERROR = Boolean.valueOf(
         System.getProperty("easy.docker.failOnError", "true"));
+    // pretend there is docker, return success or the given container ID
+    protected static final String SKIP_ID = System.getProperty("easy.docker.skip");
 
     // http://localhost:2375 causes unsupported schema problems on Windows although explained in internet
     private static final String DOCKER_HOST = System.getProperty("easy.docker.host", 
@@ -73,6 +75,15 @@ public abstract class AbstractDockerInstantiator extends AbstractFileInstantiato
             tracer.traceMessage(task + "failed: " + th.getMessage());
             throw new VilException(th.getMessage(), VilException.ID_RUNTIME);
         }
+    }
+    
+    /**
+     * Shall we skip?
+     * 
+     * @return {@code true} for skip, {@code false} for run Docker
+     */
+    static boolean skip() {
+        return SKIP_ID != null && SKIP_ID.length() > 0;
     }
 
 }

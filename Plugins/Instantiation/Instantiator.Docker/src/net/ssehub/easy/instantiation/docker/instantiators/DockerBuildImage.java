@@ -56,6 +56,9 @@ public class DockerBuildImage extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static String dockerBuildImage(Path baseDirectory, Path dockerFile, String name) throws VilException {
+        if (skip()) {
+            return SKIP_ID;
+        }
         HashSet<String> tags = new HashSet<String>();
         tags.add(name);
         

@@ -102,6 +102,9 @@ public class DockerLogin extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static boolean dockerLogin(String registry, String user, String password) throws VilException {
+        if (skip()) {
+            return true;
+        }
         try {
             AuthConfig tmp = new AuthConfig()
                 .withRegistryAddress(registry)

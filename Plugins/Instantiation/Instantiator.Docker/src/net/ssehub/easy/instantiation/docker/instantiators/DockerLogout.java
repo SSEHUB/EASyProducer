@@ -33,6 +33,9 @@ public class DockerLogout extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static boolean dockerLogout() throws VilException {
+        if (skip()) {
+            return true;
+        }
         DockerLogin.clear();
         return true;
     }
@@ -45,6 +48,9 @@ public class DockerLogout extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static boolean dockerLogout(String registry) throws VilException {
+        if (SKIP_ID != null) {
+            return true;
+        }
         return DockerLogin.clear(registry);
     }
     

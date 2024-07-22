@@ -49,30 +49,34 @@ public class DockerSaveImage extends AbstractDockerInstantiator {
      * @throws VilException in case of artifact / parameter problems
      */
     public static Set<FileArtifact> dockerSaveImage(String imageName, Path target) throws VilException {
-        long timestamp = PathUtils.normalizedTime();
-        File targetPath = determineTargetPath(target);
-       
-        try {
-            InputStream in = createClient().saveImageCmd(imageName).exec();
-            if (null != in) {
-                java.nio.file.Files.copy(
-                    in, 
-                    targetPath.toPath(), 
-                    StandardCopyOption.REPLACE_EXISTING);                
-            } else {
-                throw new VilException("No image found, stream=null", VilException.ID_RUNTIME);
-            }
-        } catch (IOException e) {
-            if (FAIL_ON_ERROR) {
-                throw new VilException(e, VilException.ID_RUNTIME);
-            }
-        }
-        
         List<FileArtifact> result = new ArrayList<FileArtifact>();
-        ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
-        FileUtils.scan(targetPath.getAbsoluteFile(), target.getArtifactModel(), timestamp, scanResult, 
-            FileArtifact.class);
-        scanResult.checkForException();
+        if (skip()) {
+            result.add(new FileArtifact()); // just return something
+        } else {
+            long timestamp = PathUtils.normalizedTime();
+            File targetPath = determineTargetPath(target);
+           
+            try {
+                InputStream in = createClient().saveImageCmd(imageName).exec();
+                if (null != in) {
+                    java.nio.file.Files.copy(
+                        in, 
+                        targetPath.toPath(), 
+                        StandardCopyOption.REPLACE_EXISTING);                
+                } else {
+                    throw new VilException("No image found, stream=null", VilException.ID_RUNTIME);
+                }
+            } catch (IOException e) {
+                if (FAIL_ON_ERROR) {
+                    throw new VilException(e, VilException.ID_RUNTIME);
+                }
+            }
+            
+            ScanResult<FileArtifact> scanResult = new ScanResult<FileArtifact>(result);
+            FileUtils.scan(targetPath.getAbsoluteFile(), target.getArtifactModel(), timestamp, scanResult, 
+                FileArtifact.class);
+            scanResult.checkForException();
+        }
         return new ListSet<FileArtifact>(result, FileArtifact.class);        
     }
     
