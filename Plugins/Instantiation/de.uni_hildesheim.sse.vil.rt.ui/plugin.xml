@@ -81,21 +81,20 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
-            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil"
             name="Runtime Variability Instantiation Language (rt-VIL)">
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.rt.RtVil"
+            category="de.uni_hildesheim.sse.vil.rt.RtVil"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil.coloring"
             name="Syntax Coloring">
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
         </page>
         <page
-            category="de.uni_hildesheim.sse.EASy/de.uni_hildesheim.sse.vil.rt.RtVil"
+            category="de.uni_hildesheim.sse.vil.rt.RtVil"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil.templates"
             name="Templates">
@@ -105,7 +104,6 @@
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
-            category="de.uni_hildesheim.sse.EASy"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
             id="de.uni_hildesheim.sse.vil.rt.RtVil"
             name="Runtime Variability Instantiation Language (rt-VIL)">
@@ -209,9 +207,16 @@
             </activeWhen>
         </handler>
     </extension>   
-
-<!-- adding resource factories -->
-
+    <extension point="org.eclipse.core.contenttype.contentTypes">
+        <content-type
+            base-type="org.eclipse.core.runtime.text"
+            file-extensions="rtvil"
+            id="de.uni_hildesheim.sse.vil.rt.RtVil.contenttype"
+            name="RtVil File"
+            priority="normal">
+        </content-type>
+    </extension>
+    <!-- adding resource factories -->
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
 		<parser
@@ -225,8 +230,6 @@
             uriExtension="rtvil">
         </resourceServiceProvider>
     </extension>
-
-
 	<!-- marker definitions for de.uni_hildesheim.sse.vil.rt.RtVil -->
 	<extension
 	        id="rtvil.check.fast"
@@ -249,16 +252,21 @@
 	    <super type="org.eclipse.xtext.ui.check.expensive"/>
 	    <persistent value="true"/>
 	</extension>
-
-   <extension
-         point="org.eclipse.xtext.builder.participant">
-      <participant
-            class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant">
-      </participant>
-   </extension>
-   <!-- disable the compiler settings
-   <extension
-            point="org.eclipse.ui.preferencePages">
+    <extension point="org.eclipse.ui.preferencePages">
+        <page
+            category="de.uni_hildesheim.sse.vil.rt.RtVil"
+            class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+            id="de.uni_hildesheim.sse.vil.rt.RtVil.validator.preferencePage"
+            name="Errors/Warnings">
+            <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
+        </page>
+    </extension>
+    <extension point="org.eclipse.xtext.builder.participant">
+        <participant
+            class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+            fileExtensions="rtvil"/>
+    </extension>
+   <extension point="org.eclipse.ui.preferencePages">
         <page
             category="de.uni_hildesheim.sse.vil.rt.RtVil"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
@@ -267,8 +275,7 @@
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
         </page>
     </extension>
-    <extension
-            point="org.eclipse.ui.propertyPages">
+    <extension point="org.eclipse.ui.propertyPages">
         <page
             category="de.uni_hildesheim.sse.vil.rt.RtVil"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
@@ -276,12 +283,32 @@
             name="Compiler">
             <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
             <enabledWhen>
-	            <adapt type="org.eclipse.core.resources.IProject"/>
-			</enabledWhen>
-	        <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+                <adapt type="org.eclipse.core.resources.IProject"/>
+            </enabledWhen>
+            <filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
         </page>
-    </extension>-->
-
+    </extension>
+    <extension point="org.eclipse.ui.menus">
+        <menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+            <command
+                commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+                id="de.uni_hildesheim.sse.vil.rt.RtVil.OpenGeneratedCode"
+                style="push">
+                <visibleWhen checkEnabled="false">
+                    <reference definitionId="de.uni_hildesheim.sse.vil.rt.RtVil.Editor.opened" />
+                </visibleWhen>
+            </command>
+        </menuContribution>
+    </extension>
+    <extension point="org.eclipse.ui.handlers">
+        <handler
+            class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+            commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+            <activeWhen>
+                <reference definitionId="de.uni_hildesheim.sse.vil.rt.RtVil.Editor.opened" />
+            </activeWhen>
+        </handler>
+    </extension>
 	<!-- Quick Outline -->
 	<extension
 		point="org.eclipse.ui.handlers">
@@ -368,29 +395,32 @@
          </command>
       </menuContribution>
    </extension>
-   <!--
-   <extension point="org.eclipse.ui.preferencePages">
-	    <page
-	        category="de.uni_hildesheim.sse.vil.rt.RtVil"
-	        class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-	        id="de.uni_hildesheim.sse.vil.rt.RtVil.refactoring"
-	        name="Refactoring">
-	        <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
-	    </page>
-	</extension>
-	-->
-
+    <extension point="org.eclipse.ui.preferencePages">
+        <page
+            category="de.uni_hildesheim.sse.vil.rt.RtVil"
+            class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+            id="de.uni_hildesheim.sse.vil.rt.RtVil.refactoring"
+            name="Refactoring">
+            <keywordReference id="de.uni_hildesheim.sse.vil.rt.ui.keyword_RtVil"/>
+        </page>
+    </extension>
   <extension point="org.eclipse.compare.contentViewers">
     <viewer id="de.uni_hildesheim.sse.vil.rt.RtVil.compare.contentViewers"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
             extensions="rtvil">
     </viewer>
+        <contentTypeBinding
+            contentTypeId="de.uni_hildesheim.sse.vil.rt.RtVil.contenttype"
+            contentViewerId="de.uni_hildesheim.sse.vil.rt.RtVil.compare.contentViewers" />    
   </extension>
   <extension point="org.eclipse.compare.contentMergeViewers">
     <viewer id="de.uni_hildesheim.sse.vil.rt.RtVil.compare.contentMergeViewers"
             class="de.uni_hildesheim.sse.vil.rt.ui.RtVilExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
             extensions="rtvil" label="RtVil Compare">
      </viewer>
+        <contentTypeBinding
+            contentTypeId="de.uni_hildesheim.sse.vil.rt.RtVil.contenttype"
+            contentMergeViewerId="de.uni_hildesheim.sse.vil.rt.RtVil.compare.contentMergeViewers" />     
   </extension>
   <extension point="org.eclipse.ui.editors.documentProviders">
     <provider id="de.uni_hildesheim.sse.vil.rt.RtVil.editors.documentProviders"
@@ -398,7 +428,12 @@
             extensions="rtvil">
     </provider>
   </extension>
-
+    <extension point="org.eclipse.team.core.fileTypes">
+        <fileTypes
+            extension="rtvil"
+            type="text">
+        </fileTypes>
+    </extension>
     <extension
         point="org.eclipse.ui.newWizards">
       <wizard
