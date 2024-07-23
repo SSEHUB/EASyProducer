@@ -21,8 +21,7 @@ import org.eclipse.ui.PlatformUI;
 
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
-import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
-import net.ssehub.easy.producer.eclipse.ProjectConstants;
+import net.ssehub.easy.producer.eclipse.EASyUtils;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
 import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
 import net.ssehub.easy.producer.ui.productline_editor.ProductLineEditorInput;
@@ -57,8 +56,9 @@ public class EditProductLineAction implements IObjectActionDelegate {
     public void run(IAction action) {
         // TODO check... unclear why this can open ScaleLog projects with other settings
         // Get the config.xml and open it in the ProductLineEditor
-        IFile configfile = selectedProject.getFile(ProjectConstants.EASY_FILES + ResourcesMgmt.INSTANCE.getSeperator()
-            + PersistenceConstants.CONFIG_FILE);
+        IFile configfile = EASyUtils.findEasyConfig(selectedProject); // also consider paths
+        //IFile configfile = selectedProject.getFile(ProjectConstants.EASY_FILES + ResourcesMgmt.INSTANCE.getSeperator()
+        //    + PersistenceConstants.CONFIG_FILE);
         String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(configfile);
         PLPInfo plp = SPLsManager.INSTANCE.getPLP(projectID);
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();

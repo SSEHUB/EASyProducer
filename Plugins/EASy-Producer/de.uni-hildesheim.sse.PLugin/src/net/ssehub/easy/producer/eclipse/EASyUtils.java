@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 
@@ -37,7 +38,9 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 import net.ssehub.easy.producer.core.persistence.Configuration;
+import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
+import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
 import net.ssehub.easy.producer.eclipse.contributions.Contributions;
 import net.ssehub.easy.producer.eclipse.persistency.EASyPersistencer;
 import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
@@ -57,6 +60,34 @@ public class EASyUtils {
      */
     private EASyUtils() {
     }
+
+    /**
+     * Tries to find the EASy-Producer configuration from the IVML/VIL path configurations.
+     * 
+     * @param project the project to look into
+     * @return the EASy config file
+     */
+    public static IFile findEasyConfig(IProject project) {
+        IFile result = null;
+        Configuration cfg = PersistenceUtils.getConfiguration(project);
+        int count = cfg.getPathCount(PathKind.IVML);
+        for (int i = 0; null == result && i < count; i++) {
+            String folder = cfg.getPath(PathKind.IVML, count);
+            IFile file = project.getFile(folder + ResourcesMgmt.INSTANCE.getSeperator() 
+                + PersistenceConstants.CONFIG_FILE);
+            if (file.exists()) {
+                result = file;
+            }
+        }
+        if (null == result) { // original/classic setup
+            IFile file = project.getFile(ProjectConstants.EASY_FILES + ResourcesMgmt.INSTANCE.getSeperator() 
+                + PersistenceConstants.CONFIG_FILE);
+            if (file.exists()) {
+                result = file;
+            }
+        }
+        return result;
+    }
     
     /**
      * Loads a project and registers it if necessary.
@@ -66,6 +97,12 @@ public class EASyUtils {
      */
     public static void loadProject(IProject project) throws PersistenceException {
         String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project);
+        if (null == projectID) { // consider paths as fallback
+            IFile cfg = findEasyConfig(project);
+            if (null != cfg) {
+                projectID = ResourcesMgmt.INSTANCE.getIDfromResource(cfg);
+            }
+        }
         if (null != projectID) {
             PLPInfo openedPLP = SPLsManager.INSTANCE.getPLP(projectID);
             if (null == openedPLP || openedPLP.isPreliminary()) {
