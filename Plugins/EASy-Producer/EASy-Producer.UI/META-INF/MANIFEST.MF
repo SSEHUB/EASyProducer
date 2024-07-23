@@ -33,7 +33,11 @@ Require-Bundle:
  net.ssehub.easy.instantiation.lxc,
  net.ssehub.easy.instantiation.aspectj,
  net.ssehub.easy.instantiation.xvcl,
- net.ssehub.easy.instantiation.velocity
+ net.ssehub.easy.instantiation.velocity,
+ de.uni_hildesheim.sse.vil.templatelang.ui,
+ de.uni_hildesheim.sse.vil.rt.ui,
+ de.uni_hildesheim.sse.ivml.ui,
+ de.uni-hildesheim.sse.ivml.ui.comments
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

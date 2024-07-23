@@ -86,17 +86,39 @@
       </dependency>
       <dependency>
           <groupId>net.ssehub.easy</groupId>
-          <artifactId> de.uni_hildesheim.sse.vil.buildlang.ui</artifactId>
-          <version>${project.version}</version>
-      </dependency>
-      <dependency>
-          <groupId>net.ssehub.easy</groupId>
           <artifactId> net.ssehub.easy.dslCore</artifactId>
           <version>${project.version}</version>
       </dependency>
       <dependency>
           <groupId>net.ssehub.easy</groupId>
           <artifactId>de.uni_hildesheim.sse.vil.buildlang</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      
+      <!-- optionals for now as we do not build with features -->
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>de.uni_hildesheim.sse.vil.buildlang.ui</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>de.uni_hildesheim.sse.vil.templatelang.ui</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>de.uni_hildesheim.sse.vil.rt.ui</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>de.uni-hildesheim.sse.ivml.ui.comments</artifactId>
+          <version>${project.version}</version>
+      </dependency>      
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>de.uni_hildesheim.sse.ivml.ui</artifactId>
           <version>${project.version}</version>
       </dependency>
       
