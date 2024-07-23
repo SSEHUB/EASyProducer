@@ -438,6 +438,7 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="com.sun.jna.platform"/>
       <plugin id="com.sun.xml.bind"/>
       <plugin id="de.uni-hildesheim.sse.easy.instantiatorCore.rt"/>
+      <plugin id="de.uni-hildesheim.sse.ivml.ui.comments"/>
       <plugin id="de.uni_hildesheim.sse.ivml"/>
       <plugin id="de.uni_hildesheim.sse.ivml.ide"/>
       <plugin id="de.uni_hildesheim.sse.ivml.ui"/>
