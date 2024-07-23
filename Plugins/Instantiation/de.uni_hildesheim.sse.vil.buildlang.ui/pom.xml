@@ -99,6 +99,11 @@
         <artifactId>de.uni_hildesheim.sse.vil.buildlang</artifactId>
         <version>${project.version}</version>
      </dependency>
+     <dependency>
+        <groupId>net.ssehub.easy</groupId>
+        <artifactId>de.uni_hildesheim.sse.vil.buildlang.ide</artifactId>
+        <version>${project.version}</version>
+     </dependency>
   </dependencies>
     
  </project>

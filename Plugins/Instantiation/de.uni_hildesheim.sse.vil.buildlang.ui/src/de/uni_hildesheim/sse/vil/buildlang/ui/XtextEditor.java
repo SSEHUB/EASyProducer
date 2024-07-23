@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.ui;
+package de.uni_hildesheim.sse.vil.buildlang.ui;
 
 import java.io.Writer;
 import java.net.URI;
@@ -9,6 +9,7 @@ import org.eclipse.ui.PartInitException;
 
 import de.uni_hildesheim.sse.BuildLangModelUtility;
 import de.uni_hildesheim.sse.VilBundleId;
+import de.uni_hildesheim.sse.ui.BuildModelListener;
 import de.uni_hildesheim.sse.vil.AbstractXTextEditor;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
 import net.ssehub.easy.dslCore.IResourceInitializer;
