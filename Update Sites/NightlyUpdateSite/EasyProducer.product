@@ -20,7 +20,7 @@ Germany
    <launcherArgs>
       <programArgs>-debug -clean
       </programArgs>
-      <vmArgs>-Xms180m -Xmx6036m --add-modules=ALL-SYSTEM -Djava.security.manager=allow -Deasy.logging.level=DEBUG
+      <vmArgs>-Xms180m -Xmx6036m --add-modules=ALL-SYSTEM -Djava.security.manager=allow -Deasy.logging.level=DEBUG -Declipse.consoleLog=false
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -491,6 +491,8 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="net.ssehub.easy.producer.core.tests"/>
       <plugin id="net.ssehub.easy.producer.eclipse"/>
       <plugin id="net.ssehub.easy.producer.eclipse.tests"/>
+      <plugin id="net.ssehub.easy.producer.examples"/>
+      <plugin id="net.ssehub.easy.producer.help"/>
       <plugin id="net.ssehub.easy.producer.ui"/>
       <plugin id="net.ssehub.easy.reasoning.core"/>
       <plugin id="net.ssehub.easy.reasoning.sseReasoner"/>
@@ -606,6 +608,7 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.equinox.frameworkadmin"/>
       <plugin id="org.eclipse.equinox.frameworkadmin.equinox"/>
       <plugin id="org.eclipse.equinox.http.jetty"/>
+      <plugin id="org.eclipse.equinox.http.registry"/>
       <plugin id="org.eclipse.equinox.http.service.api"/>
       <plugin id="org.eclipse.equinox.http.servlet"/>
       <plugin id="org.eclipse.equinox.p2.artifact.repository"/>
@@ -785,6 +788,7 @@ APPENDIX: How to apply the Apache License to your work.
    </plugins>
 
    <configurations>
+      <plugin id="net.ssehub.easy.producer.examples" autoStart="true" startLevel="11" />
       <plugin id="net.ssehub.easy.producer.ui" autoStart="true" startLevel="10" />
       <plugin id="org.apache.felix.scr" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.core.resources" autoStart="true" startLevel="3" />
