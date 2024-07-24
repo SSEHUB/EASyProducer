@@ -14,7 +14,6 @@
     <setAttribute key="deselected_workspace_bundles">
         <setEntry value="ConstraintEditor"/>
         <setEntry value="de.uni-hildesheim.sse.easy.instantiator.velocity.tests"/>
-        <setEntry value="de.uni-hildesheim.sse.ivml.ui.comments"/>
         <setEntry value="de.uni_hildesheim.sse.ivml.tests"/>
         <setEntry value="de.uni_hildesheim.sse.vil.buildlang.tests"/>
         <setEntry value="de.uni_hildesheim.sse.vil.rt.tests"/>
@@ -35,15 +34,13 @@
         <setEntry value="net.ssehub.easy.integration.common.tests"/>
         <setEntry value="net.ssehub.easy.producer.core.tests"/>
         <setEntry value="net.ssehub.easy.producer.eclipse.tests"/>
-        <setEntry value="net.ssehub.easy.producer.examples"/>
-        <setEntry value="net.ssehub.easy.producer.help"/>
         <setEntry value="net.ssehub.easy.producer.scenario_tests"/>
         <setEntry value="net.ssehub.easy.reasoning.core.tests"/>
         <setEntry value="net.ssehub.easy.reasoning.sseReasoner.tests"/>
         <setEntry value="net.ssehub.easy.varModel.tests"/>
     </setAttribute>
     <booleanAttribute key="includeOptional" value="true"/>
-    <stringAttribute key="location" value="${workspace_loc}/../runtime-EclipseApplication42"/>
+    <stringAttribute key="location" value="${workspace_loc}/../runtime-EclipseApplication41"/>
     <booleanAttribute key="org.eclipse.debug.core.ATTR_FORCE_SYSTEM_CONSOLE_ENCODING" value="false"/>
     <mapAttribute key="org.eclipse.debug.core.preferred_launchers">
         <mapEntry key="[run]" value="org.eclipse.pde.ui.RuntimeWorkbench"/>
@@ -206,6 +203,7 @@
         <setEntry value="org.eclipse.equinox.frameworkadmin.equinox@default:default"/>
         <setEntry value="org.eclipse.equinox.frameworkadmin@default:default"/>
         <setEntry value="org.eclipse.equinox.http.jetty@default:default"/>
+        <setEntry value="org.eclipse.equinox.http.registry@default:default"/>
         <setEntry value="org.eclipse.equinox.http.servlet@default:default"/>
         <setEntry value="org.eclipse.equinox.p2.artifact.repository@default:default"/>
         <setEntry value="org.eclipse.equinox.p2.core@default:default"/>
@@ -403,6 +401,7 @@
         <setEntry value="RepositoryConnector@default:default"/>
         <setEntry value="Test@default:default"/>
         <setEntry value="de.uni-hildesheim.sse.easy.instantiatorCore.rt@default:default"/>
+        <setEntry value="de.uni-hildesheim.sse.ivml.ui.comments@default:default"/>
         <setEntry value="de.uni_hildesheim.sse.ivml.ide@default:default"/>
         <setEntry value="de.uni_hildesheim.sse.ivml.ui@default:default"/>
         <setEntry value="de.uni_hildesheim.sse.ivml@default:default"/>
@@ -447,6 +446,8 @@
         <setEntry value="net.ssehub.easy.loader@default:default"/>
         <setEntry value="net.ssehub.easy.producer.core@default:default"/>
         <setEntry value="net.ssehub.easy.producer.eclipse@default:default"/>
+        <setEntry value="net.ssehub.easy.producer.examples@default:default"/>
+        <setEntry value="net.ssehub.easy.producer.help@default:default"/>
         <setEntry value="net.ssehub.easy.producer.ui@default:default"/>
         <setEntry value="net.ssehub.easy.reasoning.core@default:default"/>
         <setEntry value="net.ssehub.easy.reasoning.sseReasoner@default:default"/>

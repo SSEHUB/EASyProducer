@@ -5,6 +5,6 @@
 	<topic label="EASy-Producer User Guide" href="html/user_guide.html"/>
 	<topic label="EASy-Producer Developers Guide" href="html/developers_guide.html"/>
 	<topic label="IVML Language Specification" href="html/ivml_spec.html"/>
- <topic href="html/vil_spec.html" label="VIL Language Specification">
- </topic>
+    <topic label="VIL Language Specification" href="html/vil_spec.html"/>
+    <topic label="VIL Extensions" href="html/vil_extensions.html"/>
 </toc>
