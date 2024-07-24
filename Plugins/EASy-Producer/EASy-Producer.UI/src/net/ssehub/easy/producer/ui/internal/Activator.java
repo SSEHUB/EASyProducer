@@ -38,6 +38,8 @@ public class Activator extends AbstractUIPlugin {
      * The shared instance.
      */
     private static Activator plugin;
+    private static boolean started;
+    private static boolean stopped;
     
     /**
      * The constructor.
@@ -57,13 +59,23 @@ public class Activator extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
-        ProjectConfigurationRegistry.registerProjectDescriptor(new JavaProjectConfigurationDescriptor());
-        ProjectConfigurationRegistry.registerProjectDescriptor(new EclipseProjectConfigurationDescriptor());
-        VilArgumentProvider.add(new VilClasspathProvider("classpath"));
-        EASyPreferenceStore.loadOnStart();
-        TopLevelModelAccessor.register(IvmlModelAccessor.EXTENSION, IvmlModelAccessor.INSTANCE);
-        TopLevelModelAccessor.register(VilModelAccessor.EXTENSION, VilModelAccessor.INSTANCE);
-        ConfigurationEditorFactory.setCreator(new ConfigurationTableEditorFactory());
+        start();
+    }
+
+    /**
+     * Start code for RCP application.
+     */
+    public static void start() {
+        if (!started) {
+            started = true;
+            ProjectConfigurationRegistry.registerProjectDescriptor(new JavaProjectConfigurationDescriptor());
+            ProjectConfigurationRegistry.registerProjectDescriptor(new EclipseProjectConfigurationDescriptor());
+            VilArgumentProvider.add(new VilClasspathProvider("classpath"));
+            EASyPreferenceStore.loadOnStart();
+            TopLevelModelAccessor.register(IvmlModelAccessor.EXTENSION, IvmlModelAccessor.INSTANCE);
+            TopLevelModelAccessor.register(VilModelAccessor.EXTENSION, VilModelAccessor.INSTANCE);
+            ConfigurationEditorFactory.setCreator(new ConfigurationTableEditorFactory());
+        }
     }
 
     /**
@@ -77,9 +89,19 @@ public class Activator extends AbstractUIPlugin {
     @Override
     public void stop(BundleContext context) throws Exception {
         plugin = null;
-        TopLevelModelAccessor.unregister(IvmlModelAccessor.EXTENSION);
-        TopLevelModelAccessor.unregister(VilModelAccessor.EXTENSION);
+        stop();
         super.stop(context);
+    }
+    
+    /**
+     * Stop code for RCP application.
+     */
+    public static void stop() {
+        if (!stopped) {
+            stopped = true;
+            TopLevelModelAccessor.unregister(IvmlModelAccessor.EXTENSION);
+            TopLevelModelAccessor.unregister(VilModelAccessor.EXTENSION);
+        }
     }
 
     /**

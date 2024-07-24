@@ -12,6 +12,7 @@ import org.eclipse.ui.PlatformUI;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
+import net.ssehub.easy.producer.ui.internal.Activator;
 
 /**
  * This class controls all aspects of the application's execution.
@@ -58,6 +59,7 @@ public class Application implements IApplication {
 
     @Override
     public void stop() {
+        Activator.stop();
         if (!PlatformUI.isWorkbenchRunning()) {
             return;
         }

@@ -28,6 +28,7 @@ public class Startup implements IStartup {
                 // I would expect the following line to be part of the startup of EASy core
                 EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(Startup.class,
                     "de.uni_hildesheim.sse.easy.ui");
+                Activator.start();
                 logger.info("Processing deferred VIL/VTL registrations ...");
                 TypeRegistry.runDeferredRegistrations();
                 logger.info("EASy-Producer is up and running...");

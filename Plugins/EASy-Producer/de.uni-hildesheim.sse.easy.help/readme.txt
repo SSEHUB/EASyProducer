@@ -1,5 +1,6 @@
 https://www.eclipse.org/forums/index.php/t/149680/
 requires 
+  - org.eclipse.equinox.http.registry
   - org.eclipse.help.webapp
   - org.eclipse.equinox.jsp.jasper
   - org.eclipse.equinox.jsp.jasper.registry
