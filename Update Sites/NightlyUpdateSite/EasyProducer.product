@@ -434,6 +434,7 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="com.google.inject"/>
       <plugin id="com.ibm.icu"/>
       <plugin id="com.jcraft.jsch"/>
+      <plugin id="com.sun.el.javax.el"/>
       <plugin id="com.sun.jna"/>
       <plugin id="com.sun.jna.platform"/>
       <plugin id="com.sun.xml.bind"/>
@@ -611,6 +612,8 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.equinox.http.registry"/>
       <plugin id="org.eclipse.equinox.http.service.api"/>
       <plugin id="org.eclipse.equinox.http.servlet"/>
+      <plugin id="org.eclipse.equinox.jsp.jasper"/>
+      <plugin id="org.eclipse.equinox.jsp.jasper.registry"/>
       <plugin id="org.eclipse.equinox.p2.artifact.repository"/>
       <plugin id="org.eclipse.equinox.p2.core"/>
       <plugin id="org.eclipse.equinox.p2.director"/>
@@ -647,6 +650,7 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.help"/>
       <plugin id="org.eclipse.help.base"/>
       <plugin id="org.eclipse.help.ui"/>
+      <plugin id="org.eclipse.help.webapp"/>
       <plugin id="org.eclipse.jdt"/>
       <plugin id="org.eclipse.jdt.annotation"/>
       <plugin id="org.eclipse.jdt.core"/>
@@ -756,6 +760,8 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.hamcrest.core"/>
       <plugin id="org.jdom2"/>
       <plugin id="org.junit"/>
+      <plugin id="org.mortbay.jasper.apache-el"/>
+      <plugin id="org.mortbay.jasper.apache-jsp"/>
       <plugin id="org.objectweb.asm"/>
       <plugin id="org.objectweb.asm.commons"/>
       <plugin id="org.objectweb.asm.tree"/>
