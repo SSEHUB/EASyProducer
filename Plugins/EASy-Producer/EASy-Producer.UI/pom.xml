@@ -121,6 +121,11 @@
           <artifactId>de.uni_hildesheim.sse.ivml.ui</artifactId>
           <version>${project.version}</version>
       </dependency>
+      <dependency>
+          <groupId>net.ssehub.easy</groupId>
+          <artifactId>net.ssehub.easy.producer.help</artifactId>
+          <version>${project.version}</version>
+      </dependency>
       
       <!-- required for eclipse/RCP import -->
       <dependency>
