@@ -785,7 +785,7 @@ APPENDIX: How to apply the Apache License to your work.
    </plugins>
 
    <configurations>
-      <plugin id="net.ssehub.easy.producer.ui" autoStart="false" startLevel="10" />
+      <plugin id="net.ssehub.easy.producer.ui" autoStart="true" startLevel="10" />
       <plugin id="org.apache.felix.scr" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.core.resources" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
