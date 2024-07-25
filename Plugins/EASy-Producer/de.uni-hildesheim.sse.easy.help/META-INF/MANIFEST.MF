@@ -6,7 +6,9 @@ Automatic-Module-Name: net.ssehub.easy.producer.help
 Bundle-Version: 1.3.10.qualifier
 Bundle-Activator: net.ssehub.easy.producer.help.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.equinox.http.registry,
+ org.eclipse.help.webapp
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: University of Hildesheim - SSE
