@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Represents a static/non-static method call. For static method calls, imports may be created automatically.
  * 
@@ -27,20 +29,70 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
 
     private String methodName;
     private List<IJavaCodeElement> arguments = new ArrayList<>();
+    private boolean indent;
+    private String postfix;
     
     /**
      * Creates a method call.
      * 
      * @param parent the parent
      * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param considerStatic whether the call is static
+     * @param scope the scope of the import
+     * @param indent shall the call be indended
+     * @param postfix the postfix, e.g., semicolon newline
      */
-    public JavaCodeMethodCall(IJavaCodeElement parent, String methodName, boolean considerStatic) {
+    public JavaCodeMethodCall(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope, boolean indent, 
+        String postfix) {
         super(parent);
-        this.methodName = methodName;
-        if (considerStatic && methodName.contains(".")) { // else methodName may be qualified but not by class
-            parent.getArtifact().validateStaticMethodCall(methodName);
+        this.methodName = validateMethodName(parent, methodName, scope);
+        this.indent = indent;
+        this.postfix = postfix;
+    }
+
+    /**
+     * Validates and potentially modifies the method name, e.g., by importing the prefixed qualified type.
+     * 
+     * @param parent the parent
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @param scope the scope of the import
+     * @return {@code methodName} or a modified version
+     */
+    protected String validateMethodName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
+        String result = methodName;
+        if (JavaCodeImportScope.NONE != scope && methodName.contains(".")) {
+            result = parent.getArtifact().validateStaticMethodCall(methodName, scope);
         }
+        return result;
+    }
+
+    /**
+     * Adds a call argument as raw string of {@code arg}.
+     * 
+     * @param arg the argument
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethodCall addArgument(Object arg) {
+        arguments.add(new JavaCodeText(arg.toString(), false, false));
+        return this;
+    }
+
+    /**
+     * Adds a call argument as potentially quoted string constant adding Java quotes before and after.
+     * 
+     * @param val the String value
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethodCall addStringArgument(String val) {
+        return addArgument("\"" + StringEscapeUtils.escapeJava(val) + "\"");
+    }
+
+    public JavaCodeMethodCall addClassArgument(String cls) {
+        if (cls.endsWith(".class")) {
+            cls = cls.substring(0, cls.length() - 6);
+        }
+        JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, this);
+        addArgument(type.getOutputTypeName() + ".class");
+        return this;
     }
 
     /**
@@ -58,19 +110,33 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
      * Adds a method call as call argument.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param considerStatic whether the call is static
+     * @param scope the import scope
      * @return the created method call for chaining
      */
-    public JavaCodeMethodCall addArgument(String methodName, boolean considerStatic) {
-        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(getParent(), methodName, considerStatic));
+    public JavaCodeMethodCall addArgument(String methodName, JavaCodeImportScope scope) {
+        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(getParent(), methodName, scope, 
+            false, ""));
     }
 
+    /**
+     * Returns a prefix to be emitted before the method name.
+     * 
+     * @return the prefix, "" by default
+     */
+    protected String getCallPrefix() {
+        return "";
+    }
+    
     @Override
     public void store(CodeWriter out) {
-        out.printwi(methodName);
+        if (indent) {
+            out.printIndent();
+        }
+        out.print(getCallPrefix());
+        out.print(methodName);
         out.print("(");
         IJavaCodeElement.storeList(arguments, ",", out);
-        out.println(");");
+        out.print(")" + postfix);
     }
 
     @Override

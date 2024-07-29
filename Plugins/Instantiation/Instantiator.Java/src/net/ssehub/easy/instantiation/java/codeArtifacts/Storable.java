@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import java.util.function.Consumer;
+
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
@@ -31,5 +33,27 @@ public interface Storable {
      */
     @Invisible
     public void store(CodeWriter out);
+
+    /**
+     * Turns this Storable to a string.
+     * 
+     * @return the string representation
+     */
+    @Invisible
+    public default String getString() {
+        return getString(o -> store(o));
+    }
+
+    /**
+     * Turns the consumer {@code store}, e.g., {@link #store(CodeWriter)} to a String.
+     * 
+     * @param store the consumer
+     * @return the string
+     */
+    public static String getString(Consumer<CodeWriter> store) {
+        CodeToStringWriter out = new CodeToStringWriter();
+        store.accept(out);
+        return out.getString();
+    }
 
 }

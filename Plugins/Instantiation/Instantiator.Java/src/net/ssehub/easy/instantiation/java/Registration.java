@@ -15,20 +15,24 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 import net.ssehub.easy.instantiation.java.artifacts.JavaImport;
 import net.ssehub.easy.instantiation.java.artifacts.JavaMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAlternative;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnonymousClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAttribute;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSwitch;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVisibility;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeWhileLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTryBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVariableDeclaration;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSynchronizedBlock;
 import net.ssehub.easy.instantiation.java.instantiators.CocktailInstantiator;
 import net.ssehub.easy.instantiation.java.instantiators.Jar;
@@ -76,6 +80,7 @@ public class Registration implements IRegistration {
         // plain Java
         if (!plainRegistered) {
             plainRegistered = true;
+            TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
             TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
             TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
             TypeRegistry.DEFAULT.register(JavaCodeClass.class);
@@ -93,6 +98,9 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeImport.class);
             TypeRegistry.DEFAULT.register(JavaCodeMethod.class);
             TypeRegistry.DEFAULT.register(JavaCodeMethodCall.class);
+            TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
+            TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
+            TypeRegistry.DEFAULT.register(JavaCodeVariableDeclaration.class);
         }
     }
     

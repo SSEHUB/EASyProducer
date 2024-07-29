@@ -34,6 +34,7 @@ import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
 import net.ssehub.easy.instantiation.core.model.expressions.IExpressionParser;
 import net.ssehub.easy.instantiation.core.model.expressions.StringReplacer;
+import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.StringReplacerFactory;
@@ -624,6 +625,7 @@ public class VilTemplateProcessor implements IVilType {
             localParam.put(TemplateLangExecution.PARAM_CONFIG_SURE, config);
             localParam.put(TemplateLangExecution.PARAM_TARGET_SURE, target);
             TracerFactory.registerTemplateLanguageTracer(tracer);
+            Formatting.register(template);
             exec = new TemplateLangExecution(tracer, out, localParam);
             if (null != other) {
                 Object tmp = other.get(Constants.IMPLICIT_TERMINATOR_NAME);
@@ -651,6 +653,7 @@ public class VilTemplateProcessor implements IVilType {
             Bundle.getLogger(VilTemplateProcessor.class).error(errMsg.toString());
             throw e;
         } finally {
+            Formatting.unregister(template);
             TracerFactory.unregisterTemplateLanguageTracer(tracer);            
         }
         result.add(target);

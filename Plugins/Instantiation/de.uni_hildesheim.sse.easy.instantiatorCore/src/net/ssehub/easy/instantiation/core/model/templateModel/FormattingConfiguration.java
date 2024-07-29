@@ -28,6 +28,8 @@ public class FormattingConfiguration {
     private String lineEnding;
     private int lineLength;
     private String profile;
+    private boolean useTabs = false;
+    private int indentSteps = -1;
     private Map<String, String> profileArguments = new HashMap<String, String>();
 
     /**
@@ -35,7 +37,18 @@ public class FormattingConfiguration {
      */
     public FormattingConfiguration() {
     }
-    
+
+    /**
+     * Creates an empty configuration with default values for line length and ending.
+     * 
+     * @param lineLength the maximum line length
+     * @param lineEnding the line ending to use
+     */
+    public FormattingConfiguration(int lineLength, String lineEnding) {
+        this.lineLength = lineLength;
+        this.lineEnding = lineEnding;
+    }
+
     /**
      * Defines the line ending.
      * 
@@ -57,7 +70,7 @@ public class FormattingConfiguration {
     /**
      * Defines the line length.
      * 
-     * @param lineLength the line length in characters
+     * @param lineLength the line length in characters (ignored in formatting if negative)
      */
     public void setLineLength(int lineLength) {
         this.lineLength = lineLength;
@@ -128,6 +141,42 @@ public class FormattingConfiguration {
             result = System.getProperty("line.separator");
         }
         return result;
+    }
+
+    /**
+     * Returns whether tabs shall be used instead of whitespaces for indentation.
+     * 
+     * @return {@code true} for tabs, {@code false} else
+     */
+    public boolean useTabs() {
+        return useTabs;
+    }
+
+    /**
+     * Defines whether tabs shall be used instead of whitespaces for indentation.
+     * 
+     * @param useTabs {@code true} for tabs, {@code false} else
+     */
+    public void setUseTabs(boolean useTabs) {
+        this.useTabs = useTabs;
+    }
+
+    /**
+     * Returns the number of indentation steps per indentation level.
+     * 
+     * @return the number of indentation steps
+     */
+    public int getIndentSteps() {
+        return indentSteps;
+    }
+
+    /**
+     * Changes the number of indentation steps per indentation level.
+     * 
+     * @param indentSteps the number of indentation steps (negative is set to 0)
+     */
+    public void setIndentSteps(int indentSteps) {
+        this.indentSteps = Math.max(0, indentSteps); // well, 0...
     }
 
 }

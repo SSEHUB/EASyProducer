@@ -230,7 +230,7 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
         String result = getVisibility().getPrefix();
         result = insertModifier(result);
         if (isStatic) {
-            result += IJavaCodeElement.appendWhitespace(result) +  "static";
+            result = IJavaCodeElement.appendWhitespace(result) +  "static";
         }
         result = insertGenerics(result);
         return IJavaCodeElement.appendWhitespace(result);
@@ -256,6 +256,11 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
      */
     public JavaCodeJavadocComment getJavadocComment() {
         return comment;
+    }
+    
+    @Override
+    public String toString() {
+        return getString();
     }
 
 }

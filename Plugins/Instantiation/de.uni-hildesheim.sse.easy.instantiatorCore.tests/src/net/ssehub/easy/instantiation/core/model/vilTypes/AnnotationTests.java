@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -77,7 +79,51 @@ public class AnnotationTests extends AbstractTest {
      */
     private void writeAnnotations(PrintStream out, Annotation[] annotations, String indent) {
         for (Annotation a : annotations) {
-            out.print(indent  + a + "\r\n"); // even out win/linux -> comparison
+            out.print("  @"); // mimick output of annotation, however field sequence changed between JDK 17 and 21
+            out.print(a.annotationType().getName());
+            out.print("(");
+
+            Method[] fields = a.annotationType().getDeclaredMethods();
+            Arrays.sort(fields, (f1, f2) -> f1.getName().compareTo(f2.getName()));
+            boolean first = true;
+            for (Method f : fields) {
+                if (!first) {
+                    out.print(", ");
+                }
+                if (!(fields.length == 1 && f.getName().equals("value"))) {
+                    out.print(f.getName());
+                    out.print("=");
+                }
+                try {
+                    Object val = f.invoke(a);
+                    if (val.getClass().isArray() && !(val instanceof Object[])) { // primitive array
+                        Object[] tmp = new Object[Array.getLength(val)];
+                        for (int i = 0;  i < tmp.length; i++) {
+                            tmp[i] = Array.get(val, i);
+                        }
+                        val = tmp;
+                    }
+                    if (val instanceof String[]) {
+                        String[] array = (String[]) val;
+                        for (int i = 0; i < array.length; i++) {
+                            array[i] = "\"" + array[i] + "\"";
+                        }
+                        out.print("{");
+                        out.print(String.join(",", array));
+                        out.print("}");
+                    } else if (val instanceof Object[]) {
+                        out.print(Arrays.toString((Object[]) val));
+                    } else {
+                        if (val instanceof String) {
+                            val = "\"" + val + "\"";
+                        }
+                        out.print(val);
+                    }
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                }
+                first = false;
+            }
+            out.print(")\r\n"); // even out win/linux -> comparison
         }
     }
     

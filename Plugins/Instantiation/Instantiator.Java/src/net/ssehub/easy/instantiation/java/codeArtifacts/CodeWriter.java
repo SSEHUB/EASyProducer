@@ -20,7 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
+import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
 
 /**
  * Writes code to a file or a print writer.
@@ -28,19 +31,28 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
  * @author Holger Eichelberger
  */
 class CodeWriter implements Closeable {
-    
+
+    private static final boolean DEBUG = false;
     private PrintWriter out;
     private String indent = "";
+    private String indentStep = "  ";
+    private String lineEnd = System.lineSeparator();
+    @SuppressWarnings("unused")
+    private int lineLength = -1;  // TODO consider line breaks/formatting??
     
     /**
-     * Creates a code writer for a {@code file}.
+     * Creates a code writer for a {@code file}. This method creates parents of {@code file} if they yet do not exist.
      * 
-     * @param file the file
+     * @param file the file 
      * @throws VilException if creating/opening the file fails
      */
     CodeWriter(File file) throws VilException {
         try {
+            if (!file.exists()) {
+                file.getParentFile().mkdirs();
+            }
             this.out = new PrintWriter(file);
+            initializeFormatting();
         } catch (IOException e) {
             throw new VilException(e, VilException.ID_INTERNAL);
         }
@@ -53,6 +65,27 @@ class CodeWriter implements Closeable {
      */
     CodeWriter(PrintWriter out) {
         this.out = out;
+        initializeFormatting();
+    }
+    
+    /**
+     * Initializes the formatting from the using (top-level) template once.
+     */
+    private void initializeFormatting() {
+        FormattingConfiguration fCfg = Formatting.getFormattingConfiguration();
+        IndentationConfiguration iCfg = Formatting.getIndentationConfiguration();
+        
+        int iStep = fCfg.getIndentSteps() >= 0 ? fCfg.getIndentSteps() : iCfg.getIndentationStep(); 
+        indentStep = "";
+        for (int i = 1; i < iStep; i++) {
+            indentStep += " ";
+        }
+        if (fCfg.getLineEnding() != null) {
+            lineEnd = fCfg.getLineEnding();
+        }
+        if (fCfg.getLineLength() > 0) {
+            lineLength = fCfg.getLineLength();
+        }
     }
 
     /**
@@ -60,6 +93,9 @@ class CodeWriter implements Closeable {
      */
     void printIndent() {
         out.print(indent);
+        if (DEBUG) {
+            System.out.print(indent);
+        }
     }
 
     /**
@@ -86,7 +122,10 @@ class CodeWriter implements Closeable {
      * Prints a line break (using the@code  system line break).
      */
     void println() {
-        out.println(); // TODO linenend, consider line breaks/formatting
+        out.print(lineEnd);
+        if (DEBUG) {
+            System.out.print(lineEnd);
+        }
     }
 
     /**
@@ -95,7 +134,12 @@ class CodeWriter implements Closeable {
      * @param text the text to print
      */
     void println(String text) {
-        out.println(text);
+        out.print(text);
+        out.print(lineEnd);
+        if (DEBUG) {
+            System.out.print(text);
+            System.out.print(lineEnd);
+        }
     }
 
     /**
@@ -105,21 +149,24 @@ class CodeWriter implements Closeable {
      */
     void print(String text) {
         out.print(text);
+        if (DEBUG) {
+            System.out.print(text);
+        }
     }
 
     /**
      * Increases the indentation by a step.
      */
     void increaseIndent() {
-        indent += "  "; // TODO indentation config
+        indent += indentStep;
     }
     
     /**
      * Decreases the indentation by a step.
      */
     void decreaseIndent() {
-        if (indent.length() >= 2) { // TODO indentation config
-            indent = indent.substring(2);
+        if (indent.length() >= indentStep.length()) {
+            indent = indent.substring(indentStep.length());
         }
     }
     

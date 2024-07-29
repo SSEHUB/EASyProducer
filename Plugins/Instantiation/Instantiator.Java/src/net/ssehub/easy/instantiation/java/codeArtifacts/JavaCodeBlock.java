@@ -92,10 +92,7 @@ public class JavaCodeBlock extends JavaCodeStatement {
         } else if (getParent() instanceof JavaCodeBlock) {
             result = ((JavaCodeBlock) getParent()).getParentClass();
         } else {
-            IJavaCodeElement iter = this;
-            while (iter != null && !(iter instanceof JavaCodeClass)) {
-                iter = iter.getParent();
-            }
+            IJavaCodeElement iter = JavaCodeClass.getParentCodeClass(this);
             if (null != iter) {
                 result = (JavaCodeClass) iter;
             }
@@ -317,18 +314,19 @@ public class JavaCodeBlock extends JavaCodeStatement {
      * @return the method call (for chaining)
      */
     public JavaCodeMethodCall addCall(String methodName) {
-        return addCall(methodName, false);
+        return addCall(methodName, JavaCodeImportScope.NONE);
     }
 
     /**
      * Adds a method call.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param considerStatic whether the call is static
+     * @param scope the import scope
      * @return the method call (for chaining)
      */
-    public JavaCodeMethodCall addCall(String methodName, boolean considerStatic) {
-        return IJavaCodeElement.add(elements, new JavaCodeMethodCall(this, methodName, considerStatic));
+    public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
+        return IJavaCodeElement.add(elements, new JavaCodeMethodCall(this, methodName, scope, true,
+            ";" + System.lineSeparator()));
     }
 
     /**

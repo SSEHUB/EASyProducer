@@ -62,19 +62,30 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @return the method call (for chaining)
      */
     public JavaCodeMethodCall addCall(String methodName) {
-        return addCall(methodName, false);
+        return addCall(methodName, JavaCodeImportScope.NONE);
     }
 
     /**
      * Adds a method call.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param considerStatic whether the call is static
+     * @param scope the import scope
      * @return the method call (for chaining)
      */
-    public JavaCodeMethodCall addCall(String methodName, boolean considerStatic) {
-        initCall = new JavaCodeMethodCall(this, methodName, considerStatic);
+    public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
+        initCall = new JavaCodeMethodCall(this, methodName, scope, false, "");
         return initCall;
+    }
+
+    /**
+     * Adds a constructor call.
+     * 
+     * @param cls the name of the class, may be qualified
+     * @return the method call (for chaining)
+     */
+    public JavaCodeConstructorCall addNew(String cls) {
+        initCall = new JavaCodeConstructorCall(this, cls, false, "");
+        return (JavaCodeConstructorCall) initCall;
     }
 
     @Override

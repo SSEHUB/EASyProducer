@@ -46,18 +46,18 @@ public class JavaCodeAssignment extends JavaCodeStatement {
      * @return the method call (for chaining)
      */
     public JavaCodeMethodCall addCall(String methodName) {
-        return addCall(methodName, false);
+        return addCall(methodName, JavaCodeImportScope.NONE);
     }
 
     /**
      * Adds a method call.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param considerStatic whether the call is static
+     * @param scope the import scope
      * @return the method call (for chaining)
      */
-    public JavaCodeMethodCall addCall(String methodName, boolean considerStatic) {
-        expressionCall = new JavaCodeMethodCall(this, methodName, considerStatic);
+    public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
+        expressionCall = new JavaCodeMethodCall(this, methodName, scope, false, "");
         return expressionCall;
     }
     

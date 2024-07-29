@@ -36,9 +36,10 @@ public interface IJavaCodeArtifact {
      * Validates a qualified static method call.
      * 
      * @param name the name
+     * @param scope the scope to consider
      * @return the name, potentially without qualification if statically imported
      */
-    public String validateStaticMethodCall(String name);
+    public String validateStaticMethodCall(String name, JavaCodeImportScope scope);
     
     /**
      * Internal call to register an import.

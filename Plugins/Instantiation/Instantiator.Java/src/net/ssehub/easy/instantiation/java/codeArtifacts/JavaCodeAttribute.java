@@ -27,6 +27,9 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
 
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
+    private String initializer;
+    private JavaCodeMethodCall methodInitializer;
+    private JavaCodeAnonymousClass anonymousInitializer;
 
     /**
      * Creates an attribute.
@@ -66,7 +69,18 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         out.printwi(getModifier());
         type.store(out); 
         out.print(" ");
-        out.println(getName() + ";");
+        out.print(getName());
+        if (null != initializer) {
+            out.print(" = ");
+            out.print(initializer);
+        } else if (null != methodInitializer) {
+            out.print(" = ");
+            methodInitializer.store(out);
+        } else if (null != anonymousInitializer) {
+            out.print(" = ");
+            anonymousInitializer.store(out);
+        }
+        out.println(";");
     }
 
     @Override
@@ -120,6 +134,26 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     public JavaCodeAttribute setStatic() {
         super.setStatic();
         return this;
+    }
+    
+    public JavaCodeAttribute addInitializer(String initializer) {
+        this.initializer = initializer;
+        return this;
+    }
+    
+    public JavaCodeAnonymousClass addAnonymous(String cls) {
+        anonymousInitializer = new JavaCodeAnonymousClass(cls, getEnclosing());
+        return anonymousInitializer;
+    }
+    
+    public JavaCodeConstructorCall addNew(String cls) {
+        methodInitializer = new JavaCodeConstructorCall(this, cls, false, "");
+        return (JavaCodeConstructorCall) methodInitializer;
+    }
+    
+    public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
+        methodInitializer = new JavaCodeMethodCall(this, methodName, scope, false, "");
+        return methodInitializer;
     }
     
     /**

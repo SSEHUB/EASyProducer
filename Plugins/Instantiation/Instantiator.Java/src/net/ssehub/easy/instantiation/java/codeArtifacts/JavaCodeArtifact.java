@@ -18,8 +18,11 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
@@ -31,28 +34,36 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.java.Bundle;
+import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 
 /**
- * Represents a Java source code artifact (without compiler backend).
+ * Represents a Java source code artifact (without compiler backend). Can be {@link #disable() disabled for storing}
+ * to just enable collecting code fragments that can then be emitted through {@link #toPackage()}, {@link #toImports()}
+ * via individual classes or {@link #toString()}.
  * 
  * @author Holger Eichelberger
  */
 @ArtifactCreator(JavaCodeArtifactCreator.class)
-public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact, IStringValueProvider {
+public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact, IStringValueProvider, Storable {
 
     static final JavaCodeArtifact EMPTY = new JavaCodeArtifact(); 
+    private static final Comparator<IJavaCodeImport> IMPORT_COMPARATOR = 
+        (i1, i2) -> i1.getName().compareTo(i2.getName());
     
     private File file;
     private String packageName;
     private List<IJavaCodeImport> imports = new ArrayList<>();
     private List<IJavaCodeElement> elements = new ArrayList<>();
     private String comment;
+    private boolean store = true;
     
     /**
-     * Creates an instance. [public for testing]
+     * Creates an instance without file backing.
      */
     public JavaCodeArtifact() {
         super();
+        this.store = false;
     }
     
     /**
@@ -65,7 +76,27 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         super(file, model);
         this.file = file;
     }
-    
+
+    /**
+     * Disables storing this artifact as it shall be used only for creating code fragments.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeArtifact disable() {
+        this.store = false;
+        return this;
+    }
+
+    /**
+     * (Re-)enables storing this artifact.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeArtifact enable() {
+        this.store = false;
+        return this;
+    }
+
     /**
      * Conversion operation.
      * 
@@ -92,10 +123,24 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         JavaCodeArtifact convertedValue = null;
         if (val instanceof JavaCodeArtifact) {
             convertedValue = (JavaCodeArtifact) val;
+        } else if (val instanceof FileArtifact) {
+            FileArtifact fa = (FileArtifact) val;
+            try {
+                convertedValue = ArtifactFactory.createArtifact(
+                    JavaCodeArtifact.class, fa.getPath().getAbsolutePath(), null);
+            } catch (VilException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(JavaCodeArtifact.class, Bundle.ID).error(e.getMessage());
+            }
         }
         return convertedValue;
     }    
 
+    @Invisible
+    @Conversion
+    public static JavaCodeArtifact convert(JavaFileArtifact val) {
+        return convert((IFileSystemArtifact) val);
+    }
+    
     /**
      * Adds a public class with the given name.
      * 
@@ -105,7 +150,18 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     public JavaCodeClass addClass(String name) {
         return IJavaCodeElement.add(elements, new JavaCodeClass(name, this));
     }
-    
+
+    /**
+     * Adds a public class with the given name.
+     * 
+     * @param name the class name
+     * @param comment the javadoc comment of the class
+     * @return the class
+     */
+    public JavaCodeClass addClass(String name, String comment) {
+        return IJavaCodeElement.add(elements, new JavaCodeClass(name, this, comment));
+    }
+
     /*public JavaCodeJavadocComment setJavadocComment(String comment) {
         return new JavaCodeJavadocComment(comment);
     }*/ // --> plain comment
@@ -116,7 +172,6 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
      * @param packageName the package name
      * @return <b>this</b> (for chaining)
      */
-    @OperationMeta(name = {"package"})
     public JavaCodeArtifact setPackage(String packageName) {
         this.packageName = packageName;
         return this;
@@ -190,29 +245,149 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             }
         }
     }
-    
-    @Invisible
+
     @Override
-    public void store() throws VilException {
-        CodeWriter out = new CodeWriter(file);
-        storeComment(out);
-        if (null != packageName && packageName.length() > 0) {
-            out.println("package " + packageName + ";");
-            out.println();
-        }
-        if (imports.size() > 0) {
-            for (IJavaCodeImport imp: imports) {
-                imp.store(out);
-            }
-            out.println();
-        }
+    public void store(CodeWriter out) {
+        storeHeader(out);
         for (int e = 0; e < elements.size(); e++) {
             if (e > 0) {
                 out.println();
             }
             elements.get(e).store(out);
         }
-        out.close();
+    }
+
+    /**
+     * Stores the imports to {@code out}.
+     * 
+     * @param out the code writer
+     */
+    protected void storeImports(CodeWriter out) {
+        char lastStart = 0;
+        for (IJavaCodeImport imp: sortImports()) {
+            char start = imp.getName().charAt(0);
+            if (lastStart != 0 && lastStart != start) {
+                out.println();
+            }
+            imp.store(out);
+            lastStart = start;
+        }
+    }
+    
+    /**
+     * Returns whether this class has a package declaration.
+     * 
+     * @return {@code true} for package, {@code false} else
+     */
+    public boolean hasPackage() {
+        return (null != packageName && packageName.length() > 0);
+    }
+    
+    /**
+     * Stores the package declaration to {@code out}.
+     * 
+     * @param out the code writer
+     */
+    protected void storePackage(CodeWriter out) {
+        if (hasPackage()) {
+            out.println("package " + packageName + ";");
+        }        
+    }
+    
+    /**
+     * Stores the header (file comment, package declaration, imports) to {@code out}.
+     * 
+     * @param out the code writer
+     */
+    protected void storeHeader(CodeWriter out) {
+        storeComment(out);
+        if (hasPackage()) {
+            storePackage(out);
+            out.println();
+        }
+        if (imports.size() > 0) {
+            storeImports(out);
+            out.println();
+        }
+    }
+ 
+    @Invisible
+    @Override
+    public void store() throws VilException {
+        if (store) {
+            CodeWriter out = new CodeWriter(file);
+            store(out);
+            out.close();
+        }
+    }
+    
+    /**
+     * Just returns the collected imports code fragment.
+     * 
+     * @return the imports code fragment
+     * @see #disable()
+     */
+    public String toImports() {
+        return Storable.getString(o -> storeImports(o));
+    }
+    
+    /**
+     * Just returns the collected package code fragment.
+     * 
+     * @return the package code fragment
+     * @see #disable()
+     */
+    public String toPackage() {
+        return Storable.getString(o -> storePackage(o));
+    }
+
+    /**
+     * Just returns the collected package code fragment.
+     * 
+     * @return the package code fragment
+     * @see #disable()
+     */
+    public String toHeader() {
+        return Storable.getString(o -> storeHeader(o));
+    }
+
+    /**
+     * Sorts the imports.
+     * 
+     * @return the sorted imports
+     */
+    private List<IJavaCodeImport> sortImports() {
+        List<IJavaCodeImport> javaStatic = new ArrayList<>();
+        List<IJavaCodeImport> restStatic = new ArrayList<>();
+        List<IJavaCodeImport> java = new ArrayList<>();
+        List<IJavaCodeImport> rest = new ArrayList<>();
+        for (IJavaCodeImport i: imports) {
+            if (i.getName().startsWith("java")) {
+                if (i.isStatic()) {
+                    javaStatic.add(i);
+                } else {
+                    java.add(i);
+                }
+            } else {
+                if (i.isStatic()) {
+                    restStatic.add(i);
+                } else {
+                    rest.add(i);
+                }
+            }
+        }
+
+        Collections.sort(javaStatic, IMPORT_COMPARATOR);
+        Collections.sort(restStatic, IMPORT_COMPARATOR);
+        Collections.sort(java, IMPORT_COMPARATOR);
+        Collections.sort(rest, IMPORT_COMPARATOR);
+
+        List<IJavaCodeImport> result = new ArrayList<IJavaCodeImport>(imports.size());
+        result.addAll(java);
+        result.addAll(rest);
+        result.addAll(javaStatic);
+        result.addAll(restStatic);
+        return result;
     }
 
     @Invisible
@@ -234,20 +409,46 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     
     @Invisible
     @Override
-    public String validateStaticMethodCall(String name) {
+    public String validateStaticMethodCall(String name, JavaCodeImportScope scope) {
         int pos = name.lastIndexOf('.');
         if (pos > 0) {
-            // direct static import?
-            IJavaCodeImport imp = findMatchingImport(name, true);
-            // wildcard static import
-            if (null == imp) {
-                imp = findMatchingImport(name.substring(0, pos) + "*", true);
+            String[] parts = name.split("\\.");
+            pos = parts.length - 2;
+            while (pos > 0 && (parts[pos].endsWith(")"))) {
+                pos--;
             }
-            if (null == imp) {
-                // create direct static import, to be on the safe side no wildcard
-                new JavaCodeImport(name, this, true); // added automatically
+            String type = String.join(".", Arrays.copyOfRange(parts, 0, pos + 1));
+            String mName = parts[pos + 1];
+            int aPos = mName.indexOf("(");
+            if (aPos > 0) {
+                mName = mName.substring(0, aPos);
             }
-            name = name.substring(pos);
+            String qualifiedMethod = type + "." + mName;
+            name = String.join(".", Arrays.copyOfRange(parts, pos + 1, parts.length));
+            
+            if (JavaCodeImportScope.CLASS == scope) {
+                IJavaCodeImport imp = findMatchingImport(type, true);
+                if (null == imp) {
+                    new JavaCodeImport(type, this, false); // added automatically
+                }
+                aPos = type.lastIndexOf('.');
+                String simpleTypeName = type;
+                if (pos > 0) {
+                    simpleTypeName = type.substring(aPos + 1);
+                }
+                name = simpleTypeName + "." + name;
+            } else if (JavaCodeImportScope.METHOD == scope) {
+                // direct static import?
+                IJavaCodeImport imp = findMatchingImport(qualifiedMethod, true);
+                // is there a wildcard static import?
+                if (null == imp) {
+                    imp = findMatchingImport(type + ".*", true);
+                }
+                if (null == imp) {
+                    // create direct static import, to be on the safe side no wildcard
+                    new JavaCodeImport(qualifiedMethod, this, true); // added automatically
+                }
+            }
         }
         return name;
     }
@@ -308,7 +509,10 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     @Invisible
     @Override
     public void registerImport(IJavaCodeImport imp) {
-        imports.add(imp);
+        if (!imports.stream().anyMatch(i -> i.isStatic() == imp.isStatic() && i.isWildcard() == imp.isWildcard() 
+            && i.getName().equals(imp.getName()))) {
+            imports.add(imp);
+        }
     }
-    
+   
 }

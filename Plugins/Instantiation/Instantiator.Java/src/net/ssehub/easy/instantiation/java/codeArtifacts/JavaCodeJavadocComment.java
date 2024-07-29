@@ -94,7 +94,10 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     public void store(CodeWriter out) {
         if (null != comment) {
             out.printlnwi("/**");
-            out.printlnwi(" * " + comment);
+            String[] lines = comment.split("\\n");
+            for (String l : lines) {
+                out.printlnwi(" * " + l.trim());
+            }
             if (taggedParts != null) {
                 if (attachedTo instanceof JavaCodeMethod) {
                     out.printlnwi(" *");

@@ -15,33 +15,28 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+
 /**
- * Internal artifact for explicitly created instances and delayed adding/linking. Prevents/handles 
- * {@link NullPointerException}.
+ * Denotes the auto-import scope for types.
  * 
  * @author Holger Eichelberger
  */
-class DummyJavaCodeArtifact implements IJavaCodeArtifact {
-
-    static final IJavaCodeArtifact INSTANCE = new DummyJavaCodeArtifact();
+public enum JavaCodeImportScope implements IVilType {
 
     /**
-     * Prevents external creation.
+     * No scope, no import.
      */
-    private DummyJavaCodeArtifact() {
-    }
+    NONE,
     
-    @Override
-    public void validateType(IJavaCodeTypeSpecification type) {
-    }
+    /**
+     * Class scope.
+     */
+    CLASS,
 
-    @Override
-    public String validateStaticMethodCall(String name, JavaCodeImportScope scope) {
-        return name;
-    }
-
-    @Override
-    public void registerImport(IJavaCodeImport imp) {
-    }
+    /**
+     * (Static) class and method scope.
+     */
+    METHOD
 
 }

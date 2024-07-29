@@ -15,33 +15,21 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-/**
- * Internal artifact for explicitly created instances and delayed adding/linking. Prevents/handles 
- * {@link NullPointerException}.
- * 
- * @author Holger Eichelberger
- */
-class DummyJavaCodeArtifact implements IJavaCodeArtifact {
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
-    static final IJavaCodeArtifact INSTANCE = new DummyJavaCodeArtifact();
+public class JavaCodeAnonymousClass extends JavaCodeClass {
 
-    /**
-     * Prevents external creation.
-     */
-    private DummyJavaCodeArtifact() {
+    JavaCodeAnonymousClass(String name, JavaCodeClass enclosing) {
+        super(name, enclosing);
     }
     
+    @Invisible
     @Override
-    public void validateType(IJavaCodeTypeSpecification type) {
-    }
-
-    @Override
-    public String validateStaticMethodCall(String name, JavaCodeImportScope scope) {
-        return name;
-    }
-
-    @Override
-    public void registerImport(IJavaCodeImport imp) {
+    public void store(CodeWriter out) {
+        out.print("new ");
+        out.print(getName());
+        out.print("()"); // TODO arguments
+        storeBlock(out);
     }
 
 }

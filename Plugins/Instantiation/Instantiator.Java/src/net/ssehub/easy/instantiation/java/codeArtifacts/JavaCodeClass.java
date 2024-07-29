@@ -55,8 +55,12 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         
     }
     
-    JavaCodeClass(String name, JavaCodeArtifact artifact) {
-        super(name, JavaCodeVisibility.PUBLIC, null);
+    JavaCodeClass(String name, IJavaCodeArtifact artifact) {
+        this(name, artifact, null);
+    }
+
+    JavaCodeClass(String name, IJavaCodeArtifact artifact, String comment) {
+        super(name, JavaCodeVisibility.PUBLIC, comment);
         this.artifact = artifact;
     }
 
@@ -128,6 +132,17 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     public JavaCodeClass asAnnotation() {
         kind = Kind.ANNOTATION;
         return this;
+    }
+
+    public JavaCodeMethod addMainMethod() {
+        return addMainMethod("The main method.", "args", "command line parameters");
+    }
+
+    public JavaCodeMethod addMainMethod(String methodComment, String param, String paramComment) {
+        JavaCodeMethod result = addMethod("void", "main", methodComment)
+            .setStatic();
+        result.addParameter("String[]", param, paramComment);
+        return result;
     }
 
     public JavaCodeMethod addMethod(String name) {
@@ -243,6 +258,11 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             extendingClass.store(out);
         }
         IJavaCodeElement.storeList(" ", implementedInterfaces, ", ", out);
+        storeBlock(out);
+        out.println();
+    }
+    
+    protected void storeBlock(CodeWriter out) {
         out.println(" {");
         out.increaseIndent();
         if (elements.size() > 0) {
@@ -259,7 +279,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             }
         }
         out.decreaseIndent();
-        out.printlnwi("}");
+        out.printwi("}");        
     }
 
     @Override
@@ -286,6 +306,20 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      */
     static void setParent(IJavaCodeElement parent, Consumer<JavaCodeClass> consumer) {
         IJavaCodeElement.setParent(parent, JavaCodeClass.class, consumer);
+    }
+
+    /**
+     * Determines a code class parent.
+     * 
+     * @param element the element to start searching from
+     * @return the code class parent or <b>null</b>
+     */
+    static JavaCodeClass getParentCodeClass(IJavaCodeElement element) {
+        IJavaCodeElement iter = element.getParent();
+        while (iter != null && !(iter instanceof JavaCodeClass)) {
+            iter = iter.getParent();
+        }
+        return iter instanceof JavaCodeClass ? (JavaCodeClass) iter : null;
     }
 
 }

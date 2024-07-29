@@ -44,6 +44,16 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
      * Creates a type specification for the given type.
      * 
      * @param type the type
+     * @param element the element to start searching for the parent code class at
+     */
+    protected JavaCodeTypeSpecification(String type, IJavaCodeElement element) {
+        this(type, JavaCodeClass.getParentCodeClass(element));
+    }
+    
+    /**
+     * Creates a type specification for the given type.
+     * 
+     * @param type the type
      * @param enclosing the defining/enclosing class
      */
     protected JavaCodeTypeSpecification(String type, JavaCodeClass enclosing) {

@@ -1431,6 +1431,10 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                 }
                 if (!ok) {
                     OperationDescriptor conversion = TypeDescriptor.findConversionOnBoth(exType, checkType);
+                    // exType's conversion might deliver wrong result, type's conversion might be correct
+                    if (null != conversion && !type.isAssignableFrom(conversion.getReturnType())) {
+                        conversion = type.findConversion(exType, type);
+                    }
                     if (null == conversion) {
                         throwVariableCannotBeInitialized(cause, getName(cause), type, exType);
                     } else {

@@ -142,17 +142,18 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * Adds an exception with comment.
      * 
      * @param type the exception type
-     * @param comment Javadoc comment of the exception
+     * @param comment Javadoc description of the exception
      * @return the type specification of the exception
      */
     public JavaCodeTypeSpecification addException(String type, String comment) {
         if (null == exceptions) {
             exceptions = new ArrayList<>();
         }
+        JavaCodeTypeSpecification typeSpec = new JavaCodeTypeSpecification(type, getEnclosing());
         if (null != comment && getJavadocComment() != null) {
-            getJavadocComment().addExceptionComment(type, comment);
+            getJavadocComment().addExceptionComment(typeSpec.getOutputTypeName(), comment);
         }
-        return IJavaCodeElement.add(exceptions, new JavaCodeTypeSpecification(type, getEnclosing()));
+        return IJavaCodeElement.add(exceptions, typeSpec);
     }
 
     /**
@@ -342,11 +343,11 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * Adds a method call.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param isStatic whether the call is static
+     * @param scope the import scope
      * @return the method call (for chaining)
      */
-    public JavaCodeMethodCall addCall(String methodName, boolean isStatic) {
-        return block.addCall(methodName, isStatic);
+    public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
+        return block.addCall(methodName, scope);
     }
 
     /**
@@ -398,7 +399,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * @param initializer the initializer, may be <b>null</b> for none
      * @return the variable declaration (for chaining)
      */
-    public JavaCodeVariableDeclaration addVar(JavaCodeTypeSpecification type, String variableName, 
+    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, String initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
     }
@@ -467,7 +468,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         out.print("(");
         IJavaCodeElement.storeList(parameter, ", ", out);
         out.print(")");
-        IJavaCodeElement.storeList(" ", exceptions, ", ", out);
+        IJavaCodeElement.storeList(" throws ", exceptions, ", ", out);
         if (!isAbstract() || enclosing.getKind() == Kind.INTERFACE) {
             block.store(out);
         } else {

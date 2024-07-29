@@ -103,13 +103,18 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
 
     /**
      * Appends a whitespace to {@code text} if {@code text} is not empty.
+     * Does not add a whitespace if there is already one.
      * 
      * @param text the text to append to
      * @return {@code text} or {@code text} suffixed with whitespace
      * @see #appendSeparator(String, String)
      */
     static String appendWhitespace(String text) {
-        return appendSeparator(text, "");
+        if (text.endsWith(" ")) {
+            return text;
+        } else {
+            return appendSeparator(text, " ");
+        }
     }
 
     /**
@@ -148,7 +153,7 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     static void storeList(String prefix, List<? extends IJavaCodeElement> elements, String separator, CodeWriter out) {
         if (null != elements) {
             if (prefix != null && prefix.length() > 0) {
-                out.print("");
+                out.print(prefix);
             }
             for (int e = 0; e < elements.size(); e++) {
                 if (e > 0) {
