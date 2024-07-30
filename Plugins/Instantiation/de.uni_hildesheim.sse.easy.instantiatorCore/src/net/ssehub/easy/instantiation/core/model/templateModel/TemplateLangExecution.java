@@ -559,26 +559,29 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
             content = cleanLineEnd(content, true);
         } 
         if (null != content) {
-            int indentation = environment.getIndentation();
-            if (indentation > 0) {
-                int indent = indentation + getAdditionalIndentation();
-                content = IndentationUtils.removeIndentation(content, indent, getTabEmulation());
-            }
-            int forced = 0;
+            int forced = 0; // negative disables VTL indentation mechanism
             if (null != cnt.getIndentExpression()) {
                 Object val = cnt.getIndentExpression().accept(this);
                 if (val instanceof Integer) {
                     forced = ((Integer) val).intValue();
-                    if (forced > 0) { // precondition of insertIndentation
-                        content = IndentationUtils.insertIndentation(content, forced, contentNestingLevel > 1);
-                        lastContentFormatted = true;
-                    }
                 } else {
                     throw new VilException("indentation value is no integer", VilException.ID_SEMANTIC);
                 }
             }
+            if (forced >= 0) { // auto/forced indentation is not disabled
+                int indentation = environment.getIndentation();
+                if (indentation > 0) {
+                    int indent = indentation + getAdditionalIndentation();
+                    content = IndentationUtils.removeIndentation(content, indent, getTabEmulation());
+                }
+                //int forced = 0;
+                if (forced > 0) { // precondition of insertIndentation
+                    content = IndentationUtils.insertIndentation(content, forced, contentNestingLevel > 1);
+                    lastContentFormatted = true;
+                }
+            }
             String topContent = defContentStack.pop();
-            if (0 == topContent.length()) {
+            if (0 == topContent.length() || forced < 0) {
                 topContent = content;
             } else {
                 topContent = IndentationUtils.appendWithLastIndentation(topContent, content, 

@@ -64,9 +64,4 @@ public class JavaCodeAlternative extends JavaCodeBlock {
         }
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeIfThenElse";
-    }
-
 }

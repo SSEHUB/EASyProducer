@@ -144,11 +144,6 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     public IJavaCodeArtifact getArtifact() {
         return null;
     }
-    
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaComment";
-    }
 
     @Override
     public IJavaCodeElement getParent() {

@@ -71,6 +71,27 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     public default boolean isAttribute() {
         return false;
     }
+    
+    /**
+     * Returns the result if we are in a tracer/testing.
+     * 
+     * @param comparator the comparator to use to make tracing output comparable
+     * @return the tracer result
+     */
+    @Invisible(inherit = true)
+    public default String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName();
+    }
+    
+    @Invisible(inherit = true)
+    @Override
+    public default String getStringValue(StringComparator comparator) {
+        if (comparator.inTracer()) { // for testing, short form for simplifying the traces
+            return getTracerStringValue(comparator);
+        } else {
+            return toCode();
+        }
+    }
 
     /**
      * Adds an element to {@code list} and returns the element.

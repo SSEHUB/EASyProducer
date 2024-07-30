@@ -40,9 +40,4 @@ public class JavaCodeSynchronizedBlock extends JavaCodeBlock {
         super.store(out);
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaSynchronizedBlock";
-    }
-
 }

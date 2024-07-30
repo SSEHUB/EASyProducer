@@ -81,11 +81,6 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
             out.print(")");
             super.store(out);
         }
-
-        @Override
-        public String getStringValue(StringComparator comparator) {
-            return "JavaCodeCatchBlock";
-        }
         
     }
     
@@ -143,11 +138,6 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
             finallyBlock.store(out);
         }
         out.println();
-    }
-
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaTryBlock";
     }
 
 }

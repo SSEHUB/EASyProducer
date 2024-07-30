@@ -59,11 +59,6 @@ public class JavaCodeText implements IJavaCodeElement {
     }
 
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaText";
-    }
-
-    @Override
     public IJavaCodeElement getParent() {
         return null;
     }

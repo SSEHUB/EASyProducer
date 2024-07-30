@@ -11,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.DefaultLibUtils;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
@@ -38,6 +39,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @Override
     protected void furtherInitialization() {
         Registration.register();
+        DefaultLibUtils.loadDefaultModels(OBSERVER, Bundle.ID);
     }
 
     /**
@@ -348,6 +350,37 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
                 File expectedMethodClass2 = new File(getArtifactsFolder(),
                         "javaCode/JCATest.java");
                 File tempFileMethodClass2 = new File(base, "JCATest.java");
+                // for debugging
+                try { 
+                    System.out.println(FileUtils.readFileToString(tempFileMethodClass2, Charset.defaultCharset()));
+                } catch (IOException e) {
+                }
+                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
+            }
+
+        });
+    }
+
+    /**
+     * Test the JavaCode artifact in VIL (mixed style).
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testJavaCode2() throws IOException {
+        assertSelfInstantiate("javaCode2", "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "javaCode");
+            }
+
+            @Override
+            public void assertIn(File base) {
+                File expectedMethodClass2 = new File(getArtifactsFolder(),
+                        "javaCode/JCATest2.java");
+                File tempFileMethodClass2 = new File(base, "JCATest2.java");
                 // for debugging
                 try { 
                     System.out.println(FileUtils.readFileToString(tempFileMethodClass2, Charset.defaultCharset()));

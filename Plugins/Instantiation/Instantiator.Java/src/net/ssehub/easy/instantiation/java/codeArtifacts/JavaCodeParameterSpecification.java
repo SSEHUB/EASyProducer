@@ -79,11 +79,12 @@ public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
         super.store(out);
         out.print(" ");
         out.print(name);
-    }    
- 
+    }
+    
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaParameter " + getType() + " " + name;
+    @Invisible(inherit = true)
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + " " + getType() + " " + name;
     }
 
 }

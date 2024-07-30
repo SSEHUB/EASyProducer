@@ -466,9 +466,4 @@ public class JavaCodeBlock extends JavaCodeStatement {
         }
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaBlock";
-    }
-
 }

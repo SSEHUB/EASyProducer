@@ -46,9 +46,10 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
         getArtifact().validateType(type);
     }
     
+    @Invisible(inherit = true)
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaAnnotation " + type.getStringValue(comparator);
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + " " + type.getStringValue(comparator);
     }
 
     /**

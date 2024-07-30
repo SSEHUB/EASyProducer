@@ -41,11 +41,6 @@ public abstract class JavaCodeElement implements IJavaCodeElement {
     }
 
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return getClass().getSimpleName();
-    }
-
-    @Override
     public IJavaCodeElement getParent() {
         return parent;
     }

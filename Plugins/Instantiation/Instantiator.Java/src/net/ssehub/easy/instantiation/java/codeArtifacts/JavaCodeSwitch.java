@@ -57,9 +57,10 @@ public class JavaCodeSwitch extends JavaCodeBlock {
                 out.decreaseIndent();
             }
         }
-
+        
         @Override
-        public String getStringValue(StringComparator comparator) {
+        @Invisible(inherit = true)
+        public String getTracerStringValue(StringComparator comparator) {
             return null == expression ? "JavaCodeDefault" : "JavaCodeCase";
         }
         
@@ -106,11 +107,6 @@ public class JavaCodeSwitch extends JavaCodeBlock {
         out.print(")");
         super.store(out);
         out.println();
-    }
-
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeSwitch";
     }
 
 }

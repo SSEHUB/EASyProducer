@@ -283,8 +283,9 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
 
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaClass: " + getName();
+    @Invisible(inherit = true)
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + ": " + getName();
     }
 
     @Override

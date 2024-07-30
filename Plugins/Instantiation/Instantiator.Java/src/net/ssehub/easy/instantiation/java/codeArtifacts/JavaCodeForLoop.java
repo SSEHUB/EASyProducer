@@ -100,9 +100,4 @@ public class JavaCodeForLoop extends JavaCodeBlock {
         super.store(out);
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeForLoop";
-    }
-
 }

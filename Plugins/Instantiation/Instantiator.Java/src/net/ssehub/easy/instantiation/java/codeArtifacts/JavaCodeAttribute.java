@@ -83,9 +83,10 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         out.println(";");
     }
 
+    @Invisible(inherit = true)
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaAttribute: " + getName();
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + ": " + getName();
     }
     
     @Override

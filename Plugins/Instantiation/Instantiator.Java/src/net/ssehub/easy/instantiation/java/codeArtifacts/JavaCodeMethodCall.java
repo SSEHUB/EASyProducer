@@ -139,9 +139,4 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         out.print(")" + postfix);
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "MethodCall";
-    }
-
 }

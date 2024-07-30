@@ -32,7 +32,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfigur
  */
 class CodeWriter implements Closeable {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private PrintWriter out;
     private String indent = "";
     private String indentStep = "  ";
@@ -77,7 +77,7 @@ class CodeWriter implements Closeable {
         
         int iStep = fCfg.getIndentSteps() >= 0 ? fCfg.getIndentSteps() : iCfg.getIndentationStep(); 
         indentStep = "";
-        for (int i = 1; i < iStep; i++) {
+        for (int i = 1; i <= iStep; i++) {
             indentStep += " ";
         }
         if (fCfg.getLineEnding() != null) {

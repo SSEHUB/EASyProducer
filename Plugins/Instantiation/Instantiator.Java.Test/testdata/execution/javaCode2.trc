@@ -1,0 +1,11 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, FileArtifact) with (<config>, JCATest2.java)
+    clsName <- MyModbusConnExample
+    platfInClsName <- ModbusPhoenixEEM
+    platfOutClsName <- ModbusPhoenixRwEEM
+    connFqn <- de.iip_ecosphere.platform.connectors.modbustcpipv1.ModbusTcpIpConnector
+    connFqnPath <- de.iip_ecosphere.platform.connectors.modbustcpipv1.ModbusTcpIpConnector
+    -> name(JavaPath) with (de.iip_ecosphere.platform.connectors.modbustcpipv1.ModbusTcpIpConnector) = ModbusTcpIpConnector
+    connName <- ModbusTcpIpConnector
+    cName <- myModbusConn example
+    -> create JavaCodeArtifact() with () =     -> vilTemplateProcessor(String, Configuration, Artifact) with (JavaCode2Tpl, <config>, JCATest2.java, {}) = null

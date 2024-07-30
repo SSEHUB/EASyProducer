@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.java;
 
 import org.osgi.service.component.ComponentContext;
 
+import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.SettingsInitializerRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -23,11 +24,13 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeStatement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSwitch;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVisibility;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeWhileLoop;
@@ -48,11 +51,20 @@ public class Registration implements IRegistration {
 
     private static boolean registered = false;
     private static boolean plainRegistered = false;
+
+    /**
+     * Registers the Java artifacts and instantiators (without component context).
+     */
+    public static final void register() {
+        register(null);
+    }
     
     /**
      * Registers the Java artifacts and instantiators.
+     * 
+     * @param context the component context.
      */
-    public static final void register() {
+    public static final void register(ComponentContext context) {
         TypeRegistry.considerDeferredRegistration(() -> {
             if (!registered) {
                 registered = true;
@@ -80,6 +92,8 @@ public class Registration implements IRegistration {
         // plain Java
         if (!plainRegistered) {
             plainRegistered = true;
+            TypeRegistry.DEFAULT.register(JavaCodeElement.class);
+            TypeRegistry.DEFAULT.register(JavaCodeStatement.class);
             TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
             TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
             TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
@@ -101,21 +115,26 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
             TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
             TypeRegistry.DEFAULT.register(JavaCodeVariableDeclaration.class);
+            
+            DefaultLib.appendDefaultLibURLQuietly(Registration.class.getClassLoader(), 
+                Bundle.ID, context, "Instantiator.Java");
         }
     }
     
     /**
      * Private method to activate plugin.
-     * @param context Context.
+     * 
+     * @param context the component context.
      */
     protected void activate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable
-        register();
+        register(context);
     }
 
     /**
      * Private method to to de-activate plugin.
-     * @param context Context.
+     * 
+     * @param context the component context.
      */
     protected void deactivate(ComponentContext context) {
         // this is not the official way of using DS but the official way is instable

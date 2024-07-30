@@ -213,8 +213,9 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     }
 
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaType " + type;
+    @Invisible(inherit = true)
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + " " + type;
     }
 
     @Override

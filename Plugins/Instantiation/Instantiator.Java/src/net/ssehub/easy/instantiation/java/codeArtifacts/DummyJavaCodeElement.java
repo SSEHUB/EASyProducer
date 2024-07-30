@@ -26,11 +26,6 @@ class DummyJavaCodeElement implements IJavaCodeElement {
     private IJavaCodeElement parent;
     
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "Dummy";
-    }
-
-    @Override
     public void store(CodeWriter out) {
     }
 

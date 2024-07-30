@@ -25,7 +25,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
+public abstract class JavaCodeVisibleElement extends JavaCodeElement {
 
     private boolean isStatic;
     private String name;
@@ -41,6 +41,7 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
      * @param comment the optional comment for this element, may be <b>null</b>
      */
     protected JavaCodeVisibleElement(String name, JavaCodeVisibility visibility, String comment) {
+        super(null);
         this.name = name;
         this.visibility = visibility;
         if (null != comment) {
@@ -258,9 +259,4 @@ public abstract class JavaCodeVisibleElement implements IJavaCodeElement {
         return comment;
     }
     
-    @Override
-    public String toString() {
-        return getString();
-    }
-
 }

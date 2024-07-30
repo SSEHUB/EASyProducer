@@ -35,12 +35,11 @@ public interface Storable {
     public void store(CodeWriter out);
 
     /**
-     * Turns this Storable to a string.
+     * Turns this Storable to code.
      * 
      * @return the string representation
      */
-    @Invisible
-    public default String getString() {
+    public default String toCode() {
         return getString(o -> store(o));
     }
 

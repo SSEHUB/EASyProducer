@@ -111,9 +111,4 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         out.println(";");
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "MethodCall";
-    }
-
 }

@@ -41,9 +41,10 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
         this.annotation = annotation;
     }
     
+    @Invisible(inherit = true)
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaAnnotationArgument (" + name + "=" + value + ")";
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + " (" + name + "=" + value + ")";
     }
 
     @Override

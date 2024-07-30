@@ -46,9 +46,4 @@ public class JavaCodeWhileLoop extends JavaCodeBlock {
         super.store(out);
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaWhileLoop";
-    }
-
 }

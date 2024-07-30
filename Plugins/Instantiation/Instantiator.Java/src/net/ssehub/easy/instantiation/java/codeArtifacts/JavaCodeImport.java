@@ -106,8 +106,9 @@ public class JavaCodeImport implements IJavaCodeImport {
     }
 
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaImport: " + getName();
+    @Invisible(inherit = true)
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + ": " + getName();
     }
 
     @Override

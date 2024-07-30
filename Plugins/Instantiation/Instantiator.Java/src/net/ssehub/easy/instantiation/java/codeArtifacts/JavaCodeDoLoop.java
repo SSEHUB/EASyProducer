@@ -47,9 +47,4 @@ public class JavaCodeDoLoop extends JavaCodeBlock {
         out.println(");");
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeDoLoop";
-    }
-
 }

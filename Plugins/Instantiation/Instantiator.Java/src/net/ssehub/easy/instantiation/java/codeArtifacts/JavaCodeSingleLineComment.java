@@ -40,9 +40,4 @@ public class JavaCodeSingleLineComment extends JavaCodeElement {
         out.printlnwi("// " + text);
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeSLComment";
-    }
-
 }

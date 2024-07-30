@@ -36,9 +36,4 @@ public class JavaCodeEmptyLine extends JavaCodeElement {
         out.println();
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeEmptyLine";
-    }
-
 }

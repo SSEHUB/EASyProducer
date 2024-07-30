@@ -76,6 +76,15 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         super(file, model);
         this.file = file;
     }
+    
+    /**
+     * Creates an instance without file backing.
+     * 
+     * @return the instance
+     */
+    public static JavaCodeArtifact create() {
+        return new JavaCodeArtifact();
+    }
 
     /**
      * Disables storing this artifact as it shall be used only for creating code fragments.

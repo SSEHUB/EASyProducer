@@ -475,10 +475,11 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
             out.println(";");
         }
     }
-
+    
     @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaMethod: " + getName();
+    @Invisible(inherit = true)
+    public String getTracerStringValue(StringComparator comparator) {
+        return getClass().getSimpleName() + ": " + getName();
     }
     
     @Override

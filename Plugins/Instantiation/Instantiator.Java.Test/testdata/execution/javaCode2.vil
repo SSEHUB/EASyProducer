@@ -1,0 +1,7 @@
+vilScript JavaCode2 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("JavaCode2Tpl", config, "$target/JCATest2.java");
+    }
+
+}

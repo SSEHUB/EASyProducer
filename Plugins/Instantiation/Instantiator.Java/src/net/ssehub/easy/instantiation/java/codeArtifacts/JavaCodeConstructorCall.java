@@ -74,9 +74,4 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
         return "new ";
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "ConstructorCall";
-    }
-
 }

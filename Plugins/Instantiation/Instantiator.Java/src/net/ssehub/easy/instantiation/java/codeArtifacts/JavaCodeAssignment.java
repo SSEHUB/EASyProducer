@@ -74,9 +74,4 @@ public class JavaCodeAssignment extends JavaCodeStatement {
         out.println(";");
     }
 
-    @Override
-    public String getStringValue(StringComparator comparator) {
-        return "JavaCodeAssignment";
-    }
-
 }
