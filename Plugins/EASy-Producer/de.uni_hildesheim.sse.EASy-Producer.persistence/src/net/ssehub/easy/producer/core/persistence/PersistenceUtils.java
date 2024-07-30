@@ -20,15 +20,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.ssehub.easy.basics.io.FileUtils;
-import net.ssehub.easy.basics.io.JarUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -40,11 +37,11 @@ import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
-import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
+import net.ssehub.easy.instantiation.core.DefaultLibUtils;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
@@ -799,43 +796,11 @@ public class PersistenceUtils {
                 EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
                     "While retrieving fallback libary URL: " + e.getMessage());
             }
-                
             DefaultLib.appendQuietly(libs, dfltUrl); // ignores null
-            DefaultLib.appendAll(libs);
-            int count = 0;
-            for (URL url : libs) { // all shall be different from null by construction
-                EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
-                    "Trying to load default IVML/VIL library from '" + url);
-                try {
-                    String urlString = url.toString().replace(" ", "%20"); // space problem :(
-                    URI uri = new URI(urlString);
-                    if (JarUtils.isJarURL(url)) {
-                        File file = FileUtils.createTmpDir("easyDefaultLib_" + count);
-                        JarUtils.unpackJar(url, file);
-                        uri = file.toURI();
-                    }
-                    Location defltLibLocation = VarModel.INSTANCE.locations().getLocationFor(uri);
-                    if (null == defltLibLocation && FileUtils.isFileURI(uri)) {
-                        File defltLibFolder = new File(uri);
-                        if (defltLibFolder.exists()) {
-                            Configuration cfg = getDefaultModelsConfiguration(defltLibFolder, alternativePaths);
-                            addLocation(cfg, observer);
-                            EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).info(
-                                "Loaded default IVML/VIL library from '" + url);
-                        }
-                    }
-                    count++;
-                } catch (URISyntaxException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                        "While loading default library in '" + url + "': " + e.getMessage());
-                } catch (ModelManagementException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                        "While loading default library in '" + url + "': " + e.getMessage());
-                } catch (IOException e) {
-                    EASyLoggerFactory.INSTANCE.getLogger(PersistenceUtils.class, Activator.PLUGIN_ID).error(
-                        "While loading default library in '" + url + "': " + e.getMessage());
-                }
-            }
+            DefaultLibUtils.loadDefaultModels(loader, observer, (f, o) -> {
+                Configuration cfg = getDefaultModelsConfiguration(f, alternativePaths);
+                addLocation(cfg, observer);
+            }, libs, Activator.PLUGIN_ID);
         }
     }
     
