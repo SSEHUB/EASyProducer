@@ -666,22 +666,7 @@ public class RealTests extends AbstractRealTests {
         executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
     }
 
-    /**
-     * Tests the oktoflow model / instantiation (June 24).
-     * 
-     * @throws IOException shall not occur
-     */
-    @Ignore("local only")
-    @Test
-    public void testOktoflowExperiment() throws IOException {
-        final String folder = "experiment";
-        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
-        executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
-        executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
-        executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
-        executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
-        executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
-    }
+
     
     /**
      * Executes an IIP-Ecosphere case.
@@ -692,7 +677,7 @@ public class RealTests extends AbstractRealTests {
      * @param cfgFolder additional IVML configuration folders, may be <b>null</b>
      * @throws IOException if execution/comparison fails
      */
-    private void executeIipCase(String folder, String modelName, String vilStartRuleName, 
+    protected void executeIipCase(String folder, String modelName, String vilStartRuleName, 
         String... cfgFolder) throws IOException {
         String vilFolderName = modelName; // assumed same in expected
         String[] versions = null;

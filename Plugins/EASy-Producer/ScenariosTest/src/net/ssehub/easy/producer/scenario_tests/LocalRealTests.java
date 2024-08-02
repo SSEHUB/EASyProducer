@@ -94,4 +94,20 @@ public class LocalRealTests extends RealTests {
         testQualiMasterSep17Impl(Mode.REASON_INSTANTIATE);
     }
     
+    /**
+     * Tests the oktoflow model / instantiation (June 24).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testOktoflowExperiment() throws IOException {
+        final String folder = "experiment";
+        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
+        executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
+        executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
+        executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
+        executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
+        executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+    }    
+    
 }
