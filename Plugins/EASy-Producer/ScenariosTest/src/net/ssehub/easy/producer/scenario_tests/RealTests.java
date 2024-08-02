@@ -23,7 +23,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
-import net.ssehub.easy.instantiation.maven.Registration;
 import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
 
 /**
@@ -53,7 +52,8 @@ public class RealTests extends AbstractRealTests {
         if (!debug) {
             tests.cleanTemp();
         }
-        Registration.register();
+        net.ssehub.easy.instantiation.maven.Registration.register();
+        net.ssehub.easy.instantiation.java.Registration.register();
         VelocityInstantiator.register();
     }
 
@@ -658,7 +658,7 @@ public class RealTests extends AbstractRealTests {
     @Test
     public void testOktoflowJun24() throws IOException {
         final String folder = "jun24";
-        executeIipCase(folder, "PlatformConfiguration", "generateApi", "tests/api", "tests/common");
+        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
         executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
         executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
         executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
@@ -666,6 +666,23 @@ public class RealTests extends AbstractRealTests {
         executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
     }
 
+    /**
+     * Tests the oktoflow model / instantiation (June 24).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Ignore("local only")
+    @Test
+    public void testOktoflowExperiment() throws IOException {
+        final String folder = "experiment";
+        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
+        executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
+        executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
+        executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
+        executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
+        executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+    }
+    
     /**
      * Executes an IIP-Ecosphere case.
      * 

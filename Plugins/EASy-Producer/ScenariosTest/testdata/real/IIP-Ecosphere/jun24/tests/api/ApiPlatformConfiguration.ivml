@@ -1,4 +1,4 @@
-project PlatformConfiguration {
+project ApiPlatformConfiguration {
 
     import TechnicalSetup;
     import AllServices;
