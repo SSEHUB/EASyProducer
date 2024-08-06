@@ -72,7 +72,7 @@ public class EASyUtils {
         Configuration cfg = PersistenceUtils.getConfiguration(project);
         int count = cfg.getPathCount(PathKind.IVML);
         for (int i = 0; null == result && i < count; i++) {
-            String folder = cfg.getPath(PathKind.IVML, count);
+            String folder = cfg.getPath(PathKind.IVML, i);
             IFile file = project.getFile(folder + ResourcesMgmt.INSTANCE.getSeperator() 
                 + PersistenceConstants.CONFIG_FILE);
             if (file.exists()) {
