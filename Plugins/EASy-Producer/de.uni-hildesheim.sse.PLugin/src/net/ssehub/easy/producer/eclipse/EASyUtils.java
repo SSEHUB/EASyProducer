@@ -110,9 +110,9 @@ public class EASyUtils {
                 // load method adds automatically the loaded PLP to the SPLsManager
                 persistencer.load();
             }
-        } else {
+        } /*else {
             throw new PersistenceException("EASy configuration not found");
-        }
+        }*/
     }
     
     /**
