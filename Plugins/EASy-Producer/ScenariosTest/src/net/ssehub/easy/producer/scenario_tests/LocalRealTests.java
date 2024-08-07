@@ -102,12 +102,15 @@ public class LocalRealTests extends RealTests {
     @Test
     public void testOktoflowExperiment() throws IOException {
         final String folder = "experiment";
-        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
-        executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
-        executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
-        executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
-        executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
-        executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+        File f = new File(getTestFolder(), "IIP-Ecosphere/" + folder);
+        if (f.exists()) {
+            executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
+            executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
+            executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
+            executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
+            executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
+            executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+        }
     }    
     
 }

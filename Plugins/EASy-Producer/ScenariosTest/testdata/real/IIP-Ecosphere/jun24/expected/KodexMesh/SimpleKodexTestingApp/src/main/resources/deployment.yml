@@ -109,7 +109,7 @@ services:
          executablePath: ${tmp}/kodexPythonService/python
          artifacts:
            - /python_kodexPythonService.zip
-           - myArtifact.zip
+           - /myArtifact.zip
          locationKey: CONDA
          execArg:
            - run
