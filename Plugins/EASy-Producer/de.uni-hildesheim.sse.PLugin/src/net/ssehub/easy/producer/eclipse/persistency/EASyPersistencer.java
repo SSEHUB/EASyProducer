@@ -34,7 +34,15 @@ import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
 public class EASyPersistencer implements PersistenceConstants {
     
     private IPersistencer persistencer;
-    
+
+    /**
+     * Creates a specialized EASy persistencer without underlying project.
+     * @param projectFolder The location of the {@link ProductLineProject}.
+     */
+    public EASyPersistencer(File projectFolder) {
+        this(projectFolder, null);
+    }
+
     /**
      * Creates a specialized EASy persistencer.
      * @param projectFolder The location of the {@link ProductLineProject}.
