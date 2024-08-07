@@ -3,6 +3,8 @@
  */
 package de.uni_hildesheim.sse.vil.rt.scoping;
 
+import de.uni_hildesheim.sse.vil.buildlang.scoping.VilBuildLanguageScopeProvider;
+
 /**
  * This class contains custom scoping description.
  * 
@@ -10,6 +12,6 @@ package de.uni_hildesheim.sse.vil.rt.scoping;
  * on how and when to use it 
  *
  */
-public class RtVilScopeProvider extends de.uni_hildesheim.sse.scoping.VilBuildLanguageScopeProvider {
+public class RtVilScopeProvider extends VilBuildLanguageScopeProvider {
 
 }

@@ -60,5 +60,5 @@ public class XtextEditor extends AbstractXTextEditor<ImplementationUnit, Script>
     protected void print(TranslationResult<Script> result, Writer out) {
         BuildLangModelUtility.INSTANCE.print(result, out, true, false);
     }
-
+    
 }
