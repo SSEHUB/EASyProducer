@@ -50,7 +50,7 @@ public class ProjectUtils {
             if (!hasNature) {
                 ResourcesMgmt.INSTANCE.addEASyNatures(project, XtextProjectHelper.NATURE_ID, EASyNature.NATURE_ID);
             } else {
-                String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project);
+                String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project, project);
                 ProductLineProject deletedPLP = (ProductLineProject) SPLsManager.INSTANCE.getPLP(projectID);
                 if (null != deletedPLP) {
                     deletedPLP.close();

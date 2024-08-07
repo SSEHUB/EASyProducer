@@ -74,7 +74,7 @@ abstract class AbstractProjectCreator {
         this.projectName = projectName;
         this.lazy = lazy;
         this.configurators = configurators;
-        persistencer = new EclipsePersistencer(projectName, null);
+        persistencer = new EclipsePersistencer(projectName, null, null);
         project = null;
     }
     

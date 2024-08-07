@@ -66,20 +66,24 @@ public class EclipsePersistencer implements IPersistencer {
      * workspace, than please use the other constructor.
      * @param projectName The name of the project (which must be stored inside the workspace).
      * @param monitor A progress monitor, or <code>null</code> if progress reporting is not desired
+     * @param project the project instance to operate on , may be <b>null</b> then a default 
+     *     one may be obtained
      */
-    public EclipsePersistencer(String projectName, IProgressMonitor monitor) {
-        this(new File(WORKSPACE_FOLDER, projectName), monitor);
+    public EclipsePersistencer(String projectName, IProgressMonitor monitor, IProject project) {
+        this(new File(WORKSPACE_FOLDER, projectName), monitor, project);
     }
     
     /**
      * This constructor can be used if a project shall be/is stored outside the workspace (e.g. is only linked).
      * @param projectFolder The top level folder of the project.
      * @param monitor A progress monitor, or <code>null</code> if progress reporting is not desired
+     * @param project the project instance to operate on , may be <b>null</b> then a default 
+     *     one may be obtained
      */
-    public EclipsePersistencer(File projectFolder, IProgressMonitor monitor) {
+    public EclipsePersistencer(File projectFolder, IProgressMonitor monitor, IProject project) {
         this.projectFolder = projectFolder;
         String projectName = projectFolder.getName();
-        project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+        this.project = project != null ? project : ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         PathEnvironment pathEnv = PathEnvironmentFactory.createPathEnvironment(project);
         File projectFolder2 = new File(pathEnv.getBaseFolder(), projectName);
         File storageFile = PersistenceUtils.getLocationFile(projectFolder2, PathKind.IVML);

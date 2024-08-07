@@ -125,7 +125,7 @@ public class PLPWorkspaceListener implements IResourceChangeListener {
      * @param deletedProject The deleted or removed EASy project.
      */
     private void removeProject(IProject deletedProject) {
-        String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(deletedProject);
+        String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(deletedProject, deletedProject);
         ProductLineProject deletedPLP = (ProductLineProject) SPLsManager.INSTANCE.getPLP(projectID);
         if (null != deletedPLP) {
             deletedPLP.close();
@@ -167,7 +167,7 @@ public class PLPWorkspaceListener implements IResourceChangeListener {
         try {
             EASyUtils.loadProject(project);
         } catch (PersistenceException e) {
-            LOGGER.exception(e);
+            //LOGGER.exception(e); // ignore, comes up all the time in ErrorLog
         }
     }
     

@@ -96,23 +96,23 @@ public class EASyUtils {
      * @throws PersistenceException in case of errors loading the project
      */
     public static void loadProject(IProject project) throws PersistenceException {
-        String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project);
+        String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(project, project);
         if (null == projectID) { // consider paths as fallback
             IFile cfg = findEasyConfig(project);
             if (null != cfg) {
-                projectID = ResourcesMgmt.INSTANCE.getIDfromResource(cfg);
+                projectID = ResourcesMgmt.INSTANCE.getIDfromResource(cfg, project);
             }
         }
         if (null != projectID) {
             PLPInfo openedPLP = SPLsManager.INSTANCE.getPLP(projectID);
             if (null == openedPLP || openedPLP.isPreliminary()) {
-                EASyPersistencer persistencer = new EASyPersistencer(project.getLocation().toFile());
+                EASyPersistencer persistencer = new EASyPersistencer(project.getLocation().toFile(), project);
                 // load method adds automatically the loaded PLP to the SPLsManager
                 persistencer.load();
             }
-        } /*else {
+        } else {
             throw new PersistenceException("EASy configuration not found");
-        }*/
+        }
     }
     
     /**

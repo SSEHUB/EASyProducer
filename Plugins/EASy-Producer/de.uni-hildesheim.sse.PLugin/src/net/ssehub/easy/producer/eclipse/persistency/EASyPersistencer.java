@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.eclipse.core.resources.IProject;
+
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 import net.ssehub.easy.producer.core.persistence.Configuration;
@@ -34,11 +36,13 @@ public class EASyPersistencer implements PersistenceConstants {
     private IPersistencer persistencer;
     
     /**
-     * Sole constructor for this class.
+     * Creates a specialized EASy persistencer.
      * @param projectFolder The location of the {@link ProductLineProject}.
+     * @param project the project instance to return a persistencer for, may be <b>null</b> then a default 
+     *     one may be obtained
      */
-    public EASyPersistencer(File projectFolder) {
-        persistencer = PersistencerFactory.getPersistencer(projectFolder);
+    public EASyPersistencer(File projectFolder, IProject project) {
+        persistencer = PersistencerFactory.getPersistencer(projectFolder, project);
     }
 
     /**

@@ -59,7 +59,7 @@ public class EditProductLineAction implements IObjectActionDelegate {
         IFile configfile = EASyUtils.findEasyConfig(selectedProject); // also consider paths
         //IFile configfile = selectedProject.getFile(ProjectConstants.EASY_FILES + ResourcesMgmt.INSTANCE.getSeperator()
         //    + PersistenceConstants.CONFIG_FILE);
-        String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(configfile);
+        String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(configfile, null);
         PLPInfo plp = SPLsManager.INSTANCE.getPLP(projectID);
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()

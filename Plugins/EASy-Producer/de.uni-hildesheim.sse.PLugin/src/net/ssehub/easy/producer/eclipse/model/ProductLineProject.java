@@ -8,6 +8,8 @@ import java.util.Observer;
 import java.util.Set;
 import java.util.UUID;
 
+import org.eclipse.core.resources.IProject;
+
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -157,7 +159,8 @@ public class ProductLineProject extends PLPInfo {
      * Saves the data of this project persistently to file system.
      */
     public void save() {      
-        EASyPersistencer persistencer = new EASyPersistencer(getProjectLocation());
+        IProject project = null; // unclear how to get this here
+        EASyPersistencer persistencer = new EASyPersistencer(getProjectLocation(), project);
         try {
             persistencer.save(this);
         } catch (PersistenceException e) {

@@ -72,11 +72,11 @@ public class PathEnvironmentFactory {
      * into account. Calls {@link #updatePathEnvironment(PathEnvironment, IProject)}
      * on the new instance.
      * 
-     * @param project the project to build the path environment for
+     * @param project the project to build the path environment for (may be <b>null</b>)
      * @return the path environment
      */
     public static PathEnvironment createPathEnvironment(IProject project) {
-        IPath projectLocation = project.getLocation();
+        IPath projectLocation = null != project ? project.getLocation() : null;
         IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
         PathEnvironment pathEnv = null;
         if (null != projectLocation && !workspaceLocation.isPrefixOf(projectLocation)) {

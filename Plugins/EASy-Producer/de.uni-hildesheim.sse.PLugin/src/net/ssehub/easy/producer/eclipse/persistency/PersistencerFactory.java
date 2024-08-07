@@ -2,6 +2,8 @@ package net.ssehub.easy.producer.eclipse.persistency;
 
 import java.io.File;
 
+import org.eclipse.core.resources.IProject;
+
 import net.ssehub.easy.basics.Environment;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
@@ -27,12 +29,14 @@ public class PersistencerFactory {
     /**
      * Creates an {@link IPersistencer} instance.
      * @param projectFolder The toplevel folder of the complete project.
+     * @param project the project instance to return a persistencer for, may be <b>null</b> then a default 
+     *     one may be obtained
      * @return An {@link IPersistencer} depending on whether Eclipse is running or not.
      */
-    public static IPersistencer getPersistencer(File projectFolder) {
+    public static IPersistencer getPersistencer(File projectFolder, IProject project) {
         IPersistencer persistencer = null;
         if (Environment.runsInEclipse()) {
-            persistencer = new EclipsePersistencer(projectFolder, null);
+            persistencer = new EclipsePersistencer(projectFolder, null, project);
         } else {
             PathEnvironment projectsWorkspace = new PathEnvironment(projectFolder.getParentFile());
             File easyConfigFile = PersistenceUtils.getLocationFile(projectFolder, PathKind.IVML);

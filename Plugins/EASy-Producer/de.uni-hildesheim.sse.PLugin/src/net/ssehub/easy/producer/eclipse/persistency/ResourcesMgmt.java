@@ -157,8 +157,8 @@ public class ResourcesMgmt {
             SPLsManager splsMngr = SPLsManager.INSTANCE;
             for (IProject plProject : plProjects) {
                 File projectPath = plProject.getLocation().toFile();
-                EASyPersistencer persitency = new EASyPersistencer(projectPath);
-                String projectID = persitency.getProjectID();
+                EASyPersistencer persistency = new EASyPersistencer(projectPath, plProject);
+                String projectID = persistency.getProjectID();
                 PLPInfo plp = (PLPInfo) splsMngr.getPLP(projectID);
                 // Test whether the plp is already stored inside the SPLsManager
                 if (null == plp || plp.isPreliminary()) {
@@ -166,7 +166,7 @@ public class ResourcesMgmt {
                      * PLP is not stored in SPLsManager: 1. read config file 2. store plp on SPLsManager
                      */
                     try {
-                        plp = persitency.load();
+                        plp = persistency.load();
                     } catch (PersistenceException pExc) {
                         // TODO SE: handle this exception (invalid configuration
                         // file) correctly
@@ -226,15 +226,16 @@ public class ResourcesMgmt {
      * Returns the ID of the project holding the resource.
      * 
      * @param theResource Resource of a project from which the ID should be determined.
+     * @param project the project to operate on, may be <b>null</b>
      * @return ID of the related project or <b>null</b> if it cannot be determined.
      */
-    public String getIDfromResource(IResource theResource) {
+    public String getIDfromResource(IResource theResource, IProject project) {
         String theID = null;
         QualifiedName qname = new QualifiedName(ProjectConstants.UUID_PROPERTY_QNAME, "projectid");
-
         try {
             if (theResource.getPersistentProperty(qname) == null) {
-                EASyPersistencer persistencer = new EASyPersistencer(theResource.getProject().getLocation().toFile());
+                EASyPersistencer persistencer = new EASyPersistencer(
+                    theResource.getProject().getLocation().toFile(), project);
                 theID = persistencer.getProjectID();
                 if (null != theID) {
                     theResource.setPersistentProperty(qname, theID.toString());
@@ -243,7 +244,8 @@ public class ResourcesMgmt {
                 theID = theResource.getPersistentProperty(qname);
             }
         } catch (CoreException e) {
-            EASyPersistencer persistencer = new EASyPersistencer(theResource.getProject().getLocation().toFile());
+            EASyPersistencer persistencer = new EASyPersistencer(
+                theResource.getProject().getLocation().toFile(), project);
             theID = persistencer.getProjectID();
         }
         return theID;
@@ -318,7 +320,7 @@ public class ResourcesMgmt {
                 EASyUtils.initialize(project, plp);
                 plp.save();
                 // after additional models have been added, update VarModel etc.
-                PersistencerFactory.getPersistencer(plp.getProjectLocation()).update();
+                PersistencerFactory.getPersistencer(plp.getProjectLocation(), project).update();
             } catch (ProjectAlreadyExistsException ae) {
                 // shall not occur due to lazy creation
                 throw new IOException(ae.getMessage());
