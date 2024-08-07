@@ -43,3 +43,18 @@
                 -> +(Integer, Integer) with (27, 1) = 28
                 type.count <- 28
         }
+    data <- {}
+    for {
+        for: s3 <- expressionTest::TestType::examples [0]
+        -> replace(String, String, String) with (v1, v, x) = x1
+        tmp <- x1
+        tmp1 <- v1
+        -> add(Set, String) with ({}, x1) = x1
+        -> add(Set, String) with ({x1}, v1) = v1
+        for: s3 <- expressionTest::TestType::examples [1]
+        -> replace(String, String, String) with (v2, v, x) = x2
+        tmp <- x2
+        tmp1 <- v2
+        -> add(Set, String) with ({v1, x1}, x2) = x2
+        -> add(Set, String) with ({v1, x1, x2}, v2) = v2
+    }

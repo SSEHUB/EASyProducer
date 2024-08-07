@@ -854,6 +854,8 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
             object = decVar.getRealValue();
         } else if (TypeRegistry.booleanType().isSame(varType)) {
             object = decVar.getBooleanValue();
+        } else if (TypeRegistry.stringType().isSame(varType)) {
+            object = decVar.getStringValue();
         }
         return object;
     }

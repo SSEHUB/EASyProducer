@@ -16,6 +16,13 @@ vilScript vtl4 (Project source, Project target, Configuration config) {
         addTestType(tests, "myValue");
         addTestType(tests, "next", count=27, test=true);
         workOnSet("", tests);
+        setOf(String) data = {};
+        for(String s3:cfg.var.examples) {
+            String tmp = s3.replace("v", "x");
+            String tmp1 = s3;
+            data.add(tmp);
+            data.add(tmp1);
+        };
     }
 
     workOn(VtlTestType type) = : {

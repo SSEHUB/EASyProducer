@@ -16,6 +16,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.ConstantExpression;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.model.values.NullValue;
 import net.ssehub.easy.varModel.model.values.NullValue.NullValueType;
 
@@ -446,32 +447,41 @@ public class ReflectionOperationDescriptor extends OperationDescriptor implement
      * unnamed parameter rather than the underlying Java parameter.
      * 
      * @param retType the return type (may be <b>null</b> in order to ignore this parameter)
-     * @param params the parameters (may be <b>null</b> if there are none, may be classes)
+     * @param args the arguments (may be <b>null</b> if there are none, may be classes); values may be adjusted if 
+     *   implicit conversions make arguments compatible
      * @return an instance of {@link CompatibilityResult} denoting the actual compatibility level
      */
-    public CompatibilityResult isCompatible(Class<?> retType, Object... params) {
+    public CompatibilityResult isCompatible(Class<?> retType, Object... args) {
         Class<?>[] par = method.getParameterTypes();
         boolean cannotEvaluate = true;
-        boolean compatible = (null == params ? 0 : params.length) == par.length;
+        boolean compatible = (null == args ? 0 : args.length) == par.length;
         if (null != retType) {
             compatible &= method.getReturnType().isAssignableFrom(retType);
         }
         for (int p = 0; p < par.length; p++) { // no early end!
-            Class<?> cls;
-            if (null != params[p]) {
-                if (params[p] instanceof Class) {
-                    cls = (Class<?>) params[p];
+            Class<?> argCls;
+            if (null != args[p]) {
+                if (args[p] instanceof Class) {
+                    argCls = (Class<?>) args[p];
                 } else {
-                    cls = params[p].getClass();
+                    argCls = args[p].getClass();
                 }
             } else {
-                cls = Void.TYPE;
+                argCls = Void.TYPE;
             }
-            boolean parCompatible = par[p].isAssignableFrom(cls) // instances match?
-                || REFLECTION_EQUALITIES.get(par[p]) == cls // basic types match?
-                || (par[p] == Class.class && params[p] instanceof Class); // parameter is class
+            boolean parCompatible = par[p].isAssignableFrom(argCls) // instances match?
+                || REFLECTION_EQUALITIES.get(par[p]) == argCls // basic types match?
+                || (par[p] == Class.class && args[p] instanceof Class); // parameter is class
+            if (!parCompatible && argCls.isAssignableFrom(DecisionVariable.class)) {
+                Object dValue = ((DecisionVariable) args[p]).getValue();
+                if (dValue != null && par[p].isAssignableFrom(dValue.getClass())) {
+                    // implicit conversions, in particular when iterating over IVML collections
+                    args[p] = dValue;
+                    parCompatible = true;
+                }
+            }
             if (!parCompatible) {
-                cannotEvaluate &= params[p] == null;
+                cannotEvaluate &= args[p] == null;
             }
             compatible &= parCompatible;
         }

@@ -26,6 +26,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
+import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypeDescriptor;
 
 /**
  * Extends the basic expression evaluation visitor for the execution of those classes being
@@ -180,7 +183,18 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
     protected Object doAssignmentConversions(VariableDeclaration var, Object value) {
         if (var.getType().isMap()) {
             value = net.ssehub.easy.instantiation.core.model.vilTypes.Map.checkConvertEmpty(
-                var.getType(), value);
+                var.getType(), value);            
+        }
+        // implicit conversions, in particular when iterating over IVML collections
+        if (value != null && value.getClass().isAssignableFrom(DecisionVariable.class)) {
+            TypeDescriptor<?> dv = TypeRegistry.DEFAULT.getType(DecisionVariable.class.getSimpleName());
+            // difficult to check... allow for assignments to IVML but convert only if not assignable
+            if (!(var.getType() instanceof IvmlTypeDescriptor) && !var.getType().isAssignableFrom(dv)) {
+                Object dValue = ((DecisionVariable) value).getValue();
+                if (dValue != null) {
+                    value = dValue;
+                }
+            }
         }
         return value;
     }

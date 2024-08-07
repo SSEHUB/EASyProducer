@@ -2,10 +2,12 @@ project expressionTest {
 
     compound TestType {
         String name;
+        sequenceOf(String) examples = {};
     }
     
     TestType var = {
-        name = "test"
+        name = "test",
+        examples = {"v1", "v2"}
     };
     String var1 = "here";
     
