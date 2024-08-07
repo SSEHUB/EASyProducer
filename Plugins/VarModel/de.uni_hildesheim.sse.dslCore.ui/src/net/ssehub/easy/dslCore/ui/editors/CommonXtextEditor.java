@@ -10,10 +10,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
@@ -124,8 +122,10 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
 
     @Override
     public void buildModel(IXtextDocument doc) {
-        if (doc != null) {
-            doc.readOnly(new UnitOfWork()); 
+        if (!ValidationUtils.PERFORM_XTEXT_VALIDATION) {
+            if (doc != null) {
+                doc.readOnly(new UnitOfWork()); 
+            }
         }
     }
 
@@ -164,15 +164,8 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
                         PrintWriter pOut = new PrintWriter(out);
                         print(result, pOut);
                         getLogger().info(out.toString());
-                    } else {
-                        if (ValidationUtils.PERFORM_XTEXT_VALIDATION) {
-                            BasicDiagnostic diagnostic = Diagnostician.INSTANCE.createDefaultDiagnostic(root);
-                            ValidationUtils.processMessages(result, diagnostic);
-                        }
                     }
-                    if (!ValidationUtils.PERFORM_XTEXT_VALIDATION) {
-                        processMessages(result);
-                    }
+                    processMessages(result);
                 } catch (Exception e) {
                     getLogger().exception(e);
                 }
@@ -249,4 +242,5 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
      * @param out the output stream / writer
      */
     protected abstract void print(TranslationResult<R> result, Writer out);
+    
 }
