@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import java.util.List;
+
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
@@ -27,31 +29,88 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
     private String name;
     private String value;
     private JavaCodeAnnotation annotation;
-    
+    private boolean splitLines;
+    private List<String> values;
+
     /**
      * Creates an annotation argument.
      * 
-     * @param name the name of the argument
+     * @param name the name of the argument (may be empty or <b>null</b> for default)
      * @param value the value of the argument
+     * @param values the values of the argument (<b>null</b> to force {@code value})
+     * @param splitLines splits values into separate lines
      * @param annotation the annotated annotation
      */
-    JavaCodeAnnotationArgument(String name, String value, JavaCodeAnnotation annotation) {
+    JavaCodeAnnotationArgument(String name, String value, List<String> values, boolean splitLines, 
+        JavaCodeAnnotation annotation) {
         this.name = name;
-        this.value = value;
         this.annotation = annotation;
+        this.splitLines = splitLines;
+        this.value = value;
+        this.values = values;
     }
     
     @Invisible(inherit = true)
     @Override
     public String getTracerStringValue(StringComparator comparator) {
-        return getClass().getSimpleName() + " (" + name + "=" + value + ")";
+        return getClass().getSimpleName() + " (" + (hasName() ? name + "=" : "") 
+            + (null != values ? values : value) + ")";
+    }
+    
+    /**
+     * Returns whether this annotation has an explicit field name or whether it targets "value".
+     * 
+     * @return {@code true} for name, {@code false} for no explicit name, i.e. "value"
+     */
+    public boolean hasName() {
+        return name != null && name.length() > 0; 
     }
 
     @Override
     public void store(CodeWriter out) {
-        out.print(name);
-        out.print(" = ");
-        out.print(value);
+        if (hasName()) {
+            out.print(name);
+            out.print(" = ");
+        }
+        if (null != values) {
+            boolean split = splitLines && values.size() > 1;
+            boolean first = true;
+            out.print("{");
+            if (split) {
+                out.println();
+                out.increaseIndent();
+            }
+            for (String v: values) {
+                if (!first) {
+                    out.print(",");
+                    if (split) {
+                        out.println();
+                    }
+                }
+                if (split) {
+                    out.printIndent();
+                }
+                out.print(v);
+                first = false;
+            }
+            if (split) {
+                out.decreaseIndent();
+            }
+            out.print("}");
+        } else {
+            out.print(value);
+        }
+    }
+    
+    @Override
+    public int getElementCount() {
+        int result = 0;
+        if (null != values) {
+            if (splitLines && values.size() > 1) {
+                result += values.size();
+            }
+        }
+        return result;
     }
 
     @Override

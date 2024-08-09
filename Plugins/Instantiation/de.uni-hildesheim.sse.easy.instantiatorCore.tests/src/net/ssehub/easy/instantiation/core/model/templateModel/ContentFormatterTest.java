@@ -234,6 +234,36 @@ public class ContentFormatterTest {
         Assert.assertEquals(expected, res);
     }
 
+    /**
+     * Tests string chained arguments method formatting/indentation.
+     */
+    @Test
+    public void testContentFormatterChainedExpression() {
+        ContentFormatter formatter = createJavaFormatter(21, null);
+        String test = 
+            "public class Test {\n"
+            + "    public static void main(String[] args) {\n"
+            + "        Data.createBuilder().setValue(5).setArg(7).build();\n"
+            + "    }\n"
+            + "\n"
+            + "    \n"
+            + "}\n";
+        String res = formatter.format(test);
+        String expected = 
+            "public class Test {\n"
+            + "    public static\n"
+            + "        void main(String[]\n"
+            + "        args) {\n"
+            + "        Data.\n"
+            + "            createBuilder().\n"
+            + "            setValue(5).setArg(\n"
+            + "            7).build();\n"
+            + "    }\n"
+            + "\n"
+            + "}\n";
+        Assert.assertEquals(expected, res);
+    }
+
     /*@Test
     public void test() {
         ContentFormatter formatter = createJavaFormatter(120, "JAVA-outDoc");

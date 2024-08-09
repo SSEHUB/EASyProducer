@@ -112,5 +112,17 @@ public class Formatting {
         }
         return result;
     }
+ 
+    /**
+     * Creates a content formatter from a known formatting/indentation configuration.
+     * 
+     * @return the content formatter instance
+     */
+    public static ContentFormatter getContentFormatter() {
+        ContentFormatter contentFormatter = new ContentFormatter();
+        contentFormatter.setFormattingConfiguration(getFormattingConfiguration());
+        contentFormatter.setIndentationConfiguration(getIndentationConfiguration());
+        return contentFormatter;
+    }
 
 }

@@ -47,6 +47,16 @@ public class ContentFormatter {
          * @return {@code true} for adjustment, {@code false} else
          */
         public boolean adjustIndentation();
+
+        /**
+         * Returns whether indentation shall be enabled in the current situation at
+         * the given actual indentation. This allows, e.g., for conditional indentation at the leftmost margin, i.e., 
+         * split at no indentation.
+         * 
+         * @param indent the actual indentation
+         * @return the number of additional indentation steps, may be 0
+         */
+        public boolean enableIndentation(int indent);
         
         /**
          * Returns how many additional indentation steps shall be added when
@@ -145,6 +155,11 @@ public class ContentFormatter {
         @Override
         public int additionalIndent() {
             return 0;
+        }
+        
+        @Override
+        public boolean enableIndentation(int indent) {
+            return indent > 0;
         }
 
         @Override
@@ -245,6 +260,11 @@ public class ContentFormatter {
         }
 
         @Override
+        public boolean enableIndentation(int indent) {
+            return (State.CODE == state) ? indent >= 0 : indent > 0;
+        }
+
+        @Override
         public int additionalIndent() {
             int result = 0;
             if (State.CODE == state || State.STRING_START == state || State.STRING == state) {
@@ -269,6 +289,8 @@ public class ContentFormatter {
             boolean result = false;
             if (State.CODE == state) {
                 result = ch == '.' || ch == '"' || ch == '(';
+                result |= ch == '+' || ch == '-' || ch == '/';
+                result |= ch == '*' || ch == '[';
             } else if (State.STRING_START == state) {
                 result = ch == '"';
             } else if (State.STRING == state) { // allow everywhere, see addBeforeSplit/addAfterSplit
@@ -281,7 +303,7 @@ public class ContentFormatter {
         public int adjustSplitPosition() {
             int result = 0; 
             if (State.STRING_START == state) {
-                result = -1;
+                result = -1; // split before splitChar
             }
             return result;
         }
@@ -497,21 +519,21 @@ public class ContentFormatter {
     /**
      * Splits lines where feasible and necessary based on {@link FormattingConfiguration#getLineLength()}.
      * 
-     * @param bld the string builder representing the actual content
+     * @param builder the string builder representing the actual content
      * @see #splitLines(char, StringBuilder, int, int)
      */
-    private void splitLines(StringBuilder bld) {
+    private void splitLines(StringBuilder builder) {
         final int maxLineLength = fConf.getLineLength();
         int pos = 0;
         int lastStartPos = 0;
         int lastSplitPos = 0;
         int lastNlPos = 0; // lastNLpos only for determining the indentation
         int doubleChars = 0;
-        while (pos < bld.length()) {
+        while (pos < builder.length()) {
             int advance = 0;
-            char c = bld.charAt(pos);
+            char c = builder.charAt(pos);
             profile.processingChar(c);
-            if (isCrNl(bld, pos)) {
+            if (isCrNl(builder, pos)) {
                 pos++;
                 c = '\n';
                 doubleChars++;
@@ -521,13 +543,13 @@ public class ContentFormatter {
                 boolean split = count >= maxLineLength;
                 if (!split) { // lookahead, are we before and the next is too late?
                     int nextPos = pos + 1;
-                    while (nextPos < bld.length() && !canSplit(bld.charAt(nextPos))) {
+                    while (nextPos < builder.length() && !canSplit(builder.charAt(nextPos))) {
                         nextPos++;
                     }
                     split = (nextPos > pos + 1 && nextPos - doubleChars - lastStartPos >= maxLineLength);
                 }
                 if (split) { // here, line length exceeded
-                    advance += splitLines(c, bld, pos, lastNlPos);
+                    advance += splitLines(c, builder, pos, lastNlPos);
                     lastSplitPos = pos + advance; // adjust positions
                     lastStartPos = lastSplitPos;
                 } else {
@@ -560,29 +582,29 @@ public class ContentFormatter {
      * {@code startPos} as start of the actual line (in particular regarding/for adjusting the indentation).
      * 
      * @param ch the actual character
-     * @param bld the string builder to modify as a side effect
+     * @param buffer the string builder to modify as a side effect
      * @param splitPos the position where to potentially split the lines, i.e., insert newlines according to 
      *     {@link FormattingConfiguration#getLineEnding()}
      * @param startPos the line starting position for indentation check/adjustment
      * @return the position advancement, may be 0 for none
      * @see #adjustIndentation(StringBuilder, int, int)
      */
-    private int splitLines(char ch, StringBuilder bld, int splitPos, int startPos) {
+    private int splitLines(char ch, StringBuilder buffer, int splitPos, int startPos) {
         int result = 0;
         if (!isNewline(ch)) { // do not insert double line breaks
             final String lineBreak = FormattingConfiguration.getLineEnding(fConf);
             final int indentStep = iConf.getIndentationStep();
             String ins = "";
             if (!profile.isSplitChar(ch)) {
-                bld.delete(splitPos, splitPos + 1);
+                buffer.delete(splitPos, splitPos + 1);
             } else {
                 splitPos++;
                 result++;
             }
-            ins += profile.addBeforeSplit() + lineBreak + adjustIndentation(bld, startPos, indentStep) 
+            ins += profile.addBeforeSplit() + lineBreak + adjustIndentation(buffer, startPos, indentStep) 
                 + profile.addAfterSplit();
             int adjustSplitPos = profile.adjustSplitPosition();
-            bld.insert(splitPos + adjustSplitPos, ins);
+            buffer.insert(splitPos + adjustSplitPos, ins);
             result += ins.length() - adjustSplitPos;
         }
         return result;
@@ -620,7 +642,7 @@ public class ContentFormatter {
                 pos++;
             }
             int indent = (pos - lastStart) / indentStep;
-            if (indent > 0) {
+            if (profile.enableIndentation(indent)) { // usually indent > 0
                 indent += profile.additionalIndent();
                 for (int i = 1; i <= indent; i++) {
                     for (int j = 1; j <= indentStep; j++) {

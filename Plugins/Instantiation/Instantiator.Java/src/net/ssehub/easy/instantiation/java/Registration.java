@@ -16,6 +16,7 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 import net.ssehub.easy.instantiation.java.artifacts.JavaImport;
 import net.ssehub.easy.instantiation.java.artifacts.JavaMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAlternative;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnnotation;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnonymousClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
@@ -96,6 +97,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeStatement.class);
             TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
             TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
+            TypeRegistry.DEFAULT.register(JavaCodeAnnotation.class);
             TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
             TypeRegistry.DEFAULT.register(JavaCodeClass.class);
             TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);

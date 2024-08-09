@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
@@ -178,7 +180,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     /**
      * Sets the (optional) package name.
      * 
-     * @param packageName the package name
+     * @param packageName the package name, ignored if <b>null</b> or empty
      * @return <b>this</b> (for chaining)
      */
     public JavaCodeArtifact setPackage(String packageName) {
@@ -189,7 +191,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     /**
      * Returns the (optional) package name.
      * 
-     * @return the package name
+     * @return the package name, may be <b>null</b> or empty for none
      */
     public String getPackage() {
         return packageName;
@@ -265,6 +267,25 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             elements.get(e).store(out);
         }
     }
+    
+    @Override
+    public int getElementCount() {
+        int result = 0;
+        if (null != comment) {
+            result += 1 + StringUtils.countMatches(comment, "\\n");
+        }
+        if (hasPackage()) {
+            result += 1;
+        }
+        if (!imports.isEmpty()) {
+            result += imports.size() + 1;
+        }
+        for (int e = 0; e < elements.size(); e++) {
+            result += elements.get(e).getElementCount();
+        }
+        result += Math.max(0, elements.size() - 1);
+        return result;
+    }    
 
     /**
      * Stores the imports to {@code out}.

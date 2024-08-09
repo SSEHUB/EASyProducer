@@ -19,10 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
+
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
- * Represents a Javadoc comment.
+ * Represents a Javadoc comment. This class cares for HTML output quoting.
  * 
  * @author Holger Eichelberger
  */
@@ -84,7 +87,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             if (name != null && name.length() > 0) {
                 middle = " " + name;
             }
-            out.printlnwi(" * " + tag.getTag() + middle + " " + comment);            
+            out.printlnwi(" * " + tag.getTag() + middle + " " + escapeHtml(comment));
         }
 
     }
@@ -96,9 +99,9 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             out.printlnwi("/**");
             String[] lines = comment.split("\\n");
             for (String l : lines) {
-                out.printlnwi(" * " + l.trim());
+                out.printlnwi(" * " + escapeHtml(l.trim()));
             }
-            if (taggedParts != null) {
+            if (null != taggedParts) {
                 if (attachedTo instanceof JavaCodeMethod) {
                     out.printlnwi(" *");
                     streamByTag(Tag.PARAM).forEach(t -> t.store(out));
@@ -112,6 +115,20 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             out.printlnwi(" */");
         }
     }
+    
+    @Override
+    public int getElementCount() {
+        int result = 0;
+        if (null != comment) {
+            result += 1 + StringUtils.countMatches(comment, "\\n");
+            if (null != taggedParts) {
+                if (attachedTo instanceof JavaCodeMethod) {
+                    result += taggedParts.size();
+                }
+            }
+        }
+        return result;
+    }    
     
     private Stream<NameTaggedComment> streamByTag(Tag tag) {
         return taggedParts.stream().filter(t -> t.tag == tag);
@@ -152,6 +169,21 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
 
     @Override
     public void setParent(IJavaCodeElement parent) {
+    }
+    
+    /**
+     * Relaxed escaping for Javadoc HTML.
+     * 
+     * @param text the text to escape
+     * @return the escaped text
+     */
+    public static String escapeHtml(String text) {
+        String[] split = text.split("\"");
+        for (int i = 0; i < split.length; i++) {
+            split[i] = StringEscapeUtils.escapeHtml(split[i]);
+        }
+        text = String.join("\"", split);
+        return text;
     }
 
 }

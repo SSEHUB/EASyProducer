@@ -21,6 +21,7 @@ import java.util.List;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 
 /**
  * Represents a Java annotation.
@@ -32,6 +33,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
     private JavaCodeTypeSpecification type;
     private IJavaCodeElement annotated;
     private List<JavaCodeAnnotationArgument> arguments;
+    private String nested;
 
     /**
      * Creates an annotation instance.
@@ -41,8 +43,21 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param annotated the annotated element
      */
     JavaCodeAnnotation(JavaCodeTypeSpecification type, IJavaCodeElement annotated) {
+        this(type, null, annotated);
+    }
+    
+    /**
+     * Creates an annotation instance.
+     * 
+     * @param type the type of the annotation; the type is validated/potentially registered as import in the 
+     *   containing artifact
+     * @param nested a nested type qualification within {@code type}, may be empty or <b>null</b> for none
+     * @param annotated the annotated element
+     */
+    JavaCodeAnnotation(JavaCodeTypeSpecification type, String nested, IJavaCodeElement annotated) {
         this.annotated = annotated;
         this.type = type;
+        this.nested = nested;
         getArtifact().validateType(type);
     }
     
@@ -53,27 +68,49 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
     }
 
     /**
+     * Adds the default annotation argument (for the implicit/default "value" field).
+     * @param value the value
+     */
+    public void addArgument(String value) {
+        addArgument(null, value);
+    }
+
+    /**
      * Adds an annotation argument.
      * 
-     * @param name the name
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
      * @param value the value
      */
     public void addArgument(String name, String value) {
-        addArgument(name, value);
+        addArgument(name, value, false);
+    }
+
+    /**
+     * Adds an annotation argument.
+     * 
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
+     * @param value the value
+     * @param valueAsString shall the value be escaped and surrounded by quotes if not already given?
+     */
+    public void addArgument(String name, String value, boolean valueAsString) {
+        addArgument(name, value, null, false, valueAsString);
     }
     
     /**
      * Adds an annotation argument.
      * 
-     * @param name the name
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
      * @param value the value
+     * @param values the values of the argument (<b>null</b> to force {@code value})
+     * @param splitLines splits values into separate lines
      * @param valueAsString shall the value be escaped and surrounded by quotes if not already given?
      */
-    public void addArgument(String name, String value, boolean valueAsString) {
+    private void addArgument(String name, String value, List<String> values, boolean splitLines, 
+        boolean valueAsString) {
         if (null == arguments) {
             arguments = new ArrayList<>();
         }
-        if (valueAsString) {
+        if (null != value && valueAsString) {
             value = StringEscapeUtils.escapeJava(value);
             if (!value.startsWith("\"")) {
                 value += "\"";
@@ -82,7 +119,61 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
                 value += "\"";
             }
         }
-        IJavaCodeElement.add(arguments, new JavaCodeAnnotationArgument(name, value, this));
+        IJavaCodeElement.add(arguments, new JavaCodeAnnotationArgument(name, value, values, splitLines, this));
+    }
+
+    /**
+     * Adds an array argument consisting of multiple values for the implicit/default field "value".
+     * 
+     * @param values the values as individual strings
+     * @param valuesAsTypes shall the values be considered as types
+     */
+    public void addArgument(Sequence<String> values, boolean valuesAsTypes) {
+        addArgument(null, values, valuesAsTypes);
+    }
+
+    /**
+     * Adds an array argument consisting of multiple values for the implicit/default field "value".
+     * 
+     * @param values the values as individual strings
+     * @param splitLines splits values into separate lines
+     * @param valuesAsTypes shall the values be considered as types
+     */
+    public void addArgument(Sequence<String> values, boolean splitLines, boolean valuesAsTypes) {
+        addArgument(null, values, splitLines, valuesAsTypes);
+    }
+
+    /**
+     * Adds an array argument consisting of multiple values for the implicit/default field "value".
+     *
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
+     * @param values the values as individual strings
+     * @param valuesAsTypes shall the values be considered as types
+     */
+    public void addArgument(String name, Sequence<String> values, boolean valuesAsTypes) {
+        addArgument(name, values, false, valuesAsTypes);
+    }
+    
+    /**
+     * Adds an array argument consisting of multiple values for the implicit/default field "value".
+     *
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
+     * @param values the values as individual strings
+     * @param splitAndIndent splits value at "," and indents the individual values in individual lines
+     * @param valuesAsTypes shall the values be considered as types
+     */
+    public void addArgument(String name, Sequence<String> values, boolean splitAndIndent, boolean valuesAsTypes) {
+        List<String> tmp = new ArrayList<>();
+        for (String s : values) {
+            tmp.add(s);
+            if (valuesAsTypes) {
+                if (s.endsWith(".class")) { // usually the case
+                    s = s.substring(0, s.length() - 6);
+                    new JavaCodeTypeSpecification(s, annotated); // added automatically
+                }
+            }
+        }
+        addArgument(name, null, tmp, splitAndIndent, false);
     }
 
     @Override
@@ -99,6 +190,10 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
     public void storeNoLn(CodeWriter out) {
         out.printwi("@");
         out.print(type.getOutputTypeName());
+        if (null != nested && nested.length() > 0) {
+            out.print(".");
+            out.print(nested);
+        }
         if (null != arguments && !arguments.isEmpty()) {
             out.print("(");
             IJavaCodeElement.storeList(arguments, ", ", out);
@@ -120,6 +215,11 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
     @Override
     public void setParent(IJavaCodeElement parent) {
         this.annotated = parent;
+    }
+    
+    @Override
+    public int getElementCount() {
+        return (annotated instanceof JavaCodeParameterSpecification) ? 0 : 1;
     }
 
 }

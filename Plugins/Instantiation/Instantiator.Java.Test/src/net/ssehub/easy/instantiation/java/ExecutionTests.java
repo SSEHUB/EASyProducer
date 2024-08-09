@@ -329,27 +329,32 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
 
         });
     }
-
+    
     /**
-     * Test the JavaCode artifact in VIL.
+     * Assertion for Java code tests.
      * 
-     * @throws IOException
-     *             should not occur
+     * @param modelName the name of the VIL model to execute
+     * @param fileName the file name of the file to assert against, may end with ".java", added if not present
+     * @throws IOException if reading files fails
      */
-    @Test
-    public void testJavaCode() throws IOException {
-        assertSelfInstantiate("javaCode", "main", new SelfInstantiationAsserterAdapter() {
+    private void assertJavaCode(String modelName, String fileName) throws IOException {
+        final String folder = "javaCode";
+        if (!fileName.endsWith(".java")) {
+            fileName += ".java";
+        }
+        final String fName = fileName;
+        
+        assertSelfInstantiate(modelName, "main", new SelfInstantiationAsserterAdapter() {
 
             @Override
             public File determineTestDirectory(File file) {
-                return new File(file, "javaCode");
+                return new File(file, folder);
             }
 
             @Override
             public void assertIn(File base) {
-                File expectedMethodClass2 = new File(getArtifactsFolder(),
-                        "javaCode/JCATest.java");
-                File tempFileMethodClass2 = new File(base, "JCATest.java");
+                File expectedMethodClass2 = new File(getArtifactsFolder(), folder + File.separator + fName);
+                File tempFileMethodClass2 = new File(base, fName);
                 // for debugging
                 try { 
                     System.out.println(FileUtils.readFileToString(tempFileMethodClass2, Charset.defaultCharset()));
@@ -362,6 +367,17 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * Test the JavaCode artifact in VIL.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testJavaCode() throws IOException {
+        assertJavaCode("javaCode", "JCATest");
+    }
+
+    /**
      * Test the JavaCode artifact in VIL (mixed style).
      * 
      * @throws IOException
@@ -369,27 +385,18 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
      */
     @Test
     public void testJavaCode2() throws IOException {
-        assertSelfInstantiate("javaCode2", "main", new SelfInstantiationAsserterAdapter() {
+        assertJavaCode("javaCode2", "JCATest2");
+    }
 
-            @Override
-            public File determineTestDirectory(File file) {
-                return new File(file, "javaCode");
-            }
-
-            @Override
-            public void assertIn(File base) {
-                File expectedMethodClass2 = new File(getArtifactsFolder(),
-                        "javaCode/JCATest2.java");
-                File tempFileMethodClass2 = new File(base, "JCATest2.java");
-                // for debugging
-                try { 
-                    System.out.println(FileUtils.readFileToString(tempFileMethodClass2, Charset.defaultCharset()));
-                } catch (IOException e) {
-                }
-                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
-            }
-
-        });
+    /**
+     * Test the JavaCode artifact for an annotated junit test suite.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testJavaCode3() throws IOException {
+        assertJavaCode("javaCode3", "JCATest3");
     }
 
 }

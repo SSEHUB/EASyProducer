@@ -147,7 +147,7 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
         setStatic(true);
         return this;
     }
-    
+
     /**
      * Adds an annotation.
      * 
@@ -155,11 +155,22 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      * @return the annotation for further processing
      */
     public JavaCodeAnnotation addAnnotation(String type) {
+        return addAnnotation(type, null);
+    }
+    
+    /**
+     * Adds an annotation.
+     * 
+     * @param type the annotation type, may be fully qualified
+     * @param nested a nested type qualification within {@code type}, may be empty or <b>null</b> for none
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addAnnotation(String type, String nested) {
         if (null == annotations) {
             annotations = new ArrayList<>();
         }
         return IJavaCodeElement.add(annotations, 
-            new JavaCodeAnnotation(new JavaCodeTypeSpecification(type, getEnclosing()), this));
+            new JavaCodeAnnotation(new JavaCodeTypeSpecification(type, getClassParent()), nested, this));
     }
 
     /**
@@ -167,7 +178,18 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      * 
      * @return the enclosing class
      */
+    @Invisible
     protected abstract JavaCodeClass getEnclosing();
+    
+    /**
+     * Returns the class to be used as parent, e.g., for {@link JavaCodeTypeSpecification}.
+     * 
+     * @return the class parent, by default {@link #getEnclosing()}
+     */
+    @Invisible
+    protected JavaCodeClass getClassParent() {
+        return getEnclosing();
+    }
 
     /**
      * Returns the visibility.
@@ -257,6 +279,20 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      */
     public JavaCodeJavadocComment getJavadocComment() {
         return comment;
+    }
+    
+    @Override
+    public int getElementCount() {
+        int result = 1;
+        if (null != comment) {
+            result += comment.getElementCount();
+        }
+        if (null != annotations) {
+            for (JavaCodeAnnotation a : annotations) {
+                result += a.getElementCount();
+            }
+        }
+        return result;
     }
     
 }

@@ -33,6 +33,16 @@ public interface Storable {
      */
     @Invisible
     public void store(CodeWriter out);
+    
+    /**
+     * Returns the number of contained line-relevant elements (potentially including <b>this</b>), i.e., a rough 
+     * estimation of the lines without considering advanced formatting.
+     * 
+     * @return the number of contained line-relevant elements, formatting may differ; may be {@code 0}
+     */
+    public default int getElementCount() {
+        return 1;
+    }
 
     /**
      * Turns this Storable to code.

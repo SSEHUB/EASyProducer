@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.templateModel.ContentFormatter;
 import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
 import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
 
@@ -39,6 +40,8 @@ class CodeWriter implements Closeable {
     private String lineEnd = System.lineSeparator();
     @SuppressWarnings("unused")
     private int lineLength = -1;  // TODO consider line breaks/formatting??
+    private ContentFormatter contentFormatter;
+    private StringBuilder buffer = new StringBuilder();
     
     /**
      * Creates a code writer for a {@code file}. This method creates parents of {@code file} if they yet do not exist.
@@ -86,16 +89,14 @@ class CodeWriter implements Closeable {
         if (fCfg.getLineLength() > 0) {
             lineLength = fCfg.getLineLength();
         }
+        contentFormatter = Formatting.getContentFormatter();
     }
 
     /**
      * Prints the actual indentation.
      */
     void printIndent() {
-        out.print(indent);
-        if (DEBUG) {
-            System.out.print(indent);
-        }
+        buffer.append(indent);
     }
 
     /**
@@ -122,10 +123,7 @@ class CodeWriter implements Closeable {
      * Prints a line break (using the@code  system line break).
      */
     void println() {
-        out.print(lineEnd);
-        if (DEBUG) {
-            System.out.print(lineEnd);
-        }
+        buffer.append(lineEnd);
     }
 
     /**
@@ -134,11 +132,22 @@ class CodeWriter implements Closeable {
      * @param text the text to print
      */
     void println(String text) {
-        out.print(text);
-        out.print(lineEnd);
-        if (DEBUG) {
-            System.out.print(text);
-            System.out.print(lineEnd);
+        buffer.append(text);
+        buffer.append(lineEnd);
+        emit();
+    }
+    
+    /**
+     * Formats/emits the output buffer if it contains characters.
+     */
+    void emit() {
+        if (buffer.length() > 0) {
+            String formatted = contentFormatter.format(buffer.toString());
+            buffer.setLength(0); // clear
+            out.print(formatted);
+            if (DEBUG) {
+                System.out.print(formatted);
+            }
         }
     }
 
@@ -148,10 +157,7 @@ class CodeWriter implements Closeable {
      * @param text the text to print
      */
     void print(String text) {
-        out.print(text);
-        if (DEBUG) {
-            System.out.print(text);
-        }
+        buffer.append(text);
     }
 
     /**
@@ -172,6 +178,7 @@ class CodeWriter implements Closeable {
     
     @Override
     public void close() {
+        emit();
         if (null != out) {
             this.out.close();
         }
@@ -181,6 +188,7 @@ class CodeWriter implements Closeable {
      * Flushes the underlying stream.
      */
     protected void flush() {
+        emit();
         if (null != out) {
             this.out.flush();
         }

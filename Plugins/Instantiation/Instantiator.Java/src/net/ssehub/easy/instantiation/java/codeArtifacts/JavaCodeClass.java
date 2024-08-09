@@ -84,6 +84,11 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     protected JavaCodeClass getEnclosing() {
         return enclosing;
     }
+    
+    @Override
+    protected JavaCodeClass getClassParent() {
+        return this;
+    }
 
     /**
      * Creates a protected class with given {@code name}.

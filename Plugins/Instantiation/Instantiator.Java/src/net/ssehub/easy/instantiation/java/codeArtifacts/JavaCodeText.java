@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
@@ -67,5 +69,11 @@ public class JavaCodeText implements IJavaCodeElement {
     @Override
     public void setParent(IJavaCodeElement parent) {
     }
+    
+    @Override
+    public int getElementCount() {
+        return StringUtils.countMatches(text, "\\n") + (endWithNewline ? 1 : 0);
+    }    
+
 
 }

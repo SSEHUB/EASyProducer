@@ -466,4 +466,13 @@ public class JavaCodeBlock extends JavaCodeStatement {
         }
     }
 
+    @Override
+    public int getElementCount() {
+        int result = withBrackets ? 2 : 0;
+        for (IJavaCodeElement a : elements) {
+            result += a.getElementCount();
+        }
+        return result;
+    }    
+    
 }
