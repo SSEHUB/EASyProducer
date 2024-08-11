@@ -4,12 +4,14 @@
 package de.uni_hildesheim.sse.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IConcurrentEditingCallback;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IDirtyStateEditorSupportClient;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.InteractiveConcurrentEditingQuestion;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 
 import de.uni_hildesheim.sse.ui.hyperlinking.IvmlHyperlinkHelper;
+import net.ssehub.easy.dslCore.ui.BuilderParticipant;
 
 //import com.google.inject.name.Names;
 
@@ -52,6 +54,11 @@ public class IvmlUiModule extends de.uni_hildesheim.sse.ui.AbstractIvmlUiModule 
 	 */
 	public Class<? extends IHyperlinkHelper> bindIHyperlinkHelper() {
 		return IvmlHyperlinkHelper.class;
+	}
+
+	@Override
+	public Class<? extends IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
+	    return BuilderParticipant.class;
 	}
 	
 }

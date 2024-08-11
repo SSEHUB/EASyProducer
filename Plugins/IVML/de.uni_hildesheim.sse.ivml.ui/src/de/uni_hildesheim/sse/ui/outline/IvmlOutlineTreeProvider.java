@@ -28,6 +28,7 @@ import de.uni_hildesheim.sse.ivml.IvmlPackage;
 import de.uni_hildesheim.sse.ivml.OpDefStatement;
 import de.uni_hildesheim.sse.ivml.Project;
 import de.uni_hildesheim.sse.ivml.ProjectContents;
+import de.uni_hildesheim.sse.ivml.QualifiedName;
 import de.uni_hildesheim.sse.ivml.Typedef;
 import de.uni_hildesheim.sse.ivml.TypedefCompound;
 import de.uni_hildesheim.sse.ivml.TypedefEnum;
@@ -338,17 +339,20 @@ public class IvmlOutlineTreeProvider extends DefaultOutlineTreeProvider {
     private void createFreezeNodes(List<Freeze> freezeList, IOutlineNode parentNode) {
         for (Freeze freeze : freezeList) {
             if (freeze != null && !isEmpty(freeze.getNames())) {
-                String dvName = "" + freeze.getNames().get(0).getName().getQName();
-                dvName = dvName.substring(1, dvName.length() - 1);
-                String resultName = dvName;
-                if (freeze.getNames().size() > 1) {
-                    resultName += ", ...";
+                QualifiedName qn = freeze.getNames().get(0).getName();
+                if (null != qn) {
+                    String dvName = "" + qn.getQName();
+                    dvName = dvName.substring(1, dvName.length() - 1);
+                    String resultName = dvName;
+                    if (freeze.getNames().size() > 1) {
+                        resultName += ", ...";
+                    }
+                    StyledString resultString = new StyledString();
+                    resultString.append("freeze");
+                    resultString.append(" : " + resultName, StyledString.QUALIFIER_STYLER);
+                    createEStructuralFeatureNode(parentNode, freeze, IvmlPackage.Literals.FREEZE__NAMES,
+                            imageHelper.getImage(Images.NAME_FREEZE), resultString, true);
                 }
-                StyledString resultString = new StyledString();
-                resultString.append("freeze");
-                resultString.append(" : " + resultName, StyledString.QUALIFIER_STYLER);
-                createEStructuralFeatureNode(parentNode, freeze, IvmlPackage.Literals.FREEZE__NAMES,
-                        imageHelper.getImage(Images.NAME_FREEZE), resultString, true);
             }
         }
     }
