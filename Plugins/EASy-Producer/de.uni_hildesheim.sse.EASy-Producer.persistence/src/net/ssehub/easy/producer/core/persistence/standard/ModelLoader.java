@@ -136,9 +136,10 @@ class ModelLoader<Model extends IModel> {
                 // Load alternative, if exactly one alternative was found
                 if (null != alternatives && 1 == alternatives.size()) {
                     info = alternatives.get(0);
-                    LOGGER.warn("No " + modelType.name() + "-model found with name =\"" + projectName
-                        + "\" and version =\"" + projectVersion + "\" at " + file.getAbsolutePath()
-                        + ", load single available alternative.");
+                    // old assumption on version==0, just take it
+                    //LOGGER.warn("No " + modelType.name() + "-model found with name =\"" + projectName
+                    //    + "\" and version =\"" + projectVersion + "\" at " + file.getAbsolutePath()
+                    //    + ", load single available alternative.");
                 }
             }
         } catch (VersionFormatException e) {
