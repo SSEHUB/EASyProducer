@@ -10,6 +10,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.xtext.ui,
  org.eclipse.ui.ide,
+ org.eclipse.xtext.builder,
  net.ssehub.easy.basics,
  net.ssehub.easy.dslCore,
  net.ssehub.easy.varModel

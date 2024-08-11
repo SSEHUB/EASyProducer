@@ -72,6 +72,7 @@ public class DispatchInformation {
         bestDiff = EvaluationUtils.calculateDiff(operation, returnType, argTypes);
         candidates = new HashSet<String>();
         candidates.add(operation.getSignature());
+        updateCounts(operation);
         doneProjects = new HashSet<Project>();
     }
     
@@ -127,19 +128,28 @@ public class DispatchInformation {
                             bestMatch = tmp;
                             bestDiff = diff;
                         }
-                        if (countAnnotations) {
-                            overrideCount += tmp.hasAnnotation(OperationAnnotations.OVERRIDE) ? 1 : 0;
-                            dispatchBasisCount += tmp.hasAnnotation(OperationAnnotations.DISPATCH_BASIS) ? 1 : 0;
-                        }
+                        updateCounts(tmp);
                     }
                 }
             }
-            for (int i = 0, n = scope.getImportsCount(); bestDiff > 0 && i < n; i++) {
+            for (int i = 0, n = scope.getImportsCount(); (bestDiff > 0 || countAnnotations) && i < n; i++) {
                 Project imp = scope.getImport(i).getResolved();
                 if (null != imp) {
                     checkForDispatch(imp);
                 }
             }
+        }
+    }
+    
+    /**
+     * Updates the annotation counts if desired.
+     * 
+     * @param op the operation to take the annotations from
+     */
+    private void updateCounts(CustomOperation op) {
+        if (countAnnotations) {
+            overrideCount += op.hasAnnotation(OperationAnnotations.OVERRIDE) ? 1 : 0;
+            dispatchBasisCount += op.hasAnnotation(OperationAnnotations.DISPATCH_BASIS) ? 1 : 0;
         }
     }
 
