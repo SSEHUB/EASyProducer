@@ -180,7 +180,7 @@ public class AdvancedTests extends AbstractTest {
     @Test
     public void testCompoundOverlapping2Fail() throws IOException {
         assertEqual(createFile("compounds2Fail"), "compoundOverlapping2Fail", "0", 
-            ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+            ValueDoesNotMatchTypeException.TYPE_MISMATCH, ErrorCodes.TYPE_CONSISTENCY);
     }
 
     /**
