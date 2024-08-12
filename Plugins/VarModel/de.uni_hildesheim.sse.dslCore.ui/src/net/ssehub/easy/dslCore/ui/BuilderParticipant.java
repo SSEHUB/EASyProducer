@@ -16,29 +16,29 @@
 package net.ssehub.easy.dslCore.ui;
 
 import java.util.List;
-
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.resource.IResourceDescription;
-import org.eclipse.xtext.util.Arrays;
 
+import net.ssehub.easy.dslCore.validation.ValidationUtils;
+
+/**
+ * Hooks into the xText builder (must be declared/injected) to prevent buiding
+ * in bin/target folders. Utilizes {@link ValidationUtils#excludeBinTarget(org.eclipse.emf.common.util.URI)}.
+ * 
+ * @author Holger Eichelberger
+ */
 public class BuilderParticipant extends org.eclipse.xtext.builder.BuilderParticipant {
 
     @Override
     protected List<IResourceDescription.Delta> getRelevantDeltas(IBuildContext context) {
         List<IResourceDescription.Delta> result = super.getRelevantDeltas(context);
-        result.removeIf(d -> exclude(d.getUri()));
+        result.removeIf(d -> ValidationUtils.excludeBinTarget(d.getUri()));
         return result;
-    }
-    
-    private boolean exclude(URI uri) {
-        String[] segments = uri.segments();
-        return Arrays.contains(segments, "target") || Arrays.contains(segments, "bin");
     }
 
     @Override
     protected boolean shouldGenerate(Resource resource, IBuildContext context) {
-        return !exclude(resource.getURI()) && super.shouldGenerate(resource, context);
+        return !ValidationUtils.excludeBinTarget(resource.getURI()) && super.shouldGenerate(resource, context);
     }
 
 }

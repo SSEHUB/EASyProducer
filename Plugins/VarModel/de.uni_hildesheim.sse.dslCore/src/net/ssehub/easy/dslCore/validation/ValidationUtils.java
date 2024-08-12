@@ -7,9 +7,11 @@ import java.net.URISyntaxException;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.diagnostics.Severity;
+import org.eclipse.xtext.util.Arrays;
 import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.FeatureBasedDiagnostic;
 
@@ -189,6 +191,28 @@ public class ValidationUtils {
         return EASyLoggerFactory.INSTANCE.getLogger(ValidationUtils.class, BundleId.ID);
     }
     
+    /**
+     * Returns whether a (model) URI is excluded as it is located in "bin" or "target" to speed
+     * up building/validation.
+     * 
+     * @param uri the URI to check, may be <b>null</b>
+     * @return {@code true} for exclusion or <b>null</b>, {@code false} else
+     */
+    public static boolean excludeBinTarget(URI uri) {
+        boolean result = true;
+        if (null != uri) {
+            String[] segments = uri.segments();
+            if ("platform".equals(uri.scheme()) && segments.length >= 3) {
+                String topFolderInProject = segments[2];
+                result = "target".equals(topFolderInProject) || "bin".equals(topFolderInProject);
+            } else {
+                result = Arrays.contains(segments, "target") || Arrays.contains(segments, "bin");
+            }
+        }
+        return result;
+    }
+
+    
     // checkstyle: stop exception type check
 
     /**
@@ -204,8 +228,10 @@ public class ValidationUtils {
         boolean debug) {
         if (PERFORM_XTEXT_VALIDATION) {
             java.net.URI uri = null;
+            URI eURI = null;
             if (null != unit.eResource() && null != unit.eResource().getURI()) {
                 try {
+                    eURI = unit.eResource().getURI();
                     uri = ModelUtility.toNetUri(unit.eResource().getURI());
                     if (!"file".equals(uri.getScheme())) {
                         uri = null; // initializer may yet not be present, xText does not work with other URI schemes
@@ -215,7 +241,7 @@ public class ValidationUtils {
                         + "' during validation" + e.getMessage());
                 }
             }
-            if (null != uri && callback.isValidationEnabled(uri)) {
+            if (null != uri && callback.isValidationEnabled(uri) && !excludeBinTarget(eURI)) {
                 try {
                     TranslationResult<T> result = callback.createModel(unit, uri);
                     for (int m = 0; m < result.getMessageCount(); m++) {
