@@ -1,0 +1,15 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, FileArtifact) with (<config>, yamlBasics.yaml)
+    art <- yamlBasics.yaml
+    -> addDocument(YamlFileArtifact) with (yamlBasics.yaml) = YamlNode
+    doc <- YamlNode
+    -> addValue(YamlNode, String, Any) with (YamlNode, myVal, 1) = YamlNode
+    -> addObject(YamlNode, String) with (YamlNode, myObject) = YamlNode
+    -> addValue(YamlNode, String, Any) with (YamlNode, innerVal, String) = YamlNode
+    -> addValue(YamlNode, String, Any) with (YamlNode, booleanVal, true) = YamlNode
+    seq <- {s1, s2}
+    -> addList(YamlNode, String, Sequence) with (YamlNode, states, {s1, s2}) = YamlNode
+    map <- {{k1, v1}, {k2, v2}}
+    -> addMap(YamlNode, String, Map) with (YamlNode, mapping, {{k1, v1}, {k2, v2}}) = YamlNode
+    -> addValues(YamlNode, Map) with (YamlNode, {{k1, v1}, {k2, v2}}) = YamlNode
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (YamlBasicsTpl, <config>, yamlBasics.yaml, {}) = {yamlBasics.yaml}

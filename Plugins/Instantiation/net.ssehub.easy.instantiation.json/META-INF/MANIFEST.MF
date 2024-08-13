@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Json Instantiation Support
+Bundle-SymbolicName: net.ssehub.easy.instantiation.json
+Automatic-Module-Name: net.ssehub.easy.instantiation.json
+Bundle-Version: 1.3.10.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Service-Component: OSGI-INF/instantiator.xml
+Bundle-ClassPath: .,
+ lib/jackson-core-2.17.2.jar,
+ lib/jackson-databind-2.17.2.jar,
+ lib/jackson-annotations-2.17.2.jar
+Bundle-Vendor: University of Hildesheim, SSE
+Require-Bundle: net.ssehub.easy.instantiation.core,
+ org.eclipse.core.runtime,
+ net.ssehub.easy.libs.commons.io
+Import-Package: org.eclipse.jdt.core,
+ org.eclipse.jdt.core.dom,
+ org.osgi.service.component
+Bundle-ActivationPolicy: lazy
+Export-Package: net.ssehub.easy.instantiation.json

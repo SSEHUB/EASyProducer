@@ -33,6 +33,17 @@ public class Constants {
     public static final String FORMATTING_HINT_LINELENGTH = "lineLength";
 
     /**
+     * The name for the optional formatting hint to define a single indentation step in terms of the number 
+     * of whitespaces.
+     */
+    public static final String FORMATTING_HINT_INDENTSTEPS = "indentSteps";
+
+    /**
+     * The name for the optional formatting hint to define whether tabs shall be used.
+     */
+    public static final String FORMATTING_HINT_USETABS = "useTabs";
+    
+    /**
      * The name for the optional formatting hint to define the profile.
      */
     public static final String FORMATTING_HINT_PROFILE = "profile";

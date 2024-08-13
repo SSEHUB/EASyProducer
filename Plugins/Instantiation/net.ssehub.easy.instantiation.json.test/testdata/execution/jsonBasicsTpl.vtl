@@ -1,0 +1,18 @@
+@format(profile="default", indentSteps = 4, profileArg_prettyPrint = "true")
+template JsonBasicsTpl(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        JsonFileArtifact art = target;
+        JsonNode data = art.getData();
+        data.addValue("myVal", 1);
+        data.addObject("myObject")
+           .addValue("innerVal", "String")
+           .addValue("booleanVal", true);
+        sequenceOf(String) seq = {"s1", "s2"};
+        data.addList("states", seq);
+        mapOf(String, String) map = {{"k1", "v1"}, {"k2", "v2"}};
+        data.addMap("mapping", map);
+        data.addValues(map);
+    }
+    
+}

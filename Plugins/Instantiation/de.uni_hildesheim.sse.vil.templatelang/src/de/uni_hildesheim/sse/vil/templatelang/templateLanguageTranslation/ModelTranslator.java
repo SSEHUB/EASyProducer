@@ -245,6 +245,15 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                         warning("lineLength value is not an integer - igored", part, 
                             TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);
                     }
+                } else if (FORMATTING_HINT_INDENTSTEPS.equals(name)) {
+                    try {
+                        result.setIndentSteps(Integer.parseInt(getFormattingHintPartNumStringValue(part)));
+                    } catch (NumberFormatException e) {
+                        warning("indentSteps value is not an integer - igored", part, 
+                            TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);
+                    }
+                } else if (FORMATTING_HINT_USETABS.equals(name)) {
+                    result.setUseTabs(Boolean.valueOf(getFormattingHintPartNumStringValue(part)));
                 } else if (FORMATTING_HINT_PROFILE.equals(name)) {
                     result.setProfile(StringUtils.convertString(part.getValue()));
                 } else if (name.startsWith(FORMATTING_HINT_PROFILE_ARG_PREFIX)) {

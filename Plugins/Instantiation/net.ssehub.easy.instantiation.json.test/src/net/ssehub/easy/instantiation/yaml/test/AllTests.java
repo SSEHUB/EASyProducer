@@ -8,6 +8,6 @@ import org.junit.runners.Suite;
  * @author El-Sharkawy
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ParserTests.class, ExecutionTests.class })
+@Suite.SuiteClasses({ExecutionTests.class })
 public class AllTests {
 }

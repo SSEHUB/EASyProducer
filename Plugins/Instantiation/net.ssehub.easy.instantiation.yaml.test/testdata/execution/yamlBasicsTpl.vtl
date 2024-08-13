@@ -1,0 +1,18 @@
+@format(profile="default", indentSteps = 4, profileArg_flowStyle="BLOCK", profileArg_prettyFlow="true")
+template YamlBasicsTpl(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        YamlFileArtifact art = target;
+        YamlNode doc = art.addDocument();
+        doc.addValue("myVal", 1);
+        doc.addObject("myObject")
+           .addValue("innerVal", "String")
+           .addValue("booleanVal", true);
+        sequenceOf(String) seq = {"s1", "s2"};
+        doc.addList("states", seq);
+        mapOf(String, String) map = {{"k1", "v1"}, {"k2", "v2"}};
+        doc.addMap("mapping", map);
+        doc.addValues(map);
+    }
+    
+}

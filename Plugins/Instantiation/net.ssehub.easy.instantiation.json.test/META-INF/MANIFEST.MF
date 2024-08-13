@@ -5,10 +5,9 @@ Bundle-SymbolicName: net.ssehub.easy.instantiation.yaml.test
 Automatic-Module-Name: net.ssehub.easy.instantiation.yaml.test
 Bundle-Version: 1.3.10.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Bundle-ClassPath: lib/config-1.3.0.jar,
- .
+Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime,
- net.ssehub.easy.instantiation.yaml,
+ net.ssehub.easy.instantiation.json,
  net.ssehub.easy.instantiation.core,
  de.uni_hildesheim.sse.vil.buildlang.tests,
  de.uni_hildesheim.sse.vil.templatelang.tests,

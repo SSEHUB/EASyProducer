@@ -1,0 +1,7 @@
+vilScript YamlBasics (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("YamlBasicsTpl", config, "$target/yamlBasics.yaml");
+    }
+
+}

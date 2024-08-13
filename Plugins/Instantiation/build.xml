@@ -96,6 +96,16 @@
         <echo>##########################################</echo>
         <ant dir="Instantiator.Lxc" antfile="${build.script.name}" />
 
+        <echo>##########################################</echo>
+        <echo>###   Compiling Yaml Instantiator       ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.yaml" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Json Instantiator       ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.json" antfile="${build.script.name}" />
+
         <echo>####################################</echo>
         <echo>###  Compiling Expressions Core  ###</echo>
         <echo>####################################</echo>
@@ -201,6 +211,16 @@
         <echo>##################################</echo>
         <ant dir="de.uni-hildesheim.sse.easy.instantiator.velocity.tests" antfile="${build.script.name}" />
         
+        <echo>####################################</echo>
+        <echo>###   Compiling Yaml Tests       ###</echo>
+        <echo>####################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.yaml.tests" antfile="${build.script.name}" />
+
+        <echo>####################################</echo>
+        <echo>###   Compiling Json Tests       ###</echo>
+        <echo>####################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.json.tests" antfile="${build.script.name}" />
+		
 		<!-- tested before, time to say goodbye -->
         <!--<echo>#################################################</echo>
         <echo>###   Compiling Complete Instantiator Tests   ###</echo>

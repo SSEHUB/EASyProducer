@@ -122,7 +122,18 @@ public class FormattingConfiguration {
      * @return the argument value, may be <b>null</b> in particular if {@code name} is <b>null</b>
      */
     public String getProfileArgument(String name) {
-        return null != name ? profileArguments.get(name) : null;
+        return getProfileArgument(name, null);
+    }
+
+    /**
+     * Returns a profile-specific argument.
+     * 
+     * @param name the name of the argument
+     * @param dflt the default value if no argument was found
+     * @return the argument value, may be {@code dflt} in particular if {@code name} is <b>null</b>
+     */
+    public String getProfileArgument(String name, String dflt) {
+        return null != name ? profileArguments.get(name) : dflt;
     }
 
     /**

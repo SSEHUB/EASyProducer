@@ -1,0 +1,15 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, FileArtifact) with (<config>, jsonBasics.json)
+    art <- jsonBasics.json
+    -> getData(JsonFileArtifact) with (jsonBasics.json) = JsonNode
+    data <- JsonNode
+    -> addValue(JsonNode, String, Any) with (JsonNode, myVal, 1) = JsonNode
+    -> addObject(JsonNode, String) with (JsonNode, myObject) = JsonNode
+    -> addValue(JsonNode, String, Any) with (JsonNode, innerVal, String) = JsonNode
+    -> addValue(JsonNode, String, Any) with (JsonNode, booleanVal, true) = JsonNode
+    seq <- {s1, s2}
+    -> addList(JsonNode, String, Sequence) with (JsonNode, states, {s1, s2}) = JsonNode
+    map <- {{k1, v1}, {k2, v2}}
+    -> addMap(JsonNode, String, Map) with (JsonNode, mapping, {{k1, v1}, {k2, v2}}) = JsonNode
+    -> addValues(JsonNode, Map) with (JsonNode, {{k1, v1}, {k2, v2}}) = JsonNode
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (JsonBasicsTpl, <config>, jsonBasics.json, {}) = {jsonBasics.json}
