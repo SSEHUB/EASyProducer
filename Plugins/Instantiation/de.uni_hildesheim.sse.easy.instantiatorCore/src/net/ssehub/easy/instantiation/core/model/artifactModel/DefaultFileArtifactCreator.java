@@ -81,7 +81,7 @@ public class DefaultFileArtifactCreator implements IArtifactCreator {
     }
 
     @Override
-    public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
+    public IFileSystemArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {
         return new FileArtifact((File) real, model);
     }
 
