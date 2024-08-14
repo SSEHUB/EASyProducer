@@ -220,6 +220,16 @@
 	          <artifactId>net.ssehub.easy.instantiation.aspectj</artifactId>
 	          <version>${project.version}</version>
 	      </dependency>
+          <dependency>
+             <groupId>net.ssehub.easy</groupId>
+             <artifactId>net.ssehub.easy.instantiation.json</artifactId>
+             <version>${project.version}</version>
+          </dependency>  
+          <dependency>
+             <groupId>net.ssehub.easy</groupId>
+             <artifactId>net.ssehub.easy.instantiation.yaml</artifactId>
+             <version>${project.version}</version>
+          </dependency>  
 	      <dependency>
 	          <groupId>net.ssehub.easy</groupId>
 	          <artifactId>net.ssehub.easy.producer.core</artifactId>
