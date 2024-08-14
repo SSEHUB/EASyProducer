@@ -1729,12 +1729,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                         ErrorCodes.UNKNOWN_ELEMENT);
                 }
                 if (null != entry.getAttrib()) {
+                    boolean found = findSlotOrAttribute(comp, entry.getAttrib()); // "." looks like attribute
                     slots[e] += "." + entry.getAttrib();
                     slotDecls[e] = slotDecls[e].getAttribute(entry.getAttrib());
-                    if (null == slotDecls[e]) {
-                        throw new TranslatorException("attribute '" + slots[e] + "' does not exist in '"
+                    if (!found) {
+                        warning("attribute '" + slots[e] + "' does not exist in '"
                             + lhsType.getName() + "'", entry, IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE,
-                            ErrorCodes.UNKNOWN_ELEMENT);
+                            ErrorCodes.UNKNOWN_ELEMENT); // TODO warning for now, may become error
                     }
                 }
             }
@@ -1772,6 +1773,39 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         context.popLayer();
         level--;
         return result;
+    }
+
+    /**
+     * Tries to find {@code name} in {@comp}.
+     * 
+     * @param comp the compound
+     * @param name the name, may contain separating "."
+     * @return {@code true} if found, {@code false} else
+     */
+    private boolean findSlotOrAttribute(Compound comp, String name) {
+        boolean found = false;
+        String check = name;
+        String rest = null;
+        int pos = name.indexOf(".");
+        if (pos > 0) {
+            check = name.substring(0, pos);
+            rest = name.substring(pos + 1);
+        }
+        DecisionVariableDeclaration decl = comp.getElement(check);
+        if (decl != null) {
+            if (rest != null) {
+                IDatatype type = decl.getType();
+                type = DerivedDatatype.resolveToBasis(type); // refTo?
+                if (type instanceof Compound) {
+                    found = findSlotOrAttribute((Compound) type, rest);
+                } else {
+                    found = false;
+                }
+            } else {
+                found = true;
+            }
+        }
+        return found;
     }
 
     /**
