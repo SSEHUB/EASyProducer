@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="JSON for VIL">
-   <implementation class="net.ssehub.easy.instantiation.yaml.Registration"/>
+   <implementation class="net.ssehub.easy.instantiation.json.Registration"/>
    <service>
       <provide interface="net.ssehub.easy.instantiation.core.model.vilTypes.IRegistration"/>
    </service>

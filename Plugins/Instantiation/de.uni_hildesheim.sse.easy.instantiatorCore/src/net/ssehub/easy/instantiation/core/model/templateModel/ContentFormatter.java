@@ -397,6 +397,8 @@ public class ContentFormatter {
     // registers
     static {
         PROFILES.put("JAVA", new JavaProfile());
+        PROFILES.put("JSON", new DefaultProfile()); // nothing specific so far
+        PROFILES.put("YAML", new DefaultProfile()); // nothing specific so far
         PROFILES.put("", new DefaultProfile());
     }
     

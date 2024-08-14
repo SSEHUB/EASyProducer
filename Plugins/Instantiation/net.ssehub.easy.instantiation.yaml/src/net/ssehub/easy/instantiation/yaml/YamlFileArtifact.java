@@ -48,9 +48,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * @author Holger Eichelberger
  */
 @ArtifactCreator(YamlArtifactCreator.class)
-public class YamlFileArtifact extends FileArtifact implements IStringValueProvider {
+public class YamlFileArtifact extends FileArtifact implements IStringValueProvider, INodeParent {
 
     private List<YamlNode> data = new ArrayList<>();
+    private boolean changedByNodes = false;
     
     /**
      * Creates an instance without file backing.
@@ -64,23 +65,38 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
      * 
      * @param file the file
      * @param model the artifact model instance
+     * @see #initialize()
      */
     protected YamlFileArtifact(File file, ArtifactModel model) {
         super(file, model);
+        initialize();
+    }
+
+    /**
+     * Initializes {@code data} from an underlying file.
+     */
+    private void initialize() {
+        File f = getPath().getAbsolutePath();
         try {
-            Yaml yaml = new Yaml();
-            File f = getPath().getAbsolutePath();
+            data.clear();
             if (f.exists()) {
-                FileInputStream fis = new FileInputStream(file);
+                Yaml yaml = new Yaml();
+                FileInputStream fis = new FileInputStream(f);
                 for (Object document : yaml.loadAll(fis)) {
-                    data.add(new YamlNode(document));
+                    data.add(new YamlNode(document, this));
                 }
                 fis.close();
             }
         } catch (IOException e) {
             EASyLoggerFactory.INSTANCE.getLogger(YamlFileArtifact.class, Bundle.ID).error(
-                "While reading " + file + ": " + e.getMessage());
+                "While reading " + f + ": " + e.getMessage());
         }
+    }
+
+    @Override
+    public void artifactChanged(Object cause) throws VilException {
+        super.artifactChanged(cause);
+        initialize();
     }
 
     /**
@@ -136,8 +152,9 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
      * @return the new document instance
      */
     public YamlNode addDocument() {
-        YamlNode current = new YamlNode();
+        YamlNode current = new YamlNode(this);
         data.add(current);
+        notifyChanged();
         return current;
     }
 
@@ -149,48 +166,89 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
      */
     public YamlNode addDocument(YamlNode node) {
         data.add(node);
+        node.setParent(this);
+        notifyChanged();
         return node;
     }
     
+    /**
+     * Returns the known number of documents.
+     * 
+     * @return the number of documents
+     */
+    public int getDocumentCount() {
+        return data.size();
+    }
+    
+    /**
+     * Returns the specified document.
+     * 
+     * @param index the 0-based index of the document
+     * @return the specified document as {@link YamlNode}
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= {@link #getDocumentCount()}.
+     */
+    public YamlNode getDocument(int index) {
+        return data.get(index);
+    }
+
+    /**
+     * Removes the specified document.
+     * 
+     * @param index the 0-based index of the document
+     * @throws IndexOutOfBoundsException if index &lt; 0 || index &gt;= {@link #getDocumentCount()}.
+     */
+    public void deleteDocument(int index) {
+        data.remove(index);
+        notifyChanged();
+    }
+
     @Override
     public void store() throws VilException {
         super.store();
-        try {
-            File file = getPath().getAbsolutePath();
-            file.getParentFile().mkdirs();
-            FileWriter writer = new FileWriter(file);
-            
-            FormattingConfiguration cfg = Formatting.getFormattingConfiguration();
-            DumperOptions options = new DumperOptions();
-            FlowStyle style = FlowStyle.BLOCK;
+        if (changedByNodes) {
             try {
-                style = FlowStyle.valueOf(cfg.getProfileArgument("flowStyle", "BLOCK"));
-            } catch (IllegalArgumentException e) {
-                // take default
-            }
-            options.setDefaultFlowStyle(style);
-            options.setIndent(cfg.getIndentSteps());
-            options.setPrettyFlow(Boolean.valueOf(cfg.getProfileArgument("prettyFlow", "true")));
-            
-            Representer representer = new Representer(options);
-            //representer.addClassTag(ClassMap.class, Tag.OMAP);
-            
-            Yaml yaml = new Yaml(representer, options);
-            boolean first = true;
-            for (YamlNode node : data) {
-                if (!first) {
-                    writer.append("--\n");
+                File file = getPath().getAbsolutePath();
+                file.getParentFile().mkdirs();
+                FileWriter writer = new FileWriter(file);
+                
+                FormattingConfiguration cfg = Formatting.getFormattingConfiguration();
+                DumperOptions options = new DumperOptions();
+                FlowStyle style = FlowStyle.BLOCK;
+                try {
+                    style = FlowStyle.valueOf(cfg.getProfileArgument("flowStyle", "BLOCK"));
+                } catch (IllegalArgumentException e) {
+                    // take default
                 }
-                Map<String, Object> d = node.getData();
-                if (!d.isEmpty()) {
-                    yaml.dump(node.getData(), writer);
+                options.setDefaultFlowStyle(style);
+                options.setIndent(cfg.getIndentSteps());
+                options.setPrettyFlow(Boolean.valueOf(cfg.getProfileArgument("prettyFlow", "true")));
+                
+                Representer representer = new Representer(options);
+                //representer.addClassTag(ClassMap.class, Tag.OMAP);
+                
+                Yaml yaml = new Yaml(representer, options);
+                boolean first = true;
+                for (YamlNode node : data) {
+                    if (!first) {
+                        writer.append("--\n");
+                    }
+                    Map<String, Object> d = node.getData();
+                    if (!d.isEmpty()) {
+                        yaml.dump(node.getData(), writer);
+                    }
+                    first = false;
                 }
-                first = false;
+                writer.close();
+                changedByNodes = false;
+            } catch (IOException e) {
+                throw new VilException(e.getMessage(), e, VilException.ID_IO);
             }
-            writer.close();
-        } catch (IOException e) {
-            throw new VilException(e.getMessage(), e, VilException.ID_IO);
         }
+    }
+
+    @Override
+    public void notifyChanged() {
+        changedByNodes = true;
     }
     
 }

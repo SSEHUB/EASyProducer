@@ -15,10 +15,13 @@
  */
 package net.ssehub.easy.instantiation.json;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
+import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
@@ -30,49 +33,57 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
  * 
  * @author Holger Eichelberger
  */
-public class JsonNode implements IVilType, IStringValueProvider {
+public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
 
     private java.util.Map<String, Object> data;
+    private INodeParent parent;
 
     /**
      * Creates an empty instance.
+     *
+     * @param parent the node parent
      */
-    JsonNode() {
+    JsonNode(INodeParent parent) {
         data = new HashMap<>();
+        this.parent = parent;
     }
     
     /**
      * Creates an instance with given (typed) data map.
      * 
      * @param data the data map
+     * @param parent the node parent
      */
-    JsonNode(java.util.Map<String, Object> data) {
+    JsonNode(java.util.Map<String, Object> data, INodeParent parent) {
         this.data = data;
+        this.parent = parent;
     }
     
     /**
      * Creates an instance with arbitrry data from reading a YAML file.
      * 
      * @param data the data
+     * @param parent the node parent
      */
-    JsonNode(Object data) {
-        this();
+    JsonNode(Object data, INodeParent parent) {
+        this(parent);
         if (data instanceof Map) {
             Map<?, ?> value = (Map<?, ?>) data;
             for (Object key: value.keys()) {
                 Object val = value.get(key);
-                this.data.put(key.toString(), val); // TODO more key conversion, recursive?
+                this.data.put(key.toString(), val);
             }
         }
     }
     
     /**
-     * Creates an instance (VIL constructor).
+     * Returns whether a field for {@code name} is known / was added before.
      * 
-     * @return the instance
+     * @param name the name of the field
+     * @return {@code true} if the field exists, {@code false} else
      */
-    public static JsonNode create() {
-        return new JsonNode();
+    public boolean has(String name) {
+        return data.containsKey(name);
     }
 
     /**
@@ -84,6 +95,7 @@ public class JsonNode implements IVilType, IStringValueProvider {
      */
     public JsonNode addValue(String name, Object value) {
         data.put(name, value);
+        notifyChanged();
         return this;
     }
 
@@ -94,8 +106,9 @@ public class JsonNode implements IVilType, IStringValueProvider {
      * @return the node representing the object
      */
     public JsonNode addObject(String name) {
-        JsonNode node = new JsonNode(new HashMap<String, Object>());
+        JsonNode node = new JsonNode(new HashMap<String, Object>(), this);
         data.put(name, node);
+        notifyChanged();
         return node;
     }
 
@@ -107,6 +120,7 @@ public class JsonNode implements IVilType, IStringValueProvider {
      */
     public JsonNode delete(String name) {
         data.remove(name);
+        notifyChanged();
         return this;
     }
 
@@ -123,6 +137,7 @@ public class JsonNode implements IVilType, IStringValueProvider {
             tmp.add(o);
         }
         data.put(name, tmp);
+        notifyChanged();
         return this;
     }
 
@@ -135,8 +150,9 @@ public class JsonNode implements IVilType, IStringValueProvider {
     public JsonNode addValues(Map<?, ?> value) {
         for (Object key: value.keys()) {
             Object val = value.get(key);
-            data.put(key.toString(), val); // TODO more key conversion, recursive?
+            data.put(key.toString(), val);
         }
+        notifyChanged();
         return this;
     }
     
@@ -151,24 +167,45 @@ public class JsonNode implements IVilType, IStringValueProvider {
         java.util.Map<String, Object> tmp = new HashMap<>();
         for (Object key: value.keys()) {
             Object val = value.get(key);
-            tmp.put(key.toString(), val); // TODO more key conversion, recursive?
+            tmp.put(key.toString(), val);
         }
         data.put(name, tmp);
+        notifyChanged();
         return this;
     }
 
+    enum Sorting {
+        
+        NONE,
+        ALPHA,
+        COLLATOR
+        
+    }
+
     /**
-     * Returns the data in this node, formatted to be usedful for snakeyaml.
+     * Returns the data in this node, formatted to be useful for snakeyaml.
      * 
+     * @param sorting the sorting mode
      * @return the data
      */
     @Invisible
-    java.util.Map<String, Object> getData() {
-        java.util.Map<String, Object> result = new HashMap<>();
+    java.util.Map<String, Object> getData(Sorting sorting) {
+        java.util.Map<String, Object> result;
+        switch (sorting) {
+        case ALPHA:
+            result = new TreeMap<>((k1, k2) -> k1.compareTo(k2));
+            break;
+        case COLLATOR:
+            result = new TreeMap<>(Collator.getInstance(DefaultLocale.getDefaultLocale()));
+            break;
+        default: // including NONE
+            result = new HashMap<>();
+            break;
+        }
         for (String key: data.keySet()) {
             Object value = data.get(key);
             if (value instanceof JsonNode) {
-                value = ((JsonNode) value).getData();
+                value = ((JsonNode) value).getData(sorting);
             }
             result.put(key, value);
         }
@@ -177,7 +214,14 @@ public class JsonNode implements IVilType, IStringValueProvider {
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return comparator.inTracer() ? "JsonNode" : data.toString();
+        return null != comparator && comparator.inTracer() ? "JsonNode" : data.toString();
+    }
+
+    @Override
+    public void notifyChanged() {
+        if (null != parent) {
+            parent.notifyChanged();
+        }
     }
 
 }

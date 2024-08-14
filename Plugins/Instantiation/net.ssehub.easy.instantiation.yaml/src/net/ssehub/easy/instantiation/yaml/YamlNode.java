@@ -30,33 +30,40 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
  * 
  * @author Holger Eichelberger
  */
-public class YamlNode implements IVilType, IStringValueProvider {
+public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
 
     private java.util.Map<String, Object> data;
+    private INodeParent parent;
 
     /**
      * Creates an empty instance.
+     * 
+     * @param parent the parent to notify about changes
      */
-    YamlNode() {
+    YamlNode(INodeParent parent) {
         data = new HashMap<>();
+        setParent(parent);
     }
     
     /**
      * Creates an instance with given (typed) data map.
      * 
      * @param data the data map
+     * @param parent the parent to notify about changes
      */
-    YamlNode(java.util.Map<String, Object> data) {
+    YamlNode(java.util.Map<String, Object> data, INodeParent parent) {
         this.data = data;
+        setParent(parent);
     }
     
     /**
-     * Creates an instance with arbitrry data from reading a YAML file.
+     * Creates an instance with arbitrary data from reading a YAML file.
      * 
      * @param data the data
+     * @param parent the parent to notify about changes
      */
-    YamlNode(Object data) {
-        this();
+    YamlNode(Object data, INodeParent parent) {
+        this(parent);
         if (data instanceof Map) {
             Map<?, ?> value = (Map<?, ?>) data;
             for (Object key: value.keys()) {
@@ -66,13 +73,27 @@ public class YamlNode implements IVilType, IStringValueProvider {
         }
     }
     
+    void setParent(INodeParent parent) {
+        this.parent = parent;
+    }
+    
     /**
      * Creates an instance (VIL constructor).
      * 
      * @return the instance
      */
     public static YamlNode create() {
-        return new YamlNode();
+        return new YamlNode(null);
+    }
+
+    /**
+     * Returns whether a field for {@code name} is known / was added before.
+     * 
+     * @param name the name of the field
+     * @return {@code true} if the field exists, {@code false} else
+     */
+    public boolean has(String name) {
+        return data.containsKey(name);
     }
 
     /**
@@ -84,6 +105,7 @@ public class YamlNode implements IVilType, IStringValueProvider {
      */
     public YamlNode addValue(String name, Object value) {
         data.put(name, value);
+        notifyChanged();
         return this;
     }
 
@@ -94,8 +116,9 @@ public class YamlNode implements IVilType, IStringValueProvider {
      * @return the node representing the object
      */
     public YamlNode addObject(String name) {
-        YamlNode node = new YamlNode(new ClassMap());
+        YamlNode node = new YamlNode(new ClassMap(), this);
         data.put(name, node);
+        notifyChanged();
         return node;
     }
 
@@ -107,6 +130,7 @@ public class YamlNode implements IVilType, IStringValueProvider {
      */
     public YamlNode delete(String name) {
         data.remove(name);
+        notifyChanged();
         return this;
     }
 
@@ -123,6 +147,7 @@ public class YamlNode implements IVilType, IStringValueProvider {
             tmp.add(o);
         }
         data.put(name, tmp);
+        notifyChanged();
         return this;
     }
 
@@ -137,6 +162,7 @@ public class YamlNode implements IVilType, IStringValueProvider {
             Object val = value.get(key);
             data.put(key.toString(), val); // TODO more key conversion, recursive?
         }
+        notifyChanged();
         return this;
     }
     
@@ -154,6 +180,7 @@ public class YamlNode implements IVilType, IStringValueProvider {
             tmp.put(key.toString(), val); // TODO more key conversion, recursive?
         }
         data.put(name, tmp);
+        notifyChanged();
         return this;
     }
 
@@ -177,7 +204,14 @@ public class YamlNode implements IVilType, IStringValueProvider {
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return comparator.inTracer() ? "YamlNode" : data.toString();
+        return null != comparator && comparator.inTracer() ? "YamlNode" : data.toString();
+    }
+
+    @Override
+    public void notifyChanged() {
+        if (null != parent) {
+            parent.notifyChanged();
+        }
     }
 
 }

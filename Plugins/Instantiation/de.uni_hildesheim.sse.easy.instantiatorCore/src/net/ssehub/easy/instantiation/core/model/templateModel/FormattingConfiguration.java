@@ -133,7 +133,14 @@ public class FormattingConfiguration {
      * @return the argument value, may be {@code dflt} in particular if {@code name} is <b>null</b>
      */
     public String getProfileArgument(String name, String dflt) {
-        return null != name ? profileArguments.get(name) : dflt;
+        String result = dflt;
+        if (name != null) {
+            String tmp = profileArguments.get(name);
+            if (tmp != null) {
+                result = tmp;
+            }
+        }
+        return result;
     }
 
     /**

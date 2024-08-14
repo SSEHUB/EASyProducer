@@ -35,6 +35,11 @@ public class JsonArtifactCreator extends DefaultFileArtifactCreator {
     protected boolean handlesFileImpl(File file) {
         return checkSuffix(file, ".json");
     }
+    
+    @Override
+    public boolean handlesFallback(Class<? extends IArtifact> kind, File file) {
+        return kind == JsonFileArtifact.class;
+    }
 
     @Override
     public FileArtifact createArtifactInstance(Object real, ArtifactModel model) throws VilException {

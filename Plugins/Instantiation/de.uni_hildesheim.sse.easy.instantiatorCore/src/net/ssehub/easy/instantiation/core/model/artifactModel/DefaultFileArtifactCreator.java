@@ -77,7 +77,19 @@ public class DefaultFileArtifactCreator implements IArtifactCreator {
     @Override
     public boolean handlesArtifact(Class<? extends IArtifact> kind, Object real) {
         // handle self and those I inherit from (e.g., interfaces)
-        return kind.isAssignableFrom(getArtifactClass()) && real instanceof File && handlesFile((File) real);
+        return kind.isAssignableFrom(getArtifactClass()) && real instanceof File 
+            && (handlesFile((File) real) || handlesFallback(kind, (File) real));
+    }
+    
+    /**
+     * Allows for fallback if the primary decision, e.g., based on file name extensions is not sufficient.
+     * 
+     * @param kind the kind of artifact, may be the exact class to look for
+     * @param file the file, e.g., must be a file rather than a folder
+     * @return {@code true} if this artifact creator handles the request as fallback, {@code false} else
+     */
+    public boolean handlesFallback(Class<? extends IArtifact> kind, File file) {
+        return false;
     }
 
     @Override

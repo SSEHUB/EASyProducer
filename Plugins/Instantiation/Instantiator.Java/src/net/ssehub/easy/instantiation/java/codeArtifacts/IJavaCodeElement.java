@@ -86,7 +86,7 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     @Invisible(inherit = true)
     @Override
     public default String getStringValue(StringComparator comparator) {
-        if (comparator.inTracer()) { // for testing, short form for simplifying the traces
+        if (null != comparator && comparator.inTracer()) { // for testing, short form for simplifying the traces
             return getTracerStringValue(comparator);
         } else {
             return toCode();

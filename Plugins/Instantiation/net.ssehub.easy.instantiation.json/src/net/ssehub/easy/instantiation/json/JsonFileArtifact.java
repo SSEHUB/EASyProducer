@@ -17,7 +17,6 @@ package net.ssehub.easy.instantiation.json;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -35,6 +34,9 @@ import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfigur
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.json.JsonNode.Sorting;
 
 /**
  * Represents a JSON file artifact.
@@ -42,9 +44,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * @author Holger Eichelberger
  */
 @ArtifactCreator(JsonArtifactCreator.class)
-public class JsonFileArtifact extends FileArtifact implements IStringValueProvider {
+public class JsonFileArtifact extends FileArtifact implements IStringValueProvider, INodeParent {
 
-    private JsonNode data = new JsonNode();
+    private JsonNode data = new JsonNode(this);
+    private boolean changedByNodes = false;
     
     /**
      * Creates an instance without file backing.
@@ -58,20 +61,34 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
      * 
      * @param file the file
      * @param model the artifact model instance
+     * @see #initialize()
      */
     protected JsonFileArtifact(File file, ArtifactModel model) {
         super(file, model);
+        initialize();
+    }
+
+    /**
+     * Initializes {@code data} from an underlying file.
+     */
+    private void initialize() {
+        File f = getPath().getAbsolutePath();
         try {
-            File f = getPath().getAbsolutePath();
             if (f.exists()) {
                 ObjectMapper mapper = new ObjectMapper();
-                Map<?, ?> data = mapper.readValue(f, Map.class);
-                this.data = new JsonNode(data);
+                java.util.Map<?, ?> data = mapper.readValue(f, java.util.Map.class);
+                this.data = new JsonNode(data, this);
             }
         } catch (IOException e) {
             EASyLoggerFactory.INSTANCE.getLogger(JsonFileArtifact.class, Bundle.ID).error(
-                "While reading " + file + ": " + e.getMessage());
+                "While reading " + f + ": " + e.getMessage());
         }
+    }
+    
+    @Override
+    public void artifactChanged(Object cause) throws VilException {
+        super.artifactChanged(cause);
+        initialize();
     }
 
     /**
@@ -122,6 +139,80 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
     }    
     
     /**
+     * Returns whether a field for {@code name} is known / was added before.
+     * 
+     * @param name the name of the field
+     * @return {@code true} if the field exists, {@code false} else
+     */
+    public boolean has(String name) {
+        return data.has(name);
+    }
+
+    /**
+     * Adds a single value.
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public JsonNode addValue(String name, Object value) {
+        return data.addValue(name, value);
+    }
+
+    /**
+     * Adds an object as sub-structure.
+     * 
+     * @param name the name of the field
+     * @return the node representing the object
+     */
+    public JsonNode addObject(String name) {
+        return data.addObject(name);
+    }
+
+    /**
+     * Deletes a field and its value.
+     * 
+     * @param name the name of the field
+     * @return <b>this</b> for chaining
+     */
+    public JsonNode delete(String name) {
+        return data.delete(name);
+    }
+
+    /**
+     * Adds a field with value list.
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public JsonNode addList(String name, Sequence<?> value) {
+        return data.addList(name, value);
+    }
+
+    /**
+     * Adds the fields within the given map to this node.
+     * 
+     * @param value the map value(s)
+     * @return <b>this</b> for chaining
+     */
+    public JsonNode addValues(Map<Object, Object> value) {
+        return data.addValues(value);
+    }
+    
+    /**
+     * Adds a field with value map.
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public JsonNode addMap(String name, Map<?, ?> value) {
+        return data.addMap(name, value);
+    }
+    
+    
+    /**
      * Returns the JSON node represented by this artifact.
      * 
      * @return the node
@@ -133,22 +224,35 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
     @Override
     public void store() throws VilException {
         super.store();
-        try {
-            File file = getPath().getAbsolutePath();
-            file.getParentFile().mkdirs();
-            
-            FormattingConfiguration cfg = Formatting.getFormattingConfiguration();
-
-            ObjectMapper mapper = new ObjectMapper();
-            ObjectWriter writer = mapper.writer();
-            if (Boolean.valueOf(cfg.getProfileArgument("prettyPrint", "true"))) {
-                writer = mapper.writerWithDefaultPrettyPrinter();
+        if (changedByNodes) {
+            try {
+                File file = getPath().getAbsolutePath();
+                file.getParentFile().mkdirs();
+                
+                FormattingConfiguration cfg = Formatting.getFormattingConfiguration();
+    
+                ObjectMapper mapper = new ObjectMapper();
+                Sorting sorting = Sorting.NONE;
+                try {
+                    sorting = Sorting.valueOf(cfg.getProfileArgument("sorting", "NONE").toUpperCase());
+                } catch (IllegalArgumentException e) {
+                    // stay with NONE
+                }
+                ObjectWriter writer = mapper.writer();
+                if (Boolean.valueOf(cfg.getProfileArgument("prettyPrint", "true"))) {
+                    writer = mapper.writerWithDefaultPrettyPrinter();
+                }
+                writer.writeValue(file, data.getData(sorting));
+                changedByNodes = false;
+            } catch (IOException e) {
+                throw new VilException(e.getMessage(), e, VilException.ID_IO);
             }
-            writer.writeValue(file, data.getData());
-        } catch (IOException e) {
-            throw new VilException(e.getMessage(), e, VilException.ID_IO);
         }
     }
-    
+
+    @Override
+    public void notifyChanged() {
+        changedByNodes = true;
+    }
 
 }
