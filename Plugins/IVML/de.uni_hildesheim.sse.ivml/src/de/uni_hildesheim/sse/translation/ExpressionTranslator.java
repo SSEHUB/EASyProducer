@@ -1731,7 +1731,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 if (null != entry.getAttrib()) {
                     boolean found = findSlotOrAttribute(comp, entry.getAttrib()); // "." looks like attribute
                     slots[e] += "." + entry.getAttrib();
-                    slotDecls[e] = slotDecls[e].getAttribute(entry.getAttrib());
+                    slotDecls[e] = slotDecls[e].getAttribute(entry.getAttrib()); // may be null, also for below
                     if (!found) {
                         warning("attribute '" + slots[e] + "' does not exist in '"
                             + lhsType.getName() + "'", entry, IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE,
@@ -1743,7 +1743,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 exprs[e] = processImplicationExpression(entry.getValue(), context, parent);
                 IDatatype exprType = exprs[e].inferDatatype();
                 if (null != entry.getName() || null != entry.getAttrib()) { // named compound or attribute slot 
-                    if (!slotDecls[e].getType().isAssignableFrom(exprType) 
+                    if (null != slotDecls[e] && !slotDecls[e].getType().isAssignableFrom(exprType) 
                         // we allowed the shortcut refTo(x) = x so far 
                         && !Reference.dereference(slotDecls[e].getType()).getType().isAssignableFrom(exprType)) {
                         error("expression for slot '" + slots[e] + "' does not comply with '" 
