@@ -1729,11 +1729,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                         ErrorCodes.UNKNOWN_ELEMENT);
                 }
                 if (null != entry.getAttrib()) {
-                    boolean found = findSlotOrAttribute(comp, entry.getAttrib()); // "." looks like attribute
                     slots[e] += "." + entry.getAttrib();
-                    slotDecls[e] = slotDecls[e].getAttribute(entry.getAttrib()); // may be null, also for below
-                    if (!found) {
-                        warning("attribute '" + slots[e] + "' does not exist in '"
+                    slotDecls[e] = findSlotOrAttribute(comp, slots[e]);
+                    if (slotDecls[e] == null) {
+                        warning("field/attribute '" + slots[e] + "' does not exist in '"
                             + lhsType.getName() + "'", entry, IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE,
                             ErrorCodes.UNKNOWN_ELEMENT); // TODO warning for now, may become error
                     }
@@ -1745,7 +1744,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 if (null != entry.getName() || null != entry.getAttrib()) { // named compound or attribute slot 
                     if (null != slotDecls[e] && !slotDecls[e].getType().isAssignableFrom(exprType) 
                         // we allowed the shortcut refTo(x) = x so far 
-                        && !Reference.dereference(slotDecls[e].getType()).getType().isAssignableFrom(exprType)) {
+                        && !Reference.dereference(slotDecls[e].getType()).isAssignableFrom(
+                            Reference.dereference(exprType))) {
                         error("expression for slot '" + slots[e] + "' does not comply with '" 
                             + IvmlDatatypeVisitor.getUnqualifiedType(slotDecls[e].getType()) + "'", 
                             entryList.get(e), IvmlPackage.Literals.EXPRESSION_LIST_ENTRY__VALUE,
@@ -1780,10 +1780,10 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * 
      * @param comp the compound
      * @param name the name, may contain separating "."
-     * @return {@code true} if found, {@code false} else
+     * @return the slot declaration or <b>null</b> for none
      */
-    private boolean findSlotOrAttribute(Compound comp, String name) {
-        boolean found = false;
+    private AbstractVariable findSlotOrAttribute(Compound comp, String name) {
+        AbstractVariable result = null;
         String check = name;
         String rest = null;
         int pos = name.indexOf(".");
@@ -1797,15 +1797,13 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 IDatatype type = decl.getType();
                 type = DerivedDatatype.resolveToBasis(type); // refTo?
                 if (type instanceof Compound) {
-                    found = findSlotOrAttribute((Compound) type, rest);
-                } else {
-                    found = false;
+                    result = findSlotOrAttribute((Compound) type, rest);
                 }
             } else {
-                found = true;
+                result = decl;
             }
         }
-        return found;
+        return result;
     }
 
     /**
