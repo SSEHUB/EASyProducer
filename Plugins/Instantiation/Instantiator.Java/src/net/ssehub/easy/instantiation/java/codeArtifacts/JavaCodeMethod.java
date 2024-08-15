@@ -270,6 +270,16 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     }
     
     /**
+     * Adds a throw statement.
+     * 
+     * @param expression the expression to throw
+     * @return throw statement
+     */
+    public JavaCodeThrow addThrow(String expression) {
+        return block.addThrow(expression);
+    }
+    
+    /**
      * Adds a switch block.
      * 
      * @param expression the switch expression

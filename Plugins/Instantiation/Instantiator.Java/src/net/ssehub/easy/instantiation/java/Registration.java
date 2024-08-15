@@ -38,6 +38,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeWhileLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTryBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVariableDeclaration;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSynchronizedBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeThrow;
 import net.ssehub.easy.instantiation.java.instantiators.CocktailInstantiator;
 import net.ssehub.easy.instantiation.java.instantiators.Jar;
 import net.ssehub.easy.instantiation.java.instantiators.Javac;
@@ -106,6 +107,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeWhileLoop.class);
             TypeRegistry.DEFAULT.register(JavaCodeForLoop.class);
             TypeRegistry.DEFAULT.register(JavaCodeAlternative.class);
+            TypeRegistry.DEFAULT.register(JavaCodeThrow.class);
             TypeRegistry.DEFAULT.register(JavaCodeSwitch.class);
             TypeRegistry.DEFAULT.register(JavaCodeTryBlock.JavaCodeCatchBlock.class);
             TypeRegistry.DEFAULT.register(JavaCodeTryBlock.class);

@@ -119,6 +119,16 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
     }
 
     /**
+     * Adds a constructor call as argument.
+     * 
+     * @param cls the name of the class, may be qualified
+     * @return the method call (for chaining)
+     */
+    public JavaCodeConstructorCall addNew(String cls) {
+        return IJavaCodeElement.add(arguments, new JavaCodeConstructorCall(this, cls, false, ""));
+    }
+    
+    /**
      * Returns a prefix to be emitted before the method name.
      * 
      * @return the prefix, "" by default

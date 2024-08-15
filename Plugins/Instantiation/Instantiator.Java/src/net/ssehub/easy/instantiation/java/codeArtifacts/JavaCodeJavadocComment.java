@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang.StringEscapeUtils;
@@ -82,12 +83,15 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             this.comment = comment;
         }
 
-        public void store(CodeWriter out) {
+        public void store(CodeWriter out, AtomicInteger count) {
             String middle = "";
             if (name != null && name.length() > 0) {
                 middle = " " + name;
             }
             out.printlnwi(" * " + tag.getTag() + middle + " " + escapeHtml(comment));
+            if (null != count) {
+                count.incrementAndGet();
+            }
         }
 
     }
@@ -101,18 +105,25 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             for (String l : lines) {
                 out.printlnwi(" * " + escapeHtml(l.trim()));
             }
-            if (null != taggedParts) {
-                if (attachedTo instanceof JavaCodeMethod) {
-                    out.printlnwi(" *");
-                    streamByTag(Tag.PARAM).forEach(t -> t.store(out));
-                    streamByTag(Tag.RETURN).forEach(t -> t.store(out));
-                    if (streamByTag(Tag.THROWS).count() > 0) {
+            storeTags(out);
+            out.printlnwi(" */");
+        }
+    }
+    
+    private void storeTags(CodeWriter out) {
+        if (null != taggedParts) {
+            if (attachedTo instanceof JavaCodeMethod) {
+                AtomicInteger before = new AtomicInteger();
+                out.printlnwi(" *");
+                streamByTag(Tag.PARAM).forEach(t -> t.store(out, before));
+                streamByTag(Tag.RETURN).forEach(t -> t.store(out, before));
+                if (streamByTag(Tag.THROWS).count() > 0) {
+                    if (before.get() > 0) {
                         out.printlnwi(" *");
-                        streamByTag(Tag.THROWS).forEach(t -> t.store(out));
                     }
+                    streamByTag(Tag.THROWS).forEach(t -> t.store(out, null));
                 }
             }
-            out.printlnwi(" */");
         }
     }
     

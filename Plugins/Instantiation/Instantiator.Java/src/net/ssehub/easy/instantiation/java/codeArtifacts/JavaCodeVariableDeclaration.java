@@ -27,7 +27,8 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
     private boolean isFinal;
     private String initializer;
     private JavaCodeMethodCall initCall;
-    
+    private boolean asResource;
+
     /**
      * Creates a variable declaration.
      * 
@@ -39,11 +40,28 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      */
     public JavaCodeVariableDeclaration(IJavaCodeElement parent, JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, String initializer) {
+        this(parent, type, variableName, isFinal, initializer, false);
+    }
+    
+    /**
+     * Creates a variable declaration.
+     * 
+     * @param parent the parent
+     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param variableName the variable name
+     * @param isFinal whether the variable shall be final
+     * @param initializer the initializer, may be <b>null</b> for none
+     * @param asResource {@code true} if this declaration is used in a try resource declaration, {@code false} for 
+     *     "normal" variable declarations
+     */
+    public JavaCodeVariableDeclaration(IJavaCodeElement parent, JavaCodeTypeSpecification type, String variableName, 
+        boolean isFinal, String initializer, boolean asResource) {
         super(parent);
         this.type = type;
         this.variableName = variableName;
         this.isFinal = isFinal;
         this.initializer = initializer;
+        this.asResource = asResource;
     }
 
     /**
@@ -90,7 +108,9 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
 
     @Override
     public void store(CodeWriter out) {
-        out.printIndent();
+        if (!asResource) {
+            out.printIndent();
+        }
         if (isFinal) {
             out.print("final ");
         }
@@ -108,7 +128,9 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
             out.print(" = ");
             out.print(initializer);
         }
-        out.println(";");
+        if (!asResource) {
+            out.println(";");
+        }
     }
 
 }

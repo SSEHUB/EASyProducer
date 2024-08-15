@@ -246,7 +246,17 @@ public class JavaCodeBlock extends JavaCodeStatement {
     public JavaCodeAlternative addIf(String condition) {
         return IJavaCodeElement.add(elements, new JavaCodeAlternative(this, condition));
     }
-    
+
+    /**
+     * Adds a throw statement.
+     * 
+     * @param expression the expression to throw
+     * @return throw statement
+     */
+    public JavaCodeThrow addThrow(String expression) {
+        return IJavaCodeElement.add(elements, new JavaCodeThrow(this, expression));
+    }
+
     /**
      * Adds a switch block.
      * 

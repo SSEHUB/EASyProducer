@@ -68,6 +68,11 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
     public JavaCodeConstructorCall addArgument(String methodName, JavaCodeImportScope scope) {
         return (JavaCodeConstructorCall) super.addArgument(methodName, scope);
     }
+    
+    @Override
+    public JavaCodeConstructorCall addNew(String cls) {
+        return (JavaCodeConstructorCall) super.addNew(cls);
+    }
 
     @Override
     protected String getCallPrefix() {

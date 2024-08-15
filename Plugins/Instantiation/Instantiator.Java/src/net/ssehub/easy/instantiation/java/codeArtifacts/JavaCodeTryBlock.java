@@ -29,6 +29,8 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
     
     private List<JavaCodeCatchBlock> catches = new ArrayList<>();
     private JavaCodeBlock finallyBlock;
+    private String tryDecl;
+    private List<JavaCodeVariableDeclaration> tryDecls;
     
     /**
      * A case block.
@@ -124,11 +126,49 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
         finallyBlock = new JavaCodeBlock(this, true, false);
         return finallyBlock;
     }
+    
+    /**
+     * Creates a resource variable declaration.
+     * 
+     * @param tryDecl the try-resource declaration as single tring
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeTryBlock addResource(String tryDecl) {
+        this.tryDecl = tryDecl;
+        return this;
+    }
+    
+    /**
+     * Creates a resource variable declaration.
+     * 
+     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param variableName the variable name
+     * @param initializer the initializer, may be <b>null</b> for none
+     * @return the variable declaration (for chaining)
+     */
+    public JavaCodeVariableDeclaration addResource(String type, String variableName, 
+        String initializer) {
+        if (null == tryDecls) {
+            tryDecls = new ArrayList<>();
+        }
+        JavaCodeTypeSpecification t = null == type ? null : new JavaCodeTypeSpecification(type, getParentClass());
+        return IJavaCodeElement.add(tryDecls, new JavaCodeVariableDeclaration(this, t, variableName, 
+            false, initializer, true));
+    }
 
     @Invisible
     @Override
     public void store(CodeWriter out) {
         out.printwi("try");
+        if (null != tryDecls || null != tryDecl) {
+            out.print(" (");
+            if (null != tryDecl) {
+                out.print(tryDecl);
+            } else {
+                IJavaCodeElement.storeList(tryDecls, "; ", out);
+            }
+            out.print(")");
+        } 
         super.store(out);
         for (JavaCodeCatchBlock c : catches) {
             c.store(out);
