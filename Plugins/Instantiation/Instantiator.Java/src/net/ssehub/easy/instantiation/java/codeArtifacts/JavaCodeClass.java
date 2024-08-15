@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
- * Representes a Java code class.
+ * Representes a Java class in code.
  * 
  * @author Holger Eichelberger
  */
@@ -41,7 +41,8 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     public enum Kind {
         CLASS("class"),
         INTERFACE("interface"),
-        ANNOTATION("@interface");
+        ANNOTATION("@interface"),
+        ENUM("enum");
         
         private String keyword;
         
@@ -55,15 +56,34 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         
     }
     
+    /**
+     * Creates a public class with given name in {@code artifact}.
+     * 
+     * @param name the name of the class
+     * @param artifact the name of the containing artifact
+     */
     JavaCodeClass(String name, IJavaCodeArtifact artifact) {
         this(name, artifact, null);
     }
 
+    /**
+     * Creates a public enum with given name and comment as top-level entity in {@code artifact}.
+     * 
+     * @param name the name of the enum
+     * @param artifact the name of the containing artifact
+     * @param comment the describing comment of the enum
+     */
     JavaCodeClass(String name, IJavaCodeArtifact artifact, String comment) {
         super(name, JavaCodeVisibility.PUBLIC, comment);
         this.artifact = artifact;
     }
 
+    /**
+     * Creates a nested class with given name within {@code enclosing}.
+     * 
+     * @param name the name of the class
+     * @param enclosing the enclosing class
+     */
     JavaCodeClass(String name, JavaCodeClass enclosing) {
         super(name, JavaCodeVisibility.PUBLIC, null);
         this.enclosing = enclosing;
@@ -125,17 +145,24 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
     
     public JavaCodeClass addInterface(String type) {
+        if (null == implementedInterfaces) {
+            implementedInterfaces = new ArrayList<>();
+        }
         IJavaCodeElement.add(implementedInterfaces, JavaCodeTypeSpecification.create(type, this));
         return this;
     }
     
+    protected void setKind(Kind kind) {
+        this.kind = kind;
+    }
+    
     public JavaCodeClass asInterface() {
-        kind = Kind.INTERFACE;
+        setKind(Kind.INTERFACE);
         return this;
     }
     
     public JavaCodeClass asAnnotation() {
-        kind = Kind.ANNOTATION;
+        setKind(Kind.ANNOTATION);
         return this;
     }
 
@@ -148,6 +175,19 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             .setStatic();
         result.addParameter("String[]", param, paramComment);
         return result;
+    }
+
+    public JavaCodeMethod addConstructor() {
+        return addMethod(getName(), null);
+    }
+
+    public JavaCodeMethod addConstructor(String comment) {
+        return IJavaCodeElement.add(elements, 
+            configureConstructor(new JavaCodeMethod(null, getName(), this, comment)));
+    }
+    
+    protected JavaCodeMethod configureConstructor(JavaCodeMethod cons) {
+        return cons;
     }
 
     public JavaCodeMethod addMethod(String name) {
@@ -163,6 +203,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         return IJavaCodeElement.add(elements, 
             new JavaCodeMethod(JavaCodeTypeSpecification.create(type, this), name, this, comment));
     }
+    
     public JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name, String comment) {
         return IJavaCodeElement.add(elements, new JavaCodeMethod(type, name, this, comment));
     }
@@ -270,6 +311,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     protected void storeBlock(CodeWriter out) {
         out.println(" {");
         out.increaseIndent();
+        storeAtBlockStart(out);
         if (elements.size() > 0) {
             out.println();
             newLineStrategy.start();
@@ -285,6 +327,14 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         }
         out.decreaseIndent();
         out.printwi("}");        
+    }
+
+    /**
+     * Called before storing the code elements at the beginning of the block.
+     * 
+     * @param out the code writer
+     */
+    protected void storeAtBlockStart(CodeWriter out) {
     }
 
     @Override
@@ -326,6 +376,10 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             iter = iter.getParent();
         }
         return iter instanceof JavaCodeClass ? (JavaCodeClass) iter : null;
+    }
+    
+    protected int getElementsCount() {
+        return elements.size();
     }
 
 }

@@ -82,6 +82,15 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     }
 
     /**
+     * Adds an override annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addOverrideAnnotation() {
+        return addAnnotation("Override");
+    }
+
+    /**
      * Adds a (formal) method parameter.
      * 
      * @param type the type of the parameter
@@ -472,8 +481,10 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     public void store(CodeWriter out) {
         super.store(out); // comment, annotations
         out.printwi(getModifier());
-        type.store(out);
-        out.print(" ");
+        if (null != type) { // constructor?
+            type.store(out);
+            out.print(" ");
+        }
         out.print(getName());
         out.print("(");
         IJavaCodeElement.storeList(parameter, ", ", out);

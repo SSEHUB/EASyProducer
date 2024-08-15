@@ -26,11 +26,14 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeElement;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum.JavaCodeEnumConstant;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParameterSpecification;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeStatement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSwitch;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVisibility;
@@ -101,6 +104,8 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeAnnotation.class);
             TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
             TypeRegistry.DEFAULT.register(JavaCodeClass.class);
+            TypeRegistry.DEFAULT.register(JavaCodeEnum.class);
+            TypeRegistry.DEFAULT.register(JavaCodeEnumConstant.class);
             TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);
             TypeRegistry.DEFAULT.register(JavaCodeBlock.class);
             TypeRegistry.DEFAULT.register(JavaCodeDoLoop.class);
@@ -119,6 +124,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
             TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
             TypeRegistry.DEFAULT.register(JavaCodeVariableDeclaration.class);
+            TypeRegistry.DEFAULT.register(JavaCodeParameterSpecification.class);
             
             DefaultLib.appendDefaultLibURLQuietly(Registration.class.getClassLoader(), 
                 Bundle.ID, context, "Instantiator.Java");

@@ -399,4 +399,15 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertJavaCode("javaCode3", "JCATest3");
     }
 
+    /**
+     * Test the JavaCode artifact for enums.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testJavaCode4() throws IOException {
+        assertJavaCode("javaCode4", "JCATest4");
+    }
+
 }

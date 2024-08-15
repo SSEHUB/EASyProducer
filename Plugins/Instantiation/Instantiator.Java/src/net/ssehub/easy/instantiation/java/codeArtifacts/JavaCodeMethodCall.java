@@ -48,6 +48,15 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         this.indent = indent;
         this.postfix = postfix;
     }
+    
+    /**
+     * Returns the method name.
+     * 
+     * @return the method name
+     */
+    public String getMethodName() {
+        return methodName;
+    }
 
     /**
      * Validates and potentially modifies the method name, e.g., by importing the prefixed qualified type.
@@ -128,13 +137,8 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         return IJavaCodeElement.add(arguments, new JavaCodeConstructorCall(this, cls, false, ""));
     }
     
-    /**
-     * Returns a prefix to be emitted before the method name.
-     * 
-     * @return the prefix, "" by default
-     */
-    protected String getCallPrefix() {
-        return "";
+    public int getArgumentsCount() {
+        return arguments.size();
     }
     
     @Override
@@ -142,8 +146,15 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         if (indent) {
             out.printIndent();
         }
-        out.print(getCallPrefix());
+        storeBefore(out);
         out.print(methodName);
+        storeArgumentList(out);
+    }
+    
+    protected void storeBefore(CodeWriter out) {
+    }
+    
+    protected void storeArgumentList(CodeWriter out) {
         out.print("(");
         IJavaCodeElement.storeList(arguments, ",", out);
         out.print(")" + postfix);

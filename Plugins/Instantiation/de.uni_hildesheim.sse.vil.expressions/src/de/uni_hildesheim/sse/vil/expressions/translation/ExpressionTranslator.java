@@ -185,10 +185,12 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
     public E processExpressionStatement(de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionStatement expr, 
         R resolver) throws TranslatorException {
         Expression result = processExpression(expr.getExpr(), resolver);
-        try {
-            result.inferType();
-        } catch (VilException e) {
-            throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__EXPR);
+        if (result != null) { // null: partial, erroneous editing
+            try {
+                result.inferType();
+            } catch (VilException e) {
+                throw new TranslatorException(e, expr, ExpressionDslPackage.Literals.EXPRESSION_STATEMENT__EXPR);
+            }
         }
         if (null != expr.getVar()) {
             I decl = resolver.resolve(expr.getVar(), false, expr, 

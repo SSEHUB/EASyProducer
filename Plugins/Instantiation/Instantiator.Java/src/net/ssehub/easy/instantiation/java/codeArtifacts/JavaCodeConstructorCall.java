@@ -73,10 +73,9 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
     public JavaCodeConstructorCall addNew(String cls) {
         return (JavaCodeConstructorCall) super.addNew(cls);
     }
-
-    @Override
-    protected String getCallPrefix() {
-        return "new ";
+    
+    protected void storeBefore(CodeWriter out) {
+        out.print("new ");
     }
 
 }

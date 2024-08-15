@@ -173,9 +173,26 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         return IJavaCodeElement.add(elements, new JavaCodeClass(name, this, comment));
     }
 
-    /*public JavaCodeJavadocComment setJavadocComment(String comment) {
-        return new JavaCodeJavadocComment(comment);
-    }*/ // --> plain comment
+    /**
+     * Adds a public enum with the given name.
+     * 
+     * @param name the enum name
+     * @return the enum
+     */
+    public JavaCodeEnum addEnum(String name) {
+        return IJavaCodeElement.add(elements, new JavaCodeEnum(name, this));
+    }
+
+    /**
+     * Adds a public enum with the given name.
+     * 
+     * @param name the enum name
+     * @param comment the javadoc comment of the class
+     * @return the enum
+     */
+    public JavaCodeEnum addEnum(String name, String comment) {
+        return IJavaCodeElement.add(elements, new JavaCodeEnum(name, this, comment));
+    }
     
     /**
      * Sets the (optional) package name.

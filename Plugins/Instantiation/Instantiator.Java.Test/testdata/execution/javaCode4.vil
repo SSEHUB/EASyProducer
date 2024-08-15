@@ -1,0 +1,7 @@
+vilScript JavaCode4 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("JavaCode4Tpl", config, "$target/JCATest4.java");
+    }
+
+}
