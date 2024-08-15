@@ -34,6 +34,8 @@ Require-Bundle:
  net.ssehub.easy.instantiation.aspectj,
  net.ssehub.easy.instantiation.xvcl,
  net.ssehub.easy.instantiation.velocity,
+ net.ssehub.easy.instantiation.json,
+ net.ssehub.easy.instantiation.yaml,
  de.uni_hildesheim.sse.vil.templatelang.ui,
  de.uni_hildesheim.sse.vil.rt.ui,
  de.uni_hildesheim.sse.ivml.ui,
