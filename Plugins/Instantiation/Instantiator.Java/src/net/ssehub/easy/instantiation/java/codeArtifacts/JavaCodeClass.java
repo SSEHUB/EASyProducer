@@ -303,7 +303,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             out.print(" extends ");
             extendingClass.store(out);
         }
-        IJavaCodeElement.storeList(" ", implementedInterfaces, ", ", out);
+        IJavaCodeElement.storeList(" implements ", implementedInterfaces, ", ", out);
         storeBlock(out);
         out.println();
     }

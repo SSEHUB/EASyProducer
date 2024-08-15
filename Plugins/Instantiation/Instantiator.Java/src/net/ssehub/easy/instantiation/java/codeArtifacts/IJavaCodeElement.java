@@ -172,7 +172,7 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
      * @param out the target code writer
      */
     static void storeList(String prefix, List<? extends IJavaCodeElement> elements, String separator, CodeWriter out) {
-        if (null != elements) {
+        if (null != elements && elements.size() > 0) {
             if (prefix != null && prefix.length() > 0) {
                 out.print(prefix);
             }
