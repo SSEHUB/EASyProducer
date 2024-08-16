@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
-import de.uni_hildesheim.sse.easy.loader.ListLoader;
+import de.uni_hildesheim.sse.easy.loader.ManifestLoader;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
@@ -84,7 +84,8 @@ public class LowlevelCommands {
      * @throws IOException in case of loading the startup sequence fails.
      */
     public static void startEASy() throws IOException {
-        ListLoader loader = new ListLoader();
+        ManifestLoader loader = new ManifestLoader();
         loader.startup();
+        
     }
 }

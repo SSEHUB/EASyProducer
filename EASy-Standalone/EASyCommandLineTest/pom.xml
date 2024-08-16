@@ -17,7 +17,7 @@
   <build>
       <sourceDirectory>${basedir}/src</sourceDirectory>
       <testSourceDirectory>${basedir}/src</testSourceDirectory>
-      <outputDirectory>bin/classes</outputDirectory>
+      <outputDirectory>bin/test-classes</outputDirectory>
       <testOutputDirectory>bin/test-classes</testOutputDirectory>
       <testResources><testResource><directory>res</directory></testResource></testResources>
         <plugins>
@@ -66,6 +66,7 @@
                 <include>**/AllTests*.class</include>
               </includes>
               <forkedProcessTimeoutInSeconds>300000</forkedProcessTimeoutInSeconds>
+              <redirectTestOutputToFile>true</redirectTestOutputToFile>
             </configuration>
             <dependencies>
               <!-- Force using the latest JUnit 47 provider, consider also in lib dependencies; seems also to work with
@@ -148,7 +149,7 @@
         <version>${project.version}</version>
     </dependency>
     <dependency>
-        <groupId>net.ssehub.easy.producer</groupId>
+        <groupId>net.ssehub.easy</groupId>
         <artifactId>CommandLine</artifactId>
         <version>${project.version}</version>
     </dependency>

@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -115,8 +116,7 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
             List<StartupInfo> instantiators = new ArrayList<>();
             List<StartupInfo> rest = new ArrayList<>();
             ClassLoader resourceLoader = null == loader ? Thread.currentThread().getContextClassLoader() : loader;
-            final Enumeration<URL> resources =  resourceLoader
-                .getResources(MF_PATH);
+            final Enumeration<URL> resources =  resourceLoader.getResources(MF_PATH);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             while (resources.hasMoreElements()) {
@@ -137,7 +137,7 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
                         vilVtl.add(info);
                     } else if (cls.contains("instantiation")) {
                         instantiators.add(info);
-                    } else if (!cls.startsWith("org.eclipse.osgi.")) {
+                    } else if (!cls.startsWith("org.")) { // no full start: eclipse, apache felix
                         rest.add(info);
                     }
                 }
@@ -171,21 +171,32 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
         Attributes attr = mf.getMainAttributes();
         String serviceComponent = attr.getValue("Service-Component");
         if (null != serviceComponent) {
-            String tmp = url.toString();
-            tmp = tmp.substring(0, tmp.length() - MF_PATH.length()) + "/" + serviceComponent;
-            URL scUrl = new URL(tmp);
-            try {
-                Document doc = builder.parse(scUrl.openStream());
-                NodeList implList = doc.getElementsByTagName("implementation");
-                for (int i = 0; i < implList.getLength(); i++) {
-                    Node implNode = implList.item(i);
-                    Node clsNode = implNode.getAttributes().getNamedItem("class");
-                    if (null != clsNode) {
-                        result = new StartupInfo(InitType.DS, clsNode.getNodeValue());
-                    }
+            StringTokenizer components = new StringTokenizer(serviceComponent, ",");
+            while (components.hasMoreTokens()) {
+                String component = components.nextToken().trim();
+                String tmp = url.toString();
+                tmp = tmp.substring(0, tmp.length() - MF_PATH.length());
+                while (tmp.endsWith("/")) {
+                    tmp = tmp.substring(0, tmp.length() - 1);
                 }
-            } catch (SAXException e) {
-                throw new IOException(e.getMessage());
+                if (!component.startsWith("/")) {
+                    component = "/" + component;
+                }
+                tmp += component;
+                URL scUrl = new URL(tmp);
+                try {
+                    Document doc = builder.parse(scUrl.openStream());
+                    NodeList implList = doc.getElementsByTagName("implementation");
+                    for (int i = 0; i < implList.getLength(); i++) {
+                        Node implNode = implList.item(i);
+                        Node clsNode = implNode.getAttributes().getNamedItem("class");
+                        if (null != clsNode) {
+                            result = new StartupInfo(InitType.DS, clsNode.getNodeValue());
+                        }
+                    }
+                } catch (IOException | SAXException e) {
+                    System.err.println("Cannot read " + tmp + ": " + e.getMessage() + " Ignoring.");
+                }
             }
         } else {
             String activator = attr.getValue("Bundle-Activator");

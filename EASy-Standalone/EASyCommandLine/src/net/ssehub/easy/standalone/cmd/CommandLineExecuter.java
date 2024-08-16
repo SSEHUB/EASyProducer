@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uni_hildesheim.sse.easy.loader.ListLoader;
+import de.uni_hildesheim.sse.easy.loader.ManifestLoader;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.LoggingLevel;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -47,10 +47,7 @@ public class CommandLineExecuter {
     public static void main(String[] args) {
         int result = CmdConstants.SYSTEM_OK;
         try {
-            ListLoader loader = new ListLoader();
-            if (DEBUG) {
-                loader.setVerbose(true);
-            }
+            ManifestLoader loader = new ManifestLoader(DEBUG);
             loader.startup();
             if (DEBUG) {
                 EASyLoggerFactory.INSTANCE.setLoggingLevel(LoggingLevel.DEBUG);
