@@ -369,8 +369,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     /**
      * Test the JavaCode artifact in VIL.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testJavaCode() throws IOException {
@@ -380,8 +379,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     /**
      * Test the JavaCode artifact in VIL (mixed style).
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testJavaCode2() throws IOException {
@@ -391,8 +389,7 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     /**
      * Test the JavaCode artifact for an annotated junit test suite.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testJavaCode3() throws IOException {
@@ -402,12 +399,21 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     /**
      * Test the JavaCode artifact for enums.
      * 
-     * @throws IOException
-     *             should not occur
+     * @throws IOException should not occur
      */
     @Test
     public void testJavaCode4() throws IOException {
         assertJavaCode("javaCode4", "JCATest4");
+    }
+
+    /**
+     * Test the JavaCode artifact for sorted class elements.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCode5() throws IOException {
+        assertJavaCode("javaCode5", "JCATest5");
     }
 
 }

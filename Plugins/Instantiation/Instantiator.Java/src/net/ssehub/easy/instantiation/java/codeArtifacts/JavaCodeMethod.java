@@ -579,4 +579,14 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         JavaCodeClass.setParent(parent, p -> this.enclosing = p);
     }
 
+    @Override
+    public boolean isConstructor() {
+        return null == type;
+    }
+    
+    @Override
+    public boolean isMethod() {
+        return null != type;
+    }
+    
 }

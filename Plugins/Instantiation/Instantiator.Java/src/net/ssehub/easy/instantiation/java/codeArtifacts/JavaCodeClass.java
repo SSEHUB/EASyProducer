@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -178,7 +179,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
 
     public JavaCodeMethod addConstructor() {
-        return addMethod(getName(), null);
+        return addConstructor(null);
     }
 
     public JavaCodeMethod addConstructor(String comment) {
@@ -315,7 +316,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         if (elements.size() > 0) {
             out.println();
             newLineStrategy.start();
-            for (IJavaCodeElement e: elements) {
+            for (IJavaCodeElement e: sortedElements()) {
                 if (newLineStrategy.emitNewlineBefore(e)) {
                     out.println();
                 }
@@ -327,6 +328,76 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         }
         out.decreaseIndent();
         out.printwi("}");        
+    }
+    
+    private enum ElementSorting {
+        NONE,
+        CONS,
+        CONS_ALPHA
+    }
+    
+    private List<IJavaCodeElement> sortedElements() {
+        List<IJavaCodeElement> result;
+        ElementSorting sorting = IJavaCodeElement.getFormattingArgument(ElementSorting.class, 
+            "eltSorting", ElementSorting.NONE);
+        switch (sorting) {
+        case CONS:
+            result = partition(null);
+            break;
+        case CONS_ALPHA:
+            result = partition(IJavaCodeElement.KEY_COMPARATOR);
+            break;
+        default: // implies none, do nothing
+            result = elements;
+            break;
+        }
+        return result;
+    }
+
+    /**
+     * Partitions the elements in before constructors (attributes, comments), constructors and rest (methods, comments).
+     * Applies {@code methodComparator} if given.
+     * 
+     * @param methodComparator comparator for methods
+     * @return the partitioned/sorted elements
+     */
+    private List<IJavaCodeElement> partition(Comparator<IJavaCodeElement> methodComparator) {
+        // group related but not partitionable
+        List<IJavaCodeElement> result = ProxyElement.proxy(elements);
+
+        // partition into fixed groups, proxies are transparent
+        List<IJavaCodeElement> before = new ArrayList<>();
+        List<IJavaCodeElement> cons = new ArrayList<>();
+        List<IJavaCodeElement> rest = new ArrayList<>();
+        boolean inMethods = false;
+        for (IJavaCodeElement e : result) {
+            if (e.isConstructor()) {
+                inMethods = true;
+                cons.add(e);
+            } else if (e.isMethod()) {
+                inMethods = true;
+                rest.add(e);
+            } else if (!inMethods || e.isAttribute()) {
+                before.add(e);
+            } else {
+                inMethods = true;
+                rest.add(e);
+            }
+        }
+
+        // optionally sort
+        IJavaCodeElement.sort(rest, methodComparator);
+        
+        // un-partition from fixed groups
+        result.clear();
+        result.addAll(before);
+        result.addAll(cons);
+        result.addAll(rest);
+        
+        // ungroup related but not partitionable
+        ProxyElement.unproxy(result);
+        
+        return result;
     }
 
     /**

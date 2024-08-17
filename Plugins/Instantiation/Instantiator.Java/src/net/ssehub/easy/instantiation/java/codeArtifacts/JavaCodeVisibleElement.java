@@ -62,6 +62,12 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
             this.comment = new JavaCodeJavadocComment(comment, this); 
         }
     }
+    
+    @Invisible()
+    @Override
+    public String getSortKey() {
+        return name;
+    }
 
     @Override
     public boolean hasJavadocComment() {

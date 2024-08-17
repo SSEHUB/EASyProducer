@@ -15,9 +15,12 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
@@ -28,7 +31,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * @author Holger Eichelberger
  */
 public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storable {
-    
+
+    public static final Comparator<IJavaCodeElement> KEY_COMPARATOR 
+        = (e1, e2) -> e1.getSortKey().compareTo(e2.getSortKey());
+
     /**
      * Returns the containing artifact.
      * 
@@ -51,6 +57,16 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
      */
     @Invisible(inherit = true)
     public void setParent(IJavaCodeElement parent);
+
+    /**
+     * Adds this and contained elements on the same nesting level to {@code list}.
+     * 
+     * @param list the list to be modified as side effect
+     */
+    @Invisible(inherit = true)
+    public default void addAll(List<IJavaCodeElement> list) {
+        list.add(this);
+    }
     
     /**
      * Returns whether this code element has a Javadoc comment.
@@ -72,6 +88,36 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
         return false;
     }
     
+    /**
+     * Returns whether this element is a constructor.
+     * 
+     * @return {@code true} for constructor, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isConstructor() {
+        return false;
+    }
+
+    /**
+     * Returns whether this element is a method.
+     * 
+     * @return {@code true} for method, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isMethod() {
+        return false;
+    }
+    
+    /**
+     * Returns a key for sorting.
+     * 
+     * @return the key
+     */
+    @Invisible(inherit = true)
+    public default String getSortKey() {
+        return "";
+    }
+
     /**
      * Returns the result if we are in a tracer/testing.
      * 
@@ -216,6 +262,38 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     static <T extends IJavaCodeElement> void setParent(IJavaCodeElement parent, Class<T> cls, Consumer<T> setter) {
         if (cls.isInstance(parent)) {
             setter.accept(cls.cast(parent));
+        }
+    }
+
+    /**
+     * Returns a profile argument in terms of an enum constant.
+     * 
+     * @param <T> the enum type
+     * @param cls the enum class
+     * @param key the argument key/name to look for
+     * @param dflt the default value, may be <b>null</b>
+     * @return the value of the argument, may be {@code dflt}
+     */
+    static <T extends Enum<T>> T getFormattingArgument(Class<T> cls, String key, T dflt) {
+        T result = dflt;
+        try {
+            result = Enum.valueOf(cls, Formatting.getFormattingConfiguration().getProfileArgument(key, 
+                null != dflt ? dflt.name() : ""));
+        } catch (IllegalArgumentException e) {
+            // take default
+        }
+        return result;
+    }
+    
+    /**
+     * Sorts {@code list} according to {@code comparator}.
+     * 
+     * @param list the list to sort, may be <b>null</b> or empty
+     * @param comparator the comparator, may be <b>null</b> for no sorting
+     */
+    static void sort(List<IJavaCodeElement> list, Comparator<IJavaCodeElement> comparator) {
+        if (null != comparator && null != list && list.size() > 0) {
+            Collections.sort(list, comparator);
         }
     }
 
