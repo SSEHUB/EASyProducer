@@ -15,9 +15,11 @@
  */
 package net.ssehub.easy.instantiation.yaml;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
@@ -32,6 +34,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
  */
 public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
 
+    private List<String> sequence = new ArrayList<>();
     private java.util.Map<String, Object> data;
     private INodeParent parent;
 
@@ -68,9 +71,14 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
             Map<?, ?> value = (Map<?, ?>) data;
             for (Object key: value.keys()) {
                 Object val = value.get(key);
-                this.data.put(key.toString(), val); // TODO more key conversion, recursive?
+                add(key.toString(), val); // TODO more key conversion, recursive?
             }
         }
+    }
+    
+    private void add(String key, Object val) {
+        data.put(key, val);
+        sequence.add(key);
     }
     
     void setParent(INodeParent parent) {
@@ -104,7 +112,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * @return <b>this</b> for chaining
      */
     public YamlNode addValue(String name, Object value) {
-        data.put(name, value);
+        add(name, value);
         notifyChanged();
         return this;
     }
@@ -117,7 +125,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      */
     public YamlNode addObject(String name) {
         YamlNode node = new YamlNode(new ClassMap(), this);
-        data.put(name, node);
+        add(name, node);
         notifyChanged();
         return node;
     }
@@ -130,6 +138,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      */
     public YamlNode delete(String name) {
         data.remove(name);
+        sequence.remove(name);
         notifyChanged();
         return this;
     }
@@ -146,7 +155,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         for (Object o : value) {
             tmp.add(o);
         }
-        data.put(name, tmp);
+        add(name, tmp);
         notifyChanged();
         return this;
     }
@@ -160,7 +169,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
     public YamlNode addValues(Map<?, ?> value) {
         for (Object key: value.keys()) {
             Object val = value.get(key);
-            data.put(key.toString(), val); // TODO more key conversion, recursive?
+            add(key.toString(), val); // TODO more key conversion, recursive?
         }
         notifyChanged();
         return this;
@@ -179,23 +188,54 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
             Object val = value.get(key);
             tmp.put(key.toString(), val); // TODO more key conversion, recursive?
         }
-        data.put(name, tmp);
+        add(name, tmp);
         notifyChanged();
         return this;
     }
 
+    enum Sorting {
+        NONE,
+        INSERT,
+        ALPHA,
+        COLLATOR
+    }
+
     /**
-     * Returns the data in this node, formatted to be usedful for snakeyaml.
+     * Returns the data in this node, formatted to be useful for snakeyaml.
      * 
+     * @param sorting the sorting sequence for the data
      * @return the data
      */
     @Invisible
-    java.util.Map<String, Object> getData() {
-        java.util.Map<String, Object> result = new HashMap<>();
+    java.util.Map<String, Object> getData(Sorting sorting) {
+        java.util.Map<String, Object> result;
+        switch(sorting) {
+        case INSERT:
+            final java.util.Map<String, Integer> seq = new HashMap<>();
+            for (int i = 0; i < sequence.size(); i++) {
+                seq.put(sequence.get(i), i);
+            }
+            result = new TreeMap<>((f1, f2) -> Integer.compare(seq.get(f1), seq.get(f2)));
+            break;
+        case ALPHA:
+            result = new TreeMap<>((f1, f2) -> f1.compareTo(f2));            
+            break;
+        case COLLATOR:
+            result = new TreeMap<>(Collator.getInstance());
+            break;
+        default: // implies NONE
+            result = new HashMap<>();
+            break;
+        }
         for (String key: data.keySet()) {
             Object value = data.get(key);
             if (value instanceof YamlNode) {
-                value = ((YamlNode) value).getData();
+                YamlNode valueNode = (YamlNode) value;
+                if (valueNode.data != null && valueNode.data.size() > 0) {
+                    value = valueNode.getData(sorting);                    
+                } else {
+                    value = null;
+                }
             }
             result.put(key, value);
         }

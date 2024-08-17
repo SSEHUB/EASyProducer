@@ -29,6 +29,7 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
@@ -201,7 +202,7 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
         data.remove(index);
         notifyChanged();
     }
-
+    
     @Override
     public void store() throws VilException {
         super.store();
@@ -211,17 +212,32 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 file.getParentFile().mkdirs();
                 FileWriter writer = new FileWriter(file);
                 
-                FormattingConfiguration cfg = Formatting.getFormattingConfiguration();
+                IndentationConfiguration iCfg = Formatting.getIndentationConfiguration();
+                FormattingConfiguration fCfg = Formatting.getFormattingConfiguration();
                 DumperOptions options = new DumperOptions();
+                YamlNode.Sorting sorting = YamlNode.Sorting.INSERT;
+                try {
+                    sorting = YamlNode.Sorting.valueOf(fCfg.getProfileArgument("sorting", 
+                        YamlNode.Sorting.NONE.name()));
+                } catch (IllegalArgumentException e) {
+                    // take default
+                }
                 FlowStyle style = FlowStyle.BLOCK;
                 try {
-                    style = FlowStyle.valueOf(cfg.getProfileArgument("flowStyle", "BLOCK"));
+                    style = FlowStyle.valueOf(fCfg.getProfileArgument("flowStyle", "BLOCK"));
                 } catch (IllegalArgumentException e) {
                     // take default
                 }
                 options.setDefaultFlowStyle(style);
-                options.setIndent(cfg.getIndentSteps());
-                options.setPrettyFlow(Boolean.valueOf(cfg.getProfileArgument("prettyFlow", "true")));
+                
+                int indent = 1;
+                if (fCfg.getIndentSteps() > 0) {
+                    indent = fCfg.getIndentSteps();
+                } else if (iCfg.getIndentationStep() > 0) {
+                    indent = iCfg.getIndentationStep();
+                }
+                options.setIndent(indent);
+                options.setPrettyFlow(Boolean.valueOf(fCfg.getProfileArgument("prettyFlow", "true")));
                 
                 Representer representer = new Representer(options);
                 //representer.addClassTag(ClassMap.class, Tag.OMAP);
@@ -232,9 +248,9 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                     if (!first) {
                         writer.append("--\n");
                     }
-                    Map<String, Object> d = node.getData();
+                    Map<String, Object> d = node.getData(sorting);
                     if (!d.isEmpty()) {
-                        yaml.dump(node.getData(), writer);
+                        yaml.dump(d, writer);
                     }
                     first = false;
                 }
