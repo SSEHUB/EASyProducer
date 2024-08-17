@@ -222,4 +222,13 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
         return (annotated instanceof JavaCodeParameterSpecification) ? 0 : 1;
     }
 
+    /**
+     * Returns the full type of the annotation.
+     * 
+     * @return the full type
+     */
+    public String getType() {
+        return type.getType();
+    }
+
 }

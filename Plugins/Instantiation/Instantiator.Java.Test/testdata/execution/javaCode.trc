@@ -13,6 +13,7 @@
     -> setProtected(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeMethod: getIntegerList
     m <- JavaCodeMethod: getIntegerList
     -> addAnnotation(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, java.lang.Override) = JavaCodeAnnotation JavaCodeTypeSpecification Override
+    -> forceJavadoc(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeMethod: getIntegerList
     -> addParameter(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, int, length, the length) = JavaCodeParameterSpecification int length
     -> addVariable(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, boolean, cont, false) = JavaCodeVariableDeclaration
     -> addIf(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, cont) = JavaCodeAlternative

@@ -34,6 +34,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     private JavaCodeBlock block;
     private List<JavaCodeParameterSpecification> parameter;
     private List<JavaCodeTypeSpecification> exceptions;
+    private boolean forceJavadoc;
 
     /**
      * Creates a void method without comment.
@@ -87,7 +88,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * @return the annotation for further processing
      */
     public JavaCodeAnnotation addOverrideAnnotation() {
-        return addAnnotation("Override");
+        return addAnnotation(Override.class.getSimpleName());
     }
 
     /**
@@ -472,10 +473,26 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
      * @param block the block containing the statements
      * @return <b>this</b> for chaining
      */
-    public JavaCodeBlock setBlock(JavaCodeBlock block) {
-        return block.setBlock(block);
+    public JavaCodeMethod setBlock(JavaCodeBlock block) {
+        block.setBlock(block);
+        return this;
+    }
+    
+    /**
+     * Forces the output of javadoc even in the presence of an Override annotation.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod forceJavadoc() {
+        forceJavadoc = true;
+        return this;
     }
 
+    @Override
+    protected boolean enableStoreComment() {
+        return forceJavadoc || !hasAnnotation(Override.class.getSimpleName(), Override.class.getName());
+    }
+    
     @Invisible
     @Override
     public void store(CodeWriter out) {

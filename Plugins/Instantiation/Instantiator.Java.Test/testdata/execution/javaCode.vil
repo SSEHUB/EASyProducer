@@ -12,6 +12,7 @@ vilScript JavaCode (Project source, Configuration config, Project target) {
         cls.addAttribute("double", "myDouble");
         JavaCodeMethod m = cls.addMethod("java.util.List<Integer>", "getIntegerList", "Returns an integer list.@return the integer list").setProtected();
         m.addAnnotation("java.lang.Override");
+        m.forceJavadoc();
         m.addParameter("int", "length", "the length");
         m.addVariable("boolean", "cont", "false");
         JavaCodeAlternative alt = m.addIf("cont");

@@ -16,7 +16,10 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
@@ -262,7 +265,7 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
     @Override
     @Invisible
     public void store(CodeWriter out) {
-        if (null != comment) {
+        if (null != comment && enableStoreComment()) {
             comment.store(out);
         }
         if (null != annotations) {
@@ -270,6 +273,15 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
                 a.store(out);
             }
         }
+    }
+    
+    /**
+     * Enables a specified comment in {@link #store(CodeWriter)}.
+     * 
+     * @return {@code true} for enabled, {@code false} for disabled
+     */
+    protected boolean enableStoreComment() {
+        return true;
     }
     
     /**
@@ -291,6 +303,21 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
             for (JavaCodeAnnotation a : annotations) {
                 result += a.getElementCount();
             }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns the annotations.
+     * 
+     * @param types the annotation types to look for
+     * @return {@code true} if annotations were found, {@code false} else
+     */
+    protected boolean hasAnnotation(String... types) {
+        boolean result = false;
+        if (annotations != null) {
+            Set<String> tmp = Arrays.stream(types).collect(Collectors.toSet());
+            result = annotations.stream().anyMatch(a -> tmp.contains(a.getType()));
         }
         return result;
     }
