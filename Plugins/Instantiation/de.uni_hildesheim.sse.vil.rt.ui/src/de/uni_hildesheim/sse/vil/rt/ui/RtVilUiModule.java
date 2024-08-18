@@ -6,9 +6,11 @@ package de.uni_hildesheim.sse.vil.rt.ui;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
+import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 
 import de.uni_hildesheim.sse.vil.rt.ui.hyperlinking.RtVilHyperlinkHelper;
 import net.ssehub.easy.dslCore.ui.BuilderParticipant;
+import net.ssehub.easy.dslCore.ui.EasyUiResourceServiceProvider;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -34,6 +36,15 @@ public class RtVilUiModule extends de.uni_hildesheim.sse.vil.rt.ui.AbstractRtVil
     @Override
     public Class<? extends IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
         return BuilderParticipant.class;
+    }
+
+    /**
+     * Binds a resource service provider.
+     * 
+     * @return the resource service provider
+     */
+    public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
+        return EasyUiResourceServiceProvider.class;
     }
 
 }

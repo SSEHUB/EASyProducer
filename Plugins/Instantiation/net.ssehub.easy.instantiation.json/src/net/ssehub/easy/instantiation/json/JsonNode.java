@@ -36,6 +36,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
 
     private java.util.Map<String, Object> data;
+    private List<String> sequence = new ArrayList<>();
     private INodeParent parent;
 
     /**
@@ -71,11 +72,27 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
             Map<?, ?> value = (Map<?, ?>) data;
             for (Object key: value.keys()) {
                 Object val = value.get(key);
-                this.data.put(key.toString(), val);
+                set(key.toString(), val, false);
             }
         }
     }
-    
+
+    /**
+     * Sets the value of {@code key} to {@code val} and records the (first) insertion position.
+     * 
+     * @param key the key/field name
+     * @param val the value
+     * @param notify enable calling {@link #notifyChanged()}
+     */
+    private void set(String key, Object val, boolean notify) {
+        if (null == data.put(key, val)) { // just take the first position
+            sequence.add(key);
+        }
+        if (notify) {
+            notifyChanged();
+        }
+    }
+
     /**
      * Returns whether a field for {@code name} is known / was added before.
      * 
@@ -94,7 +111,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
      * @return <b>this</b> for chaining
      */
     public JsonNode addValue(String name, Object value) {
-        data.put(name, value);
+        set(name, value, true);
         notifyChanged();
         return this;
     }
@@ -107,8 +124,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
      */
     public JsonNode addObject(String name) {
         JsonNode node = new JsonNode(new HashMap<String, Object>(), this);
-        data.put(name, node);
-        notifyChanged();
+        set(name, node, true);
         return node;
     }
 
@@ -120,6 +136,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
      */
     public JsonNode delete(String name) {
         data.remove(name);
+        sequence.remove(name);
         notifyChanged();
         return this;
     }
@@ -136,8 +153,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
         for (Object o : value) {
             tmp.add(o);
         }
-        data.put(name, tmp);
-        notifyChanged();
+        set(name, tmp, true);
         return this;
     }
 
@@ -150,7 +166,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
     public JsonNode addValues(Map<?, ?> value) {
         for (Object key: value.keys()) {
             Object val = value.get(key);
-            data.put(key.toString(), val);
+            set(key.toString(), val, false);
         }
         notifyChanged();
         return this;
@@ -169,14 +185,14 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
             Object val = value.get(key);
             tmp.put(key.toString(), val);
         }
-        data.put(name, tmp);
-        notifyChanged();
+        set(name, tmp, true);
         return this;
     }
 
     enum Sorting {
         
         NONE,
+        INSERT,
         ALPHA,
         COLLATOR
         
@@ -192,8 +208,15 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
     java.util.Map<String, Object> getData(Sorting sorting) {
         java.util.Map<String, Object> result;
         switch (sorting) {
+        case INSERT:
+            final java.util.Map<String, Integer> seq = new HashMap<>();
+            for (int i = 0; i < sequence.size(); i++) {
+                seq.put(sequence.get(i), i);
+            }
+            result = new TreeMap<>((f1, f2) -> Integer.compare(seq.get(f1), seq.get(f2)));
+            break;
         case ALPHA:
-            result = new TreeMap<>((k1, k2) -> k1.compareTo(k2));
+            result = new TreeMap<>((f1, f2) -> f1.compareTo(f2));
             break;
         case COLLATOR:
             result = new TreeMap<>(Collator.getInstance(DefaultLocale.getDefaultLocale()));

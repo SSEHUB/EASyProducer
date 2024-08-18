@@ -6,6 +6,7 @@ package de.uni_hildesheim.sse.ui;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
+import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 
@@ -13,6 +14,7 @@ import de.uni_hildesheim.sse.ui.hyperlinking.VilHyperlinkHelper;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingCalculator;
 import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConfiguration;
 import net.ssehub.easy.dslCore.ui.BuilderParticipant;
+import net.ssehub.easy.dslCore.ui.EasyUiResourceServiceProvider;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -57,4 +59,13 @@ public class VilBuildLanguageUiModule extends de.uni_hildesheim.sse.vil.buildlan
         return BuilderParticipant.class;
     }
 
+    /**
+     * Binds a resource service provider.
+     * 
+     * @return the resource service provider
+     */
+    public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
+        return EasyUiResourceServiceProvider.class;
+    }
+    
 }

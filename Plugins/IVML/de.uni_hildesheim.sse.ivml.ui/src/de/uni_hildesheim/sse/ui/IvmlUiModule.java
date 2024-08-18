@@ -9,9 +9,11 @@ import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IConcurrentEditingCal
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IDirtyStateEditorSupportClient;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.InteractiveConcurrentEditingQuestion;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
+import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 
 import de.uni_hildesheim.sse.ui.hyperlinking.IvmlHyperlinkHelper;
 import net.ssehub.easy.dslCore.ui.BuilderParticipant;
+import net.ssehub.easy.dslCore.ui.EasyUiResourceServiceProvider;
 
 //import com.google.inject.name.Names;
 
@@ -59,6 +61,15 @@ public class IvmlUiModule extends de.uni_hildesheim.sse.ui.AbstractIvmlUiModule 
 	@Override
 	public Class<? extends IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
 	    return BuilderParticipant.class;
+	}
+	
+	/**
+	 * Binds a resource service provider.
+	 * 
+	 * @return the resource service provider
+	 */
+	public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
+	    return EasyUiResourceServiceProvider.class;
 	}
 	
 }

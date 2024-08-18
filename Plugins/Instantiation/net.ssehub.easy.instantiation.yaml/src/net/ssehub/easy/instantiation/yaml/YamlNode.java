@@ -34,8 +34,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
  */
 public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
 
-    private List<String> sequence = new ArrayList<>();
     private java.util.Map<String, Object> data;
+    private List<String> sequence = new ArrayList<>();
     private INodeParent parent;
 
     /**
@@ -71,14 +71,25 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
             Map<?, ?> value = (Map<?, ?>) data;
             for (Object key: value.keys()) {
                 Object val = value.get(key);
-                add(key.toString(), val); // TODO more key conversion, recursive?
+                set(key.toString(), val, false); // TODO more key conversion, recursive?
             }
         }
     }
     
-    private void add(String key, Object val) {
-        data.put(key, val);
-        sequence.add(key);
+    /**
+     * Sets the value of {@code key} to {@code val} and records the (first) insertion position.
+     * 
+     * @param key the key/field name
+     * @param val the value
+     * @param notify enable calling {@link #notifyChanged()}
+     */
+    private void set(String key, Object val, boolean notify) {
+        if (null == data.put(key, val)) { // just take the first position
+            sequence.add(key);
+        }
+        if (notify) {
+            notifyChanged();
+        }
     }
     
     void setParent(INodeParent parent) {
@@ -112,8 +123,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * @return <b>this</b> for chaining
      */
     public YamlNode addValue(String name, Object value) {
-        add(name, value);
-        notifyChanged();
+        set(name, value, true);
         return this;
     }
 
@@ -125,8 +135,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      */
     public YamlNode addObject(String name) {
         YamlNode node = new YamlNode(new ClassMap(), this);
-        add(name, node);
-        notifyChanged();
+        set(name, node, true);
         return node;
     }
 
@@ -155,8 +164,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         for (Object o : value) {
             tmp.add(o);
         }
-        add(name, tmp);
-        notifyChanged();
+        set(name, tmp, true);
         return this;
     }
 
@@ -169,7 +177,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
     public YamlNode addValues(Map<?, ?> value) {
         for (Object key: value.keys()) {
             Object val = value.get(key);
-            add(key.toString(), val); // TODO more key conversion, recursive?
+            set(key.toString(), val, false); // TODO more key conversion, recursive?
         }
         notifyChanged();
         return this;
@@ -188,8 +196,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
             Object val = value.get(key);
             tmp.put(key.toString(), val); // TODO more key conversion, recursive?
         }
-        add(name, tmp);
-        notifyChanged();
+        set(name, tmp, true);
         return this;
     }
 
