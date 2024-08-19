@@ -18,10 +18,13 @@ package net.ssehub.easy.instantiation.json;
 import java.io.File;
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
@@ -67,6 +70,8 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
         super(file, model);
         initialize();
     }
+    
+    // checkstyle: stop exception type check
 
     /**
      * Initializes {@code data} from an underlying file.
@@ -79,11 +84,13 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
                 java.util.Map<?, ?> data = mapper.readValue(f, java.util.Map.class);
                 this.data = new JsonNode(data, this);
             }
-        } catch (IOException e) {
+        } catch (Throwable e) { // if the format is broken/not really correct
             EASyLoggerFactory.INSTANCE.getLogger(JsonFileArtifact.class, Bundle.ID).error(
                 "While reading " + f + ": " + e.getMessage());
         }
     }
+    
+    // checkstyle: resume exception type check
     
     @Override
     public void artifactChanged(Object cause) throws VilException {
@@ -229,18 +236,35 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
                 File file = getPath().getAbsolutePath();
                 file.getParentFile().mkdirs();
                 
-                FormattingConfiguration cfg = Formatting.getFormattingConfiguration();
+                IndentationConfiguration iCfg = Formatting.getIndentationConfiguration();
+                FormattingConfiguration fCfg = Formatting.getFormattingConfiguration();
     
                 ObjectMapper mapper = new ObjectMapper();
                 Sorting sorting = Sorting.NONE;
                 try {
-                    sorting = Sorting.valueOf(cfg.getProfileArgument("sorting", "NONE").toUpperCase());
+                    sorting = Sorting.valueOf(fCfg.getProfileArgument("sorting", "NONE").toUpperCase());
                 } catch (IllegalArgumentException e) {
                     // stay with NONE
                 }
                 ObjectWriter writer = mapper.writer();
-                if (Boolean.valueOf(cfg.getProfileArgument("prettyPrint", "true"))) {
-                    writer = mapper.writerWithDefaultPrettyPrinter();
+                if (Boolean.valueOf(fCfg.getProfileArgument("prettyPrint", "true"))) {
+                    int indent = 1;
+                    if (fCfg.getIndentSteps() > 0) {
+                        indent = fCfg.getIndentSteps();
+                    } else if (iCfg.getIndentationStep() > 0) {
+                        indent = iCfg.getIndentationStep();
+                    }
+                    String indentString = "";
+                    for (int i = 1; i < indent; i++) {
+                        indentString += " ";
+                    }
+                    
+                    DefaultPrettyPrinter.Indenter indenter = 
+                        new DefaultIndenter(indentString, DefaultIndenter.SYS_LF);
+                    DefaultPrettyPrinter printer = new DefaultPrettyPrinter();
+                    printer.indentObjectsWith(indenter);
+                    printer.indentArraysWith(indenter);
+                    writer = mapper.writer(printer);
                 }
                 writer.writeValue(file, data.getData(sorting));
                 changedByNodes = false;

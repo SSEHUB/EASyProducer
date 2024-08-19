@@ -9,5 +9,5 @@ myObject:
     booleanVal: true
 myVal: 1
 states:
-- s1
-- s2
+ - s1
+ - s2

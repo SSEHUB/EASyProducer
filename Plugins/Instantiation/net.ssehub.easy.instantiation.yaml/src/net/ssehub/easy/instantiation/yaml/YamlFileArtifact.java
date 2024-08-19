@@ -72,6 +72,8 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
         super(file, model);
         initialize();
     }
+    
+    // checkstyle: stop exception type check
 
     /**
      * Initializes {@code data} from an underlying file.
@@ -88,12 +90,14 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 }
                 fis.close();
             }
-        } catch (IOException e) {
+        } catch (Throwable e) { // if the format is broken/not really correct, e.g., oktoflow data templates
             EASyLoggerFactory.INSTANCE.getLogger(YamlFileArtifact.class, Bundle.ID).error(
                 "While reading " + f + ": " + e.getMessage());
         }
     }
 
+    // checkstyle: resume exception type check
+    
     @Override
     public void artifactChanged(Object cause) throws VilException {
         super.artifactChanged(cause);
@@ -236,7 +240,19 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 } else if (iCfg.getIndentationStep() > 0) {
                     indent = iCfg.getIndentationStep();
                 }
+                
+                int indicatorIndent = indent - 1;
+                try {
+                    indicatorIndent = Integer.parseInt(fCfg.getProfileArgument("indicatorIndent", 
+                        String.valueOf(indicatorIndent)));
+                } catch (IllegalArgumentException e) {
+                    // take default
+                }
+                
                 options.setIndent(indent);
+                if (indicatorIndent >= 0 && indicatorIndent < indent) {
+                    options.setIndicatorIndent(indicatorIndent);
+                }
                 options.setPrettyFlow(Boolean.valueOf(fCfg.getProfileArgument("prettyFlow", "true")));
                 
                 Representer representer = new Representer(options);

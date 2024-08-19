@@ -1,7 +1,12 @@
 package net.ssehub.easy.instantiation.core.model.artifactModel;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -515,6 +520,43 @@ public class Path implements IVilType, IStringValueProvider {
         } else {
             FileUtils.delete(getAbsolutePath());
         }
+    }
+    
+    /**
+     * Returns the MD5 hash of this path. May fail if it is a folder.
+     * 
+     * @return the MD5 hash
+     * @throws VilException if the file artifact cannot be opened/read or the MD5 algorithm is not available
+     */
+    public String getMd5Hash() throws VilException {
+        String result;
+        try {
+            byte[] data = Files.readAllBytes(getAbsolutePath().toPath());
+            byte[] hash = MessageDigest.getInstance("MD5").digest(data);
+            result = new BigInteger(1, hash).toString(16);
+        } catch (NoSuchAlgorithmException e) {
+            throw new VilException(e.getMessage(), VilException.ID_ARTIFACT_INTERNAL);
+        } catch (IOException e) {
+            throw new VilException(e.getMessage(), VilException.ID_IO);
+        }
+        return result;
+    }
+    
+    /**
+     * Creates the file represented by this path and sets its modification time to now.
+     * 
+     * @throws VilException if I/O issues occur
+     */
+    public void touch() throws VilException {
+        File f = getAbsolutePath();
+        if (!f.exists()) {
+            try {
+                new FileOutputStream(f).close();
+            } catch (IOException e) {
+                throw new VilException(e.getMessage(), e, VilException.ID_IO);
+            }
+        }
+        f.setLastModified(System.currentTimeMillis());
     }
     
     /**

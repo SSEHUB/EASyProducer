@@ -25,8 +25,11 @@ import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Map;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Represents an untyped node in the YAML document tree.
@@ -140,6 +143,95 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
         notifyChanged();
         return this;
     }
+    
+    /**
+     * Returns the value of a field.
+     * 
+     * @param name the name of the field
+     * @return the value, may be <b>null</b>, a list, a map, ..
+     * @see #has(String)
+     */
+    public Object getValue(String name) {
+        return data.get(name);
+    }
+
+    /**
+     * Returns the value of a field as a list.
+     * 
+     * @param name the name of the field
+     * @return the value as a list, may be <b>null</b> if it does not exist/is not a list, ..
+     * @see #isList(String)
+     */
+    public Sequence<Object> getListValue(String name) {
+        Sequence<Object> result = null;
+        if (isList(name)) {
+            @SuppressWarnings("unchecked")
+            List<Object> tmp = (List<Object>) data.get(name);
+            result = new ListSequence<Object>(tmp, TypeRegistry.anyType());
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether the value of {@code name} is a list.
+     * 
+     * @param name the name of the field
+     * @return {@code true} for list, {@code false} else
+     */
+    public boolean isList(String name) {
+        return data.get(name) instanceof List;
+    }
+
+    /**
+     * Returns the value of a field as a map.
+     * 
+     * @param name the name of the field
+     * @return the value as a map, may be <b>null</b> if it does not exist/is not a map, ..
+     * @see #isMap(String)
+     */
+    public Map<String, Object> getMapValue(String name) {
+        Map<String, Object> result = null;
+        if (isList(name)) {
+            @SuppressWarnings("unchecked")
+            java.util.Map<Object, Object> tmp = (java.util.Map<Object, Object>) data.get(name);
+            TypeDescriptor<?>[] types = TypeDescriptor.createArray(2);
+            types[0] = TypeRegistry.stringType();
+            types[1] = TypeRegistry.anyType();
+            result = new Map<String, Object>(tmp, types);
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether the value of {@code name} is a map.
+     * 
+     * @param name the name of the field
+     * @return {@code true} for map, {@code false} else
+     */
+    public boolean isMap(String name) {
+        return data.get(name) instanceof Map;
+    }
+
+    /**
+     * Returns the value of a field as an object node.
+     * 
+     * @param name the name of the field
+     * @return the value as a node, may be <b>null</b> if it does not exist/is not an object, ..
+     * @see #has(String)
+     */
+    public JsonNode getObject(String name) {
+        return isObject(name) ? new JsonNode((Map<?, ?>) data.get(name), this) : null;
+    }
+
+    /**
+     * Returns whether the value of {@code name} is an object.
+     * 
+     * @param name the name of the field
+     * @return {@code true} for object, {@code false} else
+     */
+    public boolean isObject(String name) {
+        return data.get(name) instanceof Map;
+    }
 
     /**
      * Adds a field with value list.
@@ -189,11 +281,31 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
         return this;
     }
 
+    /**
+     * Defines the sorting mode of maps/objects.
+     * 
+     * @author Holger Eichelberger
+     */
     enum Sorting {
         
+        /**
+         * No sorting, implementation dependent.
+         */
         NONE,
+        
+        /**
+         * Insert/adding/reading sequence.
+         */        
         INSERT,
+        
+        /**
+         * Alphanumerical according to field/key names.
+         */        
         ALPHA,
+        
+        /**
+         * Locale/language based according to field/key names.
+         */
         COLLATOR
         
     }

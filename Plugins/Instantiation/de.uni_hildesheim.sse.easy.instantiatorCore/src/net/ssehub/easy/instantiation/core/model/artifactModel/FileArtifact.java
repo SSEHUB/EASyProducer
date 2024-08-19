@@ -5,10 +5,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigInteger;
-import java.nio.file.Files;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Binary;
 import net.ssehub.easy.instantiation.core.model.artifactModel.representation.Text;
@@ -344,17 +340,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      * @throws VilException if the file artifact cannot be opened/read or the MD5 algorithm is not available
      */
     public String getMd5Hash() throws VilException {
-        String result;
-        try {
-            byte[] data = Files.readAllBytes(path.getAbsolutePath().toPath());
-            byte[] hash = MessageDigest.getInstance("MD5").digest(data);
-            result = new BigInteger(1, hash).toString(16);
-        } catch (NoSuchAlgorithmException e) {
-            throw new VilException(e.getMessage(), VilException.ID_ARTIFACT_INTERNAL);
-        } catch (IOException e) {
-            throw new VilException(e.getMessage(), VilException.ID_IO);
-        }
-        return result;
+        return path.getMd5Hash();
     }
     
     /**
