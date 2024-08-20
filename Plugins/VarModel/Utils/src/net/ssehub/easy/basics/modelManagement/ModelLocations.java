@@ -92,7 +92,7 @@ public class ModelLocations <M extends IModel> {
         }
         
         /**
-         * Adds a dependent location.
+         * Adds a dependent location, i.e., a related location also containing model files, usually for testing.
          * 
          * @param location the location to be added
          */

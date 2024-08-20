@@ -43,22 +43,22 @@ public class EasyUiResourceServiceProvider extends DefaultResourceUIServiceProvi
 
     @Override
     public boolean canHandle(URI uri) {
-        return !ValidationUtils.excludeBinTarget(uri) && super.canHandle(uri);
+        return !ValidationUtils.excludeBinTarget(uri) && ValidationUtils.isInPath(uri) && super.canHandle(uri);
     }
 
     @Override
     public boolean canHandle(URI uri, IStorage storage) {
-        return !ValidationUtils.excludeBinTarget(uri) && super.canHandle(uri, storage);
+        return !ValidationUtils.excludeBinTarget(uri) && ValidationUtils.isInPath(uri) && super.canHandle(uri, storage);
     }
     
     @Override
     public boolean canBuild(URI uri, IStorage storage) {
-        return !ValidationUtils.excludeBinTarget(uri) && super.canBuild(uri, storage);
+        return !ValidationUtils.excludeBinTarget(uri) && ValidationUtils.isInPath(uri) && super.canBuild(uri, storage);
     }
 
     @Override
     public boolean isSource(URI uri) {
-        return !ValidationUtils.excludeBinTarget(uri) && super.isSource(uri);
+        return !ValidationUtils.excludeBinTarget(uri) && ValidationUtils.isInPath(uri) && super.isSource(uri);
     }
 
 }

@@ -20,7 +20,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Stores model information objects of the same version.
  * 
@@ -470,7 +469,7 @@ public class VersionedModelInfos <M extends IModel> {
         }
         return list;
     }
-    
+
     /**
      * Returns the textual representation of this instance.
      * 

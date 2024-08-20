@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2024 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ class ResolutionContext <M extends IModel> {
     private IRestrictionEvaluationContext evaluationContext;
     private List<ModelImport<M>> conflicts;
     private boolean topLevel = true;
+    private List<String> modelLocationPrefixes;
     
     /**
      * Creates a resolution context.
@@ -371,4 +372,59 @@ class ResolutionContext <M extends IModel> {
         return topLevel || (!topLevel && isTransitiveEnabled);
     }
 
+    /**
+     * Collect location prefixes.
+     * 
+     * @param result the prefixes
+     * @param location the location to turn into prefixes
+     */
+    private void collectLocationPrefixes(List<String> result, Location location) {
+        result.add(location.getLocation().getAbsoluteFile().toURI().toString());
+        for (int d = 0; d < location.getDependentLocationCount(); d++) {
+            collectLocationPrefixes(result, location.getDependentLocation(d));
+        }
+    }
+    
+    /**
+     * Filters {@code list} by the relevant locations for this resolution context. Removes infos/models that are not 
+     * located within {@code location}.
+     * 
+     * @param list the list of versioned model infos, to be modified by filtering as side effect
+     */
+    public void filterByLocations(List<VersionedModelInfos<M>> list) {
+        if (null != list) {
+            if (null == modelLocationPrefixes) {
+                Location modelLocation = getModelRepository().getLocationFor(getModelURI());
+                modelLocationPrefixes = new ArrayList<>();
+                collectLocationPrefixes(modelLocationPrefixes, modelLocation);
+            }
+            for (int l = list.size() - 1; l >= 0; l--) {
+                VersionedModelInfos<M> infos = list.get(l);
+                for (int i = infos.size() - 1; i >= 0; i--) {
+                    ModelInfo<M> info = infos.get(i);
+                    boolean contained = false;            
+                    for (int p = 0; !contained && p < modelLocationPrefixes.size(); p++) {
+                        contained = info.getLocation().toString().startsWith(modelLocationPrefixes.get(p));
+                    }
+                    if (!contained) {
+                        infos.remove(i);
+                    }
+                }
+                if (infos.size() == 0) {
+                    list.remove(l);
+                }
+            }
+        }
+    }
+
+    /**
+     * Filters the contained models by by {@code location}, i.e., removes modes that are not located within 
+     * {@code location}.
+     * 
+     * @param location the location that shall be used as base/required location
+     */
+    public void filterByLocation(Location location) {
+    }
+
+    
 }

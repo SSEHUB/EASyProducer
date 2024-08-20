@@ -32,13 +32,14 @@ public class BuilderParticipant extends org.eclipse.xtext.builder.BuilderPartici
     @Override
     protected List<IResourceDescription.Delta> getRelevantDeltas(IBuildContext context) {
         List<IResourceDescription.Delta> result = super.getRelevantDeltas(context);
-        result.removeIf(d -> ValidationUtils.excludeBinTarget(d.getUri()));
+        result.removeIf(d -> ValidationUtils.excludeBinTarget(d.getUri()) && !ValidationUtils.isInPath(d.getUri()));
         return result;
     }
 
     @Override
     protected boolean shouldGenerate(Resource resource, IBuildContext context) {
-        return !ValidationUtils.excludeBinTarget(resource.getURI()) && super.shouldGenerate(resource, context);
+        return !ValidationUtils.excludeBinTarget(resource.getURI()) && ValidationUtils.isInPath(resource.getURI()) 
+            && super.shouldGenerate(resource, context);
     }
 
 }

@@ -613,6 +613,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                     for (String name : context.getModelRepository().getMatchingModelNames(imp.getName())) {
                         ModelImport<M> tmpImp = imp.copy(name);
                         List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(name);
+                        context.filterByLocations(versions);
                         if (null != versions && versions.size() > 0) {
                             conflicts = add(conflicts, resolve(context, done, messages, versions, tmpImp));
                         } else {

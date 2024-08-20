@@ -1,10 +1,14 @@
 package net.ssehub.easy.dslCore.validation;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.emf.common.CommonPlugin;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
@@ -33,6 +37,7 @@ public class ValidationUtils {
      * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
      */
     public static final boolean PERFORM_XTEXT_VALIDATION = true;
+    private static List<String> pathPrefixes = new ArrayList<>();
     
     /**
      * Processes messages.
@@ -198,7 +203,7 @@ public class ValidationUtils {
      * @param uri the URI to check, may be <b>null</b>
      * @return {@code true} for exclusion or <b>null</b>, {@code false} else
      */
-    public static boolean excludeBinTarget(URI uri) {
+    public static boolean excludeBinTarget(URI uri) { // keep it for now, shall be superseded by add/removePath
         boolean result = true;
         if (null != uri) {
             String[] segments = uri.segments();
@@ -210,6 +215,59 @@ public class ValidationUtils {
             }
         }
         return result;
+    }
+    
+    /**
+     * Turns a file into a matchable URI prefix.
+     * 
+     * @param file the file 
+     * @return the prefix
+     */
+    private static String toPrefix(File file) {
+        URI uri = URI.createFileURI(file.getAbsolutePath());
+        String result = uri.toString();
+        if (file.isDirectory() && !result.endsWith("/")) {
+            result += "/";
+        }
+        return result;
+    }
+
+    /**
+     * Adds a {@code file}, usually a model location, as information/prefix which files to validate/process as 
+     * resources. Shall be called from Eclipse plugin code only.
+     *  
+     * @param file the file to add
+     */
+    public static void addPath(File file) {
+        String prefix = toPrefix(file);
+        pathPrefixes.add(prefix);
+    }
+    
+    /**
+     * Removes a {@code file}, usually a model location, as information/prefix which files to validate/process as 
+     * resources. Shall be called from Eclipse plugin code only.
+     *  
+     * @param file the file to add
+     */
+    public static void removePath(File file) {
+        String prefix = toPrefix(file);
+        pathPrefixes.remove(prefix);
+    }
+    
+    /**
+     * Returns whether the given EMF resource URI is in a path specified by {@link #addPath(File)}.
+     *  
+     * @param uri the URI to look for
+     * @return {@code true} for in path, {@code false} else
+     */
+    public static boolean isInPath(URI uri) {
+        boolean found = false;
+        
+        String u = CommonPlugin.asLocalURI(uri).toString();
+        for (int p = 0; !found && p < pathPrefixes.size(); p++) {
+            found = u.startsWith(pathPrefixes.get(p));
+        }
+        return found;
     }
 
     
@@ -241,7 +299,7 @@ public class ValidationUtils {
                         + "' during validation" + e.getMessage());
                 }
             }
-            if (null != uri && callback.isValidationEnabled(uri) && !excludeBinTarget(eURI)) {
+            if (null != uri && callback.isValidationEnabled(uri) && !excludeBinTarget(eURI) && isInPath(eURI)) {
                 try {
                     TranslationResult<T> result = callback.createModel(unit, uri);
                     for (int m = 0; m < result.getMessageCount(); m++) {
