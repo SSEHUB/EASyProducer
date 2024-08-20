@@ -71,7 +71,7 @@ public class ReasoningCommands {
         throws ModelManagementException {
         net.ssehub.easy.producer.core.persistence.Configuration config 
             = PersistenceUtils.getConfiguration(project);
-        PersistenceUtils.addLocation(config, ProgressObserver.NO_OBSERVER);    
+        PersistenceUtils.processLocation(config, true, false, ProgressObserver.NO_OBSERVER);    
         Project ivmlProject = PersistenceUtils.loadModel(VarModel.INSTANCE, ivmlFile);      
         return checkValidity(ivmlProject);
     }

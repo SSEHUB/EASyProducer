@@ -218,7 +218,7 @@ public final class InstantiationCommands {
         Script buildScript = PersistenceUtils.loadModel(BuildModel.INSTANCE, buildScriptFile);
         // Adds the project folder to all 3 models. In case of an error, only the last exception will be thrown.
         Configuration config = PersistenceUtils.getConfiguration(project);
-        PersistenceUtils.addLocation(config, ProgressObserver.NO_OBSERVER);
+        PersistenceUtils.processLocation(config, true, false, ProgressObserver.NO_OBSERVER);
         
         // Create temporary PLP
         if (null != ivmlProject && null != buildScript) {
@@ -480,9 +480,9 @@ public final class InstantiationCommands {
         
         // Adds the project folder to all 3 models. In case of an error, only the last exception will be thrown.
         Configuration configSource = PersistenceUtils.getConfiguration(projectSource);
-        PersistenceUtils.addLocation(configSource, ProgressObserver.NO_OBSERVER);    
+        PersistenceUtils.processLocation(configSource, true, false, ProgressObserver.NO_OBSERVER);    
         Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
-        PersistenceUtils.addLocation(configTarget, ProgressObserver.NO_OBSERVER);
+        PersistenceUtils.processLocation(configTarget, true, false, ProgressObserver.NO_OBSERVER);
 
         // Load ivml file
         Project ivmlProject = PersistenceUtils.loadModel(VarModel.INSTANCE, ivmlFile);      
@@ -614,8 +614,8 @@ public final class InstantiationCommands {
         // Adds the project folder to all 3 models. In case of an error, only the last exception will be thrown.
         Configuration configSource = PersistenceUtils.getConfiguration(projectSource);
         Configuration configTarget = PersistenceUtils.getConfiguration(projectTarget);
-        PersistenceUtils.addLocation(configSource, ProgressObserver.NO_OBSERVER);    
-        PersistenceUtils.addLocation(configTarget, ProgressObserver.NO_OBSERVER);
+        PersistenceUtils.processLocation(configSource, true, false, ProgressObserver.NO_OBSERVER);    
+        PersistenceUtils.processLocation(configTarget, true, false, ProgressObserver.NO_OBSERVER);
         
         Project ivmlProject = Utils.loadPreferredModel(VarModel.INSTANCE, ivmlDefinition, projectTarget, projectSource);
         Script script = Utils.loadPreferredModel(BuildModel.INSTANCE, vilDefinition, projectTarget, projectSource);
