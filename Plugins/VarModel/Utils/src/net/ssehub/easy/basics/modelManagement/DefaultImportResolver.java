@@ -488,6 +488,14 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                             messages.add(new Message(e.getMessage(), Status.ERROR));
                         }
                         if (null == conflicts) {
+                            /*for (VersionedModelInfos<M> i : context.getModelRepository()
+                                .getAvailable(found.getName())) {
+                                ModelInfo<M> info = i.get(found);
+                                if (null != info) {
+                                    System.out.println(" => " + info.getLocation());
+                                    break;
+                                }
+                            }*/
                             imp.setResolved(found);
                         }
                     }
@@ -616,7 +624,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                         context.filterByLocations(versions);
                         if (null != versions && versions.size() > 0) {
                             conflicts = add(conflicts, resolve(context, done, messages, versions, tmpImp));
-                        } else {
+                        } else if (!imp.isWildcard()) {
                             cannotResolveImport(tmpImp, messages, context.getModelURI(), 
                                 context.getEvaluationContext());
                         }
