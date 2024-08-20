@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.basics.modelManagement;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -379,7 +381,14 @@ class ResolutionContext <M extends IModel> {
      * @param location the location to turn into prefixes
      */
     private void collectLocationPrefixes(List<String> result, Location location) {
-        result.add(location.getLocation().getAbsoluteFile().toURI().toString());
+        File loc = location.getLocation().getAbsoluteFile();
+        try {
+            loc = loc.getCanonicalFile();
+        } catch (IOException e) {
+            String tmp = loc.toString();
+            loc = new File(tmp.replace("/./", "/").replace("\\.\\", "\\")); // poor man's canonical file
+        }
+        result.add(loc.toURI().toString());
         for (int d = 0; d < location.getDependentLocationCount(); d++) {
             collectLocationPrefixes(result, location.getDependentLocation(d));
         }
