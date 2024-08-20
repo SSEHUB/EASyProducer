@@ -91,7 +91,7 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 fis.close();
             }
         } catch (Throwable e) { // if the format is broken/not really correct, e.g., oktoflow data templates
-            EASyLoggerFactory.INSTANCE.getLogger(YamlFileArtifact.class, Bundle.ID).error(
+            EASyLoggerFactory.INSTANCE.getLogger(YamlFileArtifact.class, Bundle.ID).warn(
                 "While reading " + f + ": " + e.getMessage());
         }
     }

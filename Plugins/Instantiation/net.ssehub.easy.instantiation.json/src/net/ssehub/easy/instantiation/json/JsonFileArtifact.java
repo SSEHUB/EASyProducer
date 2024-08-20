@@ -85,7 +85,7 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
                 this.data = new JsonNode(data, this);
             }
         } catch (Throwable e) { // if the format is broken/not really correct
-            EASyLoggerFactory.INSTANCE.getLogger(JsonFileArtifact.class, Bundle.ID).error(
+            EASyLoggerFactory.INSTANCE.getLogger(JsonFileArtifact.class, Bundle.ID).warn(
                 "While reading " + f + ": " + e.getMessage());
         }
     }
