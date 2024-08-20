@@ -32,6 +32,7 @@ import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelLocations;
+import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
@@ -41,6 +42,7 @@ import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.DefaultLib;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor.IModelAccessor;
+import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.instantiation.core.DefaultLibUtils;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.AbstractRule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
@@ -141,9 +143,14 @@ public class PersistenceUtils {
     public static final void closeProject(File projectFolder) {
         if (null != projectFolder) {
             try {
-                CONFIGURATIONS.remove(projectFolder.getCanonicalFile().getPath());
+                Configuration cfg = CONFIGURATIONS.remove(projectFolder.getCanonicalFile().getPath());
+                if (null != cfg) {
+                    processLocation(cfg, false, false, ProgressObserver.NO_OBSERVER);
+                }
             } catch (IOException e) {
                 LOGGER.info("invalid project path - ignoring close request: " + projectFolder);
+            } catch (ModelManagementException e) {
+                LOGGER.info("closing " + projectFolder + ": " + e.getMessage());
             }
         } // pathological case - occurred in some tests    
     }
@@ -157,10 +164,10 @@ public class PersistenceUtils {
      * @param observer the progress observer to use
      * @throws ModelManagementException if updating the locations fails
      */
-    public static void updateLocations(Configuration config, PathKind kind, ModelLocations<?> locations, 
+    public static void updateLocations(Configuration config, PathKind kind, ModelLocations<?> locations,
         ProgressObserver observer) throws ModelManagementException {
         for (int p = 0; p < config.getPathCount(kind); p++) {
-            locations.updateLocation(config.getPathFile(kind, p), observer);
+            locations.updateLocation(config.getPathFile(kind, p), observer); // update ValidationUtils?
         }
     }
 
@@ -170,38 +177,61 @@ public class PersistenceUtils {
      * @param config the configuration instance to use
      * @param kind the path kind
      * @param locations the target model locations
+     * @param add add or remove locations
+     * @param dfltLib does {@code config} denote locations for default libraries
      * @param observer the progress observer to use
      * @throws ModelManagementException if updating the locations fails
      */
-    public static void addLocations(Configuration config, PathKind kind, ModelLocations<?> locations, 
-        ProgressObserver observer) throws ModelManagementException {
+    public static void processLocations(Configuration config, PathKind kind, ModelLocations<?> locations, boolean add, 
+        boolean dfltLib, ProgressObserver observer) throws ModelManagementException {
+        Location primary = null; 
         for (int p = 0; p < config.getPathCount(kind); p++) {
-            locations.addLocation(config.getPathFile(kind, p), observer);
+            File pathFile = config.getPathFile(kind, p);
+            if (add) {
+                Location loc  = locations.addLocation(pathFile, observer);
+                if (null == primary) {
+                    primary = loc;
+                } else {
+                    primary.addDependentLocation(loc);
+                }
+            } else {
+                locations.removeLocation(pathFile, observer);
+            }
+            if (!dfltLib) {
+                if (add) {
+                    ValidationUtils.addPath(pathFile);
+                } else {
+                    ValidationUtils.removePath(pathFile);
+                }
+            }
         }
     }
-        
+    
     /**
-     * Adds the given location to {@link VarModel}, {@link BuildModel}, and {@link TemplateModel}.
+     * Processes the given location to {@link VarModel}, {@link BuildModel}, and {@link TemplateModel}.
+     * 
      * @param config the configuration to use for obtaining the folders
+     * @param add add or remove locations
+     * @param dfltLib does {@code config} denote locations for default libraries
      * @param observer observer a progress observer, may be {@link ProgressObserver#NO_OBSERVER}
      * @throws ModelManagementException - in case that the available information may become
      *     inconsistent due to the new location (if more than one exception is created, the last one will be returned)
      */
-    public static final void addLocation(Configuration config, ProgressObserver observer)
-        throws ModelManagementException {
+    public static final void processLocation(Configuration config, boolean add, boolean dfltLib, 
+        ProgressObserver observer) throws ModelManagementException {
         ModelManagementException returnExc = null;
         try {
-            addLocations(config, PathKind.IVML, VarModel.INSTANCE.locations(), observer);
+            processLocations(config, PathKind.IVML, VarModel.INSTANCE.locations(), add, dfltLib, observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
         }
         try {
-            addLocations(config, PathKind.VIL, BuildModel.INSTANCE.locations(), observer);
+            processLocations(config, PathKind.VIL, BuildModel.INSTANCE.locations(), add, dfltLib, observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
         }
         try {
-            addLocations(config, PathKind.VTL, TemplateModel.INSTANCE.locations(), observer);
+            processLocations(config, PathKind.VTL, TemplateModel.INSTANCE.locations(), add, dfltLib, observer);
         } catch (ModelManagementException exc) {
             returnExc = exc;
         }
@@ -213,7 +243,12 @@ public class PersistenceUtils {
             }
             for (int p = 0; p < config.getPathCount(kind); p++) {
                 try {
-                    accessor.addLocation(config.getPathFile(kind, p).getAbsoluteFile(), observer);
+                    File f = config.getPathFile(kind, p).getAbsoluteFile();
+                    if (add) {
+                        accessor.addLocation(f, observer);
+                    } else {
+                        accessor.removeLocation(f, observer);
+                    }
                 } catch (ModelManagementException exc) {
                     returnExc = exc;
                 }
@@ -799,7 +834,7 @@ public class PersistenceUtils {
             DefaultLib.appendQuietly(libs, dfltUrl); // ignores null
             DefaultLibUtils.loadDefaultModels(loader, observer, (f, o) -> {
                 Configuration cfg = getDefaultModelsConfiguration(f, alternativePaths);
-                addLocation(cfg, observer);
+                processLocation(cfg, true, true, observer);
             }, libs, Activator.PLUGIN_ID);
         }
     }

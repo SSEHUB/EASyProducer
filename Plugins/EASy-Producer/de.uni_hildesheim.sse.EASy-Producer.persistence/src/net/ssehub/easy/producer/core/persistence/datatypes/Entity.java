@@ -58,7 +58,18 @@ public class Entity {
      * @return The value of the attribute or <code>null</code> if the specified attribute does not exist.
      */
     public String getAttributeValue(String attribute) {
-        String result = null;
+        return getAttributeValue(attribute, null);
+    }
+    
+    /**
+     * Returns value of given attribute.
+     * 
+     * @param attribute The name of the attribute which value should be returned
+     * @param dflt the default value
+     * @return The value of the attribute or <code>dflt</code> if the specified attribute does not exist.
+     */
+    public String getAttributeValue(String attribute, String dflt) {
+        String result = dflt;
         if (attributes.containsKey(attribute)) {
             result = attributes.get(attribute);
         }

@@ -91,6 +91,11 @@ public interface PersistenceConstants {
     static final String PTN_UUID = "id";
 
     /**
+     * <b>PTN:</b> Denotes whether this project shall be skipped during loading.
+     */
+    static final String PTN_SKIP = "skip";
+
+    /**
      * <b>PTN:</b> Denotes the name for the given PTN.
      */
     static final String PTN_PROJECTNAME = "name";

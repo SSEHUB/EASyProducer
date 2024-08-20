@@ -101,25 +101,27 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         
         //Register the folder of ivml files to the model for dynamic ivml file loading.
         try {
-            PersistenceUtils.addLocation(config, observer);
+            PersistenceUtils.processLocation(config, true, false, observer);
         } catch (ModelManagementException e) {
             // Should not happen, but it is also not necessarily to throw this exception.
             throw new PersistenceException(e);
         }
-
         //Load the main project file for this PersistentProject
         Model rootModel = project.getModel(ModelType.ROOT);
         Entity projectInformation = rootModel.getEntity(0);
         String projectName = projectInformation.getAttributeValue(PTN_PROJECTNAME);
         project.setName(projectName);
         String projectVersion = projectInformation.getAttributeValue(PLP_VERSION);
-        LOGGER.debug("Loaded Project \"" + projectName + "\" in " + projectVersion + ".");
-        ModelLoader<Project> projectLoader = new ModelLoader<Project>(project, config);
-        projectLoader.loadModel(projectName, projectVersion, PathKind.IVML);
-        ModelLoader<Script> scriptLoader = new ModelLoader<Script>(project, config);
-        scriptLoader.loadModel(projectName, projectVersion, PathKind.VIL);
+        if (!Boolean.valueOf(projectInformation.getAttributeValue(PTN_SKIP, "false"))) {
+            LOGGER.debug("Loading IVML for \"" + projectName + "\" in " + projectVersion + ".");
+            ModelLoader<Project> projectLoader = new ModelLoader<Project>(project, config);
+            projectLoader.loadModel(projectName, projectVersion, PathKind.IVML);
+            LOGGER.debug("Loading VIL/VTL for \"" + projectName + "\" in " + projectVersion + ".");
+            ModelLoader<Script> scriptLoader = new ModelLoader<Script>(project, config);
+            scriptLoader.loadModel(projectName, projectVersion, PathKind.VIL);
+            LOGGER.debug("Loaded Project \"" + projectName + "\" in " + projectVersion + ".");
+        }
         project.setID(projectInformation.getAttributeValue(PTN_UUID));
-
         return project;
     }
     
@@ -170,7 +172,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
             loadDefaultModels();
             // Add location of newly created project to VarModel
             try {
-                PersistenceUtils.addLocation(config, observer);
+                PersistenceUtils.processLocation(config, true, false, observer);
             } catch (ModelManagementException e) {
                 // Should not happen, but it is also not necessarily to throw this exception.
                 LOGGER.exception(e);
