@@ -65,6 +65,7 @@ class ResolutionContext <M extends IModel> {
      * @param repository the model repository
      * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
      *   interpreted locally)
+     * @see #collectLocationPrefixes()
      */
     public ResolutionContext(M model, URI modelUri, List<ModelInfo<M>> inProgress, 
         IModelRepository<M> repository, IRestrictionEvaluationContext evaluationContext) {
@@ -73,6 +74,7 @@ class ResolutionContext <M extends IModel> {
         this.inProgress = inProgress;
         this.repository = repository;
         this.evaluationContext = evaluationContext;
+        collectLocationPrefixes();
     }
     
     /**
@@ -83,6 +85,7 @@ class ResolutionContext <M extends IModel> {
      * @param repository the model repository
      * @param evaluationContext the context for evaluating import restrictions (variable definitions... 
      *   interpreted locally)
+     * @see #collectLocationPrefixes()
      */
     public ResolutionContext(String modelName, URI baseUri, IModelRepository<M> repository, 
         IRestrictionEvaluationContext evaluationContext) {
@@ -91,6 +94,21 @@ class ResolutionContext <M extends IModel> {
         this.inProgress = null;
         this.repository = repository;
         this.evaluationContext = evaluationContext;
+        collectLocationPrefixes();
+    }
+    
+    /**
+     * Collects/caches the model location prefixes for filtering.
+     */
+    private void collectLocationPrefixes() {
+        if (null != modelUri) {
+            modelLocationPrefixes = new ArrayList<>();
+            Location modelLocation = getModelRepository().getLocationFor(getModelURI());
+            while (modelLocation.getDepending() != null) {
+                modelLocation = modelLocation.getDepending();
+            }
+            collectLocationPrefixes(modelLocationPrefixes, modelLocation);
+        }
     }
     
     /**
@@ -401,17 +419,13 @@ class ResolutionContext <M extends IModel> {
      * @param list the list of versioned model infos, to be modified by filtering as side effect
      */
     public void filterByLocations(List<VersionedModelInfos<M>> list) {
-        if (null != list) {
-            if (null == modelLocationPrefixes) {
-                Location modelLocation = getModelRepository().getLocationFor(getModelURI());
-                modelLocationPrefixes = new ArrayList<>();
-                collectLocationPrefixes(modelLocationPrefixes, modelLocation);
-            }
+        if (null != list && null != modelLocationPrefixes) {
             for (int l = list.size() - 1; l >= 0; l--) {
                 VersionedModelInfos<M> infos = list.get(l);
-                for (int i = infos.size() - 1; i >= 0; i--) {
+                int size = infos.size();
+                for (int i = size - 1; i >= 0; i--) {
                     ModelInfo<M> info = infos.get(i);
-                    boolean contained = false;            
+                    boolean contained = false;
                     for (int p = 0; !contained && p < modelLocationPrefixes.size(); p++) {
                         contained = info.getLocation().toString().startsWith(modelLocationPrefixes.get(p));
                     }
@@ -419,7 +433,7 @@ class ResolutionContext <M extends IModel> {
                         infos.remove(i);
                     }
                 }
-                if (infos.size() == 0) {
+                if (size > 0 && infos.size() == 0) {
                     list.remove(l);
                 }
             }

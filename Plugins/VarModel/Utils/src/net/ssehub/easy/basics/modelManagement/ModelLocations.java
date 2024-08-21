@@ -48,8 +48,10 @@ public class ModelLocations <M extends IModel> {
      * @author Holger Eichelberger
      */
     public static class Location {
+        
         private File location;
         private List<Location> dependent;
+        private Location depending;
         
         /**
          * Creates a new location. This constructor is not visible as {@link ModelLocations} acts as a factory
@@ -97,14 +99,25 @@ public class ModelLocations <M extends IModel> {
          * @param location the location to be added
          */
         public void addDependentLocation(Location location) {
-            if (null != location) {
+            if (null != location && location != this) { // prevent accidental self-loop
                 if (null == dependent) {
                     dependent = new ArrayList<Location>();
                 }
                 if (!dependent.contains(location)) {
                     dependent.add(location);
                 }
+                location.depending = this;
             }
+        }
+        
+        /**
+         * Returns the location this location is depending on.
+         * 
+         * @return the depending location, may be <b>null</b> for none, else set if this location was added as a 
+         *     dependent location to the depending location
+         */
+        public Location getDepending() {
+            return depending;
         }
 
         /**
