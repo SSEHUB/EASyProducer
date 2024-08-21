@@ -104,10 +104,12 @@ class ResolutionContext <M extends IModel> {
         if (null != modelUri) {
             modelLocationPrefixes = new ArrayList<>();
             Location modelLocation = getModelRepository().getLocationFor(getModelURI());
-            while (modelLocation.getDepending() != null) {
-                modelLocation = modelLocation.getDepending();
+            if (modelLocation != null) {
+                while (modelLocation.getDepending() != null) {
+                    modelLocation = modelLocation.getDepending();
+                }
+                collectLocationPrefixes(modelLocationPrefixes, modelLocation);
             }
-            collectLocationPrefixes(modelLocationPrefixes, modelLocation);
         }
     }
     
@@ -419,7 +421,7 @@ class ResolutionContext <M extends IModel> {
      * @param list the list of versioned model infos, to be modified by filtering as side effect
      */
     public void filterByLocations(List<VersionedModelInfos<M>> list) {
-        if (null != list && null != modelLocationPrefixes) {
+        if (null != list && null != modelLocationPrefixes && modelLocationPrefixes.size() > 0) { // unlikely, tests
             for (int l = list.size() - 1; l >= 0; l--) {
                 VersionedModelInfos<M> infos = list.get(l);
                 int size = infos.size();

@@ -40,7 +40,7 @@ import net.ssehub.easy.varModel.model.ProjectImport;
  */
 class UnloadTestModelLoader implements IModelLoader<Project> {
 
-    public static final File BASE = new File("z:\\models");
+    public static final File BASE = new File("Z:\\models");
     
     private Map<String, ModelInfo<Project>> name2Info = new HashMap<String, ModelInfo<Project>>();
     private Map<ModelInfo<Project>, Project> data = new HashMap<ModelInfo<Project>, Project>();
