@@ -261,6 +261,43 @@ public class PersistenceUtils {
     }
     
     /**
+     * Given two project folders, this method tries to relate dependent paths to parent path constructed from the 
+     * paths in config appended to the given paths.
+     * 
+     * @param parent the parent project path
+     * @param dependent the dependent project path
+     * @param config the project/path configuration
+     */
+    public static void setDependentLocations(File parent, File dependent, Configuration config) {
+        processDependent(VarModel.INSTANCE.locations(), parent, dependent, config, PathKind.IVML);
+        processDependent(BuildModel.INSTANCE.locations(), parent, dependent, config, PathKind.VIL);
+        processDependent(TemplateModel.INSTANCE.locations(), parent, dependent, config, PathKind.VIL);
+    }
+
+    /**
+     * Given two project folders, for a specific locations/path kind combination, this method tries to relate dependent 
+     * paths to parent path constructed from the paths in config appended to the given paths.
+     * 
+     * @param locations the model locations to search within/modify
+     * @param parent the parent project path
+     * @param dependent the dependent project path
+     * @param config the project/path configuration
+     * @param kind the path kind
+     */
+    private static void processDependent(ModelLocations<?> locations, File parent, File dependent, 
+        Configuration config, PathKind kind) {
+        for (int p = 0; p < config.getPathCount(kind); p++) {
+            File par = new File(parent, config.getPath(kind, p));
+            File dep = new File(dependent, config.getPath(kind, p));
+            Location parentLoc = locations.getLocationFor(par.toURI());
+            Location dependentLoc = locations.getLocationFor(dep.toURI());
+            if (null != parentLoc && null != dependentLoc) {
+                parentLoc.addDependentLocation(dependentLoc);
+            }
+        }
+    }
+    
+    /**
      * Returns the specified location within the given <code>projectFolder</code>.
      * 
      * @param projectFolder the folder of the EASy project

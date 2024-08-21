@@ -106,6 +106,17 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
             // Should not happen, but it is also not necessarily to throw this exception.
             throw new PersistenceException(e);
         }
+        // link predecessors as dependent locations for this project
+        Model pred = project.getModel(ModelType.PREDECESSORS);
+        if (null != pred) {
+            for (int e = 0; e < pred.getEntityCount(); e++) {
+                String location = pred.getEntity(e).getAttributeValue(PRESUCCESSOR_LOCATION);
+                if (null != location) {
+                    File fLoc = new File(projectFolder.getParent(), location).getAbsoluteFile();
+                    PersistenceUtils.setDependentLocations(projectFolder.getAbsoluteFile(), fLoc, config);
+                }
+            }
+        }
         //Load the main project file for this PersistentProject
         Model rootModel = project.getModel(ModelType.ROOT);
         Entity projectInformation = rootModel.getEntity(0);
