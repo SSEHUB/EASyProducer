@@ -145,4 +145,9 @@ public abstract class ModelRepository<M extends IModel> implements IModelManagem
         return modelMgmt.availableModels().getResolvedModelInfo(model);            
     }
     
+    @Override
+    public List<Location> getDefaultLibraryLocations() {
+        return modelMgmt.locations().getDefaultLibraryLocations();
+    }
+
 }

@@ -103,6 +103,9 @@ class ResolutionContext <M extends IModel> {
     private void collectLocationPrefixes() {
         if (null != modelUri) {
             modelLocationPrefixes = new ArrayList<>();
+            for (Location l : getModelRepository().getDefaultLibraryLocations()) {
+                collectLocationPrefixes(modelLocationPrefixes, l);
+            }
             Location modelLocation = getModelRepository().getLocationFor(getModelURI());
             if (modelLocation != null) {
                 while (modelLocation.getDepending() != null) {

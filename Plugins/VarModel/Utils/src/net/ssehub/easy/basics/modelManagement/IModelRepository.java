@@ -38,6 +38,13 @@ public interface IModelRepository <M extends IModel> {
      * @return the available model or <b>null</b>
      */
     public List<VersionedModelInfos<M>> getAvailable(String name);
+
+    /**
+     * Returns the default library locations.
+     * 
+     * @return the default library locations
+     */
+    public List<Location> getDefaultLibraryLocations();
     
     /**
      * Returns whether a model information is outdated.
