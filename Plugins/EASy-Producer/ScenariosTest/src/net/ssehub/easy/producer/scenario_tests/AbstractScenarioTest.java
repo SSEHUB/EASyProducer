@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Utils;
 import net.ssehub.easy.basics.modelManagement.VersionFormatException;
@@ -473,11 +474,12 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
             // those loaders shall already be registered through subclassing AbstractTest
             if (add) {
                 System.out.println(" Adding IVML location " + ivmlFolder);
-                VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
+                Location loc = VarModel.INSTANCE.locations().addLocation(ivmlFolder, ProgressObserver.NO_OBSERVER);
                 if (null != cfgFolder) {
                     for (File c : cfgFolder) {
                         System.out.println(" Adding IVML config location " + c);
-                        VarModel.INSTANCE.locations().addLocation(c, ProgressObserver.NO_OBSERVER);
+                        Location l = VarModel.INSTANCE.locations().addLocation(c, ProgressObserver.NO_OBSERVER);
+                        loc.addDependentLocation(l);
                     }
                 }
                 System.out.println(" Adding VIL location " + vilFolder);
@@ -497,6 +499,10 @@ public abstract class AbstractScenarioTest extends AbstractTest<Script> {
                 BuildModel.INSTANCE.locations().removeLocation(vilFolder, ProgressObserver.NO_OBSERVER);
                 System.out.println(" Removing VTL location " + vtlFolder);
                 TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, ProgressObserver.NO_OBSERVER);
+                // to be on the safe side
+                VarModel.INSTANCE.clear();
+                BuildModel.INSTANCE.clear();
+                TemplateModel.INSTANCE.clear();
             }
         } catch (ModelManagementException e) {
             Assert.fail("unexpected exception (VIL/VTL): " + e.getMessage());
