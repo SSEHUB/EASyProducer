@@ -5,7 +5,9 @@ package de.uni_hildesheim.sse.vil.rt.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
+import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
+import org.eclipse.xtext.ui.editor.validation.ValidatingEditorCallback;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 
 import de.uni_hildesheim.sse.vil.rt.ui.hyperlinking.RtVilHyperlinkHelper;
@@ -45,6 +47,11 @@ public class RtVilUiModule extends de.uni_hildesheim.sse.vil.rt.ui.AbstractRtVil
      */
     public Class<? extends IResourceUIServiceProvider> bindIResourceUIServiceProvider() {
         return EasyUiResourceServiceProvider.class;
+    }
+    
+    @Override
+    public Class<? extends IXtextEditorCallback> bindIXtextEditorCallback() {
+         return ValidatingEditorCallback.class; // enable markers, Composite would be nice
     }
 
 }

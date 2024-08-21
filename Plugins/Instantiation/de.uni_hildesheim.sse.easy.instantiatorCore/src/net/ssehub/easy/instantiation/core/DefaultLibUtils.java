@@ -42,7 +42,7 @@ import net.ssehub.easy.varModel.management.VarModel;
 public class DefaultLibUtils {
 
     /**
-     * A default IVML/VIL/VTL registrar.
+     * A default library registrar for IVML/VIL/VTL.
      */
     public static final LocationRegistrar DEFAULT_REGISTRAR = new LocationRegistrar() {
         
@@ -50,17 +50,17 @@ public class DefaultLibUtils {
         public void register(File location, ProgressObserver observer) throws ModelManagementException {
             ModelManagementException returnExc = null;
             try {
-                VarModel.INSTANCE.locations().addLocation(location, observer);
+                VarModel.INSTANCE.locations().addLocation(location, observer).toDefaultLibLocation();
             } catch (ModelManagementException exc) {
                 returnExc = exc;
             }
             try {
-                BuildModel.INSTANCE.locations().addLocation(location, observer);
+                BuildModel.INSTANCE.locations().addLocation(location, observer).toDefaultLibLocation();
             } catch (ModelManagementException exc) {
                 returnExc = exc;
             }
             try {
-                TemplateModel.INSTANCE.locations().addLocation(location, observer);
+                TemplateModel.INSTANCE.locations().addLocation(location, observer).toDefaultLibLocation();
             } catch (ModelManagementException exc) {
                 returnExc = exc;
             }
@@ -84,7 +84,8 @@ public class DefaultLibUtils {
          * @param observer the progress observer
          * @throws ModelManagementException if the registration fails
          */
-        public void register(File location, ProgressObserver observer) throws ModelManagementException;
+        public void register(File location, ProgressObserver observer) 
+            throws ModelManagementException;
         
     }
 

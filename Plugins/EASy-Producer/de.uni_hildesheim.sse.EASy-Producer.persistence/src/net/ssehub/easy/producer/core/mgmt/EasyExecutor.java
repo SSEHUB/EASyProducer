@@ -38,6 +38,7 @@ import net.ssehub.easy.instantiation.core.model.execution.Executor;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.producer.core.persistence.internal.Activator;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
@@ -82,6 +83,7 @@ public class EasyExecutor {
     private ProgressObserver observer = ProgressObserver.NO_OBSERVER;
     private ReasonerConfiguration rCfg;
     private TracerFactory tracerFactory = ConsoleTracerFactory.INSTANCE;
+    private net.ssehub.easy.producer.core.persistence.Configuration easyCfg;
     private Logger logger = new Logger() {
 
         private EASyLogger logger = EASyLoggerFactory.INSTANCE.getLogger(EasyExecutor.class, Activator.PLUGIN_ID);
@@ -176,6 +178,23 @@ public class EasyExecutor {
      */
     public EasyExecutor setProjectBase(File base) {
         this.base = base;
+        return this;
+    }
+    
+    /**
+     * Looks in the {@link #setProjectBase(File) project base} for EASy-Producer files
+     * and sets up the IVML/VIL paths through these files. May take precedence over explicit
+     * settings made in this class.
+     * 
+     * @param fromFileOnly {@code true} consider the project settings only if explicitly given in a file, 
+     *     {@code false} consider them always when called
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor setupByProject(boolean fromFileOnly) {
+        easyCfg = PersistenceUtils.getConfiguration(base);
+        if (fromFileOnly && !easyCfg.isFromFile()) {
+            easyCfg = null;
+        }
         return this;
     }
 
@@ -365,20 +384,25 @@ public class EasyExecutor {
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
      */
     public void setupLocations() throws ModelManagementException {
-        Location primary = null;
-        for (File f : ivmlFolder) {
-            logger.info("Setting IVML location " + f);
-            Location loc = VarModel.INSTANCE.locations().addLocation(f, observer);
-            if (null == primary) {
-                primary = loc;
-            } else {
-                primary.addDependentLocation(loc);
+        if (null != easyCfg) {
+            logger.info("Setting up locations from EASy-Setup");
+            PersistenceUtils.processLocation(easyCfg, true, false, observer);
+        } else {
+            Location primary = null;
+            for (File f : ivmlFolder) {
+                logger.info("Setting IVML location " + f);
+                Location loc = VarModel.INSTANCE.locations().addLocation(f, observer);
+                if (null == primary) {
+                    primary = loc;
+                } else {
+                    primary.addDependentLocation(loc);
+                }
             }
+            logger.info("Setting VIL location " + vilFolder);
+            BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
+            logger.info("Setting VTL location " + vtlFolder);
+            TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
         }
-        logger.info("Setting VIL location " + vilFolder);
-        BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
-        logger.info("Setting VTL location " + vtlFolder);
-        TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
     }
 
     /**
@@ -490,14 +514,19 @@ public class EasyExecutor {
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
      */
     public void discardLocations() throws ModelManagementException {
-        logger.info("Discarding VTL location " + vtlFolder);
-        TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
-        logger.info("Discarding VIL location " + vilFolder);
-        BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-        for (int f = ivmlFolder.size() - 1; f >= 0; f--) {
-            File folder = ivmlFolder.get(f);
-            logger.info("Discarding IVML location " + folder);
-            VarModel.INSTANCE.locations().removeLocation(folder, observer);
+        if (null != easyCfg) {
+            logger.info("Discarding locations from EASy-Setup");
+            PersistenceUtils.processLocation(easyCfg, false, false, observer);
+        } else {
+            logger.info("Discarding VTL location " + vtlFolder);
+            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+            logger.info("Discarding VIL location " + vilFolder);
+            BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
+            for (int f = ivmlFolder.size() - 1; f >= 0; f--) {
+                File folder = ivmlFolder.get(f);
+                logger.info("Discarding IVML location " + folder);
+                VarModel.INSTANCE.locations().removeLocation(folder, observer);
+            }
         }
     }
     

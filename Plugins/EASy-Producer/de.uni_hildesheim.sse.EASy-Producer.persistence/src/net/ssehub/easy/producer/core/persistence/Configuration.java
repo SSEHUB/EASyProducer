@@ -11,10 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -48,6 +51,7 @@ public class Configuration {
     private File projectFolder;
     private File file;
     private long timestamp;
+    private boolean fromFile;
 
     /**
      * Defines the supported paths.
@@ -124,12 +128,22 @@ public class Configuration {
     }
     
     /**
+     * Returns whether this configuration is (initially) read from file or based on internal settings/defaults.
+     * 
+     * @return {@code true} if read from file, {@code false} else
+     */
+    public boolean isFromFile() {
+        return fromFile;
+    }
+    
+    /**
      * Sets all three paths to {@link PersistenceConstants#EASY_FILES_DEFAULT}.
      */
     public void setToEASyDefaults() {
         setPathDirect(PathKind.IVML, PersistenceConstants.EASY_FILES_DEFAULT);
         setPathDirect(PathKind.VIL, PersistenceConstants.EASY_FILES_DEFAULT);
         setPathDirect(PathKind.VTL, PersistenceConstants.EASY_FILES_DEFAULT);
+        fromFile = false;
     }
     
     /**
@@ -187,7 +201,8 @@ public class Configuration {
      */
     private void readXmlFormat(Reader reader) throws IOException {
         try {
-            XMLReader xmlReader = XMLReaderFactory.createXMLReader();
+            SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+            XMLReader xmlReader = parser.getXMLReader();
             InputSource inputSource = new InputSource(reader);
             xmlReader.setContentHandler(new ConfigurationContentHandler(this));
             xmlReader.parse(inputSource);
@@ -195,7 +210,7 @@ public class Configuration {
                 // set VTL path by default to VIL path
                 setPathDirect(PathKind.VTL, combinePath(PathKind.VIL));
             }
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | SAXException e) {
             throw new IOException(e);
         }
     }
@@ -231,6 +246,7 @@ public class Configuration {
                 }
                 reader.close();
                 timestamp = file.lastModified();
+                fromFile = true;
             } catch (IOException e) {
                 LOGGER.warn("configuration I/O problem: " + e.getMessage());
                 if (null != reader) {
