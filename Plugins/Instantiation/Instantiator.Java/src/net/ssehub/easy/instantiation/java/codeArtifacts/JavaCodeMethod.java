@@ -350,6 +350,24 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
     }
     
     /**
+     * Adds a constructor super call.
+     * 
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addSuperCall() {
+        return block.addSuperCall();
+    }
+
+    /**
+     * Adds a constructor this call.
+     * 
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addThisCall() {
+        return block.addThisCall();
+    }    
+    
+    /**
      * Adds a non-static method call.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
