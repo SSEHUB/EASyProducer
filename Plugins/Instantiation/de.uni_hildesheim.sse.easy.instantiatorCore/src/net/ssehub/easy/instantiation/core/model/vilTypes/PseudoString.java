@@ -18,6 +18,8 @@ import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
 @ClassMeta(name = Constants.TYPE_STRING)
 public class PseudoString implements IVilType {
 
+    public static final String EMPTY_CONTENT = "\0\1\0"; // don't use for anything else
+    
     @DefaultValue
     public static final String DEFAULT = "";
     
@@ -347,6 +349,16 @@ public class PseudoString implements IVilType {
      */
     public static String trim(String string) {
         return string.trim();
+    }
+    
+    /**
+     * If we have an empty content marker in {@code string}, return an empty string.
+     *
+     * @param string the text to look into
+     * @return {@code string} or empty
+     */ 
+    public static String content(String string) {
+        return string.equals(EMPTY_CONTENT) ? "" : string;
     }
     
     /**

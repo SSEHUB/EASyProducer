@@ -4,10 +4,8 @@
 package de.uni_hildesheim.sse.vil.templatelang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
-import org.eclipse.xtext.ui.editor.validation.ValidatingEditorCallback;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
@@ -69,9 +67,9 @@ public class TemplateLangUiModule extends de.uni_hildesheim.sse.vil.templatelang
         return EasyUiResourceServiceProvider.class;
     }
     
-    @Override
+    /*@Override
     public Class<? extends IXtextEditorCallback> bindIXtextEditorCallback() {
          return ValidatingEditorCallback.class; // enable markers, Composite would be nice
-    }
+    }*/
 
 }

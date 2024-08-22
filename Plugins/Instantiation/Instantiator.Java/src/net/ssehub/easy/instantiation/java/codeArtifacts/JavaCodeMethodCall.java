@@ -31,6 +31,7 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
     private List<IJavaCodeElement> arguments = new ArrayList<>();
     private boolean indent;
     private String postfix;
+    private JavaCodeMethodCall chained;
     
     /**
      * Creates a method call.
@@ -137,6 +138,29 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         return IJavaCodeElement.add(arguments, new JavaCodeConstructorCall(this, cls, false, ""));
     }
     
+    /**
+     * Adds a subsequent/chained non-static method call.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addCall(String methodName) {
+        return addCall(methodName, JavaCodeImportScope.NONE);
+    }
+
+    /**
+     * Adds a subsequent/chained method call.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @param scope the import scope
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
+        chained = new JavaCodeMethodCall(this, methodName, scope, false, postfix);
+        postfix = "";
+        return chained;
+    }
+    
     public int getArgumentsCount() {
         return arguments.size();
     }
@@ -149,6 +173,10 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         storeBefore(out);
         out.print(methodName);
         storeArgumentList(out);
+        if (null != chained) {
+            out.print(".");
+            chained.store(out);
+        }
     }
     
     protected void storeBefore(CodeWriter out) {

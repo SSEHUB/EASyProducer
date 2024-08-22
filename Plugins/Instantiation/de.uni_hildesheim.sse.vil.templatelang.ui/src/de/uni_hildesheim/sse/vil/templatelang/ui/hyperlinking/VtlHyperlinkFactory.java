@@ -41,7 +41,6 @@ public class VtlHyperlinkFactory implements IHyperlinkFactory<LanguageUnit> {
 
     @Override
     public AbstractHyperlink createHyperlink(ILeafNode parseTreeElement, LanguageUnit project) {
-System.err.println("CREATING HYPERLINK FOR " + parseTreeElement);        
         return new GenericHyperlink<LanguageUnit>(parseTreeElement, project, this);
     }
 

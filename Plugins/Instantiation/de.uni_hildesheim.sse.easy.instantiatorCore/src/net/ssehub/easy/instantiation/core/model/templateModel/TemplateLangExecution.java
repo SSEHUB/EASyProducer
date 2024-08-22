@@ -42,6 +42,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegi
 import net.ssehub.easy.instantiation.core.model.expressions.IArgumentProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ITypedModel;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 import net.ssehub.easy.instantiation.core.model.vilTypes.StringValueHelper;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.EnumValue;
@@ -98,7 +99,7 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     public static final String PARAM_TARGET_SURE = INTERNAL_PARAM_PREFIX + PARAM_TARGET;
 
     private static final List<JavaExtension> DEFAULT_EXTENSIONS = new ArrayList<JavaExtension>();
-    private static final String EMPTY_CONTENT = "\0\1\0"; // don't use for anything else
+    private static final String EMPTY_CONTENT = PseudoString.EMPTY_CONTENT;
     
     private RuntimeEnvironment environment;
     private Writer mainOut;
