@@ -5,12 +5,10 @@ package de.uni_hildesheim.sse.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
-import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IConcurrentEditingCallback;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.IDirtyStateEditorSupportClient;
 import org.eclipse.xtext.ui.editor.DirtyStateEditorSupport.InteractiveConcurrentEditingQuestion;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
-import org.eclipse.xtext.ui.editor.validation.ValidatingEditorCallback;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 
 import de.uni_hildesheim.sse.ui.hyperlinking.IvmlHyperlinkHelper;
@@ -72,9 +70,9 @@ public class IvmlUiModule extends de.uni_hildesheim.sse.ui.AbstractIvmlUiModule 
 	    return EasyUiResourceServiceProvider.class;
 	}
 	
-	@Override
+	/*@Override
 	public Class<? extends IXtextEditorCallback> bindIXtextEditorCallback() {
 	     return ValidatingEditorCallback.class; // enable markers, Composite would be nice
-	}
+	}*/
 	
 }
