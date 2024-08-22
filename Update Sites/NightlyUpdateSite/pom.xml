@@ -56,6 +56,17 @@
               <ws>cocoa</ws>
               <arch>x86_64</arch>
             </environment>
+            <!-- seems to be also for mac https://www.eclipse.org/lists/tycho-user/msg09090.html -->
+             <environment>
+               <os>macosx</os>
+               <ws>cocoa</ws>
+               <arch>aarch64</arch>
+             </environment>
+            <!--<environment>
+             <os>linux</os>
+             <ws>gtk</ws>
+             <arch>aarch64</arch>
+            </environment>-->            
           </environments>
           <target>
             <file>eclipse.target</file> <!-- executing project must have target file, alternative: maven project -->
