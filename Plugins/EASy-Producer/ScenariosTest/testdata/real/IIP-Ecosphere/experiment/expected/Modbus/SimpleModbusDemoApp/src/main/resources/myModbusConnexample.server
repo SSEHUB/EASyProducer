@@ -1,0 +1,21 @@
+{
+ "Day" : {
+   "offset" : 1282, 
+   "type" : "ushort"
+ }, "frequency" : {
+   "offset" : 32780, 
+   "type" : "float"
+ }, "I1" : {
+   "offset" : 32782, 
+   "type" : "float"
+ }, "Month" : {
+   "offset" : 1283, 
+   "type" : "ushort"
+ }, "U1" : {
+   "offset" : 32774, 
+   "type" : "float"
+ }, "Year" : {
+   "offset" : 1284, 
+   "type" : "ushort"
+ }
+}

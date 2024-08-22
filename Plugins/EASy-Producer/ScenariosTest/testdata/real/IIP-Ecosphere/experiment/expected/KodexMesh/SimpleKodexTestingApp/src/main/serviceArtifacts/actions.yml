@@ -1,0 +1,18 @@
+forms:
+   DataForm: &DataForm
+     fields:
+       - name: intField
+         validators:
+           - type: IsInteger
+       - name: stringField
+         validators:
+           - type: IsAction
+             config:
+               type: pseudonymize
+               config:
+                 method: merengue
+           - type: IsString
+actions:
+   - name: protect Kodex Pseudonymizer data
+     type: form
+     config: *DataForm

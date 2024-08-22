@@ -1,0 +1,190 @@
+project Modbus {
+
+    import IIPEcosphere;
+    import ModbusPhoenixEEM;
+    import ModbusSiemensSentron;
+
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+
+    EnumType myEnum = {
+        name = "myEnum",
+        literals = {
+            EnumLiteral {
+                name = "lit1",
+                ordinal = 100
+            }, EnumLiteral {
+                name = "lit2",
+                ordinal = 101
+            }
+        }
+    };
+
+    // ------------ component setup ------------------
+
+    serializer = Serializer::Json;
+    // serviceManager, containerManager are already defined    
+
+    aasServer = {
+        schema = AasSchema::HTTP,
+        port = 9001,
+        host = "127.0.0.1"
+    };
+    aasRegistryServer = {
+        schema = AasSchema::HTTP,
+        port = 9002,
+        host = "127.0.0.1",
+        path = "registry"
+    };
+    aasImplServer = {
+        port = 9003
+    };
+    aasProtocol = AasProtocolVabTcp{};
+
+    // ------------------ transport --------------------------
+
+    transportProtocol = TransportProtocolMQTTv5 {
+        port = 8883
+    };
+
+    serviceProtocol = ServiceProtocolMQTTv5 {};
+
+    // ------------------ resources/devicemgt ----------------
+
+    deviceRegistry = BasicDeviceRegistry {
+    };
+
+    deviceMgtStorage = S3MockDeviceMgtStorage {
+        host = "localhost",
+        port = 8884,
+        region = "local"
+    };
+
+    // just for testing, this instantiates app rather than platform
+    deviceMgtStorageServer = S3MockDeviceMgtStorageServer{};
+
+    // ------------ data types ------------------
+
+    // see externalized ModbusPhoenixEEM.ivml
+
+    // ------------ individual, reusable services ------------------
+
+    ModbusTcpV1Connector myModbusConn = {
+        id = "myModbusConn",
+        name = "myModbusConn example",
+        description = "",
+        ver = "0.1.0",
+        host = "127.0.0.1",
+        //port = 502, // default localhost
+        
+        input = {{type=refBy(modbusPhoenixRwEEM)}},
+        output = {{type=refBy(modbusPhoenixEEM)}},
+        inInterface = {type=refBy(modbusPhoenixRwEEM)}, 
+        outInterface = {type=refBy(modbusPhoenixEEM)}
+    };
+    
+    ModbusTcpV1Connector myModbusSentronConn = {
+        id = "myModbusSentronConn",
+        name = "myModbusSentronConn example",
+        description = "",
+        ver = "0.1.0",
+        host = "127.0.0.1",
+        //port = 502, // default localhost
+        
+        input = {{type=refBy(modbusSiemensRwSentron)}},
+        output = {{type=refBy(modbusSiemensSentron)}},
+        inInterface = {type=refBy(modbusSiemensRwSentron)}, 
+        outInterface = {type=refBy(modbusSiemensSentron)}
+    };    
+
+    // not really needed except for populating the interfaces package
+    Service myReceiverService = JavaService {
+        id = "ModbusReceiver",
+        name = "Modbus Receiver",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "ReceiverImpl",
+        artifact = "",
+        kind = ServiceKind::SINK_SERVICE,
+        input = {{type=refBy(modbusPhoenixEEM)}, {type=refBy(modbusSiemensSentron)}}
+    };
+
+    // --------------------- monitoring ---------------------------
+
+    // current default: no monitoring configured
+
+    // ------------------------- UI -------------------------------
+
+    // current default: no UI configured
+
+    // ------------ application and service nets ------------------
+
+    Application myApp = {
+        id = "ModbusApp",
+        name = "Simple Modbus Demo App",
+        ver = "0.1.0",
+        description = "",
+        services = {refBy(myMesh)}        
+    };
+
+    ServiceMesh myMesh = {
+        description = "Modbus Service Net",
+        sources = {refBy(mySource), refBy(mySentronSource)}
+    };
+
+    MeshSource mySource = {
+       impl = refBy(myModbusConn),
+       next = {refBy(myConnMySourceMyReceiver)}
+    };
+
+    MeshSource mySentronSource = {
+       impl = refBy(myModbusSentronConn),
+       next = {refBy(myConnMySourceMyReceiver)}
+    };
+
+    // needed to form a graph
+
+    MeshConnector myConnMySourceMyReceiver = {
+        name = "Source->Receiver",
+        next = refBy(myReceiver)
+    };
+
+    MeshSink myReceiver = {
+        impl = refBy(myReceiverService)
+    };
+
+    // ---------- generation setup ------------
+
+    sharedInterfaces = true;
+    sharedArtifact = "de.iip-ecosphere.platform:apps.ModbusAppInterfaces:" + iipVer;
+
+    // ------------ freezing ------------------
+
+    freeze {
+        aas;
+        aasServer;
+        aasRegistryServer;
+        aasImplServer;
+        aasPersistency;
+        aasProtocol;
+        serializer;
+        transportProtocol;
+        serviceManager;
+        serviceProtocol;
+        containerManager;
+        deviceMgtStorageServer;
+        deviceMgtStorage;
+        deviceRegistry;
+        javaModuleOpts;
+        javaOpts;
+        pidDir;
+        sharedInterfaces;
+        sharedArtifact;
+        platformMonitoring;
+        managementUi;
+        artifactsFolder;
+        artifactsUriPrefix;
+        .; // every variable declared in this project
+    } but (f|f.bindingTime >= BindingTime.runtimeMon);
+
+}

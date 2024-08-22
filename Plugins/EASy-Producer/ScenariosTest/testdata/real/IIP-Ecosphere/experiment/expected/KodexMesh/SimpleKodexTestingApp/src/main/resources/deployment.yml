@@ -1,0 +1,149 @@
+id: KodexMeshApp
+name: Simple Kodex Testing App
+version: 0.1.0
+application:
+  id: KodexMeshApp
+  name: Simple Kodex Testing App
+  version: 0.1.0
+types:
+    - name: KRec13
+      fields:
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+    - name: KRec13Anon
+      fields:
+        - name: kip
+          type: String
+        - name: intField
+          type: int
+        - name: stringField
+          type: String
+services:
+   - id: KodexReceiver
+     applicationId: KodexMeshApp
+     name: Kodex Data Receiver
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SINK_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveKRec13Anon_KodexReceiver-in-0
+         direction: IN
+         id: KodexPythonService -> KodexReceiver
+         type: KRec13Anon
+         function: receiveKRec13Anon_KodexReceiver
+         service: KodexPythonService
+   - id: Pseudonymizer
+     applicationId: KodexMeshApp
+     name: Kodex Pseudonymizer
+     version: 0.7.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: transformKRec13AnonKRec13Anon_KodexPythonService-out-0
+         direction: OUT
+         id: Pseudonymizer -> KodexPythonService
+         type: KRec13Anon
+         function: processKRec13Anon_Pseudonymizer
+         service: KodexPythonService
+       - channel: processKRec13_Pseudonymizer-in-0
+         direction: IN
+         id: SimpleKodexSource -> Pseudonymizer
+         type: KRec13
+         function: processKRec13_Pseudonymizer
+         service: SimpleKodexSource
+     process: 
+         artifacts:
+           - /kodex.zip
+           - /kodex_pseudonymizer.zip
+         homePath: ${tmp}/pseudonymizer/kodex
+         executablePath: ${tmp}/pseudonymizer/kodex 
+         started: true
+     ensembleWith: SimpleKodexSource
+   - id: KodexPythonService
+     applicationId: KodexMeshApp
+     name: Kodex Python Service
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: TRANSFORMATION_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: receiveKRec13Anon_KodexReceiver-out-0
+         direction: OUT
+         id: KodexPythonService -> KodexReceiver
+         type: KRec13Anon
+         function: transformKRec13AnonKRec13Anon_KodexPythonService
+         service: KodexReceiver
+       - channel: transformKRec13AnonKRec13Anon_KodexPythonService-in-0
+         direction: IN
+         id: Pseudonymizer -> KodexPythonService
+         type: KRec13Anon
+         function: transformKRec13AnonKRec13Anon_KodexPythonService
+         service: Pseudonymizer
+     process: 
+         homePath: ${tmp}/kodexPythonService/python
+         executablePath: ${tmp}/kodexPythonService/python
+         artifacts:
+           - /python_kodexPythonService.zip
+           - /myArtifact.zip
+         locationKey: CONDA
+         execArg:
+           - run
+           - -n
+           - myGPU
+         cmdArg:
+           - --mode
+           - console
+           - --modulesPath
+           - ${tmp}/kodexPythonService/python
+           - --servicesPackage
+           - services
+           - --sid
+           - KodexPythonService
+         started: true
+   - id: SimpleKodexSource
+     applicationId: KodexMeshApp
+     name: Simple Kodex Data Source
+     version: 0.1.0
+     description: 
+     deployable: true
+     kind: SOURCE_SERVICE
+     topLevel: true
+     cmdArg: 
+       - --iip.port=${port}
+       - --iip.protocol=${protocol}
+     relations:
+       - endpoint:
+           portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port} --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+           hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host} --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+       - channel: processKRec13_Pseudonymizer-out-0
+         direction: OUT
+         id: SimpleKodexSource -> Pseudonymizer
+         type: KRec13
+         function: createKRec13_SimpleKodexSource
+         service: Pseudonymizer
+

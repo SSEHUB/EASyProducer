@@ -1,0 +1,145 @@
+import PythonBasics;
+import MeshBasics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template PythonMeshElementTemplateBase(Configuration config, FileArtifact target, MeshElement elt, String pkg, PythonService service) extends MeshBasics {
+
+    String typeAdd = "";
+
+    // called via MeshBasics.generateDataMethods for MeshSource
+    def generateSourceMethod(MeshSource src, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        if (!src.impl.asynchronous) {
+        'def ${methodSuffix}(self) -> ${type}:
+            """Data generator for source classes.
+        
+            Return:
+              - the created data
+            """
+            result = ${type}${typeAdd}()
+            ${generateSourceMethodImpl(src.impl)}
+            return result\n'
+        }
+    } 
+    
+    // dispatch basis
+    def generateSourceMethodImpl(ServiceBase service) {
+        '#TODO add your code here'
+    }
+
+    // called via MeshBasics.generateDataMethods for asynch MeshProcessor
+    def generateAsyncProcessorInMethod(MeshProcessor proc, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        boolean forward = true;
+        for (IOType t: proc.input) {
+            if (toTypeName(t) == type) {
+                forward = t.forward;
+            }
+        }
+        'def ${methodSuffix}(self, data: ${type}):
+            """Asynchronous data processing method. Use self.ingest(data) to pass the result back to the data stream
+               ${generatePossibleOutputTypes(service, config)|e}
+        
+            Parameters:
+              - data -- the data to process
+            """
+            ${generateAsyncProcessorInMethodImpl(proc.impl, forward)}\n\n'
+    }
+    
+    // dispatch basis
+    def generateAsyncProcessorInMethodImpl(ServiceBase service, Boolean forward) {
+        '#create result instance and call self.ingest(data)
+        raise NotImplementedError'
+    } 
+
+    // called via MeshBasics.generateDataMethods for synch MeshProcessor
+    def generateSyncProcessorMethod(MeshProcessor proc, String inType, String outType, String methodSuffix, String methodSuffixWithServiceId) {
+        'def ${methodSuffix}(self, data: ${inType}) -> ${outType}:
+            """Synchronous data processing method.
+        
+            Parameters:
+              - data -- the data to process
+            Returns:
+              the processed data              
+            """
+            result = ${outType}${typeAdd}()
+            ${generateSyncProcessorMethodImpl(proc.impl)}
+            return result\n'
+    }
+    
+    // dispatch basis
+    def generateSyncProcessorMethodImpl(ServiceBase service) {
+        '#TODO add your code here'
+    } 
+    
+    // called via MeshBasics.generateDataMethods for MeshSink
+    def generateSinkMethod(MeshSink snk, String type, String methodSuffix, String methodSuffixWithServiceId) {
+        'def ${methodSuffix}(self, data: ${type}):
+            """Sink method, receives data.
+        
+            Parameters:
+              - data -- the received data
+            """
+            ${generateSinkMethodImpl(snk.impl)}\n'
+    }
+    
+    // dispatch basis
+    def generateSinkMethodImpl(ServiceBase service) {
+        'raise NotImplementedError'
+    }
+    
+    def produceDatatypeImports(MeshElement elt, ServiceBase service) {
+        '${generateImports(service)}'
+        setOf(RecordType) types = collectRecordTypes(elt);
+        for (RecordType t: types) {
+            String name = t.name;
+            'from datatypes.${name} import ${name}'
+            'from datatypes.${name}Impl import ${name}Impl'
+        }
+    } 
+
+    // dispatch basis
+    def generateImports(ServiceBase service) {
+        ''
+    }
+    
+    // dispatch basis
+    def inheritsFrom(String cls) {
+        cls;
+    }
+    
+    def initTypeAdd(IIPEcosphere cfg) {
+        if (cfg.sharedInterfaces) {
+            typeAdd = "Impl";
+        } else {
+            typeAdd = "";
+        }    
+    }
+    
+    def produceReconfigure(ServiceBase service) {
+        if (service.parameter.size() > 0) {
+            'def notifyReconfigured(self, values: dict):
+                """Called to inform the implementing class that a parameter reconfiguration happened.
+                   
+                   Parameters:
+                     - values -- the new param names/values
+                   """ 
+                # if you want to react on parameter changes, you may add code here
+                # if you are not interested in parameter changes, feel free to delete this method
+                pass
+            '
+        } else {
+            ''
+        }
+    }
+    
+    // dispatch basis
+    def generateFurtherMethods(ServiceBase service) {
+        ''
+    } 
+    
+    // dispatch basis
+    def produceConstructorRest(ServiceBase service) {
+        ''
+    }    
+    
+}

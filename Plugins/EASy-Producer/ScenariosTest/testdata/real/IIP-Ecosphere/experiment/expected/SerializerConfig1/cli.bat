@@ -1,0 +1,1 @@
+java -cp @plJars\classpath.win -Dio.netty.tryReflectionSetAccessible=true -Dlog4j2.formatMsgNoLookups=true --add-opens java.base/jdk.internal.misc=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED de.iip_ecosphere.platform.platform.Cli %*

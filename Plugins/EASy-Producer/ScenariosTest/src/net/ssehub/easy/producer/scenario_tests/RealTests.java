@@ -54,6 +54,8 @@ public class RealTests extends AbstractRealTests {
         }
         net.ssehub.easy.instantiation.maven.Registration.register();
         net.ssehub.easy.instantiation.java.Registration.register();
+        net.ssehub.easy.instantiation.json.Registration.register();
+        net.ssehub.easy.instantiation.yaml.Registration.register();
         VelocityInstantiator.register();
     }
 

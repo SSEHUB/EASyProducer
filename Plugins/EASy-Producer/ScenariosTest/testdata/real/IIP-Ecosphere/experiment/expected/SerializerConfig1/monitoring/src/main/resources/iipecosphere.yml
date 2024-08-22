@@ -1,0 +1,69 @@
+transport:
+    host: localhost
+    port: 8883
+    actionTimeout: 1000
+    authenticationKey: amqp
+    gatewayPort: -1
+    netmask : 
+monitoringUpdatePeriod: 2000
+aas:
+  server:
+    port: 9001
+    host: 127.0.0.1
+    schema: HTTP
+    path: 
+  registry:
+    port: 9002
+    host: 127.0.0.1
+    schema: HTTP
+    path: registry
+  implementation:
+    port: 9003
+    host: 127.0.0.1
+    netmask: 
+    schema: TCP
+    protocol: VAB-TCP
+  accessControlAllowOrigin: "*"
+  persistence: INMEMORY
+netMgr:
+    netmask: 
+runtimeStorage:
+    endpoint: "http://localhost:8885"
+    region: local
+    authenticationKey: 
+    bucket: iip
+    prefix: ecs
+    packageDescriptor: runtime.yml
+    packageFilename: runtime.zip
+configStorage:
+    endpoint: "http://localhost:8885"
+    region: local
+    authenticationKey: 
+    bucket: iip
+    prefix: config
+    packageDescriptor: config.yml
+    packageFilename: config.zip
+storageServer:
+    port: 8885
+    path: ""
+    authenticationKey: 
+prometheus:
+  server:
+    schema: HTTP
+    host: 127.0.0.1
+    port: 9090
+    running: false
+  exporter: 
+    schema: HTTP
+    host: 127.0.0.1
+    port: -1
+    running: false
+  alertMgr: 
+    schema: HTTP
+    host: 127.0.0.1
+    port: 9091
+    running: false
+  scrapeInterval: 1001
+  scrapeTimeout: 1000
+
+

@@ -1,0 +1,29 @@
+# actions and forms for Kodex Pseudonymizer
+$include:
+  - actions.yml
+  - api.yml
+# sources that we want to read from
+sources:
+  - name: stdin
+    type: stdin
+    config:
+      format: json
+      chunk-size: 1
+# destinations that we want to write to              
+destinations:
+  - name: stdout
+    type: stdout
+    config: {}
+streams:
+  - name: default
+    id: abcdef
+    sources:
+      - source: stdin
+    configs:
+      - name: default
+        id: abcdef
+        actions:
+          - name: protect Kodex Pseudonymizer data
+        destinations:
+          - name: stdout
+            status: active

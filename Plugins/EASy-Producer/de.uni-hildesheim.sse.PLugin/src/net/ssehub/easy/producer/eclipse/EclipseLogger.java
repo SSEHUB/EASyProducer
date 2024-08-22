@@ -31,7 +31,11 @@ public class EclipseLogger implements ILogger {
      */
     public void info(String msg, Class<?> clazz, String bundleName) {
         msg = "[INFO] [" + clazz.getSimpleName() + "] " + msg;
-        logger.log(new Status(IStatus.INFO, bundleName, msg));
+        try {
+            logger.log(new Status(IStatus.INFO, bundleName, msg));
+        } catch (IllegalArgumentException e) { // illegal bundle
+            System.out.println(msg);
+        }
     }
 
     /**
@@ -39,8 +43,11 @@ public class EclipseLogger implements ILogger {
      */
     public void error(String msg, Class<?> clazz, String bundleName) {
         msg = "[ERROR] [" + clazz.getSimpleName() + "] " + msg;
-        logger.log(new Status(IStatus.ERROR, bundleName, msg));
-
+        try {
+            logger.log(new Status(IStatus.ERROR, bundleName, msg));
+        } catch (IllegalArgumentException e) { // illegal bundle
+            System.out.println(msg);
+        }
     }
 
     /**
@@ -48,7 +55,11 @@ public class EclipseLogger implements ILogger {
      */
     public void warn(String msg, Class<?> clazz, String bundleName) {
         msg = "[WARNING] [" + clazz.getSimpleName() + "] " + msg;
-        logger.log(new Status(IStatus.WARNING, bundleName, msg));        
+        try {
+            logger.log(new Status(IStatus.WARNING, bundleName, msg));        
+        } catch (IllegalArgumentException e) { // illegal bundle
+            System.out.println(msg);
+        }
     }
     
     /**
@@ -56,7 +67,11 @@ public class EclipseLogger implements ILogger {
      */
     public void debug(String msg, Class<?> clazz, String bundleName) {
         msg = "[DEBUG] [" + clazz.getSimpleName() + "] " + msg;
-        logger.log(new DebugStatus(bundleName, msg));        
+        try {
+            logger.log(new DebugStatus(bundleName, msg));        
+        } catch (IllegalArgumentException e) { // illegal bundle
+            System.out.println(msg);
+        }
     }
     
     /**
@@ -64,7 +79,11 @@ public class EclipseLogger implements ILogger {
      */
     public void exception(String msg, Class<?> clazz, String bundleName) {
         msg = "[EXCEPTION] [" + clazz.getSimpleName() + "] " + msg;
-        logger.log(new DebugStatus(bundleName, msg));        
+        try {
+            logger.log(new DebugStatus(bundleName, msg));
+        } catch (IllegalArgumentException e) { // illegal bundle
+            System.out.println(msg);
+        }
     }
 
 }

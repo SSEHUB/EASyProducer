@@ -1,0 +1,11 @@
+project AllServices {
+
+    import AllServicesPart*; 
+    import IDTA_02002_ContactInformations with (IDTA_02002_ContactInformations.version == v1.0);
+        
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    freeze {
+        .;
+    }
+}

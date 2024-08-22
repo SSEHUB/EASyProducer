@@ -1,0 +1,445 @@
+import Basics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaBasics(Configuration config, FileArtifact target) {
+
+    def String asIdentifier(String s) {
+        substNonIdCharacters(s);
+    }
+
+    def String asPackageName(String s) {
+        substNonIdCharacters(s.replace("-", "_"));
+    }
+    
+    def String asMethodFieldIdentifier(String s) {
+        substNonIdCharacters(s.replace(".", "_"));
+    }
+
+    def String asMethodNameSuffix(String s) {
+        asMethodFieldIdentifier(s.firstToUpperCase());
+    }
+    
+    def String asTypeName(String s) {
+        if (s.indexOf("[") > 0) {
+            s; // assume type name with array
+        } else if (s.indexOf(".") > 0) {
+            s; // assume FQN
+        } else {
+            s.firstToUpperCase().toCamelCaseIdentifier();
+        }
+    }
+    
+    def String getAppMvnVersion(Application app) {
+        String appVersion = "${app.ver}";
+        if (app.snapshot) {
+            appVersion = appVersion + "-SNAPSHOT";
+        }
+        appVersion;
+    }
+
+    def String getAppMvnName(Application app) {
+        asTypeName(app.name);
+    }
+    
+    // ------------------------------------------ type name access -------------------------------------
+
+    def String toTypeName(IOType type) {
+        toTypeName(type.type);
+    }
+    
+    @DispatchBasis
+    def String toTypeName(DataType type) {
+        asTypeName(type.name);
+    }
+    
+    @DispatchCase
+    def String toTypeName(PrimitiveType type) {
+        type.name; // fallback
+    }
+
+    @DispatchCase
+    def String toTypeName(AliasType type) {
+        toTypeName(type.represents);
+    }
+    
+    @DispatchCase
+    def String toTypeName(EnumType type) {
+        asTypeName(type.name);
+    }
+
+    @DispatchCase
+    def String toTypeName(ShortTypeType type) {
+        "short";
+    }
+    
+    @DispatchCase
+    def String toTypeName(IntegerTypeType type) {
+        "int";
+    }
+
+    @DispatchCase
+    def String toTypeName(LongTypeType type) {
+        "long";
+    }
+    
+    @DispatchCase
+    def String toTypeName(StringTypeType type) {
+        "String";
+    }
+
+    @DispatchCase
+    def String toTypeName(BooleanTypeType type) {
+        "boolean";
+    }
+
+    @DispatchCase
+    def String toTypeName(FloatTypeType type) {
+        "float";
+    }
+
+    @DispatchCase
+    def String toTypeName(DoubleTypeType type) {
+        "double";
+    }
+
+    @DispatchCase
+    def String toTypeName(ByteTypeType type) {
+        "byte";
+    }
+
+    @DispatchCase
+    def String toTypeName(ObjectTypeType type) {
+        "Object";
+    }
+    
+    @DispatchCase
+	def String toTypeName(Integer16TypeType type) {
+        "short";
+    }
+    
+    @DispatchCase
+    def String toTypeName(Integer32TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(Integer64TypeType type) {
+        "long";
+    }
+    
+    @DispatchCase
+    def String toTypeName(SByteTypeType type) {
+        "byte";
+    }
+    
+    @DispatchCase
+    def String toTypeName(UnsignedInteger16TypeType type) {
+        "short";
+    }
+
+    @DispatchCase
+    def String toTypeName(UnsignedInteger32TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(UnsignedInteger64TypeType type) {
+        "long";
+    }
+    
+    @DispatchCase
+    def String toTypeName(ByteStringTypeType type) {
+        "byte[]";
+    }
+    
+    @DispatchCase
+    def String toTypeName(DateTimeTypeType type) {
+        "java.time.LocalDateTime";
+    }
+	
+    @DispatchCase
+    def String toTypeName(ArrayType type) {
+        toTypeName(type.type) + "[]";
+    } // implies ByteArrayTypeType, IntegerArrayTypeType, DoubleArrayTypeType, StringArrayTypeType
+
+    @DispatchCase
+    def String toTypeName(IEC61131_3DateTimeTypeType type) {
+        "java.util.Date";
+    }
+    
+    /**
+     * Returns whether typeName indicates a Java Object type that is known, from Java
+     * and (including String) can be considered as a "primitive".
+     */ 
+    def Boolean isPrimitive(String typeName) {
+        typeName=="Integer" or typeName=="Long" or typeName=="Float" or typeName=="Double"
+            or typeName=="Byte" or typeName=="Boolean" or typeName=="Char" or typeName=="Short"
+            or typeName=="String"; 
+    }
+    
+    def String considerWrapper(String typeName) {
+        switch (typeName) { // Java primitives to Wrapper
+            "int" : "Integer",
+            "long" : "Long",
+            "float" : "Float",
+            "double" : "Double",
+            "byte" : "Byte",
+            "boolean" : "Boolean",
+            "char" : "Char",
+            "short" : "Short",
+            default: typeName
+        }
+    }
+    
+    def String toTypeName(ListType type) {
+        DataType eltType = type.type;
+        String t = considerWrapper(toTypeName(eltType));
+        "java.util.List<${t}>"
+    }
+    
+    // ------------------------------------------ primitive type casting -------------------------------------
+    
+    def cast(DataType type) {
+        "(" + toTypeName(type) + ")";
+    }
+
+    // ------------------------------------------ (MVN) artifact access -------------------------------------
+    
+    def String getArtifact(MeshElement elt) {
+        getArtifact(elt.impl);
+    }
+    
+    def String getArtifact(ServiceBase service) {
+        "";
+    }
+
+    def String getArtifact(CompleteService service) {
+        service.artifact;
+    }
+
+    def String getArtifact(JavaService service) {
+        service.artifact;
+    }
+    
+    def String getArtifact(PythonService service) {
+        service.artifact;
+    }
+
+    def String getArtifact(Connector conn) {
+        conn.artifact;
+    }
+
+    def String getArtifact(Server ser) {
+        ser.artifact;
+    }
+
+    def String getSelectorArtifact(FamilyMemberSelector sel) {
+        "";
+    }
+
+    def String getSelectorArtifact(ServiceSelectorBasedFamilyMemberSelector sel) {
+        sel.artifact;
+    }
+    
+    @DispatchBasis
+    def setOf(String) getArtifacts(ServiceBase service) {
+        setOf(String) r = {};
+        r;
+    }
+
+    @DispatchCase
+    def setOf(String) getArtifacts(Service service) {
+        service.artifacts;
+    }
+    
+    @DispatchCase
+    def setOf(String) getArtifacts(PythonService service) {
+        service.artifacts;
+    }
+
+    @DispatchBasis
+    def setOf(String) getArtifacts(Server server) {
+        server.artifacts;
+    }    
+    
+    // ------------------------------------------ families ----------------------------------
+    
+    const String familyInterfaceSuffix = "FamilyInterface";
+    
+    def String familyInterfaceName(String clsName) {
+        clsName + familyInterfaceSuffix;
+    }
+    
+    def String familyMemberName(String clsName, String familyInterfaceName) {
+        if (familyInterfaceName <> "") {
+            clsName + "Family" + familyInterfaceName.substring(0, familyInterfaceName.length() - familyInterfaceSuffix.length());
+        } else {
+            clsName;
+        }
+    }
+    
+    def getJavaServiceKind(ServiceKind kind) {
+        switch (kind) {
+            ServiceKind::SOURCE_SERVICE: "ServiceKind.SOURCE_SERVICE",
+            ServiceKind::SINK_SERVICE: "ServiceKind.SINK_SERVICE",
+            ServiceKind::TRANSFORMATION_SERVICE: "ServiceKind.TRANSFORMATION_SERVICE",
+            ServiceKind::PROBE_SERVICE: "ServiceKind.PROBE_SERVICE",
+            default: "null" // shall not occur
+        }
+    }
+    
+    // ------------------------------------ simple parameters -------------------------------
+    
+    def produceParametersReg(Parameters params) {
+        for (Parameter p: params) {
+            '${produceParameterReg(p)}'
+        }
+    }
+
+    // dispatch basis
+    def produceParameterReg(Parameter p) {
+        ''
+    }
+    
+    def produceParameterReg(StringParameter p) {
+        '${produceParameterDecl(p, "String.class", "TypeTranslators.JSON_STRING")}'
+    }
+
+    def produceParameterReg(IntegerParameter p) {
+        '${produceParameterDecl(p, "Integer.class", "TypeTranslators.INTEGER")}'
+    }
+
+    def produceParameterReg(LongParameter p) {
+        '${produceParameterDecl(p, "Long.class", "TypeTranslators.LONG")}'
+    }
+
+    def produceParameterReg(BooleanParameter p) {
+        '${produceParameterDecl(p, "Boolean.class", "TypeTranslators.BOOLEAN")}'
+    }
+
+    def produceParameterReg(RealParameter p) {
+        '${produceParameterDecl(p, "Double.class", "TypeTranslators.DOUBLE")}'
+    }
+    
+    def produceParameterDecl(Parameter p, String cls, String typeTranslator) {
+        String sysProp = getStringValueSafe(p.systemProperty, "");
+        if (sysProp <> "") {
+            sysProp = ', "${sysProp}"';
+        }
+        '${produceParameterDecl(p.name, cls, typeTranslator, sysProp)}'
+    }
+
+    def produceParameterDecl(String name, String cls, String typeTranslator, String sysProp) {
+        // fast track, no attributes, no implicit recovery, just parameter declaration
+        'AbstractService.addConfigurer(c, "${name}", ${cls}, ${typeTranslator}, v -> {}, null${sysProp});'
+    }
+    
+    // ------------------------------------------ other -------------------------------------
+
+    def String toPath(String pkg) {
+        pkg.replace(".", "/");
+    }
+    
+    def String toJvmMemLimitOpt(Integer limit) {
+        if (limit > 0) {
+            "-Xmx${limit}M"
+        } else {
+            ""
+        }
+    }
+    
+    def generatePossibleOutputTypes(ServiceBase base, IIPEcosphere cfg) {
+        String res = "";
+        String typeAdd = "";
+        if (cfg.sharedInterfaces) {
+            typeAdd = "Impl";
+        }
+        for (IOType t : base.output) {
+            res = appendWithSeparator(res, ", ", toTypeName(t) + typeAdd);
+        }
+        if (res.length() > 0) {
+            res = "Possible output types: " + res;
+        }
+        res;
+    }
+    
+    def String getContainerNameInfix(EcsDevice device) {
+        String result = "";
+        if (device.containerName.length() > 0) { // not "dflt" here
+            result = "-${device.containerName}";
+        }
+        result;
+    }
+
+    // dispatch basis
+    def getPath(DataType type) {
+        ''
+    }
+    
+    /*def getPath(RecordType type) {
+        type.path;
+    }*/
+
+    def getPath(IOTypeWithPath type) {
+        type.path;
+    }
+    
+    /**
+     * Turns a qualified (package) plugin name into a class name.
+     */
+    def pluginToClassName(String plugin) {
+        String result = "";
+        boolean nextUpper = true;
+        for (String c: plugin.characters()) {
+            if (c=="." or c ==":") {
+                nextUpper = true;
+            } else {
+                if (nextUpper) {
+                    c = c.firstToUpper();
+                    nextUpper = false;
+                }
+                result = result + c;
+             }
+        }
+        asIdentifier(result);
+    }
+    
+    @DispatchBasis
+    def getQualifier(Field field) {
+        "";
+    }
+    
+    @DispatchCase
+    def getQualifier(AasField field) {
+        String semId = getStringValueSafe(field.semanticId, "");
+        if (semId <> "") {
+            ', "${semId}"';
+        } else {
+            "";
+        }
+    }
+    
+    @DispatchBasis
+    def isMultiField(Field field) {
+        false;
+    }
+        
+    @DispatchCase
+    def isMultiField(AasField field) {
+        Integer minInst = getIntegerValueSafe(field.minimumInstances, -1);
+        Integer maxInst = getIntegerValueSafe(field.maximumInstances, -1);
+        field.counting or maxInst > 1 or (minInst >= 0 and maxInst < 0); // counting: IDTA 2001 ApplicationUri
+    }
+    
+    @DispatchBasis
+    def DataType getElementType(DataType type) {
+        type;
+    }
+
+    @DispatchCase    
+    def DataType getElementType(ListType type) {
+        type.type;
+    }
+
+}
