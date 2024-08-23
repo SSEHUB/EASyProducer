@@ -144,12 +144,38 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             }
         }
         return convertedValue;
-    }    
+    } 
+    
+    /**
+     * Conversion operation.
+     * 
+     * @param path
+     *            the path to be converted
+     * @return the converted value
+     * @throws VilException
+     *             in case that creating the artifact fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaCodeArtifact convert(Path path) throws VilException {
+        return ArtifactFactory.createArtifact(JavaCodeArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
+    }
 
     @Invisible
     @Conversion
     public static JavaCodeArtifact convert(JavaFileArtifact val) {
         return convert((IFileSystemArtifact) val);
+    }
+    
+    @Override
+    public Object determineActualValue(Object object) {
+        Object result = object;
+        if (!(object instanceof JavaCodeArtifact)) { // secondary artifact conversion, allow for VTL parameter assng.
+            if (object instanceof FileArtifact) {
+                result = convert((IFileSystemArtifact) object);
+            }
+        }
+        return super.determineActualValue(result);
     }
     
     /**

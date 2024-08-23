@@ -22,6 +22,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAttribute;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlockInterface;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
@@ -107,6 +108,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeEnum.class);
             TypeRegistry.DEFAULT.register(JavaCodeEnumConstant.class);
             TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);
+            TypeRegistry.DEFAULT.register(JavaCodeBlockInterface.class);
             TypeRegistry.DEFAULT.register(JavaCodeBlock.class);
             TypeRegistry.DEFAULT.register(JavaCodeDoLoop.class);
             TypeRegistry.DEFAULT.register(JavaCodeWhileLoop.class);

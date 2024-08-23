@@ -117,6 +117,25 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
     }
 
     /**
+     * Adds a call argument as raw string.
+     * 
+     * @param arg the argument
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethodCall addConstantArgument(String arg) {
+        int pos = arg.lastIndexOf('.');
+        if (pos > 0) {
+            int classPos = arg.lastIndexOf('.', pos - 1);
+            if (classPos > 0) {
+                getArtifact().validateType(new JavaCodeTypeSpecification(arg.substring(0, pos), this));
+                arg = arg.substring(classPos + 1);
+            }
+        }
+        arguments.add(new JavaCodeText(arg, false, false));
+        return this;
+    }
+
+    /**
      * Adds a method call as call argument.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method

@@ -26,7 +26,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass.Kind;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
+public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements JavaCodeBlockInterface {
 
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
@@ -166,20 +166,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         return IJavaCodeElement.add(exceptions, typeSpec);
     }
 
-    /**
-     * Adds text and indents it.
-     * 
-     * @param text the text
-     */
+    @Override
     public void add(String text) {
         block.add(text);
     }
     
-    /**
-     * Adds text without indentation/pre-indended.
-     * 
-     * @param text the text
-     */
+    @Override
     public void addRaw(String text) {
         block.addRaw(text);
     }
@@ -194,249 +186,120 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement {
         return addReturn(value, null);
     }
     
-    /**
-     * Adds a do-loop block.
-     * 
-     * @param condition the loop condition
-     * @return the loop block
-     */
+    @Override
     public JavaCodeDoLoop addDoLoop(String condition) {
         return block.addDoLoop(condition);
     }
 
-    /**
-     * Adds a do-loop block.
-     * 
-     * @param condition the loop condition
-     * @return the loop block
-     */
+    @Override
     public JavaCodeWhileLoop addWhileLoop(String condition) {
         return block.addWhileLoop(condition);
     }
 
-    /**
-     * Creates an interable-based for-loop.
-     * 
-     * @param type the type of the iterator variable
-     * @param variableName the name of the iterator variable
-     * @param expression the expression determining the iterable to loop over
-     * @return the for loop block
-     */
+    @Override
     public JavaCodeForLoop addForLoop(String type, String variableName, String expression) {
         return block.addForLoop(type, variableName, expression);
     }
     
-    /**
-     * Creates an interable-based for-loop.
-     * 
-     * @param type the type of the iterator variable
-     * @param variableName the name of the iterator variable
-     * @param expression the expression determining the iterable to loop over
-     * @return the for loop block
-     */
+    @Override
     public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
         String expression) {
         return block.addForLoop(type, variableName, expression);
     }
 
-    /**
-     * Creates a traditional for-loop.
-     * 
-     * @param type the type of the iterator variable
-     * @param variableName the name of the iterator variable (optional, may be <b>null</b> or empty)
-     * @param initializer the iterator variable initializer
-     * @param condition the loop condition (optional, may be <b>null</b> or empty)
-     * @param update the iterator variable update, e.g., increment, decrement (may be <b>null</b> or empty)
-     * @return the for loop block
-     */
+    @Override
     public JavaCodeForLoop addForLoop(String type, String variableName, String initializer, 
         String condition, String update) {
         return block.addForLoop(type, variableName, initializer, condition, update);
     }
 
-    /**
-     * Creates a traditional for-loop.
-     * 
-     * @param type the type of the iterator variable
-     * @param variableName the name of the iterator variable (optional, may be <b>null</b> or empty)
-     * @param initializer the iterator variable initializer
-     * @param condition the loop condition (optional, may be <b>null</b> or empty)
-     * @param update the iterator variable update, e.g., increment, decrement (may be <b>null</b> or empty)
-     * @return the for loop block
-     */
+    @Override
     public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
         String initializer, String condition, String update) {
         return block.addForLoop(type, variableName, initializer, condition, update);
     }
     
-    /**
-     * Adds a if-then-else block.
-     * 
-     * @param condition the loop condition
-     * @return the if-then-else block
-     */
+    @Override
     public JavaCodeAlternative addIf(String condition) {
         return block.addIf(condition);
     }
     
-    /**
-     * Adds a throw statement.
-     * 
-     * @param expression the expression to throw
-     * @return throw statement
-     */
+    @Override
     public JavaCodeThrow addThrow(String expression) {
         return block.addThrow(expression);
     }
     
-    /**
-     * Adds a switch block.
-     * 
-     * @param expression the switch expression
-     * @return the switch block
-     */
+    @Override
     public JavaCodeSwitch addSwitch(String expression) {
         return block.addSwitch(expression);
     }
 
-    /**
-     * Adds a synchronized block.
-     * 
-     * @return the synchronized block
-     */
+    @Override
     public JavaCodeSynchronizedBlock addSynchronized() {
         return block.addSynchronized();
     }
 
-    /**
-     * Adds a synchronized block.
-     * 
-     * @return the synchronized block
-     */
+    @Override
     public JavaCodeTryBlock addTry() {
         return block.addTry();
     }
 
-    /**
-     * Adds an assignment.
-     * 
-     * @param variable the variable to change
-     * @param expression the expression determining the value
-     * @return the assignment
-     */
+    @Override
     public JavaCodeAssignment addAssignment(String variable, String expression) {
         return block.addAssignment(variable, expression);
     }
     
-    /**
-     * Adds an empty line.
-     * 
-     * @return <b>this</b>
-     */
+    @Override
     public JavaCodeMethod addEmptyLine() {
         block.addEmptyLine();
         return this;
     }
 
-    /**
-     * Adds a single-line comment.
-     * 
-     * @param text the comment text
-     * @return <b>this</b>
-     */
+    @Override
     public JavaCodeMethod addSLComment(String text) {
         block.addSLComment(text);
         return this;
     }
     
-    /**
-     * Adds a constructor super call.
-     * 
-     * @return the method call (for chaining)
-     */
+    @Override
     public JavaCodeMethodCall addSuperCall() {
         return block.addSuperCall();
     }
 
-    /**
-     * Adds a constructor this call.
-     * 
-     * @return the method call (for chaining)
-     */
+    @Override
     public JavaCodeMethodCall addThisCall() {
         return block.addThisCall();
     }    
     
-    /**
-     * Adds a non-static method call.
-     * 
-     * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @return the method call (for chaining)
-     */
+    @Override
     public JavaCodeMethodCall addCall(String methodName) {
         return block.addCall(methodName);
     }
 
-    /**
-     * Adds a method call.
-     * 
-     * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param scope the import scope
-     * @return the method call (for chaining)
-     */
+    @Override
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         return block.addCall(methodName, scope);
     }
 
-    /**
-     * Creates a variable declaration.
-     * 
-     * @param type the type of the variable, may be <b>null</b> for auto-inference
-     * @param variableName the variable name
-     * @param initializer the initializer, may be <b>null</b> for none
-     * @return the variable declaration (for chaining)
-     */
+    @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         String initializer) {
         return block.addVariable(type, variableName, initializer);
     }
 
-    /**
-     * Creates a variable declaration.
-     * 
-     * @param type the type of the variable, may be <b>null</b> for auto-inference
-     * @param variableName the variable name
-     * @param initializer the initializer, may be <b>null</b> for none
-     * @return the variable declaration (for chaining)
-     */
+    @Override
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         String initializer) {        
         return block.addVariable(type, variableName, initializer);
     }
 
-    /**
-     * Creates a variable declaration.
-     * 
-     * @param type the type of the variable, may be <b>null</b> for auto-inference
-     * @param variableName the variable name
-     * @param isFinal whether the variable shall be final
-     * @param initializer the initializer, may be <b>null</b> for none
-     * @return the variable declaration (for chaining)
-     */
+    @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         boolean isFinal, String initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
     }
 
-    /**
-     * Creates a variable declaration.
-     * 
-     * @param type the type of the variable, may be <b>null</b> for auto-inference
-     * @param variableName the variable name
-     * @param isFinal whether the variable shall be final
-     * @param initializer the initializer, may be <b>null</b> for none
-     * @return the variable declaration (for chaining)
-     */
+    @Override
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, String initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
