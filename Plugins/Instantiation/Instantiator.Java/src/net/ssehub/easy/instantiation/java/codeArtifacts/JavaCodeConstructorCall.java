@@ -39,7 +39,7 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
         String result = methodName;
         if (methodName.contains(".")) { // else methodName may be qualified but not by class
             JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(methodName, parent);
-            result = type.getOutputTypeName();
+            result = type.getOutputType(); // including generics
         }
         return result;
     }

@@ -65,6 +65,9 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
             String gen = type.substring(gStartPos).trim();
             this.type = type.substring(0, gStartPos).trim();
             generics = parseGenerics(gen, enclosing);
+            if (null == generics) {
+                generics = new ArrayList<>();
+            }
         }
         getArtifact().validateType(this);
     }
@@ -221,6 +224,12 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     @Override
     public String getOutputTypeName() {
         return type;
+    }
+
+    public String getOutputType() {
+        CodeToStringWriter out = new CodeToStringWriter();
+        store(out);
+        return out.getString();
     }
 
     @Override

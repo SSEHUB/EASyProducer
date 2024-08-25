@@ -416,4 +416,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertJavaCode("javaCode5", "JCATest5");
     }
 
+    /**
+     * Test the JavaCode artifact with Lambdas.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCode6() throws IOException {
+        assertJavaCode("javaCode6", "JCATest6");
+    }
+
 }

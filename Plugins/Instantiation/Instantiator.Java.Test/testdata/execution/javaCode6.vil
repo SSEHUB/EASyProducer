@@ -1,0 +1,7 @@
+vilScript JavaCode6 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("JavaCode6Tpl", config, "$target/JCATest6.java");
+    }
+
+}

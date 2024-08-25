@@ -134,6 +134,15 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
         arguments.add(new JavaCodeText(arg, false, false));
         return this;
     }
+    
+    /**
+     * Adds a lambda expression as call argument.
+     * 
+     * @return the lambda expression
+     */
+    public JavaCodeLambdaExpression addLambdaArgument() {
+        return IJavaCodeElement.add(arguments, new JavaCodeLambdaExpression(this));
+    }
 
     /**
      * Adds a method call as call argument.
@@ -143,7 +152,7 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
      * @return the created method call for chaining
      */
     public JavaCodeMethodCall addArgument(String methodName, JavaCodeImportScope scope) {
-        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(getParent(), methodName, scope, 
+        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(this, methodName, scope, 
             false, ""));
     }
 
