@@ -72,7 +72,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @return the block
      */
     public JavaCodeBlock addBlock() {
-        block = new JavaCodeBlock(getParent(), false, false);
+        block = new JavaCodeBlock(getParent(), false, false, false, true, true);
         return block;
     }
     

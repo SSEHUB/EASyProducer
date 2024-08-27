@@ -31,6 +31,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     private List<IJavaCodeElement> elements = new ArrayList<>();
     private boolean outputWhitespaceBefore;
     private boolean outputLnAfter;
+    private boolean isLambdaBlock;
     private boolean isStatic;
     private boolean withBrackets;
 
@@ -42,7 +43,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      * @param outputLnAfter whether a newline shall be emitted after the closing curly bracket
      */
     public JavaCodeBlock(IJavaCodeElement parent, boolean outputWhitespaceBefore, boolean outputLnAfter) {
-        this(parent, outputWhitespaceBefore, outputLnAfter, false, true);
+        this(parent, outputWhitespaceBefore, outputLnAfter, false, true, false);
     }
 
     /**
@@ -57,13 +58,39 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      */
     public JavaCodeBlock(IJavaCodeElement parent, boolean outputWhitespaceBefore, boolean outputLnAfter, 
         boolean isStatic, boolean withBrackets) {
+        this(parent, outputWhitespaceBefore, outputLnAfter, isStatic, withBrackets, false);
+    }
+    
+    /**
+     * Creates a new instance.
+     * 
+     * @param parent the parent element
+     * @param outputWhitespaceBefore whether a whitespace shall be printed before the opening curly bracket
+     * @param outputLnAfter whether a newline shall be emitted after the closing curly bracket
+     * @param isStatic shall this be a static initializer block (supersedes {@code outputWhitespaceBefore} 
+     *   and {@code withBrackets})
+     * @param withBrackets shall brackets be emitted
+     * @param isLambdaBlock whether special formattings for a lambda block shall be applied
+     */
+    public JavaCodeBlock(IJavaCodeElement parent, boolean outputWhitespaceBefore, boolean outputLnAfter, 
+        boolean isStatic, boolean withBrackets, boolean isLambdaBlock) {
         super(parent);
         this.outputWhitespaceBefore = isStatic ? true : outputWhitespaceBefore;
         this.outputLnAfter = outputLnAfter;
         this.isStatic = isStatic;
         this.withBrackets = isStatic ? true : withBrackets;
+        this.isLambdaBlock = isLambdaBlock;
     }
 
+    /**
+     * VIL constructor for unlinked code blocks with default settings.
+     * 
+     * @return the code block
+     */
+    public static JavaCodeBlock create() {
+        return create(false, false, false, true);
+    }
+    
     /**
      * VIL constructor for unlinked code blocks.
      * 
@@ -338,19 +365,31 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
             if (outputWhitespaceBefore) {
                 out.print(" ");
             }
-            out.println("{");
+            out.print("{");
+            if (!isLambdaBlock) { // defer this
+                out.println();    
+            }
         } else {
             if (outputWhitespaceBefore) {
                 out.print(" ");
             }
         }
-        out.increaseIndent();
-        for (IJavaCodeElement attr: elements) {
-            attr.store(out);
+        if (elements.size() > 0) {
+            if (isLambdaBlock) {
+                out.println();
+            }
+            out.increaseIndent();
+            for (IJavaCodeElement attr: elements) {
+                attr.store(out);
+            }
+            out.decreaseIndent();
         }
-        out.decreaseIndent();
         if (withBrackets) {
-            out.printwi("}");
+            if (isLambdaBlock && elements.size() == 0) {
+                out.print("}");
+            } else {
+                out.printwi("}");
+            }
             if (outputLnAfter) {
                 out.println();
             }
