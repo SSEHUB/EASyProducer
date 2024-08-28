@@ -160,7 +160,7 @@ public class ProductLineProject extends PLPInfo {
      */
     public void save() {      
         IProject project = null; // unclear how to get this here
-        EASyPersistencer persistencer = new EASyPersistencer(getProjectLocation(), project);
+        EASyPersistencer persistencer = new EASyPersistencer(getProjectLocation(), null, project);
         try {
             persistencer.save(this);
         } catch (PersistenceException e) {

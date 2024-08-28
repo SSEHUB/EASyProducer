@@ -98,6 +98,7 @@ public class IvmlTypeResolver implements ITypeResolver {
     
     @Override
     public TypeDescriptor<?> resolveType(String name, boolean addIfMissing) {
+        @SuppressWarnings("unused")
         Exception exception = null;
         TypeDescriptor<?> result = access.get(name);
         if (null == result) {
@@ -130,9 +131,9 @@ public class IvmlTypeResolver implements ITypeResolver {
                 exception = e;
             }
         }
-        if (null == result && null != exception) {
+        /*if (null == result && null != exception) {
             LOGGER.debug(exception.getMessage()); // shall not occur; if it's for an enum literal, it's ok
-        }
+        }*/
         return result;
     }
     

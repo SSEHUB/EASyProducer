@@ -8,6 +8,7 @@ import java.util.StringTokenizer;
 
 import org.eclipse.core.resources.IProject;
 
+import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
 import net.ssehub.easy.producer.core.persistence.Configuration;
@@ -22,6 +23,7 @@ import net.ssehub.easy.producer.core.persistence.datatypes.PersistentProject;
 import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
 import net.ssehub.easy.producer.core.varMod.container.ProjectContainer;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
+import net.ssehub.easy.producer.eclipse.observer.EclipseProgressObserver;
 import net.ssehub.easy.reasoning.core.reasoner.AttributeException;
 import net.ssehub.easy.reasoning.core.reasoner.AttributeValues;
 import net.ssehub.easy.reasoning.core.reasoner.ReasonerConfiguration;
@@ -40,17 +42,18 @@ public class EASyPersistencer implements PersistenceConstants {
      * @param projectFolder The location of the {@link ProductLineProject}.
      */
     public EASyPersistencer(File projectFolder) {
-        this(projectFolder, null);
+        this(projectFolder, null, null);
     }
 
     /**
      * Creates a specialized EASy persistencer.
      * @param projectFolder The location of the {@link ProductLineProject}.
+     * @param obs progress observer, may be {@link ProgressObserver#NO_OBSERVER} 
      * @param project the project instance to return a persistencer for, may be <b>null</b> then a default 
      *     one may be obtained
      */
-    public EASyPersistencer(File projectFolder, IProject project) {
-        persistencer = PersistencerFactory.getPersistencer(projectFolder, project);
+    public EASyPersistencer(File projectFolder, EclipseProgressObserver obs, IProject project) {
+        persistencer = PersistencerFactory.getPersistencer(projectFolder, obs, project);
     }
 
     /**
@@ -64,7 +67,6 @@ public class EASyPersistencer implements PersistenceConstants {
         PersistentProject project = persistencer.load();
         plp = persistentProject2PLP(project);
         PersistenceUtils.refreshModels(plp);
-        
         return plp;
     }
     

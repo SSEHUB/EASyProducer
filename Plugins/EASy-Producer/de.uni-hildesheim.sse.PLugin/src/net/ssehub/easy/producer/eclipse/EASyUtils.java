@@ -106,7 +106,7 @@ public class EASyUtils {
         if (null != projectID) {
             PLPInfo openedPLP = SPLsManager.INSTANCE.getPLP(projectID);
             if (null == openedPLP || openedPLP.isPreliminary()) {
-                EASyPersistencer persistencer = new EASyPersistencer(project.getLocation().toFile(), project);
+                EASyPersistencer persistencer = new EASyPersistencer(project.getLocation().toFile(), null, project);
                 // load method adds automatically the loaded PLP to the SPLsManager
                 persistencer.load();
             }

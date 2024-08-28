@@ -42,15 +42,17 @@ public abstract class AbstractXTextEditor <T extends EObject, R> extends CommonX
             doc.readOnly(new IUnitOfWork<T, XtextResource>() {
                 @SuppressWarnings("unchecked")
                 public T exec(XtextResource resource) {
-                    EList<?> lst = resource.getContents();
-                    T root; 
-                    if (lst.isEmpty()) {
-                        root = null;
-                    } else {
-                        root = (T) resource.getContents().get(0);
-                    }
-                    if (null != resource) {
-                        AbstractXTextEditor.this.resourceUri = resource.getURI();
+                    T root = null; 
+                    if (null != resource) { // file not there
+                        EList<?> lst = resource.getContents();
+                        if (lst.isEmpty()) {
+                            root = null;
+                        } else {
+                            root = (T) resource.getContents().get(0);
+                        }
+                        if (null != resource) {
+                            AbstractXTextEditor.this.resourceUri = resource.getURI();
+                        }
                     }
                     return root;
                 }

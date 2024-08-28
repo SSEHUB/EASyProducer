@@ -22,6 +22,8 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.basics.progress.ProgressObserver.ITask;
+import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Rule;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.RuleDescriptor;
@@ -76,7 +78,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
     public Persistencer(PathEnvironment pathEnv, File projectFolder, String storageFile, ProgressObserver observer) {
         this.projectFolder = projectFolder;
         storage = new DataStorage(StorageType.XML, storageFile, pathEnv);
-        this.observer = observer;
+        this.observer = null == observer ? ProgressObserver.NO_OBSERVER : observer;
     }
 
     /**
@@ -88,17 +90,19 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
 
     @Override
     public PersistentProject load() throws PersistenceException {
+        ValidationUtils.enable(false); // prevent interferences with editor validation
         loadDefaultModels();
         Configuration config = PersistenceUtils.getConfiguration(projectFolder);
-        
         /* 
          * Load non ivml data.
          * This data also contains the information which ivml model should be read
          * in case of multiple projects are present.
          */
         PersistentProject project = new PersistentProject(projectFolder);
+        ITask task = observer.registerTask("Loading project " + projectFolder.getName());
+        observer.notifyStart(task, 4);
         storage.loadModels(project);
-        
+        observer.notifyProgress(task, 1);
         //Register the folder of ivml files to the model for dynamic ivml file loading.
         try {
             PersistenceUtils.processLocation(config, true, false, observer);
@@ -106,6 +110,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
             // Should not happen, but it is also not necessarily to throw this exception.
             throw new PersistenceException(e);
         }
+        observer.notifyProgress(task, 2);
         // link predecessors as dependent locations for this project
         Model pred = project.getModel(ModelType.PREDECESSORS);
         if (null != pred) {
@@ -127,12 +132,16 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
             LOGGER.debug("Loading IVML for \"" + projectName + "\" in " + projectVersion + ".");
             ModelLoader<Project> projectLoader = new ModelLoader<Project>(project, config);
             projectLoader.loadModel(projectName, projectVersion, PathKind.IVML);
+            observer.notifyProgress(task, 3);
             LOGGER.debug("Loading VIL/VTL for \"" + projectName + "\" in " + projectVersion + ".");
             ModelLoader<Script> scriptLoader = new ModelLoader<Script>(project, config);
             scriptLoader.loadModel(projectName, projectVersion, PathKind.VIL);
             LOGGER.debug("Loaded Project \"" + projectName + "\" in " + projectVersion + ".");
         }
+        observer.notifyProgress(task, 4);
         project.setID(projectInformation.getAttributeValue(PTN_UUID));
+        observer.notifyEnd(task);
+        ValidationUtils.enable(true);
         return project;
     }
     

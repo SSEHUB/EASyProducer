@@ -25,6 +25,7 @@ import net.ssehub.easy.producer.core.persistence.datatypes.IProjectCreationResul
 import net.ssehub.easy.producer.core.persistence.datatypes.PathEnvironment;
 import net.ssehub.easy.producer.core.persistence.datatypes.PersistentProject;
 import net.ssehub.easy.producer.core.persistence.standard.Persistencer;
+import net.ssehub.easy.producer.eclipse.observer.EclipseProgressObserver;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
@@ -65,35 +66,36 @@ public class EclipsePersistencer implements IPersistencer {
      * directly into the workspace (no linking supported). If the project shall not be stored directly into the
      * workspace, than please use the other constructor.
      * @param projectName The name of the project (which must be stored inside the workspace).
-     * @param monitor A progress monitor, or <code>null</code> if progress reporting is not desired
+     * @param obs progress observer
      * @param project the project instance to operate on , may be <b>null</b> then a default 
      *     one may be obtained
      */
-    public EclipsePersistencer(String projectName, IProgressMonitor monitor, IProject project) {
-        this(new File(WORKSPACE_FOLDER, projectName), monitor, project);
+    public EclipsePersistencer(String projectName, EclipseProgressObserver obs, IProject project) {
+        this(new File(WORKSPACE_FOLDER, projectName), obs, project);
     }
     
     /**
      * This constructor can be used if a project shall be/is stored outside the workspace (e.g. is only linked).
      * @param projectFolder The top level folder of the project.
-     * @param monitor A progress monitor, or <code>null</code> if progress reporting is not desired
+     * @param obs progress observer
      * @param project the project instance to operate on , may be <b>null</b> then a default 
      *     one may be obtained
      */
-    public EclipsePersistencer(File projectFolder, IProgressMonitor monitor, IProject project) {
+    public EclipsePersistencer(File projectFolder, EclipseProgressObserver obs, IProject project) {
         this.projectFolder = projectFolder;
         String projectName = projectFolder.getName();
         this.project = project != null ? project : ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
         PathEnvironment pathEnv = PathEnvironmentFactory.createPathEnvironment(project);
         File projectFolder2 = new File(pathEnv.getBaseFolder(), projectName);
         File storageFile = PersistenceUtils.getLocationFile(projectFolder2, PathKind.IVML);
-        persistencer = new Persistencer(pathEnv, projectFolder2, 
-            storageFile.getAbsolutePath(), ProgressObserver.NO_OBSERVER);
-        if (null == monitor) {
-            this.monitor = new NullProgressMonitor();
+        ProgressObserver po = obs;
+        if (po == null) { // then also obs
+            po = ProgressObserver.NO_OBSERVER;
+            monitor = new NullProgressMonitor();
         } else {
-            this.monitor = monitor;            
+            monitor = obs.getMonitor();
         }
+        persistencer = new Persistencer(pathEnv, projectFolder2, storageFile.getAbsolutePath(), obs);
     }
 
     /**
@@ -228,7 +230,6 @@ public class EclipsePersistencer implements IPersistencer {
         if (null != project) {
             pProject.setName(project.getName());
         }
-        
         return pProject;
     }
 

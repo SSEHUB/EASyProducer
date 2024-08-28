@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
 import net.ssehub.easy.producer.eclipse.AllTests;
+import net.ssehub.easy.producer.eclipse.observer.EclipseProgressObserver;
 import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
 import net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature;
 import net.ssehub.easy.producer.eclipse.persistency.eclipse.NatureUtils;
@@ -75,7 +76,7 @@ public class ResourcesMgmtTest {
     @Test
     public void testIsPLPInWorkspace() {
 
-        ResourcesMgmt.INSTANCE.findPLProjects();
+        ResourcesMgmt.INSTANCE.findPLProjects(new EclipseProgressObserver());
         System.out.println("MANAGER WORKSPACE: " + mgmt.getWorkspace().getRoot().getLocation());
 
         IProject[] projects = mgmt.getAllProjects();

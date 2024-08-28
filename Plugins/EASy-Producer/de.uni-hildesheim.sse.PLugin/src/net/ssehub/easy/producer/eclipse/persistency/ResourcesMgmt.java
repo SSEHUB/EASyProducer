@@ -20,6 +20,7 @@ import net.ssehub.easy.producer.eclipse.EASyUtils;
 import net.ssehub.easy.producer.eclipse.PLPWorkspaceListener;
 import net.ssehub.easy.producer.eclipse.ProjectConstants;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
+import net.ssehub.easy.producer.eclipse.observer.EclipseProgressObserver;
 import net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature;
 import net.ssehub.easy.producer.eclipse.persistency.eclipse.NatureUtils;
 import net.ssehub.easy.producer.eclipse.persistency.project_creation.IEASyProjectConfigurator;
@@ -149,15 +150,17 @@ public class ResourcesMgmt {
     /**
      * Iterates through all EASy projects of the workspace, gets the config path and the uuid from all projects and
      * adds them to the {@link SPLsManager}. Considers {@link #enableBackgroundTasks}.
+     * 
+     * @param obs progress monitor
      */
-    public void findPLProjects() {
+    public void findPLProjects(EclipseProgressObserver obs) {
         ArrayList<IProject> plProjects = getAllPLProjects();
 
         if (enableBackgroundTasks && plProjects.size() > 0) {
             SPLsManager splsMngr = SPLsManager.INSTANCE;
             for (IProject plProject : plProjects) {
                 File projectPath = plProject.getLocation().toFile();
-                EASyPersistencer persistency = new EASyPersistencer(projectPath, plProject);
+                EASyPersistencer persistency = new EASyPersistencer(projectPath, obs, plProject);
                 String projectID = persistency.getProjectID();
                 PLPInfo plp = (PLPInfo) splsMngr.getPLP(projectID);
                 // Test whether the plp is already stored inside the SPLsManager
@@ -235,7 +238,7 @@ public class ResourcesMgmt {
         try {
             if (theResource.getPersistentProperty(qname) == null) {
                 EASyPersistencer persistencer = new EASyPersistencer(
-                    theResource.getProject().getLocation().toFile(), project);
+                    theResource.getProject().getLocation().toFile(), null, project);
                 theID = persistencer.getProjectID();
                 if (null != theID) {
                     theResource.setPersistentProperty(qname, theID.toString());
@@ -245,7 +248,7 @@ public class ResourcesMgmt {
             }
         } catch (CoreException e) {
             EASyPersistencer persistencer = new EASyPersistencer(
-                theResource.getProject().getLocation().toFile(), project);
+                theResource.getProject().getLocation().toFile(), null, project);
             theID = persistencer.getProjectID();
         }
         return theID;
@@ -320,7 +323,7 @@ public class ResourcesMgmt {
                 EASyUtils.initialize(project, plp);
                 plp.save();
                 // after additional models have been added, update VarModel etc.
-                PersistencerFactory.getPersistencer(plp.getProjectLocation(), project).update();
+                PersistencerFactory.getPersistencer(plp.getProjectLocation(), null, project).update();
             } catch (ProjectAlreadyExistsException ae) {
                 // shall not occur due to lazy creation
                 throw new IOException(ae.getMessage());

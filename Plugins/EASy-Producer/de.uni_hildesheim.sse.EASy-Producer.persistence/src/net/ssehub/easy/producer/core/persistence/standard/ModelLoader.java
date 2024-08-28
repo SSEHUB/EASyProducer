@@ -119,7 +119,6 @@ class ModelLoader<Model extends IModel> {
      */
     private ModelContainer<?> loadModel(String projectName, String projectVersion,
         ModelManagement<Model> modelManagement, PathKind modelType) throws PersistenceException {
-            
         File folder = location.getPathFile(modelType, 0);
         String fileName = PersistenceUtils.modelFileLocation(projectName, projectVersion, folder.getAbsolutePath(),
             modelType);

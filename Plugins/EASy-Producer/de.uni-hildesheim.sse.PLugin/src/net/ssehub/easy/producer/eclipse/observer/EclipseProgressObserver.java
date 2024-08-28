@@ -1,5 +1,7 @@
 package net.ssehub.easy.producer.eclipse.observer;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
+
 import net.ssehub.easy.basics.progress.BasicProgressObserver;
 
 /**
@@ -81,6 +83,22 @@ public class EclipseProgressObserver extends BasicProgressObserver {
             super.unregister(this.monitor);
             this.monitor = null;
         }
+    }
+
+    /**
+     * Returns the internal eclipse progress monitor if registered.
+     * 
+     * @return the monitor or {@link NullProgressMonitor}
+     */
+    public org.eclipse.core.runtime.IProgressMonitor getMonitor() {
+        org.eclipse.core.runtime.IProgressMonitor result = null;
+        if (null != this.monitor) {
+            result = this.monitor.getMonitor();
+        }
+        if (null == result) {
+            result = new NullProgressMonitor();
+        }
+        return result;
     }
 
 }
