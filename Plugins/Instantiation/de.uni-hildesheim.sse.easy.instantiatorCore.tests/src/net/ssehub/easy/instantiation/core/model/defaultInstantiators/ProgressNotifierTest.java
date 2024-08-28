@@ -108,7 +108,7 @@ public class ProgressNotifierTest {
         if (null != subTaskName) {
             Assert.assertEquals(subTaskName, this.subTaskName);
         } else {
-            Assert.assertNull(this.subTaskName);
+            Assert.assertEquals(subTaskName, this.task);
         }
         if (null != max) {
             Assert.assertEquals(max.intValue(), this.max);
