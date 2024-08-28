@@ -36,8 +36,16 @@ public class ValidationUtils {
     /**
      * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
      */
-    public static final boolean PERFORM_XTEXT_VALIDATION = true;
+    private static boolean performXtextValidation = true;
     private static List<String> pathPrefixes = new ArrayList<>();
+    
+    public static void enable(boolean enable) {
+        performXtextValidation = enable;
+    }
+    
+    public static boolean isEnabled() {
+        return performXtextValidation;
+    }
     
     /**
      * Processes messages.
@@ -284,7 +292,7 @@ public class ValidationUtils {
      */
     public static <R extends EObject, T> void checkModel(R unit, IModelValidationCallback<R, T> callback, 
         boolean debug) {
-        if (PERFORM_XTEXT_VALIDATION) {
+        if (performXtextValidation) {
             java.net.URI uri = null;
             URI eURI = null;
             if (null != unit.eResource() && null != unit.eResource().getURI()) {
@@ -300,24 +308,35 @@ public class ValidationUtils {
                 }
             }
             if (null != uri && callback.isValidationEnabled(uri) && !excludeBinTarget(eURI) && isInPath(eURI)) {
+                String uriText = "";
+                if (null != unit.eResource() && null != unit.eResource().getURI()) {
+                    uriText = " " + unit.eResource().getURI().toString();
+                }
                 try {
                     TranslationResult<T> result = callback.createModel(unit, uri);
                     for (int m = 0; m < result.getMessageCount(); m++) {
                         Message message = result.getMessage(m);
-                        switch (message.getStatus()) {
-                        case ERROR:
-                        case UNSUPPORTED:
-                            callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
-                                message.getCausingFeature(), message.getCode());
-                            break;
-                        case WARNING:
-                            callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
-                                message.getCausingFeature(), message.getCode());
-                            break;
-                        default:
-                            callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
+                        try {
+                            switch (message.getStatus()) {
+                            case ERROR:
+                            case UNSUPPORTED:
+                                callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
                                     message.getCausingFeature(), message.getCode());
-                            break;
+                                break;
+                            case WARNING:
+                                callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
+                                    message.getCausingFeature(), message.getCode());
+                                break;
+                            default:
+                                callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
+                                        message.getCausingFeature(), message.getCode());
+                                break;
+                            }
+                        } catch (Throwable t) {
+                            // in single file validation, EASy messages may not fit to the actual Resource
+                            getLogger().error("while creating marker (desc: " + message.getDescription() + ", cause: " 
+                                + message.getCause() + ", feature: " + message.getCausingFeature() + ", code: "
+                                + message.getCode() + "):" + t.getMessage() + uriText);
                         }
                     }
                     if (debug && 0 == result.getMessageCount()) {
@@ -328,11 +347,7 @@ public class ValidationUtils {
                         pOut.println("<TRANSLATED MODEL");
                         getLogger().info(out.toString());
                     }
-                } catch (Exception e) {
-                    String uriText = "";
-                    if (null != unit.eResource() && null != unit.eResource().getURI()) {
-                        uriText = " " + unit.eResource().getURI().toString();
-                    }
+                } catch (Throwable e) { // to be on the safe side
                     getLogger().error("while validating:" + e.getMessage() + uriText);
                     e.printStackTrace();
                 }

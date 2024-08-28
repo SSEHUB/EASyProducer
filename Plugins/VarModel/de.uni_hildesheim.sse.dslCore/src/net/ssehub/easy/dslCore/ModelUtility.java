@@ -318,6 +318,8 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     public static StringBuilder appendWithNewLine(StringBuilder builder, String text) {
         return append(builder, text, "\n");
     }
+    
+    // checkstyle: stop exception type check
 
     /**
      * Parses an <code>uri</code> to obtain the top-level element.
@@ -332,39 +334,47 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      *         in case of any I/O and parsing problems
      */
     protected E parse(URI uri, boolean unload,
-            MessageReceiver receiver, Class<E> cls) throws IOException {
-        ResourceSet resourceSet = getResourceSet();
+        MessageReceiver receiver, Class<E> cls) throws IOException {
         E result = null;
-        Resource resource = resourceSet.getResource(uri, true);
-        if (null == resource) {
-            resource = resourceSet.createResource(uri);    
-        }
-        resource.load(null);
-        if (resource.isLoaded()) {
-            boolean hasErrors = false;
-            for (Diagnostic diag : resource.getErrors()) {
-                if (null != receiver) {
-                    receiver.error(diag);
+        try {
+            ResourceSet resourceSet = getResourceSet();
+            Resource resource = resourceSet.getResource(uri, true);
+            if (null == resource) {
+                resource = resourceSet.createResource(uri);    
+            }
+            resource.load(null);
+            if (resource.isLoaded()) {
+                boolean hasErrors = false;
+                for (Diagnostic diag : resource.getErrors()) {
+                    if (null != receiver) {
+                        receiver.error(diag);
+                    }
+                    hasErrors = true;
                 }
-                hasErrors = true;
+                
+                EObject rootObject = null;
+                if (!hasErrors) {
+                    rootObject = resource.getContents().get(0);
+                }
+                if (cls.isInstance(rootObject)) {
+                    result = cls.cast(rootObject);
+                }
+            } else {
+                throw new IOException("resource for uri '" + uri + "' not loaded");
             }
-            
-            EObject rootObject = null;
-            if (!hasErrors) {
-                rootObject = resource.getContents().get(0);
+            if (unload) {
+                resource.unload();
             }
-            if (cls.isInstance(rootObject)) {
-                result = cls.cast(rootObject);
-            }
-        } else {
-            throw new IOException("resource for uri '" + uri + "' not loaded");
-        }
-        if (unload) {
-            resource.unload();
+        } catch (Throwable t) { // resources may throw ConcurrentModificationExceptions
+            EASyLoggerFactory.INSTANCE.getLogger(ModelUtility.class, BundleId.ID).warn("While loading resource " + uri 
+                + ": " + t.getMessage());
+            t.printStackTrace(); // preliminary
         }
         return result;
     }
-    
+
+    // checkstyle: resume exception type check
+
     /**
      * Returns whether this model utility class handles this type of file.
      * 

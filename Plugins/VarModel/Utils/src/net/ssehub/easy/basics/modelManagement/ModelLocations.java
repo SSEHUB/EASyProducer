@@ -27,7 +27,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.ssehub.easy.basics.io.FileUtils;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.progress.ObservableTask;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 
@@ -356,7 +355,6 @@ public class ModelLocations <M extends IModel> {
      */
     public synchronized Location addLocation(File file, ProgressObserver observer) 
         throws ModelManagementException {
-        EASyLoggerFactory.INSTANCE.getLogger(ModelLocations.class, null).info("Adding model location " + file);
         return addLocation(file, false, observer);
     }
 
