@@ -180,6 +180,7 @@ public class BasicProgressObserver extends ProgressObserver {
                     parent.setMax(max);
                     monitor.beginTask(null, max);
                 }
+                monitor.setTaskName(parent.getName());
                 parent.setCurrent(step);
                 monitor.worked(step);
             }
