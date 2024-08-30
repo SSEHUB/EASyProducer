@@ -89,14 +89,14 @@
          <executions>
             <execution>
                 <id>assemble-repository</id>
-                <phase>package</phase>
+                <phase>prepare-package</phase>
                 <goals>
                     <goal>assemble-repository</goal>
                 </goals>
             </execution>
          </executions>
       </plugin>
-
+      
      <!-- emulate publish-features-and-bundles which changes the timestamps -->
      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
@@ -104,7 +104,7 @@
         <executions>
           <execution>
             <id>copy-resources</id>
-            <phase>package</phase>
+            <phase>prepare-package</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -146,15 +146,53 @@
          </configuration>
          <executions>
             <execution>
+               <id>create-products</id>
+               <phase>prepare-package</phase>
+               <goals>
+                  <goal>materialize-products</goal>
+               </goals>
+            </execution>
+            <execution>
                <id>create-product-distributions</id>
                <phase>package</phase>
                <goals>
-                  <goal>materialize-products</goal>
                   <goal>archive-products</goal>
                </goals>
             </execution>
          </executions>
       </plugin>
+      
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>copy-jre-to-products</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <target>
+                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/win32/win32/x86_64/jre">
+                                <fileset dir="${user.home}/jdks/win-x64"/>
+                            </copy>
+                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/linux/gtk/x86_64/jre">
+                                <fileset dir="${user.home}/jdks/linux-x64"/>
+                            </copy>
+                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/macosx/cocoa/x86_64/jre">
+                                <fileset dir="${user.home}/jdks/mac-x64"/>
+                            </copy>
+                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/macosx/cocoa/aarch64/jre">
+                                <fileset dir="${user.home}/jdks/mac-arm64"/>
+                            </copy>
+                        </target>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+      
       
    </plugins>
   </build>
