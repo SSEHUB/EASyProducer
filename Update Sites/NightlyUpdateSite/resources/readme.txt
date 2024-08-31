@@ -1,0 +1,1 @@
+This is for additional resources to be added to the RCP builds. JREs may go directly into subfolders "jre" in the individual subfolders, but we also look for the same sub-structure in ${user.home}/jdks to avoid committing entire JDKs.

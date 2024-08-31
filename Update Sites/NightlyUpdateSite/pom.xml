@@ -175,17 +175,11 @@
                     </goals>
                     <configuration>
                         <target>
-                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/win32/win32/x86_64/jre">
-                                <fileset dir="${user.home}/jdks/win-x64"/>
+                            <copy failonerror="false" overwrite="true" todir="bin/products/net.ssehub.easy.producer.EasyProducer">
+                                <fileset dir="${user.home}/jdks"/>
                             </copy>
-                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/linux/gtk/x86_64/jre">
-                                <fileset dir="${user.home}/jdks/linux-x64"/>
-                            </copy>
-                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/macosx/cocoa/x86_64/jre">
-                                <fileset dir="${user.home}/jdks/mac-x64"/>
-                            </copy>
-                            <copy failonerror="false" todir="bin/products/net.ssehub.easy.producer.EasyProducer/macosx/cocoa/aarch64/jre">
-                                <fileset dir="${user.home}/jdks/mac-arm64"/>
+                            <copy failonerror="false" overwrite="true" todir="bin/products/net.ssehub.easy.producer.EasyProducer">
+                                <fileset dir="resources"/>
                             </copy>
                         </target>
                     </configuration>
