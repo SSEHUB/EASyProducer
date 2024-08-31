@@ -680,6 +680,7 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.jface.databinding"/>
       <plugin id="org.eclipse.jface.notifications"/>
       <plugin id="org.eclipse.jface.text"/>
+      <plugin id="org.eclipse.justj.openjdk.hotspot.jre.full"/>
       <plugin id="org.eclipse.lsp4j"/>
       <plugin id="org.eclipse.lsp4j.jsonrpc"/>
       <plugin id="org.eclipse.ltk.core.refactoring"/>

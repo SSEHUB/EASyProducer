@@ -73,6 +73,7 @@
           </target>
           <pomDependencies>wrapAsBundle</pomDependencies>
           <referencedRepositoryMode>ignore</referencedRepositoryMode>
+          <executionEnvironment>org.eclipse.justj.openjdk.hotspot.jre.full-21</executionEnvironment>
         </configuration>
       </plugin>
       
@@ -175,9 +176,9 @@
                     </goals>
                     <configuration>
                         <target>
-                            <copy failonerror="false" overwrite="true" todir="bin/products/net.ssehub.easy.producer.EasyProducer">
+                            <!--<copy failonerror="false" overwrite="true" todir="bin/products/net.ssehub.easy.producer.EasyProducer">
                                 <fileset dir="${user.home}/jdks"/>
-                            </copy>
+                            </copy>-->
                             <copy failonerror="false" overwrite="true" todir="bin/products/net.ssehub.easy.producer.EasyProducer">
                                 <fileset dir="resources"/>
                             </copy>
@@ -198,5 +199,13 @@
       <version>${project.version}</version>
     </dependency>
   </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>eclipse-jdk</id>
+      <layout>p2</layout>
+      <url>https://download.eclipse.org/justj/jres/21/updates/release/latest/</url>
+    </repository>
+  </repositories>  
     
  </project>
