@@ -10,7 +10,7 @@ EASy-Producer was already successfully applied and tested in various industrial 
 News
 -------------
 
-April/May 2024: EASy-Producer is heading for Eclipse 2024-03 and JDK 17.
+June 2024: EASy-Producer is on Eclipse 2024-06 and JDK 21, pre-built PDEs ship with embedded JRE.
 
 As we did not publish a full release for a longer term, we refer here to the nightly builds and their documentation.
 
@@ -19,10 +19,10 @@ Documentation
 
 The documentation of the actual release version of EASY-Producer consists of
 
-* Information on how to install and use EASy can be found in the [EASy Producer User Guide](http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/user_guide.pdf).
-* The [language specification of IVML](http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/ivml_spec.pdf), the Integrated Variability Modeling Language of EASy-Producer.
-* The [language specification of VIL](http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/vil_spec.pdf), the Variability Instantiation Language use to automatically instantiate variability in various forms. This specification also includes VTL, the variability template/artifact language. As VIL is an extensible language and may be customized towards the artifacts to be instantiated, there is a separate guide on the default optional [VIL language extensions](http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/VIL%20Extensions.pdf)
-* EASy also provides extension points for the integration of custom reasoners and instantiators. A step-by-step instruction on how to extend EASy with your custom functionalities can be found in the [EASy Producer Developers Guide](http://projects.sse.uni-hildesheim.de/easy/docs-git/docPreview/developers_guide.pdf).
+* Information on how to install and use EASy can be found in the [EASy Producer User Guide](https://github.com/SSEHUB/EASyProducer/tree/master/doc/web/docPreview/user_guide.pdf).
+* The [language specification of IVML](https://github.com/SSEHUB/EASyProducer/blob/master/doc/web/docPreview/IVML Language  Spec.pdf), the Integrated Variability Modeling Language of EASy-Producer.
+* The [language specification of VIL](https://github.com/SSEHUB/EASyProducer/blob/master/doc/web/docPreview/VIL Language Spec.pdf), the Variability Instantiation Language use to automatically instantiate variability in various forms. This specification also includes VTL, the variability template/artifact language. As VIL is an extensible language and may be customized towards the artifacts to be instantiated, there is a separate guide on the default optional [VIL language extensions](https://github.com/SSEHUB/EASyProducer/blob/master/doc/web/docPreview/VIL%20Extensions.pdf)
+* EASy also provides extension points for the integration of custom reasoners and instantiators. A step-by-step instruction on how to extend EASy with your custom functionalities can be found in the [EASy Producer Developers Guide](https://github.com/SSEHUB/EASyProducer/blob/master/doc/web/docPreview/developers_guide.pdf).
 
 The documentation can also be found in the Eclipse Help plugin available for installation.
 
