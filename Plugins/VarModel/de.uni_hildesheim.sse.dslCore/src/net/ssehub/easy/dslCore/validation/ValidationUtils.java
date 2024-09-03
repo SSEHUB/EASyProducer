@@ -334,7 +334,7 @@ public class ValidationUtils {
                             }
                         } catch (Throwable t) {
                             // in single file validation, EASy messages may not fit to the actual Resource
-                            getLogger().error("while creating marker (desc: " + message.getDescription() + ", cause: " 
+                            System.out.println("while creating marker (desc: " + message.getDescription() + ", cause: " 
                                 + message.getCause() + ", feature: " + message.getCausingFeature() + ", code: "
                                 + message.getCode() + "):" + t.getMessage() + uriText);
                         }

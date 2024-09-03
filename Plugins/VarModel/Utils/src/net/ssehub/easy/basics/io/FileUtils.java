@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 University of Hildesheim, Software Systems Engineering
+ * Copyright 2009-2024 University of Hildesheim, Software Systems Engineering
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 
 /**
  * Some file utility methods (may partially be taken from commons.io but this is currently no defined as dependency 
@@ -182,6 +184,29 @@ public class FileUtils {
         createIfNotExists(result);
         result.deleteOnExit();
         return result;
+    }
+
+    /**
+     * Appends {@code text} to "easy-debug.log" in user home. [debugging]
+     * 
+     * @param text the text
+     */
+    public static void appendToLogFile(String text) {
+        appendToFile(new File(System.getProperty("user.home"), "easy-debug.log"), text);
+    }
+    
+    /**
+     * Appends {@code text} to {@code file}. [debugging]
+     * 
+     * @param file the file
+     * @param text the text
+     */
+    public static void appendToFile(File file, String text) {
+        try {
+            Files.write(file.toPath(), (text + "\n").getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace(); // don't cate
+        }
     }
 
 }

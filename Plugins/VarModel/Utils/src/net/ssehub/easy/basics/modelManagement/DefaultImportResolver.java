@@ -620,8 +620,8 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                     List<M> imports = new ArrayList<>();
                     for (String name : context.getModelRepository().getMatchingModelNames(imp.getName())) {
                         ModelImport<M> tmpImp = imp.copy(name);
-                        List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(name);
-                        context.filterByLocations(versions);
+                        List<VersionedModelInfos<M>> versions = context.filterByLocations(
+                            context.getModelRepository().getAvailable(name));
                         if (null != versions && versions.size() > 0) {
                             conflicts = add(conflicts, resolve(context, done, messages, versions, tmpImp));
                         } else if (!imp.isWildcard()) {
@@ -638,8 +638,8 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                         messages.add(new Message(e.getMessage(), Status.ERROR));
                     }
                 } else {
-                    List<VersionedModelInfos<M>> versions = context.getModelRepository().getAvailable(imp.getName());
-                    context.filterByLocations(versions);
+                    List<VersionedModelInfos<M>> versions = context.filterByLocations(
+                        context.getModelRepository().getAvailable(imp.getName()));
                     if (null != versions && versions.size() > 0) {
                         conflicts = resolve(context, done, messages, versions, imp);
                     } else {

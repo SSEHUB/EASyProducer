@@ -418,31 +418,36 @@ class ResolutionContext <M extends IModel> {
     }
     
     /**
-     * Filters {@code list} by the relevant locations for this resolution context. Removes infos/models that are not 
-     * located within {@code location}.
+     * Filters {@code list} by the relevant locations for this resolution context. 
      * 
-     * @param list the list of versioned model infos, to be modified by filtering as side effect
+     * @param list the list of versioned model infos
+     * @return the filtered copy of {@code list} or {@code list} if there is nothing to filter
      */
-    public void filterByLocations(List<VersionedModelInfos<M>> list) {
-        if (null != list && null != modelLocationPrefixes && modelLocationPrefixes.size() > 0) { // unlikely, tests
+    public List<VersionedModelInfos<M>> filterByLocations(List<VersionedModelInfos<M>> list) {
+        List<VersionedModelInfos<M>> result = list;
+        if (null != list && list.size() > 0 
+            && null != modelLocationPrefixes && modelLocationPrefixes.size() > 0) { // unlikely, tests
+            result = new ArrayList<VersionedModelInfos<M>>();
             for (int l = list.size() - 1; l >= 0; l--) {
                 VersionedModelInfos<M> infos = list.get(l);
                 int size = infos.size();
+                VersionedModelInfos<M> res = new VersionedModelInfos<>(infos.getVersion());
                 for (int i = size - 1; i >= 0; i--) {
                     ModelInfo<M> info = infos.get(i);
                     boolean contained = false;
                     for (int p = 0; !contained && p < modelLocationPrefixes.size(); p++) {
                         contained = info.getLocation().toString().startsWith(modelLocationPrefixes.get(p));
                     }
-                    if (!contained) {
-                        infos.remove(i);
+                    if (contained) {
+                        res.add(info);
                     }
                 }
-                if (size > 0 && infos.size() == 0) {
-                    list.remove(l);
+                if (res.size() > 0) {
+                    result.add(res);
                 }
             }
         }
+        return result;
     }
 
     /**
