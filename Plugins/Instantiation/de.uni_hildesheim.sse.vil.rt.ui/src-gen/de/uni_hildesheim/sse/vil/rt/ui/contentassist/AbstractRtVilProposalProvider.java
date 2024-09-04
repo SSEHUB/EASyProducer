@@ -3,12 +3,13 @@
  */
 package de.uni_hildesheim.sse.vil.rt.ui.contentassist;
 
-import de.uni_hildesheim.sse.ui.contentassist.VilBuildLanguageProposalProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import de.uni_hildesheim.sse.vil.buildlang.ui.contentassist.VilBuildLanguageProposalProvider;
 
 /**
  * Represents a generated, default implementation of superclass {@link VilBuildLanguageProposalProvider}.

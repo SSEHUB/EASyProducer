@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.ui.contentassist;
+package de.uni_hildesheim.sse.vil.buildlang.ui.contentassist;
 
 import java.io.File;
 import java.io.IOException;

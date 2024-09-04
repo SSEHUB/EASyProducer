@@ -6,12 +6,12 @@ package de.uni_hildesheim.sse.vil.rt.ui.outline;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StyledString;
 
-import de.uni_hildesheim.sse.ui.outline.VilBuildLanguageOutlineTreeProvider;
-import de.uni_hildesheim.sse.ui.outline.VirtualOutlineNode;
 import de.uni_hildesheim.sse.vil.rt.rtVil.LanguageUnit;
 import de.uni_hildesheim.sse.vil.rt.rtVil.StrategyDeclaration;
 import de.uni_hildesheim.sse.vil.rt.rtVil.TacticDeclaration;
 import de.uni_hildesheim.sse.vil.rt.ui.resources.Images;
+import de.uni_hildesheim.sse.vil.buildlang.ui.outline.VilBuildLanguageOutlineTreeProvider;
+import de.uni_hildesheim.sse.vil.buildlang.ui.outline.VirtualOutlineNode;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.VilBuildLanguagePackage;
 
 /**

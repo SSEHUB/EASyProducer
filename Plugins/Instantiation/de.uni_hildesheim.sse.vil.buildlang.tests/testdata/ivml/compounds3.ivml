@@ -33,7 +33,7 @@ project compounds3 {
     Node n2;
     Flow n1n2 = {name="n1->n2", destination=refBy(n2)};
     n1 = {name="n1", output={refBy(n1n2)}, dInput={{name="t1"}}};
-    n2 = {name="n2", output={}, dInput={{name="t2"}}};
+    n2 = {name="n2", output={}, dInput={{name="t2"}},};
 
     freeze {
         n1;

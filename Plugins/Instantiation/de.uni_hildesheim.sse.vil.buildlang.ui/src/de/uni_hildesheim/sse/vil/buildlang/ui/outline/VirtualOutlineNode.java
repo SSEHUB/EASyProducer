@@ -1,4 +1,4 @@
-package de.uni_hildesheim.sse.ui.outline;
+package de.uni_hildesheim.sse.vil.buildlang.ui.outline;
 
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.xtext.ui.editor.outline.IOutlineNode;

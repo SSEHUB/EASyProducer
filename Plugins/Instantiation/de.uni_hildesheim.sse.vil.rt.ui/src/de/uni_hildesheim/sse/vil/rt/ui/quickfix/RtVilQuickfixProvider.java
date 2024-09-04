@@ -3,12 +3,14 @@
 */
 package de.uni_hildesheim.sse.vil.rt.ui.quickfix;
 
+import de.uni_hildesheim.sse.vil.buildlang.ui.quickfix.VilBuildLanguageQuickfixProvider;
+
 /**
  * Custom quickfixes.
  *
  * see http://www.eclipse.org/Xtext/documentation.html#quickfixes
  */
-public class RtVilQuickfixProvider extends de.uni_hildesheim.sse.ui.quickfix.VilBuildLanguageQuickfixProvider {
+public class RtVilQuickfixProvider extends VilBuildLanguageQuickfixProvider {
 
 //	@Fix(MyJavaValidator.INVALID_NAME)
 //	public void capitalizeName(final Issue issue, IssueResolutionAcceptor acceptor) {

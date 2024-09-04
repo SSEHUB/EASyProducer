@@ -28,10 +28,7 @@ Service-Component: OSGI-INF/vilFactory.xml
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: 
- de.uni_hildesheim.sse.ui.contentassist,
  de.uni_hildesheim.sse.ui.hyperlinking,
- de.uni_hildesheim.sse.ui.outline,
- de.uni_hildesheim.sse.ui.quickfix,
  de.uni_hildesheim.sse.vil.buildlang.ui,
  de.uni_hildesheim.sse.vil.buildlang.ui.contentassist,
  de.uni_hildesheim.sse.vil.buildlang.ui.embed,
