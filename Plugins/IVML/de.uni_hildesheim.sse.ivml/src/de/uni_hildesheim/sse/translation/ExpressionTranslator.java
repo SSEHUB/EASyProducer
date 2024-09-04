@@ -359,8 +359,7 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
                 if (null != rhs) {
                     IDatatype rhsType = inferDatatypeQuietly(rhs);
                     if (TypeQueries.isReference(lhsType) && !TypeQueries.isReference(rhsType)) {
-                        warning("Implicit refBy through assignment is discouraged.", part.getEx(), 
-                            IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__EX, ErrorCodes.REF_BY); 
+                        warnImplicitRefBy(part.getEx(), IvmlPackage.Literals.ASSIGNMENT_EXPRESSION_PART__EX);
                     }
                     result = new OCLFeatureCall(result, part.getOp(), context.getProject(), rhs);
                 }
@@ -368,6 +367,17 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
             level--;
         }
         return result;
+    }
+    
+    /**
+     * Warns about an implicit refBy use.
+     * 
+     * @param cause the causing grammar object
+     * @param feature the causing grammar feature
+     */
+    void warnImplicitRefBy(EObject cause, EStructuralFeature feature) {
+        //strange if shown in Tutorial example :|
+        //warning("Implicit refBy through assignment is discouraged.", cause, feature, ErrorCodes.REF_BY); 
     }
     
     /**

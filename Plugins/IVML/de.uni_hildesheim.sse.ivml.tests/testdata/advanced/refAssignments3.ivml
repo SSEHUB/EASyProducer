@@ -1,0 +1,11 @@
+project testRefAssignments3 {
+
+    compound ExternalContent {
+        String contentPath;
+        String accessPassword;
+    }
+
+    ExternalContent myContent;
+    refTo(ExternalContent) myRef = refBy(myContent);
+    refBy(myRef).contentPath = "http://anyserver.org/content";
+}

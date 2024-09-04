@@ -513,7 +513,27 @@ public class AdvancedTests extends AbstractTest {
     public void testRefAssignmentsFail() throws IOException {
         assertEqual(createFile("refAssignmentsFail"), null, null, CSTSemanticException.TYPE_MISMATCH);
     }
-    
+
+    /**
+     * Tests reference assignments (tutorial example with refBy).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefAssignments3() throws IOException {
+        assertEqual(createFile("refAssignments3"), null, null);
+    }
+
+    /**
+     * Tests reference assignments (lazy tutorial example without refBy).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testRefAssignments4() throws IOException {
+        assertEqual(createFile("refAssignments4"), null, null);
+    }
+
     /**
      * Tests a versioned project.
      * 
@@ -522,8 +542,7 @@ public class AdvancedTests extends AbstractTest {
      */
     @Test
     public void testVersionedProject() throws IOException {
-        assertEqual(createFile("versionedProject"), "testVersionedProject",
-                "1.1");
+        assertEqual(createFile("versionedProject"), "testVersionedProject", "1.1");
     }
 
     /**

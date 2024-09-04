@@ -55,6 +55,7 @@ import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.cst.ConstantValue;
 import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.cst.OCLFeatureCall;
+import net.ssehub.easy.varModel.cst.Variable;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.Attribute;
@@ -96,6 +97,7 @@ import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.OrderedEnum;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.values.ValueDoesNotMatchTypeException;
+import net.ssehub.easy.varModel.model.values.ValueFactory;
 
 import static de.uni_hildesheim.sse.translation.Utils.*;
 
@@ -567,8 +569,7 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
      */
     private void processExpressions(List<Typedef> typedefs, List<AttrAssignment> assignments, 
         List<ExpressionStatement> exprs, TypeContext context) {
-        // translate constraints in compounds
-        if (null != typedefs) {
+        if (null != typedefs) { // translate constraints in compounds
             processTypeDefExpressions(typedefs, context);
         }
         compoundMapping.clear();
@@ -584,20 +585,23 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 expressionTranslator.initLevel();
                 ConstraintSyntaxTree dfltExpr = expressionTranslator.processExpression(decVar.getType(), 
                     part.getDefault(), context, decVar.getParent());
+                IDatatype decVarType = decVar.getType();
+                boolean isDecReference = Reference.TYPE.isAssignableFrom(decVarType);
                 IDatatype dfltExprType = dfltExpr.inferDatatype();
                 String rhsError = null;
-                if (Reference.TYPE.isAssignableFrom(decVar.getType()) && AnyType.TYPE == dfltExprType 
+                if (isDecReference && AnyType.TYPE == dfltExprType 
                     && !ConstantValue.isNull(dfltExpr)) { // some kind of compound may be used
                     rhsError = "";
                 }
                 if (null != rhsError || !decVar.getType().isAssignableFrom(dfltExprType)) {
-                    if (null == rhsError) {
-                        rhsError = "of type '" + IvmlDatatypeVisitor.getUnqualifiedType(dfltExprType) + "' ";
+                    if (isDecReference && Reference.isReferenceTo(decVarType, dfltExprType) 
+                        && dfltExpr instanceof Variable) { // lazy refBy specified by variable only
+                        dfltExpr = new ConstantValue(ValueFactory.createValue(decVarType, dfltExpr));
+                        expressionTranslator.warnImplicitRefBy(part, 
+                            IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT);
+                    } else {
+                        throwRhsException(rhsError, decVarType, dfltExprType, part);
                     }
-                    throw new TranslatorException("cannot assign the expression " + rhsError  
-                        + "to a variable of type '" 
-                        + IvmlDatatypeVisitor.getUnqualifiedType(decVar.getType()) + "'", part, 
-                        IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT, ErrorCodes.TYPE_CONSISTENCY);
                 }
                 decVar.setValue(dfltExpr);
                 if (!ConstraintType.TYPE.isAssignableFrom(decVar.getType())) {
@@ -648,6 +652,26 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 }
             }
         }
+    }
+
+    /**
+     * Throws an type consistency translator exception on the default value of the variable declaration part.
+     * 
+     * @param rhsError the error description, may be <b>null</b> for default text
+     * @param lhsType the LHS type
+     * @param rhsType the incompatible RHS type
+     * @param cause the causing object
+     * @throws TranslatorException the thrown exception
+     */
+    private void throwRhsException(String rhsError, IDatatype lhsType, IDatatype rhsType, EObject cause) 
+        throws TranslatorException {
+        if (null == rhsError) {
+            rhsError = "of type '" + IvmlDatatypeVisitor.getUnqualifiedType(rhsType) + "' ";
+        }
+        throw new TranslatorException("cannot assign the expression " + rhsError  
+            + "to a variable of type '" 
+            + IvmlDatatypeVisitor.getUnqualifiedType(lhsType) + "'", cause, 
+            IvmlPackage.Literals.VARIABLE_DECLARATION_PART__DEFAULT, ErrorCodes.TYPE_CONSISTENCY);
     }
 
     /**
