@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import de.uni_hildesheim.sse.translation.ErrorCodes;
+import de.uni_hildesheim.sse.translation.ExpressionTranslator;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
@@ -69,7 +70,9 @@ public class WarningTests extends AbstractTest {
      */
     @Test
     public void testAutoRefBy() throws IOException {
-        expectedWarnings.add(ErrorCodes.REF_BY);
+        if (ExpressionTranslator.WARN_IMPLICIT_REFBY) {
+            expectedWarnings.add(ErrorCodes.REF_BY);
+        }
         assertEqual(createFile("autoRefBy"), null, null);
     }
     

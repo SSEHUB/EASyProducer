@@ -108,6 +108,7 @@ import net.ssehub.easy.varModel.persistency.AbstractVarModelWriter;
  */
 public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.ExpressionTranslator {
 
+    public static final boolean WARN_IMPLICIT_REFBY = false; //strange if shown in Tutorial example :|
     private AssignmentDetector assignmentDetector = new AssignmentDetector();
     private int level;
     private boolean hasTopLevelWarning;
@@ -376,8 +377,9 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
      * @param feature the causing grammar feature
      */
     void warnImplicitRefBy(EObject cause, EStructuralFeature feature) {
-        //strange if shown in Tutorial example :|
-        //warning("Implicit refBy through assignment is discouraged.", cause, feature, ErrorCodes.REF_BY); 
+        if (WARN_IMPLICIT_REFBY) {
+            warning("Implicit refBy through assignment is discouraged.", cause, feature, ErrorCodes.REF_BY); 
+        }
     }
     
     /**
