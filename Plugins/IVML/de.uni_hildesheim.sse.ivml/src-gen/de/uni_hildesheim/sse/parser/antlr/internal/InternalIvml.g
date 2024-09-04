@@ -5937,6 +5937,12 @@ ruleExpressionListOrRange returns [EObject current=null]
 				)
 			)
 		)*
+		(
+			otherlv_3=','
+			{
+				newLeafNode(otherlv_3, grammarAccess.getExpressionListOrRangeAccess().getCommaKeyword_2());
+			}
+		)?
 	)
 ;
 

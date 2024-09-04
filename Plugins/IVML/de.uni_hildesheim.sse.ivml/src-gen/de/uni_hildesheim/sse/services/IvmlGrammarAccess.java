@@ -3693,17 +3693,18 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 		private final Keyword cCommaKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
 		private final Assignment cListAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
 		private final RuleCall cListExpressionListEntryParserRuleCall_1_1_0 = (RuleCall)cListAssignment_1_1.eContents().get(0);
+		private final Keyword cCommaKeyword_2 = (Keyword)cGroup.eContents().get(2);
 		
 		//ExpressionListOrRange:    // adjust values to Expressions
 		//    list+=ExpressionListEntry
-		//    (',' list+=ExpressionListEntry)*
+		//    (',' list+=ExpressionListEntry)* ','?
 		////    |    '..' rangeEndEx=ExpressionListEntry // IVML change to OCL
 		//    ;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//// adjust values to Expressions
 		//list+=ExpressionListEntry
-		//(',' list+=ExpressionListEntry)*
+		//(',' list+=ExpressionListEntry)* ','?
 		public Group getGroup() { return cGroup; }
 		
 		//// adjust values to Expressions
@@ -3724,6 +3725,9 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 		
 		//ExpressionListEntry
 		public RuleCall getListExpressionListEntryParserRuleCall_1_1_0() { return cListExpressionListEntryParserRuleCall_1_1_0; }
+		
+		//','?
+		public Keyword getCommaKeyword_2() { return cCommaKeyword_2; }
 	}
 	public class ExpressionListEntryElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.ExpressionListEntry");
@@ -5119,7 +5123,7 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 	
 	//ExpressionListOrRange:    // adjust values to Expressions
 	//    list+=ExpressionListEntry
-	//    (',' list+=ExpressionListEntry)*
+	//    (',' list+=ExpressionListEntry)* ','?
 	////    |    '..' rangeEndEx=ExpressionListEntry // IVML change to OCL
 	//    ;
 	public ExpressionListOrRangeElements getExpressionListOrRangeAccess() {

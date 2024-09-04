@@ -10548,6 +10548,7 @@ rule__ExpressionListOrRange__Group__1
 	}
 :
 	rule__ExpressionListOrRange__Group__1__Impl
+	rule__ExpressionListOrRange__Group__2
 ;
 finally {
 	restoreStackSize(stackSize);
@@ -10562,6 +10563,32 @@ rule__ExpressionListOrRange__Group__1__Impl
 	{ before(grammarAccess.getExpressionListOrRangeAccess().getGroup_1()); }
 	(rule__ExpressionListOrRange__Group_1__0)*
 	{ after(grammarAccess.getExpressionListOrRangeAccess().getGroup_1()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__ExpressionListOrRange__Group__2
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__ExpressionListOrRange__Group__2__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__ExpressionListOrRange__Group__2__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getExpressionListOrRangeAccess().getCommaKeyword_2()); }
+	(',')?
+	{ after(grammarAccess.getExpressionListOrRangeAccess().getCommaKeyword_2()); }
 )
 ;
 finally {

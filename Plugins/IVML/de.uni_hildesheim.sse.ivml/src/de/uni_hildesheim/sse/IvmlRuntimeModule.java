@@ -9,8 +9,7 @@ import de.uni_hildesheim.sse.values.IvmlValueConverters;
  * Use this class to register components to be used at runtime / without the
  * Equinox extension registry.
  */
-public class IvmlRuntimeModule extends
-        de.uni_hildesheim.sse.AbstractIvmlRuntimeModule {
+public class IvmlRuntimeModule extends de.uni_hildesheim.sse.AbstractIvmlRuntimeModule {
 
     /**
      * Configures the value converter factory.

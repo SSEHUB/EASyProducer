@@ -392,37 +392,34 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
                 if (var.getTCompound() != null) {
                     StyledString displayName = new StyledString();
                     String varType = "compound";
-                    String varName = var.getTCompound().getName();
-                    displayName.append(var.getTCompound().getName());
+                    String varName = safeName(var.getTCompound().getName());
+                    displayName.append(varName);
                     displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
 
                     acceptor.accept(createCompletionProposal(varName + " " + namedefinition + " ;", displayName,
                                     imageHelper.getImage(Images.NAME_COMPOUND), context));
-                    varName = "";
                 }
                 // If Typedef is an Enum
                 if (var.getTEnum() != null) {
                     StyledString displayName = new StyledString();
                     String varType = "enum";
-                    String varName = var.getTEnum().getName();
-                    displayName.append(var.getTEnum().getName());
+                    String varName = safeName(var.getTEnum().getName());
+                    displayName.append(varName);
                     displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
 
                     acceptor.accept(createCompletionProposal(varName + " " + namedefinition + " ;", displayName,
                                     imageHelper.getImage(Images.NAME_ENUM), context));
-                    varName = "";
                 }
                 // If Typedef is a Typedefinition
                 if (var.getTMapping() != null) {
                     StyledString displayName = new StyledString();
                     String varType = "typedef";
-                    String varName = var.getTMapping().getNewType();
-                    displayName.append(var.getTMapping().getNewType());
+                    String varName = safeName(var.getTMapping().getNewType());
+                    displayName.append(varName);
                     displayName.append(" : " + varType, StyledString.QUALIFIER_STYLER);
 
                     acceptor.accept(createCompletionProposal(varName + " " + namedefinition + " ;", displayName,
                                     imageHelper.getImage(Images.NAME_TYPEDEF), context));
-                    varName = "";
                 }
             }
         }
@@ -749,7 +746,9 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
         String projectName = getProjectName(context);
         if (projectName != null) {
             acceptor.accept(createCompletionProposal(projectName + ";", projectName,
-                            imageHelper.getImage(Images.NAME_PROJECT), context));
+                imageHelper.getImage(Images.NAME_PROJECT), context));
+            acceptor.accept(createCompletionProposal(".;", "this project",
+                imageHelper.getImage(Images.NAME_PROJECT), context));
         }
     }
 
@@ -1819,6 +1818,28 @@ public class IvmlProposalProvider extends ExpressionProposalProvider {
             acceptor.accept(proposal);
         }
 
+    }
+
+    /**
+     * Returns {@code value} if not <b>null</b>, {@code dflt} else.
+     * 
+     * @param value the value
+     * @param dflt the default value
+     * @return {@code value} or {@code dflt}
+     */
+    private static String safe(String value, String dflt) {
+        return null == value ? dflt : value;
+    }
+    
+    /**
+     * Returns {@code value} if not <b>null</b>, "<Name>" else.
+     * 
+     * @param value the value
+     * @return {@code value} or "<Name>"
+     * @see #safe(String, String)
+     */
+    private static String safeName(String value) {
+        return safe(value, "<Name>");
     }
 
     // Maybe useful for some case.

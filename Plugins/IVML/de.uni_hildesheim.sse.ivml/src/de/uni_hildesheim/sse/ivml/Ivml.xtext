@@ -518,7 +518,7 @@ ContainerInitializer:
  
 ExpressionListOrRange:	// adjust values to Expressions
 	list+=ExpressionListEntry 
-	(',' list+=ExpressionListEntry)* 
+	(',' list+=ExpressionListEntry)* ','?
 //	|	'..' rangeEndEx=ExpressionListEntry // IVML change to OCL
 	;
 	
