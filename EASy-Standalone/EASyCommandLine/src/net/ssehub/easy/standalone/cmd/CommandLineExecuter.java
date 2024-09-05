@@ -33,7 +33,7 @@ public class CommandLineExecuter {
         Utils.BUNDLE_ID);
     private static final List<String> OPTIONS = new ArrayList<String>();
     private static final String OPT_RESULTFILE = "--resultFile"; 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = "DEBUG".equals(System.getProperty("de.uni_hildesheim.sse.easy.logging.level"));
     
     static {
         OPTIONS.add(OPT_RESULTFILE);

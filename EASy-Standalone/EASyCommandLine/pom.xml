@@ -99,6 +99,107 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>3.1.1</version>
               </plugin>              
+
+            <plugin>                 
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <phase>prepare-package</phase>
+                        <configuration>
+                            <prependGroupId>true</prependGroupId>
+                            <outputDirectory>${project.build.directory}/libs</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-classpath-win</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>build-classpath</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/dist/classpath.win</outputFile>
+                            <prependGroupId>true</prependGroupId>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <localRepoProperty>libs</localRepoProperty>
+                            <prefix>libs</prefix>
+                            <fileSeparator>\</fileSeparator>
+                            <pathSeparator>;</pathSeparator>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>build-classpath-ux</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>build-classpath</goal>
+                        </goals>
+                        <configuration>
+                            <outputFile>${project.build.directory}/dist/classpath.ux</outputFile>
+                            <prependGroupId>true</prependGroupId>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <localRepoProperty>libs</localRepoProperty>
+                            <prefix>libs</prefix>
+                            <fileSeparator>/</fileSeparator>
+                            <pathSeparator>:</pathSeparator>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>package</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                    <configuration>
+                        <target>
+                            <copy overwrite="true" file="res/dist.bat" tofile="target/dist/easy.bat"/>
+                            <copy overwrite="true" file="res/dist.sh" tofile="target/dist/easy.sh"/>
+                            <copy overwrite="true" file="res/Readme.txt" tofile="target/dist/Readme.txt"/>
+                            <chmod perm="755">
+                              <file file="target/dist/easy.sh"/>
+                            </chmod>
+                            <copy failonerror="false" overwrite="true" file="target/${project.artifactId}-${project.version}.jar" tofile="target/dist/libs/easyCmd.jar"/>
+                            <echo file="target/dist/classpath.ux" append="true">:libs/easyCmd.jar</echo>
+                            <echo file="target/dist/classpath.win" append="true">;libs\easyCmd.jar</echo>
+                            <zip destfile="target/easy-cmd.zip" update="false">
+                                <zipfileset dir="target/dist">
+                                  <include name="libs/*.*"/>
+                                  <include name="classpath.win"/>
+                                  <include name="easy.bat"/>
+                                  <include name="Readme.txt"/>
+                                </zipfileset>
+                            </zip>
+                            <tar destfile="target/easy-cmd.tgz" compression="gzip">
+                                <tarfileset dir="target/dist">
+                                  <include name="libs/*.*"/>
+                                  <include name="classpath.ux"/>
+                                  <include name="easy.sh"/>
+                                  <include name="Readme.txt"/>
+                                </tarfileset>
+                            </tar>
+                        </target>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
                          
         </plugins>
         
