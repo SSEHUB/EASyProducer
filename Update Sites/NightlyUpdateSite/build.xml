@@ -57,7 +57,7 @@
             </fileset>
         </oscp>
 
-        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -f /var/www/eclipse/easy-nightly/*"/>
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -f /var/www/eclipse/easy-nightly/net.ssehub.easy.producer.EasyProducer*"/>
         <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p /var/www/eclipse/easy-nightly"/>
         <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/easy-nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
             <fileset dir="${products}">
@@ -66,7 +66,7 @@
         </oscp>
 		
         <delete failonerror="false" dir="bin"/>
-        <delete failonerror="false" dir=".m2"/>		
+        <!--<delete failonerror="false" dir=".m2"/>-->		
     </target>
     
 </project>
