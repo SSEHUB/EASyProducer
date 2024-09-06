@@ -21,6 +21,9 @@
             </fileset>
         </oscp>
 
+	    <move file="target/easy-cmd-${time.stamp}.tgz" tofile="target/easy-cmd.tgz"/>
+	    <move file="target/easy-cmd-${time.stamp}.zip" tofile="target/easy-cmd.zip"/>
+
         <delete failonerror="false" dir="bin"/>
         <!--<delete failonerror="false" dir=".m2"/>-->
 	</target>
