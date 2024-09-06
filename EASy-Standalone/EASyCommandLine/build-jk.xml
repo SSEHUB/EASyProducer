@@ -6,8 +6,23 @@
 	
 	<target name="all">
         <maven pomFile="pom.xml" goal="deploy"/>
+		
+		<tstamp>
+		     <format property="time.stamp" pattern="yyyyMMddHHmmss"/>
+		</tstamp>
+		<move file="target/easy-cmd.tgz" tofile="target/easy-cmd-${time.stamp}.tgz"/>
+		<move file="target/easy-cmd.zip" tofile="target/easy-cmd-${time.stamp}.zip"/>
+		
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="rm -f /var/www/eclipse/easy-nightly/easy-cmd-*"/>
+        <osshexec host="projects.sse.uni-hildesheim.de" username="jenkins" trust="true" keyfile="${user.home}/.ssh/id_rsa" command="mkdir -p /var/www/eclipse/easy-nightly"/>
+        <oscp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/eclipse/easy-nightly" trust="true" keyfile="${user.home}/.ssh/id_rsa">
+            <fileset dir="target">
+                <include name="easy-cmd-*"/>
+            </fileset>
+        </oscp>
+
         <delete failonerror="false" dir="bin"/>
-        <delete failonerror="false" dir=".m2"/>   
+        <!--<delete failonerror="false" dir=".m2"/>-->
 	</target>
 	
 </project>
