@@ -173,6 +173,7 @@
                             <copy overwrite="true" file="res/dist.bat" tofile="target/dist/easy.bat"/>
                             <copy overwrite="true" file="res/dist.sh" tofile="target/dist/easy.sh"/>
                             <copy overwrite="true" file="res/Readme.txt" tofile="target/dist/Readme.txt"/>
+                            <copy overwrite="true" file="res/path-init.sh" tofile="target/dist/path.init-sh"/>
                             <chmod perm="755">
                               <file file="target/dist/easy.sh"/>
                             </chmod>
@@ -192,6 +193,7 @@
                                   <include name="libs/*.*"/>
                                   <include name="classpath.ux"/>
                                   <include name="easy.sh"/>
+                                  <include name="path-init.sh"/>
                                   <include name="Readme.txt"/>
                                 </tarfileset>
                             </tar>

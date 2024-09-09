@@ -45,6 +45,25 @@ public class CommandLineExecuter {
      *     method.
      */
     public static void main(String[] args) {
+        System.out.println("EASy-Producer CLI");
+        if (args.length == 0) {
+            System.out.println("Help (more infos in readme and programmers guide):");
+            System.out.println(" - instantiate (source -> target):");
+            System.out.println("   instantiate <src_folder> <trg_folder>");
+            System.out.println("   instantiate <src_folder> <trg_folder> <absolute path to ivml_file>");
+            System.out.println("     <absolute path to vil_file>");
+            System.out.println("   instantiate <src_folder> <trg_folder> <ivml name> <ivml version>");
+            System.out.println("     <vil name> <vil version>");
+            System.out.println(" - self-instantiation (folder -> folder):");
+            System.out.println("   instantiateSelf <project_folder>");
+            System.out.println("   instantiateSelf <project_folder> <absolute path to ivml_file>");
+            System.out.println("   instantiateSelf <project_folder> <absolute path to ivml_file>");
+            System.out.println("     <absolute path to vil_file>");
+            System.out.println(" - checking validity / reasoning:");
+            System.out.println("   checkValidity <project_folder>");
+            System.out.println("   checkValidity <project_folder> <absolute path to ivml_file>");
+            System.out.println("   checkValidity <project_folder> <ivml project name> <ivml project version>");
+        }
         int result = CmdConstants.SYSTEM_OK;
         try {
             ManifestLoader loader = new ManifestLoader(DEBUG);
@@ -262,6 +281,9 @@ public class CommandLineExecuter {
                 out.println(result);
                 out.flush();
                 out.close();
+                
+                String optionalNot = result ? "not " : "";
+                System.out.println("Reasoning result: The model is " + optionalNot + "valid");
             }
         } catch (VersionFormatException e) {
             LOGGER.exception(e);
