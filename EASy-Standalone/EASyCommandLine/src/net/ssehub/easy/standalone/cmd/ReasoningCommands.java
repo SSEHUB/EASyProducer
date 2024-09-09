@@ -47,11 +47,11 @@ public class ReasoningCommands {
      * Checks the validity of the specified EASy project by reasoning.
      * 
      * @param project the project the model is located in
-     * @return <code>true</code> if conflict occurred, <code>false</code> otherwise
+     * @return the reasoning result
      * 
      * @throws PersistenceException in case that the model cannot be loaded for some reason
      */
-    public static boolean checkValidity(File project) throws PersistenceException {
+    public static ReasoningResult checkValidity(File project) throws PersistenceException {
         LowlevelCommands.loadProject(project);
         String projectName = ProjectNameMapper.getInstance().getName(project);
         PLPInfo plp = LowlevelCommands.getProject(projectName);
@@ -63,11 +63,11 @@ public class ReasoningCommands {
      * 
      * @param project the project the model is located in
      * @param ivmlFile the IVML model file to be checked
-     * @return <code>true</code> if conflict occurred, <code>false</code> else
+     * @return the reasoning result
      * 
      * @throws ModelManagementException in case that the model cannot be loaded for some reason
      */
-    public static boolean checkValidity(File project, File ivmlFile) 
+    public static ReasoningResult checkValidity(File project, File ivmlFile) 
         throws ModelManagementException {
         net.ssehub.easy.producer.core.persistence.Configuration config 
             = PersistenceUtils.getConfiguration(project);
@@ -81,11 +81,11 @@ public class ReasoningCommands {
      * 
      * @param project the project the model is located in
      * @param ivmlDefinition the IVML model definition
-     * @return <code>true</code> if conflict occurred, <code>false</code> else
+     * @return the reasoning result
      * 
      * @throws ModelManagementException in case that the model cannot be loaded for some reason
      */
-    public static boolean checkValidity(File project, ModelLoadDefinition ivmlDefinition) 
+    public static ReasoningResult checkValidity(File project, ModelLoadDefinition ivmlDefinition) 
         throws ModelManagementException {
         VarModel.INSTANCE.locations().addLocation(project, ProgressObserver.NO_OBSERVER);
         Project ivmlProject = Utils.loadPreferredModel(VarModel.INSTANCE, ivmlDefinition, project);
@@ -96,14 +96,12 @@ public class ReasoningCommands {
      * Checks the validity of the specified IVML model by reasoning.
      * 
      * @param project the IVML model to be checked
-     * @return <code>true</code> if conflict occurred, <code>false</code> else
+     * @return the reasoning result
      */
-    public static boolean checkValidity(Project project) {
+    public static ReasoningResult checkValidity(Project project) {
         Configuration config = new Configuration(project);
         ReasonerConfiguration rConfig = new ReasonerConfiguration();
-        ReasoningResult result = ReasonerFrontend.getInstance().check(config, rConfig, 
-            ProgressObserver.NO_OBSERVER);
-        return result.hasConflict();
+        return ReasonerFrontend.getInstance().check(config, rConfig, ProgressObserver.NO_OBSERVER);
     }
     
     /**

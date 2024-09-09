@@ -19,6 +19,8 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
+import net.ssehub.easy.reasoning.core.reasoner.Message;
+import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
 
 /**
  * Class for executing EASy commands via the command line. Potential 
@@ -247,7 +249,7 @@ public class CommandLineExecuter {
      */
     private static int checkValidity(String[] args, Map<String, String> options) {
         int cmdResult = CmdConstants.SYSTEM_OK;
-        Boolean result = null;
+        ReasoningResult result = null;
         try {
             File project = new File(args[1]);
             switch (args.length) {
@@ -282,8 +284,14 @@ public class CommandLineExecuter {
                 out.flush();
                 out.close();
                 
-                String optionalNot = result ? "not " : "";
+                String optionalNot = result.hasConflict() ? "not " : "";
                 System.out.println("Reasoning result: The model is " + optionalNot + "valid");
+                for (int m = 0; m < result.getMessageCount(); m++) {
+                    Message msg = result.getMessage(m);
+                    out.println(msg.getDescription());
+                    out.println(" " + msg.getConflictComments());
+                    out.println(" " + msg.getConflictSuggestions());
+                }
             }
         } catch (VersionFormatException e) {
             LOGGER.exception(e);
