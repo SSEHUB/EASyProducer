@@ -280,7 +280,7 @@ public class CommandLineExecuter {
                     }
                 }
                 PrintStream out = new PrintStream(new FileOutputStream(file));
-                out.println(result);
+                out.println(result.hasConflict());
                 out.flush();
                 out.close();
                 
