@@ -236,14 +236,6 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
         }
     }
 
-    /**
-     * Completes a literal value.
-     * 
-     * @param model the node representing the ECore Xtext model
-     * @param assignment the assignment
-     * @param context the content assist context
-     * @param acceptor the proposal acceptor
-     */
     @Override
     public void completeLiteral_Val(EObject model, Assignment assignment, ContentAssistContext context, 
         ICompletionProposalAcceptor acceptor) {
@@ -291,21 +283,31 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
         }
         return result;
     }
-
-    /**
-     * Propose completions for a high-level prototype of expressions with (internal) functions.
-     * 
-     * @param model the node representing the ECore Xtext model
-     * @param assignment the assignment
-     * @param context the content assist context
-     * @param acceptor the proposal acceptor
-     */
+    
     @Override
-    public void completeLogicalExpressionPart_Op(EObject model, Assignment assignment, ContentAssistContext context, 
+    public void completeExpressionStatement_Expr(EObject model, Assignment assignment, ContentAssistContext context, 
         ICompletionProposalAcceptor acceptor) {
-        // take this as a high-level prototype each expression must go through
         proposeOperations(model, context, acceptor, false);
     }
+    
+    @Override
+    public void completeExpression_Let(EObject model, Assignment assignment, ContentAssistContext context, 
+        ICompletionProposalAcceptor acceptor) {
+        proposeOperations(model, context, acceptor, false);
+    }
+    
+    @Override
+    public void completeExpression_Expr(EObject model, Assignment assignment, ContentAssistContext context, 
+        ICompletionProposalAcceptor acceptor) {
+        proposeOperations(model, context, acceptor, false);
+    }
+    
+    @Override
+    public void completeExpression_Container(EObject model, Assignment assignment, ContentAssistContext context, 
+        ICompletionProposalAcceptor acceptor) {
+        proposeOperations(model, context, acceptor, false);
+    }
+    
 
     /**
      * Propose completions for a call.

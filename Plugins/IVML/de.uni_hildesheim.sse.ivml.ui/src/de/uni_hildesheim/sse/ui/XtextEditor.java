@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.ivml.VariabilityUnit;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.ui.editors.CommonXtextEditor;
+import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.Project;
 
 /**
@@ -56,6 +57,11 @@ public class XtextEditor extends CommonXtextEditor<VariabilityUnit, Project> {
     @Override
     protected TranslationResult<Project> createModel(VariabilityUnit root, URI uri) {        
         return ModelUtility.INSTANCE.createVarModel(root, uri, true);
+    }
+
+    @Override
+    protected void updateModel(Project model, URI uri) {
+        VarModel.INSTANCE.updateModel(model, uri);
     }
 
     @Override
