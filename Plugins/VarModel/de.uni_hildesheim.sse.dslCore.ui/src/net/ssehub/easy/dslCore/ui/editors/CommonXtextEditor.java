@@ -122,7 +122,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
 
     @Override
     public void buildModel(IXtextDocument doc) {
-        if (!ValidationUtils.isEnabled()) {
+        if (ValidationUtils.isEnabled()) {
             if (doc != null) {
                 doc.readOnly(new UnitOfWork()); 
             }
@@ -164,6 +164,11 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
                         PrintWriter pOut = new PrintWriter(out);
                         print(result, pOut);
                         getLogger().info(out.toString());
+                    }
+                    if (0 == result.getErrorCount()) {
+                        for (int r = 0; r < result.getResultCount(); r++) {
+                            updateModel(result.getResult(r), uri);
+                        }
                     }
                     processMessages(result);
                 } catch (Exception e) {
@@ -227,6 +232,14 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
      * @return the translation result for the created model
      */
     protected abstract TranslationResult<R> createModel(T root, java.net.URI uri);
+    
+    /**
+     * Updates a model in the model management (while {@link #buildModel(IXtextDocument)}).
+     * 
+     * @param model the model
+     * @param uri the URI of the underlying document
+     */
+    protected abstract void updateModel(R model, java.net.URI uri);
     
     /**
      * Returns the resource initializer.

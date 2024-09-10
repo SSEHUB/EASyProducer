@@ -17,6 +17,7 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: net.ssehub.easy.dslCore.ui,
+ net.ssehub.easy.dslCore.ui.contentAssist,
  net.ssehub.easy.dslCore.ui.editors,
  net.ssehub.easy.dslCore.ui.hyperlinking,
  net.ssehub.easy.dslCore.ui.listeners,
