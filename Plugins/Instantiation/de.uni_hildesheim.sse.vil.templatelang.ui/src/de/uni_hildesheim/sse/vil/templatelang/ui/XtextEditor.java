@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 
 /**
  * A specific editor class for VTL.
@@ -48,6 +49,11 @@ public class XtextEditor extends AbstractXTextEditor<LanguageUnit, Template> {
     @Override
     protected TranslationResult<Template> createModel(LanguageUnit root, URI uri) {
         return TemplateLangModelUtility.INSTANCE.createModel(root, uri, true);
+    }
+
+    @Override
+    protected void updateModel(Template model, URI uri) {
+        TemplateModel.INSTANCE.updateModel(model, uri);
     }
 
     @Override

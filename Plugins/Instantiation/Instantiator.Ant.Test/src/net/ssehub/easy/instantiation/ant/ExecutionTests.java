@@ -10,7 +10,6 @@ import org.junit.Test;
 import test.de.uni_hildesheim.sse.vil.buildlang.AbstractExecutionTest;
 import test.de.uni_hildesheim.sse.vil.buildlang.BuildLangTestConfigurer;
 import test.de.uni_hildesheim.sse.vil.buildlang.ITestConfigurer;
-import net.ssehub.easy.instantiation.ant.Registration;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**

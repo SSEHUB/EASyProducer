@@ -14,6 +14,7 @@ import de.uni_hildesheim.sse.vil.AbstractXTextEditor;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 
 /**
@@ -49,6 +50,11 @@ public class XtextEditor extends AbstractXTextEditor<ImplementationUnit, Script>
     @Override
     protected TranslationResult<Script> createModel(ImplementationUnit root, URI uri) {
         return BuildLangModelUtility.INSTANCE.createBuildModel(root, uri, true);
+    }
+
+    @Override
+    protected void updateModel(Script model, URI uri) {
+        BuildModel.INSTANCE.updateModel(model, uri);
     }
 
     @Override

@@ -27,5 +27,6 @@ Export-Package: de.uni_hildesheim.sse.vil,
  de.uni_hildesheim.sse.vil.expressions.ui.highlighting,
  de.uni_hildesheim.sse.vil.expressions.ui.hyperlinking,
  de.uni_hildesheim.sse.vil.expressions.ui.internal,
- de.uni_hildesheim.sse.vil.expressions.ui.quickfix
+ de.uni_hildesheim.sse.vil.expressions.ui.quickfix,
+ de.uni_hildesheim.sse.vil.expressions.ui.resources
 Bundle-Activator: de.uni_hildesheim.sse.vil.expressions.ui.internal.ExpressionsActivator

@@ -29,7 +29,6 @@ import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Instantiator;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
-import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 

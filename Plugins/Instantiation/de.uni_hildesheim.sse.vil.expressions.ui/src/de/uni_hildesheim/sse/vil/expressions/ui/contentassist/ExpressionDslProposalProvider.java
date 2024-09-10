@@ -3,28 +3,205 @@
 */
 package de.uni_hildesheim.sse.vil.expressions.ui.contentassist;
 
+import java.util.List;
+
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.RuleCall;
+import org.eclipse.xtext.nodemodel.INode;
+import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
+
+import com.google.inject.Inject;
+
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.EqualityExpressionPartImpl;
+import de.uni_hildesheim.sse.vil.expressions.ui.resources.Images;
+
+
 /**
- * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
+ * see
+ * http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on
+ * how to customize content assistant
  */
 public class ExpressionDslProposalProvider extends AbstractExpressionDslProposalProvider {
 
+    protected static final boolean DEBUG = false;
 
-	@Override
-	public void complete_Advice(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-	
-	@Override
-	public void complete_Import(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-	
-	public void completeVariableDeclaration_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
-	
-	public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-	}
+    @Inject
+    private IImageHelper imageHelper;
+
+    /**
+     * Debug logging but only if {@link #DEBUG} is <code>true</code>.
+     * 
+     * @param text the text to log
+     */
+    protected void debug(String text) {
+        if (DEBUG) {
+            System.err.println(text);
+        }
+    }
+    
+    @Override
+    public void complete_Advice(EObject model, RuleCall ruleCall, ContentAssistContext context,
+        ICompletionProposalAcceptor acceptor) {
+    }
+
+    @Override
+    public void complete_Import(EObject model, RuleCall ruleCall, ContentAssistContext context,
+        ICompletionProposalAcceptor acceptor) {
+    }
+
+    public void completeVariableDeclaration_Name(EObject model, Assignment assignment, ContentAssistContext context,
+        ICompletionProposalAcceptor acceptor) {
+    }
+
+    @Override
+    public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeSubCall_Call");
+        /*
+         * TODO Currently, concatenated sub-calls are not supported sufficiently!
+         * Example: fa.copy(...). <- call for content assist
+         * In this case the content assist will provide proposals on the basis of "first match"
+         * with respect to the name of the previous operation ("copy"). If the right "copy"-operation
+         * is determined, and thus the right return type of this operation, is currently not checked.
+         * 
+         *  Problem: the named argument may be an expression which must be parsed (currently not implemented
+         *  for the content assist). After parsing, the result - which may be a call or an id of a variable - must be
+         *  used as a starting point for determining the type and name (or another call) of each named argument to
+         *  construct the final sub call in terms of name and arguments.
+         *  
+         *  Only on this basis, the exact operation can be found and, thus, the right operations can be
+         *  proposed based on the return type of the exact operation.
+         */
+        
+        /*
+         *  Propose (only) all valid operations with respect to the type of the element for which the operation call shall be defined.
+         *  This is configured by the value (false) of the last parameter of the proposal-method below.
+         */
+        proposeOperations(model, assignment, context, acceptor, false);
+    }
+
+    protected void debugPath2Root(INode node) {
+        if (DEBUG) {
+            INode result = null;
+            System.out.println("_debugPath2Root_1 : " + node.getSemanticElement());
+            result = node.getParent();
+            while (result != null) {
+                System.out.println("_debugPath2Root : " + result.getSemanticElement());
+                result = result.getParent();
+            }
+        }
+    }
+    
+    protected void proposeParamsWithSpecifiedTypes(EObject model, Assignment assignment, ContentAssistContext context, 
+        ICompletionProposalAcceptor acceptor) {
+    }
+
+    @Override
+    public void completeArgumentList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeArgumentList_Param");
+        debugPath2Root(context.getLastCompleteNode());
+        proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+    }
+
+    @Override
+    public void completeCall_Decl(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+//      List<StyledString> propList = proposeOperationsForType(context.getLastCompleteNode());
+//      if (!isEmpty(propList)) {
+//          for (StyledString display : propList) {
+//              String toEditor = display.getString().substring(0, display.getString().indexOf(":") - 1);
+//              ICompletionProposal proposal = createCompletionProposal(toEditor, display, imageHelper.getImage(Images.NAME_OPERATION), context);
+//              acceptor.accept(proposal);
+//          }
+//      }
+        debug("completeCall_Decl");
+        debugPath2Root(context.getLastCompleteNode());
+        proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+    }
+    
+    @Override
+    public void completeCall_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeCall_Param");
+        debugPath2Root(context.getLastCompleteNode());
+    }
+
+    @Override
+    public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeParameterList_Param");
+        // Reuse variable declaration type proposal as parameters are defined equal to variables in VIL
+        completeVariableDeclaration_Type(model, assignment, context, acceptor);
+        proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+    }
+
+    protected void proposeOperations(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean allOperations) {
+        List<StyledString> proposalList = getUtility().getValidTypeOperations(context.getLastCompleteNode(), allOperations);
+        if (proposalList != null) {
+            for (StyledString opDescr : proposalList) {
+                String plainOpDescr = opDescr.toString();
+                String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, opDescr,
+                        imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
+            }
+        }
+    }
+    
+    @Override
+    public void completeEqualityExpressionPart_Ex(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeEqualityExpressionPart_Ex");
+        debugPath2Root(context.getLastCompleteNode());
+        EObject semanticElement = context.getLastCompleteNode().getSemanticElement();
+        if (semanticElement instanceof EqualityExpressionPartImpl) {
+            EqualityExpressionPartImpl equExpr = (EqualityExpressionPartImpl) semanticElement;
+            if (equExpr.getOp().equals("==") || equExpr.getOp().equals("!=")) {
+                String toEditor = "null";
+                StyledString toDisplay = new StyledString("null");
+                acceptor.accept(createCompletionProposal(toEditor, toDisplay,
+                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 500, context.getPrefix(), context));
+            }
+        }
+    }
+
+    @Override
+    public void completeVariableDeclaration_Type(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeVariableDeclaration_Type");
+        List<String> allTypes = getUtility().getAllTypes(context.getLastCompleteNode());
+        for (String type : allTypes) {
+            acceptor.accept(createCompletionProposal(type, new StyledString(type),
+                    imageHelper.getImage(Images.NAME_TYPE), 80, context.getPrefix(), context));
+        }
+    }
+
+    public ExpressionDslProposalProviderUtility getUtility() {
+        return null; // shall not be used
+    }
+    
+    @Override
+    public void completePrimaryExpression_OtherEx(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debugPath2Root(context.getLastCompleteNode());
+    }
+    
+    protected void proposeParentParamsVars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean completeDefsOnly) {
+        List<StyledString> proposalList = getUtility().getParentParameters(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString param : proposalList) {
+                String plainParam = param.toString();
+                String toEditor = plainParam.substring(0, plainParam.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, param,
+                    imageHelper.getImage(Images.NAME_PARAM), 800, context.getPrefix(), context));
+            }
+            proposalList.clear();
+        }
+        proposalList = getUtility().getParentVariables(context.getLastCompleteNode(), completeDefsOnly);
+        if (proposalList != null) {
+            for (StyledString varDecl : proposalList) {
+                String plainVarDecl = varDecl.toString();
+                String toEditor = plainVarDecl.substring(0, plainVarDecl.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, varDecl,
+                    imageHelper.getImage(Images.NAME_PARAM), 800, context.getPrefix(), context));
+            }
+        }
+    }
+
 }

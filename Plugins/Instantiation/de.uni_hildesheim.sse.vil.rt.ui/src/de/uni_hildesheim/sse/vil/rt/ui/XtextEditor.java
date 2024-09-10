@@ -13,6 +13,7 @@ import de.uni_hildesheim.sse.vil.rt.RtVilModelUtility;
 import de.uni_hildesheim.sse.vil.rt.rtVil.ImplementationUnit;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 
 /**
@@ -48,6 +49,11 @@ public class XtextEditor extends AbstractXTextEditor<ImplementationUnit, Script>
     @Override
     protected TranslationResult<Script> createModel(ImplementationUnit root, URI uri) {
         return RtVilModelUtility.INSTANCE.createRtModel(root, uri, true);
+    }
+
+    @Override
+    protected void updateModel(Script model, URI uri) {
+        RtVilModel.INSTANCE.updateModel(model, uri);
     }
 
     @Override

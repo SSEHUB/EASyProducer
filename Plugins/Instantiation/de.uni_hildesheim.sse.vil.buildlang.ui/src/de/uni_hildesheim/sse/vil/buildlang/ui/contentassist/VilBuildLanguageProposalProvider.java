@@ -11,7 +11,6 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.Keyword;
 import org.eclipse.xtext.RuleCall;
-import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.ui.IImageHelper;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
 import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
@@ -20,7 +19,6 @@ import com.google.inject.Inject;
 
 import de.uni_hildesheim.sse.vil.buildlang.ui.resources.Images;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl;
-import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.EqualityExpressionPartImpl;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 
 /**
@@ -31,21 +29,8 @@ import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
  */
 public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguageProposalProvider {
     
-    protected static final boolean DEBUG = false;
-    
     @Inject
     private IImageHelper imageHelper;
-    
-    /**
-     * Debug logging but only if {@link #DEBUG} is <code>true</code>.
-     * 
-     * @param text the text to log
-     */
-    protected void debug(String text) {
-        if (DEBUG) {
-            System.err.println(text);
-        }
-    }
     
     /**
      * Returns the image helper.
@@ -65,7 +50,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     @Override
     public void completeLanguageUnit_Advices(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeLanguageUnit_Advices");
-        String ivmlModelName = VilBuildLangProposalProviderUtility.INSTANCE.getIvmlModelName(context.getRootModel());
+        String ivmlModelName = getUtility().getIvmlModelName(context.getRootModel());
         if (ivmlModelName == null || ivmlModelName.isEmpty()) {
             ivmlModelName = "<IvmlModel>";
         }
@@ -90,8 +75,8 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     @Override
     public void completeImplementationUnit_Scripts(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeImplementationUnit_Scripts");
-        if (!VilBuildLangProposalProviderUtility.INSTANCE.hasScript(context.getLastCompleteNode())) {            
-            String vilFileName = VilBuildLangProposalProviderUtility.INSTANCE.getVilFileName(context.getRootModel());
+        if (!getUtility().hasScript(context.getLastCompleteNode())) {            
+            String vilFileName = getUtility().getVilFileName(context.getRootModel());
             if (vilFileName == null || vilFileName.isEmpty()) {
                 vilFileName = "<ScriptName>";
             }
@@ -116,8 +101,8 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     @Override
     public void completeScriptContents_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeScriptContents_Elements");
-        if (!VilBuildLangProposalProviderUtility.INSTANCE.isMainRuleDeclared(context.getLastCompleteNode())) {
-            String scriptParameters = VilBuildLangProposalProviderUtility.INSTANCE.
+        if (!getUtility().isMainRuleDeclared(context.getLastCompleteNode())) {
+            String scriptParameters = getUtility().
                     getScriptParametersForMainRule(context.getLastCompleteNode());
             if (scriptParameters != null) {
                 String toEditor = "    //mainRule \n    main(" + scriptParameters + ") = : {\n \n    }";
@@ -141,7 +126,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     @Override
     public void completeLanguageUnit_Version(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeLanguageUnit_Version");
-        if (!VilBuildLangProposalProviderUtility.INSTANCE.hasVersion(context.getLastCompleteNode())) {
+        if (!getUtility().hasVersion(context.getLastCompleteNode())) {
             String proposalString = "version v<VersionNumber>;";
             acceptor.accept(createCompletionProposal(proposalString, new StyledString("Version"),
                     imageHelper.getImage(Images.NAME_VERSION), 970, context.getPrefix(), context));
@@ -154,74 +139,6 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
         String proposalString = "load properties \"<PathToPropertiesFile>\";";
         acceptor.accept(createCompletionProposal(proposalString, new StyledString("Load properties"),
                 imageHelper.getImage(Images.NAME_PROP), 940, context.getPrefix(), context));
-    }
-    
-    //TODO: move to ExpressionDslProposalProvider
-    @Override
-    public void completeVariableDeclaration_Type(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeVariableDeclaration_Type");
-        List<String> allTypes = VilBuildLangProposalProviderUtility.INSTANCE.getAllTypes(context.getLastCompleteNode());
-        for (String type : allTypes) {
-            acceptor.accept(createCompletionProposal(type, new StyledString(type),
-                    imageHelper.getImage(Images.NAME_TYPE), 80, context.getPrefix(), context));
-        }
-    }
-    
-    //TODO: move to ExpressionDslProposalProvider   
-    @Override
-    public void completeVariableDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeVariableDeclaration_Expression");
-        // Propose script parameters and already declared/defined variables
-        proposeScriptParamsVars(model, assignment, context, acceptor, true); 
-        // Propose all operations (as we do not know what the user wants to define)
-        proposeOperations(model, assignment, context, acceptor, true);
-        // Propose join expression
-        proposeJoinExpression(model, assignment, context, acceptor);
-        // Propose instantiators
-        proposeInstantiators(model, assignment, context, acceptor);
-        /*
-         *  In case, that the variable declaration expression is nested in a rule, a map-
-         *  or join-expression, or any combination of this, propose the already defined
-         *  variables and parameters of these parent-elements.
-         */
-        proposeParentParamsVars(model, assignment, context, acceptor, true);
-    }
-    
-    //TODO: move to ExpressionDslProposalProvider   
-    @Override
-    public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeParameterList_Param");
-        // Reuse variable declaration type proposal as parameters are defined equal to variables in VIL
-        completeVariableDeclaration_Type(model, assignment, context, acceptor);
-        
-        proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
-        
-    }
-
-    @Override
-    public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeSubCall_Call");
-        /*
-         * TODO Currently, concatenated sub-calls are not supported sufficiently!
-         * Example: fa.copy(...). <- call for content assist
-         * In this case the content assist will provide proposals on the basis of "first match"
-         * with respect to the name of the previous operation ("copy"). If the right "copy"-operation
-         * is determined, and thus the right return type of this operation, is currently not checked.
-         * 
-         *  Problem: the named argument may be an expression which must be parsed (currently not implemented
-         *  for the content assist). After parsing, the result - which may be a call or an id of a variable - must be
-         *  used as a starting point for determining the type and name (or another call) of each named argument to
-         *  construct the final sub call in terms of name and arguments.
-         *  
-         *  Only on this basis, the exact operation can be found and, thus, the right operations can be
-         *  proposed based on the return type of the exact operation.
-         */
-        
-        /*
-         *  Propose (only) all valid operations with respect to the type of the element for which the operation call shall be defined.
-         *  This is configured by the value (false) of the last parameter of the proposal-method below.
-         */
-        proposeOperations(model, assignment, context, acceptor, false);
     }
     
     @Override
@@ -286,60 +203,11 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
         // Propose all (last parameter = true) available operations
         proposeOperations(model, assignment, context, acceptor, true);
     }
-    
+
+    @Override
     public void completeMap_Block(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeMap_Block");
         proposeParentParamsVars(model, assignment, context, acceptor, false);
-        proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
-    }
-    
-    @Override
-    public void completeCall_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeCall_Param");
-        debugPath2Root(context.getLastCompleteNode());
-    }
-    @Override
-    public void completeArgumentList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeArgumentList_Param");
-        debugPath2Root(context.getLastCompleteNode());
-        proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
-    }
-    
-    public void completePrimaryExpression_OtherEx(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debugPath2Root(context.getLastCompleteNode());
-    }
-    
-    @Override
-    public void completeEqualityExpressionPart_Ex(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeEqualityExpressionPart_Ex");
-        debugPath2Root(context.getLastCompleteNode());
-        EObject semanticElement = context.getLastCompleteNode().getSemanticElement();
-        if (semanticElement instanceof EqualityExpressionPartImpl) {
-            EqualityExpressionPartImpl equExpr = (EqualityExpressionPartImpl) semanticElement;
-            if (equExpr.getOp().equals("==") || equExpr.getOp().equals("!=")) {
-                String toEditor = "null";
-                StyledString toDisplay = new StyledString("null");
-                acceptor.accept(createCompletionProposal(toEditor, toDisplay,
-                        imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 500, context.getPrefix(), context));
-            }
-        }
-        
-    }
-    
-    /**
-     * proposes operations for operationcalls of an element (like String s.).
-     */
-    public void completeCall_Decl(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-//        List<StyledString> propList = proposeOperationsForType(context.getLastCompleteNode());
-//        if (!isEmpty(propList)) {
-//            for (StyledString display : propList) {
-//                String toEditor = display.getString().substring(0, display.getString().indexOf(":") - 1);
-//                ICompletionProposal proposal = createCompletionProposal(toEditor, display, imageHelper.getImage(Images.NAME_OPERATION), context);
-//                acceptor.accept(proposal);
-//            }
-//        }
-        debug("completeCall_Decl");
-        debugPath2Root(context.getLastCompleteNode());
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
     }
     
@@ -400,7 +268,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     }
     
     protected void proposeInstantiators(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getAllInstantiators(context.getLastCompleteNode());
+        List<StyledString> proposalList = getUtility().getAllInstantiators(context.getLastCompleteNode());
         if (proposalList != null) {
             for (StyledString opDescr : proposalList) {
                 String plainOpDescr = opDescr.toString();
@@ -420,7 +288,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     
     protected void proposeScriptParamsVars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean completeDefsOnly) {
         // Propose script parameters
-        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getScriptParameters(context.getLastCompleteNode());
+        List<StyledString> proposalList = getUtility().getScriptParameters(context.getLastCompleteNode());
         if (proposalList != null) {
             for (StyledString displayString : proposalList) {
                 String toEditor = displayString.getString().substring(0, displayString.getString().indexOf(":") - 1);
@@ -431,7 +299,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
             proposalList.clear();
         }
         // Propose script variables
-        proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getScriptVariables(context.getLastCompleteNode(), completeDefsOnly);
+        proposalList = getUtility().getScriptVariables(context.getLastCompleteNode(), completeDefsOnly);
         if (proposalList != null) {
             for (StyledString displayString : proposalList) {
                 String toEditor = displayString.getString().substring(0, displayString.getString().indexOf(":") - 1);
@@ -443,7 +311,7 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
     }
     
     protected void proposeDefinedRules(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean deleteSelf) {
-        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getAllRules(context.getLastCompleteNode(), deleteSelf);
+        List<StyledString> proposalList = getUtility().getAllRules(context.getLastCompleteNode(), deleteSelf);
         if (proposalList != null) {
             for (StyledString displayString : proposalList) {
                 // For the editor, delete the type information " : Rule" at the end of the string.
@@ -455,58 +323,25 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
         }
     }
     
-    protected void proposeOperations(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean allOperations) {
-        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getValidTypeOperations(context.getLastCompleteNode(), allOperations);
-        if (proposalList != null) {
-            for (StyledString opDescr : proposalList) {
-                String plainOpDescr = opDescr.toString();
-                String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
-                acceptor.accept(createCompletionProposal(toEditor, opDescr,
-                        imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
-            }
-        }
-    }
-    
-    protected void proposeParentParamsVars(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean completeDefsOnly) {
-        List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getParentParameters(context.getLastCompleteNode());
-        if (proposalList != null) {
-            for (StyledString param : proposalList) {
-                String plainParam = param.toString();
-                String toEditor = plainParam.substring(0, plainParam.indexOf(":") - 1);
-                acceptor.accept(createCompletionProposal(toEditor, param,
-                        imageHelper.getImage(Images.NAME_PARAM), 800, context.getPrefix(), context));
-            }
-            proposalList.clear();
-        }
-        proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getParentVariables(context.getLastCompleteNode(), completeDefsOnly);
-        if (proposalList != null) {
-            for (StyledString varDecl : proposalList) {
-                String plainVarDecl = varDecl.toString();
-                String toEditor = plainVarDecl.substring(0, plainVarDecl.indexOf(":") - 1);
-                acceptor.accept(createCompletionProposal(toEditor, varDecl,
-                        imageHelper.getImage(Images.NAME_PARAM), 800, context.getPrefix(), context));
-            }
-        }
-    }
-    
+    @Override
     protected void proposeParamsWithSpecifiedTypes(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("proposeParamsWithSpecifiedTypes");
         debugPath2Root(context.getLastCompleteNode());
-//        ExpressionOrQualifiedExecutionImpl impl = VilBuildLangProposalProviderUtility.INSTANCE.getExprOrExecution(context.getLastCompleteNode());
+//        ExpressionOrQualifiedExecutionImpl impl = getUtility().getExprOrExecution(context.getLastCompleteNode());
 //        System.out.println("EXECUTION: " + impl.get);
         
         List<String> typeList = null;
-        CallImpl call = VilBuildLangProposalProviderUtility.INSTANCE.getCallImpl(context.getLastCompleteNode());
+        CallImpl call = getUtility().getCallImpl(context.getLastCompleteNode());
         if (call != null) {
             String ruleName = Utils.getQualifiedNameString(call.getName());
             System.out.println("RULENAME OF THE CALL: " + ruleName);
-            typeList = VilBuildLangProposalProviderUtility.INSTANCE.searchForRuleParameterTypes(ruleName, context.getLastCompleteNode());
+            typeList = getUtility().searchForRuleParameterTypes(ruleName, context.getLastCompleteNode());
         } else {
             System.out.println("CALL = NULL");
         }
         
         if (typeList != null) {
-            List<StyledString> proposalList = VilBuildLangProposalProviderUtility.INSTANCE.getAllVarsForType(context.getLastCompleteNode(), typeList, false);     
+            List<StyledString> proposalList = getUtility().getAllVarsForType(context.getLastCompleteNode(), typeList, false);     
             if (proposalList != null) {
                 for (StyledString toDisplay : proposalList) {
                     String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
@@ -517,13 +352,28 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
         }
     }
     
-    protected void debugPath2Root(INode node) {
-        INode result = null;
-        System.out.println("_debugPath2Root_1 : " + node.getSemanticElement());
-        result = node.getParent();
-        while (result != null) {
-            System.out.println("_debugPath2Root : " + result.getSemanticElement());
-            result = result.getParent();
-        }
+    @Override
+    public void completeVariableDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("completeVariableDeclaration_Expression");
+        // Propose script parameters and already declared/defined variables
+        proposeScriptParamsVars(model, assignment, context, acceptor, true); 
+        // Propose all operations (as we do not know what the user wants to define)
+        proposeOperations(model, assignment, context, acceptor, true);
+        // Propose join expression
+        proposeJoinExpression(model, assignment, context, acceptor);
+        // Propose instantiators
+        proposeInstantiators(model, assignment, context, acceptor);
+        /*
+         *  In case, that the variable declaration expression is nested in a rule, a map-
+         *  or join-expression, or any combination of this, propose the already defined
+         *  variables and parameters of these parent-elements.
+         */
+        proposeParentParamsVars(model, assignment, context, acceptor, true);
     }
+    
+    @Override
+    public VilBuildLangProposalProviderUtility getUtility() {
+        return VilBuildLangProposalProviderUtility.INSTANCE;
+    }
+    
 }

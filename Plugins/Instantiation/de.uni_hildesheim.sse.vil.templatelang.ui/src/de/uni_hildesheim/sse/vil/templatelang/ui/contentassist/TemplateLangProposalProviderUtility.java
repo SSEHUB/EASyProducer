@@ -1,7 +1,6 @@
 package de.uni_hildesheim.sse.vil.templatelang.ui.contentassist;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,19 +10,16 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.nodemodel.INode;
 
-import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator;
 import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
+import de.uni_hildesheim.sse.vil.expressions.ui.contentassist.ExpressionDslProposalProviderUtility;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtBlockImpl;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.VilDefImpl;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
-import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
-
 
 /**
  * A utility class for determining different elements in the VTL build model based on the
@@ -31,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author dernek
  */
-public class TemplateLangProposalProviderUtility {
+public class TemplateLangProposalProviderUtility extends ExpressionDslProposalProviderUtility {
     
     
     /**
@@ -261,39 +257,6 @@ public class TemplateLangProposalProviderUtility {
         return result;
     }
     
-    /**
-     * Returns all VTL-types currently available in EASy-Producer, but may contain duplicate entries.
-     * 
-     * @param node the <code>INode</code> object (last complete node) for which the content assist is called.
-     * @return a list of the names (<code>String</code>) of all types currently registered to EASy-Producer.
-     */
-    private List<String> getAllTypes(INode node) {
-        List<String> allTypes = null;
-        TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
-        if (typeRegistry != null) {
-            Iterable<TypeDescriptor<?>> types = typeRegistry.allTypes();
-            if (types != null) {
-                Iterator<TypeDescriptor<?>> typeIterator = types.iterator();
-                if (typeIterator != null) {
-                    allTypes = new ArrayList<String>();
-                    while (typeIterator.hasNext()) {
-                        String typeName = typeIterator.next().getName();
-                        if (!typeName.isEmpty()) {
-                            if (typeName.equals("Set") || typeName.equals("Map")) {
-                                typeName = typeName + "(<ElementType> [ ,<ElementType>]*)";
-                            }
-                            if (typeName.equals("Sequence")) {
-                                typeName = typeName + "(<ElementType>)";
-                            }
-                            allTypes.add(typeName);
-                        }
-                    }
-                }
-            }            
-        }
-        return allTypes;
-    }
-    
     private List<VariableDeclaration> getVarsInStmtWithType(INode node, List<String> typeList) {
         List<VariableDeclaration> result = null;
         if (node != null) {
@@ -488,4 +451,10 @@ public class TemplateLangProposalProviderUtility {
         }
         return result;
     }
+    
+    @Override
+    protected String getMatchingType(INode node, String id) {
+        return ""; // preliminary
+    }
+    
 }

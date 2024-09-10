@@ -24,7 +24,7 @@ import de.uni_hildesheim.sse.vil.templatelang.ui.resources.Images;
  * see http://www.eclipse.org/Xtext/documentation/latest/xtext.html#contentAssist on how to customize content assistant
  */
 public class TemplateLangProposalProvider extends AbstractTemplateLangProposalProvider {
-    
+
     @Inject
     private IImageHelper imageHelper; 
     
@@ -134,7 +134,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
     public void completeStmtBlock_Stmts(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
        
         //propose scriptparameters
-        List<StyledString> proposalList = TemplateLangProposalProviderUtility.INSTANCE.getAllParamsFromTemplate(context.getLastCompleteNode());
+        List<StyledString> proposalList = getUtility().getAllParamsFromTemplate(context.getLastCompleteNode());
         if (proposalList != null) {
             for (StyledString toDisplay : proposalList) {
                 String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
@@ -145,7 +145,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
         }
         
         //propose parameters from def
-        proposalList = TemplateLangProposalProviderUtility.INSTANCE.getAllParamsFromDef(context.getLastCompleteNode());
+        proposalList = getUtility().getAllParamsFromDef(context.getLastCompleteNode());
         if (proposalList != null) {
             for (StyledString toDisplay : proposalList) {
                 String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
@@ -156,7 +156,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
         }
         
         // propose all variables
-        proposalList = TemplateLangProposalProviderUtility.INSTANCE.getAllVarsInStmt(context.getLastCompleteNode());
+        proposalList = getUtility().getAllVarsInStmt(context.getLastCompleteNode());
         if (proposalList != null) {
             for (StyledString toDisplay : proposalList) {
                 String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
@@ -166,7 +166,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
             }
         }
         // propose declared defs
-        proposalList = TemplateLangProposalProviderUtility.INSTANCE.getAllDefs(context.getLastCompleteNode());
+        proposalList = getUtility().getAllDefs(context.getLastCompleteNode());
         if (proposalList != null) {
             for (StyledString toDisplay : proposalList) {
                 String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1) + ";";
@@ -197,7 +197,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
         acceptor.accept(proposal);
         
         // propose VariableDeclaration
-        List<String> allTypes = TemplateLangProposalProviderUtility.INSTANCE.getAllRegisteredTypes(context.getLastCompleteNode());
+        List<String> allTypes = getUtility().getAllRegisteredTypes(context.getLastCompleteNode());
         if (allTypes != null) {
             StyledString toDisplay;
             int priority = 700;
@@ -230,7 +230,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
     public void completeAlternative_Expr(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         List<String> typeList = new ArrayList<String>();
         typeList.add("boolean");
-        List<StyledString> proposalList = TemplateLangProposalProviderUtility.INSTANCE.getAllVarsInStmtWithType(context.getLastCompleteNode(), typeList);
+        List<StyledString> proposalList = getUtility().getAllVarsInStmtWithType(context.getLastCompleteNode(), typeList);
         if (proposalList != null) {
             for (StyledString toDisplay : proposalList) {
                 String toEditor = toDisplay.getString().substring(0, toDisplay.getString().indexOf(":") -1);
@@ -242,72 +242,30 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
     }
     
     @Override
-    public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Subcall: " + context.getLastCompleteNode().getSemanticElement());
-    }
-    
-    @Override
-    public void completeExpression_Expr(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Expression: " + context.getLastCompleteNode().getSemanticElement());
-        //StmtBlockImpl block = (StmtBlockImpl) context.getLastCompleteNode().getSemanticElement();
-    }
-    
-    @Override
-    public void completeExpressionStatement_Expr(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("ExpressionStatement: " +  context.getLastCompleteNode().getSemanticElement());
-//        StmtBlockImpl block = (StmtBlockImpl) context.getLastCompleteNode().getSemanticElement();
-//        System.out.println(block.getStmts());
-    } 
-    
-    @Override
     public void completeVariableDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("VarDecl_Expression: " + context.getLastCompleteNode().getSemanticElement());
-//        StmtBlockImpl block = (StmtBlockImpl) context.getLastCompleteNode().getSemanticElement();
-//        System.out.println("Block: " + block.getStmts().get(0).getExprStmt().getExpr().getExpr().getLeft().getLeft().getLeft());
+        debug("completeVariableDeclaration_Expression");
+        // Propose all operations (as we do not know what the user wants to define)
+        proposeOperations(model, assignment, context, acceptor, true);
+        /*
+         *  In case, that the variable declaration expression is nested in a rule, a map-
+         *  or join-expression, or any combination of this, propose the already defined
+         *  variables and parameters of these parent-elements.
+         */
+        proposeParentParamsVars(model, assignment, context, acceptor, true);
     }
     
+
     @Override
-    public void completeArgumentList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.err.println("completeArgumentList_Param");
-        //proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+    public void complete_VilDef(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        debug("complete_VilDef");
+        String proposalString = "<DefName>() {\n\n    }";
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Rule"),
+            imageHelper.getImage(Images.NAME_RULE), 700, context.getPrefix(), context));
     }
-    
+
     @Override
-    public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Hello Param");
-        // Methodenaufrufe werden als Expressions verarbeitet.
-        // Schwierig für Parametervorschlag
+    public TemplateLangProposalProviderUtility getUtility() {
+        return TemplateLangProposalProviderUtility.INSTANCE;
     }
-    
-    @Override
-    public void completeCall_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Param Name");
-    }
-    
-    @Override
-    public void completeNamedArgument_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("NamedArgu");
-    }
-    
-    @Override
-    public void completeCall_Decl(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Call Decl");
-    }
-    
-    @Override
-    public void completeCall_Name(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Call Name");
-    }
-    
-    @Override
-    public void complete_Call(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Overriden call completion");
-        // Bei main( kommt eine NullPointerexception, dann kann man direkt die methode schreiben lassen mit parametern
-    }
-    
-    @Override
-    public void complete_QualifiedPrefix(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        System.out.println("Overriden qualified prefix");
-    }
-    
+
 }
