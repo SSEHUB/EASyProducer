@@ -14,34 +14,22 @@ public abstract class ProjectConstants {
 
     /**
      * Folder for internal libs inside a PL-Project.
-     * 
-     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
-    @Deprecated
     public static final String FOLDER_LIBS = "lib";
     
     /**
      * Folder for persistent configuration files.
-     * 
-     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
-    @Deprecated
     public static final String EASY_FILES = "EASy";
     
     /**
      * Sub folder of {@link #EASY_FILES} holding ivml projects of imported projects.
-     * 
-     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
-    @Deprecated
     public static final String IMPORTED_PROJECTS = "imported";
 
     /**
      * Folder for internal resources inside a PL-Project.
-     * 
-     * @deprecated remove as soon as copy mechanisms and legacy instantiations are removed
      */
-    @Deprecated
     public static final String FOLDER_RES = "resources";
 
     /*
