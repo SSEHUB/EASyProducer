@@ -20,12 +20,12 @@ import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.CallImpl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.ExpressionOrQualifiedExecutionImpl;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.impl.VariableDeclarationImpl;
-import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vil.expressions.ui.contentassist.ExpressionDslProposalProviderUtility;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ImplementationUnit;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LoopVariable;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleConditions;
+import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleDeclaration;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElement;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.RuleElementBlock;
 import de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.ScriptContents;
@@ -81,7 +81,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (Parameter param : paramList) {
                     String varName = param.getName();
-                    String type = Utils.getQualifiedNameString(param.getType().getName());
+                    String type = getTypeName(param.getType());
                     StyledString displayString = new StyledString();
                     displayString.append(varName);
                     displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
@@ -108,21 +108,20 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
     public List<StyledString> getAllRules(INode node, boolean deleteSelf) {
         List<StyledString> result = null;
         if (node != null) {
-           List<RuleDeclarationImpl> allRules = getAllRules(getActiveVilScript(node));
+           List<RuleDeclaration> allRules = getAllRules(getActiveVilScript(node));
            if (hasElements(allRules)) {
                if (deleteSelf) {
                    allRules.remove(getParentRule(node));
                }
                result = new ArrayList<StyledString>();
-               for (RuleDeclarationImpl ruleDecl : allRules) {
+               for (RuleDeclaration ruleDecl : allRules) {
                    if (ruleDecl != null) {
                        String ruleName = ruleDecl.getName() + "(";
                        if (ruleDecl.getParamList() != null && hasElements(ruleDecl.getParamList().getParam())) {
                            EList<Parameter> paramList = ruleDecl.getParamList().getParam();
                            String parameterString = "";
                            for (Parameter param : paramList) {
-                               parameterString = parameterString + Utils.getQualifiedNameString(
-                                       param.getType().getName());
+                               parameterString = parameterString + getTypeName(param.getType());
                                parameterString = parameterString + " " + param.getName() + ", ";
                            }
                            parameterString = parameterString.substring(0, parameterString.length() -2);
@@ -169,13 +168,13 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
         if (node != null) {
             LanguageUnit activeScript = getActiveVilScript(node);
             if (activeScript != null) {
-                List<VariableDeclarationImpl> varDecls = getAllVariables(activeScript);
+                List<VariableDeclaration> varDecls = getAllVariables(activeScript);
                 if (hasElements(varDecls)) {
-                    for (VariableDeclarationImpl varDecl : varDecls) {
+                    for (VariableDeclaration varDecl : varDecls) {
                         if (completeDefsOnly) {
                             if (varDecl.getExpression() != null /*TODO: also include expressions are not null ... does not work like this*/) {
                                 String varName = varDecl.getName();
-                                String type = Utils.getQualifiedNameString(varDecl.getType().getName());
+                                String type = getTypeName(varDecl.getType());
                                 StyledString displayString = new StyledString();
                                 displayString.append(varName);
                                 displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
@@ -183,7 +182,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                             }
                         } else {
                             String varName = varDecl.getName();
-                            String type = Utils.getQualifiedNameString(varDecl.getType().getName());
+                            String type = getTypeName(varDecl.getType());
                             StyledString displayString = new StyledString();
                             displayString.append(varName);
                             displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
@@ -373,8 +372,8 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
     public List<String> searchForRuleParameterTypes(String toSearch, INode node) {
         List<String> parameterTypes = null;
         if (node != null) {
-            List<RuleDeclarationImpl> allRules = getAllRules(getActiveVilScript(node));
-            for (RuleDeclarationImpl rule : allRules) {
+            List<RuleDeclaration> allRules = getAllRules(getActiveVilScript(node));
+            for (RuleDeclaration rule : allRules) {
                 if (rule != null) {
                     if (rule.getName() != null) {
                         if (rule.getName().equals(toSearch)) {
@@ -382,8 +381,8 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                             if (rule.getParamList() != null) {
                                 if (rule.getParamList().getParam() != null) {
                                     for (Parameter param : rule.getParamList().getParam()) {
-                                        String toAdd = Utils.getQualifiedNameString(param.getType().getName());
-                                        System.out.println("SearchForTypes: " + toAdd);
+                                        String toAdd = getTypeName(param.getType());
+                                        //System.out.println("SearchForTypes: " + toAdd);
                                         parameterTypes.add(toAdd); 
                                     }                           
                                 }
@@ -455,7 +454,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                             for (String type : typeList) {
                                 if (varDecl.getType().getName().getQname().get(0).equals(type)) {
                                     String varName = varDecl.getName();
-                                    String varType = Utils.getQualifiedNameString(varDecl.getType().getName());
+                                    String varType = getTypeName(varDecl.getType());
                                     StyledString displayString = new StyledString();
                                     displayString.append(varName);
                                     displayString.append(" : " + varType, StyledString.QUALIFIER_STYLER);
@@ -467,7 +466,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                         for (String type : typeList) {
                             if (varDecl.getType().getName().getQname().get(0).equals(type)) {
                                 String varName = varDecl.getName();
-                                String varType = Utils.getQualifiedNameString(varDecl.getType().getName());
+                                String varType = getTypeName(varDecl.getType());
                                 StyledString displayString = new StyledString();
                                 displayString.append(varName);
                                 displayString.append(" : " + varType, StyledString.QUALIFIER_STYLER);
@@ -484,7 +483,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                     for (String type : typeList) {
                         if (parameter.getType().getName().getQname().get(0).equals(type)) {
                             String varName = parameter.getName();
-                            String vartype = Utils.getQualifiedNameString(parameter.getType().getName());
+                            String vartype = getTypeName(parameter.getType());
                             StyledString displayString = new StyledString();
                             displayString.append(varName);
                             displayString.append(" : " + vartype, StyledString.QUALIFIER_STYLER);
@@ -497,15 +496,15 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
             // take all vars from script
             LanguageUnit activeScript = getActiveVilScript(node);
             if (activeScript != null) {
-                List<VariableDeclarationImpl> varDeclarations = getAllVariables(activeScript);
+                List<VariableDeclaration> varDeclarations = getAllVariables(activeScript);
                 if (hasElements(varDecls)) {
-                    for (VariableDeclarationImpl varDecl : varDeclarations) {
+                    for (VariableDeclaration varDecl : varDeclarations) {
                         if (completeDefsOnly) {
                             for (String type : typeList) {
                                 if (varDecl.getType().getName().getQname().get(0).equals(type)) {
                                     if (varDecl.getExpression() != null) {
                                         String varName = varDecl.getName();
-                                        String vartype = Utils.getQualifiedNameString(varDecl.getType().getName());
+                                        String vartype = getTypeName(varDecl.getType());
                                         StyledString displayString = new StyledString();
                                         displayString.append(varName);
                                         displayString.append(" : " + vartype, StyledString.QUALIFIER_STYLER);
@@ -517,7 +516,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                             for (String type : typeList) {
                                 if (varDecl.getType().getName().getQname().get(0).equals(type)) {
                                     String varName = varDecl.getName();
-                                    String vartype = Utils.getQualifiedNameString(varDecl.getType().getName());
+                                    String vartype = getTypeName(varDecl.getType());
                                     StyledString displayString = new StyledString();
                                     displayString.append(varName);
                                     displayString.append(" : " + vartype, StyledString.QUALIFIER_STYLER);
@@ -537,7 +536,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                     for (String type : typeList) {
                         if (param.getType().getName().getQname().get(0).equals(type)) {
                             String varName = param.getName();
-                            String vartype = Utils.getQualifiedNameString(param.getType().getName());
+                            String vartype = getTypeName(param.getType());
                             StyledString displayString = new StyledString();
                             displayString.append(varName);
                             displayString.append(" : " + vartype, StyledString.QUALIFIER_STYLER);
@@ -581,7 +580,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = "";
                 for (Parameter param : paramList) {
                     String varName = param.getName();
-                    String type = Utils.getQualifiedNameString(param.getType().getName());
+                    String type = getTypeName(param.getType());
                     result += type + " " + varName + ", ";
                 }
             }
@@ -622,20 +621,20 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
     }
     
     /**
-     * Returns a list of all <code>RuleDeclarationImpl</code> objects defined in the current VIL-script.
+     * Returns a list of all <code>RuleDeclaration</code> objects defined in the current VIL-script.
      * 
      * @param activeScript the <code>LanguageUnit</code> object which represents the active VIL-script currently in use.
-     * @return a list of <code>RuleDeclarationImpl</code> objects or <b>null</b> if no such object can be found.
+     * @return a list of <code>RuleDeclaration</code> objects or <b>null</b> if no such object can be found.
      */
-    private List<RuleDeclarationImpl> getAllRules(LanguageUnit activeScript) {
-        List<RuleDeclarationImpl> ruleList = null;
+    private List<RuleDeclaration> getAllRules(LanguageUnit activeScript) {
+        List<RuleDeclaration> ruleList = null;
         ScriptContents scriptContents = activeScript.getContents();
         if (scriptContents != null && hasElements(scriptContents.getElements())) {
             List<EObject> scriptContentElements = scriptContents.getElements();
-            ruleList = new ArrayList<RuleDeclarationImpl>();
+            ruleList = new ArrayList<RuleDeclaration>();
             for (EObject element : scriptContentElements) {
-                if (element != null && element instanceof RuleDeclarationImpl) {
-                    ruleList.add((RuleDeclarationImpl) element);
+                if (element != null && element instanceof RuleDeclaration) {
+                    ruleList.add((RuleDeclaration) element);
                 }
             }
         }
@@ -643,19 +642,19 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
     }
     
     /**
-     * Returns a list of all <code>VariableDeclarationImpl</code> objects defined in the current VIL-script.
+     * Returns a list of all <code>VariableDeclaration</code> objects defined in the current VIL-script.
      * 
      * @param activeScript the <code>LanguageUnit</code> object which represents the active VIL-script currently in use.
-     * @return a list of <code>VariableDeclarationImpl</code> objects or <b>null</b> if no such object can be found.
+     * @return a list of <code>VariableDeclaration</code> objects or <b>null</b> if no such object can be found.
      */
-    private List<VariableDeclarationImpl> getAllVariables(LanguageUnit activeScript) {
-        List<VariableDeclarationImpl> variableList = null;
+    private List<VariableDeclaration> getAllVariables(LanguageUnit activeScript) {
+        List<VariableDeclaration> variableList = null;
         ScriptContents scriptContents = activeScript.getContents();
         if (scriptContents != null && hasElements(scriptContents.getElements())) {
             List<EObject> scriptContentElements = scriptContents.getElements();
-            variableList = new ArrayList<VariableDeclarationImpl>();
+            variableList = new ArrayList<VariableDeclaration>();
             for (EObject element : scriptContentElements) {
-                if (element != null && element instanceof VariableDeclarationImpl) {
+                if (element != null && element instanceof VariableDeclaration) {
                     variableList.add((VariableDeclarationImpl) element);
                 }
             }
@@ -685,6 +684,9 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                      * entire script. More fine-grained searches like in a rule-body may be possible but with this
                      * granularity we can also directly search for, i.e. rule parameters, in the same step.
                      */
+                    while (parentSemanticElement instanceof RuleElementBlock) {
+                        parentSemanticElement = parentSemanticElement.eContainer();
+                    }
                     if (parentSemanticElement instanceof MapImpl) {
                         MapImpl map = (MapImpl) parentSemanticElement;
                         typeName = getType(map.getBlock(), id);
@@ -750,7 +752,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
             if (nodeSemanticElement != null && nodeSemanticElement instanceof VariableDeclarationImpl) {
                 VariableDeclarationImpl varDecl = (VariableDeclarationImpl) nodeSemanticElement;
                 if (varDecl.getType() != null && varDecl.getType().getName() != null) {
-                    typeName = Utils.getQualifiedNameString(varDecl.getType().getName());
+                    typeName = getTypeName(varDecl.getType());
                 }
             }
         }
@@ -783,7 +785,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                     EList<Parameter> ruleParameters = ruleDecl.getParamList().getParam();
                     for (Parameter param : ruleParameters) {
                         if (param != null && param.getName().equals(name)) {
-                            typeName = Utils.getQualifiedNameString(param.getType().getName()); 
+                            typeName = getTypeName(param.getType()); 
                         }
                     }   
                 }                
@@ -825,7 +827,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                 if (ruleElement.getVarDecl() != null) {
                     VariableDeclaration varDeclElement = ruleElement.getVarDecl();
                     if (varDeclElement.getName().equals(name)) {
-                        typeName = Utils.getQualifiedNameString(varDeclElement.getType().getName());                        
+                        typeName = getTypeName(varDeclElement.getType());
                     }
                 }
             }
@@ -845,11 +847,11 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
         String typeName = "";
         if (script != null && !name.isEmpty()) {
             // Check if the element identified by "name" is part of the script's variables (incl. rule variables, etc.)
-            List<VariableDeclarationImpl> varDecls = getAllVariables(script);
+            List<VariableDeclaration> varDecls = getAllVariables(script);
             if (hasElements(varDecls)) {
-                for (VariableDeclarationImpl varDecl : varDecls) {
+                for (VariableDeclaration varDecl : varDecls) {
                     if (varDecl != null && varDecl.getName() != null && varDecl.getName().equals(name)) {
-                        typeName = Utils.getQualifiedNameString(varDecl.getType().getName());
+                        typeName = getTypeName(varDecl.getType());
                     }
                 }
             }
@@ -858,17 +860,17 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                 EList<Parameter> paramList = script.getParam().getParam();
                 for (Parameter param : paramList) {
                     if (param.getName() != null && param.getName().equals(name)) {
-                        typeName = Utils.getQualifiedNameString(param.getType().getName());
+                        typeName = getTypeName(param.getType());
                     }
                 }
             }
             // Otherwise, the element may identify a rule in the script
             if (typeName.isEmpty()) {
-                List<RuleDeclarationImpl> ruleDecls = getAllRules(script);
+                List<RuleDeclaration> ruleDecls = getAllRules(script);
                 if (hasElements(ruleDecls)) {
-                    for (RuleDeclarationImpl ruleDecl : ruleDecls) {
-                        if (ruleDecl.getName() != null && ruleDecl.getName().equals(name)) {
-                            //TODO It is not possible to get the return type from RuleDeclarationImpl
+                    for (RuleDeclaration ruleDecl : ruleDecls) {
+                        if (ruleDecl.getName() != null && ruleDecl.getName().equals(name) && ruleDecl.getType() != null) {
+                            typeName = getTypeName(ruleDecl.getType());
                         }
                     }
                 }
@@ -878,28 +880,6 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
             
         }
         return typeName;
-    }
-    
-    /**
-     *  Returns the returntype of an specified operation.
-     *  
-     * @param id <code>String</code> the operationname.
-     * @param node the last complete node, when the content assist is used.
-     * @return the returntype of the operation as a <code>String</code>. Could be empty but never <b>null</b>.
-     */
-    private String getReturnType(String id, INode node) {
-        String returnType = "";
-        if (!id.isEmpty()) {
-            List<OperationDescriptor> operationsList = getAvailableOperations(node);
-            if (hasElements(operationsList)) {
-                for (OperationDescriptor opDescr : operationsList) {
-                    if (opDescr.getName().equals(id)) {
-                        returnType = opDescr.getReturnType().getName();
-                    }
-                }
-            }
-        }
-        return returnType;
     }
     
     /**
@@ -929,7 +909,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
     /**
      * Checks if the <code>RuleElementBlock</code> has at least one element or not.
      * 
-     * @param ruleElBlock
+     * @param ruleElBlock rule element block
      * @return <b>true</b> if it has at least one element, <b>false</b> otherwise.
      */
     private boolean hasElements(RuleElementBlock ruleElBlock) {
@@ -1024,7 +1004,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
             varDeclStringList = new ArrayList<StyledString>();
             for (VariableDeclaration varDecl : varDeclList) {
                 String varName = varDecl.getName();
-                String type = Utils.getQualifiedNameString(varDecl.getType().getName());
+                String type = getTypeName(varDecl.getType());
                 StyledString displayString = new StyledString();
                 displayString.append(varName);
                 displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
@@ -1051,7 +1031,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (Parameter parameter : paramList) {
                     String varName = parameter.getName();
-                    String type = Utils.getQualifiedNameString(parameter.getType().getName());
+                    String type = getTypeName(parameter.getType());
                     StyledString displayString = new StyledString();
                     displayString.append(varName);
                     displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
@@ -1108,7 +1088,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                     if (completeDefsOnly) {
                         if (varDecl.getExpression() != null) {
                             String varName = varDecl.getName();
-                            String type = Utils.getQualifiedNameString(varDecl.getType().getName());
+                            String type = getTypeName(varDecl.getType());
                             StyledString displayString = new StyledString();
                             displayString.append(varName);
                             displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);
@@ -1116,7 +1096,7 @@ public class VilBuildLangProposalProviderUtility extends ExpressionDslProposalPr
                         }
                     } else {
                         String varName = varDecl.getName();
-                        String type = Utils.getQualifiedNameString(varDecl.getType().getName());
+                        String type = getTypeName(varDecl.getType());
                         StyledString displayString = new StyledString();
                         displayString.append(varName);
                         displayString.append(" : " + type, StyledString.QUALIFIER_STYLER);

@@ -7,15 +7,17 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.nodemodel.INode;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Parameter;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.VariableDeclaration;
 import de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator;
-import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
 import de.uni_hildesheim.sse.vil.expressions.ui.contentassist.ExpressionDslProposalProviderUtility;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.LanguageUnit;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.LanguageUnitImpl;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.impl.StmtBlockImpl;
@@ -55,7 +57,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (VariableDeclaration var : varList) {
                     StyledString str = new StyledString(var.getName());
-                    String varType = Utils.getQualifiedNameString(var.getType().getName());
+                    String varType = getTypeName(var.getType());
                     str.append(" : " + varType, StyledString.QUALIFIER_STYLER);
                     result.add(str);
                 }
@@ -89,7 +91,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (VariableDeclaration var : varList) {
                     StyledString str = new StyledString(var.getName());
-                    String varType = Utils.getQualifiedNameString(var.getType().getName());
+                    String varType = getTypeName(var.getType());
                     str.append(" : " + varType, StyledString.QUALIFIER_STYLER);
                     result.add(str);
                 }
@@ -123,7 +125,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (VariableDeclaration var : varList) {
                     StyledString str = new StyledString(var.getName());
-                    String varType = Utils.getQualifiedNameString(var.getType().getName());
+                    String varType = getTypeName(var.getType());
                     str.append(" : " + varType, StyledString.QUALIFIER_STYLER);
                     result.add(str); 
                 }
@@ -140,7 +142,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (VariableDeclaration var : varList) {
                     StyledString str = new StyledString(var.getName());
-                    String varType = Utils.getQualifiedNameString(var.getType().getName());
+                    String varType = getTypeName(var.getType());
                     str.append(" : " + varType, StyledString.QUALIFIER_STYLER);
                     result.add(str);
                 }
@@ -173,7 +175,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                                 !def.getParam().getParam().isEmpty()) {
                             EList<Parameter> paramList = def.getParam().getParam();
                             for (Parameter param : paramList) {
-                                String paramtype = Utils.getQualifiedNameString(param.getType().getName());
+                                String paramtype = getTypeName(param.getType());
                                 str.append(paramtype + " " + param.getName() + ", ");
                                 addedParam = true;
                             }
@@ -210,7 +212,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (Parameter param : paramList) {
                     StyledString str = new StyledString(param.getName());
-                    String varType = Utils.getQualifiedNameString(param.getType().getName());
+                    String varType = getTypeName(param.getType());
                     str.append(" : " + varType, StyledString.QUALIFIER_STYLER);
                     result.add(str); 
                 }
@@ -233,7 +235,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<StyledString>();
                 for (Parameter param : paramList) {
                     StyledString str = new StyledString(param.getName());
-                    String varType = Utils.getQualifiedNameString(param.getType().getName());
+                    String varType = getTypeName(param.getType());
                     str.append(" : " + varType, StyledString.QUALIFIER_STYLER);
                     result.add(str); 
                 }
@@ -265,7 +267,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 result = new ArrayList<VariableDeclaration>();
                 for (String typeStr : typeList) {
                     for (VariableDeclaration var : allVarList) {
-                        String varType = Utils.getQualifiedNameString(var.getType().getName());
+                        String varType = getTypeName(var.getType());
                         if (typeStr.equals(varType)) {
                             result.add(var);
                         }
@@ -278,7 +280,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                 if (result != null) {
                     for (String typeStr : typeList) {
                         for (VariableDeclaration var : allVarList) {
-                            String varType = Utils.getQualifiedNameString(var.getType().getName());
+                            String varType = getTypeName(var.getType());
                             if (typeStr.equals(varType)) {
                                 result.add(var);
                             }
@@ -288,7 +290,7 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
                     result = new ArrayList<VariableDeclaration>();
                     for (String typeStr : typeList) {
                         for (VariableDeclaration var : allVarList) {
-                            String varType = Utils.getQualifiedNameString(var.getType().getName());
+                            String varType = getTypeName(var.getType());
                             if (typeStr.equals(varType)) {
                                 result.add(var);
                             }
@@ -454,7 +456,182 @@ public class TemplateLangProposalProviderUtility extends ExpressionDslProposalPr
     
     @Override
     protected String getMatchingType(INode node, String id) {
-        return ""; // preliminary
+        String typeName = "";
+        if (node != null && id != null && !id.isEmpty()) {
+            INode parent = node.getParent();
+            if (parent != null) {
+                EObject parentSemanticElement = parent.getSemanticElement();
+                while (parentSemanticElement instanceof StmtBlock) {
+                    parentSemanticElement = parentSemanticElement.eContainer();
+                }
+                if (parentSemanticElement instanceof VilDef) {
+                    VilDef def = (VilDef) parentSemanticElement;
+                    typeName = getType(def, id);
+                }
+                if (parentSemanticElement instanceof LanguageUnit) {
+                    typeName = getType((LanguageUnit) parentSemanticElement, id);
+                }
+                // might be further alternatives
+                if (typeName.isEmpty()) {
+                    typeName = getMatchingType(parent, id);
+                    // If no element was found - even after complete recursion - try to find an operation with this name
+                    if (typeName.isEmpty()) {
+                        typeName = getReturnType(id, node);
+                    }
+                }
+            }
+        }            
+        return typeName; // preliminary
     }
     
+    /**
+     * Get the name of the type of an VIL element based on the name (identifier) of this element.
+     * 
+     * @param script <code>LanguageUnit</code> script in which the search for the type will start.
+     * @param name <code>String</code> name of the element as a string for which the type will be determined.
+     * @return <code>String</code> name of the type of the VIL element or an empty <code>String</code> if the type
+     * could not be determined. Never <b>null</b>.
+     */
+    private String getType(LanguageUnit script, String name) {
+        String typeName = "";
+        if (script != null && !name.isEmpty()) {
+            // Check if the element identified by "name" is part of the script's variables (incl. rule variables, etc.)
+            List<VariableDeclaration> varDecls = getAllVariables(script);
+            if (hasElements(varDecls)) {
+                for (VariableDeclaration varDecl : varDecls) {
+                    if (varDecl != null && varDecl.getName() != null && varDecl.getName().equals(name)) {
+                        typeName = getTypeName(varDecl.getType());
+                    }
+                }
+            }
+            // Otherwise, the element may identify a script parameter 
+            if (typeName.isEmpty() && script.getParam() != null && hasElements(script.getParam().getParam())) {
+                EList<Parameter> paramList = script.getParam().getParam();
+                for (Parameter param : paramList) {
+                    if (param.getName() != null && param.getName().equals(name)) {
+                        typeName = getTypeName(param.getType());
+                    }
+                }
+            }
+            // Otherwise, the element may identify a rule in the script
+            if (typeName.isEmpty()) {
+                List<VilDef> defs = getAllDefs(script);
+                if (hasElements(defs)) {
+                    for (VilDef def : defs) {
+                        if (def.getId() != null && def.getId().equals(name) && def.getType() != null) {
+                            typeName = getTypeName(def.getType());
+                        }
+                    }
+                }
+            }
+            
+            // TODO extend this to searches in parent-script, imports 
+        }
+        return typeName;
+    }
+
+    /**
+     * Get the name of the type of an VTL element based on the name (identifier) of this element.
+     * 
+     * @param defDecl <code>VilDef</code> the parent-rule in which the element of interest is used in.
+     * @param name <code>String</code> the name of the element as a string for which the type will be determined.
+     * @return <code>String</code> the name of the type of the VTL element or an empty <code>String</code> if the type
+     * could not be determined. Never <b>null</b>.
+     */
+    private String getType(VilDef defDecl, String name) {
+        String typeName = "";
+        if (defDecl != null && !name.isEmpty()) {
+            // Check if declaration of the element identified by "name" is part of the rule element block 
+            typeName = getType(defDecl.getStmts(), name);
+            // Otherwise, check if the element is a rule parameter
+            if (typeName.isEmpty() && null != defDecl.getParam() 
+                && hasElements(defDecl.getParam().getParam())) {
+                EList<Parameter> ruleParameters = defDecl.getParam().getParam();
+                for (Parameter param : ruleParameters) {
+                    if (param != null && param.getName().equals(name)) {
+                        typeName = getTypeName(param.getType()); 
+                    }
+                }   
+            }                
+        }
+        return typeName;
+    }
+
+    /**
+     * Get the name of the type of an VIL element based on the name (identifier) of this element.
+     * 
+     * @param stmtBlock the statement block
+     * @param name <code>String</code> the name of the element as a string for which the type will be determined.
+     * @return <code>String</code> name of the type of the VTL element or an empty <code>String</code> if the type
+     * could not be determined. Never <b>null</b>.
+     */
+    private String getType(StmtBlock stmtBlock, String name) {
+        String typeName = "";
+        if (hasElements(stmtBlock) && name != null && !name.isEmpty()) {
+            for (int i = 0; i < stmtBlock.getStmts().size(); i++) {
+                Stmt stmt = stmtBlock.getStmts().get(i);
+                if (stmt.getVar() != null) {
+                    VariableDeclaration varDecl = stmt.getVar();
+                    if (varDecl.getName().equals(name)) {
+                        typeName = getTypeName(varDecl.getType());                        
+                    }
+                }
+            }
+        }
+        return typeName;
+    }
+
+    /**
+     * Checks if the statement block has at least one statement or not.
+     * 
+     * @param stmtBlock the statement block
+     * @return <b>true</b> if it has at least one statement, <b>false</b> otherwise.
+     */
+    private boolean hasElements(StmtBlock stmtBlock) {
+        return stmtBlock != null
+            && stmtBlock.getStmts() != null
+            && !stmtBlock.getStmts().isEmpty();
+    }
+    
+    /**
+     * Returns a list of all <code>VariableDeclaration</code> objects defined in the current VTL-script.
+     * 
+     * @param unit the <code>LanguageUnit</code> object which represents the active VTL-script currently in use.
+     * @return a list of <code>VariableDeclaration</code> objects or <b>null</b> if no such object can be found.
+     */
+    private List<VariableDeclaration> getAllVariables(LanguageUnit unit) {
+        List<VariableDeclaration> variableList = null;
+        EList<EObject> elts = unit.getElements();
+        if (hasElements(elts)) {
+            variableList = new ArrayList<VariableDeclaration>();
+            for (EObject element : elts) {
+                if (element != null && element instanceof VariableDeclaration) {
+                    variableList.add((VariableDeclaration) element);
+                }
+            }
+        }
+        return variableList;
+    }
+    
+    /**
+     * Returns a list of all <code>VilDef</code> objects defined in the current VTL-script.
+     * 
+     * @param unit the <code>LanguageUnit</code> object which represents the active VTL-script currently in use.
+     * @return a list of <code>VilDef</code> objects or <b>null</b> if no such object can be found.
+     */
+    private List<VilDef> getAllDefs(LanguageUnit unit) {
+        List<VilDef> ruleList = null;
+        EList<EObject> elts = unit.getElements();
+        if (hasElements(elts)) {
+            ruleList = new ArrayList<VilDef>();
+            for (EObject element : elts) {
+                if (element != null && element instanceof VilDef) {
+                    ruleList.add((VilDef) element);
+                }
+            }
+        }
+        return ruleList;
+    }
+
+
 }

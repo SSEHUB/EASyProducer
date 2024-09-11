@@ -60,26 +60,7 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
     @Override
     public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeSubCall_Call");
-        /*
-         * TODO Currently, concatenated sub-calls are not supported sufficiently!
-         * Example: fa.copy(...). <- call for content assist
-         * In this case the content assist will provide proposals on the basis of "first match"
-         * with respect to the name of the previous operation ("copy"). If the right "copy"-operation
-         * is determined, and thus the right return type of this operation, is currently not checked.
-         * 
-         *  Problem: the named argument may be an expression which must be parsed (currently not implemented
-         *  for the content assist). After parsing, the result - which may be a call or an id of a variable - must be
-         *  used as a starting point for determining the type and name (or another call) of each named argument to
-         *  construct the final sub call in terms of name and arguments.
-         *  
-         *  Only on this basis, the exact operation can be found and, thus, the right operations can be
-         *  proposed based on the return type of the exact operation.
-         */
-        
-        /*
-         *  Propose (only) all valid operations with respect to the type of the element for which the operation call shall be defined.
-         *  This is configured by the value (false) of the last parameter of the proposal-method below.
-         */
+        proposeFields(model, assignment, context, acceptor);
         proposeOperations(model, assignment, context, acceptor, false);
     }
 
@@ -142,11 +123,23 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
                 String plainOpDescr = opDescr.toString();
                 String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
                 acceptor.accept(createCompletionProposal(toEditor, opDescr,
-                        imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
+                    imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
             }
         }
     }
-    
+
+    protected void proposeFields(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+        List<StyledString> proposalList = getUtility().getFields(context.getLastCompleteNode());
+        if (proposalList != null) {
+            for (StyledString opDescr : proposalList) {
+                String plainOpDescr = opDescr.toString();
+                String toEditor = plainOpDescr.substring(0, plainOpDescr.indexOf(":") - 1);
+                acceptor.accept(createCompletionProposal(toEditor, opDescr,
+                    imageHelper.getImage(Images.NAME_OPERATION), 50, context.getPrefix(), context));
+            }
+        }
+    }
+
     @Override
     public void completeEqualityExpressionPart_Ex(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeEqualityExpressionPart_Ex");

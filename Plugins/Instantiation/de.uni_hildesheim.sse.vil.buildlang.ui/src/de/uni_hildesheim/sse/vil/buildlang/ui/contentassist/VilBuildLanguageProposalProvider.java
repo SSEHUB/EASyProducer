@@ -149,7 +149,6 @@ public class VilBuildLanguageProposalProvider extends AbstractVilBuildLanguagePr
                 imageHelper.getImage(Images.NAME_RULE), 700, context.getPrefix(), context));
     }
     
-    
     @Override
     public void completeRuleConditions_Preconditions(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("completeRuleConditions_Preconditions");

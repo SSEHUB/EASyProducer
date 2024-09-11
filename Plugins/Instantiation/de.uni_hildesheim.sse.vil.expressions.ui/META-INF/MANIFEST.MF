@@ -19,7 +19,8 @@ Require-Bundle: de.uni_hildesheim.sse.vil.expressions;visibility:=reexport,
  org.eclipse.compare,
  net.ssehub.easy.instantiation.core,
  net.ssehub.easy.dslCore.ui,
- net.ssehub.easy.dslCore
+ net.ssehub.easy.dslCore,
+ net.ssehub.easy.varModel
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: de.uni_hildesheim.sse.vil,

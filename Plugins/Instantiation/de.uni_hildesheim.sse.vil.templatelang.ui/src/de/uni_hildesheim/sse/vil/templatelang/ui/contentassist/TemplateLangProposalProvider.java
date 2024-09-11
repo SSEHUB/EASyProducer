@@ -178,22 +178,22 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
         
         // propose Alternative
         ICompletionProposal proposal = createCompletionProposal("if(", new StyledString("Alternative"), 
-                imageHelper.getImage(Images.NAME_RULE), 800, context.getPrefix(), context);
+                imageHelper.getImage(Images.NAME_IF), 800, context.getPrefix(), context);
         acceptor.accept(proposal);
         
         // propose switch
         proposal = createCompletionProposal("switch() {}", new StyledString("Switch"), 
-                imageHelper.getImage(Images.NAME_RULE), 800, context.getPrefix(), context);
+                imageHelper.getImage(Images.NAME_SWITCH), 800, context.getPrefix(), context);
         acceptor.accept(proposal);
         
         // propose loop
         proposal = createCompletionProposal("for() {}", new StyledString("Loop"), 
-                imageHelper.getImage(Images.NAME_RULE), 800, context.getPrefix(), context);
+                imageHelper.getImage(Images.NAME_FOR), 800, context.getPrefix(), context);
         acceptor.accept(proposal);
         
         // propose Content
         proposal = createCompletionProposal("' '", new StyledString("Content"), 
-                imageHelper.getImage(Images.NAME_RULE), 800, context.getPrefix(), context);
+                imageHelper.getImage(Images.NAME_CONTENT), 800, context.getPrefix(), context);
         acceptor.accept(proposal);
         
         // propose VariableDeclaration
@@ -259,8 +259,8 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
     public void complete_VilDef(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
         debug("complete_VilDef");
         String proposalString = "<DefName>() {\n\n    }";
-        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Rule"),
-            imageHelper.getImage(Images.NAME_RULE), 700, context.getPrefix(), context));
+        acceptor.accept(createCompletionProposal(proposalString, new StyledString("Def"),
+            imageHelper.getImage(Images.NAME_DEF), 700, context.getPrefix(), context));
     }
 
     @Override

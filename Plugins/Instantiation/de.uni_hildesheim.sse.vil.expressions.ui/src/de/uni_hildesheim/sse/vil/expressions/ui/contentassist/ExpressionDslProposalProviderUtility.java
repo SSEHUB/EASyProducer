@@ -24,6 +24,10 @@ import org.eclipse.xtext.nodemodel.ILeafNode;
 import org.eclipse.xtext.nodemodel.INode;
 
 import de.uni_hildesheim.sse.vil.expressions.ResourceRegistry;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Type;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.TypeParameters;
+import de.uni_hildesheim.sse.vil.expressions.translation.Utils;
+import net.ssehub.easy.instantiation.core.model.vilTypes.FieldDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
@@ -49,7 +53,7 @@ public abstract class ExpressionDslProposalProviderUtility {
     protected List<OperationDescriptor> getAvailableOperations(INode node) {
         List<OperationDescriptor> operations = new ArrayList<OperationDescriptor>();
         TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
-        if (typeRegistry != null) {            
+        if (typeRegistry != null) {
             Iterable<TypeDescriptor<?>> types = typeRegistry.allTypes();
             if (types != null) {
                 Iterator<TypeDescriptor<?>> typeIterator = types.iterator();
@@ -159,7 +163,6 @@ public abstract class ExpressionDslProposalProviderUtility {
             }
             lastNode = currentNode;
         }
-        System.err.println("found prefix: " + prefix);
         return prefix;
     }
     
@@ -186,6 +189,15 @@ public abstract class ExpressionDslProposalProviderUtility {
         if (typeName != null && !typeName.isEmpty()) {
             List<OperationDescriptor> allOperations = getAvailableOperations(node);
             validTypeOperations = new ArrayList<OperationDescriptor>();
+            if (typeName.startsWith("setOf")) {
+                typeName = "Set";
+            } else if (typeName.startsWith("mapOf")) {
+                typeName = "Map";
+            } else if (typeName.startsWith("collectionOf")) {
+                typeName = "Collection";
+            } else if (typeName.startsWith("sequenceOf")) {
+                typeName = "Sequence";
+            }
             for (OperationDescriptor opDescr : allOperations) {
                 if (opDescr.getDeclaringTypeName().equals(typeName)) {
                     validTypeOperations.add(opDescr);
@@ -215,6 +227,24 @@ public abstract class ExpressionDslProposalProviderUtility {
         }
         removeLogicalAndMathOperations(operationsList);
         return opsToDisplayString(operationsList);
+    }
+    
+    public List<StyledString> getFields(INode node) {
+        List<FieldDescriptor> validFields = null;
+        if (node != null) {
+            TypeRegistry typeRegistry = ResourceRegistry.getTypeRegistry(node);
+            if (typeRegistry != null) {
+                String prefixType = getMatchingType(node, getSubCallPrefix(node));
+                TypeDescriptor<?> type = typeRegistry.getType(prefixType);
+                if (null != type) {
+                    validFields = new ArrayList<>();
+                    for (FieldDescriptor fd : type.getFields()) {
+                        validFields.add(fd); // filter??
+                    }
+                }
+            }
+        }
+        return fieldsToDisplayString(validFields);
     }
     
     /**
@@ -267,7 +297,27 @@ public abstract class ExpressionDslProposalProviderUtility {
         }
         return operationStringList;
     }
-    
+
+    /**
+     * Converts the field names into a content assist friendly format, which can be directly used to display.
+     * @param fieldsList the fields
+     * @return a <code>List&lt;StyledString&gt;</code> which contains all operations, ready to display in the content assist.
+     * Maybe <b>null</b>, if the List&lt;FieldDescriptor&gt; fieldsList is empty.
+     */
+    protected List<StyledString> fieldsToDisplayString(List<FieldDescriptor> fieldsList) {
+        List<StyledString> fieldsStringList = null;
+        if (hasElements(fieldsList)) {
+            fieldsStringList = new ArrayList<StyledString>();
+            for (FieldDescriptor fieldDescr : fieldsList) {
+                StyledString fieldString = new StyledString();
+                fieldString.append(fieldDescr.getName());
+                fieldString.append(" : " + fieldDescr.getType().getName(), StyledString.QUALIFIER_STYLER);
+                fieldsStringList.add(fieldString);
+            }
+        }
+        return fieldsStringList;
+    }
+
     /**
      * Checks if a <code>List&lt;?&gt;</code> has Elements or not.
      * 
@@ -360,4 +410,73 @@ public abstract class ExpressionDslProposalProviderUtility {
         return allTypes;
     }
 
+    /**
+     *  Returns the returntype of an specified operation.
+     *  
+     * @param id <code>String</code> the operationname.
+     * @param node the last complete node, when the content assist is used.
+     * @return the returntype of the operation as a <code>String</code>. Could be empty but never <b>null</b>.
+     */
+    protected String getReturnType(String id, INode node) {
+        String returnType = "";
+        if (!id.isEmpty()) {
+            List<OperationDescriptor> operationsList = getAvailableOperations(node);
+            if (hasElements(operationsList)) {
+                for (OperationDescriptor opDescr : operationsList) {
+                    if (opDescr.getName().equals(id)) {
+                        returnType = opDescr.getReturnType().getName();
+                    }
+                }
+            }
+        }
+        return returnType;
+    }
+    
+    /**
+     * Returns the spelled out name of {@code type}.
+     * 
+     * @param type the type
+     * @return the name
+     */
+    public static String getTypeName(Type type) {
+        String result = "";
+        if (null != type) {
+            if (null != type.getName()) {
+                result = Utils.getQualifiedNameString(type.getName());
+            }
+            if (null != type.getMap()) {
+                result = "mapOf" + getTypeName(type.getParam());
+            }
+            if (null != type.getSet()) {
+                result = "setOf" + getTypeName(type.getParam());
+            }
+            if (null != type.getSeq()) {
+                result = "sequenceOf" + getTypeName(type.getParam());
+            }
+            if (null != type.getCall()) {
+                result = getTypeName(type.getReturn());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns the type name part of type parameters.
+     * 
+     * @param params the parameters, may be <b>null</b>
+     * @return the type name part
+     */
+    private static String getTypeName(TypeParameters params) {
+        String result = "(";
+        if (null != params && params.getParam() != null && !params.getParam().isEmpty()) {
+            for (Type type : params.getParam()) {
+                if (result.length() > 1) {
+                    result += ", ";
+                }
+                result += getTypeName(type);
+            }
+        }
+        return result + ")";
+    }
+    
 }
