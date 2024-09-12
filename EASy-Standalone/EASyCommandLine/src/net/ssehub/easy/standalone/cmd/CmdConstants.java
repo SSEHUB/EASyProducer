@@ -38,5 +38,7 @@ public class CmdConstants {
     public static final int SYSTEM_NPE_EXC = 6;
     public static final int SYSTEM_SECURITY_EXC = 7;
     public static final int SYSTEM_INDEX_EXC = 8;
+    public static final int SYSTEM_REASONER_CONFLICT = 10;
+    public static final int SYSTEM_NO_REASONER = 11;
 
 }

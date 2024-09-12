@@ -16,3 +16,16 @@ Possible commands are:
  * easy checkValidity <project_folder> <ivml project name> <ivml project version> - This will load a ivml file out of the project with the specified name and version. This will check the ivml file inside of the specified project. The result will be storred inside of the project in a file named ".result". The file will contain a
    - true: The specified ivml_file constains at least one conflict.
    - false: No conflicts where detected inside given ivml_file.
+
+Command line exit codes:
+    0: successful
+    1: I/O issue
+    2: model loading/path issue
+    3: EASy project loading issue
+    4: VIL/VTL execution failed
+    5: version syntax/format issue
+    6: VIL/VTL undefined value execution issue
+    7: security issue (file access)
+    8: unexpected (wrong) index, e.g., command line arguments
+    10: reasoning failed, see messages
+    11: no reasoner found

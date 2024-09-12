@@ -292,6 +292,11 @@ public class CommandLineExecuter {
                     out.println(" " + msg.getConflictComments());
                     out.println(" " + msg.getConflictSuggestions());
                 }
+                if (result.hasConflict()) {
+                    cmdResult = CmdConstants.SYSTEM_REASONER_CONFLICT;
+                }
+            } else {
+                cmdResult = CmdConstants.SYSTEM_NO_REASONER;
             }
         } catch (VersionFormatException e) {
             LOGGER.exception(e);
