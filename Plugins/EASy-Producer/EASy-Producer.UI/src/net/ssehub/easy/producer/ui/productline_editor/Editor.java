@@ -174,11 +174,11 @@ public class Editor extends MultiPageEditorPart implements Observer, IPropertyLi
         if (isDirty && plp.isSaveable()) {
             // save the changed editor only
             boolean saved = false;
-            for (int p = 0; !saved && p < pages.size(); p++) {
+            for (int p = 0; p < pages.size(); p++) {
                 AbstractEASyEditorPage page = pages.get(p);
-                saved = page.doSave();
+                saved |= page.doSave();
             }
-            if (!saved) {
+            if (saved) {
                 plp.save();
                 ResourcesMgmt.INSTANCE.refreshProject(plp.getProjectName());
             }

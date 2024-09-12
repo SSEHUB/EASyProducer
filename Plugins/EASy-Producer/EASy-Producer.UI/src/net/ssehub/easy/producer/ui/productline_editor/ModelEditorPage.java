@@ -184,7 +184,8 @@ public class ModelEditorPage extends AbstractEASyEditorPage implements IValidati
 
     @Override
     public void notifyDocumentChanged() {
-        setDirty();
+        editor.refresh();
+        //setDirty();
     }
 
     @Override

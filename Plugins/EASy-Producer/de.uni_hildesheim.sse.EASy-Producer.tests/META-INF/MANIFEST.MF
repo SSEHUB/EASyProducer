@@ -14,5 +14,7 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  org.eclipse.ui,
  org.eclipse.xtext,
  org.eclipse.xtext.builder,
- org.eclipse.xtext.ui.shared
+ org.eclipse.xtext.ui.shared,
+ org.eclipse.equinox.simpleconfigurator,
+ org.eclipse.equinox.simpleconfigurator.manipulator
 

@@ -193,6 +193,7 @@ public class EclipsePersistencer implements IPersistencer {
                 // Save given project
                 FileWriter fWriter = new FileWriter(varModelLocation);
                 IVMLWriter ivmlWriter = new IVMLWriter(fWriter);
+                ivmlWriter.setFormatInitializer(true);
                 varModel.accept(ivmlWriter);
                 ivmlWriter.flush();
                 fWriter.close();

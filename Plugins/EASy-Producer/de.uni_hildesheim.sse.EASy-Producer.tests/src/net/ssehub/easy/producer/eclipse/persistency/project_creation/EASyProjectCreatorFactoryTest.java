@@ -2,6 +2,7 @@ package net.ssehub.easy.producer.eclipse.persistency.project_creation;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -330,6 +331,17 @@ public class EASyProjectCreatorFactoryTest {
     }
     
     /**
+     * Reads a file and normalizes line ends/tabs.
+     * 
+     * @param file the file
+     * @return the file contents
+     * @throws IOException if reading the file fails
+     */
+    private String readFromFile(File file) throws IOException {
+        return FileUtils.readFileToString(file, Charset.defaultCharset()).replace("\r", "").replace("\t", "    ");
+    }
+    
+    /**
      * Helping method for testing derivation.
      * Tests whether the content of the origin file and the file of the project in workspace are equal.
      * @param originFile A text file (e.g. IVML, VIL, or VTL) of the project inside the testdata directory. 
@@ -337,8 +349,8 @@ public class EASyProjectCreatorFactoryTest {
      */
     private void testContents(File originFile, File copiedFile) {
         try {
-            String originalContent = FileUtils.readFileToString(originFile).replace("\r", "").replace("\t", "    ");
-            String copiedContent = FileUtils.readFileToString(copiedFile).replace("\r", "").replace("\t", "    ");
+            String originalContent = readFromFile(originFile);
+            String copiedContent = readFromFile(copiedFile);
             Assert.assertEquals("Error: " + copiedFile.getAbsolutePath() + "was modiefied",
                 originalContent, copiedContent);
         } catch (IOException e) {

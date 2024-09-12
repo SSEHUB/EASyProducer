@@ -565,6 +565,7 @@ public class PersistenceUtils {
         try {
             FileWriter fileWriter = new FileWriter(file);
             IVMLWriter writer = new IVMLWriter(fileWriter);
+            writer.setFormatInitializer(true);
             allProjects.get(0).accept(writer);                
             for (int i = 1; i < allProjects.size(); i++) {
                 fileWriter.append(IvmlKeyWords.LINEFEED);

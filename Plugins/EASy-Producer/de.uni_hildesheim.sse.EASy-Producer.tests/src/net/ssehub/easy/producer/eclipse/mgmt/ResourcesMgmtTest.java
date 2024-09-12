@@ -71,7 +71,8 @@ public class ResourcesMgmtTest {
     }
 
     /**
-     * Tests the {@link ResourcesMgmt#isPLPInWorkspace(String)} and the {@link ResourcesMgmt#findPLProjects()} methods.
+     * Tests the {@link ResourcesMgmt#isPLPInWorkspace(String)} and the 
+     * {@link ResourcesMgmt#findPLProjects(EclipseProgressObserver)} methods.
      */
     @Test
     public void testIsPLPInWorkspace() {
