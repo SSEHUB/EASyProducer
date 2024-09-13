@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.xtext.Assignment;
@@ -54,6 +56,7 @@ import de.uni_hildesheim.sse.ivml.Value;
 import de.uni_hildesheim.sse.translation.Utils;
 import de.uni_hildesheim.sse.ui.resources.Images;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
+import net.ssehub.easy.dslCore.ModelUtility;
 import net.ssehub.easy.varModel.management.VarModel;
 import net.ssehub.easy.varModel.model.AbstractVariable;
 import net.ssehub.easy.varModel.model.AttributeAssignment;
@@ -74,6 +77,8 @@ import net.ssehub.easy.varModel.model.datatypes.Operation;
 import net.ssehub.easy.varModel.model.datatypes.RealType;
 import net.ssehub.easy.varModel.model.datatypes.Reference;
 import net.ssehub.easy.varModel.model.datatypes.VersionType;
+
+import static net.ssehub.easy.dslCore.ui.contentAssist.ProposalProviderUtilities.*;
 
 /**
  * Implements a proposal provider for IVML expressions. We separate the expression proposal provider
@@ -109,7 +114,8 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
     protected net.ssehub.easy.varModel.model.Project getVarModel(EObject model) {
         net.ssehub.easy.varModel.model.Project result = null;
         try {
-            URI uri = new URI(model.eResource().getURI().toString());
+            URI uri = ModelUtility.toNetUri(model.eResource().getURI());
+            
             ModelInfo<net.ssehub.easy.varModel.model.Project> info 
                 = VarModel.INSTANCE.availableModels().getInfo(uri);
             if (null != info) {
@@ -360,7 +366,24 @@ public class ExpressionProposalProvider extends AbstractIvmlProposalProvider  {
             TypedefCompound cmpDef = findTypedefCompound(context.getCurrentNode());
             type = inferType((Expression) prev, model, cmpDef);
         }
+        if (null == type) {
+            try { // this is very limited, does not resolve complex expressions
+                IDocument document = context.getViewer().getDocument();
+                int pos = context.getOffset();
+                pos = consumeLeftWhitespaces(document, pos);
+                pos = consumeLeftString(document, pos, ".");
+                pos = consumeLeftWhitespaces(document, pos);
+                int varRight = pos + 1;
+                pos = consumeLeftNonWhitespaces(document, pos);
+                String varName = document.get(pos, varRight - pos).trim();
+                type = findType(model, null, varName);
+            } catch (BadLocationException e) {
+            }
+        }
         proposeOperations(type, context, acceptor, containerOp);
+        if (type instanceof Compound) {
+            propose((Compound) type, context, acceptor, 2000, new HashSet<>());
+        }
     }
 
     /**
