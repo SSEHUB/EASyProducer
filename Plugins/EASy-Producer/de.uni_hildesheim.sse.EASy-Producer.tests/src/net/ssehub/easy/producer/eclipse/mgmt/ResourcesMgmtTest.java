@@ -107,6 +107,7 @@ public class ResourcesMgmtTest {
     @Test
     public void testAddEASyNatures() throws CoreException, InvalidProjectnameException, IOException {
         String projectName = "NonEASyProject";
+        String[] natures = {EASyNature.NATURE_ID, EASyNature.XTEXT_NATURE_ID}; // may be filtered out
         
         // Retrieve Project for testing and test that it has NOT any EASy related information
         IProject project = ResourcesMgmt.INSTANCE.getProject(projectName);
@@ -120,11 +121,11 @@ public class ResourcesMgmtTest {
         File easyFolder = new File(projectLocation, PersistenceConstants.EASY_FILES_DEFAULT);
         Assert.assertNotNull(easyFolder);
         Assert.assertFalse(easyFolder.exists());
-        Assert.assertFalse(NatureUtils.hasNature(project, EASyNature.XTEXT_NATURE_ID, EASyNature.NATURE_ID));
+        Assert.assertFalse(NatureUtils.hasNature(project, natures));
         Assert.assertFalse(mgmt.isPLPInWorkspace(projectName));
         
         // Transform project into EASy-Project
-        ResourcesMgmt.INSTANCE.addEASyNatures(project, EASyNature.XTEXT_NATURE_ID, EASyNature.NATURE_ID);
+        ResourcesMgmt.INSTANCE.addEASyNatures(project, natures);
         
         // Test post condition: Check whether the the project has the nature and whether the IVML/VIL files are created.
         Assert.assertNotNull(project);
@@ -132,7 +133,7 @@ public class ResourcesMgmtTest {
         Assert.assertTrue(projectLocation.exists());
         Assert.assertNotNull(easyFolder);
         Assert.assertTrue(easyFolder.exists());
-        Assert.assertTrue(NatureUtils.hasNature(project, EASyNature.XTEXT_NATURE_ID, EASyNature.NATURE_ID));
+        Assert.assertTrue(NatureUtils.hasNature(project, natures));
         File[] files = easyFolder.listFiles();
         boolean ivmlFound = false;
         boolean vilFound = false;

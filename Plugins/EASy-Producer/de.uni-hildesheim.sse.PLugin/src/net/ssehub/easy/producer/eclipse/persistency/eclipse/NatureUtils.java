@@ -1,5 +1,7 @@
 package net.ssehub.easy.producer.eclipse.persistency.eclipse;
 
+import java.util.function.Predicate;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -12,6 +14,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public final class NatureUtils {
 
+    private static Predicate<String> natureFilter = n -> true;
+    
     /**
      * Prevents this class from being instantiated from outside.
      */
@@ -20,7 +24,7 @@ public final class NatureUtils {
 
     /**
      * Returns whether at least one of the given natures is
-     * defined on the given project.
+     * defined on the given project. Filtered out natures are always found.
      *
      * @param project the project to check the nature on
      * @param natures the natures to be checked
@@ -34,14 +38,18 @@ public final class NatureUtils {
         String[] pNatures = description.getNatureIds();
         for (int i = 0; !found && i < pNatures.length; i++) {
             for (int j = 0; !found && j < natures.length; j++) {
-                found = pNatures[i].equals(natures[j]);
+                if (natureFilter.test(natures[j])) {
+                    found = pNatures[i].equals(natures[j]);
+                } else {
+                    found = true; // just consider true
+                }
             }
         }
         return found;
     }
 
     /**
-     * Adds a nature to the given project.
+     * Adds a nature to the given project. Filtered out natures are not added.
      *
      * @param project the project to add the nature to
      * @param nature the nature to be added
@@ -49,20 +57,22 @@ public final class NatureUtils {
      * @throws CoreException if <code>project</code> does not exist or is not open
      */
     public static void addNature(IProject project, String nature, IProgressMonitor monitor) throws CoreException {
-        IProjectDescription description = project.getDescription();
-        String[] natures = description.getNatureIds();
-        String[] newNatures = new String[natures.length + 1];
-        System.arraycopy(natures, 0, newNatures, 0, natures.length);
-        newNatures[natures.length] = nature;
-        description.setNatureIds(newNatures);
-        if (project == null || !project.isOpen()) {
-            throw new RuntimeException("Project not running");
+        if (natureFilter.test(nature)) {
+            IProjectDescription description = project.getDescription();
+            String[] natures = description.getNatureIds();
+            String[] newNatures = new String[natures.length + 1];
+            System.arraycopy(natures, 0, newNatures, 0, natures.length);
+            newNatures[natures.length] = nature;
+            description.setNatureIds(newNatures);
+            if (project == null || !project.isOpen()) {
+                throw new RuntimeException("Project not running");
+            }
+            project.setDescription(description, monitor);
         }
-        project.setDescription(description, monitor);
     }
 
     /**
-     * Removes a nature from the given project.
+     * Removes a nature from the given project. Filtered out natures are not removed.
      * 
      * @param project the project to remove the nature from
      * @param nature the nature to be remove
@@ -70,18 +80,31 @@ public final class NatureUtils {
      * @throws CoreException if <code>project</code> does not exist or is not open
      */
     public static void removeNature(IProject project, String nature, IProgressMonitor monitor) throws CoreException {
-        IProjectDescription description = project.getDescription();
-        String[] natures = description.getNatureIds();
-        for (int i = 0; i < natures.length; i++) {
-            if (nature.equals(natures[i])) {
-                // Remove the nature
-                String[] newNatures = new String[natures.length - 1];
-                System.arraycopy(natures, 0, newNatures, 0, i);
-                System.arraycopy(natures, i + 1, newNatures, i, natures.length - i - 1);
-                description.setNatureIds(newNatures);
-                project.setDescription(description, monitor);
-                return;
+        if (natureFilter.test(nature)) {
+            IProjectDescription description = project.getDescription();
+            String[] natures = description.getNatureIds();
+            for (int i = 0; i < natures.length; i++) {
+                if (nature.equals(natures[i])) {
+                    // Remove the nature
+                    String[] newNatures = new String[natures.length - 1];
+                    System.arraycopy(natures, 0, newNatures, 0, i);
+                    System.arraycopy(natures, i + 1, newNatures, i, natures.length - i - 1);
+                    description.setNatureIds(newNatures);
+                    project.setDescription(description, monitor);
+                    return;
+                }
             }
+        }
+    }
+    
+    /**
+     * Allows filtering out natures. [testing].
+     * 
+     * @param filter the nature filter
+     */
+    public static void setNatureFilter(Predicate<String> filter) {
+        if (null != filter) {
+            natureFilter = filter;
         }
     }
 

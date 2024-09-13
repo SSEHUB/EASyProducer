@@ -7,8 +7,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 import net.ssehub.easy.producer.eclipse.mgmt.MemberControllerTest;
-//import net.ssehub.easy.producer.eclipse.mgmt.ResourcesMgmtTest;
-//import net.ssehub.easy.producer.eclipse.persistency.project_creation.EASyProjectCreatorFactoryTest;
+import net.ssehub.easy.producer.eclipse.mgmt.ResourcesMgmtTest;
+import net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature;
+import net.ssehub.easy.producer.eclipse.persistency.eclipse.NatureUtils;
+import net.ssehub.easy.producer.eclipse.persistency.project_creation.EASyProjectCreatorFactoryTest;
 
 /**
  * Test Suite, which starts all individual test cases.
@@ -20,8 +22,8 @@ import net.ssehub.easy.producer.eclipse.mgmt.MemberControllerTest;
 // vitally important: Insert all Testcases here!
 @Suite.SuiteClasses({
     // This test case must be the first test class, which import/create/delete projects inside the junit-workspace
-    //ResourcesMgmtTest.class, // does not run due to xtext/maven dependency problems
-    //EASyProjectCreatorFactoryTest.class, // does not run due to xtext/maven dependency problems
+    ResourcesMgmtTest.class, // does not run due to xtext/maven dependency problems
+    EASyProjectCreatorFactoryTest.class, // does not run due to xtext/maven dependency problems
     MemberControllerTest.class })
 public class AllTests {
 
@@ -46,9 +48,9 @@ public class AllTests {
      */
     @BeforeClass
     public static void setUpBeforeClass() {
+        NatureUtils.setNatureFilter(n -> !EASyNature.XTEXT_NATURE_ID.equals(n)); // Tycho issue on native SWT feature
         TempDirectoryInitializer.INSTANCE.initTempFiles();
     }
-    
 
     /**
      * Determines the actual directory with the test IVML files depending on the JVM system property

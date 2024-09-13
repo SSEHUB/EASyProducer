@@ -16,5 +16,6 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  org.eclipse.xtext.builder,
  org.eclipse.xtext.ui.shared,
  org.eclipse.equinox.simpleconfigurator,
- org.eclipse.equinox.simpleconfigurator.manipulator
+ org.eclipse.equinox.simpleconfigurator.manipulator,
+ de.uni-hildesheim.sse.easy.instantiator.velocity.tests
 

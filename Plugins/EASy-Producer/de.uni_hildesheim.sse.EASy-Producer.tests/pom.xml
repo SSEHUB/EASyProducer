@@ -21,6 +21,53 @@
     <testSourceDirectory>src</testSourceDirectory>
     <directory>bin</directory>
     <testOutputDirectory>bin/test-classes</testOutputDirectory>
+  
+      <plugins>
+        <plugin>
+            <groupId>org.eclipse.tycho</groupId>
+                <artifactId>target-platform-configuration</artifactId>
+                <configuration>
+	                <environments> <!-- those needed for testing -->
+	                    <environment>
+	                        <os>linux</os>
+	                        <ws>gtk</ws>
+	                        <arch>x86</arch>
+	                    </environment>
+                        <environment>
+                            <os>linux</os>
+                            <ws>gtk</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+	                    <environment>
+	                        <os>win32</os>
+	                        <ws>win32</ws>
+	                        <arch>x86</arch>
+	                    </environment>
+                        <environment>
+                            <os>win32</os>
+                            <ws>win32</ws>
+                            <arch>x86_64</arch>
+                        </environment>
+	                </environments>
+                    <dependency-resolution>
+                        <extraRequirements>
+                            <!-- fragment host problem, https://bugs.eclipse.org/bugs/show_bug.cgi?id=436617#c11 -->
+                            <requirement>
+                                <type>eclipse-plugin</type>
+                                <id>net.ssehub.easy.producer.eclipse</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                            <requirement>
+                                <type>eclipse-plugin</type>
+                                <id>org.eclipse.xtext.ui.shared</id>
+                                <versionRange>0.0.0</versionRange>
+                            </requirement>
+                        </extraRequirements>
+                    </dependency-resolution>
+                </configuration>
+        </plugin>
+      </plugins>
+  
   </build>
   
   <dependencies>
@@ -34,14 +81,19 @@
        <artifactId>net.ssehub.easy.reasoning.sseReasoner</artifactId>
        <version>${project.version}</version>
     </dependency>
-        <dependency>
-           <groupId>org.eclipse.platform</groupId>
-           <artifactId>org.eclipse.ui</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.platform</groupId>
-            <artifactId>org.eclipse.core.resources</artifactId>
-        </dependency>
+    <dependency>
+       <groupId>net.ssehub.easy</groupId>
+       <artifactId>net.ssehub.easy.instantiation.velocity</artifactId>
+       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+       <groupId>org.eclipse.platform</groupId>
+       <artifactId>org.eclipse.ui</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.eclipse.platform</groupId>
+       <artifactId>org.eclipse.core.resources</artifactId>
+    </dependency>
      <dependency>
          <groupId>org.eclipse.xtext</groupId>
          <artifactId>org.eclipse.xtext</artifactId>
@@ -59,5 +111,5 @@
         <artifactId>commons-io</artifactId>
     </dependency>
   </dependencies>
-
+  
  </project>
