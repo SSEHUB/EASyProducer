@@ -69,6 +69,7 @@ class ProcessExecuter {
         if (classpath.length() > 0) {
             commands.add("-cp ." + File.pathSeparator + classpath);
         }
+        commands.add("-Deasy.instantiate.selfFront=true"); 
         if (!logAll) {
             commands.add("-Dde.uni_hildesheim.sse.easy.logging.level=WARN");
         }
