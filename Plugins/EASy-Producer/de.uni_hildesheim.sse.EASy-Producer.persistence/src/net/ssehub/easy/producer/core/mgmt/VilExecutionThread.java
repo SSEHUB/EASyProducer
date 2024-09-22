@@ -65,6 +65,8 @@ public class VilExecutionThread implements Runnable {
      * @return the created executor
      */
     protected Executor createExecutor() {
+        // command line test compliance
+        boolean selfFront = Boolean.valueOf(System.getProperty("easy.instantiate.selfFront", "false"));
         ProjectDescriptor me = new ProjectDescriptor(plp);
         Executor executor = new Executor(plp.getBuildScript())
             .addTarget(me)
@@ -76,10 +78,15 @@ public class VilExecutionThread implements Runnable {
         } else {
             IProjectDescriptor[] pred = new IProjectDescriptor[predCount + 1]; 
             int i = 0;
+            if (selfFront) {  // first position for command line
+                pred[i++] = me;
+            }
             for (PLPInfo p : plp.getMemberController().getPredecessors()) {
                 pred[i++] = new ProjectDescriptor(p);
             }
-            pred[i++] = me; // whyever me was in first position
+            if (!selfFront) {
+                pred[i++] = me; // not first position for UI
+            }
             executor.addSources(pred);
         }
         VilArgumentProvider.provideArguments(plp, executor);
