@@ -247,6 +247,8 @@ public class ResourcesMgmt {
                 theID = theResource.getPersistentProperty(qname);
             }
         } catch (CoreException e) {
+        }
+        if (null == theID) {
             EASyPersistencer persistencer = new EASyPersistencer(
                 theResource.getProject().getLocation().toFile(), null, project);
             theID = persistencer.getProjectID();

@@ -74,12 +74,12 @@ public class VilExecutionThread implements Runnable {
             // no predecessors - assume self-instantiation
             executor.addSource(me);
         } else {
-            IProjectDescriptor[] pred = new IProjectDescriptor[predCount + 1];
+            IProjectDescriptor[] pred = new IProjectDescriptor[predCount + 1]; 
             int i = 0;
-            pred[i++] = me;
             for (PLPInfo p : plp.getMemberController().getPredecessors()) {
                 pred[i++] = new ProjectDescriptor(p);
             }
+            pred[i++] = me; // whyever me was in first position
             executor.addSources(pred);
         }
         VilArgumentProvider.provideArguments(plp, executor);

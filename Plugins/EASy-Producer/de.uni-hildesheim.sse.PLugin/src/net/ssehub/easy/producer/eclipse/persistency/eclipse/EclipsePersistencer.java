@@ -85,7 +85,7 @@ public class EclipsePersistencer implements IPersistencer {
         this.projectFolder = projectFolder;
         String projectName = projectFolder.getName();
         this.project = project != null ? project : ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-        PathEnvironment pathEnv = PathEnvironmentFactory.createPathEnvironment(project);
+        PathEnvironment pathEnv = PathEnvironmentFactory.createPathEnvironment(this.project);
         File projectFolder2 = new File(pathEnv.getBaseFolder(), projectName);
         File storageFile = PersistenceUtils.getLocationFile(projectFolder2, PathKind.IVML);
         ProgressObserver po = obs;

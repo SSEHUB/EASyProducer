@@ -33,6 +33,7 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
     private FormToolkit toolkit;
     private ScrolledForm contentPane;
     private List<IEASyPageListener> pageListeners;
+    private boolean isDirty = false;
       
     /**
      * Sole constructor for this class.
@@ -97,6 +98,7 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
      * Informs all {@link IEASyPageListener} that this page became dirty.
      */
     public final void setDirty() {
+        isDirty = true;
         for (int i = 0; i < pageListeners.size(); i++) {
             pageListeners.get(i).pageBecomesDirty(this);
         }
@@ -192,6 +194,15 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
 
         return client;
     }
+    
+    /**
+     * Returns whether this editor was explicitly set dirty.
+     * 
+     * @return {@code true} for dirty, {@code false} else
+     */
+    protected boolean wasSetDirty() {
+        return isDirty;
+    }
 
     /**
      * Is called by the parent to perform save operations if needed.
@@ -199,7 +210,9 @@ public abstract class AbstractEASyEditorPage extends Composite implements IPageC
      * @return <code>true</code> if save was needed and performed, <code>false</code> else
      */
     protected boolean doSave() {
-        return false;
+        boolean result = isDirty;
+        isDirty = false;
+        return result;
     }
     
 }
