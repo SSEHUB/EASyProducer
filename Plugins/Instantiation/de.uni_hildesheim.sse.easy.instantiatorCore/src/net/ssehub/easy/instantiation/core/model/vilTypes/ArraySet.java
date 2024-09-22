@@ -155,6 +155,11 @@ public class ArraySet<T> extends AbstractArrayWrapper<T> implements Set<T> {
     }
     
     @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        collect(this, evaluator, true);
+    }
+    
+    @Override
     public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.inferType();

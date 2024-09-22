@@ -151,6 +151,11 @@ public class UnmodifiableSet<T> implements Set<T> {
     }
 
     @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        set.forEach(evaluator);
+    }
+    
+    @Override
     public Object apply(ExpressionEvaluator evaluator) throws VilException {
         return set.apply(evaluator);
     }

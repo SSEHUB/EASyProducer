@@ -152,6 +152,11 @@ public class ListSequence<T> extends AbstractListWrapper<T> implements Sequence<
         param[0] = evaluator.inferType();
         return new ListSequence<Object>(collect(this, evaluator, true), param);
     }
+
+    @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        collect(this, evaluator, true);
+    }
     
     @Override
     public Sequence<?> collectNested(ExpressionEvaluator evaluator) throws VilException {

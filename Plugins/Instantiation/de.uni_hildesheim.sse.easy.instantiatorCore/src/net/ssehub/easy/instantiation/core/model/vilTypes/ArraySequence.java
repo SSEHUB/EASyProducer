@@ -158,6 +158,11 @@ public class ArraySequence<T> extends AbstractArrayWrapper<T> implements Sequenc
     }
 
     @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        collect(this, evaluator, true);
+    }
+
+    @Override
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException {
         TypeDescriptor<?>[] param = TypeDescriptor.createArray(1);
         param[0] = evaluator.inferType();

@@ -29,6 +29,8 @@ net.ssehub.easy.instantiation.core.model.vilTypes.Collection  @net.ssehub.easy.i
  - public abstract net.ssehub.easy.instantiation.core.model.vilTypes.Collection net.ssehub.easy.instantiation.core.model.vilTypes.Collection.flatten() throws net.ssehub.easy.instantiation.core.model.common.VilException
   @net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta(allowsAggregation=false, flatten=true, name={""}, opType=NORMAL, requiresDynamicExpressionProcessing=false, storeArtifactsBefore=false, trace=true, useAny=false, useGenericParameter=0, useOperandTypeAsParameter=false, useParameter=-1)
  - public abstract java.lang.Boolean net.ssehub.easy.instantiation.core.model.vilTypes.Collection.forAll(net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator) throws net.ssehub.easy.instantiation.core.model.common.VilException
+ - public abstract void net.ssehub.easy.instantiation.core.model.vilTypes.Collection.forEach(net.ssehub.easy.instantiation.core.model.expressions.ExpressionEvaluator) throws net.ssehub.easy.instantiation.core.model.common.VilException
+  @net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta(allowsAggregation=false, flatten=true, name={""}, opType=NORMAL, requiresDynamicExpressionProcessing=false, storeArtifactsBefore=false, trace=true, useAny=false, useGenericParameter=-1, useOperandTypeAsParameter=false, useParameter=0)
  - public abstract int net.ssehub.easy.instantiation.core.model.vilTypes.Collection.getGenericParameterCount()
   @net.ssehub.easy.instantiation.core.model.vilTypes.Invisible(inherit=true)
  - public abstract net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor net.ssehub.easy.instantiation.core.model.vilTypes.Collection.getGenericParameterType(int)

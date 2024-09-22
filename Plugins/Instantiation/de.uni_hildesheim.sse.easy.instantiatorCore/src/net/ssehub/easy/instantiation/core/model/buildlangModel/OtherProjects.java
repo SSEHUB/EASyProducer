@@ -159,6 +159,11 @@ class OtherProjects implements Set<IArtifact> {
     }
     
     @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        AbstractCollectionWrapper.collect(this, evaluator, true);
+    }
+    
+    @Override
     public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {
         return new ListSet<Object>(AbstractCollectionWrapper.collect(this, evaluator, false), parameter);
     }

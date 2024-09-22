@@ -121,6 +121,11 @@ public class ListSet<T> extends AbstractListWrapper<T> implements Set<T> {
         param[0] = evaluator.inferType();
         return new ListSet<Object>(collect(this, evaluator, true), param);
     }
+    
+    @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        collect(this, evaluator, true);
+    }
 
     @Override
     public Set<?> collectNested(ExpressionEvaluator evaluator) throws VilException {

@@ -105,6 +105,67 @@ public class JavaClass extends JavaParentFragmentArtifact {
         });
         return new ArraySet<JavaMethod>(list.toArray(new JavaMethod[list.size()]), JavaMethod.class);
     }
+    
+    /**
+     * Returns methods by their annotation.
+     * 
+     * @param annotation the (simple) annotation name
+     * @return the methods with the given annotation name
+     */
+    @ReturnGenerics(JavaMethod.class)
+    public Set<JavaMethod> methodsByAnnotation(String annotation) {
+        return methodsByAnnotation(annotation, null, null);
+    }
+
+    /**
+     * Returns methods by their annotation.
+     * 
+     * @param annotation the (simple) annotation name
+     * @param field the name of the field to match for (may be <b>null</b> for ignoring fields)
+     * @param value the value of the field to match
+     * @return the methods with the given annotation name
+     */
+    @ReturnGenerics(JavaMethod.class)
+    public Set<JavaMethod> methodsByAnnotation(String annotation, String field, Object value) {
+        Set<JavaMethod> res = methods();
+        for (JavaMethod m : res.asSequence()) {
+            if (!matchesAnnotation(m.annotations(), annotation, field, value)) {
+                res.remove(m);
+            }
+        }
+        return res;
+    }
+    
+    /**
+     * Returns whether there is a specified annotation in {@code annotations}.
+     * 
+     * @param annotations the annotations to examine
+     * @param annotation the (simple) annotation name
+     * @param field the name of the field to match for (may be <b>null</b> for ignoring fields)
+     * @param value the value of the field to match
+     * @return the methods with the given annotation name
+     */
+    private static boolean matchesAnnotation(Set<JavaAnnotation> annotations, String annotation, String field, 
+        Object value) {
+        boolean matches = false;
+        Object sValue = null == value ? null : value.toString();
+        for (JavaAnnotation an : annotations) {
+            try {
+                if (an.getName().equals(annotation)) {
+                    if (null != field) {
+                        String val = an.getAnnotationValue(field);
+                        matches = (null != val && val.equals(sValue));
+                    } else {
+                        matches = true;
+                    }
+                }
+            } catch (VilException e) {
+                // ignore, no result
+            }
+        }
+        return matches;
+    }
+    
 
     /**
      * Deletes a statement within a method. Right now only JavaCall can be
@@ -211,6 +272,36 @@ public class JavaClass extends JavaParentFragmentArtifact {
             }
         });
         return new ArraySet<JavaAttribute>(list.toArray(new JavaAttribute[list.size()]), JavaAttribute.class);
+    }
+
+    /**
+     * Returns attributes by their annotation.
+     * 
+     * @param annotation the (simple) annotation name
+     * @return the attributes with the given annotation name
+     */
+    @ReturnGenerics(JavaAttribute.class)
+    public Set<JavaAttribute> attributesByAnnotation(String annotation) {
+        return attributesByAnnotation(annotation, null, null);
+    }
+
+    /**
+     * Returns attributes by their annotation.
+     * 
+     * @param annotation the (simple) annotation name
+     * @param field the name of the field to match for (may be <b>null</b> for ignoring fields)
+     * @param value the value of the field to match
+     * @return the attributes with the given annotation name
+     */
+    @ReturnGenerics(JavaAttribute.class)
+    public Set<JavaAttribute> attributesByAnnotation(String annotation, String field, Object value) {
+        Set<JavaAttribute> res = attributes();
+        for (JavaAttribute a : res.asSequence()) {
+            if (!matchesAnnotation(a.annotations(), annotation, field, value)) {
+                res.remove(a);
+            }
+        }
+        return res;
     }
 
     /**

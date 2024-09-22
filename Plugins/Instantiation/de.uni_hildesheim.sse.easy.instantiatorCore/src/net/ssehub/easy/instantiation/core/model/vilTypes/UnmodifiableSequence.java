@@ -158,6 +158,11 @@ public class UnmodifiableSequence<T> implements Sequence<T> {
     public Sequence<?> collect(ExpressionEvaluator evaluator) throws VilException {
         return sequence.collect(evaluator);
     }
+    
+    @Override
+    public void forEach(ExpressionEvaluator evaluator) throws VilException {
+        sequence.forEach(evaluator);
+    }
 
     @Override
     public Object apply(ExpressionEvaluator evaluator) throws VilException {

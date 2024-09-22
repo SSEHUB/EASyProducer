@@ -168,6 +168,15 @@ public interface Collection<T> extends Iterable<T>, IVilGenericType, IStringValu
     public Collection<?> collect(ExpressionEvaluator evaluator) throws VilException;
 
     /**
+     * Executes <code>evaluator</code> without result on flattened structures.
+     * 
+     * @param evaluator the evaluator (results must evaluate to Boolean)
+     * @throws VilException in case that evaluation fails
+     */
+    @OperationMeta(useParameter = 0, flatten = true)
+    public void forEach(ExpressionEvaluator evaluator) throws VilException;
+
+    /**
      * Collects the application of <code>evaluator</code> to each individual element and keeps nested structures.
      * 
      * @param evaluator the evaluator (results must evaluate to Boolean)
