@@ -18,7 +18,10 @@ package net.ssehub.easy.producer.core.mgmt;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -360,6 +363,45 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
         File tmpBuild = new File(PersistenceUtils.vilFileLocation(name, getVersion(),
             getScriptLocation().getAbsolutePath()));
         return tmpBuild.exists();
+    }
+    
+    /**
+     * Sets the given projectIDs as predecessor projects of this project.
+     * @param predecessorIDs A list of predecessors projects.
+     * @return <code>true</code> if at least one ID was removed or added, <code>false</code> otherwise.
+     */
+    public boolean setPredecessors(List<String> predecessorIDs) {
+        boolean changed = false;
+        
+        // Add all selected Predecessors to this PTN
+        if (predecessorIDs != null) {
+
+            // handle removed predecessors
+            Iterator<String> iterator = getMemberController().getPredecessorIDs().iterator();
+            Set<String> newPredecessorsAsSet = new HashSet<String>(predecessorIDs);
+            while (iterator.hasNext()) {
+                String oldPredcessorID = iterator.next();
+                if (!newPredecessorsAsSet.contains(oldPredcessorID)) {
+                    getMemberController().removePredecessor(oldPredcessorID);
+                    changed = true;
+                }
+            }
+
+            // add all new predecessors
+            Set<String> currentPredecessors = getMemberController().getPredecessorIDs();
+            for (String predecessor : predecessorIDs) {
+                if (!currentPredecessors.contains(predecessor)) {
+                    getMemberController().addPredecessor(predecessor);
+                    changed = true;
+                }
+            }
+        }
+        
+        if (changed) {
+            createMainRule();
+        }
+        
+        return changed;
     }
     
     /**

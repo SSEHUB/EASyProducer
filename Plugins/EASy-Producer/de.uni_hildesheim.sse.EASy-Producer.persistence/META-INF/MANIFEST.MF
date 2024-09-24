@@ -14,7 +14,7 @@ Require-Bundle: net.ssehub.easy.varModel,
  de.uni_hildesheim.sse.vil.templatelang,
  net.ssehub.easy.libs.commons.io
 Import-Package: org.osgi.framework
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: net.ssehub.easy.producer.core
 Bundle-ActivationPolicy: lazy
 Export-Package: net.ssehub.easy.producer.core.contributions,

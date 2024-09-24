@@ -1,27 +1,14 @@
 package net.ssehub.easy.producer.eclipse.model;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Observer;
-import java.util.Set;
-import java.util.UUID;
 
 import org.eclipse.core.resources.IProject;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.modelManagement.Version;
-import net.ssehub.easy.basics.modelManagement.VersionFormatException;
-import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.producer.core.mgmt.MemberIterator;
-import net.ssehub.easy.producer.core.mgmt.PLPInfo;
-import net.ssehub.easy.producer.core.mgmt.SPLsManager;
+import net.ssehub.easy.producer.core.mgmt.GenericProductLineProject;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
-import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
-import net.ssehub.easy.producer.core.persistence.standard.EASyConfigFileImporter;
 import net.ssehub.easy.producer.core.varMod.container.ProjectContainer;
 import net.ssehub.easy.producer.core.varMod.container.ScriptContainer;
 import net.ssehub.easy.producer.eclipse.Activator;
@@ -31,8 +18,6 @@ import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.frontend.ReasoningProcess;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
-import net.ssehub.easy.varModel.management.VarModel;
-import net.ssehub.easy.varModel.model.Project;
 
 /**
  * This class holds all models, controllers and attributes (which are not stored in a model) related to one product lien
@@ -44,7 +29,7 @@ import net.ssehub.easy.varModel.model.Project;
  * @author Brauch
  * @since 20.09.2011
  */
-public class ProductLineProject extends PLPInfo {
+public class ProductLineProject extends GenericProductLineProject {
     
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(
         ProductLineProject.class, Activator.PLUGIN_ID); 
@@ -56,20 +41,7 @@ public class ProductLineProject extends PLPInfo {
      * @param projectLocation The top level location of the whole ProductLineProject
      */
     public ProductLineProject(String projectname, File projectLocation) {
-        super(UUID.randomUUID().toString(), projectname, "0", projectLocation);
-        Project project = new Project(projectname);
-        Version version = null;
-        try {
-            version = new Version("0");
-        } catch (VersionFormatException e1) {
-            // Should not occur
-            LOGGER.exception(e1);
-        }
-        project.setVersion(version);
-        ProjectContainer varModel = new ProjectContainer(project, PersistenceUtils.getConfiguration(projectLocation));
-        setProject(varModel);
-        createMainRule();
-        SPLsManager.INSTANCE.addPLP(this);
+        super(projectname, projectLocation);
     }    
     
     /**
@@ -83,76 +55,7 @@ public class ProductLineProject extends PLPInfo {
      */
     public ProductLineProject(String projectID, String projectName, ProjectContainer project,
         File projectLocation, ScriptContainer mainBuildScript) {
-        
-        super(projectID, projectName, Version.toString(project.getVersion()), projectLocation);
-        setProject(project);
-        setBuildScript(mainBuildScript);
-        SPLsManager.INSTANCE.addPLP(this);
-    }
-    
-    /**
-     * Sets the given projectIDs as predecessor projects of this project.
-     * @param predecessorIDs A list of predecessors projects.
-     * @return <code>true</code> if at least one ID was removed or added, <code>false</code> otherwise.
-     */
-    public boolean setPredecessors(List<String> predecessorIDs) {
-        boolean changed = false;
-        
-        // Add all selected Predecessors to this PTN
-        if (predecessorIDs != null) {
-
-            // handle removed predecessors
-            Iterator<String> iterator = getMemberController().getPredecessorIDs().iterator();
-            Set<String> newPredecessorsAsSet = new HashSet<String>(predecessorIDs);
-            while (iterator.hasNext()) {
-                String oldPredcessorID = iterator.next();
-                if (!newPredecessorsAsSet.contains(oldPredcessorID)) {
-                    getMemberController().removePredecessor(oldPredcessorID);
-                    changed = true;
-                }
-            }
-
-            // add all new predecessors
-            Set<String> currentPredecessors = getMemberController().getPredecessorIDs();
-            for (String predecessor : predecessorIDs) {
-                if (currentPredecessors.contains(predecessor)) {
-                    changed = true;
-                }
-                getMemberController().addPredecessor(predecessor);
-            }
-        }
-        
-        if (changed) {
-            createMainRule();
-        }
-        
-        return changed;
-    }
-    
-    /**
-     * This method copies the variability model, configuration,
-     * and instantiator settings of the predecessor projects to this project.
-     */
-    @Override
-    public void pullConfigFromPredecessors() {
-        // TODO SE: Remove this as far as Transformators are not longer needed.
-        EASyConfigFileImporter importer = new EASyConfigFileImporter(this);
-        // These list temporarily save the instantiators from all predecessors
-        
-        MemberIterator predecessors = getMemberController().predecessors();
-        while (predecessors.hasNext()) {
-            PLPInfo predecessorPLP = predecessors.next();
-            
-            
-            // Copy (imported) ivml files
-            // Insert a dot to hide imported folders
-            importer.copyConfigFiles(predecessorPLP, "." + predecessorPLP.getProjectName());
-        }
-        
-        //Refresh
-        EASyPersistencer.refreshModels(this);
-        getConfiguration().refresh();
-        configurationPulled();
+        super(projectID, projectName, project, projectLocation, mainBuildScript);
     }
 
     /**
@@ -167,36 +70,6 @@ public class ProductLineProject extends PLPInfo {
             // TODO SE: Auto-generated catch block
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Registers given observer for every controller.
-     * 
-     * @param observer The Observer which should be registered for notification
-     */
-    public void registerObserver(Observer observer) {
-        getMemberController().addObserver(observer);
-    }
-
-    /**
-     * Unsubscribes given observer from notification for each controller.
-     * 
-     * @param observer The Observer which should be unsubscribed from notification
-     * @since 20.10.2011
-     */
-    public void unRegisterObserver(Observer observer) {
-        getMemberController().deleteObserver(observer);
-    }
-
-    /**
-     * Checks whether instantiation should be possible. Checks whether at least one inherited instantiator has been
-     * found and whether at least one associated predecessor is located in the current workspace. Note: a complete
-     * Instantiation might still not be possible due to missing instantiator engines
-     * 
-     * @return true, if it should be possible
-     */
-    public boolean isTransformable() {
-        return isTransformableVIL();
     }
     
     @Override
@@ -217,19 +90,7 @@ public class ProductLineProject extends PLPInfo {
      * @throws PersistenceException If the file cannot be written to the file system.
      */
     public void createNewModel(Version version) throws PersistenceException {
-        //Create File
-        PersistenceUtils.createIVMLProject(getProjectName(), version, 
-            getConfigLocation().getAbsolutePath());
-        
-        // Register new file at the VARMODEL
-        try {
-            VarModel.INSTANCE.updateModelInformation(getConfigLocation(), ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException exc) {
-            LOGGER.exception(exc);
-        }
-        
-        //Refresh files 
-        refreshArtifacts();
+        super.createNewModel(version);
     }
     
     @Override

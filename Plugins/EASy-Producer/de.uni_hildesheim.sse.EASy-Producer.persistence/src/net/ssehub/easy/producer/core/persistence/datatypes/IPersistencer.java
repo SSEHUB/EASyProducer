@@ -47,6 +47,13 @@ public interface IPersistencer {
     public String getProjectID();
 
     /**
+     * Returns the project folder.
+     * 
+     * @return the project folder
+     */
+    public File getProjectFolder();
+    
+    /**
      * Updates the models in the given project.
      * 
      * @throws PersistenceException if errors during the update occur

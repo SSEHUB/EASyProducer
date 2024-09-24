@@ -260,4 +260,9 @@ public class EclipsePersistencer implements IPersistencer {
         return persistencer.getPathEnvironment();
     }
 
+    @Override
+    public File getProjectFolder() {
+        return projectFolder;
+    }
+
 }

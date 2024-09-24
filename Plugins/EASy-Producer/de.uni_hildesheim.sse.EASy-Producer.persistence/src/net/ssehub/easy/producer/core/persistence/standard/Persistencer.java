@@ -81,6 +81,11 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         this.observer = null == observer ? ProgressObserver.NO_OBSERVER : observer;
     }
 
+    @Override
+    public File getProjectFolder() {
+        return projectFolder;
+    }
+
     /**
      * Loads the default models if existent.
      */
@@ -158,7 +163,6 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
     }
 
     
-    @SuppressWarnings("deprecation")
     @Override
     public IProjectCreationResult createProject(String projectName, File parentFolder, String projectID, boolean lazy)
         throws PersistenceException {

@@ -25,14 +25,8 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.basics.modelManagement.Version;
-import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.producer.core.mgmt.SPLsManager;
-import net.ssehub.easy.producer.core.persistence.Configuration;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
-import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
-import net.ssehub.easy.producer.core.varMod.container.ProjectContainer;
-import net.ssehub.easy.producer.core.varMod.container.ScriptContainer;
 import net.ssehub.easy.producer.eclipse.Activator;
 import net.ssehub.easy.producer.eclipse.ProjectConstants;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
@@ -188,20 +182,8 @@ abstract class AbstractProjectCreator {
              * TODO: Unclear whether this is needed.
              */
             if (null == newPLP && null != result.getVarModel()) {
-                // at least called when importing / creating a new project
-                Script mainBuildScript = new Script(projectName, Script.createDefaultParameter());
-                Version version = result.getVarModel().getVersion();
-                if (null != version) {
-                    mainBuildScript.setVersion(version);
-                }
-                
-                Configuration location = PersistenceUtils.getConfiguration(result.getProjectFolder());
-                ProjectContainer varModel = new ProjectContainer(result.getVarModel(), location);
-                ScriptContainer instantiationModel = new ScriptContainer(mainBuildScript, location);
-                instantiationModel.setEdited(true);
-                
-                newPLP = new ProductLineProject(projectID, projectName, varModel, result.getProjectFolder(),
-                    instantiationModel);
+                newPLP = new EASyPersistencer(result.getProjectFolder()).populateEasyProject(projectID, projectName, 
+                    result.getProjectFolder(), result.getVarModel());
             }
         }
     }
