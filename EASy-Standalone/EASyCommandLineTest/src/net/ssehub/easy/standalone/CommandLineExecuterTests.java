@@ -345,7 +345,8 @@ public class CommandLineExecuterTests {
         }
 
         Assert.assertTrue(trg.exists());
-        Assert.assertTrue(new File(trg, "EASy/.EasyConfig").exists());
+        Assert.assertTrue(new File(trg, PersistenceConstants.EASY_FILES_DEFAULT + "/" 
+            + PersistenceConstants.CONFIG_FILE).exists());
         Assert.assertTrue(new File(trg, "src").exists());
         Assert.assertTrue(new File(trg, "bin").exists());
     }
