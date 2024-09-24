@@ -758,8 +758,15 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * @param scriptImport A import which shall be added to the main {@link Script} of this project.
      */
     public void addScriptImport(ModelImport<Script> scriptImport) {
-        mainBuildScript.getModel().addImport(scriptImport);
-        mainBuildScript.setEdited(true);
+        Script script = mainBuildScript.getModel();
+        boolean found = false; // prevent accidental double import, ignore constraint for now
+        for (int i = 0; !found && i < script.getImportsCount(); i++) {
+            found = script.getImport(i).getName().equals(scriptImport.getName());
+        }
+        if (!found) {
+            mainBuildScript.getModel().addImport(scriptImport);
+            mainBuildScript.setEdited(true);
+        }
     }
     
     /**

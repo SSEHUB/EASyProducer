@@ -40,7 +40,7 @@ public class EASyPersistencer implements PersistenceConstants {
 
     /**
      * Creates a specialized EASy persistencer without underlying project.
-     * @param projectFolder The location of the {@link ProductLineProject}.
+     * @param projectFolder The location of the project.
      */
     public EASyPersistencer(File projectFolder) {
         PathEnvironment pathEnv = new PathEnvironment(projectFolder.getParentFile());
@@ -58,8 +58,8 @@ public class EASyPersistencer implements PersistenceConstants {
     }
 
     /**
-     * Reads the persistent data and transforms them into a {@link ProductLineProject}.
-     * @return A {@link ProductLineProject} or <code>null</code>.
+     * Reads the persistent data and transforms them into a product line project.
+     * @return A product line project or <code>null</code>.
      * @throws PersistenceException Will be thrown if the data is invalid or an IOException occur,
      * while reading the persistent data.
      */
@@ -72,16 +72,16 @@ public class EASyPersistencer implements PersistenceConstants {
     }
     
     /**
-     * (Re-)Loads all variability models of the specified {@link ProductLineProject} from the file system.
-     * @param plp A {@link ProductLineProject} containing saved models which should be (re-) loaded from the file system
+     * (Re-)Loads all variability models of the specified product line project from the file system.
+     * @param plp A product line project containing saved models which should be (re-) loaded from the file system
      */
     public static void refreshModels(PLPInfo plp) {
         PersistenceUtils.refreshModels(plp);
     }
     
     /**
-     * Returns the location of the main ivml file for the given {@link ProductLineProject}.
-     * @param plp The {@link ProductLineProject} holding the ivml file for which this method looks for.
+     * Returns the location of the main ivml file for the given product line project.
+     * @param plp The product line project holding the ivml file for which this method looks for.
      * @return The location of the ivml file or <code>null</code> if the location could not be determined.
      */
     public static File projectPath(PLPInfo plp) {
@@ -98,7 +98,7 @@ public class EASyPersistencer implements PersistenceConstants {
      * 
      * @param projectID The ID of the product line project
      * @param projectName The name of the product line project
-     * @param project An already existent variability model for this {@link ProductLineProject}.
+     * @param project An already existent variability model for this product line project.
      * @param projectLocation The top level location of the whole ProductLineProject
      * @param mainBuildScript The main build script for building the project (starting point of the instantiation).
      * @return the created PLP
@@ -109,9 +109,9 @@ public class EASyPersistencer implements PersistenceConstants {
     }
     
     /**
-     * Translates the {@link PersistentProject} into a {@link ProductLineProject}.
+     * Translates the {@link PersistentProject} into a product line project.
      * @param project The {@link PersistentProject} which should be translated.
-     * @return A {@link ProductLineProject} representing the given {@link PersistentProject}.
+     * @return A product line project representing the given {@link PersistentProject}.
      * @throws PersistenceException Will be thrown if the {@link PersistentProject} contains invalid data.
      */
     private PLPInfo persistentProject2PLP(PersistentProject project) throws PersistenceException {
@@ -166,7 +166,7 @@ public class EASyPersistencer implements PersistenceConstants {
     /**
      * Creates ReasoningConfiguration.
      * @param model A model of type {@link ModelType#INSTANTIATORS} holding all instantiator information.
-     * @param plp The {@link ProductLineProject} where the instantiators should be saved
+     * @param plp The product line project where the instantiators should be saved
      */
     private void createReasonerConfiguration(PLPInfo plp, Model model) {
         ReasonerConfiguration reasonerConfig = new ReasonerConfiguration();
@@ -233,8 +233,8 @@ public class EASyPersistencer implements PersistenceConstants {
     }
     
     /**
-     * Saves the given {@link ProductLineProject} persistently.
-     * @param plp The {@link ProductLineProject} which should be saved.
+     * Saves the given product line project persistently.
+     * @param plp The product line project which should be saved.
      * @throws PersistenceException Will be thrown if an exception occurs while accessing the file system.
      */
     public void save(PLPInfo plp) throws PersistenceException {
