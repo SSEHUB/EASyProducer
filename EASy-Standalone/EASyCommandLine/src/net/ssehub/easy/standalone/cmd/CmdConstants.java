@@ -40,5 +40,6 @@ public class CmdConstants {
     public static final int SYSTEM_INDEX_EXC = 8;
     public static final int SYSTEM_REASONER_CONFLICT = 10;
     public static final int SYSTEM_NO_REASONER = 11;
-
+    public static final int SYSTEM_NO_PREDECESSOR = 12;
+    
 }
