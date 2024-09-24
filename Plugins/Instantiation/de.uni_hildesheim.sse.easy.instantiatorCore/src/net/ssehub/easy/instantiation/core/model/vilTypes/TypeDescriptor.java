@@ -629,7 +629,7 @@ public abstract class TypeDescriptor <T> implements IMetaType {
             for (int o = 0; o < iter.getOperationsCount(); o++) {
                 IMetaOperation op = iter.getOperation(o);
                 boolean ok;
-                if (null != op && op.getName().equals(name)) {
+                if (null != op && op.getName() != null && op.getName().equals(name)) {
                     // in case of default parameters, the act. number of required params may be less than the given ones
                     int reqParam = op.getRequiredParameterCount();
                     if (argCount > 0) {
