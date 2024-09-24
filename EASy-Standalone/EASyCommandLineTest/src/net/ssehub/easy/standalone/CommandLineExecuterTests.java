@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
 import net.ssehub.easy.standalone.cmd.CmdConstants;
 
 /**
@@ -323,7 +324,8 @@ public class CommandLineExecuterTests {
         }
 
         Assert.assertTrue(trg.exists());
-        Assert.assertTrue(new File(trg, "EASy/.EasyConfig").exists());
+        Assert.assertTrue(new File(trg, PersistenceConstants.EASY_FILES_DEFAULT + "/" 
+            + PersistenceConstants.CONFIG_FILE).exists());
 
         trg = new File(AllTests.ELEVATOR_DIR, "New_CreatedJ");
         FileUtils.deleteQuietly(trg);
