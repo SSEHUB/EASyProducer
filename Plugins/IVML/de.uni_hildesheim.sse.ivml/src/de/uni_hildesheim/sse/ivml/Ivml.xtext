@@ -206,13 +206,12 @@ AnnotateTo :
 
 Freeze: 
 	'freeze' '{'
-	names+=(FreezeStatement)+
+	(names+=FreezeStatement ';')+ (names+=FreezeStatement)?
 	'}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?
 	; 
 	
 FreezeStatement:
 	(dot='.' | (name=QualifiedName access=AccessName?))
-	';'	
 ;
 	
 Eval: 

@@ -2258,10 +2258,35 @@ ruleFreeze returns [EObject current=null]
 		}
 		(
 			(
+				(
+					{
+						newCompositeNode(grammarAccess.getFreezeAccess().getNamesFreezeStatementParserRuleCall_2_0_0());
+					}
+					lv_names_2_0=ruleFreezeStatement
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getFreezeRule());
+						}
+						add(
+							$current,
+							"names",
+							lv_names_2_0,
+							"de.uni_hildesheim.sse.Ivml.FreezeStatement");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+			otherlv_3=';'
+			{
+				newLeafNode(otherlv_3, grammarAccess.getFreezeAccess().getSemicolonKeyword_2_1());
+			}
+		)+
+		(
+			(
 				{
-					newCompositeNode(grammarAccess.getFreezeAccess().getNamesFreezeStatementParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getFreezeAccess().getNamesFreezeStatementParserRuleCall_3_0());
 				}
-				lv_names_2_0=ruleFreezeStatement
+				lv_names_4_0=ruleFreezeStatement
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getFreezeRule());
@@ -2269,31 +2294,31 @@ ruleFreeze returns [EObject current=null]
 					add(
 						$current,
 						"names",
-						lv_names_2_0,
+						lv_names_4_0,
 						"de.uni_hildesheim.sse.Ivml.FreezeStatement");
 					afterParserOrEnumRuleCall();
 				}
 			)
-		)+
-		otherlv_3='}'
+		)?
+		otherlv_5='}'
 		{
-			newLeafNode(otherlv_3, grammarAccess.getFreezeAccess().getRightCurlyBracketKeyword_3());
+			newLeafNode(otherlv_5, grammarAccess.getFreezeAccess().getRightCurlyBracketKeyword_4());
 		}
 		(
-			otherlv_4='but'
+			otherlv_6='but'
 			{
-				newLeafNode(otherlv_4, grammarAccess.getFreezeAccess().getButKeyword_4_0());
+				newLeafNode(otherlv_6, grammarAccess.getFreezeAccess().getButKeyword_5_0());
 			}
-			otherlv_5='('
+			otherlv_7='('
 			{
-				newLeafNode(otherlv_5, grammarAccess.getFreezeAccess().getLeftParenthesisKeyword_4_1());
+				newLeafNode(otherlv_7, grammarAccess.getFreezeAccess().getLeftParenthesisKeyword_5_1());
 			}
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getFreezeAccess().getIdIdentifierParserRuleCall_4_2_0());
+						newCompositeNode(grammarAccess.getFreezeAccess().getIdIdentifierParserRuleCall_5_2_0());
 					}
-					lv_id_6_0=ruleIdentifier
+					lv_id_8_0=ruleIdentifier
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getFreezeRule());
@@ -2301,22 +2326,22 @@ ruleFreeze returns [EObject current=null]
 						set(
 							$current,
 							"id",
-							lv_id_6_0,
+							lv_id_8_0,
 							"de.uni_hildesheim.sse.Ivml.Identifier");
 						afterParserOrEnumRuleCall();
 					}
 				)
 			)
-			otherlv_7='|'
+			otherlv_9='|'
 			{
-				newLeafNode(otherlv_7, grammarAccess.getFreezeAccess().getVerticalLineKeyword_4_3());
+				newLeafNode(otherlv_9, grammarAccess.getFreezeAccess().getVerticalLineKeyword_5_3());
 			}
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getFreezeAccess().getExLogicalExpressionParserRuleCall_4_4_0());
+						newCompositeNode(grammarAccess.getFreezeAccess().getExLogicalExpressionParserRuleCall_5_4_0());
 					}
-					lv_ex_8_0=ruleLogicalExpression
+					lv_ex_10_0=ruleLogicalExpression
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getFreezeRule());
@@ -2324,21 +2349,21 @@ ruleFreeze returns [EObject current=null]
 						set(
 							$current,
 							"ex",
-							lv_ex_8_0,
+							lv_ex_10_0,
 							"de.uni_hildesheim.sse.Ivml.LogicalExpression");
 						afterParserOrEnumRuleCall();
 					}
 				)
 			)
-			otherlv_9=')'
+			otherlv_11=')'
 			{
-				newLeafNode(otherlv_9, grammarAccess.getFreezeAccess().getRightParenthesisKeyword_4_5());
+				newLeafNode(otherlv_11, grammarAccess.getFreezeAccess().getRightParenthesisKeyword_5_5());
 			}
 		)?
 		(
-			otherlv_10=';'
+			otherlv_12=';'
 			{
-				newLeafNode(otherlv_10, grammarAccess.getFreezeAccess().getSemicolonKeyword_5());
+				newLeafNode(otherlv_12, grammarAccess.getFreezeAccess().getSemicolonKeyword_6());
 			}
 		)?
 	)
@@ -2362,65 +2387,59 @@ ruleFreezeStatement returns [EObject current=null]
 	(
 		(
 			(
-				(
-					lv_dot_0_0='.'
-					{
-						newLeafNode(lv_dot_0_0, grammarAccess.getFreezeStatementAccess().getDotFullStopKeyword_0_0_0());
+				lv_dot_0_0='.'
+				{
+					newLeafNode(lv_dot_0_0, grammarAccess.getFreezeStatementAccess().getDotFullStopKeyword_0_0());
+				}
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getFreezeStatementRule());
 					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getFreezeStatementRule());
-						}
-						setWithLastConsumed($current, "dot", lv_dot_0_0, ".");
-					}
-				)
-			)
-			    |
-			(
-				(
-					(
-						{
-							newCompositeNode(grammarAccess.getFreezeStatementAccess().getNameQualifiedNameParserRuleCall_0_1_0_0());
-						}
-						lv_name_1_0=ruleQualifiedName
-						{
-							if ($current==null) {
-								$current = createModelElementForParent(grammarAccess.getFreezeStatementRule());
-							}
-							set(
-								$current,
-								"name",
-								lv_name_1_0,
-								"de.uni_hildesheim.sse.Ivml.QualifiedName");
-							afterParserOrEnumRuleCall();
-						}
-					)
-				)
-				(
-					(
-						{
-							newCompositeNode(grammarAccess.getFreezeStatementAccess().getAccessAccessNameParserRuleCall_0_1_1_0());
-						}
-						lv_access_2_0=ruleAccessName
-						{
-							if ($current==null) {
-								$current = createModelElementForParent(grammarAccess.getFreezeStatementRule());
-							}
-							set(
-								$current,
-								"access",
-								lv_access_2_0,
-								"de.uni_hildesheim.sse.Ivml.AccessName");
-							afterParserOrEnumRuleCall();
-						}
-					)
-				)?
+					setWithLastConsumed($current, "dot", lv_dot_0_0, ".");
+				}
 			)
 		)
-		otherlv_3=';'
-		{
-			newLeafNode(otherlv_3, grammarAccess.getFreezeStatementAccess().getSemicolonKeyword_1());
-		}
+		    |
+		(
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getFreezeStatementAccess().getNameQualifiedNameParserRuleCall_1_0_0());
+					}
+					lv_name_1_0=ruleQualifiedName
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getFreezeStatementRule());
+						}
+						set(
+							$current,
+							"name",
+							lv_name_1_0,
+							"de.uni_hildesheim.sse.Ivml.QualifiedName");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getFreezeStatementAccess().getAccessAccessNameParserRuleCall_1_1_0());
+					}
+					lv_access_2_0=ruleAccessName
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getFreezeStatementRule());
+						}
+						set(
+							$current,
+							"access",
+							lv_access_2_0,
+							"de.uni_hildesheim.sse.Ivml.AccessName");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)?
+		)
 	)
 ;
 

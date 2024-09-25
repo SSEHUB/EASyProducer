@@ -1455,32 +1455,36 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Keyword cFreezeKeyword_0 = (Keyword)cGroup.eContents().get(0);
 		private final Keyword cLeftCurlyBracketKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cNamesAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cNamesFreezeStatementParserRuleCall_2_0 = (RuleCall)cNamesAssignment_2.eContents().get(0);
-		private final Keyword cRightCurlyBracketKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final Group cGroup_4 = (Group)cGroup.eContents().get(4);
-		private final Keyword cButKeyword_4_0 = (Keyword)cGroup_4.eContents().get(0);
-		private final Keyword cLeftParenthesisKeyword_4_1 = (Keyword)cGroup_4.eContents().get(1);
-		private final Assignment cIdAssignment_4_2 = (Assignment)cGroup_4.eContents().get(2);
-		private final RuleCall cIdIdentifierParserRuleCall_4_2_0 = (RuleCall)cIdAssignment_4_2.eContents().get(0);
-		private final Keyword cVerticalLineKeyword_4_3 = (Keyword)cGroup_4.eContents().get(3);
-		private final Assignment cExAssignment_4_4 = (Assignment)cGroup_4.eContents().get(4);
-		private final RuleCall cExLogicalExpressionParserRuleCall_4_4_0 = (RuleCall)cExAssignment_4_4.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_4_5 = (Keyword)cGroup_4.eContents().get(5);
-		private final Keyword cSemicolonKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Assignment cNamesAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
+		private final RuleCall cNamesFreezeStatementParserRuleCall_2_0_0 = (RuleCall)cNamesAssignment_2_0.eContents().get(0);
+		private final Keyword cSemicolonKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Assignment cNamesAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cNamesFreezeStatementParserRuleCall_3_0 = (RuleCall)cNamesAssignment_3.eContents().get(0);
+		private final Keyword cRightCurlyBracketKeyword_4 = (Keyword)cGroup.eContents().get(4);
+		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
+		private final Keyword cButKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
+		private final Keyword cLeftParenthesisKeyword_5_1 = (Keyword)cGroup_5.eContents().get(1);
+		private final Assignment cIdAssignment_5_2 = (Assignment)cGroup_5.eContents().get(2);
+		private final RuleCall cIdIdentifierParserRuleCall_5_2_0 = (RuleCall)cIdAssignment_5_2.eContents().get(0);
+		private final Keyword cVerticalLineKeyword_5_3 = (Keyword)cGroup_5.eContents().get(3);
+		private final Assignment cExAssignment_5_4 = (Assignment)cGroup_5.eContents().get(4);
+		private final RuleCall cExLogicalExpressionParserRuleCall_5_4_0 = (RuleCall)cExAssignment_5_4.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_5_5 = (Keyword)cGroup_5.eContents().get(5);
+		private final Keyword cSemicolonKeyword_6 = (Keyword)cGroup.eContents().get(6);
 		
 		////#< Compounds
 		////#> EvalFreeze
 		//// --------------------- Extension: EvalFreeze ---------------------
 		//Freeze:
 		//    'freeze' '{'
-		//    names+=(FreezeStatement)+
+		//    (names+=FreezeStatement ';')+ (names+=FreezeStatement)?
 		//    '}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?
 		//    ;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//'freeze' '{'
-		//names+=(FreezeStatement)+
+		//(names+=FreezeStatement ';')+ (names+=FreezeStatement)?
 		//'}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?
 		public Group getGroup() { return cGroup; }
 		
@@ -1490,94 +1494,96 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 		//'{'
 		public Keyword getLeftCurlyBracketKeyword_1() { return cLeftCurlyBracketKeyword_1; }
 		
-		//names+=(FreezeStatement)+
-		public Assignment getNamesAssignment_2() { return cNamesAssignment_2; }
+		//(names+=FreezeStatement ';')+
+		public Group getGroup_2() { return cGroup_2; }
 		
-		//(FreezeStatement)
-		public RuleCall getNamesFreezeStatementParserRuleCall_2_0() { return cNamesFreezeStatementParserRuleCall_2_0; }
+		//names+=FreezeStatement
+		public Assignment getNamesAssignment_2_0() { return cNamesAssignment_2_0; }
+		
+		//FreezeStatement
+		public RuleCall getNamesFreezeStatementParserRuleCall_2_0_0() { return cNamesFreezeStatementParserRuleCall_2_0_0; }
+		
+		//';'
+		public Keyword getSemicolonKeyword_2_1() { return cSemicolonKeyword_2_1; }
+		
+		//(names+=FreezeStatement)?
+		public Assignment getNamesAssignment_3() { return cNamesAssignment_3; }
+		
+		//FreezeStatement
+		public RuleCall getNamesFreezeStatementParserRuleCall_3_0() { return cNamesFreezeStatementParserRuleCall_3_0; }
 		
 		//'}'
-		public Keyword getRightCurlyBracketKeyword_3() { return cRightCurlyBracketKeyword_3; }
+		public Keyword getRightCurlyBracketKeyword_4() { return cRightCurlyBracketKeyword_4; }
 		
 		//('but' '(' id=Identifier '|' ex=LogicalExpression ')')?
-		public Group getGroup_4() { return cGroup_4; }
+		public Group getGroup_5() { return cGroup_5; }
 		
 		//'but'
-		public Keyword getButKeyword_4_0() { return cButKeyword_4_0; }
+		public Keyword getButKeyword_5_0() { return cButKeyword_5_0; }
 		
 		//'('
-		public Keyword getLeftParenthesisKeyword_4_1() { return cLeftParenthesisKeyword_4_1; }
+		public Keyword getLeftParenthesisKeyword_5_1() { return cLeftParenthesisKeyword_5_1; }
 		
 		//id=Identifier
-		public Assignment getIdAssignment_4_2() { return cIdAssignment_4_2; }
+		public Assignment getIdAssignment_5_2() { return cIdAssignment_5_2; }
 		
 		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_4_2_0() { return cIdIdentifierParserRuleCall_4_2_0; }
+		public RuleCall getIdIdentifierParserRuleCall_5_2_0() { return cIdIdentifierParserRuleCall_5_2_0; }
 		
 		//'|'
-		public Keyword getVerticalLineKeyword_4_3() { return cVerticalLineKeyword_4_3; }
+		public Keyword getVerticalLineKeyword_5_3() { return cVerticalLineKeyword_5_3; }
 		
 		//ex=LogicalExpression
-		public Assignment getExAssignment_4_4() { return cExAssignment_4_4; }
+		public Assignment getExAssignment_5_4() { return cExAssignment_5_4; }
 		
 		//LogicalExpression
-		public RuleCall getExLogicalExpressionParserRuleCall_4_4_0() { return cExLogicalExpressionParserRuleCall_4_4_0; }
+		public RuleCall getExLogicalExpressionParserRuleCall_5_4_0() { return cExLogicalExpressionParserRuleCall_5_4_0; }
 		
 		//')'
-		public Keyword getRightParenthesisKeyword_4_5() { return cRightParenthesisKeyword_4_5; }
+		public Keyword getRightParenthesisKeyword_5_5() { return cRightParenthesisKeyword_5_5; }
 		
 		//';'?
-		public Keyword getSemicolonKeyword_5() { return cSemicolonKeyword_5; }
+		public Keyword getSemicolonKeyword_6() { return cSemicolonKeyword_6; }
 	}
 	public class FreezeStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.FreezeStatement");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
-		private final Assignment cDotAssignment_0_0 = (Assignment)cAlternatives_0.eContents().get(0);
-		private final Keyword cDotFullStopKeyword_0_0_0 = (Keyword)cDotAssignment_0_0.eContents().get(0);
-		private final Group cGroup_0_1 = (Group)cAlternatives_0.eContents().get(1);
-		private final Assignment cNameAssignment_0_1_0 = (Assignment)cGroup_0_1.eContents().get(0);
-		private final RuleCall cNameQualifiedNameParserRuleCall_0_1_0_0 = (RuleCall)cNameAssignment_0_1_0.eContents().get(0);
-		private final Assignment cAccessAssignment_0_1_1 = (Assignment)cGroup_0_1.eContents().get(1);
-		private final RuleCall cAccessAccessNameParserRuleCall_0_1_1_0 = (RuleCall)cAccessAssignment_0_1_1.eContents().get(0);
-		private final Keyword cSemicolonKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final Assignment cDotAssignment_0 = (Assignment)cAlternatives.eContents().get(0);
+		private final Keyword cDotFullStopKeyword_0_0 = (Keyword)cDotAssignment_0.eContents().get(0);
+		private final Group cGroup_1 = (Group)cAlternatives.eContents().get(1);
+		private final Assignment cNameAssignment_1_0 = (Assignment)cGroup_1.eContents().get(0);
+		private final RuleCall cNameQualifiedNameParserRuleCall_1_0_0 = (RuleCall)cNameAssignment_1_0.eContents().get(0);
+		private final Assignment cAccessAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
+		private final RuleCall cAccessAccessNameParserRuleCall_1_1_0 = (RuleCall)cAccessAssignment_1_1.eContents().get(0);
 		
 		//FreezeStatement:
 		//    (dot='.' | (name=QualifiedName access=AccessName?))
-		//    ';'
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//(dot='.' | (name=QualifiedName access=AccessName?))
-		//';'
-		public Group getGroup() { return cGroup; }
-		
-		//(dot='.' | (name=QualifiedName access=AccessName?))
-		public Alternatives getAlternatives_0() { return cAlternatives_0; }
+		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//dot='.'
-		public Assignment getDotAssignment_0_0() { return cDotAssignment_0_0; }
+		public Assignment getDotAssignment_0() { return cDotAssignment_0; }
 		
 		//'.'
-		public Keyword getDotFullStopKeyword_0_0_0() { return cDotFullStopKeyword_0_0_0; }
+		public Keyword getDotFullStopKeyword_0_0() { return cDotFullStopKeyword_0_0; }
 		
 		//(name=QualifiedName access=AccessName?)
-		public Group getGroup_0_1() { return cGroup_0_1; }
+		public Group getGroup_1() { return cGroup_1; }
 		
 		//name=QualifiedName
-		public Assignment getNameAssignment_0_1_0() { return cNameAssignment_0_1_0; }
+		public Assignment getNameAssignment_1_0() { return cNameAssignment_1_0; }
 		
 		//QualifiedName
-		public RuleCall getNameQualifiedNameParserRuleCall_0_1_0_0() { return cNameQualifiedNameParserRuleCall_0_1_0_0; }
+		public RuleCall getNameQualifiedNameParserRuleCall_1_0_0() { return cNameQualifiedNameParserRuleCall_1_0_0; }
 		
 		//access=AccessName?
-		public Assignment getAccessAssignment_0_1_1() { return cAccessAssignment_0_1_1; }
+		public Assignment getAccessAssignment_1_1() { return cAccessAssignment_1_1; }
 		
 		//AccessName
-		public RuleCall getAccessAccessNameParserRuleCall_0_1_1_0() { return cAccessAccessNameParserRuleCall_0_1_1_0; }
-		
-		//';'
-		public Keyword getSemicolonKeyword_1() { return cSemicolonKeyword_1; }
+		public RuleCall getAccessAccessNameParserRuleCall_1_1_0() { return cAccessAccessNameParserRuleCall_1_1_0; }
 	}
 	public class EvalElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "de.uni_hildesheim.sse.Ivml.Eval");
@@ -4459,7 +4465,7 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 	//// --------------------- Extension: EvalFreeze ---------------------
 	//Freeze:
 	//    'freeze' '{'
-	//    names+=(FreezeStatement)+
+	//    (names+=FreezeStatement ';')+ (names+=FreezeStatement)?
 	//    '}' ('but' '(' id=Identifier '|' ex=LogicalExpression ')')? ';'?
 	//    ;
 	public FreezeElements getFreezeAccess() {
@@ -4472,7 +4478,6 @@ public class IvmlGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 	
 	//FreezeStatement:
 	//    (dot='.' | (name=QualifiedName access=AccessName?))
-	//    ';'
 	//;
 	public FreezeStatementElements getFreezeStatementAccess() {
 		return pFreezeStatement;

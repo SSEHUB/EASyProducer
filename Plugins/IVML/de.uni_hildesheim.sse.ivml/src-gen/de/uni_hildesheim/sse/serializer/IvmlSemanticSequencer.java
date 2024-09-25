@@ -782,7 +782,7 @@ public class IvmlSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     Freeze returns Freeze
 	 *
 	 * Constraint:
-	 *     (names+=FreezeStatement+ (id=Identifier ex=LogicalExpression)?)
+	 *     (names+=FreezeStatement+ names+=FreezeStatement? (id=Identifier ex=LogicalExpression)?)
 	 * </pre>
 	 */
 	protected void sequence_Freeze(ISerializationContext context, Freeze semanticObject) {

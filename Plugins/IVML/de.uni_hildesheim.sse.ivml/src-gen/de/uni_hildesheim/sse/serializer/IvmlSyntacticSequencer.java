@@ -23,7 +23,7 @@ public class IvmlSyntacticSequencer extends AbstractSyntacticSequencer {
 	protected AbstractElementAlias match_AttrAssignment_SemicolonKeyword_9_q;
 	protected AbstractElementAlias match_Eval_SemicolonKeyword_6_q;
 	protected AbstractElementAlias match_ExpressionListOrRange_CommaKeyword_2_q;
-	protected AbstractElementAlias match_Freeze_SemicolonKeyword_5_q;
+	protected AbstractElementAlias match_Freeze_SemicolonKeyword_6_q;
 	protected AbstractElementAlias match_ImportStmt_ImportKeyword_0_0_q;
 	protected AbstractElementAlias match_InterfaceDeclaration_SemicolonKeyword_5_q;
 	protected AbstractElementAlias match_Project_SemicolonKeyword_9_q;
@@ -35,7 +35,7 @@ public class IvmlSyntacticSequencer extends AbstractSyntacticSequencer {
 		match_AttrAssignment_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getAttrAssignmentAccess().getSemicolonKeyword_9());
 		match_Eval_SemicolonKeyword_6_q = new TokenAlias(false, true, grammarAccess.getEvalAccess().getSemicolonKeyword_6());
 		match_ExpressionListOrRange_CommaKeyword_2_q = new TokenAlias(false, true, grammarAccess.getExpressionListOrRangeAccess().getCommaKeyword_2());
-		match_Freeze_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getFreezeAccess().getSemicolonKeyword_5());
+		match_Freeze_SemicolonKeyword_6_q = new TokenAlias(false, true, grammarAccess.getFreezeAccess().getSemicolonKeyword_6());
 		match_ImportStmt_ImportKeyword_0_0_q = new TokenAlias(false, true, grammarAccess.getImportStmtAccess().getImportKeyword_0_0());
 		match_InterfaceDeclaration_SemicolonKeyword_5_q = new TokenAlias(false, true, grammarAccess.getInterfaceDeclarationAccess().getSemicolonKeyword_5());
 		match_Project_SemicolonKeyword_9_q = new TokenAlias(false, true, grammarAccess.getProjectAccess().getSemicolonKeyword_9());
@@ -60,8 +60,8 @@ public class IvmlSyntacticSequencer extends AbstractSyntacticSequencer {
 				emit_Eval_SemicolonKeyword_6_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_ExpressionListOrRange_CommaKeyword_2_q.equals(syntax))
 				emit_ExpressionListOrRange_CommaKeyword_2_q(semanticObject, getLastNavigableState(), syntaxNodes);
-			else if (match_Freeze_SemicolonKeyword_5_q.equals(syntax))
-				emit_Freeze_SemicolonKeyword_5_q(semanticObject, getLastNavigableState(), syntaxNodes);
+			else if (match_Freeze_SemicolonKeyword_6_q.equals(syntax))
+				emit_Freeze_SemicolonKeyword_6_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_ImportStmt_ImportKeyword_0_0_q.equals(syntax))
 				emit_ImportStmt_ImportKeyword_0_0_q(semanticObject, getLastNavigableState(), syntaxNodes);
 			else if (match_InterfaceDeclaration_SemicolonKeyword_5_q.equals(syntax))
@@ -127,11 +127,12 @@ public class IvmlSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *
 	 * This ambiguous syntax occurs at:
 	 *     ex=LogicalExpression ')' (ambiguity) (rule end)
+	 *     names+=FreezeStatement ';' '}' (ambiguity) (rule end)
 	 *     names+=FreezeStatement '}' (ambiguity) (rule end)
 	 
 	 * </pre>
 	 */
-	protected void emit_Freeze_SemicolonKeyword_5_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
+	protected void emit_Freeze_SemicolonKeyword_6_q(EObject semanticObject, ISynNavigable transition, List<INode> nodes) {
 		acceptNodes(transition, nodes);
 	}
 	
