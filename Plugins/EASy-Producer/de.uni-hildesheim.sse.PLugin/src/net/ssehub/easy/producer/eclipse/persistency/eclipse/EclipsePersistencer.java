@@ -41,6 +41,7 @@ import net.ssehub.easy.varModel.persistency.IVMLWriter;
  * @author El-Sharkawy
  */
 public class EclipsePersistencer implements IPersistencer {
+    
     //TODO Use ResourcesMgmt here
     public static final File WORKSPACE_FOLDER;
     
@@ -263,6 +264,16 @@ public class EclipsePersistencer implements IPersistencer {
     @Override
     public File getProjectFolder() {
         return projectFolder;
+    }
+
+    @Override
+    public File getEasyConfigFile() {
+        return persistencer.getEasyConfigFile();
+    }
+
+    @Override
+    public void setStorageFolder(File folder) {
+        persistencer.setStorageFolder(folder);
     }
 
 }

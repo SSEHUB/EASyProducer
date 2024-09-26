@@ -54,13 +54,21 @@ public class DataStorage implements StorageConnector {
     }
 
     /**
+     * Returns the location/file name of the EASy config file.
+     * 
+     * @return the location
+     */
+    public String getEasyConfigFile() {
+        return location + File.separator + PersistenceConstants.CONFIG_FILE;
+    }
+
+    /**
      * Creates and returns a specific storage-connector.
      */
     public void createConnector() {
         switch (type) {
         case XML:
-            final String config = location + File.separator + PersistenceConstants.CONFIG_FILE; 
-            connector = new XmlConnector(config, pathEnv);
+            connector = new XmlConnector(getEasyConfigFile(), pathEnv);
             break;
         default:
             connector = null;

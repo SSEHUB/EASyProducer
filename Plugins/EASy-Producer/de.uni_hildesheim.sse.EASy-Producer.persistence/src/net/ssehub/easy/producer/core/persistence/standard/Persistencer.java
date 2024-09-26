@@ -63,6 +63,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(Persistencer.class,
         Activator.PLUGIN_ID);
     
+    private PathEnvironment pathEnv;
     private DataStorage storage;
     private ProgressObserver observer;
     private File projectFolder;
@@ -77,13 +78,29 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
      */
     public Persistencer(PathEnvironment pathEnv, File projectFolder, String storageFile, ProgressObserver observer) {
         this.projectFolder = projectFolder;
+        this.pathEnv = pathEnv;
         storage = new DataStorage(StorageType.XML, storageFile, pathEnv);
         this.observer = null == observer ? ProgressObserver.NO_OBSERVER : observer;
     }
+    
+    /**
+     * Sets the storage folder.
+     * 
+     * @param folder the new storage folder
+     */
+    public void setStorageFolder(File folder) {
+        storage = new DataStorage(StorageType.XML, folder.getAbsolutePath(), pathEnv);
+    }
+
 
     @Override
     public File getProjectFolder() {
         return projectFolder;
+    }
+
+    @Override
+    public File getEasyConfigFile() {
+        return new File(storage.getEasyConfigFile());
     }
 
     /**

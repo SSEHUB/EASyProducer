@@ -218,7 +218,10 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * Reloads all models (variability model(s), build script(s), template(s)) and refreshes loaded files and folders.
      */
     public void refresh() {
-        //TODO SE: Force refresh.
+        Configuration cfg = getConfiguration();
+        if (null != cfg) {
+            cfg.refresh();
+        }
     }
     
     /**
@@ -296,11 +299,11 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     
     /**
      * Returns the configuration for the ivml variability model of this plp.
-     * @return the configuration for the ivml project.
+     * @return the configuration for the ivml project, may be <b>null</b>.
      * @see #getProject()
      */
     public Configuration getConfiguration() {
-        return varModel.getConfiguration();
+        return null == varModel ? null : varModel.getConfiguration();
     }
     
     /**
@@ -400,6 +403,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
         if (changed) {
             createMainRule();
         }
+        refresh();
         
         return changed;
     }

@@ -126,7 +126,6 @@ public class GenericProductLineProject extends PLPInfo {
         
         //Refresh
         refresh();
-        getConfiguration().refresh();
         configurationPulled();
     }
 

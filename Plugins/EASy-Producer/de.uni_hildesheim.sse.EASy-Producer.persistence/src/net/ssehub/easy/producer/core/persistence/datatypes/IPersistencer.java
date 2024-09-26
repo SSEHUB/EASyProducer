@@ -54,6 +54,13 @@ public interface IPersistencer {
     public File getProjectFolder();
     
     /**
+     * Returns the EASy config file.
+     * 
+     * @return the EASy config file
+     */
+    public File getEasyConfigFile();
+    
+    /**
      * Updates the models in the given project.
      * 
      * @throws PersistenceException if errors during the update occur
@@ -66,4 +73,12 @@ public interface IPersistencer {
      * @return the path environment
      */
     public PathEnvironment getPathEnvironment();
+    
+    /**
+     * Sets the storage folder.
+     * 
+     * @param folder the new storage folder
+     */
+    public void setStorageFolder(File folder);
+    
 }

@@ -56,6 +56,38 @@ public class EASyPersistencer implements PersistenceConstants {
     protected EASyPersistencer(IPersistencer persistencer) {
         this.persistencer = persistencer;
     }
+    
+    public void refreshConfiguration() {
+        File ivmlFolder = PersistenceUtils.getLocationFile(getProjectFolder(), PathKind.IVML);
+        persistencer.setStorageFolder(ivmlFolder);
+    }
+    
+    /**
+     * Returns the path environment.
+     * 
+     * @return the environment
+     */
+    public PathEnvironment getPathEnvironment() {
+        return persistencer.getPathEnvironment();
+    }
+    
+    /**
+     * Returns the project folder.
+     * 
+     * @return the folder
+     */
+    public File getProjectFolder() {
+        return persistencer.getProjectFolder();
+    }
+    
+    /**
+     * Returns the EASy config file.
+     * 
+     * @return the EASy config file
+     */
+    public File getEasyConfigFile() {
+        return persistencer.getEasyConfigFile();
+    }
 
     /**
      * Reads the persistent data and transforms them into a product line project.

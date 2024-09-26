@@ -37,7 +37,7 @@ public class Configuration {
     
     public static final Configuration DEFAULT = new Configuration();
     
-    static final String TOP_LEVEL_CONFIG_NAME = ".EASyProducer";
+    public static final String TOP_LEVEL_CONFIG_NAME = ".EASyProducer";
     
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(Configuration.class, 
         Activator.PLUGIN_ID);
