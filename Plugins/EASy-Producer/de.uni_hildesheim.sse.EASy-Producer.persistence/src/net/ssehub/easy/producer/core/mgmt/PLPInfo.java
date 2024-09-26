@@ -218,10 +218,6 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * Reloads all models (variability model(s), build script(s), template(s)) and refreshes loaded files and folders.
      */
     public void refresh() {
-        Configuration cfg = getConfiguration();
-        if (null != cfg) {
-            cfg.refresh();
-        }
     }
     
     /**

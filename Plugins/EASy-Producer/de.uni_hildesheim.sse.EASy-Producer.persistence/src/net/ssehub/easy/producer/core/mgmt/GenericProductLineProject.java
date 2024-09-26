@@ -126,6 +126,7 @@ public class GenericProductLineProject extends PLPInfo {
         
         //Refresh
         refresh();
+        getConfiguration().refresh(); // causes test interaction when called in refresh()
         configurationPulled();
     }
 
