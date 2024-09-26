@@ -119,7 +119,9 @@ public class CommandLineExecuter {
             } else if (null != args && args.length == 1) {
                 switch(args[0]) {
                 case "showFlavours":
-                    System.out.println("Available flavours: " + ProjectCreationFlavour.getFlavourNames());
+                    System.out.println("Available flavours:");
+                    ProjectCreationFlavour.forEach(
+                        f -> System.out.println(" - " + f.getName() + ": " + f.getDescription()));
                     break;
                 default:
                     break;
@@ -323,12 +325,14 @@ public class CommandLineExecuter {
             } else {
                 project.mkdirs();
             }
+            List<ProjectCreationFlavour> flavours = ProjectCreationFlavour.getFlavours(
+                Arrays.copyOfRange(args, 1, args.length));
             EASyPersistencer persistencer = new EASyPersistencer(project);
+            ProjectCreationFlavour.forEach(flavours, f -> f.configure(persistencer));
             IProjectCreationResult result = persistencer.createProject(project.getName(), 
                 project.getParentFile(), null, true);
             persistencer.populateEasyProject(result);
-            ProjectCreationFlavour.apply(ProjectCreationFlavour.getFlavours(
-                Arrays.copyOfRange(args, 1, args.length)), project);
+            ProjectCreationFlavour.forEach(flavours, f -> f.apply(project));
         } catch (PersistenceException e) {
             LOGGER.error("Creating PLP failed: " + e.getMessage());
             cmdResult = CmdConstants.SYSTEM_PERSISTENCE_EXC;

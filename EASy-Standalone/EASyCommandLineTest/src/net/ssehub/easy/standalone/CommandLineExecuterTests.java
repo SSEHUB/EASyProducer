@@ -17,6 +17,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.ssehub.easy.producer.core.persistence.Configuration;
 import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
 import net.ssehub.easy.standalone.cmd.CmdConstants;
 
@@ -327,15 +328,15 @@ public class CommandLineExecuterTests {
         Assert.assertTrue(new File(trg, PersistenceConstants.EASY_FILES_DEFAULT + "/" 
             + PersistenceConstants.CONFIG_FILE).exists());
 
-        trg = new File(AllTests.ELEVATOR_DIR, "New_CreatedJ");
-        FileUtils.deleteQuietly(trg);
-
         executer = new ProcessExecuter(MAIN_CLASS + " showFlavours", false);
         errMsg = executer.execute();
         executer.waitFor();
         if (null != errMsg) {
             Assert.fail(errMsg);
         }
+
+        trg = new File(AllTests.ELEVATOR_DIR, "New_CreatedJ");
+        FileUtils.deleteQuietly(trg);
 
         executer = new ProcessExecuter(MAIN_CLASS + " createPLP " + trg.getCanonicalPath() + " java", false);
         errMsg = executer.execute();
@@ -349,6 +350,25 @@ public class CommandLineExecuterTests {
             + PersistenceConstants.CONFIG_FILE).exists());
         Assert.assertTrue(new File(trg, "src").exists());
         Assert.assertTrue(new File(trg, "bin").exists());
+
+        trg = new File(AllTests.ELEVATOR_DIR, "New_CreatedM");
+        FileUtils.deleteQuietly(trg);
+        
+        executer = new ProcessExecuter(MAIN_CLASS + " createPLP " + trg.getCanonicalPath() + " mvn", false);
+        errMsg = executer.execute();
+        executer.waitFor();
+        if (null != errMsg) {
+            Assert.fail(errMsg);
+        }
+
+        Assert.assertTrue(trg.exists());
+        Assert.assertTrue(new File(trg, "src/main/EASy").exists());
+        Assert.assertTrue(new File(trg, "src/main/EASy/" + PersistenceConstants.CONFIG_FILE).exists());
+        Assert.assertTrue(new File(trg, "src/main/java").exists());
+        Assert.assertTrue(new File(trg, "src/test/EASy").exists());
+        Assert.assertTrue(new File(trg, "src/test/java").exists());
+        Assert.assertTrue(new File(trg, "target").exists());
+        Assert.assertTrue(new File(trg, Configuration.TOP_LEVEL_CONFIG_NAME).exists());
     }
     
 }

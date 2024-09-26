@@ -21,7 +21,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
+
+import net.ssehub.easy.producer.core.persistence.Configuration;
+import net.ssehub.easy.producer.core.persistence.EASyPersistencer;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
+import net.ssehub.easy.producer.core.persistence.Configuration.PathKind;
 
 /**
  * Project creation flavours. The mechanism around IEASyProjectConfigurator cannot be applied
@@ -45,14 +50,14 @@ public abstract class ProjectCreationFlavour {
     }
     
     /**
-     * Returns the sorted list of all flavor names.
+     * Applies {@code consumer} to a name-sorted list of all flavor names.
      * 
-     * @return the flavour names
+     * @param consumer the consumer
      */
-    public static String getFlavourNames() {
-        List<String> fl = new ArrayList<>(flavours.keySet());
-        Collections.sort(fl);
-        return fl.stream().collect(Collectors.joining(", "));
+    public static void forEach(Consumer<ProjectCreationFlavour> consumer) {
+        List<ProjectCreationFlavour> fl = new ArrayList<>(flavours.values());
+        Collections.sort(fl, (f1, f2) -> f1.getName().compareTo(f2.getName()));
+        fl.stream().forEach(consumer);
     }
     
     /**
@@ -81,17 +86,15 @@ public abstract class ProjectCreationFlavour {
         }
         return flavours;
     }
-    
+
     /**
-     * Applies all {@code flavours} to {@code projectFolder}.
+     * Applies {@code consumer} to all {@code flavours}.
      * 
      * @param flavours the flavours
-     * @param projectFolder the folder
+     * @param consumer the consumer
      */
-    public static void apply(List<ProjectCreationFlavour> flavours, File projectFolder) {
-        for (ProjectCreationFlavour f : flavours) {
-            f.apply(projectFolder);
-        }
+    public static void forEach(List<ProjectCreationFlavour> flavours, Consumer<ProjectCreationFlavour> consumer) {
+        flavours.stream().forEach(consumer);
     }
     
     /**
@@ -100,6 +103,13 @@ public abstract class ProjectCreationFlavour {
      * @return the name
      */
     public abstract String getName();
+    
+    /**
+     * Returns a short description.
+     * 
+     * @return the description
+     */
+    public abstract String getDescription();
 
     /**
      * Applies the flavour.
@@ -107,6 +117,14 @@ public abstract class ProjectCreationFlavour {
      * @param projectFolder the folder to apply the flavour
      */
     public abstract void apply(File projectFolder);
+    
+    /**
+     * Configures the given persistencer for application.
+     * +
+     * @param persistencer the persistencer
+     */
+    public void configure(EASyPersistencer persistencer) {
+    }
     
     static {
         registerFlavour(new ProjectCreationFlavour() {
@@ -117,10 +135,53 @@ public abstract class ProjectCreationFlavour {
             }
             
             @Override
+            public String getDescription() {
+                return "Classical src/bin setup";
+            }
+            
+            @Override
             public void apply(File projectFolder) {
                 new File(projectFolder, "src").mkdirs();
                 new File(projectFolder, "bin").mkdirs();
             }
+            
+        });
+        
+        registerFlavour(new ProjectCreationFlavour() {
+            
+            private static final String MAIN = "src/main/EASy";
+            private static final String TEST = "src/test/EASy";
+            
+            @Override
+            public String getName() {
+                return "mvn";
+            }
+
+            @Override
+            public String getDescription() {
+                return "Classical Java/Maven setup";
+            }
+
+            @Override
+            public void apply(File projectFolder) {
+                new File(projectFolder, MAIN).mkdirs();
+                new File(projectFolder, "src/main/java").mkdirs();
+                new File(projectFolder, TEST).mkdirs();
+                new File(projectFolder, "src/test/java").mkdirs();
+                new File(projectFolder, "target").mkdirs();
+            }
+
+            @Override
+            public void configure(EASyPersistencer persistencer) {
+                Configuration cfg = PersistenceUtils.getConfiguration(persistencer.getProjectFolder());
+                String path = MAIN + "/" + File.pathSeparator + TEST + "/";
+                cfg.setPathDirect(PathKind.IVML, path);
+                cfg.setPathDirect(PathKind.VIL, path);
+                cfg.setPathDirect(PathKind.VTL, path);
+                cfg.store();
+                persistencer.refreshConfiguration();
+            }
+
         });
     }
     
