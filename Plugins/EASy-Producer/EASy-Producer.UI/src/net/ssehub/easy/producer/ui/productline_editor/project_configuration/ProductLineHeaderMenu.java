@@ -15,14 +15,6 @@
  */
 package net.ssehub.easy.producer.ui.productline_editor.project_configuration;
 
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,30 +22,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.InvalidProjectnameException;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.ProjectAlreadyExistsException;
-import net.ssehub.easy.producer.eclipse.persistency.project_creation.ProjectCreator;
 import net.ssehub.easy.producer.ui.contributions.Contributions;
 import net.ssehub.easy.producer.ui.contributions.Contributions.UIElement;
-import net.ssehub.easy.producer.ui.core.GUIUtils;
-import net.ssehub.easy.producer.ui.core.reasoning.AbstractReasonerListener;
-import net.ssehub.easy.producer.ui.internal.Activator;
 import net.ssehub.easy.producer.ui.productline_editor.AbstractEASyEditorPage;
 import net.ssehub.easy.producer.ui.productline_editor.AbstractHeaderMenu;
-import net.ssehub.easy.producer.ui.productline_editor.EasyProducerDialog;
-import net.ssehub.easy.producer.ui.productline_editor.predecessorSelection.PredecessorSelectionDialog;
-import net.ssehub.easy.producer.ui.project_management.EASyJavaConfigurator;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
-import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
-import net.ssehub.easy.reasoning.core.reasoner.ReasoningResult;
-import net.ssehub.easy.varModel.validation.IvmlIdentifierCheck;
 
 /**
  * Header menu holding buttons for product line editor page.<br>
@@ -77,77 +54,11 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
     private static final Image IMG_DERIVE = PlatformUI.getWorkbench().getSharedImages()
         .getImage(ISharedImages.IMG_TOOL_COPY);
     
-    private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ProductLineHeaderMenu.class,
-        Activator.PLUGIN_ID);
-    
     private Button btnValidateProductline;
     private Button btnPullConfiguration;
     private Button btnManagePredecessors;
     private Button btnCreateMember;
     private AbstractEASyEditorPage relatedEditor;
-    
- 
-    /**
-     * Input Validation class for the product creation dialog.
-     * 
-     * @author El-Sharkawy
-     * 
-     */
-    private class InputValidator implements IInputValidator {
-        
-        @Override
-        public String isValid(String projectname) {
-            String result = null;
-            
-            if (projectname == null || projectname.isEmpty()) {
-                result = "Project name cannot be null!";
-            } else {
-                try {
-                    boolean projectnameExists =
-                        ResourcesPlugin.getWorkspace().getRoot().getProject(projectname).exists();
-                    URI workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getRawLocationURI();
-                    File folder = new File(workspaceLocation);
-                    folder = new File(folder, projectname);
-                    boolean folderExists = folder.exists();
-                    
-                    if (!IvmlIdentifierCheck.isValidIdentifier(projectname)) {
-                        result = "Invalid project name";
-                    } else if (projectnameExists) {
-                        result = "Project already exists";
-                    } else if (folderExists) {
-                        result = "A (hidden) folder with the specified name exists in workspace";
-                    }
-                } catch (IllegalArgumentException exc) {
-                    result = "Invalid project name";
-                }
-            }
-            return result;
-        }
-    }
-    
-    /**
-     * <code>IReasonerListener</code> for validating the variability model (perform satisfiability check).
-     * @author El-Sharkawy
-     *
-     */
-    private class ValidationListener extends AbstractReasonerListener {
-        @Override
-        public void endReasoning(ReasoningResult result) {
-            if (result.reasoningUnsupported()) {
-                EasyProducerDialog.showErrorDialog(getParent().getShell(),
-                        "Currently installed reasoners are not able to handle the "
-                                + "desired reasoning operation");
-            } else if (result.hasConflict()) {
-                Message[] errorMessages = new Message[result.getMessageCount()];
-                for (int i = 0; i < errorMessages.length; i++) {
-                    errorMessages[i] = result.getMessage(i);
-                }
-                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
-            } else {
-                EasyProducerDialog.showInfoDialog(getParent().getShell(), "No conflicts detected");
-            }
-        }
-    }
 
     /**
      * Sole constructor for this class.
@@ -201,7 +112,8 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
 
             @Override
             public void widgetSelected(SelectionEvent event) {
-                getProductLineProject().reason(ReasoningOperation.CONSITENCY_CHECK, new ValidationListener());
+                ProductLineCommands.validateProductLine(ReasoningOperation.CONSITENCY_CHECK, 
+                    getShell(), getProductLineProject());
             }
         });
     }
@@ -212,20 +124,10 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
     private void createPredecessorListener() {
         btnManagePredecessors.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                displayCreateAddPredecessorDialog();
+                ProductLineCommands.modifyPredecessors(getShell(), getProductLineProject());
+                revalidateButtons();
             }
         });
-    }
-
-    /**
-     * Creates a Dialog for choosing new predecessors.
-     */
-    private void displayCreateAddPredecessorDialog() {
-        PredecessorSelectionDialog selectiondlg = new PredecessorSelectionDialog(getShell(), SWT.TITLE | SWT.BORDER
-                | SWT.APPLICATION_MODAL, getProductLineProject().getProjectID());
-        ArrayList<String> newPredecessors = selectiondlg.open();
-        getProductLineProject().setPredecessors(newPredecessors);
-        revalidateButtons();
     }
 
     /**
@@ -234,7 +136,7 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
     private void createPullListener() {
         btnPullConfiguration.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                getProductLineProject().pullConfigFromPredecessors();
+                ProductLineCommands.pullConfigurationFromPredecessors(getShell(), getProductLineProject());
                 relatedEditor.refresh();
             }
         });
@@ -246,38 +148,9 @@ public class ProductLineHeaderMenu extends AbstractHeaderMenu {
     private void createDeriveListener() {
         btnCreateMember.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(SelectionEvent event) {
-                try {
-                    displayCreateProductDialog();
-                } catch (InvalidProjectnameException e) {
-                    LOGGER.exception(e);
-                }
+                ProductLineCommands.createProductLineMember(getShell(), getProductLineProject());
             }
         });
-    }
-
-    /**
-     * Displays the dialog for creating a new product.
-     * @throws InvalidProjectnameException 
-     */
-    private void displayCreateProductDialog() throws InvalidProjectnameException {
-
-        InputDialog dia = new InputDialog(getShell(), "Create a new Product Line Member",
-            "Please enter the name of your new Product Line Member:", "New_Product", new InputValidator());
-        dia.open();
-        if (Window.OK == dia.getReturnCode()) {
-            try {
-                ProjectCreator pc = new ProjectCreator(dia.getValue());
-                ProductLineProject newPLP = pc.deriveNewMember(getProductLineProject().getProjectID(),
-                    new EASyJavaConfigurator());
-                try {
-                    GUIUtils.openProductLineEditor(newPLP);
-                } catch (PartInitException e) {
-                    LOGGER.exception(e);
-                }
-            } catch (ProjectAlreadyExistsException e) {
-                // Could not occur, because of the IInputValidator.isValid method.
-            }
-        }
     }
     
     @Override

@@ -62,9 +62,10 @@ public class VilExecutionThread implements Runnable {
     /**
      * Creates a VIL executor for the contained PLP.
      * 
+     * @param forceSelfInstantiate whether a self-insantiation shall be carried out forcibly
      * @return the created executor
      */
-    protected Executor createExecutor() {
+    protected Executor createExecutor(boolean forceSelfInstantiate) {
         // command line test compliance
         boolean selfFront = Boolean.valueOf(System.getProperty("easy.instantiate.selfFront", "false"));
         ProjectDescriptor me = new ProjectDescriptor(plp);
@@ -72,7 +73,7 @@ public class VilExecutionThread implements Runnable {
             .addTarget(me)
             .addConfiguration(plp.getConfiguration());
         int predCount = plp.getMemberController().getPredecessorsCount();
-        if (0 == predCount) {
+        if (0 == predCount || forceSelfInstantiate) {
             // no predecessors - assume self-instantiation
             executor.addSource(me);
         } else {
@@ -114,7 +115,7 @@ public class VilExecutionThread implements Runnable {
             listeners.remove(listener);
         }
     }
-    
+
     /**
      * Starts the execution of the underlying VIL script ({@link PLPInfo#getBuildScript()}) in an own thread. 
      * @param observer The observer to inform about the current progress (in case of <code>null</code>
@@ -125,10 +126,24 @@ public class VilExecutionThread implements Runnable {
      * @see #abortInstantiation()
      */
     public void startInstantiation(ProgressObserver observer, boolean waitFor) {
+        startInstantiation(observer, waitFor, false);
+    }
+    
+    /**
+     * Starts the execution of the underlying VIL script ({@link PLPInfo#getBuildScript()}) in an own thread. 
+     * @param observer The observer to inform about the current progress (in case of <code>null</code>
+     * {@link ProgressObserver#NO_OBSERVER} will be used).
+     * @param waitFor <code>true</code> This method will wait until the script was processed completely (blocking 
+     *   method), <code>false</code> script will be processed in an asynchronous manner (usually used in an GUI 
+     *   environment).
+     * @param forceSelfInstantiate whether a self-insantiation shall be carried out forcibly
+     * @see #abortInstantiation()
+     */
+    public void startInstantiation(ProgressObserver observer, boolean waitFor, boolean forceSelfInstantiate) {
         if (null == executor) {
             successful = true;
             this.observer = (observer != null) ? observer : ProgressObserver.NO_OBSERVER;
-            executor = createExecutor();
+            executor = createExecutor(forceSelfInstantiate);
             Thread executionThread = new Thread(this);
             executionThread.start();
             if (waitFor) {

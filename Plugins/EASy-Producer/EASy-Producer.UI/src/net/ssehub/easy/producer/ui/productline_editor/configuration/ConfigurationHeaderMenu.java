@@ -16,8 +16,6 @@
 package net.ssehub.easy.producer.ui.productline_editor.configuration;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -29,28 +27,26 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
-import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.producer.core.mgmt.IProductLineProjectListener;
 import net.ssehub.easy.producer.core.mgmt.IVilExecutionListener;
 import net.ssehub.easy.producer.core.mgmt.PLPInfo;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
-import net.ssehub.easy.producer.eclipse.observer.EclipseProgressObserver;
 import net.ssehub.easy.producer.ui.confModel.GUIConfiguration;
 import net.ssehub.easy.producer.ui.confModel.GUIHistory;
 import net.ssehub.easy.producer.ui.confModel.GUIHistoryItem;
 import net.ssehub.easy.producer.ui.confModel.GUIVariable;
-import net.ssehub.easy.producer.ui.core.reasoning.AbstractReasonerListener;
 import net.ssehub.easy.producer.ui.productline_editor.AbstractEASyEditorPage;
 import net.ssehub.easy.producer.ui.productline_editor.EasyProducerDialog;
-import net.ssehub.easy.producer.ui.productline_editor.EclipseConsole;
+import net.ssehub.easy.producer.ui.productline_editor.project_configuration.ProductLineCommands;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
@@ -100,6 +96,26 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
     private Button btnPropagate;
     private AbstractEASyEditorPage parentPage;
 
+    private class BasicConfigListener extends ProductLineCommands.ValidationListener {
+
+        public BasicConfigListener(Shell shell) {
+            super(shell);
+        }
+
+        @Override
+        protected void onErrors(Message[] errorMessages) {
+            setErrorMessages(errorMessages);
+            super.onErrors(errorMessages);
+        }
+
+        @Override
+        protected boolean onWarnings(ReasoningResult result) {
+            ProductLineCommands.displayWarnings(getShell(), result);
+            return true;
+        }
+
+    }
+
     /**
      * {@link IReasonerListener} for validating the configuration. Tests whether the current configuration is valid and
      * opens a dialog presenting the result.
@@ -107,86 +123,66 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
      * @author El-Sharkawy
      * 
      */
-    private class ValidateConfigListener extends AbstractReasonerListener {
+    private class ValidateConfigListener extends BasicConfigListener {
+
+        public ValidateConfigListener(Shell shell) {
+            super(shell);
+        }
 
         @Override
         public void endReasoning(ReasoningResult result) {
             clearErrorMessages();
-            if (result.hasConflict()) {
-                Message[] errorMessages = new Message[result.getMessageCount()];
-                for (int i = 0; i < errorMessages.length; i++) {
-                    errorMessages[i] = result.getMessage(i);
-                }
-                setErrorMessages(errorMessages);
-                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
-            } else {
-                boolean hasWarnings = false;
-                for (int i = 0; i < result.getMessageCount() && !hasWarnings; i++) {
-                    hasWarnings |= result.getMessage(i).getStatus() == Status.WARNING;
-                }
-                if (hasWarnings) {
-                    displayWarnings(result);
-                } else {
-                    EasyProducerDialog.showInfoDialog(getParent().getShell(), "Everything is ok");
-                }
-            }
+            super.endReasoning(result);
         }
+
     }
 
     /**
      * {@link IReasonerListener} for propagating values.
      * 
      * @author El-Sharkawy
-     * 
      */
-    private class PropagateListener extends AbstractReasonerListener {
+    private class PropagateListener extends BasicConfigListener {
+
+        public PropagateListener(Shell shell) {
+            super(shell);
+        }
 
         @Override
-        public void endReasoning(ReasoningResult result) {
-            if (result.hasConflict()) {
-                Message[] errorMessages = new Message[result.getMessageCount()];
-                for (int i = 0; i < errorMessages.length; i++) {
-                    errorMessages[i] = result.getMessage(i);
-                }
-                setErrorMessages(errorMessages);
-                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
-            } else {
-                clearErrorMessages();
-                if (result.getMessageCount() > 0) {
-                    displayWarnings(result);
-                }
-                parentPage.refresh();
-            }
+        protected boolean onWarnings(ReasoningResult result) {
+            clearErrorMessages();
+            super.onWarnings(result);
+            parentPage.refresh();
+            return true;
         }
+
     }
 
     /**
      * {@link IReasonerListener}, for a reasoning which is executed automatically before freezing the configuration.
      * 
      * @author El-Sharkawy
-     * 
      */
-    private class ReasoningPreFreezeListener extends AbstractReasonerListener {
-        @Override
-        public void endReasoning(ReasoningResult result) {
-            if (result.hasConflict()) {
-                Message[] errorMessages = new Message[result.getMessageCount()];
-                for (int i = 0; i < errorMessages.length; i++) {
-                    errorMessages[i] = result.getMessage(i);
-                }
-                setErrorMessages(errorMessages);
-                EasyProducerDialog.showReasonerErrorDialog(getParent().getShell(), errorMessages);
-            } else {
-                clearErrorMessages();
-                if (result.getMessageCount() > 0) {
-                    displayWarnings(result);
-                }
-                getConfigContainer().getGuiConfig().freeze();
-                // TODO SE: check whether something changed.
-                parentPage.refresh();
-                parentPage.setDirty();
-            }
+    private class ReasoningPreFreezeListener extends BasicConfigListener {
+
+        public ReasoningPreFreezeListener(Shell shell) {
+            super(shell);
         }
+        
+        @Override
+        protected boolean onWarnings(ReasoningResult result) {
+            clearErrorMessages();
+            super.onWarnings(result);
+            if (result.getMessageCount() > 0) {
+                ProductLineCommands.displayWarnings(getShell(), result);
+            }
+            getConfigContainer().getGuiConfig().freeze();
+            // TODO SE: check whether something changed.
+            parentPage.refresh();
+            parentPage.setDirty();
+            return true;
+        }
+
     }
 
     /**
@@ -233,12 +229,8 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         btnPropagate.setImage(IMG_VALIDATE);
 
         // Add Listener
-        btnPropagate.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent event) {
-                createReasoningProgressObserver(ReasoningOperation.PROPAGATION, new PropagateListener());
-            }
-        });
+        btnPropagate.addSelectionListener(new ReasonerSelectionAdapter(ReasoningOperation.PROPAGATION, 
+            new PropagateListener(getShell())));
     }
 
     /**
@@ -251,26 +243,24 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         btnFreezeAll.setImage(IMG_FREEZE);
 
         // Add Listener
-        btnFreezeAll.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-                createReasoningProgressObserver(ReasoningOperation.VALIDATION, new ReasoningPreFreezeListener());
-            }
-        });
+        btnFreezeAll.addSelectionListener(new ReasonerSelectionAdapter(ReasoningOperation.VALIDATION, 
+            new ReasoningPreFreezeListener(getShell())));
     }
 
-    /**
-     * Creates a reasoning progress observer based on {@link #getProductLineProject()}.
-     * 
-     * @param operation
-     *            the desired reasoning operation
-     * @param listener
-     *            A listener which will be called after the reasoning has been finished. Can be <code>null</code>, if no
-     *            action shall be executed after the reasoning is finished.
-     */
-    private void createReasoningProgressObserver(ReasoningOperation operation,
-        IReasonerListener listener) {
-
-        getProductLineProject().reason(operation, listener);
+    private class ReasonerSelectionAdapter extends SelectionAdapter {
+        
+        private ReasoningOperation operation;
+        private IReasonerListener listener;
+        
+        private ReasonerSelectionAdapter(ReasoningOperation operation, IReasonerListener listener) {
+            this.operation = operation;
+            this.listener = listener;            
+        }
+        
+        public void widgetSelected(SelectionEvent event) {
+            ProductLineCommands.validateProductLine(operation, getShell(), getProductLineProject(), listener);
+        }
+        
     }
     
     /**
@@ -347,18 +337,8 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
         validateProductButton.setImage(IMG_VALIDATE);
 
         // Add Listener
-        setValidateListener();
-    }
-
-    /**
-     * Creates a listener for the validation button and add it to the button.
-     */
-    private void setValidateListener() {
-        validateProductButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent event) {
-                createReasoningProgressObserver(ReasoningOperation.VALIDATION, new ValidateConfigListener());
-            }
-        });
+        validateProductButton.addSelectionListener(new ReasonerSelectionAdapter(
+            ReasoningOperation.VALIDATION, new ValidateConfigListener(getShell())));
     }
 
     /**
@@ -392,14 +372,7 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
             public void widgetSelected(SelectionEvent event) {
                 btnAbortInstantiation.setEnabled(true);
                 btnInstantiate.setEnabled(false);
-                /*
-                 * The EclipseConsole allows displaying relevant information on instantiation processes to the user.
-                 * Thus, for each instantiation process triggered by the user, the console will be cleared first and
-                 * then the new output of the new instantiation process will be written to the console
-                 */
-                EclipseConsole.INSTANCE.clearConsole();
-                getProductLineProject().instantiate(new EclipseProgressObserver(), false);
-                getProductLineProject().refreshArtifacts(); 
+                ProductLineCommands.instantiateProductLine(getShell(), getProductLineProject());
             }
         });
         
@@ -408,27 +381,6 @@ public class ConfigurationHeaderMenu extends AbstractConfigMenu implements IProd
                 getProductLineProject().abortInstantiation();
             }
         });
-    }
-    
-    /**
-     * Method for preparing a <code>RasonerResult</code> for showing a warnings dialog. It filters only warnings 
-     * out of the <code>RasonerResult</code> and creates a dialog which displays the warnings.
-     * 
-     * @param result
-     *            The result of an reasoning step, may containing warnings.
-     */
-    private void displayWarnings(ReasoningResult result) {
-        List<Message> warnings = new LinkedList<Message>();
-        for (int i = 0; i < result.getMessageCount(); i++) {
-            Message msg = result.getMessage(i);
-            if (Status.WARNING == msg.getStatus() || Status.UNSUPPORTED == msg.getStatus()) {
-                warnings.add(result.getMessage(i));
-            }
-        }
-        if (warnings.size() > 0) {
-            Message[] warningsArray = warnings.toArray(new Message[warnings.size()]);
-            EasyProducerDialog.showReasonerWarningDialog(getParent().getShell(), warningsArray);
-        }
     }
 
     @Override

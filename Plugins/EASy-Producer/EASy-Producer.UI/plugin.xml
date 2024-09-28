@@ -98,6 +98,64 @@
          </visibility>
       </objectContribution>
    </extension>
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer?after=additions">
+         <menu
+               icon="icons/logo_icon.gif"
+               label="EASy-Producer (experimental)">
+            <command
+                  commandId="EASy-Producer.UI.newPLP"
+                  icon="icons/logo_icon.gif"
+                  label="new product line project"
+                  style="push">
+            </command>
+            <command
+                  commandId="EASy-Producer.UI.predecessors"
+                  icon="IMG_TOOL_NEW_WIZARD"
+                  label="add/remove predecessors"
+                  style="push">
+            </command>
+            <command
+                  commandId="EASy-Producer.UI.deriveProduct"
+                  icon="IMG_TOOL_COPY"
+                  label="derive product"
+                  style="push">
+            </command>
+            <separator
+                  name="EASy-Producer.UI.separator1">
+            </separator>
+            <command
+                  commandId="EASy-Producer.UI.pullConfiguration"
+                  icon="IMG_ETOOL_DEF_PERSPECTIVE"
+                  label="pull configuration"
+                  style="push">
+            </command>
+            <command
+                  commandId="EASy-Producer.UI.validate"
+                  icon="IMG_ELCL_SYNCED"
+                  label="validate"
+                  style="push">
+            </command>
+            <command
+                  commandId="EASy-Producer.UI.instantiate"
+                  icon="IMG_TOOL_UP"
+                  label="instantiate"
+                  style="push">
+            </command>
+            <separator
+                  name="EASy-Producer.UI.separator2">
+            </separator>
+            <command
+                  commandId="EASy-Producer.UI.instantiateSelf"
+                  icon="IMG_OBJ_ELEMENT"
+                  label="instantiate self"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
    
    <extension point="org.eclipse.ui.decorators">
       <decorator
@@ -207,6 +265,44 @@ Germany">
                value="plugin_customization.ini">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.AddRemovePredecessorsHandler"
+            id="EASy-Producer.UI.predecessors"
+            name="add/remove predecessors">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.NewPlpHandler"
+            id="EASy-Producer.UI.newPLP"
+            name="create new PLP">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.InstantiateSelfHandler"
+            id="EASy-Producer.UI.instantiateSelf"
+            name="instantiate self">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.InstantiateHandler"
+            id="EASy-Producer.UI.instantiate"
+            name="instantiate">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.ValidateHandler"
+            id="EASy-Producer.UI.validate"
+            name="validate">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.PullConfigurationHandler"
+            id="EASy-Producer.UI.pullConfiguration"
+            name="pull configuration">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.DeriveProductHandler"
+            id="EASy-Producer.UI.deriveProduct"
+            name="derive product">
+      </command>
    </extension>   
 
 </plugin>

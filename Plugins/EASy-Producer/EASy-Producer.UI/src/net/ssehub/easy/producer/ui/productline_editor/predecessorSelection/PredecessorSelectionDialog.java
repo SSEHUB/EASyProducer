@@ -97,7 +97,7 @@ public class PredecessorSelectionDialog extends Dialog {
      */
     private void createContents(final Shell shell) {
         shell.setLayout(new GridLayout(2, true));
-        shell.setSize(400, 300);
+        shell.setSize(400, 320);
         // Show the message
         Label label = new Label(shell, SWT.NONE);
         label.setText("Choose Predecessor Product Line Projects:");
