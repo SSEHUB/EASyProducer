@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.producer.ui.productline_editor.commands;
 
+import java.util.function.Supplier;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -42,8 +44,54 @@ import net.ssehub.easy.producer.eclipse.persistency.ResourcesMgmt;
  */
 public abstract class AbstractPlpHandler extends AbstractHandler {
 
-    @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException {
+    /**
+     * Denotes a selected PLP.
+     * 
+     * @author Holger Eichelberger
+     */
+    protected static class SelectedPLP {
+        private PLPInfo plp;
+        private IProject project;
+        
+        /**
+         * Creates an instance.
+         * 
+         * @param plp the PLP, may be <b>null</b> for the selected project is an Eclipse, but not a PLP project
+         * @param project the selected project, shall not be <b>null</b>
+         */
+        protected SelectedPLP(PLPInfo plp, IProject project) {
+            this.plp = plp;
+            this.project = project;
+        }
+        
+        /**
+         * Returns the PLP.
+         * 
+         * @return the PLP, may be <b>null</b> for the selected project is an Eclipse, but not a PLP project
+         */
+        public PLPInfo getPLP() {
+            return plp;
+        }
+
+        /**
+         * Returns the selected project.
+         * 
+         * @return the selected project, shall not be <b>null</b>
+         */
+        public IProject getProject() {
+            return project;
+        }
+
+    }
+    
+    /**
+     * Returns the PLPInfo of the current active workbench window selection.
+     * 
+     * @return the selection, potentially with {@link SelectedPLP#getPLP()} being <b>null</b> if the the selected 
+     *     project is not an EASy-Project or the entire result being <b>null</b> if there is no selection, the selected 
+     */
+    protected static SelectedPLP getPLPInfo() {
+        SelectedPLP result = null;
         ISelectionService selectionService = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         ISelection selection = selectionService.getSelection();
         if (selection instanceof IStructuredSelection) {    
@@ -53,16 +101,44 @@ public abstract class AbstractPlpHandler extends AbstractHandler {
                 IFile configfile = EASyUtils.findEasyConfig(selectedProject);
                 String projectID = ResourcesMgmt.INSTANCE.getIDfromResource(configfile, null);
                 PLPInfo plp = SPLsManager.INSTANCE.getPLP(projectID);
-                if (null != plp) {
-                    execute(event, selectedProject, (ProductLineProject) plp);
-                } else {
-                    Shell shell = HandlerUtil.getActiveShell(event);
-                    MessageDialog.openWarning(shell, "No PLP project", 
-                        "Cannot perform operation as project is no EASy-Producer PLP project."); 
-                }
+                result = new SelectedPLP(plp, selectedProject);
             }
         }
+        return result;
+    }
+    
+    /**
+     * Shows a warning dialog if there is no selectedPLP and {@code shellSupplier} is given.
+     * 
+     * @param selected the selected PLP with PLP/project information, may be <b>null</b> or contained PLP may be 
+     *   <b>null</b> for warning dialog
+     * @param shellSupplier function to provide a shell, may be <b>null</b> for not opening a dialog
+     */
+    protected static void showNoPLPWarning(SelectedPLP selected, Supplier<Shell> shellSupplier) {
+        if ((null == selected || selected.getPLP() == null) && null != shellSupplier) {
+            MessageDialog.openWarning(shellSupplier.get(), "No PLP project", 
+                "Cannot perform operation as project is no EASy-Producer PLP project."); 
+        }
+    }
+    
+    protected static boolean isPLP(SelectedPLP selected) {
+        return (null != selected && selected.getPLP() != null);
+    }
+    
+    @Override
+    public Object execute(ExecutionEvent event) throws ExecutionException {
+        SelectedPLP selected = getPLPInfo();
+        if (isPLP(selected)) {
+            execute(event, selected.getProject(), (ProductLineProject) selected.getPLP());
+        } else {
+            showNoPLPWarning(selected, () -> HandlerUtil.getActiveShell(event));
+        }
         return null;
+    }
+    
+    @Override
+    public boolean isEnabled() {
+        return isPLP(getPLPInfo()) && super.isEnabled();
     }
 
     /**
