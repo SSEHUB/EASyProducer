@@ -1,0 +1,3 @@
+instructions.configure=\
+  addRepository(type:0,location:https${#58}//projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/,name:EASy-Producer nightly Update Site);\
+  addRepository(type:1,location:https${#58}//projects.sse.uni-hildesheim.de/eclipse/update-sites/easy_nightly/,name:EASy-Producer nightly Update Site);
