@@ -232,9 +232,9 @@ public Object from(ModbusPhoenixRwEEM data) throws IOException {
     final ModelOutputConverter outConverter = access.getOutputConverter();
     final ModelInputConverter inConverter = access.getInputConverter();
     final String path = pathSupplier == null ? "" : pathSupplier.get();
-                access.set(path + "Day", outConverter.fromShort(data.getDay()));
-    access.set(path + "Month", outConverter.fromShort(data.getMonth()));
-    access.set(path + "Year", outConverter.fromShort(data.getYear()));
+                access.set(path + "Day", outConverter.fromInteger(data.getDay()));
+    access.set(path + "Month", outConverter.fromInteger(data.getMonth()));
+    access.set(path + "Year", outConverter.fromInteger(data.getYear()));
     
     return null; // done, no instance of pseudo type
 }
@@ -267,9 +267,9 @@ public ModbusPhoenixEEM to(de.iip_ecosphere.platform.connectors.modbustcpipv1.Mo
     final String path = pathSupplier == null ? "" : pathSupplier.get();
     
     ModbusPhoenixEEM result = new ModbusPhoenixEEMImpl();
-    result.setDay(inConverter.toShort(access.get(path + "Day", 0)));
-    result.setMonth(inConverter.toShort(access.get(path + "Month", 0)));
-    result.setYear(inConverter.toShort(access.get(path + "Year", 0)));
+    result.setDay(inConverter.toInteger(access.get(path + "Day", 0)));
+    result.setMonth(inConverter.toInteger(access.get(path + "Month", 0)));
+    result.setYear(inConverter.toInteger(access.get(path + "Year", 0)));
     result.setU1(inConverter.toFloat(access.get(path + "U1", 0)));
     result.setFrequency(inConverter.toFloat(access.get(path + "frequency", 0)));
     result.setI1(inConverter.toFloat(access.get(path + "I1", 0)));

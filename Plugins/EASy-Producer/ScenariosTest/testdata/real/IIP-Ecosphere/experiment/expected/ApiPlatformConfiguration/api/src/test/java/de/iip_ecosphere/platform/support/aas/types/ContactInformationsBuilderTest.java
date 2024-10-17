@@ -3,7 +3,6 @@ package de.iip_ecosphere.platform.support.aas.types;
 import static de.iip_ecosphere.platform.support.aas.IdentifierType.*;
 import static de.iip_ecosphere.platform.support.aas.types.common.Utils.*;
 
-import java.io.File;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.concurrent.ExecutionException;
@@ -17,15 +16,28 @@ import de.iip_ecosphere.platform.support.aas.*;
 import de.iip_ecosphere.platform.support.aas.types.common.*;
 
 import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder;
-import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.*;
-import de.iip_ecosphere.platform.support.aas.types.ContactInformations.*;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformations;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.ContactInformationBuilder;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.EmailBuilder;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.FaxBuilder;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.IPCommunicationBuilder;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.PhoneBuilder;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.RoleOfContactPerson;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.TypeOfEmailAddress;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.TypeOfFaxNumber;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformationsBuilder.TypeOfTelephone;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformations.ContactInformation;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformations.Email;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformations.Fax;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformations.IPCommunication;
+import de.iip_ecosphere.platform.support.aas.types.ContactInformations.Phone;
 
 import org.junit.Test;
 import org.junit.Assert;
 import test.de.iip_ecosphere.platform.support.aas.AbstractAasExample;
 
 /**
-* Tests {@link ContactInformationsBuilder}.
+* Tests {@link ContactInformationsBuilder} and {@link ContactInformations}.
 */
 public class ContactInformationsBuilderTest extends AbstractAasExample {
 
@@ -72,8 +84,8 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     }
     
     @Override
-    public File[] getTargetFiles() {
-        return new File[] {new File("./output/contactInformations.aasx")};
+    public java.io.File[] getTargetFiles() {
+        return new java.io.File[] {new java.io.File("./output/contactInformations.aasx")};
     }
 
     @Override
@@ -110,13 +122,16 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
      * @return {@code builder}
      */
     public static ContactInformationsBuilder populate(ContactInformationsBuilder builder, int depth) {
-        ContactInformationBuilder contactInformationBuilder = builder.createContactInformationBuilder();
-        if (!stack.contains("ContactInformation")) {
-            stack.add("ContactInformation");
-            populate(contactInformationBuilder, depth + 1);
-            stack.remove("ContactInformation");
+        ContactInformationBuilder contactInformationBuilder; 
+        for (int card = 1; card <= 1; card++) { 
+            contactInformationBuilder = builder.createContactInformationBuilder();
+            if (!stack.contains("ContactInformation")) {
+                stack.add("ContactInformation");
+                populate(contactInformationBuilder, depth + 1);
+                stack.remove("ContactInformation");
+            }
+            contactInformationBuilder.build();
         }
-        contactInformationBuilder.build();
         return builder;
     }
     
@@ -134,34 +149,46 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
         builder.setCityTown(toTestLangString("Musterstadt@de", "test@en"));
         builder.setCompany(toTestLangString("ABC Company@en", "test@en"));
         builder.setDepartment(toTestLangString("Vertrieb@de", "test@en"));
-        PhoneBuilder phoneBuilder = builder.createPhoneBuilder();
-        if (!stack.contains("Phone")) {
-            stack.add("Phone");
-            populate(phoneBuilder, depth + 1);
-            stack.remove("Phone");
+        PhoneBuilder phoneBuilder;
+        for (int card = 1; card <= 1; card++) { 
+            phoneBuilder = builder.createPhoneBuilder();
+            if (!stack.contains("Phone")) {
+                stack.add("Phone");
+                populate(phoneBuilder, depth + 1);
+                stack.remove("Phone");
+            }
+            phoneBuilder.build();
         }
-        phoneBuilder.build();
-        FaxBuilder faxBuilder = builder.createFaxBuilder();
-        if (!stack.contains("Fax")) {
-            stack.add("Fax");
-            populate(faxBuilder, depth + 1);
-            stack.remove("Fax");
+        FaxBuilder faxBuilder;
+        for (int card = 1; card <= 1; card++) { 
+            faxBuilder = builder.createFaxBuilder();
+            if (!stack.contains("Fax")) {
+                stack.add("Fax");
+                populate(faxBuilder, depth + 1);
+                stack.remove("Fax");
+            }
+            faxBuilder.build();
         }
-        faxBuilder.build();
-        EmailBuilder emailBuilder = builder.createEmailBuilder();
-        if (!stack.contains("Email")) {
-            stack.add("Email");
-            populate(emailBuilder, depth + 1);
-            stack.remove("Email");
+        EmailBuilder emailBuilder;
+        for (int card = 1; card <= 1; card++) { 
+            emailBuilder = builder.createEmailBuilder();
+            if (!stack.contains("Email")) {
+                stack.add("Email");
+                populate(emailBuilder, depth + 1);
+                stack.remove("Email");
+            }
+            emailBuilder.build();
         }
-        emailBuilder.build();
-        IPCommunicationBuilder iPCommunicationBuilder = builder.createIPCommunicationBuilder();
-        if (!stack.contains("IPCommunication")) {
-            stack.add("IPCommunication");
-            populate(iPCommunicationBuilder, depth + 1);
-            stack.remove("IPCommunication");
+        IPCommunicationBuilder iPCommunicationBuilder;
+        for (int card = 1; card <= 1; card++) { 
+            iPCommunicationBuilder = builder.createIPCommunicationBuilder();
+            if (!stack.contains("IPCommunication")) {
+                stack.add("IPCommunication");
+                populate(iPCommunicationBuilder, depth + 1);
+                stack.remove("IPCommunication");
+            }
+            iPCommunicationBuilder.build();
         }
-        iPCommunicationBuilder.build();
         builder.setStreet(toTestLangString("Musterstrasse 1@de", "test@en"));
         builder.setZipcode(toTestLangString("12345@de", "test@en"));
         builder.setPOBox(toTestLangString("PF 1234@de", "test@en"));
@@ -225,7 +252,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     }
     
     @Override
-    protected File getThumbnail() {
+    protected java.io.File getThumbnail() {
         return null;
     }
     
@@ -253,14 +280,14 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     * @throws ExecutionException if property accesses/conversions fail
     */
     private static void test(ContactInformation instance, int depth) throws ExecutionException {
-        Assert.assertEquals(toTestEnum(RoleOfContactPerson.class, "0173-1#07-AAS931#001"), first(instance.
+        assertEquals(toTestEnum(RoleOfContactPerson.class, "0173-1#07-AAS931#001"), first(instance.
             getRoleOfContactPerson()));
         Assert.assertNotNull(instance.getRoleOfContactPersonProperty());
         assertLangStringsEquals(toTestLangString("DE@de", "test@en"), first(instance.getNationalCode()));
         Assert.assertNotNull(instance.getNationalCodeProperty());
-        Assert.assertEquals(toTestString("de", "TEST"), first(instance.getLanguage()));
+        assertEquals(toTestString("de", "TEST"), first(instance.getLanguage()));
         Assert.assertNotNull(instance.getLanguageProperty(1));
-        Assert.assertEquals(toTestString("Z-12:00", "TEST"), first(instance.getTimeZone()));
+        assertEquals(toTestString("Z-12:00", "TEST"), first(instance.getTimeZone()));
         Assert.assertNotNull(instance.getTimeZoneProperty());
         assertLangStringsEquals(toTestLangString("Musterstadt@de", "test@en"), first(instance.getCityTown()));
         Assert.assertNotNull(instance.getCityTownProperty());
@@ -311,7 +338,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
         Assert.assertNotNull(instance.getAcademicTitleProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getFurtherDetailsOfContact()));
         Assert.assertNotNull(instance.getFurtherDetailsOfContactProperty());
-        Assert.assertEquals(toTestString("", "TEST"), first(instance.getAddressOfAdditionalLink()));
+        assertEquals(toTestString("", "TEST"), first(instance.getAddressOfAdditionalLink()));
         Assert.assertNotNull(instance.getAddressOfAdditionalLinkProperty());
     }
     
@@ -326,8 +353,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
         assertLangStringsEquals(toTestLangString("+491234567890@de", "test@en"), first(instance.getTelephoneNumber(
             )));
         Assert.assertNotNull(instance.getTelephoneNumberProperty());
-        Assert.assertEquals(toTestEnum(TypeOfTelephone.class, "0173-1#07-AAS754#001"), first(instance.
-            getTypeOfTelephone()));
+        assertEquals(toTestEnum(TypeOfTelephone.class, "0173-1#07-AAS754#001"), first(instance.getTypeOfTelephone()));
         Assert.assertNotNull(instance.getTypeOfTelephoneProperty());
         assertLangStringsEquals(toTestLangString("Montag – Freitag 08:00 bis 16:00@de", "test@en"), first(instance.
             getAvailableTime()));
@@ -344,7 +370,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     private static void test(Fax instance, int depth) throws ExecutionException {
         assertLangStringsEquals(toTestLangString("+491234567890@de", "test@en"), first(instance.getFaxNumber()));
         Assert.assertNotNull(instance.getFaxNumberProperty());
-        Assert.assertEquals(toTestEnum(TypeOfFaxNumber.class, "1"), first(instance.getTypeOfFaxNumber()));
+        assertEquals(toTestEnum(TypeOfFaxNumber.class, "1"), first(instance.getTypeOfFaxNumber()));
         Assert.assertNotNull(instance.getTypeOfFaxNumberProperty());
     }
     
@@ -356,11 +382,11 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     * @throws ExecutionException if property accesses/conversions fail
     */
     private static void test(Email instance, int depth) throws ExecutionException {
-        Assert.assertEquals(toTestString("email@muster-ag.de", "TEST"), first(instance.getEmailAddress()));
+        assertEquals(toTestString("email@muster-ag.de", "TEST"), first(instance.getEmailAddress()));
         Assert.assertNotNull(instance.getEmailAddressProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getPublicKey()));
         Assert.assertNotNull(instance.getPublicKeyProperty());
-        Assert.assertEquals(toTestEnum(TypeOfEmailAddress.class, "0173-1#07-AAS754#001"), first(instance.
+        assertEquals(toTestEnum(TypeOfEmailAddress.class, "0173-1#07-AAS754#001"), first(instance.
             getTypeOfEmailAddress()));
         Assert.assertNotNull(instance.getTypeOfEmailAddressProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getTypeOfPublicKey()));
@@ -375,9 +401,9 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     * @throws ExecutionException if property accesses/conversions fail
     */
     private static void test(IPCommunication instance, int depth) throws ExecutionException {
-        Assert.assertEquals(toTestString("", "TEST"), first(instance.getAddressOfAdditionalLink()));
+        assertEquals(toTestString("", "TEST"), first(instance.getAddressOfAdditionalLink()));
         Assert.assertNotNull(instance.getAddressOfAdditionalLinkProperty());
-        Assert.assertEquals(toTestString("Chat Video call", "TEST"), first(instance.getTypeOfCommunication()));
+        assertEquals(toTestString("Chat Video call", "TEST"), first(instance.getTypeOfCommunication()));
         Assert.assertNotNull(instance.getTypeOfCommunicationProperty());
         assertLangStringsEquals(toTestLangString("Montag – Freitag 08:00 bis 16:00@de", "test@en"), first(instance.
             getAvailableTime()));

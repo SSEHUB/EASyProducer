@@ -232,9 +232,9 @@ public Object from(ModbusSiemensRwSentron data) throws IOException {
     final ModelOutputConverter outConverter = access.getOutputConverter();
     final ModelInputConverter inConverter = access.getInputConverter();
     final String path = pathSupplier == null ? "" : pathSupplier.get();
-                access.set(path + "DisplayContrast", outConverter.fromLong(data.getDisplayContrast()));
-    access.set(path + "DisplayBrightness", outConverter.fromLong(data.getDisplayBrightness()));
-    access.set(path + "BrightnessDuration", outConverter.fromLong(data.getBrightnessDuration()));
+                access.set(path + "DisplayContrast", outConverter.fromBigInteger(data.getDisplayContrast()));
+    access.set(path + "DisplayBrightness", outConverter.fromBigInteger(data.getDisplayBrightness()));
+    access.set(path + "BrightnessDuration", outConverter.fromBigInteger(data.getBrightnessDuration()));
     
     return null; // done, no instance of pseudo type
 }
@@ -267,9 +267,9 @@ public ModbusSiemensSentron to(de.iip_ecosphere.platform.connectors.modbustcpipv
     final String path = pathSupplier == null ? "" : pathSupplier.get();
     
     ModbusSiemensSentron result = new ModbusSiemensSentronImpl();
-    result.setDisplayContrast(inConverter.toLong(access.get(path + "DisplayContrast", 0)));
-    result.setDisplayBrightness(inConverter.toLong(access.get(path + "DisplayBrightness", 0)));
-    result.setBrightnessDuration(inConverter.toLong(access.get(path + "BrightnessDuration", 0)));
+    result.setDisplayContrast(inConverter.toBigInteger(access.get(path + "DisplayContrast", 0)));
+    result.setDisplayBrightness(inConverter.toBigInteger(access.get(path + "DisplayBrightness", 0)));
+    result.setBrightnessDuration(inConverter.toBigInteger(access.get(path + "BrightnessDuration", 0)));
     result.setFrequency(inConverter.toFloat(access.get(path + "Frequency", 0)));
     result.setVoltageL1N(inConverter.toFloat(access.get(path + "VoltageL1N", 0)));
     result.setCurrentL1(inConverter.toFloat(access.get(path + "CurrentL1", 0)));

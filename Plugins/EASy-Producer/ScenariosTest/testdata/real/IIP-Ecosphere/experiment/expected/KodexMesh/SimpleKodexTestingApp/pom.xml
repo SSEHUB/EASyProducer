@@ -8,7 +8,7 @@
     <parent>
         <groupId>de.iip-ecosphere.platform</groupId>
         <artifactId>platformDependencies</artifactId>
-        <version>0.7.0-SNAPSHOT</version>
+        <version>0.7.1-SNAPSHOT</version>
         <relativePath/>
     </parent>
     <properties>
@@ -28,32 +28,32 @@
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>support</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>support.aas</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>transport</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>connectors</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>services.environment</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>services.environment.spring</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -66,17 +66,17 @@
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>transport.amqp</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>transport.spring.amqp</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>support.aas.basyx</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.el</groupId>
@@ -91,36 +91,36 @@
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>apps.AppInterfacesKodex</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>apps.AppInterfacesKodex</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
             <type>zip</type>
             <classifier>python</classifier>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>apps.ServiceImpl</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>apps.ServiceImpl</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
             <type>zip</type>
             <classifier>python</classifier>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>security.services.kodex</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.iip-ecosphere.platform</groupId>
             <artifactId>services.environment</artifactId>
-            <version>0.7.0-SNAPSHOT</version>
+            <version>0.7.1-SNAPSHOT</version>
             <type>zip</type>
             <classifier>python</classifier>
         </dependency>
@@ -224,7 +224,7 @@
             <plugin>
                 <groupId>de.iip-ecosphere.platform</groupId>
                 <artifactId>dependency-plugin</artifactId>
-                <version>0.7.0-SNAPSHOT</version>
+                <version>0.7.1-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <id>unpack-unpack</id>
@@ -237,7 +237,7 @@
                                 <artifactItem>
                                     <groupId>de.iip-ecosphere.platform</groupId>
                                     <artifactId>apps.ServiceImpl</artifactId>
-                                    <version>0.7.0-SNAPSHOT</version>
+                                    <version>0.7.1-SNAPSHOT</version>
                                     <type>zip</type>
                                     <classifier>artifacts</classifier>
                                     <overWrite>true</overWrite>
@@ -258,7 +258,7 @@
                                 <artifactItem>
                                     <groupId>de.iip-ecosphere.platform</groupId>
                                     <artifactId>security.services.kodex</artifactId>
-                                    <version>0.7.0-SNAPSHOT</version>
+                                    <version>0.7.1-SNAPSHOT</version>
                                     <type>zip</type>
                                     <classifier>bin</classifier>
                                     <overWrite>true</overWrite>

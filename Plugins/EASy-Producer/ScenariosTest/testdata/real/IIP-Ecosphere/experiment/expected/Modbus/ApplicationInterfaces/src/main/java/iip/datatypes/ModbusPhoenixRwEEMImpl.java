@@ -2,6 +2,7 @@ package iip.datatypes;
 
 import iip.datatypes.ModbusPhoenixRwEEM;
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import java.math.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,15 +15,15 @@ public class ModbusPhoenixRwEEMImpl implements ModbusPhoenixRwEEM {
  
     @JsonProperty("Day")
     @ConfiguredName("Day")
-    private short Day;
+    private int Day;
     
     @JsonProperty("Month")
     @ConfiguredName("Month")
-    private short Month;
+    private int Month;
     
     @JsonProperty("Year")
     @ConfiguredName("Year")
-    private short Year;
+    private int Year;
     
 
     /**
@@ -44,21 +45,21 @@ public class ModbusPhoenixRwEEMImpl implements ModbusPhoenixRwEEM {
 
     @Override
     @JsonIgnore
-    public short getDay() {
+    public int getDay() {
     
         return Day;
     }
     
     @Override
     @JsonIgnore
-    public short getMonth() {
+    public int getMonth() {
     
         return Month;
     }
     
     @Override
     @JsonIgnore
-    public short getYear() {
+    public int getYear() {
     
         return Year;
     }
@@ -66,21 +67,21 @@ public class ModbusPhoenixRwEEMImpl implements ModbusPhoenixRwEEM {
     
     @Override
     @JsonIgnore
-    public void setDay(short value) {
+    public void setDay(int value) {
     
         this.Day = value;
     }
     
     @Override
     @JsonIgnore
-    public void setMonth(short value) {
+    public void setMonth(int value) {
     
         this.Month = value;
     }
     
     @Override
     @JsonIgnore
-    public void setYear(short value) {
+    public void setYear(int value) {
     
         this.Year = value;
     }
@@ -89,9 +90,9 @@ public class ModbusPhoenixRwEEMImpl implements ModbusPhoenixRwEEM {
     @Override
     public int hashCode() {
         int hc = 0;
-        hc += Short.hashCode(getDay());
-        hc += Short.hashCode(getMonth());
-        hc += Short.hashCode(getYear());
+        hc += Integer.hashCode(getDay());
+        hc += Integer.hashCode(getMonth());
+        hc += Integer.hashCode(getYear());
         return hc;
     }
     

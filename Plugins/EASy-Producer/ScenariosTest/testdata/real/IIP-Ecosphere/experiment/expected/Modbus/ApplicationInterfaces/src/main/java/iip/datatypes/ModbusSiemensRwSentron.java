@@ -1,6 +1,7 @@
 package iip.datatypes;
 
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import java.math.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

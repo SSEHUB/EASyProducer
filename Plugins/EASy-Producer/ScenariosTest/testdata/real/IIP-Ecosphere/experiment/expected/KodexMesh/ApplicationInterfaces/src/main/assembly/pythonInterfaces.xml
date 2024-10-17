@@ -8,7 +8,7 @@
     <dependencySets>
         <dependencySet>
             <includes>
-                <include>de.iip-ecosphere.platform:services.environment:zip:python:0.7.0-SNAPSHOT</include>
+                <include>de.iip-ecosphere.platform:services.environment:zip:python:0.7.1-SNAPSHOT</include>
             </includes>
             <unpack>true</unpack>
         </dependencySet>

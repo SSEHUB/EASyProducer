@@ -9,11 +9,11 @@ types:
     - name: ModbusPhoenixEEM
       fields:
         - name: Day
-          type: short
+          type: int
         - name: Month
-          type: short
+          type: int
         - name: Year
-          type: short
+          type: int
         - name: U1
           type: float
         - name: frequency
@@ -23,11 +23,11 @@ types:
     - name: ModbusPhoenixRwEEM
       fields:
         - name: Day
-          type: short
+          type: int
         - name: Month
-          type: short
+          type: int
         - name: Year
-          type: short
+          type: int
     - name: ModbusSiemensRwSentron
       fields:
         - name: DisplayContrast

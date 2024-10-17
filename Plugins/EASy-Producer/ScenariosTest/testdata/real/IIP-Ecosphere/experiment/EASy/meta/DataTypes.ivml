@@ -4,7 +4,7 @@ project DataTypes {
     
     annotate BindingTime bindingTime = BindingTime::compile to .;
     
-    NonEmptyString iipVer = "0.7.0-SNAPSHOT"; // Maven version of platform
+    NonEmptyString iipVer = "0.7.1-SNAPSHOT"; // Maven version of platform
     const String mvnIipGroup = "de.iip-ecosphere.platform";
     
     typedef EphemeralPort Integer with (EphemeralPort >= -1 and EphemeralPort <= 65535);
@@ -379,6 +379,13 @@ project DataTypes {
         kind = PluginKind::AAS
     };
     
+    Plugin BaSyx15Plugin = {
+        id = "aas.basyx-1.5", // must be the same as in code
+        description = "BySyx 1.5.1 retrofitting AAS plugin",
+        artifact = mvnIipGroup + ":support.aas.basyx1_5:" + iipVer,
+        kind = PluginKind::AAS
+    };
+
     // -------------------------------- freeze fixed stuff ----------------------------------------
     
     // freeze all primitives
@@ -411,6 +418,7 @@ project DataTypes {
         FloatListType;
         iipVer;
         BaSyx10Plugin;
+		BaSyx15Plugin;
     };
     
 }

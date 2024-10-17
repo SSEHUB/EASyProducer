@@ -1,6 +1,7 @@
 package iip.datatypes;
 
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import java.math.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,7 +19,7 @@ public interface ModbusPhoenixRwEEM {
       * @return the value
       */
     @JsonIgnore
-    public short getDay();
+    public int getDay();
     
     /**
       * Returns the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
@@ -26,7 +27,7 @@ public interface ModbusPhoenixRwEEM {
       * @return the value
       */
     @JsonIgnore
-    public short getMonth();
+    public int getMonth();
     
     /**
       * Returns the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
@@ -34,7 +35,7 @@ public interface ModbusPhoenixRwEEM {
       * @return the value
       */
     @JsonIgnore
-    public short getYear();
+    public int getYear();
     
     
     /**
@@ -43,7 +44,7 @@ public interface ModbusPhoenixRwEEM {
      * @param value the new value
      */
     @JsonIgnore
-    public void setDay(short value);
+    public void setDay(int value);
     
     /**
      * Changes the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
@@ -51,7 +52,7 @@ public interface ModbusPhoenixRwEEM {
      * @param value the new value
      */
     @JsonIgnore
-    public void setMonth(short value);
+    public void setMonth(int value);
     
     /**
      * Changes the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
@@ -59,7 +60,7 @@ public interface ModbusPhoenixRwEEM {
      * @param value the new value
      */
     @JsonIgnore
-    public void setYear(short value);
+    public void setYear(int value);
     
     
 

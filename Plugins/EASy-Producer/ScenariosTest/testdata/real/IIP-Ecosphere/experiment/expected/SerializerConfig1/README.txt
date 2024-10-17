@@ -4,7 +4,7 @@ For understanding the components and how to explore the platform, we recommend r
   - https://www.iip-ecosphere.eu/
   - https://doi.org/10.5281/zenodo.7047640
 
-This is an assembled and instantiated version of the IIP-Ecosphere platform of version 0.7.0-SNAPSHOT. 
+This is an assembled and instantiated version of the IIP-Ecosphere platform of version 0.7.1-SNAPSHOT. 
 Components that are not configured to be part of the platform are left out. Glue code for services, wire 
 format serializers for application specific data types, logging configurations etc. are generated and packaged. 
 IP-Addresses for the central services became part of the binaries during packaging.
