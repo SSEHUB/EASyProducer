@@ -24,6 +24,9 @@ import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
+import net.ssehub.easy.producer.scenario_tests.mocks.DockerMock;
+import net.ssehub.easy.producer.scenario_tests.mocks.LxcMock;
+import net.ssehub.easy.producer.scenario_tests.mocks.MavenMock;
 
 /**
  * Real use case tests. Although Maven is available, we run the tests without Maven in order to
@@ -52,11 +55,13 @@ public class RealTests extends AbstractRealTests {
         if (!debug) {
             tests.cleanTemp();
         }
-        net.ssehub.easy.instantiation.maven.Registration.register();
+        MavenMock.register();
         net.ssehub.easy.instantiation.java.Registration.register();
         net.ssehub.easy.instantiation.json.Registration.register();
         net.ssehub.easy.instantiation.yaml.Registration.register();
         VelocityInstantiator.register();
+        DockerMock.register();
+        LxcMock.register();
     }
 
     /**

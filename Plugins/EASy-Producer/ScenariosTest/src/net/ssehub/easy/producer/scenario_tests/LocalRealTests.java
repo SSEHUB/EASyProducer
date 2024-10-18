@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import net.ssehub.easy.producer.scenario_tests.mocks.MavenMock;
+
 /**
  * Contains those tests not running on Jenkins (whyever). It's fine if there are no tests
  * in this class :)
@@ -104,12 +106,19 @@ public class LocalRealTests extends RealTests {
         final String folder = "experiment";
         File f = new File(getTestFolder(), "IIP-Ecosphere/" + folder);
         if (f.exists()) {
+            // ensure passthrough states
+            boolean origMvnPassThrough = MavenMock.setPassThrough(false);
+            
+            // tests
             executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
             executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
             executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
             executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
             executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
             executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+            
+            // reset passthrough
+            MavenMock.setPassThrough(origMvnPassThrough);
         }
     }    
     

@@ -61,12 +61,12 @@ vilScript IIPEcospherePartLxc (Project source, Configuration config, Project tar
     // baseDirectory not recognized no login happening
     loginContainerRegistry(LxcContainerManager mgr, String user, String password) = {
         if (isDefined(mgr.baseDirectory) and mgr.baseDirectory <> "") {
-            //lxcLogin(mgr.baseDirectory);
+            lxcLogin(mgr.baseDirectory);
         }
     }
     // where tag is the name of the image after build
     String createContainerImage(LxcContainerManager mgr, Path base, Path buildFile, String registry, String repository, String tag) = {
-        String id = "abc"; //lxcBuildImage(base, buildFile, tag);
+        String id = lxcBuildImage(base, buildFile, tag);
         if (isDefined(mgr.registry) and mgr.registry.length() > 0) {
             //lxcPushImage(tag, mgr.registry, registry + ":" + tag);
         }

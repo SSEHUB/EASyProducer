@@ -419,27 +419,27 @@ vilScript IIPEcospherePartDocker (Project source, Configuration config, Project 
     }
 
     String createContainerImage(DockerContainerManager mgr, Path base, Path buildFile, String registry, String repository, String tag) = {
-        String id = "abc";//dockerBuildImage(base, buildFile, toDockerImageName(registry, repository, tag));
+        String id = dockerBuildImage(base, buildFile, toDockerImageName(registry, repository, tag));
         if (isDefined(mgr.registry) and mgr.registry.length() > 0) {
-            //dockerPushImage(toDockerImageName(registry, repository, tag), mgr.registry, registry.toLower() + "/" + repository.toLower(), tag);
+            dockerPushImage(toDockerImageName(registry, repository, tag), mgr.registry, registry.toLower() + "/" + repository.toLower(), tag);
         }
         id;
     }
 
     String createContainerImageWithoutPush(DockerContainerManager mgr, Path base, Path buildFile, String registry, String repository, String tag) = {
-        String id = "abc";//dockerBuildImage(base, buildFile, toDockerImageName(registry, repository, tag));
+        String id = dockerBuildImage(base, buildFile, toDockerImageName(registry, repository, tag));
         id;
     }
 
     loginContainerRegistry(DockerContainerManager mgr, String user, String password) = {
         if (isDefined(mgr.registry) and mgr.registry <> "") {
-            //dockerLogin(mgr.registry, user, password);
+            dockerLogin(mgr.registry, user, password);
         }
     }
 
     logoutContainerRegistry(DockerContainerManager mgr) = {
         if (isDefined(mgr.registry) and mgr.registry <> "") {
-            //dockerLogout(mgr.registry);
+            dockerLogout(mgr.registry);
         }
     }
 

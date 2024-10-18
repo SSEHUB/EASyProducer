@@ -194,6 +194,9 @@ public class PersistenceUtils {
                 } else {
                     primary.addDependentLocation(loc);
                 }
+                if (dfltLib) {
+                    loc.toDefaultLibLocation();
+                }
             } else {
                 locations.removeLocation(pathFile, observer);
             }

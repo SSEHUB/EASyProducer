@@ -21,7 +21,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import net.ssehub.easy.instantiation.maven.Registration;
+import net.ssehub.easy.producer.scenario_tests.mocks.MavenMock;
 
 /**
  * Runs experiment tests from scenarios.
@@ -44,7 +44,7 @@ public class ExperimentsTests extends AbstractEasyScenarioTest {
     public static void startUp() {
         tests = new ExperimentsTests();
         tests.cleanTemp();
-        Registration.register();
+        MavenMock.register();
     }
 
     /**
