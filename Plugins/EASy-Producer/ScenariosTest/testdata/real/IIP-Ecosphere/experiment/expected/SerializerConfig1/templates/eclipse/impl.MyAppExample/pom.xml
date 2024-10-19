@@ -95,8 +95,7 @@
                                         <artifactItem>
                                             <groupId>de.iip-ecosphere.platform</groupId>
                                             <artifactId>apps.AppInterfaces</artifactId>
-                                            <version>${iip.version}</version>
-                                            <type>0.7.1-SNAPSHOT</type>
+                                            <version>0.7.1-SNAPSHOT</version>
                                             <type>zip</type>
                                             <classifier>python</classifier>
                                             <overWrite>true</overWrite>

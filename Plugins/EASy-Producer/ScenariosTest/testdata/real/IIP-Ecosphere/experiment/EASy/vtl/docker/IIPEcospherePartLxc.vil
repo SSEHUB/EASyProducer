@@ -68,7 +68,7 @@ vilScript IIPEcospherePartLxc (Project source, Configuration config, Project tar
     String createContainerImage(LxcContainerManager mgr, Path base, Path buildFile, String registry, String repository, String tag) = {
         String id = lxcBuildImage(base, buildFile, tag);
         if (isDefined(mgr.registry) and mgr.registry.length() > 0) {
-            //lxcPushImage(tag, mgr.registry, registry + ":" + tag);
+            lxcPushImage(tag, mgr.registry, registry + ":" + tag);
         }
         id;
     }
