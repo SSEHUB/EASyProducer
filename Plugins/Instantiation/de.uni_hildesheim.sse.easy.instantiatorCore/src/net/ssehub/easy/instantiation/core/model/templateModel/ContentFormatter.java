@@ -16,7 +16,9 @@
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 
@@ -77,9 +79,10 @@ public class ContentFormatter {
          * Is the given character a potential long-line splitting character, may be state dependent.
          * 
          * @param ch the character
+         * @param nextChar the next character after
          * @return {@code true} for splitting character, {@code false} else
          */
-        public boolean isSplitChar(char ch);
+        public boolean isSplitChar(char ch, char nextChar);
         
         /**
          * If the current position is a {@link #isSplitChar(char) split char}, then shall the split position be 
@@ -168,7 +171,7 @@ public class ContentFormatter {
         }
 
         @Override
-        public boolean isSplitChar(char ch) {
+        public boolean isSplitChar(char ch, char nextChar) {
             return false;
         }
 
@@ -234,12 +237,29 @@ public class ContentFormatter {
         
         private State state;
         private String javadocIndent = " * ";
+        private Set<String> noSplit2Chars = new HashSet<String>();
 
         /**
          * Creates a profile instance.
          */
         public JavaProfile() {
             reset();
+            noSplit2Chars.add("==");
+            noSplit2Chars.add("!=");
+            noSplit2Chars.add("<=");
+            noSplit2Chars.add(">=");
+            noSplit2Chars.add("->");
+            noSplit2Chars.add("|=");
+            noSplit2Chars.add("&=");
+            noSplit2Chars.add("%=");
+            noSplit2Chars.add("^=");
+            noSplit2Chars.add("-=");
+            noSplit2Chars.add("+=");
+            noSplit2Chars.add("*=");
+            noSplit2Chars.add("/=");
+            
+            noSplit2Chars.add(">>"); // prefix of >>=
+            noSplit2Chars.add("<<"); // prefix of <<=
         }
         
         @Override
@@ -285,12 +305,13 @@ public class ContentFormatter {
         }
 
         @Override
-        public boolean isSplitChar(char ch) {
+        public boolean isSplitChar(char ch, char nextChar) {
             boolean result = false;
             if (State.CODE == state) {
                 result = ch == '.' || ch == '"' || ch == '(';
                 result |= ch == '+' || ch == '-' || ch == '/';
                 result |= ch == '*' || ch == '[';
+                result &= !noSplit2Chars.contains(String.valueOf(ch) + nextChar);
             } else if (State.STRING_START == state) {
                 result = ch == '"';
             } else if (State.STRING == state) { // allow everywhere, see addBeforeSplit/addAfterSplit
@@ -517,6 +538,10 @@ public class ContentFormatter {
             pos += posAdjust;
         }
     }
+    
+    private char nextChar(StringBuilder builder, int pos) {
+        return pos + 1 < builder.length() ? builder.charAt(pos + 1) : 0;
+    }
 
     /**
      * Splits lines where feasible and necessary based on {@link FormattingConfiguration#getLineLength()}.
@@ -540,15 +565,15 @@ public class ContentFormatter {
                 c = '\n';
                 doubleChars++;
             }
-            if (canSplit(c)) { // we can split here
+            if (canSplit(c, nextChar(builder, pos))) { // we can split here
                 int count = pos - doubleChars - lastStartPos + 1;
                 boolean split = count >= maxLineLength;
                 if (!split) { // lookahead, are we before and the next is too late?
-                    int nextPos = pos + 1;
-                    while (nextPos < builder.length() && !canSplit(builder.charAt(nextPos))) {
-                        nextPos++;
+                    int nPos = pos + 1; // nextPos
+                    while (nPos < builder.length() && !canSplit(builder.charAt(nPos), nextChar(builder, nPos))) {
+                        nPos++;
                     }
-                    split = (nextPos > pos + 1 && nextPos - doubleChars - lastStartPos >= maxLineLength);
+                    split = (nPos > pos + 1 && nPos - doubleChars - lastStartPos >= maxLineLength);
                 }
                 if (split) { // here, line length exceeded
                     advance += splitLines(c, builder, pos, lastNlPos);
@@ -573,10 +598,11 @@ public class ContentFormatter {
      * Can we split at {@code ch}.
      * 
      * @param ch the character to test
+     * @param nextChar the follow-up character
      * @return {@code true} for splitting, {@code false} else
      */
-    private boolean canSplit(char ch) {
-        return isNewline(ch) || ch == ' ' || profile.isSplitChar(ch);
+    private boolean canSplit(char ch, char nextChar) {
+        return isNewline(ch) || ch == ' ' || profile.isSplitChar(ch, nextChar);
     }
 
     /**
@@ -597,7 +623,7 @@ public class ContentFormatter {
             final String lineBreak = FormattingConfiguration.getLineEnding(fConf);
             final int indentStep = iConf.getIndentationStep();
             String ins = "";
-            if (!profile.isSplitChar(ch)) {
+            if (!profile.isSplitChar(ch, nextChar(buffer, splitPos))) {
                 buffer.delete(splitPos, splitPos + 1);
             } else {
                 splitPos++;
