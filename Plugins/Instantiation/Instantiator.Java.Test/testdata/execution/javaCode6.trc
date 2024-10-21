@@ -7,6 +7,7 @@
     m <- JavaCodeMethod: main
     -> addVariable(JavaCodeMethod, String, String, String) with (JavaCodeMethod: main, java.util.List<String>, data, ) = JavaCodeVariableDeclaration
     -> addNew(JavaCodeVariableDeclaration, String) with (JavaCodeVariableDeclaration, java.util.ArrayList<>) = JavaCodeConstructorCall
+    -> addImport(JavaCodeElement, String) with (JavaCodeMethod: main, java.lang.Math) = JavaCodeImport: java.lang
     -> addCall(JavaCodeMethod, String) with (JavaCodeMethod: main, data.stream) = JavaCodeMethodCall
     c <- JavaCodeMethodCall
     -> addCall(JavaCodeMethodCall, String) with (JavaCodeMethodCall, filter) = JavaCodeMethodCall

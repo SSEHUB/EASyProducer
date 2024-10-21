@@ -12,6 +12,7 @@ template JavaCode6Tpl(Configuration config, JavaCodeArtifact target) {
         JavaCodeMethod m = mainCls.addMainMethod();
         m.addVariable("java.util.List<String>", "data", "")
             .addNew("java.util.ArrayList<>");
+        m.addImport("java.lang.Math");
             
         JavaCodeMethodCall c = m.addCall("data.stream");
         c = c.addCall("filter");
