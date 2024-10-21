@@ -44,4 +44,9 @@ class DummyJavaCodeArtifact implements IJavaCodeArtifact {
     public void registerImport(IJavaCodeImport imp) {
     }
 
+    @Override
+    public JavaCodeImport addImport(String imp) {
+        return new JavaCodeImport(imp, INSTANCE);
+    }
+
 }

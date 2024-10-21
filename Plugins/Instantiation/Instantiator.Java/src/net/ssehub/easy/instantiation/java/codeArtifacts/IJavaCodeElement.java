@@ -43,6 +43,16 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     public IJavaCodeArtifact getArtifact();
     
     /**
+     * Explicitly adds an import to {@link #getArtifact()}.
+     * 
+     * @param imp the import (may be a wildcard), static can be set on the result
+     * @return the existing or new code import
+     */
+    public default JavaCodeImport addImport(String imp) {
+        return getArtifact().addImport(imp);
+    }
+    
+    /**
      * Returns the parent.
      * 
      * @return the parent

@@ -562,12 +562,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         return result;
     }
 
-    /**
-     * Explicitly adds an import to this artifact.
-     * 
-     * @param imp the import (may be a wildcard), static can be set on the result
-     * @return the existing or new code import
-     */
+    @Override
     public JavaCodeImport addImport(String imp) {
         JavaCodeImport result = null;
         IJavaCodeImport found = findMatchingImport(imp, false);

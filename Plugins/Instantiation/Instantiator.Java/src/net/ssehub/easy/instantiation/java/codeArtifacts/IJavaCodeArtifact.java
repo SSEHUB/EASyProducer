@@ -48,5 +48,13 @@ public interface IJavaCodeArtifact {
      */
     @Invisible
     public void registerImport(IJavaCodeImport imp);
+    
+    /**
+     * Explicitly adds an import to {@link #getArtifact()}.
+     * 
+     * @param imp the import (may be a wildcard), static can be set on the result
+     * @return the existing or new code import
+     */
+    public JavaCodeImport addImport(String imp);
 
 }
