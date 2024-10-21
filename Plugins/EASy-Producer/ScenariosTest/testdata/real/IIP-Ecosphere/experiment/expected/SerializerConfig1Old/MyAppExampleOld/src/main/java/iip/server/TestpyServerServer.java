@@ -10,6 +10,7 @@ import de.iip_ecosphere.platform.services.environment.Starter;
 import de.iip_ecosphere.platform.services.environment.YamlArtifact;
 import de.iip_ecosphere.platform.services.environment.YamlServer;
 import de.iip_ecosphere.platform.support.Server;
+import de.iip_ecosphere.platform.support.resources.ResourceLoader;
 
 import org.slf4j.LoggerFactory;
 

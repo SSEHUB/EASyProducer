@@ -13,6 +13,7 @@ template JavaServer(Configuration config, JavaCodeArtifact target, Server server
     @DispatchCase
     def generateConstructor(PythonServer server, JavaCodeMethod meth) {
         String clsName = asTypeName(server.id);
+        meth.addImport("de.iip_ecosphere.platform.support.resources.ResourceLoader");
         meth.addVariable("java.io.InputStream", "desc", 
             'ResourceLoader.getResourceAsStream(${clsName}Server.class, "${getDeploymentDescriptorPath()}")');
         meth.addVariable("de.iip_ecosphere.platform.services.environment.YamlArtifact", "artifact", 
