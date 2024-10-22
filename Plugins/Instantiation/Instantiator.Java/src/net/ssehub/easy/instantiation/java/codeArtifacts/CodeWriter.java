@@ -27,13 +27,13 @@ import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
 import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
 
 /**
- * Writes code to a file or a print writer.
+ * Writes code to a file or a print writer. Debug output on system property {@code easy.java.writer.debug}.
  * 
  * @author Holger Eichelberger
  */
 class CodeWriter implements Closeable {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("easy.java.writer.debug", "false"));
     private PrintWriter out;
     private String indent = "";
     private String indentStep = "  ";
