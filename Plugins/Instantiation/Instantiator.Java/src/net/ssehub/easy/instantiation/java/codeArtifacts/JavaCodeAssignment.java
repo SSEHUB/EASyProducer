@@ -23,19 +23,33 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 public class JavaCodeAssignment extends JavaCodeStatement {
 
     private String variableName;
+    private String operator;
     private String expression;
     private JavaCodeMethodCall expressionCall;
     
     /**
-     * Creates a variable assignment.
+     * Creates a variable assignment with default assignment operator {@code =}.
      * 
      * @param parent the parent
      * @param variableName the variable name
      * @param expression the value expression
      */
     public JavaCodeAssignment(IJavaCodeElement parent, String variableName, String expression) {
+        this(parent, variableName, "=", expression);
+    }
+
+    /**
+     * Creates a variable assignment.
+     * 
+     * @param parent the parent
+     * @param variableName the variable name
+     * @param operator the assignment operator, e.g., {@code =} or {@code +=}
+     * @param expression the value expression
+     */
+    public JavaCodeAssignment(IJavaCodeElement parent, String variableName, String operator, String expression) {
         super(parent);
         this.variableName = variableName;
+        this.operator = operator;
         this.expression = expression;
     }
 
@@ -65,7 +79,9 @@ public class JavaCodeAssignment extends JavaCodeStatement {
     public void store(CodeWriter out) {
         out.printIndent();
         out.print(variableName);
-        out.print(" = ");
+        out.print(" ");
+        out.print(operator);
+        out.print(" ");
         if (expressionCall != null) {
             expressionCall.store(out);
         } else {

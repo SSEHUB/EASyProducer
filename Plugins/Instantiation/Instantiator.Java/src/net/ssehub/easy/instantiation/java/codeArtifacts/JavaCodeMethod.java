@@ -248,7 +248,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public JavaCodeAssignment addAssignment(String variable, String expression) {
         return block.addAssignment(variable, expression);
     }
-    
+
+    @Override
+    public JavaCodeAssignment addAssignment(String variable, String operator, String expression) {
+        return block.addAssignment(variable, operator, expression);
+    }
+
     @Override
     public JavaCodeMethod addEmptyLine() {
         block.addEmptyLine();
@@ -388,7 +393,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         IJavaCodeElement.storeList(parameter, ", ", out);
         out.print(")");
         IJavaCodeElement.storeList(" throws ", exceptions, ", ", out);
-        if (!isAbstract() || enclosing.getKind() == Kind.INTERFACE) {
+        if (!(isAbstract() || enclosing.getKind() == Kind.INTERFACE)) {
             block.store(out);
         } else {
             out.println(";");

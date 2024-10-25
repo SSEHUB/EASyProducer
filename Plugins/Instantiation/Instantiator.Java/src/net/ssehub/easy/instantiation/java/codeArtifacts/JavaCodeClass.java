@@ -122,9 +122,15 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
     
     public JavaCodeAttribute addAttribute(String type, String name) {
-        return IJavaCodeElement.add(elements, 
-            new JavaCodeAttribute(JavaCodeTypeSpecification.create(type, this), name, this), 
-            lastAttribute(elements));
+        return createAttribute(type, name, true);
+    }
+    
+    public JavaCodeAttribute createAttribute(String type, String name, boolean add) {
+        JavaCodeAttribute result = new JavaCodeAttribute(JavaCodeTypeSpecification.create(type, this), name, this);
+        if (add) {
+            IJavaCodeElement.add(elements, result, lastAttribute(elements));
+        }
+        return result;
     }
 
     public JavaCodeAttribute addAttribute(JavaCodeTypeSpecification type, String name) {
@@ -144,21 +150,52 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         extendingClass = JavaCodeTypeSpecification.create(type, this);
         return this;
     }
-    
+
+    /**
+     * Adds an implemented interface.
+     * 
+     * @param type the (qualified) name of the interface, ignored if empty
+     * @return <b>this</b>
+     */
     public JavaCodeClass addInterface(String type) {
-        if (null == implementedInterfaces) {
-            implementedInterfaces = new ArrayList<>();
+        if (type.length() > 0) {
+            if (null == implementedInterfaces) {
+                implementedInterfaces = new ArrayList<>();
+            }
+            IJavaCodeElement.add(implementedInterfaces, JavaCodeTypeSpecification.create(type, this));
         }
-        IJavaCodeElement.add(implementedInterfaces, JavaCodeTypeSpecification.create(type, this));
         return this;
     }
-    
+
+    /**
+     * Sets the class kind.
+     * 
+     * @param kind the new kind
+     */
     protected void setKind(Kind kind) {
         this.kind = kind;
     }
     
+    /**
+     * Turns this class to an interface.
+     * 
+     * @return <b>this</b>
+     */
     public JavaCodeClass asInterface() {
         setKind(Kind.INTERFACE);
+        return this;
+    }
+    
+    /**
+     * Conditionally turns this class to an interface.
+     * 
+     * @param enable interface if {@code true}, else no change
+     * @return <b>this</b>
+     */
+    public JavaCodeClass asInterface(boolean enable) {
+        if (enable) {
+            asInterface();
+        }
         return this;
     }
     
@@ -214,7 +251,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
     
     /**
-     * Adds an extensible default getter for {@code attribute}.
+     * Adds a default getter for {@code attribute}.
      * 
      * @param attribute the attribute to add the getter for
      * @return the getter
@@ -224,13 +261,59 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
 
     /**
-     * Adds an extensible default setter for {@code attribute}.
+     * Adds a default setter for {@code attribute}.
      * 
      * @param attribute the attribute to add the setter for
      * @return the setter
      */
     public JavaCodeMethod addSetter(JavaCodeAttribute attribute) {
         return attribute.addSetter();
+    }
+
+    /**
+     * Adds a default setter for {@code attribute}.
+     * 
+     * @param attribute the attribute to add the setter for
+     * @param paramName explicit name for the parameter, may be <b>null</b> for the name of the attribute 
+     * @return the setter
+     */
+    public JavaCodeMethod addSetter(JavaCodeAttribute attribute, String paramName) {
+        return attribute.addSetter(paramName);
+    }
+    
+    /**
+     * Adds an empty toString method with override annotation to this class.
+     * 
+     * @return the method
+     */
+    public JavaCodeMethod addToString() {
+        JavaCodeMethod toString = addMethod("String", "toString");
+        toString.addOverrideAnnotation();
+        return toString;
+    }
+
+    /**
+     * Adds an empty hashCode method with override annotation to this class.
+     * 
+     * @return the method
+     */
+    public JavaCodeMethod addHashCode() {
+        JavaCodeMethod hash = addMethod("int", "hashCode");
+        hash.addOverrideAnnotation();
+        return hash;
+    }
+
+    /**
+     * Adds an empty equals method with override annotation to this class.
+     * 
+     * @param paramName the name of the parameter of the object to compare
+     * @return the method
+     */
+    public JavaCodeMethod addEquals(String paramName) {
+        JavaCodeMethod eq = addMethod("boolean", "equals");
+        eq.addOverrideAnnotation();
+        eq.addParameter("Object", "other");
+        return eq;
     }
 
     @Override

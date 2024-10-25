@@ -176,11 +176,22 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
      * @return the setter
      */
     public JavaCodeMethod addSetter() {
+        return addSetter(null);
+    }
+    
+    /**
+     * Adds an extensible default setter for this attribute.
+     *
+     * @param paramName explicit name for the parameter, may be <b>null</b> for the name of the attribute 
+     * @return the setter
+     */
+    public JavaCodeMethod addSetter(String paramName) {
         final String attribute = getName();
+        final String pName = null == paramName ? attribute : paramName;
         JavaCodeMethod method = enclosing.addMethod(JavaCodeTypeSpecification.VOID, 
             "set" + PseudoString.firstToUpperCase(attribute), "Changes the value of " + attribute + ".");
-        method.addParameter(type, attribute, "the new value");
-        method.add("this." + attribute + " = " + attribute + ";");
+        method.addParameter(type, pName, "the new value");
+        method.add("this." + attribute + " = " + pName + ";");
         return method;
     }
 

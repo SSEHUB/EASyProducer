@@ -32,6 +32,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum.JavaCodeEnu
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeJavadocComment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeLambdaExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
@@ -104,6 +105,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
             TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
             TypeRegistry.DEFAULT.register(JavaCodeAnnotation.class);
+            TypeRegistry.DEFAULT.register(JavaCodeJavadocComment.class);
             TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
             TypeRegistry.DEFAULT.register(JavaCodeClass.class);
             TypeRegistry.DEFAULT.register(JavaCodeEnum.class);

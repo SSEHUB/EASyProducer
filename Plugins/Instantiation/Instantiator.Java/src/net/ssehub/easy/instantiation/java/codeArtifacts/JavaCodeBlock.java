@@ -241,7 +241,12 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
 
     @Override
     public JavaCodeAssignment addAssignment(String variable, String expression) {
-        return IJavaCodeElement.add(elements, new JavaCodeAssignment(this, variable, expression));
+        return addAssignment(variable, "=", expression);
+    }
+
+    @Override
+    public JavaCodeAssignment addAssignment(String variable, String operator, String expression) {
+        return IJavaCodeElement.add(elements, new JavaCodeAssignment(this, variable, operator, expression));
     }
 
     @Override

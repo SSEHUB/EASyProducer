@@ -74,6 +74,15 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
     public void addArgument(String value) {
         addArgument(null, value);
     }
+    
+    /**
+     * Adds an annotation argument as potentially quoted string constant adding Java quotes before and after.
+     * 
+     * @param value the String value
+     */    
+    public void addStringArgument(String value) {
+        addArgument("\"" + StringEscapeUtils.escapeJava(value) + "\"");    
+    }
 
     /**
      * Adds an annotation argument.
@@ -83,6 +92,16 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      */
     public void addArgument(String name, String value) {
         addArgument(name, value, false);
+    }
+    
+    /**
+     * Adds an annotation argument as potentially quoted string constant adding Java quotes before and after.
+     * 
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
+     * @param value the String value
+     */    
+    public void addStringArgument(String name, String value) {
+        addArgument(name, "\"" + StringEscapeUtils.escapeJava(value) + "\"");    
     }
 
     /**

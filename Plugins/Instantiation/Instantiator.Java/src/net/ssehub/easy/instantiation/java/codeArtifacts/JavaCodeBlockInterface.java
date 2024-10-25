@@ -146,6 +146,16 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement {
     public JavaCodeAssignment addAssignment(String variable, String expression);
 
     /**
+     * Adds an assignment.
+     * 
+     * @param variable the variable to change
+     * @param operator the assignment operator, e.g., {@code =} or {@code +=}
+     * @param expression the expression determining the value
+     * @return the assignment
+     */
+    public JavaCodeAssignment addAssignment(String variable, String operator, String expression);
+
+    /**
      * Adds an empty line.
      * 
      * @return <b>this</b>

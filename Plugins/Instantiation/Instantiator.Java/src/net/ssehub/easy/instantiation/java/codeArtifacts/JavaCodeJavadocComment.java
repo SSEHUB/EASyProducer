@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -149,9 +150,17 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         if (null == taggedParts) {
             taggedParts = new ArrayList<>();
         }
-        if (!taggedParts.stream().anyMatch(p -> p.tag == tag && p.name.equals(name))) {
+        Optional<NameTaggedComment> t = taggedParts.stream().filter(p -> p.tag == tag && p.name.equals(name)).findAny();
+        if (t.isEmpty()) {
             taggedParts.add(new NameTaggedComment(tag, name, comment));
+        } else {
+            t.get().comment = comment;
         }
+        return this;
+    }
+    
+    public JavaCodeJavadocComment setComment(String comment) {
+        this.comment = comment;
         return this;
     }
     
