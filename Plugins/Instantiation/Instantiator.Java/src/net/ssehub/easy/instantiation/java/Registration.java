@@ -32,6 +32,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum.JavaCodeEnu
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeInitializer;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeJavadocComment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeLambdaExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
@@ -113,6 +114,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);
             TypeRegistry.DEFAULT.register(JavaCodeBlockInterface.class);
             TypeRegistry.DEFAULT.register(JavaCodeBlock.class);
+            TypeRegistry.DEFAULT.register(JavaCodeInitializer.class);
             TypeRegistry.DEFAULT.register(JavaCodeDoLoop.class);
             TypeRegistry.DEFAULT.register(JavaCodeWhileLoop.class);
             TypeRegistry.DEFAULT.register(JavaCodeForLoop.class);

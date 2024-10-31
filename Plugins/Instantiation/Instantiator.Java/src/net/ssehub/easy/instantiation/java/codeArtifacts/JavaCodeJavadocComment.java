@@ -158,20 +158,61 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         }
         return this;
     }
-    
+
+    /**
+     * Changes the main comment text.
+     * 
+     * @param comment the comment text
+     * @return <b>this</b>
+     */
     public JavaCodeJavadocComment setComment(String comment) {
         this.comment = comment;
         return this;
     }
-    
+
+    /**
+     * Adds text to the main comment text.
+     * 
+     * @param comment the comment text
+     * @return <b>this</b>
+     */
+    public JavaCodeJavadocComment addComment(String comment) {
+        if (null == this.comment) {
+            setComment(comment);
+        } else {
+            this.comment += comment;
+        }
+        return this;
+    }
+
+    /**
+     * Adds/changes a parameter comment.
+     * 
+     * @param name the name of the parameter
+     * @param comment the comment text
+     * @return <b>this</b>
+     */
     public JavaCodeJavadocComment addParameterComment(String name, String comment) {
         return addTaggedPart(Tag.PARAM, name, comment);
     }
 
+    /**
+     * Adds/changes the return comment.
+     * 
+     * @param comment the comment text
+     * @return <b>this</b>
+     */
     public JavaCodeJavadocComment addReturnComment(String comment) {
         return addTaggedPart(Tag.RETURN, "", comment);
     }
 
+    /**
+     * Adds/changes an exception comment.
+     * 
+     * @param type the exception type, may be qualified
+     * @param comment the comment text
+     * @return <b>this</b>
+     */
     public JavaCodeJavadocComment addExceptionComment(String type, String comment) {
         return addTaggedPart(Tag.THROWS, type, comment);        
     }

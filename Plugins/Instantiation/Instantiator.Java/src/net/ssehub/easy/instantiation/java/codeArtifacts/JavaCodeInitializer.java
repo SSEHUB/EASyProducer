@@ -15,28 +15,35 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
- * Denotes the auto-import scope for types.
+ * Represents an initializer block.
  * 
  * @author Holger Eichelberger
  */
-public enum JavaCodeImportScope implements IVilType {
+public class JavaCodeInitializer extends JavaCodeBlock {
 
     /**
-     * No scope, no import.
+     * Creates an initializer block.
+     * 
+     * @param parent the parent class
+     * @param isStatic whether the block is static
      */
-    NONE,
+    public JavaCodeInitializer(JavaCodeClass parent, boolean isStatic) {
+        super(parent, false, true, isStatic, true);
+    }
     
-    /**
-     * Class scope.
-     */
-    CLASS,
-
-    /**
-     * (Static) class and method scope. May lead to a static method import.
-     */
-    METHOD
+    @Invisible
+    @Override
+    public void store(CodeWriter out) {
+        out.printIndent();
+        super.store(out);
+    }
+    
+    @Invisible
+    public boolean isInitializer() {
+        return true;
+    }
 
 }

@@ -120,6 +120,28 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     public JavaCodeClass addClass(String name) {
         return IJavaCodeElement.add(elements, new JavaCodeClass(name, this).setProtected());
     }
+
+    /**
+     * Adds an initializer block.
+     * 
+     * @param isStatic whether the initializer shall be static
+     * @return the created initializer
+     */
+    public JavaCodeInitializer addInitializer(boolean isStatic) {
+        return IJavaCodeElement.add(elements, new JavaCodeInitializer(this, isStatic));
+    }
+
+    /**
+     * Removes {@code elt} if {@link JavaCodeElement#isEmpty()}. Please not that no related
+     * imports are removed.
+     * 
+     * @param elt the element to check
+     */
+    public void removeIfEmpty(JavaCodeElement elt) {
+        if (elt.isEmpty()) {
+            elements.remove(elt);
+        }
+    }
     
     public JavaCodeAttribute addAttribute(String type, String name) {
         return createAttribute(type, name, true);
@@ -315,6 +337,20 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         eq.addParameter("Object", "other");
         return eq;
     }
+    
+    /**
+     * Adds an empty main method with override annotation to this class.
+     * 
+     * @param paramName the name of the parameter of the object to compare
+     * @param varArg use an array parameter type ({@code false}) or a varArg parameter ({@code true})
+     * @return the method
+     */
+    public JavaCodeMethod addMain(String paramName, boolean varArg) {
+        JavaCodeMethod main = addMethod("", "main", "Executes the program.");
+        main.setStatic();
+        main.addParameter("String" + (varArg ? "[]" : "..."), "args", "Command line arguments");
+        return main;
+    }
 
     @Override
     public JavaCodeClass setVisibility(String visibility) {
@@ -450,6 +486,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
 
         // partition into fixed groups, proxies are transparent
         List<IJavaCodeElement> before = new ArrayList<>();
+        List<IJavaCodeElement> init = new ArrayList<>();
         List<IJavaCodeElement> cons = new ArrayList<>();
         List<IJavaCodeElement> rest = new ArrayList<>();
         boolean inMethods = false;
@@ -460,6 +497,8 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
             } else if (e.isMethod()) {
                 inMethods = true;
                 rest.add(e);
+            } else if (e.isInitializer()) {
+                init.add(e);
             } else if (!inMethods || e.isAttribute()) {
                 before.add(e);
             } else {
@@ -474,6 +513,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         // un-partition from fixed groups
         result.clear();
         result.addAll(before);
+        result.addAll(init);
         result.addAll(cons);
         result.addAll(rest);
         

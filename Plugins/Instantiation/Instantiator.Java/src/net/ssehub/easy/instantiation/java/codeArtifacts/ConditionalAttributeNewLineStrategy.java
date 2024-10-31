@@ -34,7 +34,8 @@ public class ConditionalAttributeNewLineStrategy implements NewLineStrategy {
             separateBefore = elt.hasJavadocComment();
         } else if (lastIsAttribute) {
             separateBefore = true;
-        }
+        }        
+        separateBefore |= elt.isInitializer();
         return separateBefore;
     }
     

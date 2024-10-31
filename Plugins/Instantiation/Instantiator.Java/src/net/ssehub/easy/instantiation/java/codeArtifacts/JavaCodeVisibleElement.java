@@ -31,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 public abstract class JavaCodeVisibleElement extends JavaCodeElement {
 
     private boolean isStatic;
+    private boolean isFinal;
     private String name;
     private JavaCodeVisibility visibility;
     private List<JavaCodeAnnotation> annotations;
@@ -137,7 +138,7 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
     }
 
     /**
-     * Sets this element's static state.
+     * Sets this element's static modifier state.
      * 
      * @param isStatic if the element is static
      * @return <b>this</b>
@@ -153,8 +154,27 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      * @return <b>this</b>
      */
     public JavaCodeVisibleElement setStatic() {
-        setStatic(true);
+        return setStatic(true);
+    }
+
+    /**
+     * Sets this element's final modifier state.
+     * 
+     * @param isFinal if the element is final
+     * @return <b>this</b>
+     */
+    public JavaCodeVisibleElement setFinal(boolean isFinal) {
+        this.isFinal = isFinal;
         return this;
+    }
+
+    /**
+     * Sets this element to final.
+     * 
+     * @return <b>this</b>
+     */
+    public JavaCodeVisibleElement setFinal() {
+        return setFinal(true);
     }
 
     /**
@@ -227,7 +247,16 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
     public boolean isStatic() {
         return isStatic;
     }
-    
+
+    /**
+     * Returns whether the element is final.
+     * 
+     * @return {@code true} for final, {@code false} for non-final
+     */
+    public boolean isFinal() {
+        return isStatic;
+    }
+
     /**
      * Inserts additional modifiers after the visibility of the {@link #getModifier() modifiers}.
      * 
@@ -263,6 +292,9 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
         result = insertModifier(result);
         if (isStatic) {
             result = IJavaCodeElement.appendWhitespace(result) +  "static";
+        }
+        if (isFinal) {
+            result = IJavaCodeElement.appendWhitespace(result) +  "final";
         }
         result = insertGenerics(result);
         return IJavaCodeElement.appendWhitespace(result);

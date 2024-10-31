@@ -45,6 +45,15 @@ public interface Storable {
     }
 
     /**
+     * Returns whether this element (block) is empty and could be removed.
+     * 
+     * @return {@code true} for empty, {@code false} else
+     */
+    public default boolean isEmpty() {
+        return false;
+    }
+
+    /**
      * Turns this Storable to code.
      * 
      * @return the string representation

@@ -35,6 +35,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     private List<JavaCodeParameterSpecification> parameter;
     private List<JavaCodeTypeSpecification> exceptions;
     private boolean forceJavadoc;
+    private boolean dflt;
 
     /**
      * Creates a void method without comment.
@@ -384,6 +385,11 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public void store(CodeWriter out) {
         super.store(out); // comment, annotations
         out.printwi(getModifier());
+        boolean enclosingIsInterface = enclosing.getKind() == Kind.INTERFACE;
+        if (enclosingIsInterface && isDefault()) {
+            out.print("default");
+            out.print(" ");
+        }
         if (null != type) { // constructor?
             type.store(out);
             out.print(" ");
@@ -393,10 +399,11 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         IJavaCodeElement.storeList(parameter, ", ", out);
         out.print(")");
         IJavaCodeElement.storeList(" throws ", exceptions, ", ", out);
-        if (!(isAbstract() || enclosing.getKind() == Kind.INTERFACE)) {
-            block.store(out);
-        } else {
+        boolean signatureOnly = isAbstract() || (enclosingIsInterface && (!isDefault() || !isStatic()));
+        if (signatureOnly) {
             out.println(";");
+        } else {
+            block.store(out);
         }
     }
     
@@ -473,6 +480,31 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Override
     public boolean isMethod() {
         return null != type;
+    }
+    
+    /**
+     * Sets this method to default.
+     */
+    public void setDefault() {
+        dflt = true;
+    }
+    
+    /**
+     * Sets this method's default state.
+     * 
+     * @param isDefault if the method is method
+     */
+    public void setDefault(boolean isDefault) {
+        this.dflt = isDefault;
+    }
+
+    /**
+     * Returns whether the element is default.
+     * 
+     * @return {@code true} for default, {@code false} for not default
+     */
+    public boolean isDefault() {
+        return dflt;
     }
     
 }

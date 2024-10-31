@@ -87,6 +87,16 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     public default boolean hasJavadocComment() {
         return false;
     }
+
+    /**
+     * Returns whether this element is a class initializer.
+     * 
+     * @return {@code true} for initializer, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isInitializer() {
+        return false;
+    }
     
     /**
      * Returns whether this element is an attribute.

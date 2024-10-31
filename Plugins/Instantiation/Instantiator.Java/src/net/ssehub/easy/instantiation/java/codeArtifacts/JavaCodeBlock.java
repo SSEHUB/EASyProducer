@@ -409,5 +409,39 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
         }
         return result;
     }    
+
+    /**
+     * Returns whether the element is static.
+     * 
+     * @return {@code true} for static, {@code false} for instance
+     */
+    public boolean isStatic() {
+        return isStatic;
+    }
+    
+    /**
+     * Sets this element's static state.
+     * 
+     * @param isStatic if the element is static
+     * @return <b>this</b>
+     */
+    public JavaCodeBlock setStatic(boolean isStatic) {
+        this.isStatic = isStatic;
+        return this;
+    }
+
+    /**
+     * Sets this element to static.
+     * 
+     * @return <b>this</b>
+     */
+    public JavaCodeBlock setStatic() {
+        return setStatic(true);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return elements.isEmpty();
+    }
     
 }

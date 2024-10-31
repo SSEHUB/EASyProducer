@@ -124,7 +124,7 @@ class ProxyElement implements IJavaCodeElement {
             if (null == last) {
                 last = new ProxyElement();
             }
-            if (e.isAttribute() || e.isConstructor() || e.isMethod()) {
+            if (e.isAttribute() || e.isConstructor() || e.isMethod() || e.isInitializer()) {
                 if (last.delegate == null) {
                     last.delegate = e;
                 } else {
