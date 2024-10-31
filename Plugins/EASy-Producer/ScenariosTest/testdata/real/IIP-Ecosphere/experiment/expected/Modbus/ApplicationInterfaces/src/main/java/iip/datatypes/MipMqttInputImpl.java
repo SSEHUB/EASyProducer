@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.MipMqttInput;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.MipMqttInput;
 
 /**
  * Implementation of the application data type MipMqttInput.
@@ -76,130 +76,110 @@ public class MipMqttInputImpl implements MipMqttInput {
     @Override
     @JsonIgnore
     public String getMipcontext() {
-    
         return mipcontext;
     }
-    
-    @Override
-    @JsonIgnore
-    public String getMipdate() {
-    
-        return mipdate;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipto() {
-    
-        return mipto;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipfrom() {
-    
-        return mipfrom;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipcommand() {
-    
-        return mipcommand;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipbitstream_ai_clock() {
-    
-        return mipbitstream_ai_clock;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipbitstream_ai_data1() {
-    
-        return mipbitstream_ai_data1;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipbitstream_ai_data2() {
-    
-        return mipbitstream_ai_data2;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipreader() {
-    
-        return mipreader;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setMipcontext(String value) {
-    
         this.mipcontext = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipdate() {
+        return mipdate;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipdate(String value) {
-    
         this.mipdate = value;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getMipto() {
+        return mipto;
     }
     
     @Override
     @JsonIgnore
     public void setMipto(String value) {
-    
         this.mipto = value;
     }
-    
+
+    @Override
+    @JsonIgnore
+    public String getMipfrom() {
+        return mipfrom;
+    }
+
     @Override
     @JsonIgnore
     public void setMipfrom(String value) {
-    
         this.mipfrom = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipcommand() {
+        return mipcommand;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipcommand(String value) {
-    
         this.mipcommand = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipbitstream_ai_clock() {
+        return mipbitstream_ai_clock;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipbitstream_ai_clock(String value) {
-    
         this.mipbitstream_ai_clock = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipbitstream_ai_data1() {
+        return mipbitstream_ai_data1;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipbitstream_ai_data1(String value) {
-    
         this.mipbitstream_ai_data1 = value;
     }
-    
+
+    @Override
+    @JsonIgnore
+    public String getMipbitstream_ai_data2() {
+        return mipbitstream_ai_data2;
+    }
+
     @Override
     @JsonIgnore
     public void setMipbitstream_ai_data2(String value) {
-    
         this.mipbitstream_ai_data2 = value;
     }
     
     @Override
     @JsonIgnore
-    public void setMipreader(String value) {
-    
-        this.mipreader = value;
+    public String getMipreader() {
+        return mipreader;
     }
     
+    @Override
+    @JsonIgnore
+    public void setMipreader(String value) {
+        this.mipreader = value;
+    }
 
     @Override
     public int hashCode() {
@@ -227,9 +207,12 @@ public class MipMqttInputImpl implements MipMqttInput {
             eq &= getMipto() != null ? getMipto().equals(oth.getMipto()) : true;
             eq &= getMipfrom() != null ? getMipfrom().equals(oth.getMipfrom()) : true;
             eq &= getMipcommand() != null ? getMipcommand().equals(oth.getMipcommand()) : true;
-            eq &= getMipbitstream_ai_clock() != null ? getMipbitstream_ai_clock().equals(oth.getMipbitstream_ai_clock()) : true;
-            eq &= getMipbitstream_ai_data1() != null ? getMipbitstream_ai_data1().equals(oth.getMipbitstream_ai_data1()) : true;
-            eq &= getMipbitstream_ai_data2() != null ? getMipbitstream_ai_data2().equals(oth.getMipbitstream_ai_data2()) : true;
+            eq &= getMipbitstream_ai_clock() != null ? getMipbitstream_ai_clock().equals(oth.getMipbitstream_ai_clock(
+                )) : true;
+            eq &= getMipbitstream_ai_data1() != null ? getMipbitstream_ai_data1().equals(oth.getMipbitstream_ai_data1(
+                )) : true;
+            eq &= getMipbitstream_ai_data2() != null ? getMipbitstream_ai_data2().equals(oth.getMipbitstream_ai_data2(
+                )) : true;
             eq &= getMipreader() != null ? getMipreader().equals(oth.getMipreader()) : true;
         } else {
             eq = false;

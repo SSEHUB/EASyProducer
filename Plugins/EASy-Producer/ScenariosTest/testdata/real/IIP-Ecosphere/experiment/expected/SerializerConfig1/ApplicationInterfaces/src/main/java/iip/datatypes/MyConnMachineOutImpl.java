@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.MyConnMachineOut;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.MyConnMachineOut;
 
 /**
  * Implementation of the application data type MyConnMachineOut.
@@ -20,7 +20,6 @@ public class MyConnMachineOutImpl implements MyConnMachineOut {
     @JsonProperty("nested")
     @ConfiguredName("nested")
     private MyNested[] nested;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -41,32 +40,26 @@ public class MyConnMachineOutImpl implements MyConnMachineOut {
     @Override
     @JsonIgnore
     public String getCmdField() {
-    
         return cmdField;
     }
-    
-    @Override
-    @JsonIgnore
-    public MyNested[] getNested() {
-    
-        return nested;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setCmdField(String value) {
-    
         this.cmdField = value;
     }
     
     @Override
     @JsonIgnore
-    public void setNested(MyNested[] value) {
-    
-        this.nested = value;
+    public MyNested[] getNested() {
+        return nested;
     }
     
+    @Override
+    @JsonIgnore
+    public void setNested(MyNested[] value) {
+        this.nested = value;
+    }
 
     @Override
     public int hashCode() {

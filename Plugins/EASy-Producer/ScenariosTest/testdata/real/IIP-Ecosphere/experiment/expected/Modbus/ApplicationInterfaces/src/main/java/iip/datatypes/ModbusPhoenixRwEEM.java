@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type ModbusPhoenixRwEEM.
@@ -11,33 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("ModbusPhoenixRwEEM")
 public interface ModbusPhoenixRwEEM {
- 
 
     /**
-      * Returns the value of {@code Day}. Day of occurrence of the voltage dip (UTC)
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code Day}. Day of occurrence of the voltage dip (UTC)
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public int getDay();
-    
-    /**
-      * Returns the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getMonth();
-    
-    /**
-      * Returns the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getYear();
-    
-    
+
     /**
      * Changes the value of {@code Day}. Day of occurrence of the voltage dip (UTC)
      * 
@@ -47,6 +28,14 @@ public interface ModbusPhoenixRwEEM {
     public void setDay(int value);
     
     /**
+     * Returns the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public int getMonth();
+
+    /**
      * Changes the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
      * 
      * @param value the new value
@@ -55,13 +44,19 @@ public interface ModbusPhoenixRwEEM {
     public void setMonth(int value);
     
     /**
+     * Returns the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public int getYear();
+    
+    /**
      * Changes the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setYear(int value);
-    
-    
 
 }

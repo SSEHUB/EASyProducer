@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.ModbusSiemensRwSentron;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.ModbusSiemensRwSentron;
 
 /**
  * Implementation of the application data type ModbusSiemensRwSentron.
@@ -24,7 +24,6 @@ public class ModbusSiemensRwSentronImpl implements ModbusSiemensRwSentron {
     @JsonProperty("BrightnessDuration")
     @ConfiguredName("BrightnessDuration")
     private long BrightnessDuration;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -46,46 +45,38 @@ public class ModbusSiemensRwSentronImpl implements ModbusSiemensRwSentron {
     @Override
     @JsonIgnore
     public long getDisplayContrast() {
-    
         return DisplayContrast;
     }
-    
-    @Override
-    @JsonIgnore
-    public long getDisplayBrightness() {
-    
-        return DisplayBrightness;
-    }
-    
-    @Override
-    @JsonIgnore
-    public long getBrightnessDuration() {
-    
-        return BrightnessDuration;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setDisplayContrast(long value) {
-    
         this.DisplayContrast = value;
     }
-    
+
+    @Override
+    @JsonIgnore
+    public long getDisplayBrightness() {
+        return DisplayBrightness;
+    }
+
     @Override
     @JsonIgnore
     public void setDisplayBrightness(long value) {
-    
         this.DisplayBrightness = value;
     }
     
     @Override
     @JsonIgnore
-    public void setBrightnessDuration(long value) {
-    
-        this.BrightnessDuration = value;
+    public long getBrightnessDuration() {
+        return BrightnessDuration;
     }
     
+    @Override
+    @JsonIgnore
+    public void setBrightnessDuration(long value) {
+        this.BrightnessDuration = value;
+    }
 
     @Override
     public int hashCode() {

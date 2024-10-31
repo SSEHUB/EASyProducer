@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type RtsaTestInput.
@@ -11,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("RtsaTestInput")
 public interface RtsaTestInput {
- 
 
     /**
       * Returns the value of {@code id}.
@@ -20,24 +18,7 @@ public interface RtsaTestInput {
       */
     @JsonIgnore
     public int getId();
-    
-    /**
-      * Returns the value of {@code value1}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public double getValue1();
-    
-    /**
-      * Returns the value of {@code value2}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public double getValue2();
-    
-    
+
     /**
      * Changes the value of {@code id}.
      * 
@@ -47,6 +28,14 @@ public interface RtsaTestInput {
     public void setId(int value);
     
     /**
+      * Returns the value of {@code value1}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public double getValue1();
+
+    /**
      * Changes the value of {@code value1}.
      * 
      * @param value the new value
@@ -55,13 +44,19 @@ public interface RtsaTestInput {
     public void setValue1(double value);
     
     /**
+      * Returns the value of {@code value2}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public double getValue2();
+    
+    /**
      * Changes the value of {@code value2}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setValue2(double value);
-    
-    
 
 }

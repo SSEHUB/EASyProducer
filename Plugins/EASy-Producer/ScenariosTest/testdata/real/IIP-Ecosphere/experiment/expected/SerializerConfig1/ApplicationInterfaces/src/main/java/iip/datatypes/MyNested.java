@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type MyNested.
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("MyNested")
 public interface MyNested {
  
-
     /**
       * Returns the value of {@code state}.
       * 
@@ -21,7 +19,6 @@ public interface MyNested {
     @JsonIgnore
     public String getState();
     
-    
     /**
      * Changes the value of {@code state}.
      * 
@@ -29,7 +26,5 @@ public interface MyNested {
      */
     @JsonIgnore
     public void setState(String value);
-    
-    
 
 }

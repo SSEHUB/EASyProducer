@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.RtsaTestOutput;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.RtsaTestOutput;
 
 /**
  * Implementation of the application data type RtsaTestOutput.
@@ -32,7 +32,6 @@ public class RtsaTestOutputImpl implements RtsaTestOutput {
     @JsonProperty("prediction")
     @ConfiguredName("prediction")
     private boolean prediction;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -56,74 +55,62 @@ public class RtsaTestOutputImpl implements RtsaTestOutput {
     @Override
     @JsonIgnore
     public int getId() {
-    
         return id;
     }
-    
-    @Override
-    @JsonIgnore
-    public double getValue1() {
-    
-        return value1;
-    }
-    
-    @Override
-    @JsonIgnore
-    public double getValue2() {
-    
-        return value2;
-    }
-    
-    @Override
-    @JsonIgnore
-    public double getConfidence() {
-    
-        return confidence;
-    }
-    
-    @Override
-    @JsonIgnore
-    public boolean getPrediction() {
-    
-        return prediction;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setId(int value) {
-    
         this.id = value;
     }
     
     @Override
     @JsonIgnore
+    public double getValue1() {
+        return value1;
+    }
+
+    @Override
+    @JsonIgnore
     public void setValue1(double value) {
-    
         this.value1 = value;
     }
     
     @Override
     @JsonIgnore
+    public double getValue2() {
+        return value2;
+    }
+
+    @Override
+    @JsonIgnore
     public void setValue2(double value) {
-    
         this.value2 = value;
     }
     
     @Override
     @JsonIgnore
+    public double getConfidence() {
+        return confidence;
+    }
+
+    @Override
+    @JsonIgnore
     public void setConfidence(double value) {
-    
         this.confidence = value;
     }
     
     @Override
     @JsonIgnore
-    public void setPrediction(boolean value) {
-    
-        this.prediction = value;
+    public boolean getPrediction() {
+        return prediction;
     }
     
+    @Override
+    @JsonIgnore
+    public void setPrediction(boolean value) {
+        this.prediction = value;
+    }
 
     @Override
     public int hashCode() {

@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.MipMqttOutput;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.MipMqttOutput;
 
 /**
  * Implementation of the application data type MipMqttOutput.
@@ -71,117 +71,99 @@ public class MipMqttOutputImpl implements MipMqttOutput {
     @Override
     @JsonIgnore
     public String getMipcontext() {
-    
         return mipcontext;
     }
-    
-    @Override
-    @JsonIgnore
-    public String getMipdate() {
-    
-        return mipdate;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipfrom() {
-    
-        return mipfrom;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipid_tag() {
-    
-        return mipid_tag;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipreader() {
-    
-        return mipreader;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipraw_signal_clock() {
-    
-        return mipraw_signal_clock;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipraw_signal_data1() {
-    
-        return mipraw_signal_data1;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getMipraw_signal_data2() {
-    
-        return mipraw_signal_data2;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setMipcontext(String value) {
-    
         this.mipcontext = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipdate() {
+        return mipdate;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipdate(String value) {
-    
         this.mipdate = value;
     }
     
     @Override
     @JsonIgnore
-    public void setMipfrom(String value) {
-    
-        this.mipfrom = value;
+    public String getMipfrom() {
+        return mipfrom;
     }
     
     @Override
     @JsonIgnore
+    public void setMipfrom(String value) {
+        this.mipfrom = value;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getMipid_tag() {
+        return mipid_tag;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipid_tag(String value) {
-    
         this.mipid_tag = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipreader() {
+        return mipreader;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipreader(String value) {
-    
         this.mipreader = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipraw_signal_clock() {
+        return mipraw_signal_clock;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipraw_signal_clock(String value) {
-    
         this.mipraw_signal_clock = value;
     }
     
     @Override
     @JsonIgnore
+    public String getMipraw_signal_data1() {
+        return mipraw_signal_data1;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMipraw_signal_data1(String value) {
-    
         this.mipraw_signal_data1 = value;
     }
     
     @Override
     @JsonIgnore
-    public void setMipraw_signal_data2(String value) {
+    public String getMipraw_signal_data2() {
+        return mipraw_signal_data2;
+    }
     
+    @Override
+    @JsonIgnore
+    public void setMipraw_signal_data2(String value) {
         this.mipraw_signal_data2 = value;
     }
     
-
     @Override
     public int hashCode() {
         int hc = 0;

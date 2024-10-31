@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type KRec13Anon.
@@ -11,33 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("KRec13Anon")
 public interface KRec13Anon {
- 
 
     /**
-      * Returns the value of {@code kip}.
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code kip}.
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public String getKip();
-    
-    /**
-      * Returns the value of {@code intField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getIntField();
-    
-    /**
-      * Returns the value of {@code stringField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getStringField();
-    
-    
+
     /**
      * Changes the value of {@code kip}.
      * 
@@ -47,12 +28,28 @@ public interface KRec13Anon {
     public void setKip(String value);
     
     /**
+     * Returns the value of {@code intField}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public int getIntField();
+
+    /**
      * Changes the value of {@code intField}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setIntField(int value);
+
+    /**
+     * Returns the value of {@code stringField}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getStringField();
     
     /**
      * Changes the value of {@code stringField}.
@@ -61,7 +58,5 @@ public interface KRec13Anon {
      */
     @JsonIgnore
     public void setStringField(String value);
-    
-    
 
 }

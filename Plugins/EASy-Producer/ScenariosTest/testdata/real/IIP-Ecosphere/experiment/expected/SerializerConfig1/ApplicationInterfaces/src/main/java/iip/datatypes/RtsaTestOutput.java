@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type RtsaTestOutput.
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("RtsaTestOutput")
 public interface RtsaTestOutput {
  
-
     /**
       * Returns the value of {@code id}.
       * 
@@ -20,40 +18,7 @@ public interface RtsaTestOutput {
       */
     @JsonIgnore
     public int getId();
-    
-    /**
-      * Returns the value of {@code value1}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public double getValue1();
-    
-    /**
-      * Returns the value of {@code value2}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public double getValue2();
-    
-    /**
-      * Returns the value of {@code confidence}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public double getConfidence();
-    
-    /**
-      * Returns the value of {@code prediction}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public boolean getPrediction();
-    
-    
+
     /**
      * Changes the value of {@code id}.
      * 
@@ -63,6 +28,14 @@ public interface RtsaTestOutput {
     public void setId(int value);
     
     /**
+      * Returns the value of {@code value1}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public double getValue1();
+
+    /**
      * Changes the value of {@code value1}.
      * 
      * @param value the new value
@@ -70,6 +43,14 @@ public interface RtsaTestOutput {
     @JsonIgnore
     public void setValue1(double value);
     
+    /**
+      * Returns the value of {@code value2}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public double getValue2();
+
     /**
      * Changes the value of {@code value2}.
      * 
@@ -79,6 +60,14 @@ public interface RtsaTestOutput {
     public void setValue2(double value);
     
     /**
+      * Returns the value of {@code confidence}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public double getConfidence();
+
+    /**
      * Changes the value of {@code confidence}.
      * 
      * @param value the new value
@@ -87,13 +76,19 @@ public interface RtsaTestOutput {
     public void setConfidence(double value);
     
     /**
+      * Returns the value of {@code prediction}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public boolean getPrediction();
+    
+    /**
      * Changes the value of {@code prediction}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setPrediction(boolean value);
-    
-    
 
 }

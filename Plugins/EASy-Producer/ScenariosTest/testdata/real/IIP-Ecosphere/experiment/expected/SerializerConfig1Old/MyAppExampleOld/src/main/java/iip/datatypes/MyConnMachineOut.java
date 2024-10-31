@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type MyConnMachineOut.
@@ -28,7 +28,6 @@ public class MyConnMachineOut {
     @ConfiguredName("nested")
     private MyNested[] nested;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -54,8 +53,17 @@ public class MyConnMachineOut {
       */
     @JsonIgnore
     public String getCmdField() {
-    
         return cmdField;
+    }
+
+    /**
+     * Changes the value of {@code cmdField}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setCmdField(String value) {
+        this.cmdField = value;
     }
     
     /**
@@ -65,8 +73,17 @@ public class MyConnMachineOut {
       */
     @JsonIgnore
     public String getDataField() {
-    
         return dataField;
+    }
+
+    /**
+     * Changes the value of {@code dataField}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setDataField(String value) {
+        this.dataField = value;
     }
     
     /**
@@ -76,8 +93,17 @@ public class MyConnMachineOut {
       */
     @JsonIgnore
     public int getDataValue() {
-    
         return dataValue;
+    }
+
+    /**
+     * Changes the value of {@code dataValue}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setDataValue(int value) {
+        this.dataValue = value;
     }
     
     /**
@@ -87,42 +113,7 @@ public class MyConnMachineOut {
       */
     @JsonIgnore
     public MyNested[] getNested() {
-    
         return nested;
-    }
-    
-    
-    /**
-     * Changes the value of {@code cmdField}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setCmdField(String value) {
-    
-        this.cmdField = value;
-    }
-    
-    /**
-     * Changes the value of {@code dataField}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setDataField(String value) {
-    
-        this.dataField = value;
-    }
-    
-    /**
-     * Changes the value of {@code dataValue}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setDataValue(int value) {
-    
-        this.dataValue = value;
     }
     
     /**
@@ -132,10 +123,8 @@ public class MyConnMachineOut {
      */
     @JsonIgnore
     public void setNested(MyNested[] value) {
-    
         this.nested = value;
     }
-    
 
     @Override
     public int hashCode() {

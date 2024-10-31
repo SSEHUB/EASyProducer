@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type AvaMqttOutput.
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("AvaMqttOutput")
 public interface AvaMqttOutput {
  
-
     /**
       * Returns the value of {@code xaxis}.
       * 
@@ -20,24 +18,7 @@ public interface AvaMqttOutput {
       */
     @JsonIgnore
     public String getXaxis();
-    
-    /**
-      * Returns the value of {@code yaxis}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getYaxis();
-    
-    /**
-      * Returns the value of {@code zaxis}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getZaxis();
-    
-    
+
     /**
      * Changes the value of {@code xaxis}.
      * 
@@ -47,6 +28,14 @@ public interface AvaMqttOutput {
     public void setXaxis(String value);
     
     /**
+      * Returns the value of {@code yaxis}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getYaxis();
+
+    /**
      * Changes the value of {@code yaxis}.
      * 
      * @param value the new value
@@ -55,13 +44,19 @@ public interface AvaMqttOutput {
     public void setYaxis(String value);
     
     /**
+      * Returns the value of {@code zaxis}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getZaxis();
+    
+    /**
      * Changes the value of {@code zaxis}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setZaxis(String value);
-    
-    
 
 }

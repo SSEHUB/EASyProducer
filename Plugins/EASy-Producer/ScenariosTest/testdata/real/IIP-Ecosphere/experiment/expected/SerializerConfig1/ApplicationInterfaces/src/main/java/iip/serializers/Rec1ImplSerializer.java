@@ -1,11 +1,11 @@
 package iip.serializers;
 
 import java.io.IOException;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.support.json.JsonUtils;
-import iip.datatypes.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.iip_ecosphere.platform.support.json.JsonUtils;
+import de.iip_ecosphere.platform.transport.serialization.Serializer;
+import iip.datatypes.*;
 
 /**
  * JSON transport serializer for Rec1.
@@ -14,9 +14,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class Rec1ImplSerializer implements Serializer<Rec1Impl> {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    
     static {
         JsonUtils.defineOptionals(MAPPER, Rec1Impl.class, "stringField");
-        JsonUtils.handleIipDataClasses(MAPPER); // only if nested?
+        JsonUtils.handleIipDataClasses(MAPPER);
     }
 
     @Override             

@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type KRec13.
@@ -11,25 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("KRec13")
 public interface KRec13 {
- 
 
     /**
-      * Returns the value of {@code intField}.
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code intField}.
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public int getIntField();
-    
-    /**
-      * Returns the value of {@code stringField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getStringField();
-    
-    
+
     /**
      * Changes the value of {@code intField}.
      * 
@@ -39,13 +28,19 @@ public interface KRec13 {
     public void setIntField(int value);
     
     /**
+     * Returns the value of {@code stringField}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getStringField();
+    
+    /**
      * Changes the value of {@code stringField}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setStringField(String value);
-    
-    
 
 }

@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type ModbusSiemensSentron.
@@ -11,57 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("ModbusSiemensSentron")
 public interface ModbusSiemensSentron {
- 
 
     /**
-      * Returns the value of {@code DisplayContrast}. Display Contrast
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code DisplayContrast}. Display Contrast
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public long getDisplayContrast();
-    
-    /**
-      * Returns the value of {@code DisplayBrightness}. Display Brightness
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public long getDisplayBrightness();
-    
-    /**
-      * Returns the value of {@code BrightnessDuration}. BrightnessDuration
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public long getBrightnessDuration();
-    
-    /**
-      * Returns the value of {@code Frequency}. Power Frequency
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public float getFrequency();
-    
-    /**
-      * Returns the value of {@code VoltageL1N}. Voltage L1-N
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public float getVoltageL1N();
-    
-    /**
-      * Returns the value of {@code CurrentL1}. Current L1
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public float getCurrentL1();
-    
-    
+
     /**
      * Changes the value of {@code DisplayContrast}. Display Contrast
      * 
@@ -71,6 +28,14 @@ public interface ModbusSiemensSentron {
     public void setDisplayContrast(long value);
     
     /**
+     * Returns the value of {@code DisplayBrightness}. Display Brightness
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public long getDisplayBrightness();
+
+    /**
      * Changes the value of {@code DisplayBrightness}. Display Brightness
      * 
      * @param value the new value
@@ -78,6 +43,14 @@ public interface ModbusSiemensSentron {
     @JsonIgnore
     public void setDisplayBrightness(long value);
     
+    /**
+     * Returns the value of {@code BrightnessDuration}. BrightnessDuration
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public long getBrightnessDuration();
+
     /**
      * Changes the value of {@code BrightnessDuration}. BrightnessDuration
      * 
@@ -87,6 +60,14 @@ public interface ModbusSiemensSentron {
     public void setBrightnessDuration(long value);
     
     /**
+     * Returns the value of {@code Frequency}. Power Frequency
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public float getFrequency();
+
+    /**
      * Changes the value of {@code Frequency}. Power Frequency
      * 
      * @param value the new value
@@ -94,6 +75,14 @@ public interface ModbusSiemensSentron {
     @JsonIgnore
     public void setFrequency(float value);
     
+    /**
+     * Returns the value of {@code VoltageL1N}. Voltage L1-N
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public float getVoltageL1N();
+
     /**
      * Changes the value of {@code VoltageL1N}. Voltage L1-N
      * 
@@ -103,13 +92,19 @@ public interface ModbusSiemensSentron {
     public void setVoltageL1N(float value);
     
     /**
+     * Returns the value of {@code CurrentL1}. Current L1
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public float getCurrentL1();
+    
+    /**
      * Changes the value of {@code CurrentL1}. Current L1
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setCurrentL1(float value);
-    
-    
 
 }

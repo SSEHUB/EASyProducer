@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type MyConnPltfOut.
@@ -19,7 +19,6 @@ public class MyConnPltfOut {
     @JsonProperty("nested")
     @ConfiguredName("nested")
     private MyNested[] nested;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -44,8 +43,17 @@ public class MyConnPltfOut {
       */
     @JsonIgnore
     public String getCmdField() {
-    
         return cmdField;
+    }
+
+    /**
+     * Changes the value of {@code cmdField}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setCmdField(String value) {
+        this.cmdField = value;
     }
     
     /**
@@ -55,20 +63,7 @@ public class MyConnPltfOut {
       */
     @JsonIgnore
     public MyNested[] getNested() {
-    
         return nested;
-    }
-    
-    
-    /**
-     * Changes the value of {@code cmdField}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setCmdField(String value) {
-    
-        this.cmdField = value;
     }
     
     /**
@@ -78,10 +73,8 @@ public class MyConnPltfOut {
      */
     @JsonIgnore
     public void setNested(MyNested[] value) {
-    
         this.nested = value;
     }
-    
 
     @Override
     public int hashCode() {

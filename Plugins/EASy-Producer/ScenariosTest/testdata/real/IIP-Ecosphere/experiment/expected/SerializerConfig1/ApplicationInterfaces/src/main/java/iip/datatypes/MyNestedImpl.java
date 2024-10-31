@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.MyNested;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.MyNested;
 
 /**
  * Implementation of the application data type MyNested.
@@ -17,7 +17,6 @@ public class MyNestedImpl implements MyNested {
     @ConfiguredName("state")
     private String state;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -36,18 +35,14 @@ public class MyNestedImpl implements MyNested {
     @Override
     @JsonIgnore
     public String getState() {
-    
         return state;
     }
-    
     
     @Override
     @JsonIgnore
     public void setState(String value) {
-    
         this.state = value;
     }
-    
 
     @Override
     public int hashCode() {

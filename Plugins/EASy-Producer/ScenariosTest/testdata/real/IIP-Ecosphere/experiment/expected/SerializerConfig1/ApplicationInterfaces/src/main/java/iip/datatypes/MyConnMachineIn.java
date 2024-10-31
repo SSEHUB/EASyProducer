@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type MyConnMachineIn.
@@ -12,40 +11,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("myConnMachineIn")
 public interface MyConnMachineIn {
  
+    /**
+     * Returns the value of {@code dataField}.
+     * 
+     * @return the value
+     */
+   @JsonIgnore
+   public String getDataField();
 
-    /**
-      * Returns the value of {@code dataField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getDataField();
-    
-    /**
-      * Returns the value of {@code axis}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getAxis();
-    
-    /**
-      * Returns the value of {@code cmdField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getCmdField();
-    
-    /**
-      * Returns the value of {@code nested}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public MyNested[] getNested();
-    
-    
     /**
      * Changes the value of {@code dataField}.
      * 
@@ -55,6 +28,14 @@ public interface MyConnMachineIn {
     public void setDataField(String value);
     
     /**
+      * Returns the value of {@code axis}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public int getAxis();
+
+    /**
      * Changes the value of {@code axis}.
      * 
      * @param value the new value
@@ -62,6 +43,14 @@ public interface MyConnMachineIn {
     @JsonIgnore
     public void setAxis(int value);
     
+    /**
+      * Returns the value of {@code cmdField}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getCmdField();
+
     /**
      * Changes the value of {@code cmdField}.
      * 
@@ -71,13 +60,19 @@ public interface MyConnMachineIn {
     public void setCmdField(String value);
     
     /**
+      * Returns the value of {@code nested}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public MyNested[] getNested();
+    
+    /**
      * Changes the value of {@code nested}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setNested(MyNested[] value);
-    
-    
 
 }

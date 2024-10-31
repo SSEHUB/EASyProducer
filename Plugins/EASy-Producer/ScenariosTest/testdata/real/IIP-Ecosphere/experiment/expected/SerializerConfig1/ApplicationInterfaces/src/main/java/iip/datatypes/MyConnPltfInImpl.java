@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.MyConnPltfIn;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.MyConnPltfIn;
 
 /**
  * Implementation of the application data type MyConnPltfIn.
@@ -46,46 +46,38 @@ public class MyConnPltfInImpl implements MyConnPltfIn {
     @Override
     @JsonIgnore
     public int getAxis() {
-    
         return axis;
     }
-    
-    @Override
-    @JsonIgnore
-    public String getDataField() {
-    
-        return dataField;
-    }
-    
-    @Override
-    @JsonIgnore
-    public MyNested[] getNested() {
-    
-        return nested;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setAxis(int value) {
-    
         this.axis = value;
     }
     
     @Override
     @JsonIgnore
+    public String getDataField() {
+        return dataField;
+    }
+
+    @Override
+    @JsonIgnore
     public void setDataField(String value) {
-    
         this.dataField = value;
     }
     
     @Override
     @JsonIgnore
-    public void setNested(MyNested[] value) {
-    
-        this.nested = value;
+    public MyNested[] getNested() {
+        return nested;
     }
     
+    @Override
+    @JsonIgnore
+    public void setNested(MyNested[] value) {
+        this.nested = value;
+    }
 
     @Override
     public int hashCode() {

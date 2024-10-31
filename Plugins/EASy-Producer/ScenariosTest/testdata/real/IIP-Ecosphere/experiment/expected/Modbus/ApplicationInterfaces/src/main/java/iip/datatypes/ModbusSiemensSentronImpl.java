@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.ModbusSiemensSentron;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.ModbusSiemensSentron;
 
 /**
  * Implementation of the application data type ModbusSiemensSentron.
@@ -36,7 +36,6 @@ public class ModbusSiemensSentronImpl implements ModbusSiemensSentron {
     @JsonProperty("CurrentL1")
     @ConfiguredName("CurrentL1")
     private float CurrentL1;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -61,88 +60,74 @@ public class ModbusSiemensSentronImpl implements ModbusSiemensSentron {
     @Override
     @JsonIgnore
     public long getDisplayContrast() {
-    
         return DisplayContrast;
     }
-    
-    @Override
-    @JsonIgnore
-    public long getDisplayBrightness() {
-    
-        return DisplayBrightness;
-    }
-    
-    @Override
-    @JsonIgnore
-    public long getBrightnessDuration() {
-    
-        return BrightnessDuration;
-    }
-    
-    @Override
-    @JsonIgnore
-    public float getFrequency() {
-    
-        return Frequency;
-    }
-    
-    @Override
-    @JsonIgnore
-    public float getVoltageL1N() {
-    
-        return VoltageL1N;
-    }
-    
-    @Override
-    @JsonIgnore
-    public float getCurrentL1() {
-    
-        return CurrentL1;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setDisplayContrast(long value) {
-    
         this.DisplayContrast = value;
     }
     
     @Override
     @JsonIgnore
+    public long getDisplayBrightness() {
+        return DisplayBrightness;
+    }
+
+    @Override
+    @JsonIgnore
     public void setDisplayBrightness(long value) {
-    
         this.DisplayBrightness = value;
     }
     
     @Override
     @JsonIgnore
+    public long getBrightnessDuration() {
+        return BrightnessDuration;
+    }
+
+    @Override
+    @JsonIgnore
     public void setBrightnessDuration(long value) {
-    
         this.BrightnessDuration = value;
     }
     
     @Override
     @JsonIgnore
+    public float getFrequency() {
+        return Frequency;
+    }
+
+    @Override
+    @JsonIgnore
     public void setFrequency(float value) {
-    
         this.Frequency = value;
     }
     
     @Override
     @JsonIgnore
+    public float getVoltageL1N() {
+        return VoltageL1N;
+    }
+
+    @Override
+    @JsonIgnore
     public void setVoltageL1N(float value) {
-    
         this.VoltageL1N = value;
     }
     
     @Override
     @JsonIgnore
-    public void setCurrentL1(float value) {
-    
-        this.CurrentL1 = value;
+    public float getCurrentL1() {
+        return CurrentL1;
     }
     
+    @Override
+    @JsonIgnore
+    public void setCurrentL1(float value) {
+        this.CurrentL1 = value;
+    }
 
     @Override
     public int hashCode() {

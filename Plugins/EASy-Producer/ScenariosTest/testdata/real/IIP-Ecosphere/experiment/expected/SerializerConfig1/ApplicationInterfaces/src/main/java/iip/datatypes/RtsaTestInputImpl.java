@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.RtsaTestInput;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.RtsaTestInput;
 
 /**
  * Implementation of the application data type RtsaTestInput.
@@ -25,7 +25,6 @@ public class RtsaTestInputImpl implements RtsaTestInput {
     @ConfiguredName("value2")
     private double value2;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -46,46 +45,38 @@ public class RtsaTestInputImpl implements RtsaTestInput {
     @Override
     @JsonIgnore
     public int getId() {
-    
         return id;
     }
-    
-    @Override
-    @JsonIgnore
-    public double getValue1() {
-    
-        return value1;
-    }
-    
-    @Override
-    @JsonIgnore
-    public double getValue2() {
-    
-        return value2;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setId(int value) {
-    
         this.id = value;
     }
     
     @Override
     @JsonIgnore
+    public double getValue1() {
+        return value1;
+    }
+
+    @Override
+    @JsonIgnore
     public void setValue1(double value) {
-    
         this.value1 = value;
     }
     
     @Override
     @JsonIgnore
-    public void setValue2(double value) {
-    
-        this.value2 = value;
+    public double getValue2() {
+        return value2;
     }
     
+    @Override
+    @JsonIgnore
+    public void setValue2(double value) {
+        this.value2 = value;
+    }
 
     @Override
     public int hashCode() {

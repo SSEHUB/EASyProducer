@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.KRec13Anon;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.KRec13Anon;
 
 /**
  * Implementation of the application data type KRec13Anon.
@@ -25,7 +25,6 @@ public class KRec13AnonImpl implements KRec13Anon {
     @ConfiguredName("stringField")
     private String stringField;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -46,46 +45,38 @@ public class KRec13AnonImpl implements KRec13Anon {
     @Override
     @JsonIgnore
     public String getKip() {
-    
         return kip;
     }
-    
-    @Override
-    @JsonIgnore
-    public int getIntField() {
-    
-        return intField;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getStringField() {
-    
-        return stringField;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setKip(String value) {
-    
         this.kip = value;
     }
     
     @Override
     @JsonIgnore
+    public int getIntField() {
+        return intField;
+    }
+
+    @Override
+    @JsonIgnore
     public void setIntField(int value) {
-    
         this.intField = value;
     }
     
     @Override
     @JsonIgnore
-    public void setStringField(String value) {
-    
-        this.stringField = value;
+    public String getStringField() {
+        return stringField;
     }
     
+    @Override
+    @JsonIgnore
+    public void setStringField(String value) {
+        this.stringField = value;
+    }
 
     @Override
     public int hashCode() {

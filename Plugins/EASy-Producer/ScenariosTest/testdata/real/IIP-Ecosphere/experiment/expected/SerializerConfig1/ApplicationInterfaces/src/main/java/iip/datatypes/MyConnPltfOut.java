@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type MyConnPltfOut.
@@ -12,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("myConnPltfOut")
 public interface MyConnPltfOut {
  
-
     /**
       * Returns the value of {@code cmdField}.
       * 
@@ -20,16 +18,7 @@ public interface MyConnPltfOut {
       */
     @JsonIgnore
     public String getCmdField();
-    
-    /**
-      * Returns the value of {@code nested}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public MyNested[] getNested();
-    
-    
+
     /**
      * Changes the value of {@code cmdField}.
      * 
@@ -39,13 +28,19 @@ public interface MyConnPltfOut {
     public void setCmdField(String value);
     
     /**
+      * Returns the value of {@code nested}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public MyNested[] getNested();
+    
+    /**
      * Changes the value of {@code nested}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setNested(MyNested[] value);
-    
-    
 
 }

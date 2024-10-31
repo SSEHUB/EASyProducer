@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type MipMqttOutput.
@@ -11,73 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("MipMqttOutput")
 public interface MipMqttOutput {
- 
 
     /**
-      * Returns the value of {@code mipcontext}.
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code mipcontext}.
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public String getMipcontext();
-    
-    /**
-      * Returns the value of {@code mipdate}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipdate();
-    
-    /**
-      * Returns the value of {@code mipfrom}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipfrom();
-    
-    /**
-      * Returns the value of {@code mipid_tag}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipid_tag();
-    
-    /**
-      * Returns the value of {@code mipreader}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipreader();
-    
-    /**
-      * Returns the value of {@code mipraw_signal_clock}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipraw_signal_clock();
-    
-    /**
-      * Returns the value of {@code mipraw_signal_data1}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipraw_signal_data1();
-    
-    /**
-      * Returns the value of {@code mipraw_signal_data2}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipraw_signal_data2();
-    
-    
+
     /**
      * Changes the value of {@code mipcontext}.
      * 
@@ -87,6 +28,14 @@ public interface MipMqttOutput {
     public void setMipcontext(String value);
     
     /**
+     * Returns the value of {@code mipdate}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipdate();
+
+    /**
      * Changes the value of {@code mipdate}.
      * 
      * @param value the new value
@@ -94,6 +43,14 @@ public interface MipMqttOutput {
     @JsonIgnore
     public void setMipdate(String value);
     
+    /**
+     * Returns the value of {@code mipfrom}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipfrom();
+
     /**
      * Changes the value of {@code mipfrom}.
      * 
@@ -103,6 +60,14 @@ public interface MipMqttOutput {
     public void setMipfrom(String value);
     
     /**
+     * Returns the value of {@code mipid_tag}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipid_tag();
+
+    /**
      * Changes the value of {@code mipid_tag}.
      * 
      * @param value the new value
@@ -110,6 +75,14 @@ public interface MipMqttOutput {
     @JsonIgnore
     public void setMipid_tag(String value);
     
+    /**
+     * Returns the value of {@code mipreader}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipreader();
+
     /**
      * Changes the value of {@code mipreader}.
      * 
@@ -119,12 +92,28 @@ public interface MipMqttOutput {
     public void setMipreader(String value);
     
     /**
+     * Returns the value of {@code mipraw_signal_clock}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipraw_signal_clock();
+
+    /**
      * Changes the value of {@code mipraw_signal_clock}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setMipraw_signal_clock(String value);
+    
+    /**
+     * Returns the value of {@code mipraw_signal_data1}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipraw_signal_data1();
     
     /**
      * Changes the value of {@code mipraw_signal_data1}.
@@ -135,13 +124,19 @@ public interface MipMqttOutput {
     public void setMipraw_signal_data1(String value);
     
     /**
+     * Returns the value of {@code mipraw_signal_data2}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipraw_signal_data2();
+    
+    /**
      * Changes the value of {@code mipraw_signal_data2}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setMipraw_signal_data2(String value);
-    
-    
 
 }

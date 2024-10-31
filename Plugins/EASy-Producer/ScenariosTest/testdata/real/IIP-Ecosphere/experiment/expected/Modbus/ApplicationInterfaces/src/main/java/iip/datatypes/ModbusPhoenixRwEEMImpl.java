@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.ModbusPhoenixRwEEM;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.ModbusPhoenixRwEEM;
 
 /**
  * Implementation of the application data type ModbusPhoenixRwEEM.
@@ -24,7 +24,6 @@ public class ModbusPhoenixRwEEMImpl implements ModbusPhoenixRwEEM {
     @JsonProperty("Year")
     @ConfiguredName("Year")
     private int Year;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -46,47 +45,39 @@ public class ModbusPhoenixRwEEMImpl implements ModbusPhoenixRwEEM {
     @Override
     @JsonIgnore
     public int getDay() {
-    
         return Day;
     }
-    
-    @Override
-    @JsonIgnore
-    public int getMonth() {
-    
-        return Month;
-    }
-    
-    @Override
-    @JsonIgnore
-    public int getYear() {
-    
-        return Year;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setDay(int value) {
-    
         this.Day = value;
     }
     
     @Override
     @JsonIgnore
+    public int getMonth() {
+        return Month;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMonth(int value) {
-    
         this.Month = value;
     }
     
     @Override
     @JsonIgnore
-    public void setYear(int value) {
+    public int getYear() {
+        return Year;
+    }
     
+    @Override
+    @JsonIgnore
+    public void setYear(int value) {
         this.Year = value;
     }
     
-
     @Override
     public int hashCode() {
         int hc = 0;

@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type ModbusPhoenixEEM.
@@ -11,57 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("ModbusPhoenixEEM")
 public interface ModbusPhoenixEEM {
- 
 
     /**
-      * Returns the value of {@code Day}. Day of occurrence of the voltage dip (UTC)
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code Day}. Day of occurrence of the voltage dip (UTC)
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public int getDay();
-    
-    /**
-      * Returns the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getMonth();
-    
-    /**
-      * Returns the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getYear();
-    
-    /**
-      * Returns the value of {@code U1}. Effective value voltage U1
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public float getU1();
-    
-    /**
-      * Returns the value of {@code frequency}. Frequency
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public float getFrequency();
-    
-    /**
-      * Returns the value of {@code I1}. Effective value current I1
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public float getI1();
-    
-    
+
     /**
      * Changes the value of {@code Day}. Day of occurrence of the voltage dip (UTC)
      * 
@@ -71,6 +28,14 @@ public interface ModbusPhoenixEEM {
     public void setDay(int value);
     
     /**
+     * Returns the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public int getMonth();
+
+    /**
      * Changes the value of {@code Month}. Month of occurrence of the voltage dip (UTC)
      * 
      * @param value the new value
@@ -78,6 +43,14 @@ public interface ModbusPhoenixEEM {
     @JsonIgnore
     public void setMonth(int value);
     
+    /**
+     * Returns the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public int getYear();
+
     /**
      * Changes the value of {@code Year}. Year of occurrence of the voltage dip (UTC)
      * 
@@ -87,6 +60,14 @@ public interface ModbusPhoenixEEM {
     public void setYear(int value);
     
     /**
+     * Returns the value of {@code U1}. Effective value voltage U1
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public float getU1();
+
+    /**
      * Changes the value of {@code U1}. Effective value voltage U1
      * 
      * @param value the new value
@@ -94,6 +75,14 @@ public interface ModbusPhoenixEEM {
     @JsonIgnore
     public void setU1(float value);
     
+    /**
+     * Returns the value of {@code frequency}. Frequency
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public float getFrequency();
+
     /**
      * Changes the value of {@code frequency}. Frequency
      * 
@@ -103,13 +92,19 @@ public interface ModbusPhoenixEEM {
     public void setFrequency(float value);
     
     /**
+     * Returns the value of {@code I1}. Effective value current I1
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public float getI1();
+
+    /**
      * Changes the value of {@code I1}. Effective value current I1
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setI1(float value);
-    
-    
 
 }

@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type Rec1.
@@ -20,7 +20,6 @@ public class Rec1 {
     @ConfiguredName("stringField")
     private String stringField;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -44,8 +43,17 @@ public class Rec1 {
       */
     @JsonIgnore
     public int getIntField() {
-    
         return intField;
+    }
+
+    /**
+     * Changes the value of {@code intField}. Some int value
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setIntField(int value) {
+        this.intField = value;
     }
     
     /**
@@ -55,20 +63,7 @@ public class Rec1 {
       */
     @JsonIgnore
     public String getStringField() {
-    
         return stringField;
-    }
-    
-    
-    /**
-     * Changes the value of {@code intField}. Some int value
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setIntField(int value) {
-    
-        this.intField = value;
     }
     
     /**
@@ -78,11 +73,9 @@ public class Rec1 {
      */
     @JsonIgnore
     public void setStringField(String value) {
-    
         this.stringField = value;
     }
     
-
     @Override
     public int hashCode() {
         int hc = 0;

@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.ModbusPhoenixEEM;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.ModbusPhoenixEEM;
 
 /**
  * Implementation of the application data type ModbusPhoenixEEM.
@@ -37,7 +37,6 @@ public class ModbusPhoenixEEMImpl implements ModbusPhoenixEEM {
     @ConfiguredName("I1")
     private float I1;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -61,88 +60,74 @@ public class ModbusPhoenixEEMImpl implements ModbusPhoenixEEM {
     @Override
     @JsonIgnore
     public int getDay() {
-    
         return Day;
     }
-    
-    @Override
-    @JsonIgnore
-    public int getMonth() {
-    
-        return Month;
-    }
-    
-    @Override
-    @JsonIgnore
-    public int getYear() {
-    
-        return Year;
-    }
-    
-    @Override
-    @JsonIgnore
-    public float getU1() {
-    
-        return U1;
-    }
-    
-    @Override
-    @JsonIgnore
-    public float getFrequency() {
-    
-        return frequency;
-    }
-    
-    @Override
-    @JsonIgnore
-    public float getI1() {
-    
-        return I1;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setDay(int value) {
-    
         this.Day = value;
     }
     
     @Override
     @JsonIgnore
+    public int getMonth() {
+        return Month;
+    }
+
+    @Override
+    @JsonIgnore
     public void setMonth(int value) {
-    
         this.Month = value;
     }
     
     @Override
     @JsonIgnore
+    public int getYear() {
+        return Year;
+    }
+
+    @Override
+    @JsonIgnore
     public void setYear(int value) {
-    
         this.Year = value;
     }
     
     @Override
     @JsonIgnore
-    public void setU1(float value) {
-    
-        this.U1 = value;
+    public float getU1() {
+        return U1;
     }
     
     @Override
     @JsonIgnore
+    public void setU1(float value) {
+        this.U1 = value;
+    }
+
+    @Override
+    @JsonIgnore
+    public float getFrequency() {
+        return frequency;
+    }
+
+    @Override
+    @JsonIgnore
     public void setFrequency(float value) {
-    
         this.frequency = value;
     }
     
     @Override
     @JsonIgnore
-    public void setI1(float value) {
-    
-        this.I1 = value;
+    public float getI1() {
+        return I1;
     }
     
+    @Override
+    @JsonIgnore
+    public void setI1(float value) {
+        this.I1 = value;
+    }
 
     @Override
     public int hashCode() {

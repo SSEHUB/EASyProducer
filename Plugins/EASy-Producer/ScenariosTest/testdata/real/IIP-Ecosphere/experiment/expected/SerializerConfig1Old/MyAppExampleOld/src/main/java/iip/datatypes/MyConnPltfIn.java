@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type MyConnPltfIn.
@@ -27,7 +27,6 @@ public class MyConnPltfIn {
     @JsonProperty("channel")
     @ConfiguredName("channel")
     private String channel;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -54,8 +53,17 @@ public class MyConnPltfIn {
       */
     @JsonIgnore
     public int getAxis() {
-    
         return axis;
+    }
+
+    /**
+     * Changes the value of {@code axis}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setAxis(int value) {
+        this.axis = value;
     }
     
     /**
@@ -65,8 +73,17 @@ public class MyConnPltfIn {
       */
     @JsonIgnore
     public String getDataField() {
-    
         return dataField;
+    }
+
+    /**
+     * Changes the value of {@code dataField}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setDataField(String value) {
+        this.dataField = value;
     }
     
     /**
@@ -76,8 +93,18 @@ public class MyConnPltfIn {
       */
     @JsonIgnore
     public MyNested[] getNested() {
-    
         return nested;
+    }
+
+    /**
+     * Changes the value of {@code nested}. This field is read only, but needs an accessor for connector serializers. 
+     * Although you can change it, a connector may ignore the value.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setNested(MyNested[] value) {
+        this.nested = value;
     }
     
     /**
@@ -87,59 +114,19 @@ public class MyConnPltfIn {
       */
     @JsonIgnore
     public String getChannel() {
-    
         return channel;
     }
     
-    
     /**
-     * Changes the value of {@code axis}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setAxis(int value) {
-    
-        this.axis = value;
-    }
-    
-    /**
-     * Changes the value of {@code dataField}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setDataField(String value) {
-    
-        this.dataField = value;
-    }
-    
-    /**
-     * Changes the value of {@code nested}.
-     * This field is read only, but needs an accessor for connector serializers. Although you can change it, 
-     * a connector may ignore the value.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setNested(MyNested[] value) {
-    
-        this.nested = value;
-    }
-    
-    /**
-     * Changes the value of {@code channel}.
-     * This field is read only, but needs an accessor for connector serializers. Although you can change it, 
-     * a connector may ignore the value.
+     * Changes the value of {@code channel}. This field is read only, but needs an accessor for connector serializers. 
+     * Although you can change it, a connector may ignore the value.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setChannel(String value) {
-    
         this.channel = value;
     }
-    
 
     @Override
     public int hashCode() {

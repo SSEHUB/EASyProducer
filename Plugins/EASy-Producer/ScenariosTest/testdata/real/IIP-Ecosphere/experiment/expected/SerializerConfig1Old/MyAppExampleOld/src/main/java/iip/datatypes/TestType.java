@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type TestType.
@@ -23,7 +23,6 @@ public class TestType {
     @JsonProperty("values")
     @ConfiguredName("values")
     private int[] values;
-    
 
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
@@ -49,8 +48,17 @@ public class TestType {
       */
     @JsonIgnore
     public String get$type() {
-    
         return $type;
+    }
+
+    /**
+     * Changes the value of {@code $type}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void set$type(String value) {
+        this.$type = value;
     }
     
     /**
@@ -60,8 +68,17 @@ public class TestType {
       */
     @JsonIgnore
     public String get_kip() {
-    
         return _kip;
+    }
+
+    /**
+     * Changes the value of {@code _kip}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void set_kip(String value) {
+        this._kip = value;
     }
     
     /**
@@ -71,31 +88,7 @@ public class TestType {
       */
     @JsonIgnore
     public int[] getValues() {
-    
         return values;
-    }
-    
-    
-    /**
-     * Changes the value of {@code $type}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void set$type(String value) {
-    
-        this.$type = value;
-    }
-    
-    /**
-     * Changes the value of {@code _kip}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void set_kip(String value) {
-    
-        this._kip = value;
     }
     
     /**
@@ -105,10 +98,8 @@ public class TestType {
      */
     @JsonIgnore
     public void setValues(int[] value) {
-    
         this.values = value;
     }
-    
 
     @Override
     public int hashCode() {

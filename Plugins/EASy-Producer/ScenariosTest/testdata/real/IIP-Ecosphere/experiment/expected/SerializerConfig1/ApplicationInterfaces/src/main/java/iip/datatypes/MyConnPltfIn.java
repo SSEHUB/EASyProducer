@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type MyConnPltfIn.
@@ -11,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("myConnPltfIn")
 public interface MyConnPltfIn {
- 
 
     /**
       * Returns the value of {@code axis}.
@@ -20,24 +18,7 @@ public interface MyConnPltfIn {
       */
     @JsonIgnore
     public int getAxis();
-    
-    /**
-      * Returns the value of {@code dataField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getDataField();
-    
-    /**
-      * Returns the value of {@code nested}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public MyNested[] getNested();
-    
-    
+
     /**
      * Changes the value of {@code axis}.
      * 
@@ -47,14 +28,29 @@ public interface MyConnPltfIn {
     public void setAxis(int value);
     
     /**
-     * Changes the value of {@code dataField}.
-     * This field is read only, but needs an accessor for connector serializers. Although you can change it, 
-     * a connector may ignore the value.
+      * Returns the value of {@code dataField}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getDataField();
+
+    /**
+     * Changes the value of {@code dataField}. This field is read only, but needs an accessor for connector 
+     * serializers. Although you can change it, a connector may ignore the value.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setDataField(String value);
+    
+    /**
+      * Returns the value of {@code nested}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public MyNested[] getNested();
     
     /**
      * Changes the value of {@code nested}.
@@ -63,7 +59,5 @@ public interface MyConnPltfIn {
      */
     @JsonIgnore
     public void setNested(MyNested[] value);
-    
-    
 
 }

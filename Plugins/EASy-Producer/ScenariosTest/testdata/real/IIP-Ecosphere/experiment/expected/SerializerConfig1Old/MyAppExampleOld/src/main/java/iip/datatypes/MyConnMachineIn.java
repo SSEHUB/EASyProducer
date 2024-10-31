@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type MyConnMachineIn.
@@ -54,44 +54,9 @@ public class MyConnMachineIn {
       */
     @JsonIgnore
     public String getDataField() {
-    
         return dataField;
     }
-    
-    /**
-      * Returns the value of {@code axis}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public int getAxis() {
-    
-        return axis;
-    }
-    
-    /**
-      * Returns the value of {@code cmdField}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getCmdField() {
-    
-        return cmdField;
-    }
-    
-    /**
-      * Returns the value of {@code nested}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public MyNested[] getNested() {
-    
-        return nested;
-    }
-    
-    
+
     /**
      * Changes the value of {@code dataField}.
      * 
@@ -99,8 +64,17 @@ public class MyConnMachineIn {
      */
     @JsonIgnore
     public void setDataField(String value) {
-    
         this.dataField = value;
+    }
+
+    /**
+      * Returns the value of {@code axis}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public int getAxis() {
+        return axis;
     }
     
     /**
@@ -110,10 +84,19 @@ public class MyConnMachineIn {
      */
     @JsonIgnore
     public void setAxis(int value) {
-    
         this.axis = value;
     }
     
+    /**
+      * Returns the value of {@code cmdField}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getCmdField() {
+        return cmdField;
+    }
+
     /**
      * Changes the value of {@code cmdField}.
      * 
@@ -121,8 +104,17 @@ public class MyConnMachineIn {
      */
     @JsonIgnore
     public void setCmdField(String value) {
-    
         this.cmdField = value;
+    }
+    
+    /**
+      * Returns the value of {@code nested}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public MyNested[] getNested() {
+        return nested;
     }
     
     /**
@@ -132,10 +124,8 @@ public class MyConnMachineIn {
      */
     @JsonIgnore
     public void setNested(MyNested[] value) {
-    
         this.nested = value;
     }
-    
 
     @Override
     public int hashCode() {

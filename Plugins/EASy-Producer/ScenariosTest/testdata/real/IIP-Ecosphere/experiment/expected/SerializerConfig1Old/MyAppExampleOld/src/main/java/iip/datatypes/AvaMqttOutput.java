@@ -1,9 +1,9 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Implementation of the application data type AvaMqttOutput.
@@ -24,7 +24,6 @@ public class AvaMqttOutput {
     @ConfiguredName("zaxis")
     private String zaxis;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -43,39 +42,15 @@ public class AvaMqttOutput {
     }
 
     /**
-      * Returns the value of {@code xaxis}.
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code xaxis}.
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public String getXaxis() {
-    
         return xaxis;
     }
-    
-    /**
-      * Returns the value of {@code yaxis}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getYaxis() {
-    
-        return yaxis;
-    }
-    
-    /**
-      * Returns the value of {@code zaxis}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getZaxis() {
-    
-        return zaxis;
-    }
-    
-    
+
     /**
      * Changes the value of {@code xaxis}.
      * 
@@ -83,10 +58,19 @@ public class AvaMqttOutput {
      */
     @JsonIgnore
     public void setXaxis(String value) {
-    
         this.xaxis = value;
     }
-    
+
+    /**
+     * Returns the value of {@code yaxis}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getYaxis() {
+        return yaxis;
+    }
+
     /**
      * Changes the value of {@code yaxis}.
      * 
@@ -94,8 +78,17 @@ public class AvaMqttOutput {
      */
     @JsonIgnore
     public void setYaxis(String value) {
-    
         this.yaxis = value;
+    }
+    
+    /**
+     * Returns the value of {@code zaxis}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getZaxis() {
+        return zaxis;
     }
     
     /**
@@ -105,10 +98,8 @@ public class AvaMqttOutput {
      */
     @JsonIgnore
     public void setZaxis(String value) {
-    
         this.zaxis = value;
     }
-    
 
     @Override
     public int hashCode() {

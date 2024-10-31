@@ -1,10 +1,10 @@
 package iip.datatypes;
 
-import iip.datatypes.AvaMqttOutput;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+import iip.datatypes.AvaMqttOutput;
 
 /**
  * Implementation of the application data type AvaMqttOutput.
@@ -46,46 +46,38 @@ public class AvaMqttOutputImpl implements AvaMqttOutput {
     @Override
     @JsonIgnore
     public String getXaxis() {
-    
         return xaxis;
     }
-    
-    @Override
-    @JsonIgnore
-    public String getYaxis() {
-    
-        return yaxis;
-    }
-    
-    @Override
-    @JsonIgnore
-    public String getZaxis() {
-    
-        return zaxis;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setXaxis(String value) {
-    
         this.xaxis = value;
     }
-    
+
+    @Override
+    @JsonIgnore
+    public String getYaxis() {
+        return yaxis;
+    }
+
     @Override
     @JsonIgnore
     public void setYaxis(String value) {
-    
         this.yaxis = value;
     }
     
     @Override
     @JsonIgnore
-    public void setZaxis(String value) {
-    
-        this.zaxis = value;
+    public String getZaxis() {
+        return zaxis;
     }
     
+    @Override
+    @JsonIgnore
+    public void setZaxis(String value) {
+        this.zaxis = value;
+    }
 
     @Override
     public int hashCode() {

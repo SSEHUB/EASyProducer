@@ -1,9 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 import java.math.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type ModbusSiemensRwSentron.
@@ -11,33 +10,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @ConfiguredName("ModbusSiemensRwSentron")
 public interface ModbusSiemensRwSentron {
- 
 
     /**
-      * Returns the value of {@code DisplayContrast}. Display Contrast
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code DisplayContrast}. Display Contrast
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public long getDisplayContrast();
-    
-    /**
-      * Returns the value of {@code DisplayBrightness}. Display Brightness
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public long getDisplayBrightness();
-    
-    /**
-      * Returns the value of {@code BrightnessDuration}. BrightnessDuration
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public long getBrightnessDuration();
-    
-    
+
     /**
      * Changes the value of {@code DisplayContrast}. Display Contrast
      * 
@@ -47,6 +28,14 @@ public interface ModbusSiemensRwSentron {
     public void setDisplayContrast(long value);
     
     /**
+     * Returns the value of {@code DisplayBrightness}. Display Brightness
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public long getDisplayBrightness();
+
+    /**
      * Changes the value of {@code DisplayBrightness}. Display Brightness
      * 
      * @param value the new value
@@ -55,13 +44,19 @@ public interface ModbusSiemensRwSentron {
     public void setDisplayBrightness(long value);
     
     /**
+     * Returns the value of {@code BrightnessDuration}. BrightnessDuration
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public long getBrightnessDuration();
+    
+    /**
      * Changes the value of {@code BrightnessDuration}. BrightnessDuration
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setBrightnessDuration(long value);
-    
-    
 
 }
