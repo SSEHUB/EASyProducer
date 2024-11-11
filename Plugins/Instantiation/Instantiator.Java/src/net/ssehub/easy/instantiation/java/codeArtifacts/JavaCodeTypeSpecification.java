@@ -69,7 +69,9 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
                 generics = new ArrayList<>();
             }
         }
-        getArtifact().validateType(this);
+        if (null != enclosing) {
+            getArtifact().validateType(this);
+        }
     }
 
     /**
@@ -259,6 +261,9 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     @Override
     public void setParent(IJavaCodeElement parent) {
         JavaCodeClass.setParent(parent, p -> this.enclosing = p);
+        if (null != enclosing) {
+            getArtifact().validateType(this);
+        }
     }
 
 }

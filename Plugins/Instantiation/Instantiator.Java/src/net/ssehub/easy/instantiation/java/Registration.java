@@ -23,12 +23,14 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAttribute;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlockInterface;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeCastExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum.JavaCodeEnumConstant;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
@@ -38,13 +40,18 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeLambdaExpression
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParameterSpecification;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeReturn;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeStatement;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeStringExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSwitch;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVisibility;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeWhileLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTryBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVariableDeclaration;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVariableExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSynchronizedBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTernaryExpression;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTextExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeThrow;
 import net.ssehub.easy.instantiation.java.instantiators.CocktailInstantiator;
 import net.ssehub.easy.instantiation.java.instantiators.Jar;
@@ -101,42 +108,55 @@ public class Registration implements IRegistration {
         // plain Java
         if (!plainRegistered) {
             plainRegistered = true;
-            TypeRegistry.DEFAULT.register(JavaCodeElement.class);
-            TypeRegistry.DEFAULT.register(JavaCodeStatement.class);
-            TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
-            TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
-            TypeRegistry.DEFAULT.register(JavaCodeAnnotation.class);
-            TypeRegistry.DEFAULT.register(JavaCodeJavadocComment.class);
-            TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
-            TypeRegistry.DEFAULT.register(JavaCodeClass.class);
-            TypeRegistry.DEFAULT.register(JavaCodeEnum.class);
-            TypeRegistry.DEFAULT.register(JavaCodeEnumConstant.class);
-            TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);
-            TypeRegistry.DEFAULT.register(JavaCodeBlockInterface.class);
-            TypeRegistry.DEFAULT.register(JavaCodeBlock.class);
-            TypeRegistry.DEFAULT.register(JavaCodeInitializer.class);
-            TypeRegistry.DEFAULT.register(JavaCodeDoLoop.class);
-            TypeRegistry.DEFAULT.register(JavaCodeWhileLoop.class);
-            TypeRegistry.DEFAULT.register(JavaCodeForLoop.class);
-            TypeRegistry.DEFAULT.register(JavaCodeAlternative.class);
-            TypeRegistry.DEFAULT.register(JavaCodeThrow.class);
-            TypeRegistry.DEFAULT.register(JavaCodeSwitch.class);
-            TypeRegistry.DEFAULT.register(JavaCodeTryBlock.JavaCodeCatchBlock.class);
-            TypeRegistry.DEFAULT.register(JavaCodeTryBlock.class);
-            TypeRegistry.DEFAULT.register(JavaCodeSynchronizedBlock.class);
-            TypeRegistry.DEFAULT.register(JavaCodeAssignment.class);
-            TypeRegistry.DEFAULT.register(JavaCodeImport.class);
-            TypeRegistry.DEFAULT.register(JavaCodeMethod.class);
-            TypeRegistry.DEFAULT.register(JavaCodeMethodCall.class);
-            TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
-            TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
-            TypeRegistry.DEFAULT.register(JavaCodeVariableDeclaration.class);
-            TypeRegistry.DEFAULT.register(JavaCodeParameterSpecification.class);
-            TypeRegistry.DEFAULT.register(JavaCodeLambdaExpression.class);
-            
+            registerJavaCodeTypes();
             DefaultLib.appendDefaultLibURLQuietly(Registration.class.getClassLoader(), 
                 Bundle.ID, context, "Instantiator.Java");
         }
+    }
+
+    /**
+     * Registers the Java code (artifact) types.
+     */
+    private static void registerJavaCodeTypes() {
+        TypeRegistry.DEFAULT.register(JavaCodeElement.class);
+        TypeRegistry.DEFAULT.register(JavaCodeStatement.class);
+        TypeRegistry.DEFAULT.register(JavaCodeExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
+        TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
+        TypeRegistry.DEFAULT.register(JavaCodeAnnotation.class);
+        TypeRegistry.DEFAULT.register(JavaCodeJavadocComment.class);
+        TypeRegistry.DEFAULT.register(JavaCodeArtifact.class);
+        TypeRegistry.DEFAULT.register(JavaCodeClass.class);
+        TypeRegistry.DEFAULT.register(JavaCodeEnum.class);
+        TypeRegistry.DEFAULT.register(JavaCodeEnumConstant.class);
+        TypeRegistry.DEFAULT.register(JavaCodeReturn.class);
+        TypeRegistry.DEFAULT.register(JavaCodeAttribute.class);
+        TypeRegistry.DEFAULT.register(JavaCodeBlockInterface.class);
+        TypeRegistry.DEFAULT.register(JavaCodeBlock.class);
+        TypeRegistry.DEFAULT.register(JavaCodeInitializer.class);
+        TypeRegistry.DEFAULT.register(JavaCodeDoLoop.class);
+        TypeRegistry.DEFAULT.register(JavaCodeWhileLoop.class);
+        TypeRegistry.DEFAULT.register(JavaCodeForLoop.class);
+        TypeRegistry.DEFAULT.register(JavaCodeAlternative.class);
+        TypeRegistry.DEFAULT.register(JavaCodeThrow.class);
+        TypeRegistry.DEFAULT.register(JavaCodeSwitch.class);
+        TypeRegistry.DEFAULT.register(JavaCodeTryBlock.JavaCodeCatchBlock.class);
+        TypeRegistry.DEFAULT.register(JavaCodeTryBlock.class);
+        TypeRegistry.DEFAULT.register(JavaCodeSynchronizedBlock.class);
+        TypeRegistry.DEFAULT.register(JavaCodeAssignment.class);
+        TypeRegistry.DEFAULT.register(JavaCodeImport.class);
+        TypeRegistry.DEFAULT.register(JavaCodeMethod.class);
+        TypeRegistry.DEFAULT.register(JavaCodeMethodCall.class);
+        TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
+        TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
+        TypeRegistry.DEFAULT.register(JavaCodeVariableDeclaration.class);
+        TypeRegistry.DEFAULT.register(JavaCodeParameterSpecification.class);
+        TypeRegistry.DEFAULT.register(JavaCodeLambdaExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeTextExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeStringExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeVariableExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeTernaryExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeCastExpression.class);
     }
     
     /**

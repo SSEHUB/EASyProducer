@@ -57,4 +57,12 @@ public interface IJavaCodeArtifact {
      */
     public JavaCodeImport addImport(String imp);
 
+    /**
+     * Explicitly adds static import to {@link #getArtifact()}.
+     * 
+     * @param imp the import (may be a wildcard)
+     * @return the existing or new code import
+     */
+    public JavaCodeImport addStaticImport(String imp);
+
 }

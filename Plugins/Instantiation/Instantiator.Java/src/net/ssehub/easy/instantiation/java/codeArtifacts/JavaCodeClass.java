@@ -86,7 +86,18 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      * @param enclosing the enclosing class
      */
     JavaCodeClass(String name, JavaCodeClass enclosing) {
-        super(name, JavaCodeVisibility.PUBLIC, null);
+        this(name, enclosing, null);
+    }
+
+    /**
+     * Creates a nested class with given name within {@code enclosing} with comment.
+     * 
+     * @param name the name of the class
+     * @param enclosing the enclosing class
+     * @param comment the class comment
+     */
+    JavaCodeClass(String name, JavaCodeClass enclosing, String comment) {
+        super(name, JavaCodeVisibility.PUBLIC, comment);
         this.enclosing = enclosing;
     }
     
@@ -119,6 +130,17 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      */
     public JavaCodeClass addClass(String name) {
         return IJavaCodeElement.add(elements, new JavaCodeClass(name, this).setProtected());
+    }
+
+    /**
+     * Creates a protected class with given {@code name} with comment.
+     * 
+     * @param name the name of the class
+     * @param comment the class comment
+     * @return the created class
+     */
+    public JavaCodeClass addClass(String name, String comment) {
+        return IJavaCodeElement.add(elements, new JavaCodeClass(name, this, comment).setProtected());
     }
 
     /**
@@ -351,7 +373,46 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         main.addParameter("String" + (varArg ? "[]" : "..."), "args", "Command line arguments");
         return main;
     }
+    
+    /**
+     * Adds text and indents it.
+     * 
+     * @param text the text
+     */
+    public void add(String text) {
+        elements.add(new JavaCodeText(text, true, true));
+    }
+    
+    /**
+     * Adds text without indentation/pre-indended.
+     * 
+     * @param text the text
+     */
+    public void addRaw(String text) {
+        elements.add(new JavaCodeText(text, false, true));
+    }
 
+    /**
+     * Adds an empty line.
+     * 
+     * @return <b>this</b>
+     */
+    public JavaCodeClass addEmptyLine() {
+        IJavaCodeElement.add(elements, new JavaCodeEmptyLine(this));
+        return this;
+    }
+
+    /**
+     * Adds a single-line comment.
+     * 
+     * @param text the comment text
+     * @return <b>this</b>
+     */
+    public JavaCodeClass addSLComment(String text) {
+        IJavaCodeElement.add(elements, new JavaCodeSingleLineComment(this, text));
+        return this;
+    }
+    
     @Override
     public JavaCodeClass setVisibility(String visibility) {
         super.setVisibility(visibility);

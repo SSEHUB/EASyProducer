@@ -36,11 +36,11 @@
     -> addLambdaArgument(JavaCodeMethodCall) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
     -> addVariable(JavaCodeLambdaExpression, String) with (JavaCodeLambdaExpression, d) = JavaCodeLambdaExpression
     -> addBlock(JavaCodeLambdaExpression) with (JavaCodeLambdaExpression) = JavaCodeBlock
-    -> addReturn(JavaCodeBlock, String) with (JavaCodeBlock, d != null && d.length() > 0)
+    -> addReturn(JavaCodeBlock, JavaCodeExpression) with (JavaCodeBlock, JavaCodeTextExpression) = JavaCodeBlock
     -> addCall(JavaCodeMethodCall, String) with (JavaCodeMethodCall, collect) = JavaCodeMethodCall
     -> addArgument(JavaCodeMethodCall, String, JavaCodeImportScope) with (JavaCodeMethodCall, java.util.Collectors.toList(), CLASS) = JavaCodeMethodCall
     -> addMethod(JavaCodeClass, String, String, String) with (JavaCodeClass: Data, boolean, isOk, Checks whether a String is ok.) = JavaCodeMethod: isOk
     -> setStatic(JavaCodeMethod) with (JavaCodeMethod: isOk) = JavaCodeMethod: isOk
-    -> addReturn(JavaCodeMethod, String) with (JavaCodeMethod: isOk, !text.isEmpty()) = JavaCodeMethod: isOk
+    -> addReturn(JavaCodeMethod, JavaCodeExpression) with (JavaCodeMethod: isOk, JavaCodeTextExpression) = JavaCodeMethod: isOk
     -> addParameter(JavaCodeMethod, String, String, String) with (JavaCodeMethod: isOk, String, text, the text) = JavaCodeParameterSpecification String text
     -> vilTemplateProcessor(String, Configuration, Artifact) with (JavaCode6Tpl, <config>, JCATest6.java, {}) = {JCATest6.java}

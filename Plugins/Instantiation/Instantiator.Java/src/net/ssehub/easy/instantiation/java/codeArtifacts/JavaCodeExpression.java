@@ -15,6 +15,10 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
  * Basic implementation for (selected) expressions. Intentionally, this is neither a
  * {@link JavaCodeStatement} nor a {@link IJavaCodeElement}.
@@ -30,6 +34,32 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
      */
     protected JavaCodeExpression(IJavaCodeElement parent) {
         super(parent);
+    }
+    
+    /**
+     * Creates an instance by conversion from {@code text}. Must be hooked in by {@link #setParent(IJavaCodeElement)} 
+     * later.
+     * 
+     * @param text the text representing the expression
+     * @return the instance
+     * @throws VilException if the conversion fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaCodeExpression convert(String text) throws VilException {
+        return JavaCodeTextExpression.create(text); // forward!!
+    }    
+    
+    /**
+     * Helper method to conditionally set the parent of {@code elt} if {@code elt} is not <b>null</b>.
+     * 
+     * @param elt the element
+     * @param parent the parent
+     */
+    protected static void setParent(IJavaCodeElement elt, IJavaCodeElement parent) {
+        if (null != elt) {
+            elt.setParent(parent);
+        }
     }
     
 }

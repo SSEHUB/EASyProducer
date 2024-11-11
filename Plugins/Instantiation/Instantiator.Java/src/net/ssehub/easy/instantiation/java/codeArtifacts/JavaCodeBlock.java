@@ -297,8 +297,9 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         boolean isFinal, String initializer) {
-        return addVariable(null == type ? null : new JavaCodeTypeSpecification(type, getParentClass()), variableName, 
-            isFinal, initializer);
+        return addVariable(null == type || type.length() == 0 
+            ? null : new JavaCodeTypeSpecification(type, getParentClass()), 
+            variableName, isFinal, initializer);
     }
 
     @Override
@@ -307,14 +308,16 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
         return IJavaCodeElement.add(elements, new JavaCodeVariableDeclaration(this, type, variableName, 
             isFinal, initializer));
     }
-
+    
     /**
      * Adds a return statement without javadoc comment.
      * 
-     * @param value the return value
+     * @param valueEx the return value
+     * @return the return statement
      */
-    public void addReturn(String value) {
-        add("return " + value + ";"); // preliminary, may also become a class
+    public JavaCodeBlock addReturn(JavaCodeExpression valueEx) {
+        IJavaCodeElement.add(elements, new JavaCodeReturn(this, valueEx));
+        return this;
     }
     
     /**

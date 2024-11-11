@@ -49,4 +49,11 @@ class DummyJavaCodeArtifact implements IJavaCodeArtifact {
         return new JavaCodeImport(imp, INSTANCE);
     }
 
+    @Override
+    public JavaCodeImport addStaticImport(String imp) {
+        JavaCodeImport result = new JavaCodeImport(imp, INSTANCE);
+        result.setStatic();
+        return result;
+    }
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.StringUtils;
+
 import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -572,6 +574,28 @@ public class PseudoString implements IVilType {
             isIdentifier = Character.isJavaIdentifierPart(string.charAt(i));
         }
         return isIdentifier;
+    }
+ 
+    /**
+     * Removes the given {@code stripChars} from the end of {@code string}.
+     * 
+     * @param string the string to modify
+     * @param stripChars the set of characters to strip
+     * @return the stripped {@code string}
+     */
+    public static String stripEnd(String string, String stripChars) {
+        return StringUtils.stripEnd(string, stripChars);
+    }
+
+    /**
+     * Removes the given {@code stripChars} from the start of {@code string}.
+     * 
+     * @param string the string to modify
+     * @param stripChars the set of characters to strip
+     * @return the stripped {@code string}
+     */
+    public static String stripStart(String string, String stripChars) {
+        return StringUtils.stripStart(string, stripChars);
     }
 
     /**

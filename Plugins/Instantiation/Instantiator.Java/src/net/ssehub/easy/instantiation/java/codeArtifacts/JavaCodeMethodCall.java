@@ -18,20 +18,21 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**
  * Represents a static/non-static method call. For static method calls, imports may be created automatically.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeMethodCall extends JavaCodeStatement {
+public class JavaCodeMethodCall extends JavaCodeExpression {
 
     private String methodName;
     private List<IJavaCodeElement> arguments = new ArrayList<>();
     private boolean indent;
     private String postfix;
     private JavaCodeMethodCall chained;
+    private JavaCodeImportScope scope;
     
     /**
      * Creates a method call.
@@ -45,9 +46,31 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
     public JavaCodeMethodCall(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope, boolean indent, 
         String postfix) {
         super(parent);
+        this.scope = scope;
         this.methodName = validateMethodName(parent, methodName, scope);
         this.indent = indent;
         this.postfix = postfix;
+    }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param methodName the method name
+     * @return the instance
+     */
+    public static JavaCodeMethodCall create(String methodName) {
+        return create(methodName, JavaCodeImportScope.NONE);
+    }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param methodName the method name
+     * @param scope the scope of the import
+     * @return the instance
+     */
+    public static JavaCodeMethodCall create(String methodName, JavaCodeImportScope scope) {
+        return new JavaCodeMethodCall(null, methodName, scope, false, "");
     }
     
     /**
@@ -62,14 +85,14 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
     /**
      * Validates and potentially modifies the method name, e.g., by importing the prefixed qualified type.
      * 
-     * @param parent the parent
+     * @param parent the parent (may be <b>null</b> for ignore/deferred)
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @param scope the scope of the import
      * @return {@code methodName} or a modified version
      */
     protected String validateMethodName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
         String result = methodName;
-        if (JavaCodeImportScope.NONE != scope && methodName.contains(".")) {
+        if (null != parent && JavaCodeImportScope.NONE != scope && methodName.contains(".")) {
             result = parent.getArtifact().validateStaticMethodCall(methodName, scope);
         }
         return result;
@@ -93,28 +116,70 @@ public class JavaCodeMethodCall extends JavaCodeStatement {
      * @return <b>this</b> for chaining
      */
     public JavaCodeMethodCall addStringArgument(String val) {
-        return addArgument("\"" + StringEscapeUtils.escapeJava(val) + "\"");
+        return addArgument(new JavaCodeStringExpression(this, val));
     }
 
+    /**
+     * Adds a call argument as class expression, i.e. potentially qualified class name optionally ending with ".class".
+     * 
+     * @param cls the (qualified) class name, optionally ending with ".class"
+     * @return <b>this</b> for chaining
+     */
     public JavaCodeMethodCall addClassArgument(String cls) {
         if (cls.endsWith(".class")) {
             cls = cls.substring(0, cls.length() - 6);
         }
         JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, this);
-        addArgument(type.getOutputTypeName() + ".class");
+        addArgument(new JavaCodeTypeExpression(this, type));
         return this;
+    }
+    
+    /**
+     * Adds this as call argument.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethodCall addThisArgument() {
+        return addArgument("this");
     }
 
     /**
      * Adds a call argument as raw string.
      * 
-     * @param arg the argument
+     * @param arg the argument, may be empty or <b>null</b> to ignore this argument
      * @return <b>this</b> for chaining
      */
     public JavaCodeMethodCall addArgument(String arg) {
-        arguments.add(new JavaCodeText(arg, false, false));
+        if (null != arg && arg.length() > 0) {
+            arguments.add(new JavaCodeText(arg, false, false));
+        }
         return this;
     }
+    
+    /**
+     * Adds an expression as call argument.
+     * 
+     * @param ex the expression, may be <b>null</b> for none
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethodCall addArgument(JavaCodeExpression ex) {
+        if (null != ex) {
+            ex.setParent(this);
+            arguments.add(ex);
+        }
+        return this;
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        this.methodName = validateMethodName(parent, methodName, scope);
+        for (IJavaCodeElement a : arguments) {
+            setParent(a, this);
+        }
+        setParent(chained, this);
+    }    
 
     /**
      * Adds a call argument as raw string.

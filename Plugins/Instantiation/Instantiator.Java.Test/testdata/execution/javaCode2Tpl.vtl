@@ -4,13 +4,13 @@ import javaLib;
 @format(profile="java", profileArg_javadocIndent="* ", lineLength = 120)
 template JavaCode2Tpl(Configuration config, FileArtifact target) {
 
-    def addSerializerRegistrationStatement(JavaCodeMethod method, String clsName, sequenceOf(JavaCodeStatement) calls) {
+    def addSerializerRegistrationStatement(JavaCodeMethod method, String clsName, sequenceOf(JavaCodeElement) calls) {
         JavaCodeMethodCall call = method.addCall("de.iip_ecosphere.platform.transport.serialization.SerializerRegistry.registerSerializer", JavaCodeImportScope.CLASS);
         call.addArgument("iip.serializers.${clsName}.class");
         calls.add(call);
     }
 
-    def addSerializerRegistration(JavaCodeMethod method, String clsName, sequenceOf(JavaCodeStatement) calls) {
+    def addSerializerRegistration(JavaCodeMethod method, String clsName, sequenceOf(JavaCodeElement) calls) {
         if (true) { // config.sharedInterfaces
             String implClsName = clsName + "Impl";
             addSerializerRegistrationStatement(method, implClsName, calls);
@@ -57,7 +57,7 @@ template JavaCode2Tpl(Configuration config, FileArtifact target) {
         JavaCodeClass mainCls = art.addClass("Tmp");
         JavaCodeAttribute cb = addCallback(mainCls, platfOutClsName, "callback");
         JavaCodeMethod mainClsMain = mainCls.addMainMethod();
-        sequenceOf(JavaCodeStatement) calls = {};
+        sequenceOf(JavaCodeElement) calls = {};
         addSerializerRegistration(mainClsMain, "ModbusPhoenixEEM", calls);
         addSerializerRegistration(mainClsMain, "ModbusPhoenixRwEEM", calls);
 

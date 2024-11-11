@@ -34,6 +34,16 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
         super(parent, cls, JavaCodeImportScope.NONE, indent, postfix);
     }
 
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param cls the class name
+     * @return the instance
+     */
+    public static JavaCodeConstructorCall create(String cls) {
+        return new JavaCodeConstructorCall(null, cls, false, "");
+    }
+    
     @Override
     protected String validateMethodName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
         String result = methodName;

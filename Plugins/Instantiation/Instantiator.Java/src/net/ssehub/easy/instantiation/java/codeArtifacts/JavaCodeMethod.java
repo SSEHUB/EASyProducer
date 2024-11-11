@@ -72,6 +72,17 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         this.type = type;
         this.block = new JavaCodeBlock(this, true, true);
     }
+    
+    /**
+     * Overrides the original type specification. This may lead to unintended imports.
+     * 
+     * @param type the type
+     * @return <b>this</b>
+     */
+    public JavaCodeMethod setType(String type) {
+        this.type = JavaCodeTypeSpecification.create(type, getClassParent());
+        return this;
+    }
 
     @Invisible
     public IJavaCodeArtifact getArtifact() {
@@ -175,16 +186,6 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Override
     public void addRaw(String text) {
         block.addRaw(text);
-    }
-    
-    /**
-     * Adds a return statement without javadoc comment.
-     * 
-     * @param value the return value
-     * @return <b>this</b> for chaining
-     */
-    public JavaCodeMethod addReturn(String value) {
-        return addReturn(value, null);
     }
     
     @Override
@@ -312,14 +313,24 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     /**
+     * Adds a return statement without javadoc comment.
+     * 
+     * @param valueEx the return value
+     * @return the return statement
+     */
+    public JavaCodeMethod addReturn(JavaCodeExpression valueEx) {
+        return addReturn(valueEx, null);
+    }
+    
+    /**
      * Adds a return statement with javadoc comment.
      * 
-     * @param value the return value
+     * @param valueEx the return value expression
      * @param comment the javadoc comment for the return
-     * @return <b>this</b> for chaining
+     * @return <b>this</b>
      */
-    public JavaCodeMethod addReturn(String value, String comment) {
-        add("return " + value + ";"); // preliminary, may also become a class
+    public JavaCodeMethod addReturn(JavaCodeExpression valueEx, String comment) {
+        block.addReturn(valueEx);
         if (null != comment) {
             ensureJavadocComment("");
             getJavadocComment().addReturnComment(comment);

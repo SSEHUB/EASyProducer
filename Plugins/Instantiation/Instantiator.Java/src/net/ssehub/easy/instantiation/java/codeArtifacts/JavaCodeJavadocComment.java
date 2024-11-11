@@ -233,7 +233,9 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     }
     
     /**
-     * Relaxed escaping for Javadoc HTML.
+     * Relaxed escaping for Javadoc HTML. Implements a simple heuristic that everything
+     * that is within &lt; &gt; is considered as an element and not escaped while everything
+     * outside is escaped.
      * 
      * @param text the text to escape
      * @return the escaped text
@@ -241,7 +243,27 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     public static String escapeHtml(String text) {
         String[] split = text.split("\"");
         for (int i = 0; i < split.length; i++) {
-            split[i] = StringEscapeUtils.escapeHtml(split[i]);
+            String tmp = split[i];
+            String tmpRes = "";
+            boolean inElement = false;
+            int jLastOpen = -1;
+            int jLastSplit = 0;
+            for (int j = 0; j < tmp.length(); j++) {
+                char c = tmp.charAt(j);
+                if (c == '<') {
+                    inElement = true;
+                    jLastOpen = j;
+                } else if (c == '>') {
+                    if (inElement && jLastOpen > 0) {
+                        tmpRes += StringEscapeUtils.escapeHtml(tmp.substring(jLastSplit, jLastOpen));
+                        jLastSplit = j + 1;
+                        tmpRes += tmp.substring(jLastOpen, jLastSplit);
+                        inElement = false;
+                    }
+                }
+            }
+            tmpRes += StringEscapeUtils.escapeHtml(tmp.substring(jLastSplit, tmp.length()));
+            split[i] = tmpRes;
         }
         text = String.join("\"", split);
         return text;

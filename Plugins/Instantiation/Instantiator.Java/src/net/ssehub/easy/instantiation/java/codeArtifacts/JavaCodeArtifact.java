@@ -564,10 +564,19 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
 
     @Override
     public JavaCodeImport addImport(String imp) {
+        return addImport(imp, false);
+    }
+
+    public JavaCodeImport addStaticImport(String imp) {
+        return addImport(imp, true);
+    }
+
+    private JavaCodeImport addImport(String imp, boolean isStatic) {
         JavaCodeImport result = null;
         IJavaCodeImport found = findMatchingImport(imp, false);
         if (null == found) {
             result = new JavaCodeImport(imp, this);
+            result.setStatic(isStatic);
         } else if (found instanceof JavaCodeImport) {
             result = (JavaCodeImport) found;
         }

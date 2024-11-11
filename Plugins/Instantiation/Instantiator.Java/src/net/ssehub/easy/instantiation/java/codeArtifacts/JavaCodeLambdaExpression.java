@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
  * Represents a lambda expression. 
  * 
@@ -26,8 +28,7 @@ import java.util.List;
 public class JavaCodeLambdaExpression extends JavaCodeExpression {
     
     private List<String> variables;
-    private String expression;
-    private JavaCodeMethodCall callExpression;
+    private JavaCodeExpression expression;
     private JavaCodeBlock block;
 
     /**
@@ -38,19 +39,34 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
     protected JavaCodeLambdaExpression(IJavaCodeElement parent) {
         super(parent);
     }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param variable the first lambda variable (may be <b>null</b> or empty to ignore)
+     * @return the instance
+     */
+    public static JavaCodeLambdaExpression create(String variable) {
+        JavaCodeLambdaExpression result = new JavaCodeLambdaExpression(null);
+        result.addVariable(variable);
+        return result;
+    }
+    
     
     /**
      * Adds a variable to the lambda expression.
      * 
-     * @param variable the variable
+     * @param variable the variable (may be <b>null</b> or empty to ignore)
      * @return <b>this</b> for chaining
      */
     public JavaCodeLambdaExpression addVariable(String variable) {
-        if (null == variables) {
-            variables = new ArrayList<>();
-        }
-        if (!variables.contains(variable)) {
-            variables.add(variable);
+        if (null != variable && variable.length() > 0) {
+            if (null == variables) {
+                variables = new ArrayList<>();
+            }
+            if (!variables.contains(variable)) {
+                variables.add(variable);
+            }
         }
         return this;
     }
@@ -62,7 +78,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @return <b>this</b> for chaining
      */
     public JavaCodeLambdaExpression addExpression(String expression) {
-        this.expression = expression;
+        this.expression = new JavaCodeTextExpression(this, expression);
         return this;
     }
 
@@ -105,8 +121,16 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @return the call
      */
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
-        callExpression = new JavaCodeMethodCall(this, methodName, scope, false, "");
-        return callExpression;
+        expression = new JavaCodeMethodCall(this, methodName, scope, false, "");
+        return (JavaCodeMethodCall) expression;
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        setParent(expression, parent);
+        setParent(block, parent);
     }
     
     @Override
@@ -125,10 +149,8 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
         out.print(" -> ");
         if (block != null) {
             block.store(out);
-        } else if (callExpression != null) {
-            callExpression.store(out);
-        } else {
-            out.print(expression);
+        } else if (expression != null) {
+            expression.store(out);
         }
     }
     

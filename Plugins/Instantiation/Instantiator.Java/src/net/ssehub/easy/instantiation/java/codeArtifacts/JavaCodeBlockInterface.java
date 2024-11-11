@@ -204,7 +204,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement {
     /**
      * Creates a variable declaration.
      * 
-     * @param type the type of the variable, may be <b>null</b> for auto-inference
+     * @param type the type of the variable, may be <b>null</b> or empty for auto-inference
      * @param variableName the variable name
      * @param initializer the initializer, may be <b>null</b> for none
      * @return the variable declaration (for chaining)

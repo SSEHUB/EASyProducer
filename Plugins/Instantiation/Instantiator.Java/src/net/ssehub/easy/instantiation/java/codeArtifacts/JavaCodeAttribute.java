@@ -166,7 +166,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         final String attribute = getName();
         JavaCodeMethod method = enclosing.addMethod(type, 
             "get" + PseudoString.firstToUpperCase(attribute), "Returns the value of " + attribute + ".");
-        method.addReturn(getName(), "the value of " + attribute);
+        method.addReturn(new JavaCodeTextExpression(this, getName()), "the value of " + attribute);
         return method;
     }
     
