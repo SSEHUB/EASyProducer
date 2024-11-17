@@ -31,6 +31,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     
     private String type;
     private List<JavaCodeTypeSpecification> generics;
+    private String arrays;
     private JavaCodeClass enclosing;
 
     /**
@@ -59,15 +60,21 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     protected JavaCodeTypeSpecification(String type, JavaCodeClass enclosing) {
         this.enclosing = enclosing;
         this.type = type; // -> validateType
-        int gStartPos = type.indexOf("<");
-        int gEndPos = type.lastIndexOf(">");
-        if (gStartPos > 0 && gEndPos > 0) {
-            String gen = type.substring(gStartPos).trim();
-            this.type = type.substring(0, gStartPos).trim();
+        int startPos = type.indexOf("<");
+        int endPos = type.lastIndexOf(">");
+        if (startPos > 0 && endPos > 0) {
+            String gen = type.substring(startPos, endPos + 1).trim();
+            this.type = type.substring(0, startPos) + this.type.substring(endPos + 1).trim();
             generics = parseGenerics(gen, enclosing);
             if (null == generics) {
                 generics = new ArrayList<>();
             }
+        }
+        startPos = this.type.indexOf("[");
+        endPos = this.type.lastIndexOf("]");
+        if (startPos > 0 && endPos > 0) {
+            arrays = this.type.substring(startPos, endPos + 1).replaceAll("\\s+", "");
+            this.type = this.type.substring(0, startPos) + this.type.substring(endPos + 1);
         }
         if (null != enclosing) {
             getArtifact().validateType(this);
@@ -83,6 +90,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     protected JavaCodeTypeSpecification(JavaCodeTypeSpecification type, JavaCodeClass enclosing) {
         this.enclosing = enclosing;
         this.type = type.type;
+        this.arrays = type.arrays;
         if (null != type.generics) {
             this.generics = new ArrayList<>(type.generics); // deep copy?
         }
@@ -214,6 +222,9 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
                 generics.get(g).store(out);
             }
             out.print(">");
+        }
+        if (null != arrays) {
+            out.print(arrays);
         }
     }
     
