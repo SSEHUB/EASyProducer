@@ -27,8 +27,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
 
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
-    private String initializer;
-    private JavaCodeMethodCall methodInitializer;
+    private JavaCodeExpression initializer;
     private JavaCodeAnonymousClass anonymousInitializer;
 
     /**
@@ -72,10 +71,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         out.print(getName());
         if (null != initializer) {
             out.print(" = ");
-            out.print(initializer);
-        } else if (null != methodInitializer) {
-            out.print(" = ");
-            methodInitializer.store(out);
+            initializer.store(out);
         } else if (null != anonymousInitializer) {
             out.print(" = ");
             anonymousInitializer.store(out);
@@ -137,7 +133,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         return this;
     }
     
-    public JavaCodeAttribute addInitializer(String initializer) {
+    public JavaCodeAttribute addInitializer(JavaCodeExpression initializer) {
         this.initializer = initializer;
         return this;
     }
@@ -148,13 +144,13 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     }
     
     public JavaCodeConstructorCall addNew(String cls) {
-        methodInitializer = new JavaCodeConstructorCall(this, cls, false, "");
-        return (JavaCodeConstructorCall) methodInitializer;
+        this.initializer = new JavaCodeConstructorCall(this, cls, false, "");
+        return (JavaCodeConstructorCall) this.initializer;
     }
     
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
-        methodInitializer = new JavaCodeMethodCall(this, methodName, scope, false, "");
-        return methodInitializer;
+        this.initializer = new JavaCodeMethodCall(this, methodName, scope, false, "");
+        return (JavaCodeMethodCall) this.initializer;
     }
     
     /**
@@ -166,6 +162,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         final String attribute = getName();
         JavaCodeMethod method = enclosing.addMethod(type, 
             "get" + PseudoString.firstToUpperCase(attribute), "Returns the value of " + attribute + ".");
+        method.setStatic(isStatic());
         method.addReturn(new JavaCodeTextExpression(this, getName()), "the value of " + attribute);
         return method;
     }
@@ -190,6 +187,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         final String pName = null == paramName ? attribute : paramName;
         JavaCodeMethod method = enclosing.addMethod(JavaCodeTypeSpecification.VOID, 
             "set" + PseudoString.firstToUpperCase(attribute), "Changes the value of " + attribute + ".");
+        method.setStatic(isStatic());
         method.addParameter(type, pName, "the new value");
         method.add("this." + attribute + " = " + pName + ";");
         return method;

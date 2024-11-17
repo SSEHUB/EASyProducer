@@ -142,6 +142,27 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     public JavaCodeClass addClass(String name, String comment) {
         return IJavaCodeElement.add(elements, new JavaCodeClass(name, this, comment).setProtected());
     }
+    
+    /**
+     * Adds a public enum with the given name.
+     * 
+     * @param name the enum name
+     * @return the enum
+     */
+    public JavaCodeEnum addEnum(String name) {
+        return IJavaCodeElement.add(elements, new JavaCodeEnum(name, this));
+    }
+
+    /**
+     * Adds a public enum with the given name.
+     * 
+     * @param name the enum name
+     * @param comment the javadoc comment of the class
+     * @return the enum
+     */
+    public JavaCodeEnum addEnum(String name, String comment) {
+        return IJavaCodeElement.add(elements, new JavaCodeEnum(name, this, comment));
+    }
 
     /**
      * Adds an initializer block.
@@ -285,7 +306,13 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         return IJavaCodeElement.add(elements, 
             new JavaCodeMethod(JavaCodeTypeSpecification.create(type, this), name, this, comment));
     }
-    
+
+    public JavaCodeMethod addMethod(String type, String name, String comment, String returnComment) {
+        JavaCodeMethod result = addMethod(type, name, comment);
+        result.getJavadocComment().addReturnComment(returnComment);
+        return result;
+    }
+
     public JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name, String comment) {
         return IJavaCodeElement.add(elements, new JavaCodeMethod(type, name, this, comment));
     }
@@ -432,8 +459,20 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
 
     @Override
+    public JavaCodeClass setPublic(boolean isPublic) {
+        super.setPublic(isPublic);
+        return this;
+    }
+
+    @Override
     public JavaCodeClass setPrivate() {
         super.setPrivate();
+        return this;
+    }
+
+    @Override
+    public JavaCodeClass setPrivate(boolean isPrivate) {
+        super.setPrivate(isPrivate);
         return this;
     }
 
@@ -444,8 +483,20 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
 
     @Override
+    public JavaCodeClass setProtected(boolean isProtected) {
+        super.setProtected(isProtected);
+        return this;
+    }
+
+    @Override
     public JavaCodeClass setPackage() {
         super.setPackage();
+        return this;
+    }
+
+    @Override
+    public JavaCodeClass setPackage(boolean isPackage) {
+        super.setPackage(isPackage);
         return this;
     }
 

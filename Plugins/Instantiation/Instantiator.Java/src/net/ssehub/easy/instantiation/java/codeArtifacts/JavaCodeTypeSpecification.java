@@ -49,7 +49,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     protected JavaCodeTypeSpecification(String type, IJavaCodeElement element) {
         this(type, JavaCodeClass.getParentCodeClass(element));
     }
-    
+
     /**
      * Creates a type specification for the given type.
      * 
@@ -86,6 +86,16 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
         if (null != type.generics) {
             this.generics = new ArrayList<>(type.generics); // deep copy?
         }
+    }
+    
+    /**
+     * Creates a type specification for the given type without validation/creating imports.
+     * 
+     * @param type the type
+     * @return the created type specification
+     */
+    public static JavaCodeTypeSpecification create(String type) {
+        return new JavaCodeTypeSpecification(type, null);
     }
 
     /**
@@ -146,7 +156,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
      */
     static JavaCodeTypeSpecification create(String type, JavaCodeClass enclosing) {
         JavaCodeTypeSpecification result;
-        if (VOID.getType().equals(type)) {
+        if (VOID.getType().equals(type) || type == null || type.length() == 0) {
             result = VOID;
         } else {
             result = new JavaCodeTypeSpecification(type, enclosing);

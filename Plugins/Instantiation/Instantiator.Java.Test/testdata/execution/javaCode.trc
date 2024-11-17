@@ -31,16 +31,16 @@
     -> addCall(JavaCodeBlock, String) with (JavaCodeDefault, doOther) = JavaCodeMethodCall
     -> addSLComment(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, -- loops --) = JavaCodeMethod: getIntegerList
     -> addDoLoop(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, cont) = JavaCodeDoLoop
-    -> addAssignment(JavaCodeBlock, String, String) with (JavaCodeDoLoop, cont, false) = JavaCodeAssignment
+    -> addAssignment(JavaCodeBlock, String, JavaCodeExpression) with (JavaCodeDoLoop, cont, JavaCodeTextExpression) = JavaCodeAssignment
     -> addEmptyLine(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeMethod: getIntegerList
     -> addWhileLoop(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, !cont) = JavaCodeWhileLoop
-    -> addAssignment(JavaCodeBlock, String, String) with (JavaCodeWhileLoop, cont, true) = JavaCodeAssignment
+    -> addAssignment(JavaCodeBlock, String, JavaCodeExpression) with (JavaCodeWhileLoop, cont, JavaCodeTextExpression) = JavaCodeAssignment
     -> addForLoop(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, String, s, args) = JavaCodeForLoop
     -> addCall(JavaCodeBlock, String) with (JavaCodeForLoop, System.out.println) = JavaCodeMethodCall
     -> addForLoop(JavaCodeMethod, String, String, String, String, String) with (JavaCodeMethod: getIntegerList, int, c, 0, c < 10, c++) = JavaCodeForLoop
     -> addCall(JavaCodeBlock, String) with (JavaCodeForLoop, System.out.println) = JavaCodeMethodCall
     -> addSynchronized(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeSynchronizedBlock
-    -> add(JavaCodeBlock, String) with (JavaCodeSynchronizedBlock, length++;)
+    -> add(JavaCodeBlock, String) with (JavaCodeSynchronizedBlock, length++;) = JavaCodeSynchronizedBlock
     -> addTry(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeTryBlock
     try <- JavaCodeTryBlock
     -> addSLComment(JavaCodeBlock, String) with (JavaCodeTryBlock, try) = JavaCodeTryBlock

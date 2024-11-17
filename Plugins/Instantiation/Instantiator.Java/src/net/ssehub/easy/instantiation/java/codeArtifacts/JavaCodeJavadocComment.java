@@ -169,6 +169,18 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         this.comment = comment;
         return this;
     }
+    
+    /**
+     * Changes the main comment text and the return value comment text.
+     * 
+     * @param comment the comment text
+     * @param returnComment the return comment text
+     * @return <b>this</b>
+     */
+    public JavaCodeJavadocComment setComment(String comment, String returnComment) {
+        setComment(comment);
+        return addReturnComment(returnComment);
+    }
 
     /**
      * Adds text to the main comment text.
@@ -254,7 +266,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
                     inElement = true;
                     jLastOpen = j;
                 } else if (c == '>') {
-                    if (inElement && jLastOpen > 0) {
+                    if (inElement && jLastOpen >= 0) {
                         tmpRes += StringEscapeUtils.escapeHtml(tmp.substring(jLastSplit, jLastOpen));
                         jLastSplit = j + 1;
                         tmpRes += tmp.substring(jLastOpen, jLastSplit);

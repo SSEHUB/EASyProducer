@@ -23,6 +23,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAttribute;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlockInterface;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeCallElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeCastExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
@@ -31,6 +32,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeEnum.JavaCodeEnumConstant;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeExpression;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeExpressionStatement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeForLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeImportScope;
@@ -40,6 +42,8 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeLambdaExpression
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParameterSpecification;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodePostfixExpression;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeQualifiableElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeReturn;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeStatement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeStringExpression;
@@ -47,6 +51,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSwitch;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVisibility;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeWhileLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTryBlock;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTypeSpecification;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVariableDeclaration;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeVariableExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeSynchronizedBlock;
@@ -118,6 +123,8 @@ public class Registration implements IRegistration {
      * Registers the Java code (artifact) types.
      */
     private static void registerJavaCodeTypes() {
+        TypeRegistry.DEFAULT.register(JavaCodeTypeSpecification.class);
+        TypeRegistry.DEFAULT.register(JavaCodeCallElement.class);
         TypeRegistry.DEFAULT.register(JavaCodeElement.class);
         TypeRegistry.DEFAULT.register(JavaCodeStatement.class);
         TypeRegistry.DEFAULT.register(JavaCodeExpression.class);
@@ -146,6 +153,7 @@ public class Registration implements IRegistration {
         TypeRegistry.DEFAULT.register(JavaCodeAssignment.class);
         TypeRegistry.DEFAULT.register(JavaCodeImport.class);
         TypeRegistry.DEFAULT.register(JavaCodeMethod.class);
+        TypeRegistry.DEFAULT.register(JavaCodeQualifiableElement.class);
         TypeRegistry.DEFAULT.register(JavaCodeMethodCall.class);
         TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
         TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
@@ -157,6 +165,8 @@ public class Registration implements IRegistration {
         TypeRegistry.DEFAULT.register(JavaCodeVariableExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeTernaryExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeCastExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodePostfixExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeExpressionStatement.class);
     }
     
     /**

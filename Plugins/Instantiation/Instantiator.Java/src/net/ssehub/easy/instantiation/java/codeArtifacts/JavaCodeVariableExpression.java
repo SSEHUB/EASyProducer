@@ -20,7 +20,9 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeVariableExpression extends JavaCodeTextExpression {
+public class JavaCodeVariableExpression extends JavaCodeTextExpression implements JavaCodeQualifiableElement {
+
+    private IJavaCodeElement qualification;
 
     /**
      * Creates an instance.
@@ -31,6 +33,16 @@ public class JavaCodeVariableExpression extends JavaCodeTextExpression {
     protected JavaCodeVariableExpression(IJavaCodeElement parent, String text) {
         super(parent, text);
     }
+
+    /**
+     * Creates an instance.
+     * 
+     * @param parent the parent element
+     * @param var the variable to access
+     */
+    protected JavaCodeVariableExpression(IJavaCodeElement parent, JavaCodeVariableDeclaration var) {
+        super(parent, var.getName());
+    }
     
     /**
      * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
@@ -40,6 +52,43 @@ public class JavaCodeVariableExpression extends JavaCodeTextExpression {
      */
     public static JavaCodeVariableExpression create(String text) {
         return new JavaCodeVariableExpression(null, text);
+    }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param var the variable to represent/access
+     * @return the instance
+     */
+    public static JavaCodeVariableExpression create(JavaCodeVariableDeclaration var) {
+        return new JavaCodeVariableExpression(null, var);
+    }
+
+    @Override
+    public void store(CodeWriter out) {
+        if (null != qualification) {
+            qualification.store(out);
+            out.print(".");
+        }
+        super.store(out);
+    }
+
+    @Override
+    public JavaCodeVariableExpression qualifiedBy(String qualification) {
+        this.qualification = new JavaCodeTextExpression(this, qualification);
+        return this;
+    }
+
+    @Override
+    public JavaCodeVariableExpression qualifiedByType(String type) {
+        this.qualification = new JavaCodeTypeSpecification(type, this);
+        return this;
+    }
+
+    @Override
+    public JavaCodeVariableExpression qualifiedBy(JavaCodeVariableDeclaration var) {
+        this.qualification = new JavaCodeVariableExpression(this, var);
+        return this;
     }
 
 }

@@ -16,45 +16,47 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 /**
- * Represents raw text/value as an expression.
+ * Represents postfix increment and decrement expressions.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeTextExpression extends JavaCodeExpression {
+public class JavaCodePostfixExpression extends JavaCodeExpression {
 
-    private Object text;
+    private String variable;
+    private boolean increment;
 
     /**
-     * Creates an instance.
+     * Creates a raw text instance.
      * 
      * @param parent the parent element
-     * @param text the text representing the expression/value
+     * @param variable the variable name
+     * @param increment increment or decrement
      */
-    protected JavaCodeTextExpression(IJavaCodeElement parent, Object text) {
+    protected JavaCodePostfixExpression(IJavaCodeElement parent, String variable, boolean increment) {
         super(parent);
-        this.text = text;
+        this.variable = variable;
+        this.increment = increment;
     }
 
     /**
      * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
      * 
-     * @param text the text representing the expression/value
+     * @param variable the variable name
+     * @param increment increment or decrement
      * @return the instance
      */
-    public static JavaCodeTextExpression create(Object text) {
-        return new JavaCodeTextExpression(null, text);
+    public static JavaCodePostfixExpression create(String variable, boolean increment) {
+        return new JavaCodePostfixExpression(null, variable, increment);
     }
-    
+
     @Override
     public void store(CodeWriter out) {
-        if (null != text) {
-            out.print(text.toString());
+        out.print(variable);
+        if (increment) {
+            out.print("++");
+        } else {
+            out.print("--");
         }
-    }
-    
-    @Override
-    public boolean isEmpty() {
-        return null != text && text.toString().length() > 0;
     }
 
 }

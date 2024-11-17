@@ -24,8 +24,7 @@ public class JavaCodeAssignment extends JavaCodeStatement {
 
     private String variableName;
     private String operator;
-    private String expression;
-    private JavaCodeMethodCall expressionCall;
+    private JavaCodeExpression expression;
     
     /**
      * Creates a variable assignment with default assignment operator {@code =}.
@@ -34,7 +33,7 @@ public class JavaCodeAssignment extends JavaCodeStatement {
      * @param variableName the variable name
      * @param expression the value expression
      */
-    public JavaCodeAssignment(IJavaCodeElement parent, String variableName, String expression) {
+    public JavaCodeAssignment(IJavaCodeElement parent, String variableName, JavaCodeExpression expression) {
         this(parent, variableName, "=", expression);
     }
 
@@ -46,7 +45,8 @@ public class JavaCodeAssignment extends JavaCodeStatement {
      * @param operator the assignment operator, e.g., {@code =} or {@code +=}
      * @param expression the value expression
      */
-    public JavaCodeAssignment(IJavaCodeElement parent, String variableName, String operator, String expression) {
+    public JavaCodeAssignment(IJavaCodeElement parent, String variableName, String operator, 
+        JavaCodeExpression expression) {
         super(parent);
         this.variableName = variableName;
         this.operator = operator;
@@ -71,8 +71,8 @@ public class JavaCodeAssignment extends JavaCodeStatement {
      * @return the method call (for chaining)
      */
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
-        expressionCall = new JavaCodeMethodCall(this, methodName, scope, false, "");
-        return expressionCall;
+        expression = new JavaCodeMethodCall(this, methodName, scope, false, "");
+        return (JavaCodeMethodCall) expression;
     }
     
     @Override
@@ -82,10 +82,8 @@ public class JavaCodeAssignment extends JavaCodeStatement {
         out.print(" ");
         out.print(operator);
         out.print(" ");
-        if (expressionCall != null) {
-            expressionCall.store(out);
-        } else {
-            out.print(expression);
+        if (expression != null) {
+            expression.store(out);
         }
         out.println(";");
     }

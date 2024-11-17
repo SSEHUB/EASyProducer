@@ -94,6 +94,18 @@ public class JavaCodeEnum extends JavaCodeClass {
         setKind(Kind.ENUM);
     }
 
+    /**
+     * Creates a nested instance with given name within {@code enclosing}.
+     * 
+     * @param name the name of the enum
+     * @param enclosing the enclosing class
+     * @param comment the describing comment of the enum
+     */
+    JavaCodeEnum(String name, JavaCodeClass enclosing, String comment) {
+        super(name, enclosing, comment);
+        setKind(Kind.ENUM);
+    }
+
     @Override
     protected JavaCodeMethod configureConstructor(JavaCodeMethod cons) {
         return cons.setPrivate();

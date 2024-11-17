@@ -26,6 +26,6 @@
     -> addConstructor(JavaCodeClass, String) with (JavaCodeEnum: PublicEnum, Creates a constant.) = JavaCodeMethod: PublicEnum
     cons <- JavaCodeMethod: PublicEnum
     -> addParameter(JavaCodeMethod, String, String, String) with (JavaCodeMethod: PublicEnum, int, value, the value) = JavaCodeParameterSpecification int value
-    -> addAssignment(JavaCodeMethod, String, String) with (JavaCodeMethod: PublicEnum, this.value, value) = JavaCodeAssignment
+    -> addAssignment(JavaCodeMethod, String, JavaCodeExpression) with (JavaCodeMethod: PublicEnum, this.value, JavaCodeTextExpression) = JavaCodeAssignment
     -> addGetter(JavaCodeClass, JavaCodeAttribute) with (JavaCodeEnum: PublicEnum, JavaCodeAttribute: value) = JavaCodeMethod: getValue
     -> vilTemplateProcessor(String, Configuration, Artifact) with (JavaCode4Tpl, <config>, JCATest4.java, {}) = {JCATest4.java}

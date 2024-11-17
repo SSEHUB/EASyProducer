@@ -108,6 +108,19 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
     }
 
     /**
+     * Sets the visibility of this element to public.
+     * 
+     * @param isPublic whether public visibility shall be set
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeVisibleElement setPublic(boolean isPublic) {
+        if (isPublic) {
+            setPublic();
+        }
+        return this;
+    }
+    
+    /**
      * Sets the visibility of this element to private.
      * 
      * @return <b>this</b> (for chaining)
@@ -117,6 +130,19 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
         return this;
     }
 
+    /**
+     * Sets the visibility of this element to private.
+     * 
+     * @param isPrivate whether private visibility shall be set
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeVisibleElement setPrivate(boolean isPrivate) {
+        if (isPrivate) {
+            setPrivate();
+        }
+        return this;
+    }
+    
     /**
      * Sets the visibility of this element to protected.
      * 
@@ -128,12 +154,38 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
     }
 
     /**
+     * Sets the visibility of this element to protected.
+     * 
+     * @param isProtected whether protected visibility shall be set
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeVisibleElement setProtected(boolean isProtected) {
+        if (isProtected) {
+            setProtected();
+        }
+        return this;
+    }
+
+    /**
      * Sets the visibility of this element to package.
      * 
      * @return <b>this</b> (for chaining)
      */
     public JavaCodeVisibleElement setPackage() {
         setVisibility(JavaCodeVisibility.PACKAGE);
+        return this;
+    }
+    
+    /**
+     * Sets the visibility of this element to package.
+     * 
+     * @param isPackage whether package visibility shall be set
+     * @return <b>this</b> (for chaining)
+     */
+    public JavaCodeVisibleElement setPackage(boolean isPackage) {
+        if (isPackage) {
+            setPackage();
+        }
         return this;
     }
 

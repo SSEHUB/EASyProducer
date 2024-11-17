@@ -96,7 +96,7 @@ public class JavaCodeSwitch extends JavaCodeBlock {
     }
 
     public JavaCodeBlock addDefault(boolean asBlock, boolean withClosingBreak) {
-        return add(new CaseBlock(getParent(), null, asBlock, withClosingBreak));
+        return addElement(new CaseBlock(getParent(), null, asBlock, withClosingBreak));
     }
 
     @Invisible

@@ -25,8 +25,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
     private JavaCodeTypeSpecification type;
     private String variableName;
     private boolean isFinal;
-    private String initializer;
-    private JavaCodeMethodCall initCall;
+    private JavaCodeExpression initEx;
     private boolean asResource;
 
     /**
@@ -50,7 +49,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param type the type of the variable, may be <b>null</b> for auto-inference
      * @param variableName the variable name
      * @param isFinal whether the variable shall be final
-     * @param initializer the initializer, may be <b>null</b> for none
+     * @param initializer the initializer, may be <b>null</b> or empty for none
      * @param asResource {@code true} if this declaration is used in a try resource declaration, {@code false} for 
      *     "normal" variable declarations
      */
@@ -60,7 +59,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         this.type = type;
         this.variableName = variableName;
         this.isFinal = isFinal;
-        this.initializer = initializer;
+        setInitializer(initializer);
         this.asResource = asResource;
     }
 
@@ -68,13 +67,36 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * Sets the initializer.
      * 
      * @param initializer the initializer
+     * @return <b>this</b> for chaining
      */
-    public void setInitializer(String initializer) {
-        this.initializer = initializer;
+    public JavaCodeVariableDeclaration addInitializer(String initializer) {
+        return setInitializer(initializer); // TODO transition to expression
+    }
+
+    /**
+     * Sets the initializer.
+     * 
+     * @param initializer the initializer, may be <b>null</b> or empty for none
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeVariableDeclaration setInitializer(String initializer) {
+        if (null != initializer && initializer.length() > 0) {
+            this.initEx = new JavaCodeTextExpression(this, initializer);
+        }
+        return this;
+    }
+
+    /**
+     * Returns the initializer expression.
+     * 
+     * @return the initializer expression, may be <b>null</b> for none
+     */
+    public JavaCodeExpression getInitializer() {
+        return initEx;
     }
     
     /**
-     * Adds a non-static method call.
+     * Adds a non-static method call as initializer.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @return the method call (for chaining)
@@ -84,15 +106,15 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
     }
 
     /**
-     * Adds a method call.
+     * Adds a method call as initializer.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @param scope the import scope
      * @return the method call (for chaining)
      */
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
-        initCall = new JavaCodeMethodCall(this, methodName, scope, false, "");
-        return initCall;
+        initEx = new JavaCodeMethodCall(this, methodName, scope, false, "");
+        return (JavaCodeMethodCall) initEx;
     }
 
     /**
@@ -102,8 +124,8 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @return the method call (for chaining)
      */
     public JavaCodeConstructorCall addNew(String cls) {
-        initCall = new JavaCodeConstructorCall(this, cls, false, "");
-        return (JavaCodeConstructorCall) initCall;
+        initEx = new JavaCodeConstructorCall(this, cls, false, "");
+        return (JavaCodeConstructorCall) initEx;
     }
 
     @Override
@@ -121,16 +143,22 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
             out.print(" ");
         }
         out.print(variableName);
-        if (initCall != null) {
+        if (initEx != null) {
             out.print(" = ");
-            initCall.store(out);
-        } else if (null != initializer && !initializer.isEmpty()) {
-            out.print(" = ");
-            out.print(initializer);
+            initEx.store(out);
         }
         if (!asResource) {
             out.println(";");
         }
+    }
+    
+    /**
+     * Returns the name of the variable.
+     * 
+     * @return the name
+     */
+    public String getName() {
+        return variableName;
     }
 
 }

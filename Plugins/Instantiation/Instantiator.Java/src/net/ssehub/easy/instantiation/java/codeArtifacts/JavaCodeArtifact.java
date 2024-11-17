@@ -467,12 +467,17 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     @Override
     public void validateType(IJavaCodeTypeSpecification type) {
         String typeName = type.getOutputTypeName();
+        String varArg = "";
+        if (typeName.endsWith("...")) {
+            varArg = "...";
+            typeName = typeName.substring(0, typeName.length() - 3);
+        }
         int pos = typeName.lastIndexOf('.');
         if (pos > 0) {
             if (null == findMatchingImport(typeName, false)) {
                 new JavaCodeImport(typeName, this); // added automatically
             }
-            type.setOutputTypeName(typeName.substring(pos + 1));
+            type.setOutputTypeName(typeName.substring(pos + 1) + varArg);
         }
         /*CodeToStringWriter tmp = new CodeToStringWriter();
         tmp.print("VALIDATE: ");

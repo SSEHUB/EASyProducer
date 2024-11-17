@@ -25,7 +25,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeMethodCall extends JavaCodeExpression {
+public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCallElement, JavaCodeQualifiableElement {
 
     private String methodName;
     private List<IJavaCodeElement> arguments = new ArrayList<>();
@@ -33,7 +33,8 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
     private String postfix;
     private JavaCodeMethodCall chained;
     private JavaCodeImportScope scope;
-    
+    private IJavaCodeElement qualification;
+
     /**
      * Creates a method call.
      * 
@@ -45,11 +46,27 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
      */
     public JavaCodeMethodCall(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope, boolean indent, 
         String postfix) {
+        this(parent, null, methodName, scope, indent, postfix);
+    }
+
+    /**
+     * Creates a method call.
+     * 
+     * @param parent the parent
+     * @param qualification the qualification
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @param scope the scope of the import
+     * @param indent shall the call be indended
+     * @param postfix the postfix, e.g., semicolon newline
+     */
+    public JavaCodeMethodCall(IJavaCodeElement parent, IJavaCodeElement qualification, String methodName, 
+        JavaCodeImportScope scope, boolean indent, String postfix) {
         super(parent);
         this.scope = scope;
         this.methodName = validateMethodName(parent, methodName, scope);
         this.indent = indent;
         this.postfix = postfix;
+        this.qualification = qualification;
     }
 
     /**
@@ -65,14 +82,62 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
     /**
      * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
      * 
+     * @param qualification the qualification
+     * @param methodName the method name
+     * @return the instance
+     */
+    public static JavaCodeMethodCall create(JavaCodeVariableDeclaration qualification, String methodName) {
+        return create(qualification, methodName, JavaCodeImportScope.NONE);
+    }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param qualification the qualification
+     * @param methodName the method name
+     * @return the instance
+     */
+    public static JavaCodeMethodCall create(IJavaCodeElement qualification, String methodName) {
+        return create(qualification, methodName, JavaCodeImportScope.NONE);
+    }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
      * @param methodName the method name
      * @param scope the scope of the import
      * @return the instance
      */
     public static JavaCodeMethodCall create(String methodName, JavaCodeImportScope scope) {
-        return new JavaCodeMethodCall(null, methodName, scope, false, "");
+        return create(null, methodName, scope);
     }
-    
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param qualification the qualification
+     * @param methodName the method name
+     * @param scope the scope of the import
+     * @return the instance
+     */
+    public static JavaCodeMethodCall create(JavaCodeVariableDeclaration qualification, String methodName, 
+        JavaCodeImportScope scope) {
+        return create((IJavaCodeElement) qualification, methodName, scope);
+    }
+
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param qualification the qualification
+     * @param methodName the method name
+     * @param scope the scope of the import
+     * @return the instance
+     */
+    public static JavaCodeMethodCall create(IJavaCodeElement qualification, String methodName, 
+        JavaCodeImportScope scope) {
+        return new JavaCodeMethodCall(null, qualification, methodName, scope, false, "");
+    }
+
     /**
      * Returns the method name.
      * 
@@ -169,7 +234,20 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
         }
         return this;
     }
-    
+
+    /**
+     * Adds variable name as call argument.
+     * 
+     * @param var the variable declaration, may be <b>null</b> for none
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethodCall addArgument(JavaCodeVariableDeclaration var) {
+        if (null != var) {
+            arguments.add(new JavaCodeVariableExpression(this, var));
+        }
+        return this;
+    }
+
     @Invisible
     @Override
     public void setParent(IJavaCodeElement parent) {
@@ -210,6 +288,27 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
     }
 
     /**
+     * Adds a method call as call argument with default scope ({@link JavaCodeImportScope#NONE}).
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @return the created method call for chaining
+     */
+    public JavaCodeMethodCall addCallArgument(String methodName) {
+        return addCallArgument(methodName, JavaCodeImportScope.NONE);
+    }
+
+    /**
+     * Adds a method call as call argument.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @param scope the import scope
+     * @return the created method call for chaining
+     */
+    public JavaCodeMethodCall addCallArgument(String methodName, JavaCodeImportScope scope) {
+        return addArgument(methodName, scope); // transitioning addArgument(...)
+    }
+    
+    /**
      * Adds a method call as call argument.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
@@ -231,29 +330,41 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
         return IJavaCodeElement.add(arguments, new JavaCodeConstructorCall(this, cls, false, ""));
     }
     
-    /**
-     * Adds a subsequent/chained non-static method call.
-     * 
-     * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @return the method call (for chaining)
-     */
+    @Override
     public JavaCodeMethodCall addCall(String methodName) {
         return addCall(methodName, JavaCodeImportScope.NONE);
     }
 
-    /**
-     * Adds a subsequent/chained method call.
-     * 
-     * @param methodName the method name, qualified or statically qualified expression to call the method
-     * @param scope the import scope
-     * @return the method call (for chaining)
-     */
+    @Override
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         chained = new JavaCodeMethodCall(this, methodName, scope, false, postfix);
         postfix = "";
         return chained;
     }
     
+    @Override
+    public JavaCodeMethodCall qualifiedBy(String qualification) {
+        this.qualification = new JavaCodeTextExpression(this, qualification);
+        return this;
+    }
+
+    @Override
+    public JavaCodeMethodCall qualifiedByType(String type) {
+        this.qualification = new JavaCodeTypeSpecification(type, this);
+        return this;
+    }
+    
+    @Override
+    public JavaCodeMethodCall qualifiedBy(JavaCodeVariableDeclaration var) {
+        this.qualification = new JavaCodeVariableExpression(this, var);
+        return this;
+    }
+    
+    /**
+     * Returns the number of arguments of this call.
+     * 
+     * @return the number of arguments
+     */
     public int getArgumentsCount() {
         return arguments.size();
     }
@@ -271,8 +382,17 @@ public class JavaCodeMethodCall extends JavaCodeExpression {
             chained.store(out);
         }
     }
-    
+
+    /**
+     * Called as part of {@link #store(CodeWriter)} to store object specific parts before the call.
+     * 
+     * @param out the writer
+     */
     protected void storeBefore(CodeWriter out) {
+        if (null != qualification) {
+            qualification.store(out);
+            out.print(".");
+        }
     }
     
     protected void storeArgumentList(CodeWriter out) {

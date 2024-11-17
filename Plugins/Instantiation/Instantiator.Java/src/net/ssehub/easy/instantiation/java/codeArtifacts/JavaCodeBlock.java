@@ -134,7 +134,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      * @param element the element
      * @return {@code element}
      */
-    protected <E extends IJavaCodeElement> E add(E element) {
+    protected <E extends IJavaCodeElement> E addElement(E element) {
         elements.add(element);
         return element;
     }
@@ -171,13 +171,21 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }
 
     @Override
-    public void add(String text) {
+    public JavaCodeBlock add(String text) {
         elements.add(new JavaCodeText(text, true, true));
+        return this;
+    }
+    
+    @Override
+    public JavaCodeBlock add(JavaCodeStatement stmt) {
+        elements.add(stmt);
+        return this;
     }
 
     @Override
-    public void addRaw(String text) {
+    public JavaCodeBlock addRaw(String text) {
         elements.add(new JavaCodeText(text, false, true));
+        return this;
     }
     
     @Override
@@ -240,12 +248,27 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }
 
     @Override
-    public JavaCodeAssignment addAssignment(String variable, String expression) {
+    public JavaCodeExpressionStatement addPostfixIncrement(String variable) {
+        return addPostfix(variable, true);
+    }
+
+    @Override
+    public JavaCodeExpressionStatement addPostfixDecrement(String variable) {
+        return addPostfix(variable, false);
+    }
+
+    private JavaCodeExpressionStatement addPostfix(String variable, boolean increment) {
+        return IJavaCodeElement.add(elements, 
+            JavaCodeExpressionStatement.createPostfixStatement(this, variable, increment));
+    }
+
+    @Override
+    public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression) {
         return addAssignment(variable, "=", expression);
     }
 
     @Override
-    public JavaCodeAssignment addAssignment(String variable, String operator, String expression) {
+    public JavaCodeAssignment addAssignment(String variable, String operator, JavaCodeExpression expression) {
         return IJavaCodeElement.add(elements, new JavaCodeAssignment(this, variable, operator, expression));
     }
 
@@ -297,9 +320,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         boolean isFinal, String initializer) {
-        return addVariable(null == type || type.length() == 0 
-            ? null : new JavaCodeTypeSpecification(type, getParentClass()), 
-            variableName, isFinal, initializer);
+        return IJavaCodeElement.add(elements, createVariable(type, variableName, isFinal, initializer));
     }
 
     @Override
@@ -308,9 +329,22 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
         return IJavaCodeElement.add(elements, new JavaCodeVariableDeclaration(this, type, variableName, 
             isFinal, initializer));
     }
+
+    @Override
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, String initializer) {
+        return createVariable(type, variableName, false, initializer);
+    }
+
+    @Override
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
+        boolean isFinal, String initializer) {
+        JavaCodeTypeSpecification t = null == type || type.length() == 0 
+            ? null : new JavaCodeTypeSpecification(type, getParentClass());
+        return new JavaCodeVariableDeclaration(this, t, variableName, isFinal, initializer);
+    }
     
     /**
-     * Adds a return statement without javadoc comment.
+     * Adds a return statement without Javadoc comment.
      * 
      * @param valueEx the return value
      * @return the return statement

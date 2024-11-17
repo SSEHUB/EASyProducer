@@ -74,6 +74,15 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     /**
+     * Creates a temporary instance without parent.
+     * 
+     * @return the instance
+     */
+    public static JavaCodeMethod create() {
+        return new JavaCodeMethod("", null);
+    }    
+    
+    /**
      * Overrides the original type specification. This may lead to unintended imports.
      * 
      * @param type the type
@@ -101,6 +110,15 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      */
     public JavaCodeAnnotation addOverrideAnnotation() {
         return addAnnotation(Override.class.getSimpleName());
+    }
+
+    /**
+     * Adds an override annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addJunitTestAnnotation() {
+        return addAnnotation("org.junit.Test");
     }
 
     /**
@@ -179,13 +197,27 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
 
     @Override
-    public void add(String text) {
+    public JavaCodeMethod add(String text) {
         block.add(text);
+        return this;
     }
     
     @Override
-    public void addRaw(String text) {
+    public JavaCodeMethod add(JavaCodeStatement stmt) {
+        block.add(stmt);
+        return this;
+    }
+
+    @Override
+    public JavaCodeMethod add(JavaCodeExpression expr) {
+        block.add(expr);
+        return this;
+    }
+
+    @Override
+    public JavaCodeMethod addRaw(String text) {
         block.addRaw(text);
+        return this;
     }
     
     @Override
@@ -245,14 +277,24 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public JavaCodeTryBlock addTry() {
         return block.addTry();
     }
+    
+    @Override
+    public JavaCodeExpressionStatement addPostfixIncrement(String variable) {
+        return block.addPostfixIncrement(variable);
+    }
 
     @Override
-    public JavaCodeAssignment addAssignment(String variable, String expression) {
+    public JavaCodeExpressionStatement addPostfixDecrement(String variable) {
+        return block.addPostfixDecrement(variable);
+    }
+
+    @Override
+    public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression) {
         return block.addAssignment(variable, expression);
     }
 
     @Override
-    public JavaCodeAssignment addAssignment(String variable, String operator, String expression) {
+    public JavaCodeAssignment addAssignment(String variable, String operator, JavaCodeExpression expression) {
         return block.addAssignment(variable, operator, expression);
     }
 
@@ -310,6 +352,17 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, String initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
+    }
+    
+    @Override
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, String initializer) {
+        return block.createVariable(type, variableName, false, initializer);
+    }
+
+    @Override
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
+        boolean isFinal, String initializer) {
+        return block.createVariable(type, variableName, isFinal, initializer);
     }
     
     /**
@@ -516,6 +569,15 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      */
     public boolean isDefault() {
         return dflt;
+    }
+
+    /**
+     * Returns the code block of this method.
+     * 
+     * @return the block
+     */
+    public JavaCodeBlock getBlock() {
+        return block;
     }
     
 }

@@ -83,5 +83,10 @@ public class JavaCodeCastExpression extends JavaCodeExpression {
         }
         valueEx.store(out);
     }
+    
+    @Override
+    public boolean isEmpty() {
+        return typeName.length() > 0 ? false : valueEx.isEmpty();
+    }
 
 }

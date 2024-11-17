@@ -40,14 +40,14 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
      * Creates an instance by conversion from {@code text}. Must be hooked in by {@link #setParent(IJavaCodeElement)} 
      * later.
      * 
-     * @param text the text representing the expression
+     * @param text the text representing the expression/value
      * @return the instance
      * @throws VilException if the conversion fails
      */
     @Invisible
     @Conversion
-    public static JavaCodeExpression convert(String text) throws VilException {
-        return JavaCodeTextExpression.create(text); // forward!!
+    public static JavaCodeExpression convert(Object text) throws VilException {
+        return JavaCodeTextExpression.create(text); // forward use!!
     }    
     
     /**
@@ -60,6 +60,15 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
         if (null != elt) {
             elt.setParent(parent);
         }
+    }
+    
+    /**
+     * Returns whether this expression is empty, can be ignored.
+     * 
+     * @return {@code true} for empty, {@code false} else
+     */
+    public boolean isEmpty() {
+        return false;
     }
     
 }
