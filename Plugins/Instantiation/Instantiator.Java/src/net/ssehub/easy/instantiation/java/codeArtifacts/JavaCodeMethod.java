@@ -366,7 +366,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     /**
-     * Adds a return statement without javadoc comment.
+     * Adds a return statement without Javadoc comment.
      * 
      * @param valueEx the return value
      * @return the return statement
@@ -376,13 +376,14 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     /**
-     * Adds a return statement with javadoc comment.
+     * Adds a return statement with Javadoc comment.
      * 
      * @param valueEx the return value expression
-     * @param comment the javadoc comment for the return
+     * @param comment the Javadoc comment for the return
      * @return <b>this</b>
      */
     public JavaCodeMethod addReturn(JavaCodeExpression valueEx, String comment) {
+        valueEx.setParent(this);
         block.addReturn(valueEx);
         if (null != comment) {
             ensureJavadocComment("");

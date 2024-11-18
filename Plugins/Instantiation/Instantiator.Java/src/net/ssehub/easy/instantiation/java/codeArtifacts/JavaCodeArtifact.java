@@ -50,6 +50,7 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact, IStringValueProvider, Storable {
 
     static final JavaCodeArtifact EMPTY = new JavaCodeArtifact(); 
+    static final String VARARG_TYPE_POSTFIX = "...";
     private static final Comparator<IJavaCodeImport> IMPORT_COMPARATOR = 
         (i1, i2) -> i1.getName().compareTo(i2.getName());
     
@@ -468,16 +469,21 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     public void validateType(IJavaCodeTypeSpecification type) {
         String typeName = type.getOutputTypeName();
         String varArg = "";
-        if (typeName.endsWith("...")) {
-            varArg = "...";
-            typeName = typeName.substring(0, typeName.length() - 3);
+        if (typeName.endsWith(VARARG_TYPE_POSTFIX)) {
+            varArg = VARARG_TYPE_POSTFIX;
+            typeName = typeName.substring(0, typeName.length() - VARARG_TYPE_POSTFIX.length());
         }
         int pos = typeName.lastIndexOf('.');
         if (pos > 0) {
-            if (null == findMatchingImport(typeName, false)) {
-                new JavaCodeImport(typeName, this); // added automatically
+            String simpleTypeName = typeName.substring(pos + 1);
+            JavaCodeClass cls = JavaCodeClass.getParentCodeClass(type);
+            String simpleClsName = cls != null ? cls.getName() : "";
+            if (!simpleClsName.equals(simpleTypeName)) { // do not import if class name overlaps import
+                if (null == findMatchingImport(typeName, false)) {
+                    new JavaCodeImport(typeName, this); // added automatically
+                }
+                type.setOutputTypeName(simpleTypeName + varArg);
             }
-            type.setOutputTypeName(typeName.substring(pos + 1) + varArg);
         }
         /*CodeToStringWriter tmp = new CodeToStringWriter();
         tmp.print("VALIDATE: ");

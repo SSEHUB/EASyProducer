@@ -291,6 +291,17 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
      * Adds a method call as call argument with default scope ({@link JavaCodeImportScope#NONE}).
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @return <b>this</b> (as no arguments are provided)
+     */
+    public JavaCodeMethodCall addCallArgumentNoArg(String methodName) {
+        addCallArgument(methodName);
+        return this;
+    }
+    
+    /**
+     * Adds a method call as call argument with default scope ({@link JavaCodeImportScope#NONE}).
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
      * @return the created method call for chaining
      */
     public JavaCodeMethodCall addCallArgument(String methodName) {

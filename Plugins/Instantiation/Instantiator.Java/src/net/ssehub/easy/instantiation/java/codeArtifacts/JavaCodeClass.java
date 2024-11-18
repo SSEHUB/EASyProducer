@@ -270,7 +270,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
 
     public JavaCodeMethod addMainMethod() {
-        return addMainMethod("The main method.", "args", "command line parameters");
+        return addMainMethod("The main method.", "args", "command line arguments");
     }
 
     public JavaCodeMethod addMainMethod(String methodComment, String param, String paramComment) {
@@ -677,9 +677,12 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      * @return the code class parent or <b>null</b>
      */
     static JavaCodeClass getParentCodeClass(IJavaCodeElement element) {
-        IJavaCodeElement iter = element.getParent();
-        while (iter != null && !(iter instanceof JavaCodeClass)) {
-            iter = iter.getParent();
+        IJavaCodeElement iter = null;
+        if (null != element) {
+            iter = element.getParent();
+            while (iter != null && !(iter instanceof JavaCodeClass)) {
+                iter = iter.getParent();
+            }
         }
         return iter instanceof JavaCodeClass ? (JavaCodeClass) iter : null;
     }

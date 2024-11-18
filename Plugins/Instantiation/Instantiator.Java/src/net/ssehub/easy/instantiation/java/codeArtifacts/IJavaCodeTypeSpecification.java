@@ -22,7 +22,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  *  
  * @author Holger Eichelberger
  */
-public interface IJavaCodeTypeSpecification extends Storable {
+public interface IJavaCodeTypeSpecification extends IJavaCodeElement, Storable {
     
     /**
      * Returns the output type name (plain name, potentially unqualified, without generics).
