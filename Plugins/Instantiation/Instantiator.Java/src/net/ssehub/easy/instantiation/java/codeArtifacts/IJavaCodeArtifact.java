@@ -50,7 +50,7 @@ public interface IJavaCodeArtifact {
     public void registerImport(IJavaCodeImport imp);
     
     /**
-     * Explicitly adds an import to {@link #getArtifact()}.
+     * Explicitly adds an import to this artifact.
      * 
      * @param imp the import (may be a wildcard), static can be set on the result
      * @return the existing or new code import
@@ -58,7 +58,7 @@ public interface IJavaCodeArtifact {
     public JavaCodeImport addImport(String imp);
 
     /**
-     * Explicitly adds static import to {@link #getArtifact()}.
+     * Explicitly adds static import to this artifact.
      * 
      * @param imp the import (may be a wildcard)
      * @return the existing or new code import

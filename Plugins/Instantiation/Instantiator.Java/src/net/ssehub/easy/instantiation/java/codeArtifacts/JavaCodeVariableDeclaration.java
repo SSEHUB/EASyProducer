@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
  * Represents a variable declaration. An explicit method call takes precedence over a String initializer.
  * 
@@ -150,6 +152,11 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         if (!asResource) {
             out.println(";");
         }
+    }
+    
+    @Invisible
+    public void storeAsQualifier(CodeWriter out) {
+        out.print(variableName);
     }
     
     /**

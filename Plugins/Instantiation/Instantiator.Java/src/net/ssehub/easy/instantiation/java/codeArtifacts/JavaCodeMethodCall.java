@@ -401,7 +401,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
      */
     protected void storeBefore(CodeWriter out) {
         if (null != qualification) {
-            qualification.store(out);
+            qualification.storeAsQualifier(out);
             out.print(".");
         }
     }

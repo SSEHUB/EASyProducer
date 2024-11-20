@@ -395,6 +395,11 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         }
     }
     
+    @Override
+    public boolean enableAutoStore() {
+        return false;
+    }
+    
     /**
      * Just returns the collected imports code fragment.
      * 

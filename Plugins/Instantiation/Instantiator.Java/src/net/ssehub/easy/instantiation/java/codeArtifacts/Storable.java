@@ -33,6 +33,17 @@ public interface Storable {
      */
     @Invisible
     public void store(CodeWriter out);
+
+    /**
+     * Special actions to store this expression as qualifier, e.g., for a method call.
+     * Calls {@link #store(CodeWriter)} by default.
+     * 
+     * @param out the code writer
+     */
+    @Invisible
+    public default void storeAsQualifier(CodeWriter out) {
+        store(out);
+    }
     
     /**
      * Returns the number of contained line-relevant elements (potentially including <b>this</b>), i.e., a rough 

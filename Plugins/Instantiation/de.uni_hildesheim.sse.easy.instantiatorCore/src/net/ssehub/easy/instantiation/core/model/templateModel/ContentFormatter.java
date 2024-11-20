@@ -85,7 +85,7 @@ public class ContentFormatter {
         public boolean isSplitChar(char ch, char nextChar);
         
         /**
-         * If the current position is a {@link #isSplitChar(char) split char}, then shall the split position be 
+         * If the current position is a {@link #isSplitChar(char, char) split char}, then shall the split position be 
          * modified?
          * 
          * @return increment or decrement to split position, may be 0 for none
@@ -93,7 +93,7 @@ public class ContentFormatter {
         public int adjustSplitPosition();
         
         /**
-         * If the current position is a {@link #isSplitChar(char) split char}, then shall something be
+         * If the current position is a {@link #isSplitChar(char, char) split char}, then shall something be
          * added at this specific position, e.g., a string end for string end + string start?
          * 
          * @return the additional text, may be empty for none
@@ -101,7 +101,7 @@ public class ContentFormatter {
         public String addBeforeSplit();
 
         /**
-         * If the current position is a {@link #isSplitChar(char) split char}, then shall something be
+         * If the current position is a {@link #isSplitChar(char, char) split char}, then shall something be
          * added after the new line break, e.g., a + string end for string end + string start?
          * 
          * @return the additional text, may be empty for none

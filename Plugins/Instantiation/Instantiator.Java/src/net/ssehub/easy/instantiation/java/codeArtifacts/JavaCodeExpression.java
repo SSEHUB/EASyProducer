@@ -70,5 +70,5 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
     public boolean isEmpty() {
         return false;
     }
-    
+
 }

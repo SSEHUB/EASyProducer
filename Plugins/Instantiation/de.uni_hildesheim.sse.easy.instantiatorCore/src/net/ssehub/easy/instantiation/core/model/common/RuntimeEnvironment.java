@@ -248,6 +248,27 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         }
         
         /**
+         * Allow or disable auto-storing during VTL processing. Typically, an artifact is stored whenever
+         * a variable containing it is removed from the actual scope, i.e., the scope is closed. This is needed
+         * for usual artifacts to contain/flush recent VTL content output even if output fails. However, it is 
+         * inefficient for artifacts, that collect information and need storing their information only once, when 
+         * the VTL processing ends.
+         * 
+         * @param artifact the artifact to consider
+         * @param enable whether auto-storing would be enabled based on VTL mechanisms.
+         * @param nestingLevel the actual nesting level of the query, -1 is VTL script top-level main
+         * @return {@code true} to enable auto-storing, {@code false} to prevent it; by default, usual artifacts 
+         * return the value of {@code enable}
+         * @see IArtifact#enableAutoStore()
+         */
+        private boolean enableAutoStore(IArtifact artifact, boolean enable, int nestingLevel) {
+            if (enable && !artifact.enableAutoStore()) {
+                return nestingLevel < 0; // only on top-level
+            }
+            return enable;
+        }
+        
+        /**
          * Stores the recent artifacts, but only artifacts that are not excluded and not initially defined on the 
          * current level (avoids repeated writing the same artifacts along a nesting hierarchy).
          * 
@@ -262,10 +283,12 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                 int maxLevel = levels.size() - 2; // do not look into top
                 for (Map.Entry<D, Object> ent : top.values.entrySet()) {
                     Object o = ent.getValue();
-                    if (o instanceof IArtifact 
-                        && (force || (!noAutoStore.contains(o) && !isDefined(ent.getKey(), maxLevel)))) {
+                    if (o instanceof IArtifact) { 
                         IArtifact artifact = (IArtifact) o;
-                        artifact.store();
+                        if (force || enableAutoStore(artifact,
+                            !noAutoStore.contains(artifact) && !isDefined(ent.getKey(), maxLevel), maxLevel)) {
+                            artifact.store();
+                        }
                     }
                 }
             }
@@ -414,7 +437,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     private IResolvableModel<V, M> mostSpecificModel;
     private TypeRegistry typeRegistry;
     private Class<V> cls;
-    private Set<IArtifact> noAutoStore = new HashSet<IArtifact>();
+    private Set<IArtifact> noAutoStore = new HashSet<>();
     private Supplier<String> modelNameSupplier = new Supplier<String>() {
         
         @Override
@@ -984,7 +1007,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     }
     
     /**
-     * Marks artifacts as excluded from auto-storing when related variabeles become unavailable.
+     * Marks artifacts as excluded from auto-storing when related variables become unavailable.
      * 
      * @param artifact the artifact
      */

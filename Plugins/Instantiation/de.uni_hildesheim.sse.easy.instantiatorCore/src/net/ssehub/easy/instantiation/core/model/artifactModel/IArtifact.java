@@ -97,5 +97,20 @@ public interface IArtifact extends IVilType {
      */
     @Invisible(inherit = true)
     public void store() throws VilException;
+
+    /**
+     * Allow or disable auto-storing during VTL processing. Typically, an artifact is stored whenever
+     * a variable containing it is removed from the actual scope, i.e., the scope is closed, thus auto-store is 
+     * enabled. This is needed for usual artifacts to contain/flush recent VTL content output even if output fails. 
+     * However, it is inefficient for artifacts, that collect information and need storing their information only once, 
+     * when the VTL processing ends.
+     * 
+     * @return {@code true} to enable auto-storing, {@code false} to prevent it; by default, usual artifacts return the 
+     * value of {@code enable}
+     */
+    @Invisible
+    public default boolean enableAutoStore() {
+        return true;
+    }
     
 }
