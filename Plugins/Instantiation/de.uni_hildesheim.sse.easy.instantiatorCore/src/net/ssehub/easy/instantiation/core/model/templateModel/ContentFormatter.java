@@ -500,6 +500,9 @@ public class ContentFormatter {
                 result = bld.toString();
             }
         }
+        if (null != fConf && fConf.getCharset() != null) {
+            result = new String(result.getBytes(), fConf.getCharset());
+        }
         return result;
     }
     

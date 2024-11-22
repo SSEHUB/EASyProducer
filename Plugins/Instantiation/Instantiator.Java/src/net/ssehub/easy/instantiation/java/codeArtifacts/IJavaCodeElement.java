@@ -18,7 +18,9 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
@@ -325,6 +327,30 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
         if (null != comparator && null != list && list.size() > 0) {
             Collections.sort(list, comparator);
         }
+    }
+    
+    /**
+     * Escapes a Java string with exception for acceptable characters.
+     * 
+     * @param text the text to escape
+     * @param escapes the characters that shall not be escapes, remain as they are 
+     * @param escapeFunc the actual function escaping needed characters
+     * @return the escaped text
+     */
+    static String escape(String text, Set<Character> escapes, Function<String, String> escapeFunc) {
+        String tmp = "";
+        int lastSplit = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (escapes.contains(c)) {
+                tmp += escapeFunc.apply(text.substring(lastSplit, i)) + c;
+                lastSplit = i + 1;
+            }
+        }
+        if (lastSplit < text.length()) {
+            tmp += escapeFunc.apply(text.substring(lastSplit, text.length()));
+        }
+        return tmp;
     }
 
 }

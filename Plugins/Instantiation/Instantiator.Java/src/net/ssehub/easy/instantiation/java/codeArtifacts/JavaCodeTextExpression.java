@@ -54,7 +54,7 @@ public class JavaCodeTextExpression extends JavaCodeExpression {
     
     @Override
     public boolean isEmpty() {
-        return null != text && text.toString().length() > 0;
+        return null == text || text.toString().length() == 0;
     }
 
 }

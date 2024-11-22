@@ -39,6 +39,12 @@ public class Constants {
     public static final String FORMATTING_HINT_INDENTSTEPS = "indentSteps";
 
     /**
+     * The name for the optional formatting hint to define the output characterset. Must be a valid 
+     * characterset name.
+     */
+    public static final String FORMATTING_HINT_CHARSET = "charset";
+
+    /**
      * The name for the optional formatting hint to define whether tabs shall be used.
      */
     public static final String FORMATTING_HINT_USETABS = "useTabs";

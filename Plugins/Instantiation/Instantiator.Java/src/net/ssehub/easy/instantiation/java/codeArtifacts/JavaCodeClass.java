@@ -667,7 +667,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      * @param consumer the setter consumer
      */
     static void setParent(IJavaCodeElement parent, Consumer<JavaCodeClass> consumer) {
-        IJavaCodeElement.setParent(parent, JavaCodeClass.class, consumer);
+        IJavaCodeElement.setParent(getParentCodeClass(parent), JavaCodeClass.class, consumer);
     }
 
     /**
@@ -678,7 +678,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      */
     static JavaCodeClass getParentCodeClass(IJavaCodeElement element) {
         IJavaCodeElement iter = null;
-        if (null != element) {
+        if (null != element && !(element instanceof JavaCodeClass)) {
             iter = element.getParent();
             while (iter != null && !(iter instanceof JavaCodeClass)) {
                 iter = iter.getParent();

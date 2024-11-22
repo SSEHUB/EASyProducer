@@ -18,6 +18,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
@@ -33,6 +34,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  */
 public class JavaCodeJavadocComment implements IJavaCodeElement {
 
+    private static final Set<String> HTML_ELEMENTS = Set.of("code", "br", "p", "div", "it", "ul", "ol", "li", "b");
+    private static final Set<Character> HTML_ESCAPES = Set.of('’');
+    
     private String comment;
     private IJavaCodeElement attachedTo;
     private List<NameTaggedComment> taggedParts;
@@ -245,12 +249,63 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     }
     
     /**
+     * Returns whether a char shall be skipped that the beginning or end of a potential HTML
+     * element, i.e., whitespaces as well as opening or closing brackets.
+     * 
+     * @param ch the character
+     * @param left skip left or right
+     * @return {@code true} for skip, {@code false} for not skip
+     */
+    private static boolean skipHtmlChar(char ch, boolean left) {
+        return Character.isWhitespace(ch) || left ? ch == '<' : ch == '>';
+    }
+    
+    /**
+     * Returns whether {@code text} is probably an HTML element based on a lookup in {@link #HTML_ELEMENTS}.
+     * 
+     * @param text the text
+     * @return {@code true} for HTML element, {@code false} else
+     */
+    private static boolean isHtmlElement(String text) {
+        boolean result = false;
+        int left = 0;
+        while (left < text.length() && skipHtmlChar(text.charAt(left), true)) {
+            left++;
+        }
+        int right = text.length() - 1;
+        while (right >= 0 && skipHtmlChar(text.charAt(right), false)) {
+            right--;
+        }
+        if (left > 0 && right < text.length()) {
+            String elt = text.substring(left, right + 1);
+            if (elt.startsWith("/")) {
+                elt = elt.substring(1);
+            } else if (elt.endsWith("/")) {
+                elt = elt.substring(0, elt.length() - 1);
+            }
+            result = HTML_ELEMENTS.contains(elt);
+        }
+        return result;
+    }
+
+    /**
+     * Implements the plain HTML escaping with exceptions taken from {@link #HTML_ESCAPES}.
+     * 
+     * @param text the text to escape
+     * @return the escaped text
+     */
+    private static String escapeHtmlImpl(String text) {
+        return IJavaCodeElement.escape(text, HTML_ESCAPES, StringEscapeUtils::escapeHtml);
+    }
+    
+    /**
      * Relaxed escaping for Javadoc HTML. Implements a simple heuristic that everything
      * that is within &lt; &gt; is considered as an element and not escaped while everything
      * outside is escaped.
      * 
      * @param text the text to escape
      * @return the escaped text
+     * @see #escapeHtmlImpl(String)
      */
     public static String escapeHtml(String text) {
         String[] split = text.split("\"");
@@ -267,14 +322,18 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
                     jLastOpen = j;
                 } else if (c == '>') {
                     if (inElement && jLastOpen >= 0) {
-                        tmpRes += StringEscapeUtils.escapeHtml(tmp.substring(jLastSplit, jLastOpen));
+                        tmpRes += escapeHtmlImpl(tmp.substring(jLastSplit, jLastOpen));
                         jLastSplit = j + 1;
-                        tmpRes += tmp.substring(jLastOpen, jLastSplit);
+                        String elt = tmp.substring(jLastOpen, jLastSplit);
+                        if (!isHtmlElement(elt)) {
+                            elt = escapeHtmlImpl(elt);
+                        }
+                        tmpRes += elt;
                         inElement = false;
                     }
                 }
             }
-            tmpRes += StringEscapeUtils.escapeHtml(tmp.substring(jLastSplit, tmp.length()));
+            tmpRes += escapeHtmlImpl(tmp.substring(jLastSplit, tmp.length()));
             split[i] = tmpRes;
         }
         text = String.join("\"", split);

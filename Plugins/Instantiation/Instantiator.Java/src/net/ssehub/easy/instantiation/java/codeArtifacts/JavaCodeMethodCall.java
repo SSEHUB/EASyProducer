@@ -187,15 +187,17 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
     /**
      * Adds a call argument as class expression, i.e. potentially qualified class name optionally ending with ".class".
      * 
-     * @param cls the (qualified) class name, optionally ending with ".class"
+     * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
      * @return <b>this</b> for chaining
      */
     public JavaCodeMethodCall addClassArgument(String cls) {
-        if (cls.endsWith(".class")) {
-            cls = cls.substring(0, cls.length() - 6);
+        if (null != cls && cls.length() > 0) {
+            if (cls.endsWith(".class")) {
+                cls = cls.substring(0, cls.length() - 6);
+            }
+            JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, this);
+            addArgument(new JavaCodeTypeExpression(this, type));
         }
-        JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, this);
-        addArgument(new JavaCodeTypeExpression(this, type));
         return this;
     }
     
@@ -256,6 +258,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
         for (IJavaCodeElement a : arguments) {
             setParent(a, this);
         }
+        setParent(qualification, this);
         setParent(chained, this);
     }    
 

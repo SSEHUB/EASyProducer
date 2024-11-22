@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import java.util.Set;
+
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -24,6 +26,9 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class JavaCodeStringExpression extends JavaCodeTextExpression {
 
+    private static final Set<Character> JAVA_ESCAPES = Set.of('\u2013', 'ä', 'ü', 'ö', 'ß', 'Ä', 'Ü', 'Ö', '\\', 
+        '²', '³', '°');
+    
     /**
      * Creates an instance.
      * 
@@ -31,29 +36,7 @@ public class JavaCodeStringExpression extends JavaCodeTextExpression {
      * @param text the text
      */
     protected JavaCodeStringExpression(IJavaCodeElement parent, String text) {
-        super(parent, "\"" + escape(text) + "\"");
-    }
-
-    /**
-     * Escapes a Java string with exception for acceptable characters.
-     * 
-     * @param text the text to escape
-     * @return the escaped text
-     */
-    private static String escape(String text) {
-        String tmp = "";
-        int lastSplit = 0;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-            if (c == '\u2013') {
-                tmp += StringEscapeUtils.escapeJava(text.substring(lastSplit, i)) + c;
-                lastSplit = i + 1;
-            }
-        }
-        if (lastSplit < text.length()) {
-            tmp += StringEscapeUtils.escapeJava(text.substring(lastSplit, text.length()));
-        }
-        return tmp;
+        super(parent, "\"" + IJavaCodeElement.escape(text, JAVA_ESCAPES, StringEscapeUtils::escapeJava) + "\"");
     }
     
     /**

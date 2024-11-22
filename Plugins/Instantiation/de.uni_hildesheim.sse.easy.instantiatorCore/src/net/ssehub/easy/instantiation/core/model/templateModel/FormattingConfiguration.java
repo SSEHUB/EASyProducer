@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.instantiation.core.model.templateModel;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class FormattingConfiguration {
     private String profile;
     private boolean useTabs = false;
     private int indentSteps = -1;
+    private Charset charset;
     private Map<String, String> profileArguments = new HashMap<String, String>();
 
     /**
@@ -195,6 +197,24 @@ public class FormattingConfiguration {
      */
     public void setIndentSteps(int indentSteps) {
         this.indentSteps = Math.max(0, indentSteps); // well, 0...
+    }
+    
+    /**
+     * Returns the requested output charset.
+     * 
+     * @return the charset, may be <b>null</b> for undefined/system default
+     */
+    public Charset getCharset() {
+        return charset;
+    }
+
+    /**
+     * Chantes the output charset.
+     * 
+     * @param charset the charset, may be <b>null</b> for undefined/system default
+     */
+    public void setCharset(Charset charset) {
+        this.charset = charset;
     }
 
 }

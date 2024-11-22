@@ -3,6 +3,8 @@ package de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation;
 import static net.ssehub.easy.instantiation.core.model.templateModel.Constants.*;
 
 import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -250,6 +252,13 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
                         result.setIndentSteps(Integer.parseInt(getFormattingHintPartNumStringValue(part)));
                     } catch (NumberFormatException e) {
                         warning("indentSteps value is not an integer - igored", part, 
+                            TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);
+                    }
+                } else if (FORMATTING_HINT_CHARSET.equals(name)) {
+                    try {
+                        result.setCharset(Charset.forName(getFormattingHintPartNumStringValue(part)));
+                    } catch (IllegalCharsetNameException e) {
+                        warning("charset value does not denote a valid charset - igored", part, 
                             TemplateLangPackage.Literals.FORMATTING_HINT_PART__NAME, ErrorCodes.UNKNOWN_ELEMENT);
                     }
                 } else if (FORMATTING_HINT_USETABS.equals(name)) {
