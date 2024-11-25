@@ -97,7 +97,7 @@ public class LocalRealTests extends RealTests {
     }
     
     /**
-     * Tests the oktoflow model / instantiation (June 24).
+     * Tests the oktoflow model / instantiation (updated recent model).
      * 
      * @throws IOException shall not occur
      */

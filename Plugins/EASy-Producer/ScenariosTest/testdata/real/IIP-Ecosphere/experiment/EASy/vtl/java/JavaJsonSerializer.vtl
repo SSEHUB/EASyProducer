@@ -1,10 +1,28 @@
 import JavaBasics;
+import JavaSerializerBase;
 
 @advice(IIPEcosphere)
 @indent(indentation = 4, additional = 0)
 @format(profile="java", profileArg_javadocIndent="* ", lineLength = 120, profileArg_eltSorting="CONS")
-template JavaJsonSerializer(Configuration config, JavaCodeArtifact target, RecordType type, String pkg, String typePkg, Boolean sharedInterfaces, Boolean impl) {
+template JavaJsonSerializer(IIPEcosphere config, JavaCodeArtifact target, RecordType type, String pkg, String typePkg, Boolean sharedInterfaces, Boolean impl) extends JavaSerializerBase {
 
+    @Override
+    def String getProtocolName() {
+        "JSON";
+    }
+
+    @Override
+    def genClsInit(IIPEcosphere config, JavaCodeClass mainCls, String typeName) {
+        mainCls.addAttribute("com.fasterxml.jackson.databind.ObjectMapper", "MAPPER")
+            .addInitializer("new ObjectMapper()")
+            .setStatic()
+            .setFinal();
+        JavaCodeBlock init = mainCls.addInitializer(true);
+        defineJacksonOptionals(type, "MAPPER", typeName, init);
+        defineJacksonTypeMapper(config, "MAPPER", init);
+        mainCls.removeIfEmpty(init); // if dynamically empty
+    }
+    
     def defineJacksonOptionals(RecordType type, String objectMapperVar, String typeName, JavaCodeBlock block) {
         sequenceOf(String) fieldNames = type.fields->select(f|f.optional)->collect(f|f.name);
         if (fieldNames.size() > 0) {
@@ -22,56 +40,22 @@ template JavaJsonSerializer(Configuration config, JavaCodeArtifact target, Recor
         }
     }
 
-    def main(Configuration config, JavaCodeArtifact target, RecordType type, String pkg, String typePkg, Boolean sharedInterfaces, Boolean impl) {
-        String clsName = asTypeName(type.name);
-        String typeName = clsName;
-        String add = "";
-        if (sharedInterfaces) {
-            add = "Impl";
-            if (impl) {
-                typeName = typeName + add;
-            }
-        }
-
-        JavaCodeClass mainCls = codeCreateClass(target, pkg, "${typeName}Serializer", 'JSON transport serializer for ${clsName}');
-        if (pkg != typePkg) {
-            mainCls.addImport("${typePkg}.*");
-        }
-        mainCls.addInterface("de.iip_ecosphere.platform.transport.serialization.Serializer<${typeName}>");
-        mainCls.addAttribute("com.fasterxml.jackson.databind.ObjectMapper", "MAPPER")
-            .addInitializer("new ObjectMapper()")
-            .setStatic()
-            .setFinal();
-        JavaCodeBlock init = mainCls.addInitializer(true);
-        defineJacksonOptionals(type, "MAPPER", typeName, init);
-        defineJacksonTypeMapper(config, "MAPPER", init);
-        mainCls.removeIfEmpty(init);
-        
-        JavaCodeMethod from = mainCls.addMethod(typeName, "from", "");
-        from.addParameter("byte[]", "data");
-        from.addOverrideAnnotation();
-        from.addException("java.io.IOException");
+    @Override
+    def genFrom(IIPEcosphere config, RecordType type, JavaCodeMethod from, String paramName, String dataType) {
         JavaCodeTryBlock fromTry = from.addTry();
-        fromTry.addReturn("MAPPER.readValue(data, ${clsName}${add}.class)");
+        fromTry.addReturn("MAPPER.readValue(${paramName}, ${dataType}.class)");
         fromTry.addCatch("com.fasterxml.jackson.core.JsonProcessingException", "e").addThrow("new IOException(e)");
+    }
 
-        JavaCodeMethod to = mainCls.addMethod("byte[]", "to", "");
-        to.addParameter(typeName, "source");
-        to.addOverrideAnnotation();
-        to.addException("java.io.IOException");
+    @Override
+    def genTo(IIPEcosphere config, RecordType type, JavaCodeMethod to, String paramName, String dataType) {
         JavaCodeTryBlock toTry = to.addTry();
-        toTry.addReturn("MAPPER.writeValueAsBytes(source)");
+        toTry.addReturn("MAPPER.writeValueAsBytes(${paramName})");
         toTry.addCatch("com.fasterxml.jackson.core.JsonProcessingException", "e").addThrow("new IOException(e)");
+    }
 
-        JavaCodeMethod clone = mainCls.addMethod(typeName, "clone", "");
-        clone.addParameter(typeName, "origin");
-        clone.addOverrideAnnotation();
-        clone.addException("java.io.IOException");
-        clone.addReturn("new ${clsName}${add}(origin)");
-
-        JavaCodeMethod getType = mainCls.addMethod("Class<${typeName}>", "getType", "");
-        getType.addOverrideAnnotation();
-        getType.addReturn("${typeName}.class");
+    def main(IIPEcosphere config, JavaCodeArtifact target, RecordType type, String pkg, String typePkg, Boolean sharedInterfaces, Boolean impl) {
+        genCls(config, target, type, pkg, typePkg, sharedInterfaces, impl);
     }
     
 }
