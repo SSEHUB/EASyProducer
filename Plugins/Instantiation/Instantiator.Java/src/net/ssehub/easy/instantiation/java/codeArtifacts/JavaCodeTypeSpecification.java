@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeToStringWriter;
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**

@@ -32,6 +32,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;

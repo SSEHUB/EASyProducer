@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+
 /**
  * Representes a Java enum in code.
  * 

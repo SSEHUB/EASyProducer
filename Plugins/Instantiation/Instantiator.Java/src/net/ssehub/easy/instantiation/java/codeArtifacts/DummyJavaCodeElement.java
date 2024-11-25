@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+
 /**
  * Internal code element for explicitly created instances and delayed adding/linking. Prevents/handles 
  * {@link NullPointerException}.

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.instantiation.java.codeArtifacts;
+package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;

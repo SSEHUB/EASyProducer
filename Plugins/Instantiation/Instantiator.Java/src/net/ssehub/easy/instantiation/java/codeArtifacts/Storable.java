@@ -17,6 +17,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.function.Consumer;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeToStringWriter;
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
 /**

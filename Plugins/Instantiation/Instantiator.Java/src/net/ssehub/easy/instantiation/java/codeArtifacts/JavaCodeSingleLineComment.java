@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+
 /**
  * Represents a variable assignment.
  * 

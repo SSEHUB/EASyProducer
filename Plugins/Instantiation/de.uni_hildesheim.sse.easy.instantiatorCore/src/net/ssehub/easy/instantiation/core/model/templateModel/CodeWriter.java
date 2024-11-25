@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.ssehub.easy.instantiation.java.codeArtifacts;
+package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import java.io.Closeable;
 import java.io.File;
@@ -22,16 +22,13 @@ import java.io.PrintWriter;
 
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.templateModel.ContentFormatter;
-import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
-import net.ssehub.easy.instantiation.core.model.templateModel.FormattingConfiguration;
 
 /**
  * Writes code to a file or a print writer. Debug output on system property {@code easy.java.writer.debug}.
  * 
  * @author Holger Eichelberger
  */
-class CodeWriter implements Closeable {
+public class CodeWriter implements Closeable {
 
     private static final boolean DEBUG = Boolean.valueOf(System.getProperty("easy.java.writer.debug", "false"));
     private PrintWriter out;
@@ -49,7 +46,7 @@ class CodeWriter implements Closeable {
      * @param file the file 
      * @throws VilException if creating/opening the file fails
      */
-    CodeWriter(File file) throws VilException {
+    public CodeWriter(File file) throws VilException {
         try {
             if (!file.exists()) {
                 file.getParentFile().mkdirs();
@@ -66,7 +63,7 @@ class CodeWriter implements Closeable {
      * 
      * @param out the output writer
      */
-    CodeWriter(PrintWriter out) {
+    public CodeWriter(PrintWriter out) {
         this.out = out;
         initializeFormatting();
     }
@@ -95,7 +92,7 @@ class CodeWriter implements Closeable {
     /**
      * Prints the actual indentation.
      */
-    void printIndent() {
+    public void printIndent() {
         buffer.append(indent);
     }
 
@@ -104,7 +101,7 @@ class CodeWriter implements Closeable {
      * 
      * @param text the text to print
      */
-    void printlnwi(String text) {
+    public void printlnwi(String text) {
         printIndent();
         println(text);
     }
@@ -114,7 +111,7 @@ class CodeWriter implements Closeable {
      * 
      * @param text the text to print
      */
-    void printwi(String text) {
+    public void printwi(String text) {
         printIndent();
         print(text);
     }
@@ -122,7 +119,7 @@ class CodeWriter implements Closeable {
     /**
      * Prints a line break (using the@code  system line break).
      */
-    void println() {
+    public void println() {
         buffer.append(lineEnd);
     }
 
@@ -131,7 +128,7 @@ class CodeWriter implements Closeable {
      * 
      * @param text the text to print
      */
-    void println(String text) {
+    public void println(String text) {
         buffer.append(text);
         buffer.append(lineEnd);
         emit();
@@ -156,21 +153,21 @@ class CodeWriter implements Closeable {
      * 
      * @param text the text to print
      */
-    void print(String text) {
+    public void print(String text) {
         buffer.append(text);
     }
 
     /**
      * Increases the indentation by a step.
      */
-    void increaseIndent() {
+    public void increaseIndent() {
         indent += indentStep;
     }
     
     /**
      * Decreases the indentation by a step.
      */
-    void decreaseIndent() {
+    public void decreaseIndent() {
         if (indent.length() >= indentStep.length()) {
             indent = indent.substring(indentStep.length());
         }

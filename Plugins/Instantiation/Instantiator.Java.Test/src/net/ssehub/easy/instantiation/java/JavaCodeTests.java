@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.ssehub.easy.instantiation.java.codeArtifacts.CodeToStringWriter;
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeToStringWriter;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeTypeSpecification;
