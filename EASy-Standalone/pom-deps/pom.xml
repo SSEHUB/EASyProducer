@@ -210,6 +210,11 @@
 	          <artifactId>net.ssehub.easy.instantiation.java</artifactId>
 	          <version>${project.version}</version>
 	      </dependency>
+          <dependency>
+              <groupId>net.ssehub.easy</groupId>
+              <artifactId>net.ssehub.easy.instantiation.python</artifactId>
+              <version>${project.version}</version>
+          </dependency>
 	      <dependency>
 	          <groupId>net.ssehub.easy</groupId>
 	          <artifactId>net.ssehub.easy.instantiation.ant</artifactId>

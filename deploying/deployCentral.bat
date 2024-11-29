@@ -42,6 +42,7 @@ call :DeployArtifact %EMPTY% core.eclipse %EASY_VERSION% false
 call :DeployArtifact instantiation ant %EASY_VERSION% false
 call :DeployArtifact instantiation aspectj %EASY_VERSION% false
 call :DeployArtifact instantiation java %EASY_VERSION% false
+call :DeployArtifact instantiation python %EASY_VERSION% false
 call :DeployArtifact instantiation maven %EASY_VERSION% false
 call :DeployArtifact instantiation serializer.xml %EASY_VERSION% false
 call :DeployArtifact instantiation velocity %EASY_VERSION% false
