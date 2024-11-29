@@ -1,0 +1,20 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testImport(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addImport("matplotlib.pyplot").setAlias("plt");
+    	target.addImport("module1");
+		target.addImport("module2", "*");
+
+    	target.addCall("plt.plot");
+    	target.addCall("plt.plot", PythonCodeImportScope.MODULE);
+    	target.addCall("mat.ploting.plot", PythonCodeImportScope.MODULE);
+
+    	target.addCall("module.someFunc", PythonCodeImportScope.FUNC);
+    	target.addCall("module.someFunc2", PythonCodeImportScope.FUNC);
+
+		target.addSLComment("imported from module2");
+    	target.addCall("module2.someOtherFunc", PythonCodeImportScope.FUNC);
+    	target.addCall("module2.someOtherFunc2", PythonCodeImportScope.FUNC);
+    }
+}

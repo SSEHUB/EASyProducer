@@ -52,7 +52,7 @@ public class CodeToStringWriter extends CodeWriter {
      */
     public String getString() {
         flush();
-        String result = bos.toString(Charset.defaultCharset());
+        String result = bos.toString(Charset.defaultCharset()); // turn to formatter charset
         bos.reset();
         return result;
     }

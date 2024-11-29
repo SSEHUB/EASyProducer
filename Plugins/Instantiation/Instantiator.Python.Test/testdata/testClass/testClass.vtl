@@ -1,0 +1,22 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testClass(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	PythonCodeClass c1 = target.addClass("TestClass").addBase("BaseClass");
+
+		c1.addAttribute("var1", "420");
+		c1.addAttribute("var2", "int", "69");
+		c1.addGetter("var1");
+		c1.addSetter("var1");
+		c1.addGetter("var2", "int");
+		c1.addSetter("var2", "int");
+		c1.addConstructor("some comment");
+		c1.addConstructor();
+		
+		c1.addMethod("method1");
+		c1.addMethod("method2", "some method");
+
+    	PythonCodeClass c2 = target.addClass("TestClass2", "comment for TestClass2");
+    	c2.addClass("InnerClass");
+    }
+}

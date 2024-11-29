@@ -141,6 +141,16 @@ public class ContentFormatter {
          */
         public void configure(FormattingConfiguration fConfig);
         
+        /**
+         * Returns the (configured/overridden) line length.
+         * 
+         * @param fConfig the configuration to configure this profile with
+         * @return the line length
+         */
+        public default int getLineLength(FormattingConfiguration fConfig) {
+            return null == fConfig ? 80 : fConfig.getLineLength();
+        }
+        
     }
 
     /**
@@ -210,6 +220,25 @@ public class ContentFormatter {
 
         @Override
         public void configure(FormattingConfiguration fConfig) {
+        }
+
+    }
+    
+    /**
+     * A simple formatting profile for Python.
+     * 
+     * @author Holger Eichelberger
+     */
+    public static class PythonProfile extends DefaultProfile {
+
+        @Override
+        public int getLineLength(FormattingConfiguration fConfig) {
+            return Integer.MAX_VALUE; // see project thesis Kevin Shaperjahn
+        }
+
+        @Override
+        public Profile createInstance() {
+            return new PythonProfile();
         }
 
     }
@@ -422,6 +451,7 @@ public class ContentFormatter {
         PROFILES.put("JAVA", new JavaProfile());
         PROFILES.put("JSON", new DefaultProfile()); // nothing specific so far
         PROFILES.put("YAML", new DefaultProfile()); // nothing specific so far
+        PROFILES.put("PYTHON", new PythonProfile()); // nothing specific so far
         PROFILES.put("", new DefaultProfile());
     }
     
@@ -469,6 +499,16 @@ public class ContentFormatter {
         this.iConf = iConf;
         this.profile = null;
     }
+    
+    /**
+     * Returns whether there is a line length or a profile configured (python re-defines line length).
+     * 
+     * @param fConf the formatter configuration
+     * @return {@code true} for configured, {@code false}
+     */
+    private static boolean isFormatterConfigEnabled(FormattingConfiguration fConf) {
+        return (fConf.getLineLength() > 0 || (fConf.getProfile() != null && fConf.getProfile().length() > 0));
+    }
 
     /**
      * Formats the given content.
@@ -478,7 +518,7 @@ public class ContentFormatter {
      */
     public String format(String content) {
         String result = content;
-        if (iConf != null && fConf != null && fConf.getLineLength() > 0) {
+        if (iConf != null && fConf != null && isFormatterConfigEnabled(fConf)) {
             determineProfile();
             if (profile.removeMultiEmptyLines()) {
                 if (result.trim().length() == 0) {
@@ -555,7 +595,7 @@ public class ContentFormatter {
      * @see #splitLines(char, StringBuilder, int, int)
      */
     private void splitLines(StringBuilder builder) {
-        final int maxLineLength = fConf.getLineLength();
+        final int maxLineLength = profile.getLineLength(fConf);
         int pos = 0;
         int lastStartPos = 0;
         int lastSplitPos = 0;

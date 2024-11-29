@@ -1,0 +1,13 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testWith(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addWith("open('file.txt', 'r')");
+
+    	target.addWith("open('file.txt', 'r')", "f1");
+
+    	target.addWith("open('file1.txt', 'r')", "f1")
+    		.addWithItem("open('file2.txt', 'r')", "f2")
+    		.addWithItem("open('file3.txt', 'r')");
+    }
+}

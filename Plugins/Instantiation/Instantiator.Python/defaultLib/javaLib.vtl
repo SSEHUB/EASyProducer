@@ -1,0 +1,19 @@
+template javaLib() {
+
+    /**
+    * Emit the code of the Java code elements as given. 
+    */
+    def emitJava(sequenceOf(JavaCodeElement) elements) {
+        for (JavaCodeElement e : elements) {
+            '${e}' !<CR>;
+        }
+    }
+    
+    /**
+    * Emit the code of the Java code element as given. 
+    */
+    def emitJava(JavaCodeElement elt) {
+        '${elt}' | -1;
+    }
+
+}

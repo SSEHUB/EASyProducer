@@ -1,0 +1,19 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testMisc(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addAssign("a", "69");
+    	target.addAssign("b", "420");
+    	target.addAssign("c", "64");
+    	target.addAssign("d", "86");
+    	
+    	PythonCodeFunction f = target.addFunc("someFunc");
+    	f.addGlobal("a").addVar("b");
+		f.addNonLocal("c").addVar("d");
+
+		target.addDelete("a").addVar("b").addVar("c").addVar("d");
+
+		target.addAssert("420 != 69");
+		target.addAssert("64 != 86", "assert failed");
+    }
+}

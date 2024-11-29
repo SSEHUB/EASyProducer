@@ -170,7 +170,7 @@ public class Registration implements IRegistration {
     }
     
     /**
-     * Private method to activate plugin.
+     * OSGi method to activate plugin.
      * 
      * @param context the component context.
      */
@@ -180,7 +180,7 @@ public class Registration implements IRegistration {
     }
 
     /**
-     * Private method to to de-activate plugin.
+     * OSGi method to to de-activate plugin.
      * 
      * @param context the component context.
      */

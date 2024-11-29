@@ -1,0 +1,8 @@
+vilScript testTypeAlias (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {   	
+    	vilTemplateProcessor("$target/testTypeAlias.vtl", config, "$target/testTypeAlias.py");
+    }
+}

@@ -1,0 +1,9 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python", lineLength = 120)
+template test1(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.comment("test comment");
+    	target.addAssign("a", "42069");
+    	target.addAssign("b", "str", '"some string"');
+    }
+}

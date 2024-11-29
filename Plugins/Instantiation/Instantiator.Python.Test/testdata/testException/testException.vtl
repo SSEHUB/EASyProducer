@@ -1,0 +1,21 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testException(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	PythonCodeTryBlock t = target.addTry();
+    	t.addRaise("ValueError");
+    	t.addExcept("ValueError");
+    	t.addExcept("OtherError", "e");
+    	t.addExcept();
+ 
+    	target.addEmptyLine();
+
+    	PythonCodeTryBlock t2 = target.addTry();
+    	t2.addRaise("ValueError").addMsg("error message");
+    	t2.addExceptStar("ValueError");
+    	t2.addExceptStar("OtherError", "e");
+    	t2.addExceptStar();
+    	t2.addElse();
+    	t2.addFinally();
+    }
+}

@@ -1,0 +1,8 @@
+vilScript testClass (Project source, Configuration config, Project target) {
+
+    version v0;
+
+    main(Project source, Configuration config, Project target) = : {   	
+    	vilTemplateProcessor("$target/testClass.vtl", config, "$target/testClass.py");
+    }
+}

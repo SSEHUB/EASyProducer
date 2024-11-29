@@ -1,0 +1,8 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testTypeAlias(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addTypeAlias("CustomType", "int");
+    	target.addFunc("someFunc").addParameter("a", "CustomType");
+    }
+}

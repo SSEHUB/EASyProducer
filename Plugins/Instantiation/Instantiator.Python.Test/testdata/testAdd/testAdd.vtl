@@ -1,0 +1,18 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testAdd(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	PythonCodeBlock b1 = target.addIf('True');
+    	b1.add('print("something")');
+    	b1.addSLComment('some comment');
+
+    	target.addEmptyLine();
+
+    	PythonCodeBlock b2 = target.addIf('True');
+    	b2.addRaw('print("something")');
+    	b2.addSLComment('some comment');
+
+    	target.addRaw('print("something")');
+    	target.add('print("something")');
+    }
+}

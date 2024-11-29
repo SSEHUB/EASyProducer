@@ -1,0 +1,30 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testFunc(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addFunc("dummy");
+    	target.addFunc("dummy2", "dummy function 2");
+
+    	PythonCodeFunction f = target.addFunc("function1")
+    		.addParameter("p1")
+    		.addParameter("p2", "int")
+    		.addParameter("p3", "int", "3rd parameter");
+    	f.addReturn("p1 + p2 + p3", "return sum of p1, p2, p3");
+    	f.addRetType("int");
+
+    	PythonCodeFunction f2 = target.addFunc("function2");
+    	f2.addDecorator("someDecorator");
+    	f2.addDecorator("module.someDecorator2")
+    		.addArgument("arg1")
+    		.addArgument("arg2");
+    	f2.addDecorator("module.someDecorator3", PythonCodeImportScope.FUNC);
+    	
+    	target.addCall("retObject").addCall("funcInObject");
+
+    	target.addCall("func")
+    		.addStringArgument("some string")
+    		.addConstructorCall("TestClass")
+    		.addLambdaArgument().addVariable("i").addExpr("i+1");
+
+    }
+}

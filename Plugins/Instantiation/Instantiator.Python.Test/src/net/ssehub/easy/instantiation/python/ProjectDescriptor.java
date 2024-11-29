@@ -1,4 +1,4 @@
-package net.ssehub.easy.instantiation.java;
+package net.ssehub.easy.instantiation.python; 
 
 import java.io.File;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import net.ssehub.easy.varModel.model.Project;
 /**
  * Implements a descriptor for the source and target VIL project locations.
  * 
- * @author Aike Sass
+ * @author Kevin Schaperjahn
  */
 public class ProjectDescriptor implements IProjectDescriptor {
 
@@ -46,8 +46,8 @@ public class ProjectDescriptor implements IProjectDescriptor {
         this.base = new File(fileName);
 
         BuildModel repository = BuildModel.INSTANCE;
-        // by convention the same name, ignore versions for now
         List<ModelInfo<Script>> vilScripts = repository.availableModels().getModelInfo(modelName);
+
         if (null == vilScripts || vilScripts.isEmpty()) {
             throw new ModelManagementException("Cannot resolve main instantiation script",
                     ModelManagementException.ID_CANNOT_RESOLVE);
@@ -99,22 +99,13 @@ public class ProjectDescriptor implements IProjectDescriptor {
 
     @Override
     public ProgressObserver createObserver() {
-        return ProgressObserver.NO_OBSERVER; // TODO check, preliminary
+        return ProgressObserver.NO_OBSERVER;
     }
 
     @Override
     public String getModelFolder(ModelKind kind) {
         return "EASy";
     }
-
-    // /**
-    // * Returns the top-level QM configuration.
-    // *
-    // * @return the top-level configuration to be used for instantiation
-    // */
-    // public Configuration getConfiguration(String modelName) {
-    // return getConfiguration(modelName);
-    // }
 
     /**
      * Returns the configuration for the given model.
@@ -125,32 +116,26 @@ public class ProjectDescriptor implements IProjectDescriptor {
      */
     static Configuration getConfiguration(String modelName) {
         Configuration result = CONFIG_CACHE.get(modelName);
-        if (null == result) {
+        if (result == null) {
             Project model = null;
             List<ModelInfo<Project>> infos = VarModel.INSTANCE.availableModels().getModelInfo(modelName);
-            // primitive for now
+
             if (null != infos) {
                 ModelInfo<Project> info = infos.get(0);
                 try {
                     model = VarModel.INSTANCE.load(info);
                 } catch (ModelManagementException e) {
-                    // Dialogs.showErrorDialog("Model error", ModelAccess.class,
-                    // e);
                     System.out.println("Model error: " + e);
                 }
             }
-            if (null == model) {
+
+            if (model == null) {
                 model = new Project(modelName);
             }
+
             result = new Configuration(model, true);
-            // Reasoner reasoner = new Reasoner();
-            // ReasoningResult rresult = reasoner.propagate(model, result, new
-            // ReasonerConfiguration(), ProgressObserver.NO_OBSERVER);
-            // System.out.println("Reasoning Result is: " +
-            // rresult.getMessageCount());
-            // CONFIG_CACHE.put(modelName, result);
         }
+
         return result;
     }
-
 }

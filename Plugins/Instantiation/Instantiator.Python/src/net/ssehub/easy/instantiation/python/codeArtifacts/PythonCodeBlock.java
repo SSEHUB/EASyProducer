@@ -1,0 +1,244 @@
+package net.ssehub.easy.instantiation.python.codeArtifacts;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
+/**
+ * Represents a Python code block in VTL.
+ * 
+ * @author Kevin Schaperjahn
+ */
+public class PythonCodeBlock extends PythonCodeStmt {
+    
+    private List<IPythonCodeElement> elements = new ArrayList<>();
+    private IPythonCodeArtifact artifact;
+
+    public PythonCodeBlock(IPythonCodeElement parent) {
+        super(parent);
+    }
+
+    public PythonCodeBlock(IPythonCodeArtifact artifact) {
+        super(null);
+        this.artifact = artifact;
+    }
+
+    protected <T extends IPythonCodeElement> T addElt(T elt) {
+        return IPythonCodeElement.add(elements, elt);
+    }
+
+    protected <T extends IPythonCodeElement> T addElt(T elt, boolean importToFront) {
+        int lastImport = -1;
+        if (importToFront && elt instanceof IPythonCodeImport) {
+            for (int e = 0; e < elements.size(); e++) {
+                IPythonCodeElement tmp = elements.get(e);
+                if (tmp instanceof IPythonCodeImport) {
+                    lastImport = e;
+                }
+            }
+        }
+        T result;
+        if (lastImport < 0) {
+            if (importToFront) {
+                result = IPythonCodeElement.add(elements, elt, 0);
+            } else {
+                result = IPythonCodeElement.add(elements, elt);
+            }
+        } else {
+            result = IPythonCodeElement.add(elements, elt, lastImport + 1);
+        }
+        return result;
+    }
+    
+    public void add(String text) {
+        elements.add(new PythonCodeText(text, true, true));
+    }
+
+    public void addRaw(String text) {
+        elements.add(new PythonCodeText(text, false, true));
+    }
+
+    public void addEmptyLine() {
+        add("");
+    }
+
+    public PythonCodeClass addClass(String name) {
+        return addElt(new PythonCodeClass(this, name));
+    }
+
+    public PythonCodeClass addClass(String name, String comment) {
+        return addElt(new PythonCodeClass(this, name, comment));
+    }
+
+    public PythonCodeFunction addFunc(String name) {
+        return addElt(new PythonCodeFunction(this, name));
+    }
+
+    public PythonCodeFunction addFunc(String name, String comment) {
+        return addElt(new PythonCodeFunction(this, name, comment));
+    }
+
+    public PythonCodeTypeAlias addTypeAlias(String name, String expr) {
+        return addElt(new PythonCodeTypeAlias(this, name, expr));
+    }
+
+    public PythonCodeAssign addAssign(String varName, String expr) {
+        return addElt(new PythonCodeAssign(this, varName, expr));
+    }
+
+    public PythonCodeAssign addAssign(String varName, String type, String expr) {
+        return addElt(new PythonCodeAssign(this, varName, type, expr));
+    }
+
+    public PythonCodeFnCall addCall(String name) {
+        return addCall(name, PythonCodeImportScope.NONE);
+    }
+
+    public PythonCodeFnCall addCall(String name, PythonCodeImportScope scope) {
+        return addElt(new PythonCodeFnCall(this, name, scope, true));
+    }
+
+    public PythonCodeAlternative addIf(String condition) {
+        return addElt(new PythonCodeAlternative(this, condition));
+    }
+
+    public PythonCodeMatch addMatch(String expr) {
+        return addElt(new PythonCodeMatch(this, expr));
+    }
+
+    public PythonCodeWhileLoop addWhile(String condition) {
+        return addElt(new PythonCodeWhileLoop(this, condition));
+    }
+
+    public PythonCodeForLoop addFor(String element, String array) {
+        return addElt(new PythonCodeForLoop(this, element, array));
+    }
+
+    public PythonCodeForLoop addFor(String element, String rangeStart, String rangeEnd) {
+        return addElt(new PythonCodeForLoop(this, element, rangeStart, rangeEnd));
+    }
+
+    public PythonCodeForLoop addFor(String element, String rangeStart, String rangeEnd, String rangeStep) {
+        return addElt(new PythonCodeForLoop(this, element, rangeStart, rangeEnd, rangeStep));
+    }
+
+    public PythonCodeWith addWith(String expr) {
+        return addElt(new PythonCodeWith(this, expr));
+    }
+
+    public PythonCodeWith addWith(String expr, String varName) {
+        return addElt(new PythonCodeWith(this, expr, varName));
+    }
+
+    public PythonCodeTryBlock addTry() {
+        return addElt(new PythonCodeTryBlock(this));
+    }
+
+    public PythonCodeRaise addRaise(String expression) {
+        return addElt(new PythonCodeRaise(this, expression));
+    }
+
+    public PythonCodeBlock addComment(String comment) {
+        addElt(new PythonCodeDocComment(comment, this));
+        return this;
+    }
+
+    public PythonCodeBlock addSLComment(String comment) {
+        return addSLComment(comment, false);
+    }
+
+    public PythonCodeBlock addSLComment(String comment, boolean enclosed) {
+        addElt(new PythonCodeSingleLineComment(this, comment, enclosed));
+        return this;
+    }
+
+    public PythonCodeDelete addDelete(String varName) {
+        return addElt(new PythonCodeDelete(this, varName));
+    }
+
+    public PythonCodeNonLocal addNonLocal(String varName) {
+        return addElt(new PythonCodeNonLocal(this, varName));
+    }
+
+    public PythonCodeGlobal addGlobal(String varName) {
+        return addElt(new PythonCodeGlobal(this, varName));
+    }
+
+    public PythonCodeAssert addAssert(String expr) {
+        return addElt(new PythonCodeAssert(this, expr));
+    }
+
+    public PythonCodeAssert addAssert(String expr, String msg) {
+        return addElt(new PythonCodeAssert(this, expr, msg));
+    }
+
+    public void addReturn(String value) {
+        add("return " + value);
+    }
+
+    public void addContinue() {
+        add("continue");
+    }
+
+    public void addBreak() {
+        add("break");
+    }
+
+    public PythonCodeBlock setBlock(PythonCodeBlock block) {
+        elements.clear();
+        for (IPythonCodeElement e : block.elements) {
+            e.setParent(this);
+            elements.add(e);
+        }
+        return this;
+    }
+
+    @Override
+    public void store(CodeWriter out) {
+        for (IPythonCodeElement e : elements) {
+            e.store(out);
+        }
+
+        if (elements.isEmpty()) {
+            out.printlnwi("pass");
+        }
+    }
+
+    @Override
+    public int getElementCount() {
+        int result = 0;
+
+        for (int e = 0; e < elements.size(); e++) {
+            result += elements.get(e).getElementCount();
+        }
+
+        return result;
+    }
+
+    protected PythonCodeClass getParentClass() {
+        PythonCodeClass result = null;
+        if (getParent() instanceof PythonCodeClass) {
+            result = (PythonCodeClass) getParent();
+        } else if (getParent() instanceof PythonCodeBlock) {
+            result = ((PythonCodeBlock) getParent()).getParentClass();
+        } else {
+            IPythonCodeElement iter = PythonCodeClass.getParentCodeClass(this);
+            if (null != iter) {
+                result = (PythonCodeClass) iter;
+            }
+        }
+        return result;
+    }
+
+    @Invisible
+    @Override
+    public IPythonCodeArtifact getArtifact() {
+        if (artifact == null) {
+            return getParent().getArtifact();
+        }
+
+        return artifact;
+    }
+}

@@ -1,0 +1,11 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testWhile(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addWhile("420 == 69").addCall("print").addArgument('"420 == 69"');
+
+		PythonCodeBlock b = target.addWhile("True");
+    	b.addIf("420 >= 69").addBreak();
+    	b.addIf("420 == 69").addContinue();
+    }
+}

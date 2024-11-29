@@ -1,0 +1,17 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testMatch(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addAssign("a", "64");
+
+    	PythonCodeMatch m = target.addMatch("a");
+		m.addCase("0");
+		m.addCase("64");
+		m.addDefault();
+
+    	PythonCodeMatch m2 = target.addMatch("a");
+		m2.addCase("_");
+		m2.addCase("0");
+		m2.addCase("64");
+    }
+}

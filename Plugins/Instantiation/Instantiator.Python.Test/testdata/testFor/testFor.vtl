@@ -1,0 +1,15 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testFor(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addAssign("arr", "[0,1,2,3,4,5]");
+    	target.addFor("elem", "arr")
+    		.addCall("print").addArgument("elem");
+
+    	target.addFor("elem", "0", "4")
+    		.addCall("print").addArgument("elem");
+
+    	target.addFor("elem", "0", "6", "2")
+    		.addCall("print").addArgument("elem");
+    }
+}

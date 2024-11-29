@@ -26,6 +26,11 @@
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.java.dir}" antfile="${build.script.name}" />
 
+        <echo>#########################################</echo>
+        <echo>###   Compiling Python Instantiator   ###</echo>
+        <echo>#########################################</echo>
+        <ant dir="Instantiator.Python" antfile="${build.script.name}" />
+
 		<echo>#############################</echo>
         <echo>###  Assembling ANT-Lib   ###</echo>
         <echo>#############################</echo>
@@ -195,6 +200,11 @@
         <echo>###   Compiling Java Instantiator Tests   ###</echo>
         <echo>#############################################</echo>
         <ant dir="${home.instantiator.java.test.dir}" antfile="${build.script.name}" />
+
+        <echo>###############################################</echo>
+        <echo>###   Compiling Python Instantiator Tests   ###</echo>
+        <echo>###############################################</echo>
+        <ant dir="Instantiator.Python.Test" antfile="${build.script.name}" />
 
         <echo>#############################################</echo>
         <echo>###   Compiling ANT Instantiator Tests    ###</echo>

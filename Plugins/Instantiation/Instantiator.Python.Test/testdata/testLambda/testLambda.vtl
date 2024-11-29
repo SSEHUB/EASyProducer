@@ -1,0 +1,7 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testLambda(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	target.addCall("someFunc").addLambdaArgument().addVariable("i").addVariable("j").addExpr("i+j");
+    }
+}

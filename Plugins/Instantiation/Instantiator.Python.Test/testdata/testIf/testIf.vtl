@@ -1,0 +1,9 @@
+@indent(indentation = 4, additional = 0)
+@format(profile="python")
+template testIf(Configuration config, PythonCodeArtifact target) {
+    def main(Configuration config, PythonCodeArtifact target) {
+    	PythonCodeAlternative alt = target.addIf("420 == 69");
+    	alt.addCall("print").addArgument('"420 == 69"');
+    	alt.addElse().addCall("print").addArgument('"420 != 69"');
+    }
+}

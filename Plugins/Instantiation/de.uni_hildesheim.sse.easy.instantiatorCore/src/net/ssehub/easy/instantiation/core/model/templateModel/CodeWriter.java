@@ -19,6 +19,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -38,6 +39,7 @@ public class CodeWriter implements Closeable {
     @SuppressWarnings("unused")
     private int lineLength = -1;  // TODO consider line breaks/formatting??
     private ContentFormatter contentFormatter;
+    private Charset charset;
     private StringBuilder buffer = new StringBuilder();
     
     /**
@@ -87,6 +89,11 @@ public class CodeWriter implements Closeable {
             lineLength = fCfg.getLineLength();
         }
         contentFormatter = Formatting.getContentFormatter();
+        charset = null == fCfg.getCharset() ? Charset.defaultCharset() : fCfg.getCharset();
+    }
+    
+    protected Charset getCharset() {
+        return charset;
     }
 
     /**
