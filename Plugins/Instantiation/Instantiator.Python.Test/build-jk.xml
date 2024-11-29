@@ -5,7 +5,7 @@
     <include file="${user.home}/macros.xml"/>
 	
 	<target name="all">
-        <echo file="testdata.dir" append="false">${home.instantiator.java.test.dir}/testdata</echo>
+        <echo file="testdata.dir" append="false">${home.base.dir}/${projects.instantiation.dir}/Instantiator.Python.Test/testdata</echo>
         <maven pomFile="pom.xml" goal="deploy"/>
 
         <delete failonerror="false" dir="bin"/>
