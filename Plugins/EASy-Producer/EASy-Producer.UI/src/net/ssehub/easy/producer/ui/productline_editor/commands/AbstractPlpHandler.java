@@ -142,7 +142,7 @@ public abstract class AbstractPlpHandler extends AbstractHandler {
     }
 
     /**
-     * Executes the command on the selected {@link project}.
+     * Executes the command on the selected {@code project}.
      * 
      * @param event the causing event
      * @param project the selected project

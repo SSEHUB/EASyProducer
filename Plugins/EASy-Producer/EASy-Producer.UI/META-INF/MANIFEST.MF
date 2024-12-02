@@ -29,6 +29,7 @@ Require-Bundle:
  net.ssehub.easy.reasoning.sseReasoner,
  net.ssehub.easy.instantiation.maven,
  net.ssehub.easy.instantiation.java,
+ net.ssehub.easy.instantiation.python,
  net.ssehub.easy.instantiation.docker,
  net.ssehub.easy.instantiation.lxc,
  net.ssehub.easy.instantiation.aspectj,
