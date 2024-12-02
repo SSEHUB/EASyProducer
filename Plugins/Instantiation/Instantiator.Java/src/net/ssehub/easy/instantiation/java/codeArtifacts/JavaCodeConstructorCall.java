@@ -47,7 +47,7 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
     }
     
     @Override
-    protected String validateMethodName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
+    protected String validateName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
         String result = methodName;
         if (methodName.contains(".")) { // else methodName may be qualified but not by class
             JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(methodName, parent);

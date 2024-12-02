@@ -64,7 +64,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
         JavaCodeImportScope scope, boolean indent, String postfix) {
         super(parent);
         this.scope = scope;
-        this.methodName = validateMethodName(parent, methodName, scope);
+        this.methodName = validateName(parent, methodName, scope);
         this.indent = indent;
         this.postfix = postfix;
         this.qualification = qualification;
@@ -149,17 +149,17 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
     }
 
     /**
-     * Validates and potentially modifies the method name, e.g., by importing the prefixed qualified type.
+     * Validates and potentially modifies the method/variable name, e.g., by importing the prefixed qualified type.
      * 
      * @param parent the parent (may be <b>null</b> for ignore/deferred)
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @param scope the scope of the import
      * @return {@code methodName} or a modified version
      */
-    protected String validateMethodName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
+    protected String validateName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
         String result = methodName;
         if (null != parent && JavaCodeImportScope.NONE != scope && methodName.contains(".")) {
-            result = parent.getArtifact().validateStaticMethodCall(methodName, scope);
+            result = parent.getArtifact().validateStaticName(methodName, scope);
         }
         return result;
     }
@@ -255,7 +255,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
     @Override
     public void setParent(IJavaCodeElement parent) {
         super.setParent(parent);
-        this.methodName = validateMethodName(parent, methodName, scope);
+        this.methodName = validateName(parent, methodName, scope);
         for (IJavaCodeElement a : arguments) {
             setParent(a, this);
         }
@@ -335,6 +335,18 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
             false, ""));
     }
 
+    /**
+     * Adds a variable access as call argument.
+     * 
+     * @param variableName the variable name, qualified or statically qualified expression
+     * @param scope the import scope
+     * @return the created variable expression for chaining
+     */
+    public JavaCodeVariableExpression addVariableArgument(String variableName, JavaCodeImportScope scope) {
+        variableName = validateName(this, variableName, scope);
+        return IJavaCodeElement.add(arguments, new JavaCodeVariableExpression(this, variableName));
+    }
+    
     /**
      * Adds a constructor call as argument.
      * 

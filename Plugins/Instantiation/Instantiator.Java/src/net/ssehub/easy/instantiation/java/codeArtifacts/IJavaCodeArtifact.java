@@ -33,13 +33,13 @@ public interface IJavaCodeArtifact {
     public void validateType(IJavaCodeTypeSpecification type);
     
     /**
-     * Validates a qualified static method call.
+     * Validates a qualified static method/variable name.
      * 
      * @param name the name
      * @param scope the scope to consider
      * @return the name, potentially without qualification if statically imported
      */
-    public String validateStaticMethodCall(String name, JavaCodeImportScope scope);
+    public String validateStaticName(String name, JavaCodeImportScope scope);
     
     /**
      * Internal call to register an import.

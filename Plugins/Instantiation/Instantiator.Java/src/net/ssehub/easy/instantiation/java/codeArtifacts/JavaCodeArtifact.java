@@ -499,7 +499,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     
     @Invisible
     @Override
-    public String validateStaticMethodCall(String name, JavaCodeImportScope scope) {
+    public String validateStaticName(String name, JavaCodeImportScope scope) {
         int pos = name.lastIndexOf('.');
         if (pos > 0) {
             String[] parts = name.split("\\.");

@@ -295,6 +295,16 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
         return addCall("this");
     }
     
+    /**
+     * Adds a JUnit assert call (as static, non-imported method).
+     * 
+     * @param methodName the assert method to call
+     * @return the method call
+     */
+    public JavaCodeMethodCall addJunitAssertCall(String methodName) {
+        return addCall("org.junit.Assert." + methodName, JavaCodeImportScope.CLASS);        
+    }    
+    
     @Override
     public JavaCodeMethodCall addCall(String methodName) {
         return addCall(methodName, JavaCodeImportScope.NONE);

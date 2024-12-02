@@ -227,6 +227,18 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
     public PythonCodeFunction addFunc(String name, String comment) {
         return block.addFunc(name, comment);
     }
+    
+    /**
+     * Adds a call to {@code sys.path.insert} with given {@code position} adding {@code path} to the system path.
+     * 
+     * @param position the position where to add the {@code path}
+     * @param path the path to add
+     * @return the function call for chaining
+     */
+    public PythonCodeFnCall addSysPathInsert(int position, String path) {
+        addImport("sys");
+        return addCall("sys.path.insert").addArgument(position).addStringArgument(path);
+    }
 
     public PythonCodeTypeAlias addTypeAlias(String name, String expr) {
         return block.addTypeAlias(name, expr);

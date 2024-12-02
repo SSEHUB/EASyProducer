@@ -114,12 +114,40 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
 
     /**
-     * Adds an override annotation.
+     * Adds a JUnit Test annotation.
      * 
      * @return the annotation for further processing
      */
     public JavaCodeAnnotation addJunitTestAnnotation() {
         return addAnnotation("org.junit.Test");
+    }
+    
+    /**
+     * Adds a JUnit assert call (as static, non-imported method).
+     * 
+     * @param methodName the assert method to call
+     * @return the method call
+     */
+    public JavaCodeMethodCall addJunitAssertCall(String methodName) {
+        return block.addJunitAssertCall(methodName);        
+    }
+
+    /**
+     * Adds a JUnit Before annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addJunitBeforeAnnotation() {
+        return addAnnotation("org.junit.Before");
+    }
+
+    /**
+     * Adds a JUnit After annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addJunitAfterAnnotation() {
+        return addAnnotation("org.junit.After");
     }
 
     /**

@@ -36,7 +36,7 @@ class DummyJavaCodeArtifact implements IJavaCodeArtifact {
     }
 
     @Override
-    public String validateStaticMethodCall(String name, JavaCodeImportScope scope) {
+    public String validateStaticName(String name, JavaCodeImportScope scope) {
         return name;
     }
 
