@@ -39,7 +39,6 @@ public class PythonCodeAlternative extends PythonCodeBlock {
             elseBlock.store(out);
             out.decreaseIndent();
         }
-
-        out.println();
     }
+    
 }

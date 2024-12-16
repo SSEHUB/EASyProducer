@@ -46,15 +46,6 @@ public class PythonCodeFunction extends PythonCodeBlock {
         params.add(new PythonCodeParamSpec(this, name, type));
         return this;
     }
-    
-    /**
-     * Adds an (untyped) self-parameter.
-     * 
-     * @return <b>this</b> for chaining
-     */
-    public PythonCodeFunction addSelfParameter() {
-        return addParameter("self");
-    }
 
     public PythonCodeFunction addParameter(String name, String type, String comment) {
         this.comment.addParameterComment(name, type, comment);

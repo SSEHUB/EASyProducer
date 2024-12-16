@@ -117,7 +117,8 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
     @Override
     public Object getMetaValue(Object owner) throws VilException {
         if (Utils.isCompatibleToDecisionVariable(owner) != CompatibilityResult.COMPATIBLE) {
-            throw new VilException("incompatible arguments", VilException.ID_TYPE_INCOMPATIBILITY);
+            throw new VilException("incompatible arguments accessing meta value of IVML variable " 
+                + getVariable().getName(), VilException.ID_TYPE_INCOMPATIBILITY);
         }
         return ((DecisionVariable) owner).getByName(getName());
     }

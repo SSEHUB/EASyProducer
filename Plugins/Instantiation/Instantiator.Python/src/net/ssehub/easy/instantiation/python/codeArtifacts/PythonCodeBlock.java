@@ -96,6 +96,26 @@ public class PythonCodeBlock extends PythonCodeStmt {
         return addCall(name, PythonCodeImportScope.NONE);
     }
 
+    /**
+     * Adds a call to "super()".
+     * 
+     * @param name the name of the function
+     * @return the function for chaining
+     */
+    public PythonCodeFnCall addSuperCall(String name) {
+        return addCall("super").addCall(name);
+    }
+
+    /**
+     * Adds a call to "self.".
+     * 
+     * @param name the name of the function
+     * @return the function for chaining
+     */
+    public PythonCodeFnCall addSelfCall(String name) {
+        return addCall("self." + name);
+    }
+    
     public PythonCodeFnCall addCall(String name, PythonCodeImportScope scope) {
         return addElt(new PythonCodeFnCall(this, name, scope, true));
     }

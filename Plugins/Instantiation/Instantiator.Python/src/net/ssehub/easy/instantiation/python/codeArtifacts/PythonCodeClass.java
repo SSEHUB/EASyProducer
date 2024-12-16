@@ -185,9 +185,13 @@ public class PythonCodeClass extends PythonCodeElement {
 
     @Invisible
     public void storeElements(CodeWriter out) {
+        IPythonCodeElement last = null;
         for (IPythonCodeElement e : elements) {
-            out.println();
+            if (last == null || (last.isAttribute() && !e.isAttribute())) {
+                out.println();
+            }
             e.store(out);
+            last = e;
         }
 
         if (elements.isEmpty()) {

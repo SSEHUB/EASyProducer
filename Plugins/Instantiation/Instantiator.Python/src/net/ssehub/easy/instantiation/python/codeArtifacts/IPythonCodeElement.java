@@ -49,16 +49,6 @@ public interface IPythonCodeElement extends IVilType, IStringValueProvider, Stor
     }
 
     @Invisible(inherit = true)
-    public default boolean isConstructor() {
-        return false;
-    }
-
-    @Invisible(inherit = true)
-    public default boolean isMethod() {
-        return false;
-    }
-
-    @Invisible(inherit = true)
     public default String getTracerStringValue(StringComparator comparator) {
         return getClass().getSimpleName();
     }

@@ -57,4 +57,10 @@ public class PythonCodeAssign extends PythonCodeStmt {
         }
         out.println();
     }
+    
+    @Override
+    public boolean isAttribute() {
+        return getParent() instanceof PythonCodeClass;
+    }
+    
 }
