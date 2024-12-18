@@ -14,12 +14,27 @@ public class PythonCodeAssign extends PythonCodeStmt {
     private String expr;
     private PythonCodeFnCall call = null;
 
+    /**
+     * Creates an assignment statement.
+     * 
+     * @param parent the parent
+     * @param varName the variable name
+     * @param expr the value expression
+     */
     public PythonCodeAssign(IPythonCodeElement parent, String varName, String expr) {
         super(parent);
         this.varName = varName;
         this.expr = expr;
     }
 
+    /**
+     * Creates an assignment statement.
+     * 
+     * @param parent the parent
+     * @param varName the variable name
+     * @param type the type (for annotation)
+     * @param expr the value expression
+     */
     public PythonCodeAssign(IPythonCodeElement parent, String varName, String type, String expr) {
         super(parent);
         this.varName = varName;

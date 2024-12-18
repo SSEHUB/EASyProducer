@@ -4,6 +4,7 @@ import net.ssehub.easy.instantiation.core.model.common.ILanguageElement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
+import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 
 /**
  * Represents a statement which contains just of an expression.
@@ -51,7 +52,7 @@ public class ExpressionStatement
 
     @Override
     public TypeDescriptor<?> inferType() throws VilException {
-        return getExpression().inferType();
+        return null == getExpression() ? TypeRegistry.anyType() :  getExpression().inferType();
     }
 
     @Override

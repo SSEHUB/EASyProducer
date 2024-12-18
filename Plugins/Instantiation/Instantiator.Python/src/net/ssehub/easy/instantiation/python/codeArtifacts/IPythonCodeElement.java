@@ -43,8 +43,33 @@ public interface IPythonCodeElement extends IVilType, IStringValueProvider, Stor
         return "";
     }
 
+    /**
+     * Returns whether this element is a (class) property/attribute.
+     * 
+     * @return {@code true} for attribute, {@code false} else
+     */
     @Invisible(inherit = true)
     public default boolean isAttribute() {
+        return false;
+    }
+
+    /**
+     * Returns whether this element is a class(-like) element.
+     * 
+     * @return {@code true} for class, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isClass() {
+        return false;
+    }
+    
+    /**
+     * Returns whether this element is an empty line.
+     * 
+     * @return {@code true} for empty line, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isEmptyLine() {
         return false;
     }
 

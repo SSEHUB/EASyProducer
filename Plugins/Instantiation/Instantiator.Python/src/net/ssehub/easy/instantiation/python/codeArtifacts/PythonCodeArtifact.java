@@ -200,14 +200,48 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
         block.addRaw(text);
     }
 
+    /**
+     * Adds a class without comment.
+     * 
+     * @param name the name of the class
+     * @return the class for chaining
+     */
     public PythonCodeClass addClass(String name) {
         return block.addClass(name);
     }
 
+    /**
+     * Adds a class with comment.
+     * 
+     * @param name the name of the class
+     * @param comment the comment for the class
+     * @return the class for chaining
+     */
     public PythonCodeClass addClass(String name, String comment) {
         return block.addClass(name, comment);
     }
 
+    /**
+     * Adds an enum without comment.
+     * 
+     * @param name the name of the enum
+     * @return the enum for chaining
+     */
+    public PythonCodeEnum addEnum(String name) {
+        return block.addEnum(name);
+    }
+
+    /**
+     * Adds an enum with comment.
+     * 
+     * @param name the name of the enum
+     * @param comment the comment for the enum
+     * @return the enum for chaining
+     */
+    public PythonCodeEnum addEnum(String name, String comment) {
+        return block.addEnum(name, comment);
+    }
+    
     public PythonCodeAssign addAssign(String varName, String expr) {
         return block.addAssign(varName, expr);
     }
@@ -220,10 +254,12 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
         return block.addMatch(expr);
     }
 
+    @Override
     public PythonCodeFunction addFunc(String name) {
         return block.addFunc(name);
     }
 
+    @Override
     public PythonCodeFunction addFunc(String name, String comment) {
         return block.addFunc(name, comment);
     }

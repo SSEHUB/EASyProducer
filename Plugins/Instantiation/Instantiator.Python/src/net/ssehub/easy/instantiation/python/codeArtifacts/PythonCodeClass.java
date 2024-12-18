@@ -22,17 +22,39 @@ public class PythonCodeClass extends PythonCodeElement {
     private List<PythonCodeTypeSpec> bases = new ArrayList<>();
     private PythonCodeDocComment comment;
 
+    /**
+     * Creates a class.
+     * 
+     * @param parent the parent code element
+     * @param name the class name
+     */
     PythonCodeClass(IPythonCodeElement parent, String name) {
         super(parent);
         this.name = name;
         PythonCodeTypeSpec.create(name, this);
     }
 
+    /**
+     * Creates a class with comment.
+     * 
+     * @param parent the parent code element
+     * @param name the class name
+     * @param comment the comment
+     */
     PythonCodeClass(IPythonCodeElement parent, String name, String comment) {
         super(parent);
         this.name = name;
         this.comment = new PythonCodeDocComment(comment, this);
         PythonCodeTypeSpec.create(name, this);
+    }
+    
+    /**
+     * Returns the class name.
+     * 
+     * @return the class name
+     */
+    public String getName() {
+        return name;
     }
 
     public PythonCodeClass add(String text) {
@@ -45,15 +67,19 @@ public class PythonCodeClass extends PythonCodeElement {
     }
 
     public PythonCodeClass addClass(String name) {
-        return IPythonCodeElement.add(elements, new PythonCodeClass(this, name));
+        return add(new PythonCodeClass(this, name));
     }
 
     public PythonCodeAssign addAttribute(String name, String initExpr) {
-        return IPythonCodeElement.add(elements, new PythonCodeAssign(this, name, initExpr));
+        return add(new PythonCodeAssign(this, name, initExpr));
     }
 
     public PythonCodeAssign addAttribute(String name, String type, String initExpr) {
-        return IPythonCodeElement.add(elements, new PythonCodeAssign(this, name, type, initExpr));
+        return add(new PythonCodeAssign(this, name, type, initExpr));
+    }
+    
+    protected <T extends IPythonCodeElement> T add(T element) {
+        return IPythonCodeElement.add(elements, element);
     }
     
     public PythonCodeClass addBase(String type) {
@@ -67,14 +93,14 @@ public class PythonCodeClass extends PythonCodeElement {
 
     @OperationMeta(name = {"addMethod", "addFunc"})
     public PythonCodeFunction addMethod(String name) {
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, name));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, name));
         func.addParameter("self");
         return func;
     }
     
     @OperationMeta(name = {"addMethod", "addFunc"})
     public PythonCodeFunction addMethod(String name, String comment) {
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, name, comment));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, name, comment));
         func.addParameter("self");
         return func;
     }
@@ -83,7 +109,7 @@ public class PythonCodeClass extends PythonCodeElement {
         String funcName = "get" + PseudoString.firstToUpperCase(varName);
         String funcComment = "Returns the value of " + varName + ".";
 
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, funcName, funcComment));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, funcName, funcComment));
         func.addParameter("self");
         func.addReturn("self." + varName, "return value of " + varName);
         return func;
@@ -93,7 +119,7 @@ public class PythonCodeClass extends PythonCodeElement {
         String funcName = "get" + PseudoString.firstToUpperCase(varName);
         String funcComment = "Returns the value of " + varName + ".";
 
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, funcName, funcComment));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, funcName, funcComment));
         func.addParameter("self");
         func.addReturn("self." + varName, "return value of " + varName);
         func.addRetType(type);
@@ -104,7 +130,7 @@ public class PythonCodeClass extends PythonCodeElement {
         String funcName = "set" + PseudoString.firstToUpperCase(varName);
         String funcComment = "Sets the value of " + varName + ".";
 
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, funcName, funcComment));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, funcName, funcComment));
         func.addParameter("self");
         func.addParameter(varName, "", "the new value");
         func.addAssign("self." + varName, varName);
@@ -115,7 +141,7 @@ public class PythonCodeClass extends PythonCodeElement {
         String funcName = "set" + PseudoString.firstToUpperCase(varName);
         String funcComment = "Sets the value of " + varName + ".";
 
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, funcName, funcComment));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, funcName, funcComment));
         func.addParameter("self");
         func.addParameter(varName, type, "the new value");
         func.addAssign("self." + varName, varName);
@@ -127,13 +153,13 @@ public class PythonCodeClass extends PythonCodeElement {
     }
 
     public PythonCodeFunction addConstructor(String comment) {
-        PythonCodeFunction func = IPythonCodeElement.add(elements, new PythonCodeFunction(this, "__init__", comment));
+        PythonCodeFunction func = add(new PythonCodeFunction(this, "__init__", comment));
         func.addParameter("self");
         return func;
     }
 
     public PythonCodeClass addComment(String comment) {
-        IPythonCodeElement.add(elements, new PythonCodeDocComment(comment, this));
+        add(new PythonCodeDocComment(comment, this));
         return this;
     }
 
@@ -142,7 +168,7 @@ public class PythonCodeClass extends PythonCodeElement {
     }
 
     public PythonCodeClass addSLComment(String comment, boolean enclosed) {
-        IPythonCodeElement.add(elements, new PythonCodeSingleLineComment(this, comment, enclosed));
+        add(new PythonCodeSingleLineComment(this, comment, enclosed));
         return this;
     }
 
@@ -187,7 +213,7 @@ public class PythonCodeClass extends PythonCodeElement {
     public void storeElements(CodeWriter out) {
         IPythonCodeElement last = null;
         for (IPythonCodeElement e : elements) {
-            if (last == null || (last.isAttribute() && !e.isAttribute())) {
+            if (last != null && (last.isAttribute() && !e.isAttribute())) {
                 out.println();
             }
             e.store(out);
@@ -198,4 +224,10 @@ public class PythonCodeClass extends PythonCodeElement {
             out.printlnwi("pass");
         }
     }
+    
+    @Override
+    public boolean isClass() {
+        return true;
+    }
+    
 }

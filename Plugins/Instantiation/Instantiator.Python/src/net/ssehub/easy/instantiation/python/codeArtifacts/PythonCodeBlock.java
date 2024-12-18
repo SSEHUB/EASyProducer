@@ -64,12 +64,46 @@ public class PythonCodeBlock extends PythonCodeStmt {
         add("");
     }
 
+    /**
+     * Adds a class without comment.
+     * 
+     * @param name the name of the class
+     * @return the class for chaining
+     */
     public PythonCodeClass addClass(String name) {
         return addElt(new PythonCodeClass(this, name));
     }
 
+    /**
+     * Adds a class with comment.
+     * 
+     * @param name the name of the class
+     * @param comment the comment for the class
+     * @return the class for chaining
+     */
     public PythonCodeClass addClass(String name, String comment) {
         return addElt(new PythonCodeClass(this, name, comment));
+    }
+
+    /**
+     * Adds an enum without comment.
+     * 
+     * @param name the name of the enum
+     * @return the enum for chaining
+     */
+    public PythonCodeEnum addEnum(String name) {
+        return addElt(new PythonCodeEnum(this, name));
+    }
+
+    /**
+     * Adds an enum with comment.
+     * 
+     * @param name the name of the enum
+     * @param comment the comment for the enum
+     * @return the enum for chaining
+     */
+    public PythonCodeEnum addEnum(String name, String comment) {
+        return addElt(new PythonCodeEnum(this, name, comment));
     }
 
     public PythonCodeFunction addFunc(String name) {
@@ -100,10 +134,19 @@ public class PythonCodeBlock extends PythonCodeStmt {
      * Adds a call to "super()".
      * 
      * @param name the name of the function
-     * @return the function for chaining
+     * @return the function call for chaining
      */
     public PythonCodeFnCall addSuperCall(String name) {
         return addCall("super").addCall(name);
+    }
+
+    /**
+     * Adds a call to "super().__init__(...)".
+     * 
+     * @return the function call for chaining
+     */
+    public PythonCodeFnCall addSuperConstructorCall() {
+        return addSuperCall("__init__");
     }
 
     /**
@@ -198,12 +241,25 @@ public class PythonCodeBlock extends PythonCodeStmt {
         add("return " + value);
     }
 
+    /**
+     * Adds a "continue" statement.
+     */
     public void addContinue() {
         add("continue");
     }
 
+    /**
+     * Adds a "break" statement.
+     */
     public void addBreak() {
         add("break");
+    }
+
+    /**
+     * Adds a "pass" statement.
+     */
+    public void addPass() {
+        add("pass");
     }
 
     public PythonCodeBlock setBlock(PythonCodeBlock block) {
@@ -217,8 +273,13 @@ public class PythonCodeBlock extends PythonCodeStmt {
 
     @Override
     public void store(CodeWriter out) {
+        IPythonCodeElement last = null;
         for (IPythonCodeElement e : elements) {
+            if (e.isClass() && !(last != null && last.isEmptyLine())) {
+                out.println();
+            }
             e.store(out);
+            last = e;
         }
 
         if (elements.isEmpty()) {

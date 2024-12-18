@@ -1,5 +1,5 @@
-class TestClass(BaseClass):
 
+class TestClass(BaseClass):
     var1 = 420
     var2: int = 69
 
@@ -47,9 +47,9 @@ class TestClass(BaseClass):
         pass
 
 
+
 class TestClass2:
     """comment for TestClass2"""
-
 
     class InnerClass:
         pass

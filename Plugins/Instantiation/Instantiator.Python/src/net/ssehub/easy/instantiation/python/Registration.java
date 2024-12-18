@@ -14,6 +14,7 @@ import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeConstructorC
 import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeDecorator;
 import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeDelete;
 import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeElement;
+import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeEnum;
 import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeExpr;
 import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeFnCall;
 import net.ssehub.easy.instantiation.python.codeArtifacts.PythonCodeForLoop;
@@ -59,6 +60,7 @@ public class Registration implements IRegistration {
             TypeRegistry.DEFAULT.register(PythonCodeStmt.class);
             TypeRegistry.DEFAULT.register(PythonCodeText.class);
             TypeRegistry.DEFAULT.register(PythonCodeClass.class);
+            TypeRegistry.DEFAULT.register(PythonCodeEnum.class);
             TypeRegistry.DEFAULT.register(PythonCodeImport.class);
             TypeRegistry.DEFAULT.register(PythonCodeAssign.class);
             TypeRegistry.DEFAULT.register(PythonCodeWhileLoop.class);

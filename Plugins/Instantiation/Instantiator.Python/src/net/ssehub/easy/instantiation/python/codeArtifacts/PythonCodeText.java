@@ -52,4 +52,10 @@ public class PythonCodeText implements IPythonCodeElement {
         int lines = rawText.length() - rawText.replace("\\n", "").length();
         return lines + (endWithNewline ? 1 : 0);
     }
+
+    @Override
+    public boolean isEmptyLine() {
+        return rawText != null && rawText.isEmpty();
+    }
+    
 }

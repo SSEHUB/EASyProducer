@@ -15,4 +15,39 @@ public interface IPythonCodeArtifact {
 
     @Invisible
     public void registerImport(IPythonCodeImport imp, boolean explicit);
+    
+    /**
+     * Adds a simple import.
+     * 
+     * @param imp the import
+     * @return the import (for chaining)
+     */
+    public PythonCodeImport addImport(String imp);
+
+    /**
+     * Adds a module-based import.
+     * 
+     * @param from the owning module
+     * @param imp the import
+     * @return the import (for chaining)
+     */
+    public PythonCodeImport addImport(String from, String imp);
+    
+    /**
+     * Adds a function.
+     * 
+     * @param name the name of the function
+     * @return the function (for chaining)
+     */
+    public PythonCodeFunction addFunc(String name);
+
+    /**
+     * Adds a function.
+     * 
+     * @param name the name of the function
+     * @param comment the documentation comment of the function
+     * @return the function (for chaining)
+     */
+    public PythonCodeFunction addFunc(String name, String comment);
+
 }

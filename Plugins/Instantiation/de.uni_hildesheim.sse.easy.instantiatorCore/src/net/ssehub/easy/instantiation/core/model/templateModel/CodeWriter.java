@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
+import java.util.function.Predicate;
 
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -31,7 +32,8 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
  */
 public class CodeWriter implements Closeable {
 
-    private static final boolean DEBUG = Boolean.valueOf(System.getProperty("easy.java.writer.debug", "false"));
+    private static Predicate<File> debugFilter = 
+        f -> Boolean.valueOf(System.getProperty("easy.java.writer.debug", "false"));
     private PrintWriter out;
     private String indent = "";
     private String indentStep = "  ";
@@ -41,6 +43,7 @@ public class CodeWriter implements Closeable {
     private ContentFormatter contentFormatter;
     private Charset charset;
     private StringBuilder buffer = new StringBuilder();
+    private boolean debug;
     
     /**
      * Creates a code writer for a {@code file}. This method creates parents of {@code file} if they yet do not exist.
@@ -55,6 +58,7 @@ public class CodeWriter implements Closeable {
             }
             this.out = new PrintWriter(file);
             initializeFormatting();
+            debug = debugFilter.test(file); 
         } catch (IOException e) {
             throw new VilException(e, VilException.ID_INTERNAL);
         }
@@ -92,6 +96,25 @@ public class CodeWriter implements Closeable {
         charset = null == fCfg.getCharset() ? Charset.defaultCharset() : fCfg.getCharset();
     }
     
+    /**
+     * Changes the debug filter.
+     * 
+     * @param filter the new filter, ignored if <b>null</b>
+     * @return the previously active filter
+     */
+    public static Predicate<File> setDebugFilter(Predicate<File> filter) {
+        Predicate<File> old = debugFilter;
+        if (null != filter) {
+            debugFilter = filter;
+        }
+        return old;
+    }
+
+    /**
+     * Returns the active charset.
+     * 
+     * @return the charset
+     */
     protected Charset getCharset() {
         return charset;
     }
@@ -149,7 +172,7 @@ public class CodeWriter implements Closeable {
             String formatted = contentFormatter.format(buffer.toString());
             buffer.setLength(0); // clear
             out.print(formatted);
-            if (DEBUG) {
+            if (debug) {
                 System.out.print(formatted);
             }
         }
