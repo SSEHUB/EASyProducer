@@ -88,6 +88,22 @@ public class PythonCodeFunction extends PythonCodeBlock {
         decorators.add(dec);
         return dec;
     }
+    
+    public PythonCodeFunction setClass() {
+        addDecorator("classmethod");
+        if (!params.isEmpty() && "self".equals(params.get(0).getName())) {
+            params.get(0).setName("cls");
+        }
+        return this;
+    }
+
+    public PythonCodeFunction setStatic() {
+        //addDecorator("staticmethod"); // needs oktoflow tests first
+        if (!params.isEmpty() && "self".equals(params.get(0).getName())) {
+            params.remove(0);
+        }
+        return this;
+    }
 
     @Override
     @Invisible

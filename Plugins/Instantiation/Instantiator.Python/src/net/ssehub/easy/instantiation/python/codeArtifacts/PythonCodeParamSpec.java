@@ -9,6 +9,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * @author Kevin Schaperjahn
  */
 public class PythonCodeParamSpec extends PythonCodeElement {
+    
     private String name;
     private PythonCodeTypeSpec type = null;
 
@@ -29,6 +30,24 @@ public class PythonCodeParamSpec extends PythonCodeElement {
         super(parentFunc);
         this.name = name;
         this.type = type;
+    }
+    
+    /**
+     * Returns the name of the parameter.
+     * 
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+    
+    /**
+     * Changes the name of the parameter.
+     * 
+     * @param name the new name
+     */
+    void setName(String name) {
+        this.name = name;
     }
 
     @Invisible
