@@ -89,6 +89,15 @@ public class PythonCodeFunction extends PythonCodeBlock {
         return dec;
     }
     
+    /**
+     * Adds raising a NotImplementedError.
+     * 
+     * @return the raise statement (for chaining)
+     */
+    public PythonCodeRaise addRaiseNotImplementedError() {
+        return addElt(new PythonCodeRaise(this, "NotImplementedError"));
+    }    
+    
     public PythonCodeFunction setClass() {
         addDecorator("classmethod");
         if (!params.isEmpty() && "self".equals(params.get(0).getName())) {
@@ -103,6 +112,15 @@ public class PythonCodeFunction extends PythonCodeBlock {
             params.remove(0);
         }
         return this;
+    }
+
+    /**
+     * Returns the comment object.
+     * 
+     * @return the comment object, may be <b>null</b>
+     */
+    public PythonCodeDocComment getComment() {
+        return comment;
     }
 
     @Override

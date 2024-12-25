@@ -262,6 +262,15 @@ public class PythonCodeBlock extends PythonCodeStmt {
         add("pass");
     }
 
+    /**
+     * Adds a "print" function call.
+     * 
+     * @return the function call
+     */
+    public PythonCodeFnCall addPrint() {
+        return addCall("print");
+    }
+
     public PythonCodeBlock setBlock(PythonCodeBlock block) {
         elements.clear();
         for (IPythonCodeElement e : block.elements) {
