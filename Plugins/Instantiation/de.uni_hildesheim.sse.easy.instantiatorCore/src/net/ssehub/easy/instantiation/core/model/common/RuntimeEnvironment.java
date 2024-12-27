@@ -592,6 +592,9 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                     try {
                         result = ctx.getValue(resolvable);
                         found = true;
+                        if (null != result) {
+                            break;
+                        }
                     } catch (VilException e1) {
                         // ignore, we have e
                     }
