@@ -33,6 +33,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import de.uni_hildesheim.sse.easy.loader.framework.Log;
+
 /**
  * Experimental: Loader that identifies the available services/activators from Manifests.
  * 
@@ -122,9 +124,9 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
                 if (verbose) {
-                    System.out.println("Reading manifest: " + url);
+                    Log.info("Reading manifest: " + url);
                 }
-                StartupInfo info = loadManifest(url, builder);
+                StartupInfo info = loadManifest(url, builder, verbose);
                 if (null != info) {
                     String cls = info.getClassName();
                     if (cls.contains("reasoning")) {
@@ -162,15 +164,19 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
      * 
      * @param url the URL of the manifest
      * @param builder a re-usable document builder
+     * @param verbose produce verbose output
      * @return information instances about the loaded services/activators
      * @throws IOException if loading fails
      */
-    public static StartupInfo loadManifest(URL url, DocumentBuilder builder) throws IOException {
+    public static StartupInfo loadManifest(URL url, DocumentBuilder builder, boolean verbose) throws IOException {
         StartupInfo result = null;
         Manifest mf = new Manifest(url.openStream());
         Attributes attr = mf.getMainAttributes();
         String serviceComponent = attr.getValue("Service-Component");
         if (null != serviceComponent) {
+            if (verbose) {
+                Log.info(" - Found service component: " + serviceComponent);
+            }
             StringTokenizer components = new StringTokenizer(serviceComponent, ",");
             while (components.hasMoreTokens()) {
                 String component = components.nextToken().trim();
@@ -184,6 +190,9 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
                 }
                 tmp += component;
                 URL scUrl = new URL(tmp);
+                if (verbose) {
+                    Log.info(" - Reading service descriptor: " + tmp);
+                }
                 try {
                     Document doc = builder.parse(scUrl.openStream());
                     NodeList implList = doc.getElementsByTagName("implementation");
@@ -191,6 +200,9 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
                         Node implNode = implList.item(i);
                         Node clsNode = implNode.getAttributes().getNamedItem("class");
                         if (null != clsNode) {
+                            if (verbose) {
+                                Log.info(" - Found service implementation: " + clsNode.getNodeValue());
+                            }
                             result = new StartupInfo(InitType.DS, clsNode.getNodeValue());
                         }
                     }
@@ -201,6 +213,9 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
         } else {
             String activator = attr.getValue("Bundle-Activator");
             if (null != activator) {
+                if (verbose) {
+                    Log.info(" - Found bundle activator: " + activator);
+                }
                 result = new StartupInfo(InitType.ACTIVATOR, activator);
             }
         }

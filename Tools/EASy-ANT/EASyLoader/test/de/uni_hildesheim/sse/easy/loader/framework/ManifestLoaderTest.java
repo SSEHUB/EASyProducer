@@ -52,12 +52,12 @@ public class ManifestLoaderTest {
         DocumentBuilder builder = factory.newDocumentBuilder();
 
         File mfFile = new File("testResources/activator/" + ManifestLoader.MF_PATH);
-        StartupInfo mfInfo = ManifestLoader.loadManifest(mfFile.toURI().toURL(), builder);
+        StartupInfo mfInfo = ManifestLoader.loadManifest(mfFile.toURI().toURL(), builder, false);
         Assert.assertEquals(InitType.ACTIVATOR, mfInfo.getType());
         Assert.assertEquals("de.uni_hildesheim.sse.ui.Activator", mfInfo.getClassName());
         
         mfFile = new File("testResources/service/" + ManifestLoader.MF_PATH);
-        mfInfo = ManifestLoader.loadManifest(mfFile.toURI().toURL(), builder);
+        mfInfo = ManifestLoader.loadManifest(mfFile.toURI().toURL(), builder, false);
         Assert.assertEquals(InitType.DS, mfInfo.getType());
         Assert.assertEquals("net.ssehub.easy.instantiation.lxc.Registration", mfInfo.getClassName());
     }
