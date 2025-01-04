@@ -81,13 +81,10 @@ public interface IPythonCodeElement extends IVilType, IStringValueProvider, Stor
     @Invisible(inherit = true)
     @Override
     public default String getStringValue(StringComparator comparator) {
-        if (comparator != null && comparator.inTracer()) { // for testing, short
-                                                           // form for
-                                                           // simplifying the
-                                                           // traces
+        if (comparator != null) { // short form for simplifying the traces
             return getTracerStringValue(comparator);
         } else {
-            return toCode();
+            return getClass().getSimpleName();
         }
     }
 

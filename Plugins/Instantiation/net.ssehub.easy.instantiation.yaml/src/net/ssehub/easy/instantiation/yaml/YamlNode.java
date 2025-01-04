@@ -370,7 +370,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return null != comparator && comparator.inTracer() ? "YamlNode" : data.toString();
+        return null != comparator ? "YamlNode" : data.toString();
     }
 
     @Override

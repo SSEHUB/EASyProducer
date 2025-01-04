@@ -349,7 +349,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
 
     @Override
     public String getStringValue(StringComparator comparator) {
-        return null != comparator && comparator.inTracer() ? "JsonNode" : data.toString();
+        return null != comparator ? "JsonNode" : data.toString();
     }
 
     @Override
