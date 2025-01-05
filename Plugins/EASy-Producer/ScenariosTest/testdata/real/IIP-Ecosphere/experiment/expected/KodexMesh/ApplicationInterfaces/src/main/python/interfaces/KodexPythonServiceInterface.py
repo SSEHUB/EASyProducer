@@ -40,41 +40,39 @@ class KodexPythonServiceInterface(AbstractService):
         if self.ingestor is not None:
             self.ingestor(data)
 
-    def setState(self, state:ServiceState):
+    def setState(self, state: ServiceState):
         """Changes the state. [R133c]
         
         Parameters:
-          - newState -- the new state (ServiceState)
+          - state (ServiceState) -- the new state 
         """
         super().setState(state)
-        if (state==ServiceState.STARTING):
+        if state==ServiceState.STARTING:
             self.start()
-        if (state==ServiceState.STOPPING):
+        if state==ServiceState.STOPPING:
             self.stop()
 
     def start(self):
-        """Called when the server shall start.
-        """
+        """Called when the service shall start."""
         pass
 
     def stop(self):
-        """Called when the server shall stop.
-        """
+        """Called when the service shall stop."""
         pass
 
     def notifyReconfigured(self, values: dict):
         """Called to inform the implementing class that a parameter reconfiguration happened.
            
            Parameters:
-             - values -- the new param names/values
+             - values (dict) -- the new param names/values
            """ 
         pass
     
-    def reconfigure(self, values:dict):
+    def reconfigure(self, values: dict):
         """Called by ServiceEnvironment to initialize service parameters or to reconfigure them at runtime.
            
            Parameters:
-             - values -- the new param names/values
+             - values (dict) -- the new param names/values
            """ 
         if "passThrough" in values:
             self.param_passThrough = str(values["passThrough"]).lower() == "true"
@@ -85,16 +83,16 @@ class KodexPythonServiceInterface(AbstractService):
     def getPassThrough(self):
         """Returns the value of parameter passThrough. May change at runtime upon reconfiguration.
            
-           Result:
-             - the value of the parameter
+           Returns:
+             the value of the parameter
            """ 
     
         return self.param_passThrough
     def getSParam(self):
         """Returns the value of parameter sParam. May change at runtime upon reconfiguration.
            
-           Result:
-             - the value of the parameter
+           Returns:
+             the value of the parameter
            """ 
     
         return self.param_sParam
@@ -104,9 +102,10 @@ class KodexPythonServiceInterface(AbstractService):
         """Synchronous data processing/transformation method.
     
         Parameters:
-          - data -- the data to process
+          - data (KRec13Anon) -- the data to process
         Returns:
-          the processed data (not None)
+            KRec13Anon
+                the processed data (not None)
         """
         raise NotImplementedError
     

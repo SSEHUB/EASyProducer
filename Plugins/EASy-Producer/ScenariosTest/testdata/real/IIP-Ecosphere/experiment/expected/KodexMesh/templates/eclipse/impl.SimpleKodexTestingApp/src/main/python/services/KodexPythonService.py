@@ -6,8 +6,8 @@ from datatypes.KRec13Anon import KRec13Anon
 from datatypes.KRec13AnonImpl import KRec13AnonImpl
 from interfaces.KodexPythonServiceInterface import KodexPythonServiceInterface
 
-"""Do not utilise global code here. Place the needed function in the start / end methods.
-   Add methods needed to be run on the start of a service in the start or end methods NOT in init()"""
+""" Do not utilise global code here. Place the needed function in the start / end methods.
+    Add methods needed to be run on the start of a service in the start or end methods NOT in init() """
 
 class KodexPythonService(KodexPythonServiceInterface):
     """Template service implementation for KodexPythonService
@@ -19,22 +19,20 @@ class KodexPythonService(KodexPythonServiceInterface):
         
 
     def start(self):
-        """Called when the server shall start.
-        """
-        #code for set state to STARTING
+        """Called when the service shall start."""
+        # code for set state to STARTING
         pass
 
     def stop(self):
-        """Called when the server shall stop.
-        """
+        """Called when the service shall stop."""
 
-        #code for set state to STOPPING
+        # code for set state to STOPPING
         pass
     def notifyReconfigured(self, values: dict):
         """Called to inform the implementing class that a parameter reconfiguration happened.
            
            Parameters:
-             - values -- the new param names/values
+             - values (dict) -- the new param names/values
            """ 
         # if you want to react on parameter changes, you may add code here
         # if you are not interested in parameter changes, feel free to delete this method
@@ -44,15 +42,14 @@ class KodexPythonService(KodexPythonServiceInterface):
         """Synchronous data processing method.
     
         Parameters:
-          - data -- the data to process
+            - data (KRec13Anon) -- the data to process
         Returns:
-          the processed data              
+            KRec13Anon
+              the processed data              
         """
         result = KRec13Anon()
-        #TODO add your code here
+        # TODO add your code here
         return result
-    
-    
 
-#registers itself
+# registers itself
 KodexPythonService()

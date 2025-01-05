@@ -1,15 +1,13 @@
 package MySourceImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'mySource example'.
@@ -18,17 +16,17 @@ import org.junit.Test;
 public class MySourceImplTest {
 
     private MySourceImpl service;
-    
 
     /**
      * Initializes the test.
      */
     @Before
     public void startup() {
-        service = new MySourceImpl(); // constructor for testing, does not set up service management values!
+        // constructor for testing, does not set up service management values!
+        service = new MySourceImpl();
         service.attachStringIngestor(d -> {
             // called when results from asynchronous service processing occurs 
-            Assert.assertNotNull(d); // contract, see platform handbook            
+            Assert.assertNotNull(d);
             // TODO add assert here or collect results and assert in test
         });
         
@@ -50,5 +48,5 @@ public class MySourceImplTest {
             LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

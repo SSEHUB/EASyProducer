@@ -1,15 +1,13 @@
 package MyReceiverImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'MyReceiver'.
@@ -24,7 +22,7 @@ public class MyReceiverImplTest {
      */
     @Test
     public void testProcessString() {
-        String data = new String();
+        String data = "";
         // TODO fill data via setters
         service.processString(data);
         // no direct output for a sink. may be it's generating a log, a file, etc. to assert
@@ -33,8 +31,8 @@ public class MyReceiverImplTest {
      */
     @Before
     public void startup() {
-        service = new MyReceiverImpl(); // constructor for testing, does not set up service management values!        
-        try {
+        // constructor for testing, does not set up service management values!
+        service = new MyReceiverImpl();        try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
             LoggerFactory.getLogger(getClass()).error("Cannot start service: {}", e);
@@ -52,5 +50,5 @@ public class MyReceiverImplTest {
             LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

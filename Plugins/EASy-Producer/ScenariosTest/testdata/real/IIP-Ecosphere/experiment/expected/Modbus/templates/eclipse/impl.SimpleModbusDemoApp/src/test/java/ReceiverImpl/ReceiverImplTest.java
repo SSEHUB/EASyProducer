@@ -1,15 +1,18 @@
 package ReceiverImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+
+import iip.datatypes.ModbusPhoenixEEM;
+import iip.datatypes.ModbusPhoenixEEMImpl;
+import iip.datatypes.ModbusSiemensSentron;
+import iip.datatypes.ModbusSiemensSentronImpl;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'Modbus Receiver'.
@@ -29,6 +32,7 @@ public class ReceiverImplTest {
         service.processModbusPhoenixEEM(data);
         // no direct output for a sink. may be it's generating a log, a file, etc. to assert
     }
+
     /**
      * Tests processing a data item of type "ModbusSiemensSentron" asynchronously.
      */
@@ -38,12 +42,15 @@ public class ReceiverImplTest {
         // TODO fill data via setters
         service.processModbusSiemensSentron(data);
         // no direct output for a sink. may be it's generating a log, a file, etc. to assert
-    }            /**
+    }
+
+    /**
      * Initializes the test.
      */
     @Before
     public void startup() {
-        service = new ReceiverImpl(); // constructor for testing, does not set up service management values!                
+        // constructor for testing, does not set up service management values!
+        service = new ReceiverImpl();
         try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
@@ -62,5 +69,5 @@ public class ReceiverImplTest {
             LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

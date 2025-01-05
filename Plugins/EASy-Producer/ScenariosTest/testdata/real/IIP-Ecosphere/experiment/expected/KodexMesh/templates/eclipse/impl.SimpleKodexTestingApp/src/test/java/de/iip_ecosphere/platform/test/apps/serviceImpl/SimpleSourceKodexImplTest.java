@@ -1,15 +1,17 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+import de.iip_ecosphere.platform.test.apps.serviceImpl.SimpleSourceKodexImpl;
+
+import iip.datatypes.KRec13;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'Simple Kodex Data Source'.
@@ -19,16 +21,13 @@ public class SimpleSourceKodexImplTest {
 
     private SimpleSourceKodexImpl service;
 
-    
     /**
      * Synchronous source method, called to produce data items of type "KRec13".
-     *
-     * @return the data value to be ingested
      */
     @Test
     public void testProduceKRec13() {
         KRec13 res = service.produceKRec13();
-        Assert.assertNotNull(res); // contract, see platform handbook
+        Assert.assertNotNull(res);
         // TODO assert fields of res
     }
 
@@ -37,7 +36,8 @@ public class SimpleSourceKodexImplTest {
      */
     @Before
     public void startup() {
-        service = new SimpleSourceKodexImpl(); // constructor for testing, does not set up service management values!        
+        // constructor for testing, does not set up service management values!
+        service = new SimpleSourceKodexImpl();        
         try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
@@ -56,5 +56,5 @@ public class SimpleSourceKodexImplTest {
             LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

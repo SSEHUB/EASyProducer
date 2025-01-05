@@ -1,15 +1,16 @@
 package MyAnonymizerImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+
+import iip.datatypes.MyConnPltfIn;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'myAnonymizer example'.
@@ -24,7 +25,7 @@ public class MyAnonymizerImplTest {
      */
     @Test
     public void testProcessString() {
-        String data = new String();
+        String data = "";
         // TODO fill data via setters
         service.processString(data);
         // asynchronous results occur through ingestors, see startup()
@@ -46,10 +47,11 @@ public class MyAnonymizerImplTest {
      */
     @Before
     public void startup() {
-        service = new MyAnonymizerImpl(); // constructor for testing, does not set up service management values!
+        // constructor for testing, does not set up service management values!
+        service = new MyAnonymizerImpl();
         service.attachRec1Ingestor(d -> {
             // called when results from asynchronous service processing occurs 
-            Assert.assertNotNull(d); // contract, see platform handbook            
+            Assert.assertNotNull(d);  
             // TODO add assert here or collect results and assert in test
         });
         
@@ -71,5 +73,5 @@ public class MyAnonymizerImplTest {
             LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

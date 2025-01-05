@@ -1,15 +1,18 @@
 package MyKi2Impl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+
+import iip.datatypes.Rec1;
+import iip.datatypes.Rec1Impl;
+import iip.datatypes.RtsaTestInput;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'Alternative myKi example'.
@@ -27,17 +30,17 @@ public class MyKi2ImplTest {
         Rec1 data = new Rec1Impl();
         // TODO fill data via setters
         RtsaTestInput res = service.transformRec1(data);
-        Assert.assertNotNull(res); // contract, see platform handbook
+        Assert.assertNotNull(res);
         // TODO assert fields of res
     }
-    
 
     /**
      * Initializes the test.
      */
     @Before
     public void startup() {
-        service = new MyKi2Impl(); // constructor for testing, does not set up service management values!        
+        // constructor for testing, does not set up service management values!
+        service = new MyKi2Impl();        
         try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
@@ -56,5 +59,5 @@ public class MyKi2ImplTest {
             LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

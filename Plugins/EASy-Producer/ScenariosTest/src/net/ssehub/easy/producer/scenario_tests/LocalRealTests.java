@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.producer.scenario_tests.mocks.MavenMock;
 
 /**
@@ -120,6 +121,13 @@ public class LocalRealTests extends RealTests {
             // reset passthrough
             MavenMock.setPassThrough(origMvnPassThrough);
         }
-    }    
+    }
+    
+    @Override
+    protected TracerFactory getTracerFactory() {
+        //CodeWriter.setDebugFilter(f -> f.getName().endsWith(".py"));
+        return super.getTracerFactory();
+        //return net.ssehub.easy.instantiation.core.model.tracing.ConsoleTracerFactory.INSTANCE;
+    }
     
 }
