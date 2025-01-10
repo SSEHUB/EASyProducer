@@ -38,6 +38,7 @@ public class Registration implements IRegistration {
             registered = true;
             TypeRegistry.DEFAULT.register(YamlFileArtifact.class);
             TypeRegistry.DEFAULT.register(YamlNode.class);
+            TypeRegistry.DEFAULT.register(YamlList.class);
         }
     }
     

@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
+import org.yaml.snakeyaml.DumperOptions.ScalarStyle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.representer.Representer;
 
@@ -164,6 +165,23 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
     }
 
     /**
+     * Adds a new document.
+     * 
+     * @param onlyIfEmpty add a document only if the artifact is empty, else return the existing one
+     * @return the (new) document instance
+     * @link #addDocument()
+     */
+    public YamlNode addDocument(boolean onlyIfEmpty) {
+        YamlNode result;
+        if (data.isEmpty()) {
+            result = addDocument();
+        } else {
+            result = data.get(0);
+        }
+        return result;
+    }
+
+    /**
      * Adds a given document.
      * 
      * @param node the node to add as document
@@ -207,6 +225,50 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
         notifyChanged();
     }
     
+    private DumperOptions createDumperOptions() {
+        DumperOptions options = new DumperOptions();
+        IndentationConfiguration iCfg = Formatting.getIndentationConfiguration();
+        FormattingConfiguration fCfg = Formatting.getFormattingConfiguration();
+
+        FlowStyle flowStyle = FlowStyle.BLOCK;
+        try {
+            flowStyle = FlowStyle.valueOf(fCfg.getProfileArgument("flowStyle", "BLOCK"));
+        } catch (IllegalArgumentException e) {
+            // take default
+        }
+        options.setDefaultFlowStyle(flowStyle);
+        
+        ScalarStyle scalarStyle = ScalarStyle.PLAIN;
+        try {
+            scalarStyle = ScalarStyle.valueOf(fCfg.getProfileArgument("scalarStyle", "PLAIN"));
+        } catch (IllegalArgumentException e) {
+            // take default
+        }
+        options.setDefaultScalarStyle(scalarStyle);
+
+        int indent = 1;
+        if (fCfg.getIndentSteps() > 0) {
+            indent = fCfg.getIndentSteps();
+        } else if (iCfg.getIndentationStep() > 0) {
+            indent = iCfg.getIndentationStep();
+        }
+
+        int indicatorIndent = indent - 1;
+        try {
+            indicatorIndent = Integer.parseInt(fCfg.getProfileArgument("indicatorIndent", 
+                String.valueOf(indicatorIndent)));
+        } catch (IllegalArgumentException e) {
+            // take default
+        }
+        
+        options.setIndent(indent);
+        if (indicatorIndent >= 0 && indicatorIndent < indent) {
+            options.setIndicatorIndent(indicatorIndent);
+        }
+        options.setPrettyFlow(Boolean.valueOf(fCfg.getProfileArgument("prettyFlow", "true")));
+        return options;
+    }
+    
     @Override
     public void store() throws VilException {
         super.store();
@@ -216,9 +278,7 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 file.getParentFile().mkdirs();
                 FileWriter writer = new FileWriter(file);
                 
-                IndentationConfiguration iCfg = Formatting.getIndentationConfiguration();
                 FormattingConfiguration fCfg = Formatting.getFormattingConfiguration();
-                DumperOptions options = new DumperOptions();
                 YamlNode.Sorting sorting = YamlNode.Sorting.INSERT;
                 try {
                     sorting = YamlNode.Sorting.valueOf(fCfg.getProfileArgument("sorting", 
@@ -226,35 +286,8 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 } catch (IllegalArgumentException e) {
                     // take default
                 }
-                FlowStyle style = FlowStyle.BLOCK;
-                try {
-                    style = FlowStyle.valueOf(fCfg.getProfileArgument("flowStyle", "BLOCK"));
-                } catch (IllegalArgumentException e) {
-                    // take default
-                }
-                options.setDefaultFlowStyle(style);
-                
-                int indent = 1;
-                if (fCfg.getIndentSteps() > 0) {
-                    indent = fCfg.getIndentSteps();
-                } else if (iCfg.getIndentationStep() > 0) {
-                    indent = iCfg.getIndentationStep();
-                }
-                
-                int indicatorIndent = indent - 1;
-                try {
-                    indicatorIndent = Integer.parseInt(fCfg.getProfileArgument("indicatorIndent", 
-                        String.valueOf(indicatorIndent)));
-                } catch (IllegalArgumentException e) {
-                    // take default
-                }
-                
-                options.setIndent(indent);
-                if (indicatorIndent >= 0 && indicatorIndent < indent) {
-                    options.setIndicatorIndent(indicatorIndent);
-                }
-                options.setPrettyFlow(Boolean.valueOf(fCfg.getProfileArgument("prettyFlow", "true")));
-                
+
+                DumperOptions options = createDumperOptions();
                 Representer representer = new Representer(options);
                 //representer.addClassTag(ClassMap.class, Tag.OMAP);
                 

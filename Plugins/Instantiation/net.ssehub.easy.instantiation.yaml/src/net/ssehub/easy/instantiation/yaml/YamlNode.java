@@ -19,9 +19,9 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
-import net.ssehub.easy.instantiation.core.model.vilTypes.IStringValueProvider;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSequence;
@@ -35,11 +35,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
  * 
  * @author Holger Eichelberger
  */
-public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
+public class YamlNode extends YamlStructure {
 
     private java.util.Map<String, Object> data;
     private List<String> sequence = new ArrayList<>();
-    private INodeParent parent;
 
     /**
      * Creates an empty instance.
@@ -47,8 +46,8 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * @param parent the parent to notify about changes
      */
     YamlNode(INodeParent parent) {
+        super(parent);
         data = new HashMap<>();
-        setParent(parent);
     }
     
     /**
@@ -58,8 +57,8 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * @param parent the parent to notify about changes
      */
     YamlNode(java.util.Map<String, Object> data, INodeParent parent) {
+        super(parent);
         this.data = data;
-        setParent(parent);
     }
     
     /**
@@ -87,21 +86,12 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * @param notify enable calling {@link #notifyChanged()}
      */
     private void set(String key, Object val, boolean notify) {
-        if (null == data.put(key, val)) { // just take the first position
+        if (null == data.put(key, IVilType.convertVilValue(val))) { // just take the first position
             sequence.add(key);
         }
         if (notify) {
             notifyChanged();
         }
-    }
-    
-    /**
-     * Changes the parent, e.g., if by artifact without binding to parent.
-     * 
-     * @param parent the new parent
-     */
-    void setParent(INodeParent parent) {
-        this.parent = parent;
     }
     
     /**
@@ -136,6 +126,44 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
     }
 
     /**
+     * Adds a single value if the value is not considered empty (String).
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public YamlNode addValueNotEmpty(String name, Object value) {
+        boolean add = true;
+        if (value instanceof String) {
+            add = !((String) value).isEmpty();
+        }
+        if (add) {
+            addValue(name, value);
+        }
+        return this;
+    }
+
+    /**
+     * Adds a single value if the value, turns the value into null/none if considered empty (String).
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public YamlNode addValueOrNone(String name, Object value) {
+        boolean add = true;
+        if (value instanceof String) {
+            if (((String) value).isEmpty()) {
+                value = null;
+            }
+        }
+        if (add) {
+            addValue(name, value);
+        }
+        return this;
+    }
+
+    /**
      * Adds an object as sub-structure.
      * 
      * @param name the name of the field
@@ -145,6 +173,22 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         YamlNode node = new YamlNode(new ClassMap(), this);
         set(name, node, true);
         return node;
+    }
+    
+    /**
+     * Adds multiple (empty) objects.
+     * 
+     * @param path the path of the object names
+     * @param separators the separator(s) among the names
+     * @return the last created node, may be <b>this</b> for none
+     */
+    public YamlNode addObjects(String path, String separators) {
+        YamlNode result = this;
+        StringTokenizer tokens = new StringTokenizer(path, separators);
+        while (tokens.hasMoreTokens()) {
+            result = result.addObject(tokens.nextToken());
+        }
+        return result;
     }
 
     /**
@@ -196,7 +240,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * Returns the value of a field as a list.
      * 
      * @param name the name of the field
-     * @return the value as a list, may be <b>null</b> if it does not exist/is not a list, ..
+     * @return the value as a list, may be <b>null</b> if it does not exist/is not a list, ...
      * @see #isList(String)
      */
     public Sequence<Object> getListValue(String name) {
@@ -205,6 +249,27 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
             @SuppressWarnings("unchecked")
             List<Object> tmp = (List<Object>) data.get(name);
             result = new ListSequence<Object>(tmp, TypeRegistry.anyType());
+        }
+        return result;
+    }
+
+    /**
+     * Returns the value of a field as a {@link YamlList}.
+     * 
+     * @param name the name of the field
+     * @return the value as a list, may be <b>null</b> if it does not exist/is not a list, ...
+     * @see #isList(String)
+     */
+    @SuppressWarnings("unchecked")
+    public YamlList getList(String name) {
+        YamlList result = null;
+        if (isList(name)) {
+            Object d = data.get(name);
+            if (d instanceof YamlList) {
+                result = (YamlList) d;
+            } else {
+                result = new YamlList((List<Object>) d, this);
+            }
         }
         return result;
     }
@@ -223,7 +288,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
      * Returns the value of a field as a map.
      * 
      * @param name the name of the field
-     * @return the value as a map, may be <b>null</b> if it does not exist/is not a map, ..
+     * @return the value as a map, may be <b>null</b> if it does not exist/is not a map, ...
      * @see #isMap(String)
      */
     public Map<String, Object> getMapValue(String name) {
@@ -240,6 +305,32 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
     }
     
     /**
+     * Returns the value of a field as a map.
+     * 
+     * @param name the name of the field
+     * @return the value as a map, may be <b>null</b> if it does not exist/is not 
+     *   a map, ...
+     * @see #isMap(String)
+     */
+    @SuppressWarnings("unchecked")
+    public YamlNode getMap(String name) {
+        YamlNode result = null;
+        if (isList(name)) {
+            Object d = data.get(name);
+            if (d instanceof YamlNode) {
+                result = (YamlNode) d;
+            } else if (d instanceof Map) {
+                java.util.Map<String, Object> tmp = new HashMap<>();
+                for (java.util.Map.Entry<Object, Object> e: ((java.util.Map<Object, Object>) d).entrySet()) {
+                    tmp.put(e.getKey().toString(), e.getValue());
+                }
+                result = new YamlNode(tmp, this);
+            }
+        }
+        return result;
+    }    
+    
+    /**
      * Returns whether the value of {@code name} is a map.
      * 
      * @param name the name of the field
@@ -249,6 +340,22 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         return data.get(name) instanceof Map;
     }
 
+    /**
+     * Adds a field with an empty list or returns a known list for the given field.
+     * 
+     * @param name the name of the field
+     * @return the list for chaining
+     * @see #getList(String)
+     */
+    public YamlList addList(String name) {
+        YamlList result = getList(name);
+        if (null == result) {
+            result = new YamlList(new ArrayList<Object>(), this);
+            set(name, result, true);
+        }
+        return result;
+    }
+    
     /**
      * Adds a field with value list.
      * 
@@ -266,6 +373,20 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
     }
 
     /**
+     * Adds a field with value list, but only if the list is not empty.
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public YamlNode addListNotEmpty(String name, Sequence<?> value) {
+        if (value.size() > 0) {
+            addList(name, value);
+        }
+        return this;
+    }
+
+    /**
      * Adds the fields within the given map to this node.
      * 
      * @param value the map value(s)
@@ -279,7 +400,23 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         notifyChanged();
         return this;
     }
-    
+
+    /**
+     * Adds a field with an empty map.
+     * 
+     * @param name the name of the field
+     * @return the map node for chaining
+     * @see #getMap(String)
+     */
+    public YamlNode addMap(String name) {
+        YamlNode result = getMap(name);
+        if (null == result) {
+            result = new YamlNode(this);
+            set(name, result, true);
+        }
+        return result;
+    }
+
     /**
      * Adds a field with value map.
      * 
@@ -297,41 +434,7 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         return this;
     }
 
-    /**
-     * Defines the sorting mode of maps/objects.
-     * 
-     * @author Holger Eichelberger
-     */
-    enum Sorting {
-        
-        /**
-         * No sorting, implementation dependent.
-         */
-        NONE,
-
-        /**
-         * Insert/adding/reading sequence.
-         */
-        INSERT,
-
-        /**
-         * Alphanumerical according to field/key names.
-         */
-        ALPHA,
-
-        /**
-         * Locale/language based according to field/key names.
-         */
-        COLLATOR
-        
-    }
-
-    /**
-     * Returns the data in this node, formatted to be useful for snakeyaml.
-     * 
-     * @param sorting the sorting sequence for the data
-     * @return the data
-     */
+    @Override
     @Invisible
     java.util.Map<String, Object> getData(Sorting sorting) {
         java.util.Map<String, Object> result;
@@ -355,9 +458,9 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         }
         for (String key: data.keySet()) {
             Object value = data.get(key);
-            if (value instanceof YamlNode) {
-                YamlNode valueNode = (YamlNode) value;
-                if (valueNode.data != null && valueNode.data.size() > 0) {
+            if (value instanceof YamlStructure) {
+                YamlStructure valueNode = (YamlStructure) value;
+                if (valueNode.hasData()) {
                     value = valueNode.getData(sorting);                    
                 } else {
                     value = null;
@@ -367,17 +470,16 @@ public class YamlNode implements IVilType, IStringValueProvider, INodeParent {
         }
         return result;
     }
+    
+    @Invisible
+    @Override
+    boolean hasData() {
+        return data != null && data.size() > 0;
+    }
 
     @Override
     public String getStringValue(StringComparator comparator) {
         return null != comparator ? "YamlNode" : data.toString();
-    }
-
-    @Override
-    public void notifyChanged() {
-        if (null != parent) {
-            parent.notifyChanged();
-        }
     }
 
 }

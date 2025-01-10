@@ -88,7 +88,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
      * @param notify enable calling {@link #notifyChanged()}
      */
     private void set(String key, Object val, boolean notify) {
-        if (null == data.put(key, val)) { // just take the first position
+        if (null == data.put(key, IVilType.convertVilValue(val))) { // just take the first position
             sequence.add(key);
         }
         if (notify) {
@@ -116,6 +116,24 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
     public JsonNode addValue(String name, Object value) {
         set(name, value, true);
         notifyChanged();
+        return this;
+    }
+    
+    /**
+     * Adds a single value if the value is not considered empty (String).
+     * 
+     * @param name the name of the field
+     * @param value the value
+     * @return <b>this</b> for chaining
+     */
+    public JsonNode addValueNotEmpty(String name, Object value) {
+        boolean add = true;
+        if (value instanceof String) {
+            add = !((String) value).isEmpty();
+        }
+        if (add) {
+            addValue(name, value);
+        }
         return this;
     }
 
