@@ -838,6 +838,17 @@ public class XmlElement extends XmlNode implements IXmlContainer {
         return nodes == null ? 0 : nodes.length;
     }
     
+    /**
+     * Creates a new XmlElement as child of this element, with given name.
+     * @param name The name of the new XmlElement.
+     * @param contents optional initial contents, ignored if empty
+     * @return The created XmlElement.
+     * @throws VilException if element could not be created.
+     */
+    public XmlElement createElement(String name, String contents) throws VilException {
+        return create(this, name, contents);
+    }
+    
     @Override
     XmlNode getChild(int index) {
         if (null == nodes) {

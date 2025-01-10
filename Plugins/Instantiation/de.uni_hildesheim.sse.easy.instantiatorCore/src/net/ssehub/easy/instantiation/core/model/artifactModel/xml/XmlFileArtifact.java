@@ -761,6 +761,17 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
     
     /**
+     * Creates a new XmlElement as child of this element, with given name.
+     * @param name The name of the new XmlElement.
+     * @param contents optional initial contents, ignored if empty
+     * @return The created XmlElement.
+     * @throws VilException if element could not be created.
+     */
+    public XmlElement createElement(String name, String contents) throws VilException {
+        return XmlElement.create(this, name, contents);
+    }
+    
+    /**
      * Sets the number of whitespaces to use for auto-indenting this artifact while writing/storing.
      * 
      * @param indentation the number of whitespaces (default 4), a negative value disables indentation

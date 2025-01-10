@@ -261,7 +261,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
     public JsonNode addList(String name, Sequence<?> value) {
         List<Object> tmp = new ArrayList<Object>();
         for (Object o : value) {
-            tmp.add(o);
+            tmp.add(IVilType.convertVilValue(o));
         }
         set(name, tmp, true);
         return this;
@@ -292,7 +292,7 @@ public class JsonNode implements IVilType, IStringValueProvider, INodeParent {
     public JsonNode addMap(String name, Map<?, ?> value) {
         java.util.Map<String, Object> tmp = new HashMap<>();
         for (Object key: value.keys()) {
-            Object val = value.get(key);
+            Object val = IVilType.convertVilValue(value.get(key));
             tmp.put(key.toString(), val);
         }
         set(name, tmp, true);
