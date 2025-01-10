@@ -463,7 +463,9 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      */
     protected void setBuildScript(ScriptContainer mainBuildScript) {
         this.mainBuildScript = mainBuildScript;
-        this.mainBuildScript.registerModelListener(this);
+        if (null != this.mainBuildScript) { // may not be loadable/resolvabke
+            this.mainBuildScript.registerModelListener(this);
+        }
     }
     
     /**
@@ -721,10 +723,10 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
     public List<SemanticErrorDescription> getParsingExceptions() {
         List<SemanticErrorDescription> exceptions = new ArrayList<SemanticErrorDescription>(2);
         
-        if (null != varModel.getDescription()) {
+        if (null != varModel && null != varModel.getDescription()) {
             exceptions.add(varModel.getDescription());
         }
-        if (null != mainBuildScript.getDescription()) {
+        if (null != mainBuildScript && null != mainBuildScript.getDescription()) {
             exceptions.add(mainBuildScript.getDescription());
         }
         
@@ -739,7 +741,7 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * @return <code>true</code> if instantiation should be possible, <code>false</code> else
      */
     protected final boolean isTransformableVIL() {
-        return mainBuildScript.isTransformable();
+        return null != mainBuildScript ? mainBuildScript.isTransformable() : false;
     }
     
     /**
@@ -773,14 +775,16 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * @param scriptImport A import which shall be added to the main {@link Script} of this project.
      */
     public void addScriptImport(ModelImport<Script> scriptImport) {
-        Script script = mainBuildScript.getModel();
-        boolean found = false; // prevent accidental double import, ignore constraint for now
-        for (int i = 0; !found && i < script.getImportsCount(); i++) {
-            found = script.getImport(i).getName().equals(scriptImport.getName());
-        }
-        if (!found) {
-            mainBuildScript.getModel().addImport(scriptImport);
-            mainBuildScript.setEdited(true);
+        if (null != mainBuildScript) {
+            Script script = mainBuildScript.getModel();
+            boolean found = false; // prevent accidental double import, ignore constraint for now
+            for (int i = 0; !found && i < script.getImportsCount(); i++) {
+                found = script.getImport(i).getName().equals(scriptImport.getName());
+            }
+            if (!found) {
+                mainBuildScript.getModel().addImport(scriptImport);
+                mainBuildScript.setEdited(true);
+            }
         }
     }
     
@@ -790,7 +794,9 @@ public class PLPInfo implements IInstantiatorProject, IModelListener<Script> {
      * If this flag was not set, all the (changed) build script will not be saved.
      */
     public void buildScriptWasEdited() {
-        mainBuildScript.setEdited(true);
+        if (null != mainBuildScript) {
+            mainBuildScript.setEdited(true);
+        }
     }
     
     /**
