@@ -9,14 +9,12 @@ transport:
     actionTimeout: 1000
     authenticationKey: amqp
     gatewayPort: -1
-    netmask : 
 monitoringUpdatePeriod: 2000
 aas:
   server:
     port: 9001
     host: 127.0.0.1
     schema: HTTP
-    path: 
   registry:
     port: 9002
     host: 127.0.0.1
@@ -25,10 +23,9 @@ aas:
   implementation:
     port: -1
     host: 127.0.0.1
-    netmask: 
     schema: TCP
     protocol: VAB-TCP
-  accessControlAllowOrigin: "*"
+  accessControlAllowOrigin: '*'
 binders:
     properties:
        internal:
@@ -58,10 +55,10 @@ management:
     endpoints:
         web:
             exposure:
-                include: "metrics"
+                include: metrics
 spring:
     main:
-        banner-mode: off
+        banner-mode: 'off'
     cloud:
         function:
             definition: createKRec13_SimpleKodexSource;processKRec13_Pseudonymizer;receiveKRec13Anon_KodexReceiver;transformKRec13AnonKRec13Anon_KodexPythonService

@@ -9,14 +9,12 @@ transport:
     actionTimeout: 1000
     authenticationKey: amqp
     gatewayPort: -1
-    netmask : 
 monitoringUpdatePeriod: 2000
 aas:
   server:
     port: 9001
     host: 127.0.0.1
     schema: HTTP
-    path: 
   registry:
     port: 9002
     host: 127.0.0.1
@@ -25,10 +23,9 @@ aas:
   implementation:
     port: -1
     host: 127.0.0.1
-    netmask: 
     schema: TCP
     protocol: VAB-TCP
-  accessControlAllowOrigin: "*"
+  accessControlAllowOrigin: '*'
 binders:
     properties:
        internal:
@@ -64,10 +61,10 @@ management:
     endpoints:
         web:
             exposure:
-                include: "metrics"
+                include: metrics
 spring:
     main:
-        banner-mode: off
+        banner-mode: 'off'
     cloud:
         function:
             definition: createMyConnPltfIn_myMqttConn;createMyConnPltfIn_myOpcConn;createString_mySource;processRtsaTestInput_myRtsa;receiveRtsaTestOutput_aasSink;transformRec1RtsaTestInput_myKiFamily

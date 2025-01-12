@@ -55,7 +55,6 @@ services:
      applicationId: ModbusApp
      name: Modbus Receiver
      version: 0.1.0
-     description: 
      deployable: true
      kind: SINK_SERVICE
      topLevel: true
@@ -82,7 +81,6 @@ services:
      applicationId: ModbusApp
      name: myModbusConn example
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true
@@ -97,13 +95,11 @@ services:
          direction: OUT
          id: myModbusConn -> ModbusReceiver
          type: ModbusPhoenixEEM
-         function: 
          service: ModbusReceiver
    - id: myModbusSentronConn
      applicationId: ModbusApp
      name: myModbusSentronConn example
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true
@@ -118,6 +114,5 @@ services:
          direction: OUT
          id: myModbusSentronConn -> ModbusReceiver
          type: ModbusSiemensSentron
-         function: 
          service: ModbusReceiver
 

@@ -25,7 +25,6 @@ services:
      applicationId: KodexMeshApp
      name: Kodex Data Receiver
      version: 0.1.0
-     description: 
      deployable: true
      kind: SINK_SERVICE
      topLevel: true
@@ -46,7 +45,6 @@ services:
      applicationId: KodexMeshApp
      name: Kodex Pseudonymizer
      version: 0.7.0
-     description: 
      deployable: true
      kind: TRANSFORMATION_SERVICE
      topLevel: true
@@ -81,7 +79,6 @@ services:
      applicationId: KodexMeshApp
      name: Kodex Python Service
      version: 0.1.0
-     description: 
      deployable: true
      kind: TRANSFORMATION_SERVICE
      topLevel: true
@@ -105,16 +102,11 @@ services:
          function: transformKRec13AnonKRec13Anon_KodexPythonService
          service: Pseudonymizer
      process: 
-         homePath: ${tmp}/kodexPythonService/python
-         executablePath: ${tmp}/kodexPythonService/python
          artifacts:
            - /python_kodexPythonService.zip
            - /myArtifact.zip
-         locationKey: CONDA
-         execArg:
-           - run
-           - -n
-           - myGPU
+         homePath: ${tmp}/kodexPythonService/python
+         executablePath: ${tmp}/kodexPythonService/python
          cmdArg:
            - --mode
            - console
@@ -125,11 +117,15 @@ services:
            - --sid
            - KodexPythonService
          started: true
+         locationKey: CONDA
+         execArg:
+           - run
+           - -n
+           - myGPU
    - id: SimpleKodexSource
      applicationId: KodexMeshApp
      name: Simple Kodex Data Source
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true

@@ -4,12 +4,10 @@ transport:
     actionTimeout: 1000
     authenticationKey: amqp
     gatewayPort: -1
-    netmask : 
 docker:
     dockerHost: unix:///var/run/docker.sock
     dockerImageYamlFilename: image-info.yml
     deleteWhenUndeployed: false
-    registry: 
     authenticationKey: docker
 monitoringUpdatePeriod: 2000
 aas:
@@ -17,7 +15,6 @@ aas:
     port: 9001
     host: 127.0.0.1
     schema: HTTP
-    path: 
   registry:
     port: 9002
     host: 127.0.0.1
@@ -26,11 +23,8 @@ aas:
   implementation:
     port: -1
     host: 127.0.0.1
-    netmask: 
     schema: TCP
     protocol: VAB-TCP
-  accessControlAllowOrigin: "*"
-netMgr:
-    netmask: 
+  accessControlAllowOrigin: '*'
 artifactInfixes:
   - bitmotec

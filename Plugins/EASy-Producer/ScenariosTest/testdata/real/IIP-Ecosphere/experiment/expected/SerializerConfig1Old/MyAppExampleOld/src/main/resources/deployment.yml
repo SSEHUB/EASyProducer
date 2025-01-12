@@ -37,7 +37,6 @@ services:
      applicationId: myApp
      name: myAnonymizer example
      version: 0.1.0
-     description: 
      deployable: true
      kind: TRANSFORMATION_SERVICE
      topLevel: true
@@ -76,7 +75,6 @@ services:
      applicationId: myApp
      name: myKi example
      version: 0.1.0
-     description: 
      deployable: true
      kind: TRANSFORMATION_SERVICE
      topLevel: true
@@ -103,7 +101,6 @@ services:
      applicationId: myApp
      name: myMqttConnExample
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true
@@ -118,13 +115,11 @@ services:
          direction: OUT
          id: myMqttConn -> myAnonymizer
          type: MyConnPltfIn
-         function: 
          service: myAnonymizer
    - id: myOpcConn
      applicationId: myApp
      name: myOpcConn example
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true
@@ -139,13 +134,11 @@ services:
          direction: OUT
          id: myOpcConn -> myAnonymizer
          type: MyConnPltfIn
-         function: 
          service: myAnonymizer
    - id: MyReceiver
      applicationId: myApp
      name: MyReceiver
      version: 0.1.0
-     description: 
      deployable: true
      kind: SINK_SERVICE
      topLevel: true
@@ -166,7 +159,6 @@ services:
      applicationId: myApp
      name: mySource example
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true
@@ -195,7 +187,8 @@ servers:
     asProcess: false
     artifacts:
       - /python_testpyServer.zip
-    netMgtKey: test-pyServer
+    homePath: ${tmp}/python_testpyServer
+    executablePath: ${tmp}/python_testpyServer
     cmdArg:
       - --mode
       - console
@@ -205,6 +198,5 @@ servers:
       - server
       - --sid
       - test-pyServer
-    homePath: ${tmp}/python_testpyServer
-    executablePath: ${tmp}/python_testpyServer
+    netMgtKey: test-pyServer
 

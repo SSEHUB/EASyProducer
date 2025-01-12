@@ -4,12 +4,10 @@ transport:
     actionTimeout: 1000
     authenticationKey: amqp
     gatewayPort: -1
-    netmask : 
 docker:
     dockerHost: unix:///var/run/docker.sock
     dockerImageYamlFilename: image-info.yml
     deleteWhenUndeployed: false
-    registry: 
     authenticationKey: docker
 monitoringUpdatePeriod: 2000
 aas:
@@ -17,7 +15,6 @@ aas:
     port: 9001
     host: 127.0.0.1
     schema: HTTP
-    path: 
   registry:
     port: 9002
     host: 127.0.0.1
@@ -26,12 +23,9 @@ aas:
   implementation:
     port: -1
     host: 127.0.0.1
-    netmask: 
     schema: TCP
     protocol: VAB-TCP
-  accessControlAllowOrigin: "*"
-netMgr:
-    netmask: 
+  accessControlAllowOrigin: '*'
 artifactInfixes:
   - plcNext
 logging:
@@ -39,7 +33,7 @@ logging:
         root: INFO
 spring:
     main:
-        banner-mode: off
+        banner-mode: 'off'
         web-application-type: none
     cloud:
         deployer:
@@ -58,12 +52,10 @@ service-mgr:
         actionTimeout: 1000
         authenticationKey: amqp
         gatewayPort: -1
-        netmask : 
     docker:
         dockerHost: unix:///var/run/docker.sock
         dockerImageYamlFilename: image-info.yml
         deleteWhenUndeployed: false
-        registry: 
         authenticationKey: docker
     monitoringUpdatePeriod: 2000
     aas:
@@ -71,7 +63,6 @@ service-mgr:
         port: 9001
         host: 127.0.0.1
         schema: HTTP
-        path: 
       registry:
         port: 9002
         host: 127.0.0.1
@@ -80,12 +71,9 @@ service-mgr:
       implementation:
         port: -1
         host: 127.0.0.1
-        netmask: 
         schema: TCP
         protocol: VAB-TCP
-      accessControlAllowOrigin: "*"
-    netMgr:
-        netmask: 
+      accessControlAllowOrigin: '*'
 metricsprovider:
     schedulerrate: 2000
     
