@@ -55,6 +55,8 @@ import net.ssehub.easy.dslCore.translation.MessageReceiver;
 public abstract class ModelUtility <E extends EObject, R extends IModel> implements IModelLoader<R> {
 
     private static IResourceInitializer resourceInitializer;
+    private static List<ModelUtility<?, ?>> instances = 
+        Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
 
     private static final List<ModelUtility<?, ?>> SCHEDULED 
         = Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
@@ -91,6 +93,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         } else {
             SCHEDULED.add(this);
         }
+        instances.add(this);
     }
     
     static {
@@ -103,6 +106,10 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         logger.info("Setting up Standalone resource initializer");
         resourceInitializer = new StandaloneInitializer();
         //}
+    }
+    
+    public static Iterable<ModelUtility<?, ?>> instances() {
+        return instances;
     }
     
     /**
@@ -163,7 +170,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * 
      * @return the resource set
      */
-    protected XtextResourceSet getResourceSet() {
+    public XtextResourceSet getResourceSet() {
         if (null == resourceSet) {
             resourceSet = getResourceInitializer().createResourceSet(getInjector());
         }
@@ -175,7 +182,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * 
      * @return the injector
      */
-    protected Injector getInjector() {
+    public Injector getInjector() {
         return injector;
     }
 
