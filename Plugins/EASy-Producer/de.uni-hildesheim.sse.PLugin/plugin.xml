@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-<extension
+   <extension
          id="de.uni_hildesheim.sse.EASy-Producer"
-         name="EASy-Producer 2.0"
+         name="EASy-Producer"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run class="net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature">

@@ -304,5 +304,24 @@ Germany">
             name="derive product">
       </command>
    </extension>   
+   
+   <extension
+         id="de.uni_hildesheim.sse.EASy-Producer"
+         name="EASy-Producer"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="net.ssehub.easy.producer.eclipse.persistency.eclipse.EASyNature">
+         </run>
+      </runtime>
+      <builder id="de.uni_hildesheim.sse.EASy-Producer.Builder"/> 
+   </extension>
+   <extension 
+    id="de.uni_hildesheim.sse.EASy-Producer.Builder" 
+    name="Easy-Producer builder" 
+    point="org.eclipse.core.resources.builders"> 
+      <builder hasNature="true"> 
+         <run class="net.ssehub.easy.dslCore.ui.Builder"/>
+      </builder> 
+   </extension>     
 
 </plugin>
