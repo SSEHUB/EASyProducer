@@ -15,12 +15,41 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+
 /**
  * Represents a code block.
  * 
  * @author Holger Eichelberger
  */
 public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallElement {
+
+    
+    /**
+     * Transfers all my elements to the given block.
+     * 
+     * @param block the target block
+     * @see #add(IJavaCodeElement)
+     */
+    @Invisible
+    public void transferElementsTo(JavaCodeBlockInterface block);
+
+    /**
+     * Adds the given element to this block.
+     * 
+     * @param element the element to add
+     */
+    @Invisible
+    public void add(IJavaCodeElement element);
+
+    /**
+     * Adds all elements in {@code block} to this block.
+     * 
+     * @param block the block to take the elements from (remove them)
+     * @return this boick for chaining
+     * @see #transferElementsTo(JavaCodeBlockInterface)
+     */
+    public JavaCodeBlockInterface addAll(JavaCodeBlockInterface block);
 
     /**
      * Adds a statement and indents it.
@@ -230,7 +259,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the variable declaration (for chaining)
      */
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
-        String initializer);
+        JavaCodeExpression initializer);
 
     /**
      * Creates a variable declaration without initialization.
@@ -252,7 +281,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the variable declaration (for chaining)
      */
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        String initializer);
+        JavaCodeExpression initializer);
 
     /**
      * Creates a variable declaration.
@@ -264,7 +293,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the variable declaration (for chaining)
      */
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
-        boolean isFinal, String initializer);
+        boolean isFinal, JavaCodeExpression initializer);
 
     /**
      * Creates a variable declaration.
@@ -276,7 +305,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the variable declaration (for chaining)
      */
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        boolean isFinal, String initializer);
+        boolean isFinal, JavaCodeExpression initializer);
     
     /**
      * Creates a variable declaration without initialization and without adding it.
@@ -297,7 +326,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param initializer the initializer, may be <b>null</b> or empty for none
      * @return the variable declaration (for chaining)
      */
-    public JavaCodeVariableDeclaration createVariable(String type, String variableName, String initializer);
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, JavaCodeExpression initializer);
 
     /**
      * Creates a variable declaration without adding it.
@@ -309,6 +338,6 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the variable declaration (for chaining)
      */
     public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
-        boolean isFinal, String initializer);
+        boolean isFinal, JavaCodeExpression initializer);
     
 }

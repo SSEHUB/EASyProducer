@@ -15,14 +15,14 @@
     -> addAnnotation(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, java.lang.Override) = JavaCodeAnnotation JavaCodeTypeSpecification Override
     -> forceJavadoc(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeMethod: getIntegerList
     -> addParameter(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, int, length, the length) = JavaCodeParameterSpecification int length
-    -> addVariable(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, boolean, cont, false) = JavaCodeVariableDeclaration
+    -> addVariable(JavaCodeMethod, String, String, JavaCodeExpression) with (JavaCodeMethod: getIntegerList, boolean, cont, JavaCodeTextExpression) = JavaCodeVariableDeclaration
     -> addIf(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, cont) = JavaCodeAlternative
     alt <- JavaCodeAlternative
     -> addCall(JavaCodeBlock, String) with (JavaCodeAlternative, System.out.println) = JavaCodeMethodCall
     -> addElse(JavaCodeAlternative) with (JavaCodeAlternative) = JavaCodeBlock
     -> addCall(JavaCodeBlock, String) with (JavaCodeBlock, System.out.println) = JavaCodeMethodCall
     -> addArgument(JavaCodeMethodCall, String) with (JavaCodeMethodCall, length) = JavaCodeMethodCall
-    -> addVariable(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, int, data, 0) = JavaCodeVariableDeclaration
+    -> addVariable(JavaCodeMethod, String, String, JavaCodeExpression) with (JavaCodeMethod: getIntegerList, int, data, JavaCodeTextExpression) = JavaCodeVariableDeclaration
     -> addSwitch(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, data) = JavaCodeSwitch
     sw <- JavaCodeSwitch
     -> addCase(JavaCodeSwitch, String, Boolean, Boolean) with (JavaCodeSwitch, 5, false, true) = JavaCodeCase

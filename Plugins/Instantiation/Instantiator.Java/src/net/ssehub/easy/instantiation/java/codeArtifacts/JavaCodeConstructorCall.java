@@ -23,9 +23,9 @@ import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
  * @author Holger Eichelberger
  */
 public class JavaCodeConstructorCall extends JavaCodeMethodCall {
-    
+
     /**
-     * Creates a method call.
+     * Creates a method call with no import scope.
      * 
      * @param parent the parent
      * @param cls the class name
@@ -33,7 +33,21 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
      * @param postfix the postfix, e.g., semicolon newline
      */
     public JavaCodeConstructorCall(IJavaCodeElement parent, String cls, boolean indent, String postfix) {
-        super(parent, cls, JavaCodeImportScope.NONE, indent, postfix);
+        this(parent, cls, JavaCodeImportScope.NONE, indent, postfix);
+    }
+
+    /**
+     * Creates a method call.
+     * 
+     * @param parent the parent
+     * @param cls the class name
+     * @param scope the scope to apply
+     * @param indent shall the call be indended
+     * @param postfix the postfix, e.g., semicolon newline
+     */
+    public JavaCodeConstructorCall(IJavaCodeElement parent, String cls, JavaCodeImportScope scope, boolean indent, 
+        String postfix) {
+        super(parent, cls, scope, indent, postfix);
     }
 
     /**
@@ -46,12 +60,27 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
         return new JavaCodeConstructorCall(null, cls, false, "");
     }
     
-    @Override
-    protected String validateName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
-        String result = methodName;
-        if (methodName.contains(".")) { // else methodName may be qualified but not by class
-            JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(methodName, parent);
-            result = type.getOutputType(); // including generics
+    /**
+     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param cls the class name
+     * @param scope the scope of the import
+     * @return the instance
+     */
+    public static JavaCodeConstructorCall create(String cls, JavaCodeImportScope scope) {
+        return new JavaCodeConstructorCall(null, cls, scope, false, "");
+    }
+    
+    @Override // implicitly called in setParent via parent class
+    protected String validateName(IJavaCodeElement parent, String cls, JavaCodeImportScope scope) {
+        String result = cls;
+        if (cls.contains(".")) { // else methodName may be qualified but not by class
+            if (JavaCodeImportScope.NONE == scope || parent == null || parent.getArtifact() == null) {
+                JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, parent);
+                result = type.getOutputType(); // including generics
+            } else {
+                result = parent.getArtifact().validateStaticName(cls, scope);
+            }
         }
         return result;
     }

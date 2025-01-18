@@ -16,48 +16,42 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
-import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 
 /**
- * Represents raw text/value as an expression.
+ * Represents a Java parenthesis expression.
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeTextExpression extends JavaCodeExpression {
+public class JavaCodeParenthesisExpression extends JavaCodeExpression {
 
-    private Object text;
+    private JavaCodeExpression expression;
 
     /**
-     * Creates an instance.
+     * Creates a parenthesis expression.
      * 
      * @param parent the parent element
-     * @param text the text representing the expression/value
+     * @param expression the nested expression
      */
-    protected JavaCodeTextExpression(IJavaCodeElement parent, Object text) {
+    protected JavaCodeParenthesisExpression(IJavaCodeElement parent, JavaCodeExpression expression) {
         super(parent);
-        this.text = text;
+        this.expression = expression;
+    }
+    
+    /**
+     * Creates an unlinked parenthesis expression. {@link #setParent(IJavaCodeElement)} must be called afterwards.
+     * 
+     * @param expression the nested expression
+     * @return the created expression
+     */
+    public static JavaCodeParenthesisExpression create(JavaCodeExpression expression) {
+        return new JavaCodeParenthesisExpression(null, expression);
     }
 
-    /**
-     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
-     * 
-     * @param text the text representing the expression/value
-     * @return the instance
-     */
-    public static JavaCodeTextExpression create(Object text) {
-        return new JavaCodeTextExpression(null, IVilType.convertVilValue(text));
-    }
-    
     @Override
     public void store(CodeWriter out) {
-        if (null != text) {
-            out.print(text.toString());
-        }
-    }
-    
-    @Override
-    public boolean isEmpty() {
-        return null == text || text.toString().length() == 0;
+        out.print("(");
+        expression.store(out);
+        out.print(")");
     }
 
 }

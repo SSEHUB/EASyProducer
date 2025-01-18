@@ -18,6 +18,7 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAlternative;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnnotation;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnonymousClass;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArgumentListExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAssignment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAttribute;
@@ -41,7 +42,10 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeJavadocComment;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeLambdaExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethodCall;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeNewArrayExpression;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeOperatorExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParameterSpecification;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParenthesisExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodePostfixExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeQualifiableElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeReturn;
@@ -154,8 +158,11 @@ public class Registration implements IRegistration {
         TypeRegistry.DEFAULT.register(JavaCodeImport.class);
         TypeRegistry.DEFAULT.register(JavaCodeMethod.class);
         TypeRegistry.DEFAULT.register(JavaCodeQualifiableElement.class);
+        TypeRegistry.DEFAULT.register(JavaCodeArgumentListExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeMethodCall.class);
         TypeRegistry.DEFAULT.register(JavaCodeConstructorCall.class);
+        TypeRegistry.DEFAULT.register(JavaCodeNewArrayExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeParenthesisExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeAnonymousClass.class);
         TypeRegistry.DEFAULT.register(JavaCodeVariableDeclaration.class);
         TypeRegistry.DEFAULT.register(JavaCodeParameterSpecification.class);
@@ -166,6 +173,7 @@ public class Registration implements IRegistration {
         TypeRegistry.DEFAULT.register(JavaCodeTernaryExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeCastExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodePostfixExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeOperatorExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeExpressionStatement.class);
     }
     

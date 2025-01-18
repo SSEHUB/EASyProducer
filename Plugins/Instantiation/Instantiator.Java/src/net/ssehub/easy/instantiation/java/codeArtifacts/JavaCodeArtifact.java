@@ -51,7 +51,6 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact, IStringValueProvider, Storable {
 
     static final JavaCodeArtifact EMPTY = new JavaCodeArtifact(); 
-    static final String VARARG_TYPE_POSTFIX = "...";
     private static final Comparator<IJavaCodeImport> IMPORT_COMPARATOR = 
         (i1, i2) -> i1.getName().compareTo(i2.getName());
     
@@ -474,10 +473,11 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     @Override
     public void validateType(IJavaCodeTypeSpecification type) {
         String typeName = type.getOutputTypeName();
-        String varArg = "";
-        if (typeName.endsWith(VARARG_TYPE_POSTFIX)) {
-            varArg = VARARG_TYPE_POSTFIX;
-            typeName = typeName.substring(0, typeName.length() - VARARG_TYPE_POSTFIX.length());
+        boolean varArg = false;
+        if (typeName.endsWith(IJavaCodeTypeSpecification.VARARG_TYPE_POSTFIX)) {
+            varArg = true;
+            typeName = typeName.substring(0, typeName.length() 
+                - IJavaCodeTypeSpecification.VARARG_TYPE_POSTFIX.length());
         }
         int pos = typeName.lastIndexOf('.');
         if (pos > 0) {
@@ -488,13 +488,10 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
                 if (null == findMatchingImport(typeName, false)) {
                     new JavaCodeImport(typeName, this); // added automatically
                 }
-                type.setOutputTypeName(simpleTypeName + varArg);
+                type.setOutputTypeName(simpleTypeName);
+                type.setVarArg(varArg);
             }
         }
-        /*CodeToStringWriter tmp = new CodeToStringWriter();
-        tmp.print("VALIDATE: ");
-        type.store(tmp);
-        System.out.println(tmp.getString()+" "+type.getGenericCount());*/
     }
     
     @Invisible
@@ -515,8 +512,11 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             }
             String qualifiedMethod = type + "." + mName;
             name = String.join(".", Arrays.copyOfRange(parts, pos + 1, parts.length));
-            
-            if (JavaCodeImportScope.CLASS == scope) {
+            if (scope == JavaCodeImportScope.CLASS_NO_METHOD) {
+                type = type + "." + name;
+            }
+            if (JavaCodeImportScope.CLASS == scope || JavaCodeImportScope.METHOD_CLASS_IMPORT == scope 
+                || JavaCodeImportScope.CLASS_NO_METHOD == scope) {
                 IJavaCodeImport imp = findMatchingImport(type, true);
                 if (null == imp) {
                     new JavaCodeImport(type, this, false); // added automatically
@@ -526,7 +526,9 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
                 if (pos > 0) {
                     simpleTypeName = type.substring(aPos + 1);
                 }
-                name = simpleTypeName + "." + name;
+                if (JavaCodeImportScope.CLASS == scope) {
+                    name = simpleTypeName + "." + name;
+                } // else like .METHOD
             } else if (JavaCodeImportScope.METHOD == scope) {
                 // direct static import?
                 IJavaCodeImport imp = findMatchingImport(qualifiedMethod, true);

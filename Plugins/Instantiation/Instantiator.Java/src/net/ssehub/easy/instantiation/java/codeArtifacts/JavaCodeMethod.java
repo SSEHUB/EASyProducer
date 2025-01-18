@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass.Kind;
 
 /**
@@ -317,11 +318,13 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         return block.addPostfixDecrement(variable);
     }
 
+    @OperationMeta(name = {"addAssignment", "addAssign"})
     @Override
     public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression) {
         return block.addAssignment(variable, expression);
     }
 
+    @OperationMeta(name = {"addAssignment", "addAssign"})
     @Override
     public JavaCodeAssignment addAssignment(String variable, String operator, JavaCodeExpression expression) {
         return block.addAssignment(variable, operator, expression);
@@ -361,36 +364,37 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
 
     @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
-        String initializer) {
+        JavaCodeExpression initializer) {
         return block.addVariable(type, variableName, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        String initializer) {        
+        JavaCodeExpression initializer) {        
         return block.addVariable(type, variableName, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
     }
     
     @Override
-    public JavaCodeVariableDeclaration createVariable(String type, String variableName, String initializer) {
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
+        JavaCodeExpression initializer) {
         return block.createVariable(type, variableName, false, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         return block.createVariable(type, variableName, isFinal, initializer);
     }
     
@@ -444,6 +448,24 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      */
     public JavaCodeBlock addBlock(JavaCodeBlock block) {
         return block.addBlock(block);
+    }
+    
+    @Invisible
+    @Override
+    public void transferElementsTo(JavaCodeBlockInterface block) {
+        block.transferElementsTo(block);
+    }
+
+    @Invisible
+    @Override
+    public void add(IJavaCodeElement element) {
+        block.add(element);
+    }
+
+    @Override
+    public JavaCodeMethod addAll(JavaCodeBlockInterface block) {
+        block.addAll(block);
+        return this;
     }
 
     /**

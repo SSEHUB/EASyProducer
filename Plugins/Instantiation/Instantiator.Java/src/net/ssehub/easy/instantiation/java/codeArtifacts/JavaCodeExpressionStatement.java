@@ -78,4 +78,10 @@ public class JavaCodeExpressionStatement extends JavaCodeStatement {
         expression.setParent(this);
     }    
 
+    @Override
+    public boolean isEmpty() {
+        return null == expression || expression.isEmpty();
+    }
+
+
 }

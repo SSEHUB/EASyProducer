@@ -35,6 +35,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     private List<JavaCodeTypeSpecification> generics;
     private String arrays;
     private JavaCodeClass enclosing;
+    private boolean varArg;
 
     /**
      * Creates a type specification for "void".
@@ -228,6 +229,9 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
         if (null != arrays) {
             out.print(arrays);
         }
+        if (varArg) {
+            out.print(VARARG_TYPE_POSTFIX);
+        }
     }
     
     /**
@@ -260,6 +264,12 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     @Override
     public void setOutputTypeName(String typeName) {
         this.type = typeName;
+    }
+    
+    @Invisible(inherit = true)
+    @Override
+    public void setVarArg(boolean varArg) {
+        this.varArg = varArg;
     }
     
     @Override

@@ -31,4 +31,13 @@ public abstract class JavaCodeStatement extends JavaCodeElement {
         super(parent);
     }
     
+    /**
+     * Returns whether this statement is considered empty, e.g., with an empty expression.
+     * 
+     * @return {@code true} for empty, {@code false} else
+     */
+    public boolean isEmpty() {
+        return false;
+    }
+    
 }

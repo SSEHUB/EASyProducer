@@ -179,7 +179,9 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     
     @Override
     public JavaCodeBlock add(JavaCodeStatement stmt) {
-        elements.add(stmt);
+        if (!stmt.isEmpty()) {
+            elements.add(stmt);
+        }
         return this;
     }
 
@@ -318,37 +320,38 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
 
     @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
-        String initializer) {
+        JavaCodeExpression initializer) {
         return addVariable(type, variableName, false, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        String initializer) {
+        JavaCodeExpression initializer) {
         return addVariable(type, variableName, false, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         return IJavaCodeElement.add(elements, createVariable(type, variableName, isFinal, initializer));
     }
 
     @Override
     public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         return IJavaCodeElement.add(elements, new JavaCodeVariableDeclaration(this, type, variableName, 
             isFinal, initializer));
     }
 
     @Override
-    public JavaCodeVariableDeclaration createVariable(String type, String variableName, String initializer) {
+    public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
+        JavaCodeExpression initializer) {
         return createVariable(type, variableName, false, initializer);
     }
 
     @Override
     public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         JavaCodeTypeSpecification t = null == type || type.length() == 0 
             ? null : new JavaCodeTypeSpecification(type, getParentClass());
         return new JavaCodeVariableDeclaration(this, t, variableName, isFinal, initializer);
@@ -389,6 +392,27 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      */
     public JavaCodeBlock addBlock(JavaCodeBlock block) {
         return IJavaCodeElement.add(elements, block);
+    }
+    
+    @Invisible
+    @Override
+    public void transferElementsTo(JavaCodeBlockInterface block) {
+        for (IJavaCodeElement e : elements) {
+            block.add(e);
+        }
+        elements.clear();
+    }
+
+    @Invisible
+    @Override
+    public void add(IJavaCodeElement element) {
+        elements.add(element);
+    }
+
+    @Override
+    public JavaCodeBlock addAll(JavaCodeBlockInterface block) {
+        block.transferElementsTo(this);
+        return this;
     }
 
     /**

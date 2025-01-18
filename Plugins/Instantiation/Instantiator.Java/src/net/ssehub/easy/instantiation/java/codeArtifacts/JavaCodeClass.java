@@ -39,6 +39,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     private IJavaCodeArtifact artifact;
     private JavaCodeTypeSpecification extendingClass;
     private List<JavaCodeTypeSpecification> implementedInterfaces;
+    private List<String> generics;
     
     public enum Kind {
         CLASS("class"),
@@ -101,7 +102,16 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         super(name, JavaCodeVisibility.PUBLIC, comment);
         this.enclosing = enclosing;
     }
-    
+
+    @Override
+    protected String validateName(String name) {
+        JavaCodeTypeSpecification tmp = new JavaCodeTypeSpecification(name, null); // do not register
+        for (int g = 0; g < tmp.getGenericCount(); g++) {
+            addGeneric(tmp.getGeneric(g).getOutputTypeName());
+        }
+        return tmp.getOutputTypeName();
+    }
+     
     @Invisible
     @Override
     public IJavaCodeArtifact getArtifact() {
@@ -352,6 +362,34 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     public JavaCodeMethod addSetter(JavaCodeAttribute attribute, String paramName) {
         return attribute.addSetter(paramName);
     }
+
+    /**
+     * Adds a generic parameter.
+     * 
+     * @param name the name of the parameter
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeClass addGeneric(String name) {
+        return addGeneric(name, null);
+    }
+
+    /**
+     * Adds a generic parameter.
+     * 
+     * @param name the name of the parameter
+     * @param comment the documentation comment for the parameter
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeClass addGeneric(String name, String comment) {
+        if (null == generics) {
+            generics = new ArrayList<>();
+        }
+        generics.add(name);
+        if (null != comment && comment.length() > 0) {
+            getJavadocComment().addParameterComment("<" + name + ">", comment);
+        }
+        return this;
+    }
     
     /**
      * Adds an empty toString method with override annotation to this class.
@@ -532,6 +570,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     public void store(CodeWriter out) {
         super.store(out); // comment, annotations
         out.printwi(getModifier() + kind.getKeyword() + " " + getName());
+        storeGenerics(out);
         if (null != extendingClass) {
             out.print(" extends ");
             extendingClass.store(out);
@@ -539,6 +578,12 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         IJavaCodeElement.storeList(" implements ", implementedInterfaces, ", ", out);
         storeBlock(out);
         out.println();
+    }
+    
+    protected void storeGenerics(CodeWriter out) {
+        if (null != generics) {
+            out.print("<" + IJavaCodeElement.toList(generics, ", ") + ">");
+        }
     }
     
     protected void storeBlock(CodeWriter out) {

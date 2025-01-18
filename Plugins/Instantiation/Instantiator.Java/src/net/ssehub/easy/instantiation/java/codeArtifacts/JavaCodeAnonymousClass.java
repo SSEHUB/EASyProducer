@@ -29,6 +29,7 @@ public class JavaCodeAnonymousClass extends JavaCodeClass {
     public void store(CodeWriter out) {
         out.print("new ");
         out.print(getName());
+        storeGenerics(out);
         out.print("()"); // TODO arguments
         storeBlock(out);
     }

@@ -426,4 +426,24 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertJavaCode("javaCode6", "JCATest6");
     }
 
+    /**
+     * Test the JavaCode artifact with implicit generics.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCode7() throws IOException {
+        assertJavaCode("javaCode7", "JCATest7");
+    }
+
+    /**
+     * Test the JavaCode artifact with explicit generics.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCode8() throws IOException {
+        assertJavaCode("javaCode8", "JCATest8");
+    }
+
 }

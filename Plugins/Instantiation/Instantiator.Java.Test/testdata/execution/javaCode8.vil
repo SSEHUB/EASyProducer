@@ -1,0 +1,7 @@
+vilScript JavaCode8 (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("JavaCode8Tpl", config, "$target/JCATest8.java");
+    }
+
+}

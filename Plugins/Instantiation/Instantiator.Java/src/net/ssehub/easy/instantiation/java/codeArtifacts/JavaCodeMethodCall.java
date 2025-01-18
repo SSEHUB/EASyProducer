@@ -15,9 +15,6 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
@@ -26,10 +23,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCallElement, JavaCodeQualifiableElement {
+public class JavaCodeMethodCall extends JavaCodeArgumentListExpression 
+    implements JavaCodeCallElement, JavaCodeQualifiableElement {
 
     private String methodName;
-    private List<IJavaCodeElement> arguments = new ArrayList<>();
     private boolean indent;
     private String postfix;
     private JavaCodeMethodCall chained;
@@ -164,91 +161,44 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
         return result;
     }
 
-    /**
-     * Adds a call argument as raw string of {@code arg}.
-     * 
-     * @param arg the argument
-     * @return <b>this</b> for chaining
-     */
+    @Override
     public JavaCodeMethodCall addArgument(Object arg) {
-        arguments.add(new JavaCodeText(arg.toString(), false, false));
-        return this;
+        return (JavaCodeMethodCall) super.addArgument(arg);
     }
 
-    /**
-     * Adds a call argument as potentially quoted string constant adding Java quotes before and after.
-     * 
-     * @param val the String value
-     * @return <b>this</b> for chaining
-     */
+    @Override
+    public JavaCodeMethodCall addNullArgument() {
+        return (JavaCodeMethodCall) super.addArgument("null");
+    }
+
+    @Override
     public JavaCodeMethodCall addStringArgument(String val) {
-        return addArgument(new JavaCodeStringExpression(this, val));
+        return (JavaCodeMethodCall) super.addStringArgument(val); 
     }
 
-    /**
-     * Adds a call argument as class expression, i.e. potentially qualified class name optionally ending with ".class".
-     * 
-     * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
-     * @return <b>this</b> for chaining
-     */
+    @Override
     public JavaCodeMethodCall addClassArgument(String cls) {
-        if (null != cls && cls.length() > 0) {
-            if (cls.endsWith(".class")) {
-                cls = cls.substring(0, cls.length() - 6);
-            }
-            JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, this);
-            addArgument(new JavaCodeTypeExpression(this, type));
-        }
-        return this;
+        return (JavaCodeMethodCall) super.addClassArgument(cls);
     }
     
-    /**
-     * Adds this as call argument.
-     * 
-     * @return <b>this</b> for chaining
-     */
+    @Override
     public JavaCodeMethodCall addThisArgument() {
-        return addArgument("this");
+        return (JavaCodeMethodCall) super.addThisArgument();
     }
 
-    /**
-     * Adds a call argument as raw string.
-     * 
-     * @param arg the argument, may be empty or <b>null</b> to ignore this argument
-     * @return <b>this</b> for chaining
-     */
+    @Override
     public JavaCodeMethodCall addArgument(String arg) {
-        if (null != arg && arg.length() > 0) {
-            arguments.add(new JavaCodeText(arg, false, false));
-        }
-        return this;
-    }
-    
-    /**
-     * Adds an expression as call argument.
-     * 
-     * @param ex the expression, may be <b>null</b> for none
-     * @return <b>this</b> for chaining
-     */
-    public JavaCodeMethodCall addArgument(JavaCodeExpression ex) {
-        if (null != ex) {
-            ex.setParent(this);
-            arguments.add(ex);
-        }
-        return this;
+        return (JavaCodeMethodCall) super.addArgument(arg);
     }
 
-    /**
-     * Adds variable name as call argument.
-     * 
-     * @param var the variable declaration, may be <b>null</b> for none
-     * @return <b>this</b> for chaining
-     */
+    @Override
+    public JavaCodeMethodCall addArgument(JavaCodeExpression ex) {
+        return (JavaCodeMethodCall) super.addArgument(ex);
+    }
+
+    @Override
     public JavaCodeMethodCall addArgument(JavaCodeVariableDeclaration var) {
-        if (null != var) {
-            arguments.add(new JavaCodeVariableExpression(this, var));
-        }
-        return this;
+        return (JavaCodeMethodCall) super.addArgument(var);
     }
 
     @Invisible
@@ -256,39 +206,13 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
     public void setParent(IJavaCodeElement parent) {
         super.setParent(parent);
         this.methodName = validateName(parent, methodName, scope);
-        for (IJavaCodeElement a : arguments) {
-            setParent(a, this);
-        }
         setParent(qualification, this);
         setParent(chained, this);
     }    
 
-    /**
-     * Adds a call argument as raw string.
-     * 
-     * @param arg the argument
-     * @return <b>this</b> for chaining
-     */
+    @Override
     public JavaCodeMethodCall addConstantArgument(String arg) {
-        int pos = arg.lastIndexOf('.');
-        if (pos > 0) {
-            int classPos = arg.lastIndexOf('.', pos - 1);
-            if (classPos > 0) {
-                getArtifact().validateType(new JavaCodeTypeSpecification(arg.substring(0, pos), this));
-                arg = arg.substring(classPos + 1);
-            }
-        }
-        arguments.add(new JavaCodeText(arg, false, false));
-        return this;
-    }
-    
-    /**
-     * Adds a lambda expression as call argument.
-     * 
-     * @return the lambda expression
-     */
-    public JavaCodeLambdaExpression addLambdaArgument() {
-        return IJavaCodeElement.add(arguments, new JavaCodeLambdaExpression(this));
+        return (JavaCodeMethodCall) super.addConstantArgument(arg);
     }
 
     /**
@@ -331,8 +255,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
      * @return the created method call for chaining
      */
     public JavaCodeMethodCall addArgument(String methodName, JavaCodeImportScope scope) {
-        return IJavaCodeElement.add(arguments, new JavaCodeMethodCall(this, methodName, scope, 
-            false, ""));
+        return addArgumentImpl(new JavaCodeMethodCall(this, methodName, scope, false, ""));
     }
 
     /**
@@ -344,7 +267,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
      */
     public JavaCodeVariableExpression addVariableArgument(String variableName, JavaCodeImportScope scope) {
         variableName = validateName(this, variableName, scope);
-        return IJavaCodeElement.add(arguments, new JavaCodeVariableExpression(this, variableName));
+        return addArgumentImpl(new JavaCodeVariableExpression(this, variableName));
     }
     
     /**
@@ -354,7 +277,7 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
      * @return the method call (for chaining)
      */
     public JavaCodeConstructorCall addNew(String cls) {
-        return IJavaCodeElement.add(arguments, new JavaCodeConstructorCall(this, cls, false, ""));
+        return addArgumentImpl(new JavaCodeConstructorCall(this, cls, false, ""));
     }
     
     @Override
@@ -387,15 +310,6 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
         return this;
     }
     
-    /**
-     * Returns the number of arguments of this call.
-     * 
-     * @return the number of arguments
-     */
-    public int getArgumentsCount() {
-        return arguments.size();
-    }
-    
     @Override
     public void store(CodeWriter out) {
         if (indent) {
@@ -421,10 +335,11 @@ public class JavaCodeMethodCall extends JavaCodeExpression implements JavaCodeCa
             out.print(".");
         }
     }
-    
+
+    @Override
     protected void storeArgumentList(CodeWriter out) {
         out.print("(");
-        IJavaCodeElement.storeList(arguments, ",", out);
+        super.storeArgumentList(out);
         out.print(")" + postfix);
     }
 

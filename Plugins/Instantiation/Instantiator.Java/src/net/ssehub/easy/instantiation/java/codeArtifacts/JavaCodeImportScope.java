@@ -35,8 +35,18 @@ public enum JavaCodeImportScope implements IVilType {
     CLASS,
 
     /**
+     * Class scope. The name is a class not followed by a method name.
+     */
+    CLASS_NO_METHOD,
+
+    /**
      * (Static) class and method scope. May lead to a static method import.
      */
-    METHOD
+    METHOD, 
+    
+    /**
+     * (Static) class and method scope. Import class only, no static method import.
+     */
+    METHOD_CLASS_IMPORT
 
 }

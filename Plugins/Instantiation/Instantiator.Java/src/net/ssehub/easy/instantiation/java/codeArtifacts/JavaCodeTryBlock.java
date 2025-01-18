@@ -148,7 +148,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
      * @return the variable declaration (for chaining)
      */
     public JavaCodeVariableDeclaration addResource(String type, String variableName, 
-        String initializer) {
+        JavaCodeExpression initializer) {
         if (null == tryDecls) {
             tryDecls = new ArrayList<>();
         }

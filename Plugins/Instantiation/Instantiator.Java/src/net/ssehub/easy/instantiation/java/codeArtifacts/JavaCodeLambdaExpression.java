@@ -78,7 +78,18 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param expression the expression
      * @return <b>this</b> for chaining
      */
-    public JavaCodeLambdaExpression addExpression(String expression) {
+    public JavaCodeLambdaExpression addExpression(JavaCodeExpression expression) {
+        this.expression = expression;
+        return this;
+    }
+   
+    /**
+     * Adds the expression to be applied to the variables.
+     * 
+     * @param expression the expression
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeLambdaExpression addExpression(String expression) { // TODO remove? -> JavaCodeExpressino
         this.expression = new JavaCodeTextExpression(this, expression);
         return this;
     }

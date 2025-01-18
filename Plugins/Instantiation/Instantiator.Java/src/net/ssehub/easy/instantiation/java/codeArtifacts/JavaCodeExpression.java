@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.common.VilException;
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
@@ -27,6 +28,18 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  */
 public abstract class JavaCodeExpression extends JavaCodeElement {
 
+    public static final JavaCodeExpression EMPTY = new JavaCodeExpression(null) {
+        
+        @Override
+        public void store(CodeWriter out) {
+        }
+        
+        @Invisible
+        public boolean isEmpty() {
+            return true;
+        }
+    };
+    
     /**
      * Creates an instance.
      *
@@ -49,7 +62,30 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
     public static JavaCodeExpression convert(Object text) throws VilException {
         return JavaCodeTextExpression.create(text); // forward use!!
     }    
+
+    /**
+     * Creates an instance by conversion from {@code var}. Must be hooked in by {@link #setParent(IJavaCodeElement)} 
+     * later.
+     * 
+     * @param var the variable declaration
+     * @return the instance
+     * @throws VilException if the conversion fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaCodeExpression convert(JavaCodeVariableDeclaration var) throws VilException {
+        return JavaCodeVariableExpression.create(var); // forward use!!
+    }    
     
+    /**
+     * Creates an empty expression.
+     * 
+     * @return the empty expression
+     */
+    public static JavaCodeExpression create() {
+        return EMPTY;
+    }
+
     /**
      * Helper method to conditionally set the parent of {@code elt} if {@code elt} is not <b>null</b>.
      * 

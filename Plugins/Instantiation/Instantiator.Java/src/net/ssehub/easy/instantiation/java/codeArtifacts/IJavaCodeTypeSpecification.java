@@ -23,7 +23,9 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * @author Holger Eichelberger
  */
 public interface IJavaCodeTypeSpecification extends IJavaCodeElement, Storable {
-    
+
+    public static final String VARARG_TYPE_POSTFIX = "...";
+
     /**
      * Returns the output type name (plain name, potentially unqualified, without generics).
      * 
@@ -39,6 +41,14 @@ public interface IJavaCodeTypeSpecification extends IJavaCodeElement, Storable {
      */
     @Invisible(inherit = true)
     public void setOutputTypeName(String typeName);
+
+    /**
+     * Changes the vararg flag.
+     * 
+     * @param varArg whether the type is a vararg type
+     */
+    @Invisible(inherit = true)
+    public void setVarArg(boolean varArg);
     
     /**
      * Returns the number of generics.

@@ -5,14 +5,14 @@
     mainCls <- JavaCodeClass: Data
     -> addMainMethod(JavaCodeClass) with (JavaCodeClass: Data) = JavaCodeMethod: main
     m <- JavaCodeMethod: main
-    -> addVariable(JavaCodeMethod, String, String, String) with (JavaCodeMethod: main, java.util.List<String>, data, ) = JavaCodeVariableDeclaration
+    -> addVariable(JavaCodeMethod, String, String, JavaCodeExpression) with (JavaCodeMethod: main, java.util.List<String>, data, JavaCodeTextExpression) = JavaCodeVariableDeclaration
     -> addNew(JavaCodeVariableDeclaration, String) with (JavaCodeVariableDeclaration, java.util.ArrayList<>) = JavaCodeConstructorCall
     -> addImport(JavaCodeElement, String) with (JavaCodeMethod: main, java.lang.Math) = JavaCodeImport: java.lang
     -> addCall(JavaCodeMethod, String) with (JavaCodeMethod: main, data.stream) = JavaCodeMethodCall
     c <- JavaCodeMethodCall
     -> addCall(JavaCodeMethodCall, String) with (JavaCodeMethodCall, filter) = JavaCodeMethodCall
     c <- JavaCodeMethodCall
-    -> addLambdaArgument(JavaCodeMethodCall) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
+    -> addLambdaArgument(JavaCodeArgumentListExpression) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
     -> addVariable(JavaCodeLambdaExpression, String) with (JavaCodeLambdaExpression, d) = JavaCodeLambdaExpression
     -> addExpression(JavaCodeLambdaExpression, String) with (JavaCodeLambdaExpression, d.length() > 0) = JavaCodeLambdaExpression
     -> addCall(JavaCodeMethodCall, String) with (JavaCodeMethodCall, collect) = JavaCodeMethodCall
@@ -22,7 +22,7 @@
     c <- JavaCodeMethodCall
     -> addCall(JavaCodeMethodCall, String) with (JavaCodeMethodCall, filter) = JavaCodeMethodCall
     c <- JavaCodeMethodCall
-    -> addLambdaArgument(JavaCodeMethodCall) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
+    -> addLambdaArgument(JavaCodeArgumentListExpression) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
     -> addVariable(JavaCodeLambdaExpression, String) with (JavaCodeLambdaExpression, d) = JavaCodeLambdaExpression
     -> addCall(JavaCodeLambdaExpression, String) with (JavaCodeLambdaExpression, isOk) = JavaCodeMethodCall
     -> addArgument(JavaCodeMethodCall, String) with (JavaCodeMethodCall, d) = JavaCodeMethodCall
@@ -33,7 +33,7 @@
     c <- JavaCodeMethodCall
     -> addCall(JavaCodeMethodCall, String) with (JavaCodeMethodCall, filter) = JavaCodeMethodCall
     c <- JavaCodeMethodCall
-    -> addLambdaArgument(JavaCodeMethodCall) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
+    -> addLambdaArgument(JavaCodeArgumentListExpression) with (JavaCodeMethodCall) = JavaCodeLambdaExpression
     -> addVariable(JavaCodeLambdaExpression, String) with (JavaCodeLambdaExpression, d) = JavaCodeLambdaExpression
     -> addBlock(JavaCodeLambdaExpression) with (JavaCodeLambdaExpression) = JavaCodeBlock
     -> addReturn(JavaCodeBlock, JavaCodeExpression) with (JavaCodeBlock, JavaCodeTextExpression) = JavaCodeBlock

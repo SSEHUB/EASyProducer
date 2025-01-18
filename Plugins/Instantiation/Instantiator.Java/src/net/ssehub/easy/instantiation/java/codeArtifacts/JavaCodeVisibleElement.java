@@ -47,11 +47,21 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      */
     protected JavaCodeVisibleElement(String name, JavaCodeVisibility visibility, String comment) {
         super(null);
-        this.name = name;
+        this.name = validateName(name);
         this.visibility = visibility;
         if (null != comment) {
             ensureJavadocComment(comment);
         }
+    }
+    
+    /**
+     * Validates/Adjusts the name.
+     * 
+     * @param name the name to validate
+     * @return the validated name
+     */
+    protected String validateName(String name) {
+        return name;
     }
 
     /**

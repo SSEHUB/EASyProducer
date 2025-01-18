@@ -41,7 +41,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param initializer the initializer, may be <b>null</b> for none
      */
     public JavaCodeVariableDeclaration(IJavaCodeElement parent, JavaCodeTypeSpecification type, String variableName, 
-        boolean isFinal, String initializer) {
+        boolean isFinal, JavaCodeExpression initializer) {
         this(parent, type, variableName, isFinal, initializer, false);
     }
     
@@ -57,12 +57,15 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      *     "normal" variable declarations
      */
     public JavaCodeVariableDeclaration(IJavaCodeElement parent, JavaCodeTypeSpecification type, String variableName, 
-        boolean isFinal, String initializer, boolean asResource) {
+        boolean isFinal, JavaCodeExpression initializer, boolean asResource) {
         super(parent);
         this.type = type;
         this.variableName = variableName;
         this.isFinal = isFinal;
-        setInitializer(initializer);
+        if (null != initializer && !initializer.isEmpty()) {
+            this.initEx = initializer;
+            this.initEx.setParent(this);
+        }
         this.asResource = asResource;
     }
 
@@ -86,6 +89,26 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         if (null != initializer && initializer.length() > 0) {
             this.initEx = new JavaCodeTextExpression(this, initializer);
         }
+        return this;
+    }
+    
+    /**
+     * Sets this variable declaration to final.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeVariableDeclaration setFinal() {
+        return setFinal(true);
+    }
+
+    /**
+     * Sets this variable declaration conditionally to final.
+     * 
+     * @param isFinal whether this variable shall be final
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeVariableDeclaration setFinal(boolean isFinal) {
+        this.isFinal = isFinal;
         return this;
     }
 

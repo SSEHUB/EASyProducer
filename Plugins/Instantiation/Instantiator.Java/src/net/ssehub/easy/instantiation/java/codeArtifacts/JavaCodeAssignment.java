@@ -53,6 +53,7 @@ public class JavaCodeAssignment extends JavaCodeStatement {
         this.variableName = variableName;
         this.operator = operator;
         this.expression = expression;
+        this.expression.setParent(this);
     }
 
     /**

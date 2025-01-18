@@ -118,10 +118,26 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     
     private void storeTags(CodeWriter out) {
         if (null != taggedParts) {
-            if (attachedTo instanceof JavaCodeMethod) {
-                AtomicInteger before = new AtomicInteger();
-                out.printlnwi(" *");
+            storeTagsImpl(out);
+        }
+    }
+    
+    private void storeTagsImpl(CodeWriter out) {
+        boolean withReturnThrows = false;
+        boolean withParam = false;
+        if (attachedTo instanceof JavaCodeMethod) {
+            withReturnThrows = true;
+            withParam = true;
+        } else if (attachedTo instanceof JavaCodeClass) {
+            withParam = true;
+        }
+        if (withReturnThrows || withParam) {
+            AtomicInteger before = new AtomicInteger();
+            out.printlnwi(" *");
+            if (withParam) {
                 streamByTag(Tag.PARAM).forEach(t -> t.store(out, before));
+            }
+            if (withReturnThrows) {
                 streamByTag(Tag.RETURN).forEach(t -> t.store(out, before));
                 if (streamByTag(Tag.THROWS).count() > 0) {
                     if (before.get() > 0) {
