@@ -9,6 +9,7 @@ import java.net.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.xtext.validation.Check;
+import org.eclipse.xtext.validation.CheckType;
 
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangConfig;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
@@ -71,7 +72,7 @@ public class TemplateLangValidator extends AbstractTemplateLangValidator {
      * 
      * @param unit the variability unit to start tests with
      */
-    @Check
+    @Check(CheckType.NORMAL)
     public void checkModel(LanguageUnit unit) {
         ValidationUtils.checkModel(unit, callback, TemplateLangConfig.isDebuggingEnabled());
     }
