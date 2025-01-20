@@ -533,6 +533,29 @@ project Connectors {
        Constraint outInterfaceOk = isModbusPath(outInterface);
    }
    
+   // ------------------------ REST ----------------------------------
+
+   compound RestField refines Field {
+       String endpoint = "";
+   } 
+   
+   compound RestConnector refines Connector { // fixed template types see JavaConnector.vtl
+       assign (uiGroup = UiInvisibleGroup) to {
+           String class = "de.iip_ecosphere.platform.connectors.rest.RESTConnector";
+           String artifact ="de.iip-ecosphere.platform:connectors.rest:";
+           NameplateInfo nameplateInfo = {
+               manufacturerProductDesignation = "Generic REST connector@en",
+               manufacturer = refBy(manufacturer_sse)
+           };
+       }
+       String endpointPrefix = "";
+       assign (uiGroup = UiOptionalGroup1) to {
+           Port port = 8080;
+       }
+       assign (uiGroup = UiOptionalGroup2) to {
+           String deviceServiceKey = "REST";
+       }
+   }
    
    // ------------------------ Beckhoff ADS ----------------------------------
 
