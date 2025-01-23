@@ -62,6 +62,39 @@ public class JavaCodeAlternative extends JavaCodeBlock {
         return result;
     }
 
+    /**
+     * Returns whether this alternative has an else-block.
+     * 
+     * @return {@code true} for else-block, {@code false} for none or else-block
+     */
+    public boolean hasElse() {
+        return elseBlock instanceof JavaCodeBlock;
+    }
+
+    /**
+     * Returns whether this alternative has an else-if-block.
+     * 
+     * @return {@code true} for else-if-block, {@code false} for none or else-block
+     */
+    public boolean hasElseIf() {
+        return elseBlock instanceof JavaCodeAlternative;
+    }
+
+    /**
+     * Converts an existing else-if-block to an else, i.e., removes the condition but transfers the block contents.
+     * This may be needed for a final step incremental generation of if-then-else cascades.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeAlternative elseIfToElse() {
+        if (elseBlock instanceof JavaCodeAlternative) {
+            JavaCodeBlock tmp = new JavaCodeBlock(this, true, true);
+            tmp.addAll(elseBlock);
+            elseBlock = tmp;
+        }
+        return this;
+    }
+
     @Invisible
     @Override
     public void store(CodeWriter out) {
