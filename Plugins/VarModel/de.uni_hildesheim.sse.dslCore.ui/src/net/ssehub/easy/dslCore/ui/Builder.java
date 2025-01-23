@@ -291,7 +291,7 @@ public class Builder extends IncrementalProjectBuilder {
         IResourceUIValidatorExtension validatorExtension = getResourceUIValidatorExtension(
             resourceServiceProviderRegistry, uri);
         IMarkerContributor markerContributor = new TaskMarkerContributor(unit);
-        CheckMode checkMode = CheckMode.ALL;
+        CheckMode checkMode = CheckMode.NORMAL_ONLY; // prevent fast checks, double markers we may not get rid off
         Storage2UriMapperImpl mapper = new Storage2UriMapperImpl();
         mapper.setUriValidator(unit.getInstance(UriValidator.class));
         for (Pair<IStorage, IProject> pair : mapper.getStorages(uri)) {
