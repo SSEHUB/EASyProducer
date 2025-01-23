@@ -291,6 +291,7 @@ public class ContentFormatter {
             
             noSplit2Chars.add(">>"); // prefix of >>=
             noSplit2Chars.add("<<"); // prefix of <<=
+            noSplit2Chars.add(".."); // prefix of ...
         }
         
         @Override
