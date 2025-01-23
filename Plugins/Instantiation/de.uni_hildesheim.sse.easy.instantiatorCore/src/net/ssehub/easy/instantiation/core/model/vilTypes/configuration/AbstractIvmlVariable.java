@@ -1017,7 +1017,7 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
     public String toString() {
         String result;
         AbstractVariable decl = variable.getDeclaration();
-        if (null == decl) { // QM2 tests after migration to Java 17 (?)
+        if (null == decl || variable.getValue() == null) { // QM2 tests after migration to Java 17 (?)
             result = "<null>";
         } else {
             result = decl.getType().toString() + " " + decl.getName() + " = " + variable.getValue().toString();
