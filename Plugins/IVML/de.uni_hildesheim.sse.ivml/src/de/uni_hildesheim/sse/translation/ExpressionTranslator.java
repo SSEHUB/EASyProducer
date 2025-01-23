@@ -1674,8 +1674,8 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         if (lhsType instanceof Container) {
             if (allWithId && entryCount > 0) {
                 throw new TranslatorException(
-                    "container initialization must not have name-value assignments", init,
-                    IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
+                    "container initialization " + toString(entryList, true) + " must not have name-value assignments", 
+                    init, IvmlPackage.Literals.EXPRESSION_LIST_OR_RANGE__LIST, ErrorCodes.INITIALIZER_CONSISTENCY);
             } 
             result = processContainerInitializer(lhsType, context, parent, entryList);
         } else if (lhsType instanceof Compound) {
@@ -1697,6 +1697,28 @@ public class ExpressionTranslator extends net.ssehub.easy.dslCore.translation.Ex
         }
         level--;
         return result;
+    }
+    
+    /**
+     * Turns expression list into text for messages.
+     * 
+     * @param list the list
+     * @param withNames add names
+     * @return the message
+     */
+    public String toString(EList<ExpressionListEntry> list, boolean withNames) {
+        String result = "[";
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) {
+                result += ", ";
+            }
+            ExpressionListEntry e = list.get(i);
+            if (withNames) {
+                result += e.getName() + "=";
+            }
+            result += "<" + (e.getValue() == null ? "null" : "value") + ">";
+        }
+        return result + "]";
     }
 
     /**
