@@ -16,7 +16,7 @@
         -> clearValue(DecisionVariable) with (Clear::enable)
         -> +(String, Any) with (node , Clear::node) = node Node node = {capacity=null}
         -> println(Any) with (node Node node = {capacity=null})
-        -> +(String, Any) with (enable , Clear::enable) = null
-        -> println(Any) with (null)
+        -> +(String, Any) with (enable , Clear::enable) = enable <null>
+        -> println(Any) with (enable <null>)
         Reasoner execution ok: true
     -> enact(Project, Configuration, Project) with (<project>, <config>, <project>)
