@@ -50,10 +50,27 @@ public class JavaCodeAlternative extends JavaCodeBlock {
         return elseBlock;
     }
 
+    /**
+     * Add an else-if block.
+     * 
+     * @param condition the condition
+     * @return the else-if alternative
+     */
+    public JavaCodeAlternative addElseIf(String condition) {
+        JavaCodeAlternative result = new JavaCodeAlternative(this, condition);
+        elseBlock = result;
+        return result;
+    }
+
     @Invisible
     @Override
     public void store(CodeWriter out) {
-        out.printwi("if (");
+        if (!(getParent() instanceof JavaCodeAlternative)) {
+            out.printIndent();
+        } else { // else if
+            out.print(" ");
+        }
+        out.print("if (");
         out.print(condition);
         out.print(")");
         super.store(out);
