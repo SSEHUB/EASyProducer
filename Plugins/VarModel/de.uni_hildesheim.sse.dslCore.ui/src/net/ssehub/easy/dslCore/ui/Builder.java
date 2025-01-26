@@ -317,7 +317,7 @@ public class Builder extends IncrementalProjectBuilder {
                     if (resourceSet == null) {
                         throw new IllegalArgumentException("resourceSet may not be null for changed resources.");
                     }
-
+                    deleteAllMarkers(file); // a bit harsh, but in certain situations we do not get rid of xText markers
                     Resource resource = resourceSet.getResource(uri, true);
                     if (validatorExtension != null) {
                         validatorExtension.updateValidationMarkers(file, resource, checkMode, monitor);
@@ -326,6 +326,7 @@ public class Builder extends IncrementalProjectBuilder {
                         markerContributor.updateMarkers(file, resource, monitor);
                     }
                 } else {
+                    deleteAllMarkers(file); // a bit harsh, but in certain situations we do not get rid of xText markers
                     if (validatorExtension != null) {
                         validatorExtension.deleteValidationMarkers(file, checkMode, monitor);
                     } else {
@@ -338,6 +339,14 @@ public class Builder extends IncrementalProjectBuilder {
                     }
                 }
             }
+        }
+    }
+    
+    private void deleteAllMarkers(IFile file) {
+        try {
+            file.deleteMarkers(null, true, IResource.DEPTH_INFINITE);
+        } catch (CoreException e) {
+            LOG.error(e.getMessage(), e);
         }
     }
 

@@ -36,15 +36,23 @@ public class ValidationUtils {
     /**
      * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
      */
-    private static boolean performXtextValidation = true;
+    private static boolean performValidationOnSave = false; // set true if validation does not work through xtext
     private static List<String> pathPrefixes = new ArrayList<>();
-    
-    public static void enable(boolean enable) {
-        performXtextValidation = enable;
+
+    /**
+     * Enables/disables validation on save, e.g., to handle xText conflicts.
+     * 
+     * @param enable enable or disable
+     * @return the previous state
+     */
+    public static boolean enableOnSave(boolean enable) {
+        boolean old = performValidationOnSave;
+        performValidationOnSave = enable;
+        return old;
     }
     
-    public static boolean isEnabled() {
-        return performXtextValidation;
+    public static boolean isOnSaveEnabled() {
+        return performValidationOnSave;
     }
     
     /**
@@ -292,7 +300,7 @@ public class ValidationUtils {
      */
     public static <R extends EObject, T> void checkModel(R unit, IModelValidationCallback<R, T> callback, 
         boolean debug) {
-        if (performXtextValidation) {
+        if (performValidationOnSave) {
             java.net.URI uri = null;
             URI eURI = null;
             if (null != unit.eResource() && null != unit.eResource().getURI()) {

@@ -122,7 +122,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
 
     @Override
     public void buildModel(IXtextDocument doc) {
-        if (ValidationUtils.isEnabled()) {
+        if (ValidationUtils.isOnSaveEnabled()) {
             if (doc != null) {
                 doc.readOnly(new UnitOfWork()); 
             }
