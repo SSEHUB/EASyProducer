@@ -112,7 +112,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
 
     @Override
     public PersistentProject load() throws PersistenceException {
-        ValidationUtils.enable(false); // prevent interferences with editor validation
+        boolean oldEnableSave = ValidationUtils.enableOnSave(false); // prevent interferences with editor validation
         loadDefaultModels();
         Configuration config = PersistenceUtils.getConfiguration(projectFolder);
         /* 
@@ -163,7 +163,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
         observer.notifyProgress(task, 4);
         project.setID(projectInformation.getAttributeValue(PTN_UUID));
         observer.notifyEnd(task);
-        ValidationUtils.enable(true);
+        ValidationUtils.enableOnSave(oldEnableSave);
         return project;
     }
     
