@@ -125,6 +125,13 @@ public class CodeWriter implements Closeable {
     public void printIndent() {
         buffer.append(indent);
     }
+    
+    /**
+     * Prints a single indentation step.
+     */
+    public void printIndentStep() {
+        buffer.append(indentStep);
+    }
 
     /**
      * Prints the {@code text} as a new line with indentation (wi) before. Line separator is the system line separator.

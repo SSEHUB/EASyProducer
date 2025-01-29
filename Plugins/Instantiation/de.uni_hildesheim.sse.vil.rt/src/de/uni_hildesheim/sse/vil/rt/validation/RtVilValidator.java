@@ -79,7 +79,7 @@ public class RtVilValidator extends AbstractRtVilValidator {
      */
     @Check(CheckType.NORMAL)
     public void checkModel(ImplementationUnit unit) {
-        ValidationUtils.checkModel(unit, callback, BuildLangConfig.isDebuggingEnabled()); // take settings from VIL
+        ValidationUtils.checkModelFromValidation(unit, callback, BuildLangConfig.isDebuggingEnabled()); // take settings from VIL
     }
 
 }

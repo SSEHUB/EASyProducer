@@ -74,7 +74,7 @@ public class TemplateLangValidator extends AbstractTemplateLangValidator {
      */
     @Check(CheckType.NORMAL)
     public void checkModel(LanguageUnit unit) {
-        ValidationUtils.checkModel(unit, callback, TemplateLangConfig.isDebuggingEnabled());
+        ValidationUtils.checkModelFromValidation(unit, callback, TemplateLangConfig.isDebuggingEnabled());
     }
 
 }

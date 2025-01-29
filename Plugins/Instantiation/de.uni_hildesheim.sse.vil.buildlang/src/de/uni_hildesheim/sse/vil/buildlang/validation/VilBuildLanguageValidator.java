@@ -74,7 +74,7 @@ public class VilBuildLanguageValidator extends AbstractVilBuildLanguageValidator
      */
     @Check(CheckType.NORMAL)
     public void checkModel(ImplementationUnit unit) {
-        ValidationUtils.checkModel(unit, callback, BuildLangConfig.isDebuggingEnabled());
+        ValidationUtils.checkModelFromValidation(unit, callback, BuildLangConfig.isDebuggingEnabled());
     }
     
 }

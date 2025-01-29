@@ -576,7 +576,7 @@ public class VilTemplateProcessor implements IVilType {
                 model = tpl;
             }
             if (null == model) {
-                throw new VilException("Cannot find VIL template " + templateName + " with resolution URI " + baseURI, 
+                throw new VilException("Cannot find VTL template " + templateName + " with resolution URI " + baseURI, 
                     VilException.ID_NOT_FOUND);
             } else if (model.isDirty()) {
                 Template old = model;
@@ -586,10 +586,10 @@ public class VilTemplateProcessor implements IVilType {
                     + (old != model)); // for Cui
             }
         } catch (ModelManagementException e) {
-            throw new VilException(e.getMessage(), e.getId());
+            throw new VilException("In VTL template: " + templateName + ": " + e.getMessage(), e.getId());
         } catch (RuntimeException e) {
             // checkstyle: runtime errors in the implementation are otherwise not shown
-            throw new VilException(e, VilException.ID_RUNTIME_EXECUTION);
+            throw new VilException("In VTL template: " + templateName + ": " + e, VilException.ID_RUNTIME_EXECUTION);
         }
         return model;
     }
