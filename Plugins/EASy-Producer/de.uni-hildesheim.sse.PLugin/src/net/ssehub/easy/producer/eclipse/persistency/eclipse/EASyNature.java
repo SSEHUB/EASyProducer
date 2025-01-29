@@ -16,11 +16,13 @@ public class EASyNature implements IProjectNature {
      * ID of this project nature.
      */
     public static final String NATURE_ID = "de.uni_hildesheim.sse.EASy-Producer";
+    public static final String BUILDER_ID = "de.uni_hildesheim.sse.EASy-Producer.Builder";
     
     /**
      * ID copied from Xtext.UI plug-in.
      */
     public static final String XTEXT_NATURE_ID = "org.eclipse.xtext.ui.shared.xtextNature";
+    public static final String XTEXT_BUILDER_ID = "org.eclipse.xtext.ui.shared.xtextBuilder";
 
     private IProject project;
 

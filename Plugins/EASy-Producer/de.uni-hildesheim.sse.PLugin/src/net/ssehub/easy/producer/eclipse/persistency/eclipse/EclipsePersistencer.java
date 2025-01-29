@@ -137,6 +137,7 @@ public class EclipsePersistencer implements IPersistencer {
         if (!NatureUtils.hasNature(project, EASyNature.NATURE_ID)) {
             NatureUtils.addNature(project, EASyNature.NATURE_ID, monitor);
         }
+        NatureUtils.ensureBuilder(project, EASyNature.BUILDER_ID, EASyNature.XTEXT_BUILDER_ID, monitor);
         
         return new EclipseProjectCreationResult(result, project);
     }

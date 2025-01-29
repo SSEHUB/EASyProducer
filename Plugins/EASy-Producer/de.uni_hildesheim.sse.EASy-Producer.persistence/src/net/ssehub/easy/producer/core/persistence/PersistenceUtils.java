@@ -718,8 +718,8 @@ public class PersistenceUtils {
                             // Create variable for iteration
                             VariableDeclaration p = new VariableDeclaration("predecessor", IvmlTypes.projectType());
                             
-                            // Create: source.predecessors()
-                            Expression sourceVar = new VariableExpression(mainRule.getParameter(0));
+                            // Create: source.predecessors()  // 2025 (Leo) was 0, try with 2
+                            Expression sourceVar = new VariableExpression(mainRule.getParameter(2));
                             Expression predecessorAccess = new CallExpression(mainRule, "predecessors", sourceVar);
                             // Resolve expression
                             predecessorAccess.inferType();

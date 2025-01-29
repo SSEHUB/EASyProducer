@@ -1,7 +1,11 @@
 package net.ssehub.easy.producer.eclipse.persistency.eclipse;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
+import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -46,6 +50,38 @@ public final class NatureUtils {
             }
         }
         return found;
+    }
+    
+    /**
+     * Ensures a builder, while removing another one.
+     * 
+     * @param project the project to check the builders on
+     * @param includeBuilder the builder id to include
+     * @param excludeBuilder the builder id to exclude
+     * @param monitor an optional progress monitor (may be <b>null</b>)
+     * @throws CoreException if <code>project</code> does not exist or is not open
+     */
+    public static void ensureBuilder(IProject project, String includeBuilder, String excludeBuilder, 
+        IProgressMonitor monitor) throws CoreException {
+        IProjectDescription projectDescription = project.getDescription();
+        ICommand[] buildSpec = projectDescription.getBuildSpec();
+        List<ICommand> list = new ArrayList<>(Arrays.asList(buildSpec));
+        boolean found = false;
+        for (int b = list.size() - 1; b >= 0; b--) {
+            ICommand c = list.get(b);
+            if (c.getBuilderName().equals(excludeBuilder)) {
+                list.remove(b);
+            } else if (c.getBuilderName().equals(includeBuilder)) {
+                found = true;
+            }
+        }
+        if (!found && includeBuilder != null) {
+            ICommand command = projectDescription.newCommand();
+            command.setBuilderName(includeBuilder);
+            list.add(command);
+        }
+        projectDescription.setBuildSpec(list.toArray(new ICommand[list.size()]));
+        project.setDescription(projectDescription, monitor);
     }
 
     /**

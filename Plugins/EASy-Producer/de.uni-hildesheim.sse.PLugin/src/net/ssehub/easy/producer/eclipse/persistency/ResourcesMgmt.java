@@ -285,6 +285,7 @@ public class ResourcesMgmt {
                 if (!NatureUtils.hasNature(project, natures[i])) {
                     NatureUtils.addNature(project, natures[i], null);
                 }
+                NatureUtils.ensureBuilder(project, EASyNature.BUILDER_ID, EASyNature.XTEXT_BUILDER_ID, null);
             }
         }
         try {
