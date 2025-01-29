@@ -36,7 +36,7 @@ public class ValidationUtils {
     /**
      * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
      */
-    private static boolean performValidationOnSave = false; // set true if validation does not work through xtext
+    private static boolean performValidationOnSave = true; // set true if validation does not work through xtext
     private static List<String> pathPrefixes = new ArrayList<>();
 
     /**
@@ -362,7 +362,20 @@ public class ValidationUtils {
             }
         }
     }
-    
+
+    /**
+     * Checks the model on top-level element layer. 
+     * 
+     * @param <R> the model root type
+     * @param <T> the transformation result type
+     * @param unit the variability unit to start tests with
+     * @param callback the callback providing relevant model information
+     * @param debug shall debug information be emitted
+     */
+    public static <R extends EObject, T> void checkModelFromValidation(R unit, IModelValidationCallback<R, T> callback, 
+        boolean debug) {
+    }
+
     // checkstyle: resume exception type check
     
 }
