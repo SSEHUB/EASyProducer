@@ -75,7 +75,7 @@ public class IvmlValidator extends AbstractIvmlValidator {
      */
     @Check(CheckType.NORMAL)
     public void checkModel(VariabilityUnit unit) {
-        ValidationUtils.checkModel(unit, callback, Config.isDebuggingEnabled());
+        ValidationUtils.checkModelFromValidation(unit, callback, Config.isDebuggingEnabled());
     }
 
 }
