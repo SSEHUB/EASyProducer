@@ -17,6 +17,8 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import org.junit.Test;
 
+import java.util.function.Consumer;
+
 import org.junit.Assert;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 
@@ -35,7 +37,7 @@ public class ContentFormatterTest {
     private ContentFormatter createJavaFormatter() {
         return createJavaFormatter(20, null);
     }
-    
+
     /**
      * Creates a customizable formatter for testing.
      * 
@@ -44,12 +46,28 @@ public class ContentFormatterTest {
      * @return the formatter
      */
     private ContentFormatter createJavaFormatter(int lineLength, String profile) {
+        return createJavaFormatter(lineLength, profile, null);
+    }
+    
+    /**
+     * Creates a customizable formatter for testing.
+     * 
+     * @param lineLength the line length
+     * @param profile the profile
+     * @param optionConfigurer optional formatter option configurer, may be <b>null</b> for none
+     * @return the formatter
+     */
+    private ContentFormatter createJavaFormatter(int lineLength, String profile, 
+        Consumer<FormattingConfiguration> optionConfigurer) {
         ContentFormatter formatter = new ContentFormatter();
         FormattingConfiguration fConf = new FormattingConfiguration();
         fConf.setLineEnding("\n");
         fConf.setLineLength(lineLength);
         fConf.setProfile(null == profile ? "Java" : profile);
         fConf.setProfileArgument("javadocIndent", " * "); // the default value, just for testing
+        if (null != optionConfigurer) {
+            optionConfigurer.accept(fConf);
+        }
         formatter.setFormattingConfiguration(fConf);
         IndentationConfiguration iConf = new IndentationConfiguration(4);
         formatter.setIndentationConfiguration(iConf);
@@ -261,6 +279,39 @@ public class ContentFormatterTest {
             + "    }\n"
             + "\n"
             + "}\n";
+        Assert.assertEquals(expected, res);
+    }
+    
+    /**
+     * Based on issue with line splitting.
+     */
+    @Test
+    public void testLineSplit() {
+        ContentFormatter formatter = createJavaFormatter(120, null);
+        String test = "        service = new ConnectorServiceWrapper<DataItem, Object, MyConnPltfIn, MyConnPltfOut>("
+            + "serviceData, conn, () -> param);";
+        String res = formatter.format(test);
+        String expected = "        service = new ConnectorServiceWrapper<DataItem, Object, MyConnPltfIn, MyConnPltfOut>"
+            + "(serviceData, conn, () ->\n"
+            + "            param);";
+        Assert.assertEquals(expected, res);
+    }
+    
+    /**
+     * Based on issue with hopping over end of empty string at split point.
+     */
+    @Test
+    public void testState() {
+        ContentFormatter formatter = createJavaFormatter(120, null);
+        String test = "Connector<DataItem, Object, MyConnPltfIn, MyConnPltfOut> conn = ConnectorFactory."
+            + "createConnector(\"de.iip_ecosphere.platform.connectors.opcuav1.OpcUaConnector\", () -> param, "
+            + "createConnectorAdapter(()->service.getInPath(\"\"), ()->service.getOutPath(\"\")));";
+        String res = formatter.format(test);
+        String expected = "Connector<DataItem, Object, MyConnPltfIn, MyConnPltfOut> conn = ConnectorFactory."
+            + "createConnector(\n"
+            + "\"de.iip_ecosphere.platform.connectors.opcuav1.OpcUaConnector\", () -> param, createConnectorAdapter("
+            + "()->service.getInPath(\n"
+            + "    \"\"), ()->service.getOutPath(\"\")));";
         Assert.assertEquals(expected, res);
     }
 

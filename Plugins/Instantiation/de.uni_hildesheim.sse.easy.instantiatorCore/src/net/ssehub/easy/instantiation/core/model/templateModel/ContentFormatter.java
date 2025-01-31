@@ -88,32 +88,36 @@ public class ContentFormatter {
          * If the current position is a {@link #isSplitChar(char, char) split char}, then shall the split position be 
          * modified?
          * 
+         * @param ch the character where the split will happen
          * @return increment or decrement to split position, may be 0 for none
          */
-        public int adjustSplitPosition();
+        public int adjustSplitPosition(char ch);
         
         /**
          * If the current position is a {@link #isSplitChar(char, char) split char}, then shall something be
          * added at this specific position, e.g., a string end for string end + string start?
          * 
+         * @param ch the character where the split will happen
          * @return the additional text, may be empty for none
          */
-        public String addBeforeSplit();
+        public String addBeforeSplit(char ch);
 
         /**
          * If the current position is a {@link #isSplitChar(char, char) split char}, then shall something be
          * added after the new line break, e.g., a + string end for string end + string start?
          * 
+         * @param ch the character where the split will happen
          * @return the additional text, may be empty for none
          */
-        public String addAfterSplit();
+        public String addAfterSplit(char ch);
 
         /**
          * Notifies the profile about the actual character being processed. May form the state.
          * 
          * @param ch the character
+         * @param pos the position of {@code ch}
          */
-        public void processingChar(char ch);
+        public void processingChar(char ch, int pos);
 
         /**
          * Shall multiple empty lines in sequence be removed.
@@ -186,22 +190,22 @@ public class ContentFormatter {
         }
 
         @Override
-        public int adjustSplitPosition() {
+        public int adjustSplitPosition(char ch) {
             return 0;
         }
         
         @Override
-        public String addBeforeSplit() {
+        public String addBeforeSplit(char ch) {
             return "";
         }
 
         @Override
-        public String addAfterSplit() {
+        public String addAfterSplit(char ch) {
             return "";
         }
 
         @Override
-        public void processingChar(char ch) {
+        public void processingChar(char ch, int pos) {
         }
 
         @Override
@@ -288,6 +292,8 @@ public class ContentFormatter {
             noSplit2Chars.add("/=");
             noSplit2Chars.add("++");
             noSplit2Chars.add("--");
+            noSplit2Chars.add("\"\""); // not the empty string
+            //noSplit2Chars.add("()"); // not the empty argument list
             
             noSplit2Chars.add(">>"); // prefix of >>=
             noSplit2Chars.add("<<"); // prefix of <<=
@@ -353,7 +359,7 @@ public class ContentFormatter {
         }
 
         @Override
-        public int adjustSplitPosition() {
+        public int adjustSplitPosition(char ch) {
             int result = 0; 
             if (State.STRING_START == state) {
                 result = -1; // split before splitChar
@@ -362,25 +368,25 @@ public class ContentFormatter {
         }
 
         @Override
-        public String addBeforeSplit() {
+        public String addBeforeSplit(char ch) {
             String result = "";
-            if (State.STRING == state) {
+            if (State.STRING == state && ch != '"') { // not at string end/empty string
                 result = "\"";
             }
             return result;
         }
 
         @Override
-        public String addAfterSplit() {
+        public String addAfterSplit(char ch) {
             String result = "";
-            if (State.STRING == state) {
+            if (State.STRING == state && ch != '"') { // not at string end/empty string
                 result = "+ \"";
             }
             return result;
         }
 
         @Override
-        public void processingChar(char ch) {
+        public void processingChar(char ch, int pos) {
             State before = state;
             if ('/' == ch) {
                 if (State.CODE == state) {
@@ -605,7 +611,7 @@ public class ContentFormatter {
         while (pos < builder.length()) {
             int advance = 0;
             char c = builder.charAt(pos);
-            profile.processingChar(c);
+            profile.processingChar(c, pos);
             if (isCrNl(builder, pos)) {
                 pos++;
                 c = '\n';
@@ -623,6 +629,7 @@ public class ContentFormatter {
                 }
                 if (split) { // here, line length exceeded
                     advance += splitLines(c, builder, pos, lastNlPos);
+// HERE +1                     
                     lastSplitPos = pos + advance; // adjust positions
                     lastStartPos = lastSplitPos;
                 } else {
@@ -675,9 +682,9 @@ public class ContentFormatter {
                 splitPos++;
                 result++;
             }
-            ins += profile.addBeforeSplit() + lineBreak + adjustIndentation(buffer, startPos, indentStep) 
-                + profile.addAfterSplit();
-            int adjustSplitPos = profile.adjustSplitPosition();
+            ins += profile.addBeforeSplit(ch) + lineBreak + adjustIndentation(buffer, startPos, indentStep) 
+                + profile.addAfterSplit(ch);
+            int adjustSplitPos = profile.adjustSplitPosition(ch);
             buffer.insert(splitPos + adjustSplitPos, ins);
             result += ins.length() - adjustSplitPos;
         }

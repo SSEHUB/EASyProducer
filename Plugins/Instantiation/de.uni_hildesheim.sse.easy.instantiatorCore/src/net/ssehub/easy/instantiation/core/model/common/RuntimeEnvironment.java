@@ -85,13 +85,16 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         private int indentation;
         private IndentationConfiguration indentationConfiguration;
         private String[] paths;
-        
+        private Context<D , O> parent;
+
         /**
          * Creates a new context.
          * 
          * @param model the related model
+         * @param parent the parent context to look into for variable values, may be <b>null</b> for none
          */
-        public Context(IResolvableModel<D, O> model) {
+        public Context(IResolvableModel<D, O> model, Context<D, O> parent) {
+            this.parent = parent;
             this.model = model;
             this.specificModel = model;
             if (null != model.getIndentationConfiguration() 
@@ -136,8 +139,20 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
          * @throws VilException in case that <code>resolvable</code> was not defined
          */
         public Object getValue(IResolvable resolvable) throws VilException {
+            return getValue(resolvable, true);
+        }
+        
+        /**
+         * Returns the value of <code>resolvable</code>.
+         * 
+         * @param resolvable the variable to return the value for
+         * @param thrw throw an exception if the needs occurs or do not throw (as recursively nested on parents)
+         * @return the value of <code>resolvable</code>
+         * @throws VilException in case that <code>resolvable</code> was not defined
+         */
+        private Object getValue(IResolvable resolvable, boolean thrw) throws VilException {
             boolean found = false;
-            Object value = null;  
+            Object value = null;
             for (int l = levels.size() - 1; !found && l >= 0; l--) {
                 Level<D> level = levels.get(l);
                 if (level.values.containsKey(resolvable)) {
@@ -145,7 +160,11 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                     value = level.values.get(resolvable);
                 }
             }
-            if (!found) {
+            if (!found && parent != null) {
+                value = parent.getValue(resolvable, false);
+                found = value != null;
+            }
+            if (!found && thrw) {
                 throw new VilException("variable " + resolvable.getName() + " is not defined", 
                     VilException.ID_NOT_FOUND);
             }
@@ -477,6 +496,18 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         return typeRegistry;
     }
     
+    Context<V, M> findInheritedContext(IResolvableModel<V, M> model) {
+        Context<V, M> result = null;
+        for (Context<V, M> ctx : contexts.values()) {
+            IResolvableModel<V, M> ctxModel = ctx.getModel();
+            if (model.isAssignableFrom(ctxModel)) { // inherits
+                result = ctx;
+                break;
+            }
+        }
+        return result;
+    }
+    
     /**
      * Switches the context.
      * 
@@ -497,7 +528,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
         }
         currentContext = contexts.get(model);
         if (null == currentContext) {
-            currentContext = new Context<V, M>(model);
+            currentContext = new Context<V, M>(model, findInheritedContext(model));
             contexts.put(model, currentContext);
             if (contexts.size() > 1) { // we jump into another model and continue there, set baseline indentation
                 currentContext.increaseIndentation();
@@ -579,7 +610,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     public IResolvableModel<?, M> getMostSpecificContextModel() {
         return mostSpecificModel;
     }
-
+    
     @Override
     public Object getValue(IResolvable resolvable) throws VilException {
         Object result = null;
@@ -733,17 +764,40 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
     public void popLevel() throws VilException {
         currentContext.popLevel();
     }
-
+    
     /**
-     * Changes the value of <code>var</code> to the top level.
+     * Changes the value of <code>var</code> to the top level of the current context.
      * 
      * @param var the variable to be modified
      * @param object the value of <code>var</code>
      * @throws VilException in case of an attempt of modifying a constant
      */
     public void addValue(V var, Object object) throws VilException {
+        addValue(var, object, false);
+    }
+
+    /**
+     * Changes the value of <code>var</code> to the top level of the current context or the top parent context.
+     * 
+     * @param var the variable to be modified
+     * @param object the value of <code>var</code>
+     * @param modelVar is this a (global, inherited) model variable, shall we declare it in the top parent context?
+     * @throws VilException in case of an attempt of modifying a constant
+     */
+    public void addValue(V var, Object object, boolean modelVar) throws VilException {
         object = checkType(var, object);
-        currentContext.addValue(var, object);
+        Context<V, M> context = currentContext;
+        if (modelVar) {
+            boolean isDefined = false;
+            while (context.parent != null) {
+                context = context.parent;
+                isDefined |= context.isDefined(var);
+            }
+            if (isDefined) {
+                context = currentContext;
+            }
+        }
+        context.addValue(var, object);
     }
     
     /**

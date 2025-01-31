@@ -48,6 +48,7 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
     private RuntimeEnvironment<V, M> environment;
     private ITracer tracer;
     private Map<String, Object> parameter;
+    private boolean modelVars = false; // marks when top-level (global) model variables are initialized
 
     /**
      * Creates an execution visitor.
@@ -162,13 +163,13 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
         if (null != var.getExpression()) {
             value = var.getExpression().accept(this);
             value = doAssignmentConversions(var, value);
-            environment.addValue(v, value);
+            environment.addValue(v, value, modelVars);
             tracer.valueDefined(var, null, value);
         } else {
             // add as undefined to current level in runtime environment. otherwise variable may be assigned implicitly 
             // to wrong level upon first assignment, which may be removed (e.g., inner levels of alternatives 
             // containing initial assignment), and thus not be valid outside on correct level
-            environment.addValue(v, null); 
+            environment.addValue(v, null, modelVars); 
         }
         return value;
     }
@@ -309,15 +310,18 @@ public abstract class ExecutionVisitor <M extends IResolvableModel<V, M>, O exte
                 }
             }
             initializeImplicitVariables(model);
+            modelVars = true;
             for (int v = 0; v < model.getVariableDeclarationCount(); v++) {
                 V varDecl = model.getVariableDeclaration(v);
                 if (!model.isImplicit(varDecl)) {
-                    model.getVariableDeclaration(v).accept((IVisitor) this);
+                    varDecl.accept((IVisitor) this);
                 }
             }
+            modelVars = false;
             environment.switchContext(oldContext);
         }
     }
+    
 
     /**
      * Initializes implicit variables of a model (before explicitly defined variables).
