@@ -664,7 +664,6 @@ public class RealTests extends AbstractRealTests {
      * 
      * @throws IOException shall not occur
      */
-    @Ignore("after formatter change, oktoflowExperiment works")
     @Test
     public void testOktoflowJun24() throws IOException {
         final String folder = "jun24";
