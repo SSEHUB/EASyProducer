@@ -33,11 +33,24 @@ import net.ssehub.easy.dslCore.translation.Message;
  */
 public class ValidationUtils {
 
+    public enum ValidationMode {
+        /**
+         * On-Save through hook in editor, avoid conflicts with xText e.g. Reconciler.
+         */
+        ON_SAVE,
+        
+        /**
+         * Through xText validation called in Builder.
+         */
+        VALIDATOR
+    }
+    
     /**
      * Perform Xtext validation or emulate problem markers on editor save (partial parsing problem).
      */
-    private static boolean performValidationOnSave = true; // set true if validation does not work through xtext
+    private static boolean performValidationOnSave = true;
     private static List<String> pathPrefixes = new ArrayList<>();
+    private static ValidationMode mode = ValidationMode.ON_SAVE;
 
     /**
      * Enables/disables validation on save, e.g., to handle xText conflicts.
@@ -53,6 +66,15 @@ public class ValidationUtils {
     
     public static boolean isOnSaveEnabled() {
         return performValidationOnSave;
+    }
+    
+    /**
+     * Returns the validation mode.
+     * 
+     * @return the mode
+     */
+    public static ValidationMode getValidationMode() {
+        return mode;
     }
     
     /**
@@ -298,73 +320,87 @@ public class ValidationUtils {
      * @param callback the callback providing relevant model information
      * @param debug shall debug information be emitted
      */
+    private static <R extends EObject, T> void doCheckModel(R unit, IModelValidationCallback<R, T> callback, 
+        boolean debug) {
+        java.net.URI uri = null;
+        URI eURI = null;
+        if (null != unit.eResource() && null != unit.eResource().getURI()) {
+            try {
+                eURI = unit.eResource().getURI();
+                uri = ModelUtility.toNetUri(unit.eResource().getURI());
+                if (!"file".equals(uri.getScheme())) {
+                    uri = null; // initializer may yet not be present, xText does not work with other URI schemes
+                }
+            } catch (URISyntaxException e) {
+                getLogger().error("error translating '" + unit.eResource().getURI() 
+                    + "' during validation" + e.getMessage());
+            }
+        }
+        if (null != uri && callback.isValidationEnabled(uri) && !excludeBinTarget(eURI) && isInPath(eURI)) {
+            String uriText = "";
+            if (null != unit.eResource() && null != unit.eResource().getURI()) {
+                uriText = " " + unit.eResource().getURI().toString();
+            }
+            try {
+                TranslationResult<T> result = callback.createModel(unit, uri);
+                for (int m = 0; m < result.getMessageCount(); m++) {
+                    Message message = result.getMessage(m);
+                    try {
+                        switch (message.getStatus()) {
+                        case ERROR:
+                        case UNSUPPORTED:
+                            callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
+                                message.getCausingFeature(), message.getCode());
+                            break;
+                        case WARNING:
+                            callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
+                                message.getCausingFeature(), message.getCode());
+                            break;
+                        default:
+                            callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
+                                    message.getCausingFeature(), message.getCode());
+                            break;
+                        }
+                    } catch (Throwable t) {
+                        // in single file validation, EASy messages may not fit to the actual Resource
+                        System.out.println("while creating marker (desc: " + message.getDescription() + ", cause: " 
+                            + message.getCause() + ", feature: " + message.getCausingFeature() + ", code: "
+                            + message.getCode() + "):" + t.getMessage() + uriText);
+                    }
+                }
+                if (debug && 0 == result.getMessageCount()) {
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    PrintWriter pOut = new PrintWriter(out);
+                    pOut.println(">TRANSLATED MODEL");
+                    callback.print(result, pOut);
+                    pOut.println("<TRANSLATED MODEL");
+                    getLogger().info(out.toString());
+                }
+            } catch (Throwable e) { // to be on the safe side
+                getLogger().error("while validating:" + e.getMessage() + uriText);
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * Checks the model on top-level element layer on-save through editor hook, if enabled. 
+     * 
+     * @param <R> the model root type
+     * @param <T> the transformation result type
+     * @param unit the variability unit to start tests with
+     * @param callback the callback providing relevant model information
+     * @param debug shall debug information be emitted
+     */
     public static <R extends EObject, T> void checkModel(R unit, IModelValidationCallback<R, T> callback, 
         boolean debug) {
-        if (performValidationOnSave) {
-            java.net.URI uri = null;
-            URI eURI = null;
-            if (null != unit.eResource() && null != unit.eResource().getURI()) {
-                try {
-                    eURI = unit.eResource().getURI();
-                    uri = ModelUtility.toNetUri(unit.eResource().getURI());
-                    if (!"file".equals(uri.getScheme())) {
-                        uri = null; // initializer may yet not be present, xText does not work with other URI schemes
-                    }
-                } catch (URISyntaxException e) {
-                    getLogger().error("error translating '" + unit.eResource().getURI() 
-                        + "' during validation" + e.getMessage());
-                }
-            }
-            if (null != uri && callback.isValidationEnabled(uri) && !excludeBinTarget(eURI) && isInPath(eURI)) {
-                String uriText = "";
-                if (null != unit.eResource() && null != unit.eResource().getURI()) {
-                    uriText = " " + unit.eResource().getURI().toString();
-                }
-                try {
-                    TranslationResult<T> result = callback.createModel(unit, uri);
-                    for (int m = 0; m < result.getMessageCount(); m++) {
-                        Message message = result.getMessage(m);
-                        try {
-                            switch (message.getStatus()) {
-                            case ERROR:
-                            case UNSUPPORTED:
-                                callback.message(MessageType.ERROR, message.getDescription(), message.getCause(),
-                                    message.getCausingFeature(), message.getCode());
-                                break;
-                            case WARNING:
-                                callback.message(MessageType.WARNING, message.getDescription(), message.getCause(),
-                                    message.getCausingFeature(), message.getCode());
-                                break;
-                            default:
-                                callback.message(MessageType.INFO, message.getDescription(), message.getCause(),
-                                        message.getCausingFeature(), message.getCode());
-                                break;
-                            }
-                        } catch (Throwable t) {
-                            // in single file validation, EASy messages may not fit to the actual Resource
-                            System.out.println("while creating marker (desc: " + message.getDescription() + ", cause: " 
-                                + message.getCause() + ", feature: " + message.getCausingFeature() + ", code: "
-                                + message.getCode() + "):" + t.getMessage() + uriText);
-                        }
-                    }
-                    if (debug && 0 == result.getMessageCount()) {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        PrintWriter pOut = new PrintWriter(out);
-                        pOut.println(">TRANSLATED MODEL");
-                        callback.print(result, pOut);
-                        pOut.println("<TRANSLATED MODEL");
-                        getLogger().info(out.toString());
-                    }
-                } catch (Throwable e) { // to be on the safe side
-                    getLogger().error("while validating:" + e.getMessage() + uriText);
-                    e.printStackTrace();
-                }
-            }
+        if (ValidationMode.ON_SAVE == mode && performValidationOnSave) {
+            doCheckModel(unit, callback, debug);
         }
     }
 
     /**
-     * Checks the model on top-level element layer. 
+     * Checks the model on top-level element layer, called through builder validation. 
      * 
      * @param <R> the model root type
      * @param <T> the transformation result type
@@ -374,6 +410,9 @@ public class ValidationUtils {
      */
     public static <R extends EObject, T> void checkModelFromValidation(R unit, IModelValidationCallback<R, T> callback, 
         boolean debug) {
+        if (ValidationMode.VALIDATOR == mode) {
+            doCheckModel(unit, callback, debug);
+        }
     }
 
     // checkstyle: resume exception type check

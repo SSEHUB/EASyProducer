@@ -54,6 +54,8 @@ import org.eclipse.xtext.validation.CheckMode;
 import com.google.inject.Inject;
 
 import net.ssehub.easy.dslCore.ModelUtility;
+import net.ssehub.easy.dslCore.validation.ValidationUtils;
+import net.ssehub.easy.dslCore.validation.ValidationUtils.ValidationMode;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -317,7 +319,7 @@ public class Builder extends IncrementalProjectBuilder {
                     if (resourceSet == null) {
                         throw new IllegalArgumentException("resourceSet may not be null for changed resources.");
                     }
-                    deleteAllMarkers(file); // a bit harsh, but in certain situations we do not get rid of xText markers
+                    deleteAllMarkersCheckValidator(file); // a bit harsh, but we do not get rid of xText markers
                     Resource resource = resourceSet.getResource(uri, true);
                     if (validatorExtension != null) {
                         validatorExtension.updateValidationMarkers(file, resource, checkMode, monitor);
@@ -326,7 +328,7 @@ public class Builder extends IncrementalProjectBuilder {
                         markerContributor.updateMarkers(file, resource, monitor);
                     }
                 } else {
-                    deleteAllMarkers(file); // a bit harsh, but in certain situations we do not get rid of xText markers
+                    deleteAllMarkersCheckValidator(file); // a bit harsh, but we do not get rid of xText markers
                     if (validatorExtension != null) {
                         validatorExtension.deleteValidationMarkers(file, checkMode, monitor);
                     } else {
@@ -341,6 +343,12 @@ public class Builder extends IncrementalProjectBuilder {
             }
         }
     }
+    
+    private void deleteAllMarkersCheckValidator(IFile file) {
+        if (ValidationUtils.getValidationMode() == ValidationMode.VALIDATOR) {
+            deleteAllMarkers(file);
+        }
+    }    
     
     private void deleteAllMarkers(IFile file) {
         try {
