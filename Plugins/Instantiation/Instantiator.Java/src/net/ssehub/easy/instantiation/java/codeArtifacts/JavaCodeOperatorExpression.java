@@ -80,15 +80,17 @@ public class JavaCodeOperatorExpression extends JavaCodeExpression {
     public static JavaCodeOperatorExpression create(String operator, JavaCodeArgumentListExpression operands, 
         boolean addParentheses) {
         JavaCodeOperatorExpression result = null;
+        JavaCodeOperatorExpression prev = null;
         for (IJavaCodeElement op : operands.arguments()) {
             if (op instanceof JavaCodeExpression) {
-                JavaCodeOperatorExpression tmp = new JavaCodeOperatorExpression(result, (JavaCodeExpression) op, 
+                JavaCodeOperatorExpression tmp = new JavaCodeOperatorExpression(null, (JavaCodeExpression) op, 
                     operator, null);
                 if (null == result) {
                     result = tmp;
+                    prev = tmp;
                 } else {
-                    result.second = addParentheses ? new JavaCodeParenthesisExpression(result, tmp) : tmp;
-                    result = tmp;
+                    prev.second = addParentheses ? new JavaCodeParenthesisExpression(result, tmp) : tmp;
+                    prev = tmp;
                 }
             }
         }
@@ -99,8 +101,8 @@ public class JavaCodeOperatorExpression extends JavaCodeExpression {
     @Override
     public void setParent(IJavaCodeElement parent) {
         super.setParent(parent);
-        first.setParent(this);
-        second.setParent(this);
+        setParent(first, this);
+        setParent(second, this);
     }
     
     @Override
@@ -113,5 +115,23 @@ public class JavaCodeOperatorExpression extends JavaCodeExpression {
             second.store(out);
         }
     }
+    
+    @Override
+    public JavaCodeOperatorExpression replaceVariable(String oldName, String newName) {
+        first.replaceVariable(oldName, newName);
+        if (null != second) {
+            second.replaceVariable(oldName, newName);
+        }
+        return this;
+    }
+
+    @Override
+    public JavaCodeOperatorExpression replaceMethod(String oldName, String newName) {
+        first.replaceMethod(oldName, newName);
+        if (null != second) {
+            second.replaceMethod(oldName, newName);
+        }
+        return this;
+    }    
 
 }

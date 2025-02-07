@@ -24,6 +24,8 @@ import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
  */
 public class JavaCodeConstructorCall extends JavaCodeMethodCall {
 
+    private String generics = null;
+    
     /**
      * Creates a method call with no import scope.
      * 
@@ -86,6 +88,16 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
     }
 
     @Override
+    public JavaCodeConstructorCall addArgument(JavaCodeExpression arg) {
+        return (JavaCodeConstructorCall) super.addArgument(arg);
+    }
+
+    @Override
+    public JavaCodeConstructorCall addArgument(JavaCodeParameterSpecification param) {
+        return (JavaCodeConstructorCall) super.addArgument(param);
+    }
+    
+    @Override
     public JavaCodeConstructorCall addArgument(Object arg) {
         return (JavaCodeConstructorCall) super.addArgument(arg);
     }
@@ -106,8 +118,8 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
     }
 
     @Override
-    public JavaCodeConstructorCall addArgument(String methodName, JavaCodeImportScope scope) {
-        return (JavaCodeConstructorCall) super.addArgument(methodName, scope);
+    public JavaCodeMethodCall addArgument(String methodName, JavaCodeImportScope scope) {
+        return super.addArgument(methodName, scope); // returns a method call, not this
     }
     
     @Override
@@ -115,8 +127,30 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
         return (JavaCodeConstructorCall) super.addNew(cls);
     }
     
+    /**
+     * Adds generics.
+     * 
+     * @param generics the generics, may be <b>null</b> for no generics, empty for no generic parameters
+     *
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeConstructorCall addGenerics(String generics) {
+        this.generics = generics;
+        return this;
+    }
+     
+    @Override
     protected void storeBefore(CodeWriter out) {
         out.print("new ");
+    }
+
+    @Override
+    protected void storeAfterName(CodeWriter out) {
+        if (null != generics) {
+            out.print("<");
+            out.print(generics);
+            out.print(">");
+        }
     }
 
 }

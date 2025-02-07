@@ -23,6 +23,13 @@ public interface IJavaCodeImport extends IJavaCodeElement {
      * @return the name
      */
     public String getName();
+
+    /**
+     * Returns the imported non-qualified name.
+     * 
+     * @return the non-qualified name
+     */
+    public String getSimpleName();
     
     /**
      * Returns whether the import is static.

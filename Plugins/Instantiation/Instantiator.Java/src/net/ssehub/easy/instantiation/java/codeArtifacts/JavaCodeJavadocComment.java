@@ -35,7 +35,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  */
 public class JavaCodeJavadocComment implements IJavaCodeElement {
 
-    private static final Set<String> HTML_ELEMENTS = Set.of("code", "br", "p", "div", "it", "ul", "ol", "li", "b");
+    private static final Set<String> HTML_ELEMENTS = Set.of("code", "br", "p", "div", "it", "ul", "ol", "li", "b", "i");
     private static final Set<Character> HTML_ESCAPES = Set.of('’');
     
     private String comment;
@@ -61,6 +61,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     
     private enum Tag {
         
+        GENERIC("param"),
         PARAM("param"),
         RETURN("return"),
         THROWS("throws");
@@ -92,7 +93,17 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         public void store(CodeWriter out, AtomicInteger count) {
             String middle = "";
             if (name != null && name.length() > 0) {
-                middle = " " + name;
+                middle = " ";
+                String n = name;
+                if (Tag.GENERIC == tag) {
+                    if (!n.startsWith("<")) {
+                        n = "<" + n;
+                    }
+                    if (!n.endsWith(">")) {
+                        n = n + ">";
+                    }
+                }
+                middle += n;
             }
             out.printlnwi(" * " + tag.getTag() + middle + " " + escapeHtml(comment));
             if (null != count) {
@@ -135,6 +146,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             AtomicInteger before = new AtomicInteger();
             out.printlnwi(" *");
             if (withParam) {
+                streamByTag(Tag.GENERIC).forEach(t -> t.store(out, before));
                 streamByTag(Tag.PARAM).forEach(t -> t.store(out, before));
             }
             if (withReturnThrows) {
@@ -179,6 +191,10 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         }
         return this;
     }
+    
+    public String getComment() {
+        return comment;
+    }
 
     /**
      * Changes the main comment text.
@@ -216,6 +232,17 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
             this.comment += comment;
         }
         return this;
+    }
+
+    /**
+     * Adds/changes a generic comment.
+     * 
+     * @param name the name of the generic
+     * @param comment the comment text
+     * @return <b>this</b>
+     */
+    public JavaCodeJavadocComment addGenericComment(String name, String comment) {
+        return addTaggedPart(Tag.GENERIC, name, comment);
     }
 
     /**

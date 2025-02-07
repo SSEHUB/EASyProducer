@@ -94,6 +94,18 @@ public class ContentFormatter {
         public int adjustSplitPosition(char ch);
         
         /**
+         * Finally enable a split with character {@code ch} at the the split position and {@code nextCh} at
+         * one position right to ch as lookahead.
+         * 
+         * @param ch the character at the split position
+         * @param nextCh the next/lookahead character, may be {@code 0} for there is none
+         * @return {@code true} to enable the split, {@code false} else
+         */
+        public default boolean enableSplit(char ch, char nextCh) {
+            return true;
+        }
+        
+        /**
          * If the current position is a {@link #isSplitChar(char, char) split char}, then shall something be
          * added at this specific position, e.g., a string end for string end + string start?
          * 
@@ -329,6 +341,16 @@ public class ContentFormatter {
                 result = 1;
             }
             return result;       
+        }
+        
+        @Override
+        public boolean enableSplit(char ch, char nextCh) {
+            boolean result = true;
+            if ((State.STRING == state || State.STRING_START == state) && nextCh == '"') { 
+                // we are in a string and the current char will end it, do not enable an empty split
+                result = false;
+            }
+            return result;
         }
 
         @Override
@@ -625,14 +647,19 @@ public class ContentFormatter {
                     while (nPos < builder.length() && !canSplit(builder.charAt(nPos), nextChar(builder, nPos))) {
                         nPos++;
                     }
-                    split = (nPos > pos + 1 && nPos - doubleChars - lastStartPos >= maxLineLength);
+                    split = (nPos > pos + 1 && nPos - doubleChars - lastStartPos - 1 > maxLineLength);
                 }
                 if (split) { // here, line length exceeded
-                    advance += splitLines(c, builder, pos, lastNlPos);
-// HERE +1                     
-                    lastSplitPos = pos + advance; // adjust positions
-                    lastStartPos = lastSplitPos;
-                } else {
+                    int adv = splitLines(c, builder, pos, lastNlPos);
+                    if (adv > 0) {
+                        advance += adv;
+                        lastStartPos = lastSplitPos;
+                        lastSplitPos = pos + advance; // adjust positions
+                    } else {
+                        split = false;
+                    }
+                } 
+                if (!split) {
                     lastSplitPos = pos; // do not split, advance split position
                     if (isNewline(c)) {
                         lastStartPos = pos;
@@ -676,17 +703,20 @@ public class ContentFormatter {
             final String lineBreak = FormattingConfiguration.getLineEnding(fConf);
             final int indentStep = iConf.getIndentationStep();
             String ins = "";
-            if (!profile.isSplitChar(ch, nextChar(buffer, splitPos))) {
-                buffer.delete(splitPos, splitPos + 1);
-            } else {
-                splitPos++;
-                result++;
+            char nextCh = nextChar(buffer, splitPos);
+            if (profile.enableSplit(ch, nextCh)) {
+                if (!profile.isSplitChar(ch, nextCh)) {
+                    buffer.delete(splitPos, splitPos + 1);
+                } else {
+                    splitPos++;
+                    result++;
+                }
+                ins += profile.addBeforeSplit(ch) + lineBreak + adjustIndentation(buffer, startPos, indentStep) 
+                    + profile.addAfterSplit(ch);
+                int adjustSplitPos = profile.adjustSplitPosition(ch);
+                buffer.insert(splitPos + adjustSplitPos, ins);
+                result += ins.length() - adjustSplitPos;
             }
-            ins += profile.addBeforeSplit(ch) + lineBreak + adjustIndentation(buffer, startPos, indentStep) 
-                + profile.addAfterSplit(ch);
-            int adjustSplitPos = profile.adjustSplitPosition(ch);
-            buffer.insert(splitPos + adjustSplitPos, ins);
-            result += ins.length() - adjustSplitPos;
         }
         return result;
     }
@@ -703,10 +733,10 @@ public class ContentFormatter {
     }
 
     /**
-     * Returns whether {@code ch} is either a carridge return or a newline.
+     * Returns whether {@code ch} is either a carriage return or a newline.
      * 
      * @param ch the character to check
-     * @return {@code true} for carridge return or newline, {@code false} else
+     * @return {@code true} for carriage return or newline, {@code false} else
      */
     private static boolean isNewline(char ch) {
         return ch == '\r' || ch == '\n'; 

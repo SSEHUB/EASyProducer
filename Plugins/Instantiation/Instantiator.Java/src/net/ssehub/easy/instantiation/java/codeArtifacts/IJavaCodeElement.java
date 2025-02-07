@@ -165,11 +165,7 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
     @Invisible(inherit = true)
     @Override
     public default String getStringValue(StringComparator comparator) {
-        if (null != comparator) { // short form for simplifying the traces
-            return getTracerStringValue(comparator);
-        } else {
-            return toCode();
-        }
+        return getTracerStringValue(comparator);
     }
 
     /**
@@ -352,6 +348,28 @@ public interface IJavaCodeElement extends IVilType, IStringValueProvider, Storab
             tmp += escapeFunc.apply(text.substring(lastSplit, text.length()));
         }
         return tmp;
+    }
+    
+    /**
+     * Replaces variables, e.g., in qualifications.
+     * 
+     * @param oldName the old name
+     * @param newName the new name
+     * @return {@code this} for chaining
+     */
+    public default IJavaCodeElement replaceVariable(String oldName, String newName) {
+        return this;
+    }
+
+    /**
+     * Replaces method names.
+     * 
+     * @param oldName the old name
+     * @param newName the new name
+     * @return {@code this} for chaining
+     */
+    public default IJavaCodeElement replaceMethod(String oldName, String newName) {
+        return this;
     }
 
 }

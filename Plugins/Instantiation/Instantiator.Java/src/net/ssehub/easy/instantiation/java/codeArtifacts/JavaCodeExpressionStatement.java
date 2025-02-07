@@ -83,5 +83,20 @@ public class JavaCodeExpressionStatement extends JavaCodeStatement {
         return null == expression || expression.isEmpty();
     }
 
+    @Override
+    public JavaCodeExpressionStatement replaceVariable(String oldName, String newName) {
+        if (null != expression) {
+            expression.replaceVariable(oldName, newName);
+        }
+        return this;
+    }
+
+    @Override
+    public JavaCodeExpressionStatement replaceMethod(String oldName, String newName) {
+        if (null != expression) {
+            expression.replaceMethod(oldName, newName);
+        }
+        return this;
+    }    
 
 }

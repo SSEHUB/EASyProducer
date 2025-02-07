@@ -32,12 +32,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
 
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
-    //private List<IJavaCodeElement> elements = new ArrayList<>();
     private JavaCodeBlock block;
     private List<JavaCodeParameterSpecification> parameter;
     private List<JavaCodeTypeSpecification> exceptions;
     private boolean forceJavadoc;
     private boolean dflt;
+    private List<String> generics;
 
     /**
      * Creates a void method without comment.
@@ -106,12 +106,72 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
 
     /**
+     * Adds a generic parameter specification.
+     * 
+     * @param generic the generic
+     * @param comment optional comment, may be <b>null</b> or empty for none
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod addGeneric(String generic, String comment) {
+        if (null != generic && generic.length() > 0) {
+            if (null == generics) {
+                generics = new ArrayList<>();
+            }
+            generic = generic.trim();
+            if (generic.startsWith("<")) {
+                generic = generic.substring(1);
+            }
+            if (generic.endsWith(">")) {
+                generic = generic.substring(0, generic.length() - 1);
+            }
+            JavaCodeTypeSpecification tmp = new JavaCodeTypeSpecification(generic, this);
+            generics.add(generic);
+            if (null != comment && comment.length() > 0) {
+                getJavadocComment().addGenericComment(tmp.getOutputTypeName(), comment);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Directly changes the method Javadoc comment.
+     * 
+     * @param comment the new comment
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod setJavadocComment(String comment) {
+        getJavadocComment().setComment(comment);
+        return this;
+    }
+
+    /**
+     * Adds the given string to the method Javadoc comment.
+     * 
+     * @param comment the comment addition
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod addToJavadocComment(String comment) {
+        JavaCodeJavadocComment c = getJavadocComment();
+        c.setComment(c.getComment() + comment);
+        return this;
+    }
+
+    /**
      * Adds an override annotation.
      * 
      * @return the annotation for further processing
      */
     public JavaCodeAnnotation addOverrideAnnotation() {
         return addAnnotation(Override.class.getSimpleName());
+    }
+
+    /**
+     * Adds a suppress warnings annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addSuppressWarningsUncheckedAnnotation() {
+        return addSuppressWarningsAnnotation().addStringArgument("unchecked");
     }
 
     /**
@@ -231,7 +291,13 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         block.add(text);
         return this;
     }
-    
+
+    @Override
+    public JavaCodeMethod addAsStatement(String text) {
+        block.addAsStatement(text);
+        return this;
+    }
+
     @Override
     public JavaCodeMethod add(JavaCodeStatement stmt) {
         block.add(stmt);
@@ -294,7 +360,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     @Override
-    public JavaCodeSwitch addSwitch(String expression) {
+    public JavaCodeSwitch addSwitch(JavaCodeExpression expression) {
         return block.addSwitch(expression);
     }
 
@@ -316,6 +382,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Override
     public JavaCodeExpressionStatement addPostfixDecrement(String variable) {
         return block.addPostfixDecrement(variable);
+    }
+
+    @OperationMeta(name = {"addAssignment", "addAssign"})
+    @Override
+    public JavaCodeAssignment addAssignment(String variable) {
+        return block.addAssignment(variable);
     }
 
     @OperationMeta(name = {"addAssignment", "addAssign"})
@@ -350,6 +422,11 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Override
     public JavaCodeMethodCall addThisCall() {
         return block.addThisCall();
+    }    
+    
+    @Override
+    public JavaCodeMethodCall addSystemOutPrintlnCall() {
+        return block.addSystemOutPrintlnCall();
     }    
     
     @Override
@@ -407,6 +484,31 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public JavaCodeMethod addReturn(JavaCodeExpression valueEx) {
         return addReturn(valueEx, null);
     }
+
+    /**
+     * Adds a class return statement without Javadoc comment.
+     * 
+     * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
+     * @return <b>this</b>
+     */
+    public JavaCodeMethod addReturnClass(String cls) {
+        return addReturnClass(cls, null);
+    }
+
+    /**
+     * Adds a class return statement with Javadoc comment.
+     * 
+     * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
+     * @param comment the Javadoc comment for the return
+     * @return <b>this</b>
+     */
+    public JavaCodeMethod addReturnClass(String cls, String comment) {
+        JavaCodeTypeSpecification type = JavaCodeTypeSpecification.toClassType(cls, this);
+        if (null != type) {
+            addReturn(new JavaCodeTypeExpression(this, type), null);
+        }
+        return this;
+    }
     
     /**
      * Adds a return statement with Javadoc comment.
@@ -453,7 +555,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Invisible
     @Override
     public void transferElementsTo(JavaCodeBlockInterface block) {
-        block.transferElementsTo(block);
+        block.transferElementsTo(this);
     }
 
     @Invisible
@@ -464,7 +566,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
 
     @Override
     public JavaCodeMethod addAll(JavaCodeBlockInterface block) {
-        block.addAll(block);
+        this.block.addAll(block);
         return this;
     }
 
@@ -495,20 +597,27 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     protected boolean enableStoreComment() {
         return forceJavadoc || !hasAnnotation(Override.class.getSimpleName(), Override.class.getName());
     }
-    
+
     @Invisible
     @Override
     public void store(CodeWriter out) {
         super.store(out); // comment, annotations
         out.printwi(getModifier());
         boolean enclosingIsInterface = enclosing.getKind() == Kind.INTERFACE;
-        if (enclosingIsInterface && isDefault()) {
-            out.print("default");
-            out.print(" ");
-        }
-        if (null != type) { // constructor?
-            type.store(out);
-            out.print(" ");
+        if (!isConstructor()) {
+            if (enclosingIsInterface && isDefault()) {
+                out.print("default");
+                out.print(" ");
+            }
+            if (null != generics) {
+                out.print("<");
+                out.print(IJavaCodeElement.toList(generics, ", "));
+                out.print("> ");
+            }
+            if (null != type) { // constructor?
+                type.store(out);
+                out.print(" ");
+            }
         }
         out.print(getName());
         out.print("(");
@@ -585,6 +694,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Invisible
     @Override
     public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
         JavaCodeClass.setParent(parent, p -> this.enclosing = p);
     }
 

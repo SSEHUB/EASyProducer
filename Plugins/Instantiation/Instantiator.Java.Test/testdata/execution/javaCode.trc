@@ -12,7 +12,7 @@
     -> addMethod(JavaCodeClass, String, String, String) with (JavaCodeClass: JCATest, java.util.List<Integer>, getIntegerList, Returns an integer list.@return the integer list) = JavaCodeMethod: getIntegerList
     -> setProtected(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeMethod: getIntegerList
     m <- JavaCodeMethod: getIntegerList
-    -> addAnnotation(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, java.lang.Override) = JavaCodeAnnotation JavaCodeTypeSpecification Override
+    -> addAnnotation(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, java.lang.Override) = JavaCodeAnnotation JavaCodeTypeSpecification java.lang.Override
     -> forceJavadoc(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeMethod: getIntegerList
     -> addParameter(JavaCodeMethod, String, String, String) with (JavaCodeMethod: getIntegerList, int, length, the length) = JavaCodeParameterSpecification int length
     -> addVariable(JavaCodeMethod, String, String, JavaCodeExpression) with (JavaCodeMethod: getIntegerList, boolean, cont, JavaCodeTextExpression) = JavaCodeVariableDeclaration
@@ -23,9 +23,9 @@
     -> addCall(JavaCodeBlock, String) with (JavaCodeBlock, System.out.println) = JavaCodeMethodCall
     -> addArgument(JavaCodeMethodCall, String) with (JavaCodeMethodCall, length) = JavaCodeMethodCall
     -> addVariable(JavaCodeMethod, String, String, JavaCodeExpression) with (JavaCodeMethod: getIntegerList, int, data, JavaCodeTextExpression) = JavaCodeVariableDeclaration
-    -> addSwitch(JavaCodeMethod, String) with (JavaCodeMethod: getIntegerList, data) = JavaCodeSwitch
+    -> addSwitch(JavaCodeMethod, JavaCodeExpression) with (JavaCodeMethod: getIntegerList, JavaCodeTextExpression) = JavaCodeSwitch
     sw <- JavaCodeSwitch
-    -> addCase(JavaCodeSwitch, String, Boolean, Boolean) with (JavaCodeSwitch, 5, false, true) = JavaCodeCase
+    -> addCase(JavaCodeSwitch, JavaCodeExpression, Boolean, Boolean) with (JavaCodeSwitch, JavaCodeTextExpression, false, true) = JavaCodeCase
     -> addCall(JavaCodeBlock, String) with (JavaCodeCase, doOther) = JavaCodeMethodCall
     -> addDefault(JavaCodeSwitch, Boolean, Boolean) with (JavaCodeSwitch, false, false) = JavaCodeDefault
     -> addCall(JavaCodeBlock, String) with (JavaCodeDefault, doOther) = JavaCodeMethodCall

@@ -68,18 +68,6 @@ public class JavaCodeTernaryExpression extends JavaCodeExpression {
      * @param elseEx the then expression
      * @return the instance
      */
-    public static JavaCodeTernaryExpression create(String condition, String ifEx, String elseEx) {
-        return new JavaCodeTernaryExpression(null, condition, ifEx, elseEx);
-    }
-
-    /**
-     * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
-     * 
-     * @param condition the condition expression
-     * @param ifEx the if expression
-     * @param elseEx the then expression
-     * @return the instance
-     */
     public static JavaCodeTernaryExpression create(JavaCodeExpression condition, JavaCodeExpression ifEx, 
         JavaCodeExpression elseEx) {
         return new JavaCodeTernaryExpression(null, condition, ifEx, elseEx);

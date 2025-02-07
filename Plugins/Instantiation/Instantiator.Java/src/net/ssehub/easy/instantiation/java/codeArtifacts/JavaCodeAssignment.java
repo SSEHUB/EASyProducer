@@ -53,11 +53,13 @@ public class JavaCodeAssignment extends JavaCodeStatement {
         this.variableName = variableName;
         this.operator = operator;
         this.expression = expression;
-        this.expression.setParent(this);
+        if (null != expression) {
+            this.expression.setParent(this);
+        }
     }
 
     /**
-     * Adds a non-static method call.
+     * Adds a non-static method call as value to assign.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @return the method call (for chaining)
@@ -67,7 +69,7 @@ public class JavaCodeAssignment extends JavaCodeStatement {
     }
 
     /**
-     * Adds a method call.
+     * Adds a method call as value to assign.
      * 
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @param scope the import scope
@@ -78,6 +80,17 @@ public class JavaCodeAssignment extends JavaCodeStatement {
         return (JavaCodeMethodCall) expression;
     }
     
+    /**
+     * Adds a constructor call as value to assign.
+     * 
+     * @param cls the class name to create an instance for
+     * @return the constructor call (for chaining)
+     */
+    public JavaCodeConstructorCall addNew(String cls) {
+        expression = new JavaCodeConstructorCall(this, cls, false, "");
+        return (JavaCodeConstructorCall) expression;
+    }
+     
     @Override
     public void store(CodeWriter out) {
         out.printIndent();

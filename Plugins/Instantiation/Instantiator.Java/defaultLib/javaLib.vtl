@@ -5,7 +5,7 @@ template javaLib() {
     */
     def emitJava(sequenceOf(JavaCodeElement) elements) {
         for (JavaCodeElement e : elements) {
-            '${e}' !<CR>;
+            '${e.toCode()}' !<CR>;
         }
     }
     
@@ -13,7 +13,7 @@ template javaLib() {
     * Emit the code of the Java code element as given. 
     */
     def emitJava(JavaCodeElement elt) {
-        '${elt}' | -1;
+        '${elt.toCode()}' | -1;
     }
 
 }

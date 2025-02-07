@@ -110,6 +110,24 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     }
 
     /**
+     * Turns a class name into a type specification.
+     * 
+     * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
+     * @param element the element to start searching for the parent code class at
+     * @return <b>this</b> for chaining
+     */
+    static JavaCodeTypeSpecification toClassType(String cls, IJavaCodeElement element) {
+        JavaCodeTypeSpecification result = null;
+        if (null != cls && cls.length() > 0) {
+            if (cls.endsWith(".class")) {
+                cls = cls.substring(0, cls.length() - 6);
+            }
+            result = new JavaCodeTypeSpecification(cls, element);
+        }
+        return result;
+    }
+    
+    /**
      * Parses the generics part of a type definition into individual top-level generics.
      * 
      * @param text the text containing the generics part to be parsed

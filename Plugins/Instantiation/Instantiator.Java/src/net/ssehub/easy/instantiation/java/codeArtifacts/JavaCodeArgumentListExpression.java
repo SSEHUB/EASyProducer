@@ -53,12 +53,17 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
     /**
      * Adds a call argument as raw string of {@code arg}.
      * 
-     * @param arg the argument
+     * @param arg the argument (ignored if equivalent to empty or null)
      * @return <b>this</b> for chaining
      */
     public JavaCodeArgumentListExpression addArgument(Object arg) {
         arg = IVilType.convertVilValue(arg);
-        arguments.add(new JavaCodeText(null == arg ? "" : arg.toString(), false, false));
+        if (null != arg) {
+            String sArg = arg.toString();
+            if (sArg.length() > 0) {
+                arguments.add(new JavaCodeText(sArg, false, false));
+            }
+        }
         return this;
     }
 
@@ -82,17 +87,28 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
     }
 
     /**
+     * Adds a call argument as potentially quoted string constant adding Java quotes before and after.
+     * 
+     * @param val the String value
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeArgumentListExpression addStringArgumentNotEmpty(String val) {
+        if (null != val && val.length() > 0) {
+            addStringArgument(val);
+        }
+        return this;
+    }
+    
+    /**
      * Adds a call argument as class expression, i.e. potentially qualified class name optionally ending with ".class".
+     * Cares for importing {@code cls},
      * 
      * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
      * @return <b>this</b> for chaining
      */
     public JavaCodeArgumentListExpression addClassArgument(String cls) {
-        if (null != cls && cls.length() > 0) {
-            if (cls.endsWith(".class")) {
-                cls = cls.substring(0, cls.length() - 6);
-            }
-            JavaCodeTypeSpecification type = new JavaCodeTypeSpecification(cls, this);
+        JavaCodeTypeSpecification type = JavaCodeTypeSpecification.toClassType(cls, this);
+        if (null != type) {
             addArgument(new JavaCodeTypeExpression(this, type));
         }
         return this;
@@ -127,7 +143,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @return <b>this</b> for chaining
      */
     public JavaCodeArgumentListExpression addArgument(JavaCodeExpression ex) {
-        if (null != ex) {
+        if (null != ex && !ex.isEmpty()) {
             ex.setParent(this);
             arguments.add(ex);
         }
@@ -143,6 +159,19 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
     public JavaCodeArgumentListExpression addArgument(JavaCodeVariableDeclaration var) {
         if (null != var) {
             arguments.add(new JavaCodeVariableExpression(this, var));
+        }
+        return this;
+    }
+
+    /**
+     * Adds the name of a parameter as call argument.
+     * 
+     * @param param the parameter declaration, may be <b>null</b> for none
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeArgumentListExpression addArgument(JavaCodeParameterSpecification param) {
+        if (null != param) {
+            arguments.add(new JavaCodeTextExpression(this, param.getName())); // might also be a specific instance
         }
         return this;
     }
@@ -172,9 +201,19 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @return the lambda expression
      */
     public JavaCodeLambdaExpression addLambdaArgument() {
-        return addArgumentImpl(new JavaCodeLambdaExpression(this));
+        return addLambdaArgument(null);
     }
-    
+
+    /**
+     * Adds a lambda expression with given single variable as call argument.
+     * 
+     * @param variable the variable name, may be <b>null</b> or empty for none
+     * @return the lambda expression
+     */
+    public JavaCodeLambdaExpression addLambdaArgument(String variable) {
+        return addArgumentImpl(new JavaCodeLambdaExpression(this).addVariable(variable));
+    }
+
     /**
      * Adds an argument list expression through its individual contained arguments.
      * 
@@ -238,4 +277,16 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
         IJavaCodeElement.storeList(arguments, ",", out); // this is just a partial argument list
     }
     
+    @Override
+    public JavaCodeArgumentListExpression replaceVariable(String oldName, String newName) {
+        arguments.forEach(a -> a.replaceVariable(oldName, newName));
+        return this;
+    }
+
+    @Override
+    public JavaCodeArgumentListExpression replaceMethod(String oldName, String newName) {
+        arguments.forEach(a -> a.replaceMethod(oldName, newName));
+        return this;
+    }
+
 }

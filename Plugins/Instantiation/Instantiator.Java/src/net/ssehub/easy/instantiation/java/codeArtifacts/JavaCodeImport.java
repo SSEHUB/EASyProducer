@@ -68,6 +68,16 @@ public class JavaCodeImport implements IJavaCodeImport {
     public String getName() {
         return name;
     }
+    
+    @Override
+    public String getSimpleName() {
+        String result = name;
+        int pos = result.lastIndexOf('.');
+        if (pos > 0) {
+            result = result.substring(pos + 1);
+        }
+        return result;
+    }
 
     /**
      * Sets this element's static state.

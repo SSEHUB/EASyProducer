@@ -28,7 +28,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeClass extends JavaCodeVisibleElement {
+public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
 
     static final JavaCodeClass EMPTY = new JavaCodeClass("", JavaCodeArtifact.EMPTY);
     private static NewLineStrategy newLineStrategy = new ConditionalAttributeNewLineStrategy();
@@ -39,7 +39,6 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     private IJavaCodeArtifact artifact;
     private JavaCodeTypeSpecification extendingClass;
     private List<JavaCodeTypeSpecification> implementedInterfaces;
-    private List<String> generics;
     
     public enum Kind {
         CLASS("class"),
@@ -223,7 +222,9 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
     }
     
     public JavaCodeClass addExtends(String type) {
-        extendingClass = JavaCodeTypeSpecification.create(type, this);
+        if (null != type && type.length() > 0) {
+            extendingClass = JavaCodeTypeSpecification.create(type, this);
+        }
         return this;
     }
 
@@ -234,7 +235,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      * @return <b>this</b>
      */
     public JavaCodeClass addInterface(String type) {
-        if (type.length() > 0) {
+        if (null != type && type.length() > 0) {
             if (null == implementedInterfaces) {
                 implementedInterfaces = new ArrayList<>();
             }
@@ -282,6 +283,10 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
 
     public JavaCodeMethod addMainMethod() {
         return addMainMethod("The main method.", "args", "command line arguments");
+    }
+
+    public JavaCodeMethod addMainMethod(String methodComment) {
+        return addMainMethod(methodComment, "args", "command line arguments");
     }
 
     public JavaCodeMethod addMainMethod(String methodComment, String param, String paramComment) {
@@ -370,7 +375,7 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      * @return <b>this</b> for chaining
      */
     public JavaCodeClass addGeneric(String name) {
-        return addGeneric(name, null);
+        return (JavaCodeClass) super.addGeneric(name);
     }
 
     /**
@@ -381,12 +386,9 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
      * @return <b>this</b> for chaining
      */
     public JavaCodeClass addGeneric(String name, String comment) {
-        if (null == generics) {
-            generics = new ArrayList<>();
-        }
-        generics.add(name);
+        super.addGeneric(name);
         if (null != comment && comment.length() > 0) {
-            getJavadocComment().addParameterComment("<" + name + ">", comment);
+            getJavadocComment().addGenericComment(name, comment);
         }
         return this;
     }
@@ -551,6 +553,18 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         return this;
     }
     
+    @Override
+    public JavaCodeClass setAbstract(boolean isAbstract) {
+        super.setAbstract(isAbstract);
+        return this;
+    }
+
+    @Override
+    public JavaCodeClass setAbstract() {
+        super.setAbstract();
+        return this;
+    }    
+    
     /**
      * Returns the class kind.
      * 
@@ -580,10 +594,10 @@ public class JavaCodeClass extends JavaCodeVisibleElement {
         out.println();
     }
     
-    protected void storeGenerics(CodeWriter out) {
-        if (null != generics) {
-            out.print("<" + IJavaCodeElement.toList(generics, ", ") + ">");
-        }
+    @Invisible
+    @Override
+    protected String insertGenerics(String text) {
+        return text; // not after modifier (-> method), needs to be done later in class
     }
     
     protected void storeBlock(CodeWriter out) {

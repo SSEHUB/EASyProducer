@@ -77,6 +77,14 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return <b>this</b> for chaining
      */
     public JavaCodeBlockInterface add(String text);
+    
+    /**
+     * Adds text, potentially as a statement (potentially adding a ";"), and indents it.
+     * 
+     * @param text the text
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeBlockInterface addAsStatement(String text);
 
     /**
      * Adds text without indentation/pre-indended.
@@ -170,7 +178,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the switch expression
      * @return the switch block
      */
-    public JavaCodeSwitch addSwitch(String expression);
+    public JavaCodeSwitch addSwitch(JavaCodeExpression expression);
 
     /**
      * Adds a synchronized block.
@@ -201,6 +209,14 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the decrement expression statement
      */
     public JavaCodeExpressionStatement addPostfixDecrement(String variable);    
+
+    /**
+     * Adds an assignment without value expression, to be added through the returned assignment.
+     * 
+     * @param variable the variable to change
+     * @return the assignment
+     */
+    public JavaCodeAssignment addAssignment(String variable);
 
     /**
      * Adds an assignment.
@@ -249,7 +265,14 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return the method call (for chaining)
      */
     public JavaCodeMethodCall addThisCall();
-    
+
+    /**
+     * Adds a "System.out.println" call.
+     * 
+     * @return the method call (for chaining)
+     */
+    public JavaCodeMethodCall addSystemOutPrintlnCall();
+
     /**
      * Creates a variable declaration.
      * 

@@ -54,6 +54,15 @@ public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
         super(type, method.getEnclosing());
         this.name = name;
     }
+    
+    /**
+     * Returns the parameter name.
+     * 
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
     /**
      * Adds an annotation.

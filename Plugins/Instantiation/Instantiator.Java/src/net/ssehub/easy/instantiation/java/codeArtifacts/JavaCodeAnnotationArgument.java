@@ -28,10 +28,10 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 public class JavaCodeAnnotationArgument implements IJavaCodeElement {
 
     private String name;
-    private String value;
+    private JavaCodeExpression value;
     private JavaCodeAnnotation annotation;
     private boolean splitLines;
-    private List<String> values;
+    private List<JavaCodeExpression> values;
 
     /**
      * Creates an annotation argument.
@@ -42,8 +42,8 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
      * @param splitLines splits values into separate lines
      * @param annotation the annotated annotation
      */
-    JavaCodeAnnotationArgument(String name, String value, List<String> values, boolean splitLines, 
-        JavaCodeAnnotation annotation) {
+    JavaCodeAnnotationArgument(String name, JavaCodeExpression value, List<JavaCodeExpression> values, 
+        boolean splitLines, JavaCodeAnnotation annotation) {
         this.name = name;
         this.annotation = annotation;
         this.splitLines = splitLines;
@@ -81,9 +81,9 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
                 out.println();
                 out.increaseIndent();
             }
-            for (String v: values) {
+            for (JavaCodeExpression v: values) {
                 if (!first) {
-                    out.print(",");
+                    out.print(", ");
                     if (split) {
                         out.println();
                     }
@@ -91,7 +91,7 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
                 if (split) {
                     out.printIndent();
                 }
-                out.print(v);
+                v.store(out);
                 first = false;
             }
             if (split) {
@@ -99,7 +99,7 @@ public class JavaCodeAnnotationArgument implements IJavaCodeElement {
             }
             out.print("}");
         } else {
-            out.print(value);
+            value.store(out);
         }
     }
     

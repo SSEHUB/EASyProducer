@@ -37,9 +37,9 @@ public class JavaCodeNewArrayExpression extends JavaCodeExpression {
      * @param parent the parent
      * @param type the type
      */
-    protected JavaCodeNewArrayExpression(IJavaCodeElement parent, JavaCodeTypeSpecification type) {
+    protected JavaCodeNewArrayExpression(IJavaCodeElement parent, String type) {
         super(parent);
-        this.type = type;
+        this.type = new JavaCodeTypeSpecification(type, this);
     }
 
     /**
@@ -49,7 +49,7 @@ public class JavaCodeNewArrayExpression extends JavaCodeExpression {
      * @return the instance
      */
     public static JavaCodeNewArrayExpression create(String type) {
-        return new JavaCodeNewArrayExpression(null, new JavaCodeTypeSpecification(type, null));
+        return new JavaCodeNewArrayExpression(null, type);
     }
     
     /**

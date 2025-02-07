@@ -427,7 +427,7 @@ public abstract class RuntimeEnvironment<V extends VariableDeclaration, M extend
                 }
             }
             if (!found) {
-                throw new VilException("IVML element " + name + " is not defined", 
+                throw new VilException("IVML element '" + name + "' is not defined", 
                     VilException.ID_NOT_FOUND);
             }
             return value;

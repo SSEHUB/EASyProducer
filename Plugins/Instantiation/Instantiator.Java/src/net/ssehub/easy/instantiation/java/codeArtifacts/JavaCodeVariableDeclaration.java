@@ -15,6 +15,9 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 
@@ -30,6 +33,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
     private boolean isFinal;
     private JavaCodeExpression initEx;
     private boolean asResource;
+    private List<JavaCodeAnnotation> annotations;
 
     /**
      * Creates a variable declaration.
@@ -67,6 +71,18 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
             this.initEx.setParent(this);
         }
         this.asResource = asResource;
+    }
+
+    /**
+     * Sets the initializer as expression.
+     * 
+     * @param initializer the initializer
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeVariableDeclaration addInitializer(JavaCodeExpression initializer) {
+        this.initEx = initializer;
+        this.initEx.setParent(this);
+        return this;
     }
 
     /**
@@ -153,9 +169,64 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         initEx = new JavaCodeConstructorCall(this, cls, false, "");
         return (JavaCodeConstructorCall) initEx;
     }
+    
+    public JavaCodeAnonymousClass addAnonymous(String cls) {
+        JavaCodeAnonymousClass ano = new JavaCodeAnonymousClass(cls, JavaCodeClass.getParentCodeClass(this));
+        initEx = JavaCodeAnonymousClass.toExpression(ano);
+        return ano;
+    }
+    
+    /**
+     * Adds an annotation.
+     * 
+     * @param type the annotation type, may be fully qualified
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addAnnotation(String type) {
+        return addAnnotation(type, null);
+    }
+    
+    /**
+     * Adds a suppress warnings annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addSuppressWarningsAnnotation() {
+        return addAnnotation(SuppressWarnings.class.getSimpleName());
+    }
+
+    /**
+     * Adds a suppress "unchecked" warnings annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addSuppressWarningsUncheckedAnnotation() {
+        return addSuppressWarningsAnnotation().addStringArgument("unchecked");
+    }
+
+    /**
+     * Adds an annotation.
+     * 
+     * @param type the annotation type, may be fully qualified
+     * @param nested a nested type qualification within {@code type}, may be empty or <b>null</b> for none
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addAnnotation(String type, String nested) {
+        if (null == annotations) {
+            annotations = new ArrayList<>();
+        }
+        return IJavaCodeElement.add(annotations, 
+            new JavaCodeAnnotation(new JavaCodeTypeSpecification(type, JavaCodeClass.getParentCodeClass(this)), 
+                nested, this));
+    }
 
     @Override
     public void store(CodeWriter out) {
+        if (null != annotations) {
+            for (JavaCodeAnnotation a : annotations) {
+                a.store(out);
+            }
+        }
         if (!asResource) {
             out.printIndent();
         }
@@ -190,6 +261,23 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      */
     public String getName() {
         return variableName;
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        if (null != type) {
+            type.setParent(this);
+        }
+    }
+
+    @Override
+    public JavaCodeVariableDeclaration replaceVariable(String oldName, String newName) {
+        if (variableName.equals(oldName)) {
+            variableName = newName;
+        }
+        return this;
     }
 
 }

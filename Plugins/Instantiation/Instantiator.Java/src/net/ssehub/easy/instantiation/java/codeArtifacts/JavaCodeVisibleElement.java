@@ -251,6 +251,15 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
     }
     
     /**
+     * Adds a suppress warnings annotation.
+     * 
+     * @return the annotation for further processing
+     */
+    public JavaCodeAnnotation addSuppressWarningsAnnotation() {
+        return addAnnotation(SuppressWarnings.class.getSimpleName());
+    }
+    
+    /**
      * Adds an annotation.
      * 
      * @param type the annotation type, may be fully qualified

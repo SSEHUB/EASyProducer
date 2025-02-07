@@ -156,7 +156,9 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     protected String validateName(IJavaCodeElement parent, String methodName, JavaCodeImportScope scope) {
         String result = methodName;
         if (null != parent && JavaCodeImportScope.NONE != scope && methodName.contains(".")) {
-            result = parent.getArtifact().validateStaticName(methodName, scope);
+            if (null != parent.getArtifact()) {            
+                result = parent.getArtifact().validateStaticName(methodName, scope);
+            }
         }
         return result;
     }
@@ -175,6 +177,11 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     public JavaCodeMethodCall addStringArgument(String val) {
         return (JavaCodeMethodCall) super.addStringArgument(val); 
     }
+    
+    @Override
+    public JavaCodeMethodCall addStringArgumentNotEmpty(String val) {
+        return (JavaCodeMethodCall) super.addStringArgumentNotEmpty(val); 
+    }    
 
     @Override
     public JavaCodeMethodCall addClassArgument(String cls) {
@@ -195,10 +202,15 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     public JavaCodeMethodCall addArgument(JavaCodeExpression ex) {
         return (JavaCodeMethodCall) super.addArgument(ex);
     }
-
+    
     @Override
     public JavaCodeMethodCall addArgument(JavaCodeVariableDeclaration var) {
         return (JavaCodeMethodCall) super.addArgument(var);
+    }
+    
+    @Override
+    public JavaCodeMethodCall addArgument(JavaCodeParameterSpecification param) {
+        return (JavaCodeMethodCall) super.addArgument(param);
     }
 
     @Invisible
@@ -259,6 +271,20 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     }
 
     /**
+     * Adds a constructor call as call argument.
+     * 
+     * @param cls the class to create an instance from
+     * @return the create constructor call for chaining
+     */
+    public JavaCodeConstructorCall addNewArgument(String cls) {
+        return addArgumentImpl(new JavaCodeConstructorCall(this, cls, false, ""));
+    }
+    
+    public JavaCodeNewArrayExpression addNewArrayArgument(String type) {
+        return addArgumentImpl(new JavaCodeNewArrayExpression(this, type));
+    }
+    
+    /**
      * Adds a variable access as call argument.
      * 
      * @param variableName the variable name, qualified or statically qualified expression
@@ -287,9 +313,20 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
 
     @Override
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
-        chained = new JavaCodeMethodCall(this, methodName, scope, false, postfix);
-        postfix = "";
-        return chained;
+        JavaCodeMethodCall result = new JavaCodeMethodCall(this, methodName, scope, false, postfix);
+        if (chained == null) {
+            chained = result;
+            postfix = System.lineSeparator();
+        } else {
+            JavaCodeMethodCall last = chained;
+            while (last.chained != null) {
+                last = last.chained;
+            }
+            last.chained = result;
+            result.postfix = last.postfix;
+            last.postfix = System.lineSeparator();
+        }
+        return result;
     }
     
     @Override
@@ -317,8 +354,11 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
         }
         storeBefore(out);
         out.print(methodName);
+        storeAfterName(out);
         storeArgumentList(out);
         if (null != chained) {
+            out.printIndent();
+            out.printIndentStep();
             out.print(".");
             chained.store(out);
         }
@@ -335,12 +375,51 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
             out.print(".");
         }
     }
+    
+    /**
+     * Called as part of {@link #store(CodeWriter)} to store object specific parts after the call name.
+     * 
+     * @param out the writer
+     */
+    protected void storeAfterName(CodeWriter out) {
+    }
 
     @Override
     protected void storeArgumentList(CodeWriter out) {
         out.print("(");
         super.storeArgumentList(out);
         out.print(")" + postfix);
+    }
+
+    @Override
+    public JavaCodeMethodCall replaceVariable(String oldName, String newName) {
+        if (null != qualification) {
+            qualification.replaceVariable(oldName, newName);
+        }
+        if (methodName.startsWith(oldName + ".")) {
+            int pos = methodName.indexOf('.');
+            methodName = newName + methodName.substring(pos);            
+        }
+        super.replaceVariable(oldName, newName);
+        return this;
+    }
+
+    @Override
+    public JavaCodeMethodCall replaceMethod(String oldName, String newName) {
+        if (null != qualification) {
+            qualification.replaceMethod(oldName, newName);
+        }
+        if (null != chained) {
+            chained.replaceMethod(oldName, newName);
+        }
+        if (methodName.equals(oldName)) {
+            methodName = newName;
+        } else if (methodName.endsWith("." + oldName)) {
+            int pos = methodName.lastIndexOf('.');
+            methodName = methodName.substring(pos + 1) + newName;
+        }
+        super.replaceMethod(oldName, newName);
+        return this;
     }
 
 }

@@ -59,5 +59,13 @@ public class JavaCodeTextExpression extends JavaCodeExpression {
     public boolean isEmpty() {
         return null == text || text.toString().length() == 0;
     }
+    
+    @Override
+    public JavaCodeTextExpression replaceVariable(String oldName, String newName) {
+        if (null != text) {
+            text = text.toString().replace(oldName, newName);
+        }
+        return this;
+    }
 
 }

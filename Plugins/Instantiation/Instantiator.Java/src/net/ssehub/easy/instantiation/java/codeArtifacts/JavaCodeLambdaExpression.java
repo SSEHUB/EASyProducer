@@ -42,6 +42,15 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
     }
 
     /**
+     * Creates an instance without parent/variable. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @return the instance
+     */
+    public static JavaCodeLambdaExpression create() {
+        return create(null);
+    }
+
+    /**
      * Creates an instance without parent. Must be hooked in by {@link #setParent(IJavaCodeElement)} later.
      * 
      * @param variable the first lambda variable (may be <b>null</b> or empty to ignore)
@@ -72,6 +81,39 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
         return this;
     }
     
+    /**
+     * Adds (multiple) variables from the comma separated {@code variables} string.
+     * 
+     * @param variables the variables, may be empty or null
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeLambdaExpression addVariables(String variables) {
+        if (null != variables && variables.length() > 0) {
+            for (String v : variables.split(",")) {
+                addVariable(v);
+            }
+        }
+        return this;
+    }
+
+    /**
+     * Convenience method to add some code element as expression. May be an expression, a block or a 
+     * statement (to be wrapped into a block).
+     * 
+     * @param element the element
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeLambdaExpression addAsExpression(JavaCodeElement element) {
+        if (element instanceof JavaCodeExpression) {
+            addExpression((JavaCodeExpression) element);
+        } else if (element instanceof JavaCodeBlock) {
+            setBlock((JavaCodeBlock) element);
+        } else if (element instanceof JavaCodeStatement) {
+            setBlock(JavaCodeBlock.create().add((JavaCodeStatement) element));
+        }
+        return this;
+    }
+
     /**
      * Adds the expression to be applied to the variables.
      * 
@@ -165,5 +207,34 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
             expression.store(out);
         }
     }
+    
+    @Override
+    public JavaCodeLambdaExpression replaceVariable(String oldName, String newName) {
+        if (null != block) {
+            block.replaceVariable(oldName, newName);
+        }
+        if (null != expression) {
+            expression.replaceVariable(oldName, newName);
+        }
+        if (null != variables) {
+            for (int v = 0; v < variables.size(); v++) {
+                if (variables.get(v).equals(oldName)) {
+                    variables.set(v, newName);
+                }
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public JavaCodeLambdaExpression replaceMethod(String oldName, String newName) {
+        if (null != block) {
+            block.replaceVariable(oldName, newName);
+        }
+        if (null != expression) {
+            expression.replaceVariable(oldName, newName);
+        }
+        return this;
+    }        
     
 }

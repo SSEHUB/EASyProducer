@@ -29,7 +29,6 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
     private JavaCodeExpression initializer;
-    private JavaCodeAnonymousClass anonymousInitializer;
 
     /**
      * Creates an attribute.
@@ -73,9 +72,6 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         if (null != initializer) {
             out.print(" = ");
             initializer.store(out);
-        } else if (null != anonymousInitializer) {
-            out.print(" = ");
-            anonymousInitializer.store(out);
         }
         out.println(";");
     }
@@ -134,14 +130,30 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         return this;
     }
     
+    public JavaCodeAttribute setPublicStaticFinal() {
+        super.setPublic();
+        super.setStatic();
+        super.setFinal();
+        return this;
+    }
+    
     public JavaCodeAttribute addInitializer(JavaCodeExpression initializer) {
         this.initializer = initializer;
+        if (null != this.initializer) {
+            this.initializer.setParent(this);
+        }
+        return this;
+    }
+    
+    public JavaCodeAttribute addStringInitializer(String stringEx) {
+        this.initializer = new JavaCodeStringExpression(this, stringEx);
         return this;
     }
     
     public JavaCodeAnonymousClass addAnonymous(String cls) {
-        anonymousInitializer = new JavaCodeAnonymousClass(cls, getEnclosing());
-        return anonymousInitializer;
+        JavaCodeAnonymousClass ano = new JavaCodeAnonymousClass(cls, getEnclosing());
+        this.initializer = JavaCodeAnonymousClass.toExpression(ano);
+        return ano;
     }
     
     public JavaCodeConstructorCall addNew(String cls) {
@@ -149,22 +161,38 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         return (JavaCodeConstructorCall) this.initializer;
     }
     
+    public JavaCodeNewArrayExpression addNewArray(String type) {
+        this.initializer = new JavaCodeNewArrayExpression(this, type);
+        return (JavaCodeNewArrayExpression) this.initializer;
+    }
+    
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         this.initializer = new JavaCodeMethodCall(this, methodName, scope, false, "");
         return (JavaCodeMethodCall) this.initializer;
     }
-    
+
     /**
      * Adds an extensible default getter for this attribute.
      * 
      * @return the getter
      */
     public JavaCodeMethod addGetter() {
+        return addGetter(false);
+    }
+    
+    /**
+     * Adds an extensible default getter for this attribute.
+     * 
+     * @param mayBeNull if the value may be <b>null</b>
+     * @return the getter
+     */
+    public JavaCodeMethod addGetter(boolean mayBeNull) {
         final String attribute = getName();
         JavaCodeMethod method = enclosing.addMethod(type, 
             "get" + PseudoString.firstToUpperCase(attribute), "Returns the value of " + attribute + ".");
         method.setStatic(isStatic());
-        method.addReturn(new JavaCodeTextExpression(this, getName()), "the value of " + attribute);
+        String retComment = "the value of " + attribute + (mayBeNull ? ", may be <b>null</b>" : "");
+        method.addReturn(new JavaCodeTextExpression(this, getName()), retComment);
         return method;
     }
     
@@ -176,20 +204,41 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     public JavaCodeMethod addSetter() {
         return addSetter(null);
     }
+
+    /**
+     * Adds an extensible default setter for this attribute.
+     *
+     * @param paramName explicit name for the parameter, may be <b>null</b> or empty for the name of the attribute 
+     * @return the setter
+     */
+    public JavaCodeMethod addSetter(String paramName) {
+        return addSetter(paramName, false);
+    }
+
+    /**
+     * Adds an extensible default setter for this attribute.
+     *
+     * @param mayBeNull if the value may be <b>null</b>
+     * @return the setter
+     */
+    public JavaCodeMethod addSetter(boolean mayBeNull) {
+        return addSetter(null, mayBeNull);
+    }
     
     /**
      * Adds an extensible default setter for this attribute.
      *
-     * @param paramName explicit name for the parameter, may be <b>null</b> for the name of the attribute 
+     * @param paramName explicit name for the parameter, may be <b>null</b> or empty for the name of the attribute 
+     * @param mayBeNull if the value may be <b>null</b>
      * @return the setter
      */
-    public JavaCodeMethod addSetter(String paramName) {
+    public JavaCodeMethod addSetter(String paramName, boolean mayBeNull) {
         final String attribute = getName();
-        final String pName = null == paramName ? attribute : paramName;
+        final String pName = (null == paramName || paramName.length() == 0) ? attribute : paramName;
         JavaCodeMethod method = enclosing.addMethod(JavaCodeTypeSpecification.VOID, 
             "set" + PseudoString.firstToUpperCase(attribute), "Changes the value of " + attribute + ".");
         method.setStatic(isStatic());
-        method.addParameter(type, pName, "the new value");
+        method.addParameter(type, pName, "the new value" + (mayBeNull ? ", may be <b>null</b>" : ""));
         method.add("this." + attribute + " = " + pName + ";");
         return method;
     }

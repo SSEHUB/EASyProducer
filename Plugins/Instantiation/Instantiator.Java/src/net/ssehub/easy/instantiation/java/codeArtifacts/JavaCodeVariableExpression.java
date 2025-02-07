@@ -93,4 +93,12 @@ public class JavaCodeVariableExpression extends JavaCodeTextExpression implement
         return this;
     }
 
+    @Override
+    public JavaCodeVariableExpression replaceVariable(String oldName, String newName) {
+        if (null != qualification) {
+            qualification.replaceVariable(oldName, newName);
+        }
+        return this;
+    }
+
 }

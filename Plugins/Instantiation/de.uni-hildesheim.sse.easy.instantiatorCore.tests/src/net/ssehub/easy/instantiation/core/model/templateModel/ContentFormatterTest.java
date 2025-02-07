@@ -17,9 +17,13 @@ package net.ssehub.easy.instantiation.core.model.templateModel;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
+
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 
 /**
@@ -89,7 +93,10 @@ public class ContentFormatterTest {
         String expected = 
             "public class Test {\n"
             + "    public static\n"
-            + "        void main(String[]\n"
+            + "        void\n"
+            + "        main(\n"
+            + "        String[\n"
+            + "        ]\n"
             + "        args) {\n"
             + "    }\n"
             + "}\n";
@@ -101,7 +108,7 @@ public class ContentFormatterTest {
      */
     @Test
     public void testContentFormatterJavadoc() {
-        ContentFormatter formatter = createJavaFormatter(21, null);
+        ContentFormatter formatter = createJavaFormatter(31, null);
         String test = 
               "/**\n"
             + " * This is a rather long text for this formatter.\n"
@@ -113,14 +120,12 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
               "/**\n"
-            + " * This is a rather\n"
-            + " * long text for this\n"
-            + " * formatter.\n"
+            + " * This is a rather long text\n"
+            + " * for this formatter.\n"
             + " */\n"
             + "public class Test {\n"
-            + "    public static\n"
-            + "        void main(String[]\n"
-            + "        args) {\n"
+            + "    public static void main(\n"
+            + "        String[] args) {\n"
             + "    }\n"
             + "}\n";
         Assert.assertEquals(expected, res);
@@ -131,7 +136,7 @@ public class ContentFormatterTest {
      */
     @Test
     public void testContentFormatterJavadocIndented() {
-        ContentFormatter formatter = createJavaFormatter(28, null);
+        ContentFormatter formatter = createJavaFormatter(35, null);
         String test = 
               "    /**\n"
             + "     * This is a rather long text for this formatter and it goes on here.\n"
@@ -143,14 +148,13 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
               "    /**\n"
-            + "     * This is a rather\n"
-            + "     * long text for this\n"
-            + "     * formatter and it goes on\n"
-            + "     * here.\n"
+            + "     * This is a rather long text\n"
+            + "     * for this formatter and\n"
+            + "     * it goes on here.\n"
             + "     */\n"
             + "    public class Test {\n"
-            + "        public static void\n"
-            + "            main(String[] args) {\n"
+            + "        public static void main(\n"
+            + "            String[] args) {\n"
             + "        }\n"
             + "    }\n";
         Assert.assertEquals(expected, res);
@@ -161,7 +165,7 @@ public class ContentFormatterTest {
      */
     @Test
     public void testContentFormatterComment() {
-        ContentFormatter formatter = createJavaFormatter(21, null);
+        ContentFormatter formatter = createJavaFormatter(22, null);
         String test = 
               "// This is a rather long text for this formatter.\n"
             + "public class Test {\n"
@@ -173,11 +177,13 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
               "// This is a rather\n"
-            + "// long text for this\n"
+            + "// long text\n"
+            + "// for this\n"
             + "// formatter.\n"
             + "public class Test {\n"
-            + "    public static\n"
-            + "        void main(String[]\n"
+            + "    public static void\n"
+            + "        main(\n"
+            + "        String[]\n"
             + "        args) {\n"
             + "    }\n"
             + "\n"
@@ -195,7 +201,7 @@ public class ContentFormatterTest {
      */
     @Test
     public void testContentFormatterStringArg() {
-        ContentFormatter formatter = createJavaFormatter(21, null);
+        ContentFormatter formatter = createJavaFormatter(31, null);
         String test = 
               "// This is a rather long text for this formatter.\n"
             + "public class Test {\n"
@@ -207,15 +213,14 @@ public class ContentFormatterTest {
             + "}\n";
         String res = formatter.format(test);
         String expected = 
-              "// This is a rather\n"
-            + "// long text for this\n"
-            + "// formatter.\n"
+              "// This is a rather long text\n"
+            + "// for this formatter.\n"
             + "public class Test {\n"
-            + "    public static\n"
-            + "        void main(String[]\n"
-            + "        args) {\n"
+            + "    public static void main(\n"
+            + "        String[] args) {\n"
             + "        println(\n"
-            + "            \"http://aaa.bbb.ccc\");\n"
+            + "            \"http://aaa.bbb.c\"\n"
+            + "            + \"cc\");\n"
             + "    }\n"
             + "\n"
             + "}\n";
@@ -227,7 +232,7 @@ public class ContentFormatterTest {
      */
     @Test
     public void testContentFormatterStringArg2() {
-        ContentFormatter formatter = createJavaFormatter(25, null);
+        ContentFormatter formatter = createJavaFormatter(31, null);
         String test = 
               "// This is a rather long text for this formatter.\n"
             + "public class Test {\n"
@@ -239,13 +244,14 @@ public class ContentFormatterTest {
             + "}\n";
         String res = formatter.format(test);
         String expected = 
-              "// This is a rather long\n"
-            + "// text for this formatter.\n"
+              "// This is a rather long text\n"
+            + "// for this formatter.\n"
             + "public class Test {\n"
-            + "    public static void\n"
-            + "        main(String[] args) {\n"
+            + "    public static void main(\n"
+            + "        String[] args) {\n"
             + "        out.println(\n"
-            + "            \"http://aaa.bbb.ccc\");\n"
+            + "            \"http://aaa.bbb.c\"\n"
+            + "            + \"cc\");\n"
             + "    }\n"
             + "\n"
             + "}\n";
@@ -257,7 +263,7 @@ public class ContentFormatterTest {
      */
     @Test
     public void testContentFormatterChainedExpression() {
-        ContentFormatter formatter = createJavaFormatter(21, null);
+        ContentFormatter formatter = createJavaFormatter(31, null);
         String test = 
             "public class Test {\n"
             + "    public static void main(String[] args) {\n"
@@ -269,13 +275,12 @@ public class ContentFormatterTest {
         String res = formatter.format(test);
         String expected = 
             "public class Test {\n"
-            + "    public static\n"
-            + "        void main(String[]\n"
-            + "        args) {\n"
-            + "        Data.\n"
-            + "            createBuilder().\n"
-            + "            setValue(5).setArg(\n"
-            + "            7).build();\n"
+            + "    public static void main(\n"
+            + "        String[] args) {\n"
+            + "        Data.createBuilder().\n"
+            + "            setValue(5).\n"
+            + "            setArg(7).build(\n"
+            + "            );\n"
             + "    }\n"
             + "\n"
             + "}\n";
@@ -310,9 +315,25 @@ public class ContentFormatterTest {
         String expected = "Connector<DataItem, Object, MyConnPltfIn, MyConnPltfOut> conn = ConnectorFactory."
             + "createConnector(\n"
             + "\"de.iip_ecosphere.platform.connectors.opcuav1.OpcUaConnector\", () -> param, createConnectorAdapter("
-            + "()->service.getInPath(\n"
-            + "    \"\"), ()->service.getOutPath(\"\")));";
+            + "()->service.\n    getInPath(\"\"), ()->service.getOutPath(\"\")));";
         Assert.assertEquals(expected, res);
+    }
+    
+    /**
+     * Read directly from a file.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Ignore
+    @Test
+    public void test() throws IOException {
+        @SuppressWarnings("deprecation")
+        java.util.List<String> test = FileUtils.readLines(new java.io.File("./test.txt"));
+        ContentFormatter formatter = createJavaFormatter(120, null);
+        for (String s : test) {
+            String res = formatter.format(s);
+            System.out.println(res);
+        }
     }
 
     /*@Test

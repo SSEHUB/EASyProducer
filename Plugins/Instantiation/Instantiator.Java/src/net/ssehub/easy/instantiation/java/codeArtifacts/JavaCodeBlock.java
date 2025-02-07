@@ -173,7 +173,21 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
 
     @Override
     public JavaCodeBlock add(String text) {
-        elements.add(new JavaCodeText(text, true, true));
+        return add(text, false);
+    }
+    
+    @Override
+    public JavaCodeBlock addAsStatement(String text) {
+        return add(text, true);
+    }
+    
+    private JavaCodeBlock add(String text, boolean asStatement) {
+        if (text != null && text.length() > 0) {
+            if (asStatement && !text.endsWith(";")) {
+                text = text + ";";
+            }
+            elements.add(new JavaCodeText(text, true, true));
+        }
         return this;
     }
     
@@ -187,7 +201,9 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
 
     @Override
     public JavaCodeBlock addRaw(String text) {
-        elements.add(new JavaCodeText(text, false, true));
+        if (text != null && text.length() > 0) {
+            elements.add(new JavaCodeText(text, false, true));
+        }
         return this;
     }
     
@@ -236,7 +252,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }
 
     @Override
-    public JavaCodeSwitch addSwitch(String expression) {
+    public JavaCodeSwitch addSwitch(JavaCodeExpression expression) {
         return IJavaCodeElement.add(elements, new JavaCodeSwitch(this, expression));
     }
 
@@ -265,6 +281,11 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
             JavaCodeExpressionStatement.createPostfixStatement(this, variable, increment));
     }
 
+    @Override
+    public JavaCodeAssignment addAssignment(String variable) {
+        return addAssignment(variable, "=", null);
+    }
+    
     @Override
     public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression) {
         return addAssignment(variable, "=", expression);
@@ -296,7 +317,12 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     public JavaCodeMethodCall addThisCall() {
         return addCall("this");
     }
-    
+
+    @Override
+    public JavaCodeMethodCall addSystemOutPrintlnCall() {
+        return addCall("System.out.println");
+    }
+
     /**
      * Adds a JUnit assert call (as static, non-imported method).
      * 
@@ -397,10 +423,20 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @Invisible
     @Override
     public void transferElementsTo(JavaCodeBlockInterface block) {
-        for (IJavaCodeElement e : elements) {
-            block.add(e);
+        if (block != this) { // prevent accidental endless look, stack overflow
+            for (IJavaCodeElement e : elements) {
+                block.add(e);
+                e.setParent(block);
+            }
+            elements.clear();
         }
-        elements.clear();
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        elements.forEach(e -> e.setParent(this));
     }
 
     @Invisible
@@ -459,6 +495,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
             for (IJavaCodeElement attr: elements) {
                 attr.store(out);
             }
+            storeBeforeBlockEnd(out);
             out.decreaseIndent();
         }
         if (withBrackets) {
@@ -471,6 +508,9 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
                 out.println();
             }
         }
+    }
+    
+    protected void storeBeforeBlockEnd(CodeWriter out) {
     }
 
     @Override
@@ -514,6 +554,32 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @Override
     public boolean isEmpty() {
         return elements.isEmpty();
+    }
+    
+    @Override
+    public JavaCodeBlock replaceVariable(String oldName, String newName) {
+        elements.forEach(e -> e.replaceVariable(oldName, newName));
+        return this;
+    }
+
+    @Override
+    public JavaCodeBlock replaceMethod(String oldName, String newName) {
+        elements.forEach(e -> replaceMethod(oldName, newName));
+        return this;
+    }
+    
+    /**
+     * Returns whether {@code elt} is contained in this block.
+     * 
+     * @param elt the element to search for
+     * @return {@code true} for contained, {@code false} else
+     */
+    protected boolean contains(IJavaCodeElement elt) {
+        return elements.contains(elt);
+    }
+    
+    protected boolean withBrackets() {
+        return withBrackets;
     }
     
 }

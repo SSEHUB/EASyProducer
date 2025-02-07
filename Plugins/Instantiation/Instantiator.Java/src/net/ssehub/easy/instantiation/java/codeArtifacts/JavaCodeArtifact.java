@@ -468,6 +468,10 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         result.addAll(restStatic);
         return result;
     }
+    
+    private String removeNonTypeChars(String text) {
+        return text.replace("\n", "").replace("\r", "").replace(" ", "");
+    }
 
     @Invisible
     @Override
@@ -479,19 +483,43 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             typeName = typeName.substring(0, typeName.length() 
                 - IJavaCodeTypeSpecification.VARARG_TYPE_POSTFIX.length());
         }
-        int pos = typeName.lastIndexOf('.');
+        String prefix = "";
+        String marker = " super ";
+        int pos = typeName.lastIndexOf(marker);
+        if (pos < 0) {
+            marker = " extends ";
+            pos = typeName.lastIndexOf(marker);
+        }
+        if (pos > 0) {
+            pos += marker.length();
+            prefix = typeName.substring(0, pos);
+            typeName = typeName.substring(pos);
+        }
+        typeName = removeNonTypeChars(typeName); // sometimes there is a pre-formatted input, indended (?)
+        String plainTypeName = typeName;
+        pos = typeName.lastIndexOf('.');
         if (pos > 0) {
             String simpleTypeName = typeName.substring(pos + 1);
             JavaCodeClass cls = JavaCodeClass.getParentCodeClass(type);
             String simpleClsName = cls != null ? cls.getName() : "";
             if (!simpleClsName.equals(simpleTypeName)) { // do not import if class name overlaps import
-                if (null == findMatchingImport(typeName, false)) {
+                String newOutputTypeName = prefix + simpleTypeName;
+                IJavaCodeImport match = findMatchingImport(typeName, false);
+                if (null == match) {
                     new JavaCodeImport(typeName, this); // added automatically
+                } else {
+                    if (!plainTypeName.equals(match.getName())) { // exists but differs, keep FQN
+                        newOutputTypeName = plainTypeName;
+                    }
                 }
-                type.setOutputTypeName(simpleTypeName);
+                type.setOutputTypeName(newOutputTypeName);
                 type.setVarArg(varArg);
             }
         }
+    }
+    
+    private static boolean seemsToBeClass(String name) {
+        return name.length() > 0 && Character.isUpperCase(name.charAt(0));
     }
     
     @Invisible
@@ -518,7 +546,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             if (JavaCodeImportScope.CLASS == scope || JavaCodeImportScope.METHOD_CLASS_IMPORT == scope 
                 || JavaCodeImportScope.CLASS_NO_METHOD == scope) {
                 IJavaCodeImport imp = findMatchingImport(type, true);
-                if (null == imp) {
+                if (null == imp && type.contains(".")) { // no local imports
                     new JavaCodeImport(type, this, false); // added automatically
                 }
                 aPos = type.lastIndexOf('.');
@@ -526,7 +554,8 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
                 if (pos > 0) {
                     simpleTypeName = type.substring(aPos + 1);
                 }
-                if (JavaCodeImportScope.CLASS == scope) {
+                if (JavaCodeImportScope.CLASS == scope 
+                    || (JavaCodeImportScope.METHOD_CLASS_IMPORT == scope && seemsToBeClass(simpleTypeName))) {
                     name = simpleTypeName + "." + name;
                 } // else like .METHOD
             } else if (JavaCodeImportScope.METHOD == scope) {
@@ -555,9 +584,11 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     private IJavaCodeImport findMatchingImport(String imp, boolean isStatic) {
         IJavaCodeImport result = null;
         String impPrefix = "";
+        String impSimpleName = imp;
         int pos = imp.lastIndexOf('.');
         if (pos > 0) {
             impPrefix = imp.substring(0, pos);
+            impSimpleName = imp.substring(pos + 1);
         }
         if (JavaCodeImport.DEFAULT.getName().equals(impPrefix)) {
             result = JavaCodeImport.DEFAULT;
@@ -569,7 +600,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
                     if (i.isWildcard()) {
                         found = impPrefix.equals(iName.substring(0, iName.length() - 1));
                     } else {
-                        found = iName.equals(imp);
+                        found = iName.equals(imp) || i.getSimpleName().equals(impSimpleName);
                     }
                     if (found) {
                         result = i;

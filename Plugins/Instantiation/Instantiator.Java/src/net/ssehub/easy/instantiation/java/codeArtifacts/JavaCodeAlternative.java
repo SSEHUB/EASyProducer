@@ -94,14 +94,28 @@ public class JavaCodeAlternative extends JavaCodeBlock {
         }
         return this;
     }
+    
+    /**
+     * Returns whether this alternative is is part of an if-then-else cascade or whether it is contained in the 
+     * parent's else block.
+     * 
+     * @return {@code true} for cascaded/not contained, {@false} for contained
+     */
+    private boolean isCascaded() {
+        boolean chained = false;
+        if (getParent() instanceof JavaCodeAlternative) {
+            chained = !((JavaCodeAlternative) getParent()).contains(this);
+        }
+        return chained;
+    }
 
     @Invisible
     @Override
     public void store(CodeWriter out) {
-        if (!(getParent() instanceof JavaCodeAlternative)) {
-            out.printIndent();
-        } else { // else if
+        if (isCascaded()) { // else if
             out.print(" ");
+        } else {
+            out.printIndent();
         }
         out.print("if (");
         out.print(condition);

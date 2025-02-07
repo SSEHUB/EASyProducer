@@ -18,6 +18,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
@@ -46,18 +47,23 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
      * Sets this element's abstract state.
      * 
      * @param isAbstract if the element is abstract
+     * @return <b>this</b> for chaining
      */
     @OperationMeta(name = {"abstract"})
-    public void setAbstract(boolean isAbstract) {
+    public JavaCodeAbstractVisibleElement setAbstract(boolean isAbstract) {
         this.isAbstract = isAbstract;
+        return this;
     }
 
     /**
      * Sets this element to abstract.
+     * 
+     * @return <b>this</b> for chaining
      */
     @OperationMeta(name = {"abstract"})
-    public void setAbstract() {
+    public JavaCodeAbstractVisibleElement setAbstract() {
         setAbstract(true);
+        return this;
     }
 
     /**
@@ -73,12 +79,14 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
      * Adds a generic.
      * 
      * @param generic the generic
+     * @return <b>this</b> for chaining
      */
-    public void addGeneric(String generic) {
+    public JavaCodeAbstractVisibleElement addGeneric(String generic) {
         if (null == generics) {
             generics = new ArrayList<>();
         }
         generics.add(generic);
+        return this;
     }
 
     @Invisible
@@ -97,4 +105,11 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
         return text + IJavaCodeElement.toList(generics, ", "); // TODO SEPARATOR
     }
 
+    
+    protected void storeGenerics(CodeWriter out) {
+        if (null != generics) {
+            out.print("<" + IJavaCodeElement.toList(generics, ", ") + ">");
+        }
+    }
+    
 }

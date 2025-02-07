@@ -25,20 +25,21 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  */
 public class JavaCodeSwitch extends JavaCodeBlock {
 
-    private String expression;
+    private JavaCodeExpression expression;
     
     /**
      * A case block.
      * 
      * @author Holger Eichelberger
      */
-    private class CaseBlock extends JavaCodeBlock {
+    public class JavaCodeCaseBlock extends JavaCodeBlock {
     
-        private String expression;
+        private JavaCodeExpression expression;
         private boolean withClosingBreak;
         
-        private CaseBlock(IJavaCodeElement parent, String expression, boolean withBrackets, boolean withClosingBreak) {
-            super(parent, true, true, false, withBrackets);
+        private JavaCodeCaseBlock(IJavaCodeElement parent, JavaCodeExpression expression, boolean withBrackets, 
+            boolean withClosingBreak) {
+            super(parent, withBrackets, true, false, withBrackets);
             this.expression = expression;
             this.withClosingBreak = withClosingBreak;
         }
@@ -47,15 +48,22 @@ public class JavaCodeSwitch extends JavaCodeBlock {
         @Override
         public void store(CodeWriter out) {
             if (null == expression) {
-                out.printlnwi("default:");
+                out.printwi("default:");
             } else {
-                out.printlnwi("case " + expression + ":");
+                out.printwi("case ");
+                expression.store(out);
+                out.print(":");
+            }
+            if (!withBrackets()) {
+                out.println();
             }
             super.store(out);
+        }
+        
+        @Override
+        protected void storeBeforeBlockEnd(CodeWriter out) {
             if (withClosingBreak) {
-                out.increaseIndent();
                 out.printlnwi("break;");
-                out.decreaseIndent();
             }
         }
         
@@ -82,29 +90,34 @@ public class JavaCodeSwitch extends JavaCodeBlock {
      * @param parent the parent instance
      * @param expression the switch expression
      */
-    public JavaCodeSwitch(IJavaCodeElement parent, String expression) {
+    public JavaCodeSwitch(IJavaCodeElement parent, JavaCodeExpression expression) {
         super(parent, true, false);
         this.expression = expression;
     }
     
-    public JavaCodeBlock addCase(String expression, boolean asBlock, boolean withClosingBreak) {
-        return add(new CaseBlock(getParent(), expression, asBlock, withClosingBreak), caseAddPosition());
+    public JavaCodeBlock addStringCase(String expression, boolean asBlock, boolean withClosingBreak) {
+        return add(new JavaCodeCaseBlock(getParent(), new JavaCodeStringExpression(this, expression), asBlock, 
+            withClosingBreak), caseAddPosition());
+    }
+    
+    public JavaCodeBlock addCase(JavaCodeExpression expression, boolean asBlock, boolean withClosingBreak) {
+        return add(new JavaCodeCaseBlock(getParent(), expression, asBlock, withClosingBreak), caseAddPosition());
     }
     
     private int caseAddPosition() {
         int size = getElementsSize();
-        return elementsStream().anyMatch(c -> ((CaseBlock) c).isDefault()) ? size - 1 : size;
+        return elementsStream().anyMatch(c -> ((JavaCodeCaseBlock) c).isDefault()) ? size - 1 : size;
     }
 
     public JavaCodeBlock addDefault(boolean asBlock, boolean withClosingBreak) {
-        return addElement(new CaseBlock(getParent(), null, asBlock, withClosingBreak));
+        return addElement(new JavaCodeCaseBlock(getParent(), null, asBlock, withClosingBreak));
     }
 
     @Invisible
     @Override
     public void store(CodeWriter out) {
         out.printwi("switch (");
-        out.print(expression);
+        expression.store(out);
         out.print(")");
         super.store(out);
         out.println();

@@ -24,6 +24,17 @@ public class JavaCodeAnonymousClass extends JavaCodeClass {
         super(name, enclosing);
     }
     
+    static JavaCodeExpression toExpression(JavaCodeAnonymousClass cls) {
+        return new JavaCodeExpression(null) {
+
+            @Override
+            public void store(CodeWriter out) {
+                cls.store(out);
+            }
+            
+        };
+    }
+    
     @Invisible
     @Override
     public void store(CodeWriter out) {

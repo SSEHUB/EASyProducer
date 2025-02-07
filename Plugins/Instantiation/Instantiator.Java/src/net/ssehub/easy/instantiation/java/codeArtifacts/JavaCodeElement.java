@@ -37,7 +37,7 @@ public abstract class JavaCodeElement implements IJavaCodeElement {
     
     @Override
     public IJavaCodeArtifact getArtifact() {
-        return parent.getArtifact();
+        return null == parent ? null : parent.getArtifact();
     }
 
     @Override

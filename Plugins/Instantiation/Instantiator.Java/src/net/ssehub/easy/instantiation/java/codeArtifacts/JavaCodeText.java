@@ -76,5 +76,20 @@ public class JavaCodeText implements IJavaCodeElement {
         return StringUtils.countMatches(text, "\\n") + (endWithNewline ? 1 : 0);
     }    
 
+    @Override
+    public JavaCodeText replaceVariable(String oldName, String newName) {
+        if (text.equals(oldName)) {
+            text = newName;
+        }
+        return this;
+    }
+
+    @Override
+    public JavaCodeText replaceMethod(String oldName, String newName) {
+        if (text.equals(oldName)) {
+            text = newName;
+        }
+        return this;
+    }    
 
 }
