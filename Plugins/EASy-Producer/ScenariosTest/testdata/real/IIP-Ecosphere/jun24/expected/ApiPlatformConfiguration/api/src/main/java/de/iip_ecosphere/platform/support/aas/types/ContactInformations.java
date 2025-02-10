@@ -114,8 +114,8 @@ public class ContactInformations extends DelegatingSubmodel {
         */
         public Iterable<String> getLanguage() throws ExecutionException {
             return collect(elements(), Property.class, iri(
-                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Language"), p -> cast(p, String.
-                class));
+                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Language"), p ->
+                cast(p, String.class));
         }
         
         /**

@@ -296,8 +296,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
         Assert.assertNotNull(instance.getPOBoxProperty());
         assertLangStringsEquals(toTestLangString("12345@de", "test@en"), first(instance.getZipCodeOfPOBox()));
         Assert.assertNotNull(instance.getZipCodeOfPOBoxProperty());
-        assertLangStringsEquals(toTestLangString("Muster-Bundesland@de", "test@en"), first(instance.getStateCounty(
-            )));
+        assertLangStringsEquals(toTestLangString("Muster-Bundesland@de", "test@en"), first(instance.getStateCounty()));
         Assert.assertNotNull(instance.getStateCountyProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getNameOfContact()));
         Assert.assertNotNull(instance.getNameOfContactProperty());
@@ -323,11 +322,10 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     * @throws ExecutionException if property accesses/conversions fail
     */
     private static void test(Phone instance, int depth) throws ExecutionException {
-        assertLangStringsEquals(toTestLangString("+491234567890@de", "test@en"), first(instance.getTelephoneNumber(
-            )));
+        assertLangStringsEquals(toTestLangString("+491234567890@de", "test@en"), first(instance.getTelephoneNumber()));
         Assert.assertNotNull(instance.getTelephoneNumberProperty());
-        Assert.assertEquals(toTestEnum(TypeOfTelephone.class, "0173-1#07-AAS754#001"), first(instance.
-            getTypeOfTelephone()));
+        Assert.assertEquals(toTestEnum(TypeOfTelephone.class, "0173-1#07-AAS754#001"), first(instance.getTypeOfTelephone(
+            )));
         Assert.assertNotNull(instance.getTypeOfTelephoneProperty());
         assertLangStringsEquals(toTestLangString("Montag – Freitag 08:00 bis 16:00@de", "test@en"), first(instance.
             getAvailableTime()));

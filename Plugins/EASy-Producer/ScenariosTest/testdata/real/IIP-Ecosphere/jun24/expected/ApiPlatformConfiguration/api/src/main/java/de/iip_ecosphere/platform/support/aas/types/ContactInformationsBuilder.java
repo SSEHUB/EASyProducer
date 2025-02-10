@@ -817,8 +817,8 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
                 availableTimeCounter++;
             }
             createMultiLanguageProperty(getDelegate(), createMultiLanguageProperties, "AvailableTime", 
-                iri("https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"
-                    ), availableTime);
+                iri("https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"),
+                availableTime);
             return this;
         }
         
@@ -1065,7 +1065,8 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
             typeOfCommunicationCounter++;
             createPropertyBuilder("TypeOfCommunication")
                 .setSemanticId(iri(
-                    "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication"))
+                    "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication"
+                    + "/TypeOfCommunication"))
                 .setValue(Type.STRING, typeOfCommunication).build();
             return this;
         }
@@ -1081,15 +1082,14 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
                 availableTimeCounter++;
             }
             createMultiLanguageProperty(getDelegate(), createMultiLanguageProperties, "AvailableTime", 
-                iri("https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"
-                    ), availableTime);
+                iri("https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"), 
+                    availableTime);
             return this;
         }
         
         @Override
         public SubmodelElementCollection build() {
-            assertThat(addressOfAdditionalLinkCounter == 1, "Cardinality of AddressOfAdditionalLink must be equal 1."
-                );
+            assertThat(addressOfAdditionalLinkCounter == 1, "Cardinality of AddressOfAdditionalLink must be equal 1.");
             assertThat(0 <= typeOfCommunicationCounter && typeOfCommunicationCounter <= 1, "Cardinality of TypeOfCommun"
                 + "ication must be greater or equal 0 and less or equal 1.");
             assertThat(0 <= availableTimeCounter && availableTimeCounter <= 1, "Cardinality of AvailableTime must be gr"
