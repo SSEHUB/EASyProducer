@@ -409,32 +409,39 @@ public class ModelTranslator extends net.ssehub.easy.dslCore.translation.ModelTr
                 IDatatype knownType = DerivedDatatype.resolveToBasis(known.getType());       
                 if (!declType.isAssignableFrom(knownType)) {
                     TypedefCompound tdC = cmpMapping.get(known.getParent());
-                    List<EObject> elts = tdC.getElements();
-                    EObject cause = eProject;
-                    EStructuralFeature feature = IvmlPackage.Literals.PROJECT__NAME;
-                    VariableDeclaration slot = null;
-                    for (int e = 0; null == slot && e < elts.size(); e++) {
-                        EObject elt = elts.get(e);
-                        if (elt instanceof VariableDeclaration) {
-                            VariableDeclaration vd = (VariableDeclaration) elt;
-                            List<VariableDeclarationPart> parts = vd.getDecls();
-                            for (int p = 0; null == slot && p < parts.size(); p++) {
-                                if (name.equals(parts.get(p).getName())) {
-                                    slot = vd;
-                                    cause = slot;
-                                    feature = IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME;
-                                }
-                            }
-                        }
-                    }
-                    error("Slot '" + name + "' in compound '" + known.getParent().getName() 
-                        + "' does not refine slot with same name in refining compound '" + cmp.getName() + "'", 
-                        cause, feature, ValueDoesNotMatchTypeException.TYPE_MISMATCH);
+                    checkCompound(eProject, tdC, cmp, name, known);
                 }
             }
         }
         for (int r = 0; r < cmp.getRefinesCount(); r++) {
             checkCompound(eProject, cmp.getRefines(r), cmpMapping, done);
+        }
+    }
+    
+    private void checkCompound(de.uni_hildesheim.sse.ivml.Project eProject, TypedefCompound tdC, Compound cmp, 
+        String name, DecisionVariableDeclaration known) {
+        if (null != tdC) {
+            List<EObject> elts = tdC.getElements();
+            EObject cause = eProject;
+            EStructuralFeature feature = IvmlPackage.Literals.PROJECT__NAME;
+            VariableDeclaration slot = null;
+            for (int e = 0; null == slot && e < elts.size(); e++) {
+                EObject elt = elts.get(e);
+                if (elt instanceof VariableDeclaration) {
+                    VariableDeclaration vd = (VariableDeclaration) elt;
+                    List<VariableDeclarationPart> parts = vd.getDecls();
+                    for (int p = 0; null == slot && p < parts.size(); p++) {
+                        if (name.equals(parts.get(p).getName())) {
+                            slot = vd;
+                            cause = slot;
+                            feature = IvmlPackage.Literals.VARIABLE_DECLARATION_PART__NAME;
+                        }
+                    }
+                }
+            }
+            error("Slot '" + name + "' in compound '" + known.getParent().getName() 
+                + "' does not refine slot with same name in refining compound '" + cmp.getName() + "'", 
+                cause, feature, ValueDoesNotMatchTypeException.TYPE_MISMATCH);
         }
     }
     
