@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.dslCore.ui;
 
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,8 @@ import org.eclipse.xtext.validation.CheckMode;
 
 import com.google.inject.Inject;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.dslCore.BundleId;
 import net.ssehub.easy.dslCore.ModelUtility;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.ValidationMode;
@@ -199,21 +202,26 @@ public class Builder extends IncrementalProjectBuilder {
         
         List<ResourceWorkUnit> workUnits = new LinkedList<>();
         for (ModelUtility<?, ?> utility : ModelUtility.instances()) {
-            for (Resource resource : utility.getResourceSet().getResources()) {
-                URI uri = resource.getURI();
-                boolean add = false;
-                boolean deleted = false;
-                boolean updated = false;
-                if (null == toBeBuilt) {
-                    add = true;
-                } else if (toBeBuilt.getToBeDeleted().contains(uri)) {
-                    deleted = true;
-                } else if (toBeBuilt.getToBeUpdated().contains(uri)) {
-                    updated = true;
+            try {
+                for (Resource resource : utility.getResourceSet().getResources()) {
+                    URI uri = resource.getURI();
+                    boolean add = false;
+                    boolean deleted = false;
+                    boolean updated = false;
+                    if (null == toBeBuilt) {
+                        add = true;
+                    } else if (toBeBuilt.getToBeDeleted().contains(uri)) {
+                        deleted = true;
+                    } else if (toBeBuilt.getToBeUpdated().contains(uri)) {
+                        updated = true;
+                    }
+                    if (add || deleted || updated) {
+                        workUnits.add(new ResourceWorkUnit(utility, resource, deleted, updated));
+                    }
                 }
-                if (add || deleted || updated) {
-                    workUnits.add(new ResourceWorkUnit(utility, resource, deleted, updated));
-                }
+            } catch (ConcurrentModificationException e) {
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), BundleId.ID).warn("Concurrent modification in xText "
+                    + "resource set. Cannot obtain resources, cannot update markers.");
             }
         }
 
@@ -314,7 +322,7 @@ public class Builder extends IncrementalProjectBuilder {
                     // can't react on any markers anyway.
                     continue;
                 }
-
+                
                 if (delta.getNew() != null || unit.considerUpdated()) {
                     if (resourceSet == null) {
                         throw new IllegalArgumentException("resourceSet may not be null for changed resources.");
@@ -340,6 +348,11 @@ public class Builder extends IncrementalProjectBuilder {
                         deleteAllContributedMarkers(file, monitor);
                     }
                 }
+                
+                if (ValidationUtils.ValidationMode.EASY_BUILDER == ValidationUtils.getValidationMode()) {
+                    unit.utility.validate(unit.resource, r -> MessageUtils.processMessagesQuiet(file, r));
+                }
+                
             }
         }
     }

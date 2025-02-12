@@ -40,9 +40,14 @@ public class ValidationUtils {
         ON_SAVE,
         
         /**
-         * Through xText validation called in Builder.
+         * Through xText validation called in Builder, using xText language validators.
          */
-        VALIDATOR
+        VALIDATOR,
+
+        /**
+         * Through EASY-Builder.
+         */
+        EASY_BUILDER
     }
     
     /**
@@ -50,7 +55,7 @@ public class ValidationUtils {
      */
     private static boolean performValidationOnSave = true;
     private static List<String> pathPrefixes = new ArrayList<>();
-    private static ValidationMode mode = ValidationMode.ON_SAVE;
+    private static ValidationMode mode = ValidationMode.EASY_BUILDER;
 
     /**
      * Enables/disables validation on save, e.g., to handle xText conflicts.
@@ -382,7 +387,9 @@ public class ValidationUtils {
             }
         }
     }
-    
+
+    // checkstyle: resume exception type check
+
     /**
      * Checks the model on top-level element layer on-save through editor hook, if enabled. 
      * 
@@ -414,7 +421,5 @@ public class ValidationUtils {
             doCheckModel(unit, callback, debug);
         }
     }
-
-    // checkstyle: resume exception type check
     
 }

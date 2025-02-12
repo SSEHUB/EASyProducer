@@ -6,8 +6,6 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
@@ -15,17 +13,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
-import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
-import org.eclipse.xtext.util.IAcceptor;
 import org.eclipse.xtext.util.concurrent.IUnitOfWork;
-import org.eclipse.xtext.validation.DiagnosticConverterImpl;
-import org.eclipse.xtext.validation.Issue;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.dslCore.IResourceInitializer;
 import net.ssehub.easy.dslCore.TranslationResult;
-import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.ui.MessageUtils;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 
 /**
@@ -186,24 +180,7 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
      * @throws CoreException in case of marker processing problems
      */
     private void processMessages(TranslationResult<?> result) throws CoreException {
-        final IResource res = getResource();
-        res.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
-        DiagnosticConverterImpl conv = new DiagnosticConverterImpl();
-        final MarkerCreator markerCreator = new MarkerCreator();
-        for (int m = 0; m < result.getMessageCount(); m++) {
-            Message message = result.getMessage(m);
-            conv.convertValidatorDiagnostic(ValidationUtils.processMessage(message), new IAcceptor<Issue>() {
-                
-                @Override
-                public void accept(Issue issue) {
-                    try {
-                        markerCreator.createMarker(issue, res, IMarker.PROBLEM);
-                    } catch (CoreException e) {
-                        getLogger().exception(e);
-                    }
-                }
-            });
-        }
+        MessageUtils.processMessages(getResource(), result);
     }
 
     /**

@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -477,5 +478,20 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @return the extension
      */
     public abstract String getExtension();
+    
+    /**
+     * Validates the given resource.
+     * 
+     * @param resource the resource
+     * @param messageHandler message handler (may be on UI level)
+     */
+    public void validate(Resource resource, Consumer<MessageReceiver> messageHandler) {
+        try {
+            TranslationResult<R> res = parse(resource.getURI());
+            messageHandler.accept(res.getReceiver());
+        } catch (IOException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(getClass(), BundleId.ID).exception(e);
+        }
+    }
     
 }

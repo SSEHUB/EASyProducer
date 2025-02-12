@@ -80,6 +80,15 @@ public class TranslationResult <R> {
         }
         return receiver.getMessage(index);
     }
+    
+    /**
+     * Returns the message receiver.
+     * 
+     * @return the receiver
+     */
+    public MessageReceiver getReceiver() {
+        return receiver;
+    }
 
     /**
      * Returns the list of messages (using the more common type).

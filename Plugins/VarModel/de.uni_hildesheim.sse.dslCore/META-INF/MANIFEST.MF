@@ -9,6 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.emf.ecore,
  org.eclipse.xtext,
  com.google.guava,
+ org.eclipse.core.resources,
  net.ssehub.easy.basics;visibility:=reexport,
  org.apache.log4j;bundle-version="1.2.15"
 Export-Package: net.ssehub.easy.dslCore,
