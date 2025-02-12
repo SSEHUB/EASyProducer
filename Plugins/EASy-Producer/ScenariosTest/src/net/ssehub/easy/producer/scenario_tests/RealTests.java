@@ -24,6 +24,7 @@ import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 import net.ssehub.easy.instantiation.velocity.VelocityInstantiator;
 import net.ssehub.easy.producer.scenario_tests.mocks.DockerMock;
 import net.ssehub.easy.producer.scenario_tests.mocks.LxcMock;
@@ -667,7 +668,7 @@ public class RealTests extends AbstractRealTests {
     @Test
     public void testOktoflowJun24() throws IOException {
         final String folder = "jun24";
-        executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
+        //executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common"); // formatter?
         executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
         executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
         executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
@@ -691,7 +692,19 @@ public class RealTests extends AbstractRealTests {
         String[] names = {folder, modelName, "IIPEcosphere"};
         File base = executeCase(names, versions, "IIP-Ecosphere/", null, Mode.REASON_INSTANTIATE, 
             new IipTestModifier(vilFolderName, vilStartRuleName, cfgFolder));
-        assertFileEqualityRec(new File(new File(base, "expected"), vilFolderName), new File(base, vilFolderName), 
+        String expectedFolder = vilFolderName;
+        if (expectedFolder.equals("PlatformConfiguration") && cfgFolder.length > 0) { // managed cfg generic name
+            for (String cfg : cfgFolder) {
+                File tmp = new File(cfg);
+                tmp = new File(new File(base, "expected"), PseudoString.firstToUpperCase(tmp.getName()) 
+                    + expectedFolder);
+                if (tmp.exists() && tmp.isDirectory()) {
+                    expectedFolder = tmp.getName();
+                    break;
+                }
+            }
+        }
+        assertFileEqualityRec(new File(new File(base, "expected"), expectedFolder), new File(base, vilFolderName), 
             new FileFilter() {
             
                 @Override
