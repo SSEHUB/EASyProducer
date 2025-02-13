@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -57,6 +59,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     private File file;
     private String packageName;
     private List<IJavaCodeImport> imports = new ArrayList<>();
+    private Set<String> importExclusions;
     private List<IJavaCodeElement> elements = new ArrayList<>();
     private String comment;
     private boolean store = true;
@@ -502,7 +505,8 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             String simpleTypeName = typeName.substring(pos + 1);
             JavaCodeClass cls = JavaCodeClass.getParentCodeClass(type);
             String simpleClsName = cls != null ? cls.getName() : "";
-            if (!simpleClsName.equals(simpleTypeName)) { // do not import if class name overlaps import
+            if (!simpleClsName.equals(simpleTypeName) && !isExcludedImport(typeName)) { 
+                // do not import if class name overlaps import or import is excluded
                 String newOutputTypeName = prefix + simpleTypeName;
                 IJavaCodeImport match = findMatchingImport(typeName, false);
                 if (null == match) {
@@ -525,6 +529,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     @Invisible
     @Override
     public String validateStaticName(String name, JavaCodeImportScope scope) {
+        String origName = name;
         int pos = name.lastIndexOf('.');
         if (pos > 0) {
             String[] parts = name.split("\\.");
@@ -545,19 +550,23 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             }
             if (JavaCodeImportScope.CLASS == scope || JavaCodeImportScope.METHOD_CLASS_IMPORT == scope 
                 || JavaCodeImportScope.CLASS_NO_METHOD == scope) {
-                IJavaCodeImport imp = findMatchingImport(type, true);
-                if (null == imp && type.contains(".")) { // no local imports
-                    new JavaCodeImport(type, this, false); // added automatically
+                if (isExcludedImport(type)) {
+                    name = origName;
+                } else {
+                    IJavaCodeImport imp = findMatchingImport(type, true);
+                    if (null == imp && type.contains(".")) { // no local imports
+                        new JavaCodeImport(type, this, false); // added automatically
+                    }
+                    aPos = type.lastIndexOf('.');
+                    String simpleTypeName = type;
+                    if (pos > 0) {
+                        simpleTypeName = type.substring(aPos + 1);
+                    }
+                    if (JavaCodeImportScope.CLASS == scope 
+                        || (JavaCodeImportScope.METHOD_CLASS_IMPORT == scope && seemsToBeClass(simpleTypeName))) {
+                        name = simpleTypeName + "." + name;
+                    } // else like .METHOD
                 }
-                aPos = type.lastIndexOf('.');
-                String simpleTypeName = type;
-                if (pos > 0) {
-                    simpleTypeName = type.substring(aPos + 1);
-                }
-                if (JavaCodeImportScope.CLASS == scope 
-                    || (JavaCodeImportScope.METHOD_CLASS_IMPORT == scope && seemsToBeClass(simpleTypeName))) {
-                    name = simpleTypeName + "." + name;
-                } // else like .METHOD
             } else if (JavaCodeImportScope.METHOD == scope) {
                 // direct static import?
                 IJavaCodeImport imp = findMatchingImport(qualifiedMethod, true);
@@ -611,6 +620,13 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         }
         return result;
     }
+    
+    public void addImportExclusion(String imp) {
+        if (null == importExclusions) {
+            importExclusions = new HashSet<>();
+        }
+        importExclusions.add(imp);
+    }
 
     @Override
     public JavaCodeImport addImport(String imp) {
@@ -632,13 +648,19 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
         }
         return result;
     }
+    
+    private boolean isExcludedImport(String imp) {
+        return null != importExclusions && importExclusions.contains(imp);
+    }
 
     @Invisible
     @Override
     public void registerImport(IJavaCodeImport imp) {
         if (!imports.stream().anyMatch(i -> i.isStatic() == imp.isStatic() && i.isWildcard() == imp.isWildcard() 
             && i.getName().equals(imp.getName()))) {
-            imports.add(imp);
+            if (!isExcludedImport(imp.getName())) {
+                imports.add(imp);
+            }
         }
     }
    

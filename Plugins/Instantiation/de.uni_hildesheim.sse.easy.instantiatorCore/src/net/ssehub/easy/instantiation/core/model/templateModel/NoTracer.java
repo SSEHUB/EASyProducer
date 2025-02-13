@@ -71,4 +71,12 @@ public class NoTracer extends net.ssehub.easy.instantiation.core.model.common.No
     public void visitedFlush() {
     }
 
+    @Override
+    public void visitBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment) {
+    }
+
+    @Override
+    public void visitedBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment, Object result) {
+    }
+
 }

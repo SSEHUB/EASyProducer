@@ -127,6 +127,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//StmtBlock"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubCall" eSuperTypes="platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//SubCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varType" eType="ecore:EClass platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.ecore#//Type"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nested" upperBound="-1"
+        eType="#//Stmt" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="multiselect">
     <eStructuralFeatures xsi:type="ecore:EReference" name="gen" eType="#//genericMultiselect"
         containment="true"/>

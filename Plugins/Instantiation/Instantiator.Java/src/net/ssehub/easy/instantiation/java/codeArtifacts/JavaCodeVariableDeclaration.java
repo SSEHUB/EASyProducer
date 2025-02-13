@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a variable declaration. An explicit method call takes precedence over a String initializer.
@@ -79,6 +80,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param initializer the initializer
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addInitializer", "initializer"})
     public JavaCodeVariableDeclaration addInitializer(JavaCodeExpression initializer) {
         this.initEx = initializer;
         this.initEx.setParent(this);
@@ -91,6 +93,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param initializer the initializer
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addInitializer", "initializer"})
     public JavaCodeVariableDeclaration addInitializer(String initializer) {
         return setInitializer(initializer); // TODO transition to expression
     }
@@ -143,6 +146,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName) {
         return addCall(methodName, JavaCodeImportScope.NONE);
     }
@@ -154,6 +158,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param scope the import scope
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         initEx = new JavaCodeMethodCall(this, methodName, scope, false, "");
         return (JavaCodeMethodCall) initEx;
@@ -182,6 +187,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param type the annotation type, may be fully qualified
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addAnnotation", "annotate"})
     public JavaCodeAnnotation addAnnotation(String type) {
         return addAnnotation(type, null);
     }
@@ -191,6 +197,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addSuppressWarningsAnnotation", "suppressWarnings"})
     public JavaCodeAnnotation addSuppressWarningsAnnotation() {
         return addAnnotation(SuppressWarnings.class.getSimpleName());
     }
@@ -211,6 +218,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * @param nested a nested type qualification within {@code type}, may be empty or <b>null</b> for none
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addAnnotation", "annotate"})
     public JavaCodeAnnotation addAnnotation(String type, String nested) {
         if (null == annotations) {
             annotations = new ArrayList<>();

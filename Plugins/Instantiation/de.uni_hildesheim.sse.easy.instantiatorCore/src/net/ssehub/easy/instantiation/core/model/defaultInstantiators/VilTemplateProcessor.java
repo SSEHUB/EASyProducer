@@ -40,6 +40,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.StringReplacerFactory;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangMetricsVisitor;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateSubstitutionExecution;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Collection;
@@ -614,6 +615,7 @@ public class VilTemplateProcessor implements IVilType {
         StringWriter out = new StringWriter();
         // executing the model
         ITracer tracer = TracerFactory.createTemplateLanguageTracer();
+        long startTime = System.currentTimeMillis();
         try {
             Map<String, Object> localParam = new HashMap<String, Object>();
             // put default parameter
@@ -653,6 +655,7 @@ public class VilTemplateProcessor implements IVilType {
             Bundle.getLogger(VilTemplateProcessor.class).error(errMsg.toString());
             throw e;
         } finally {
+            TemplateLangMetricsVisitor.recordMetrics(template, System.currentTimeMillis() - startTime);
             Formatting.unregister(template);
             TracerFactory.unregisterTemplateLanguageTracer(tracer);            
         }

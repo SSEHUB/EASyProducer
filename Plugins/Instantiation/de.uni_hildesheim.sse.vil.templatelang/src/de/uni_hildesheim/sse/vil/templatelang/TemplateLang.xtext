@@ -104,6 +104,13 @@ While:
     (stmt=Stmt | block=StmtBlock)
 ;
 
+@Override
+SubCall:
+    type=('.' | '->') call=Call 
+    | '[' arrayEx=Expression ']' // IVML addition to OCL
+    | '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt (nested+=Stmt)* '}' ')' // implicit block with variable from last result
+;
+
 Flush:
     'flush' ';'
 ;

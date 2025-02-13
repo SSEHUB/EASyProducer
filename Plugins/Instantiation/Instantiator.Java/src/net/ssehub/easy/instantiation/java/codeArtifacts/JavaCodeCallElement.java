@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * An element to which we can add a method call. The code may be nested, chained, depending on the semantics of the
@@ -31,7 +32,18 @@ public interface JavaCodeCallElement extends IVilType {
      * @param methodName the method name, qualified or statically qualified expression to call the method
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName);
+
+    /**
+     * Adds a qualified non-static method call where the class (but not the method) shall be imported, i.e., calls 
+     * {@link #addCall(String, JavaCodeImportScope)} with {@link JavaCodeImportScope#METHOD_CLASS_IMPORT}.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @return the method call (for chaining)
+     */
+    @OperationMeta(name = "callQualified")
+    public JavaCodeMethodCall addCallQualified(String methodName);
 
     /**
      * Adds a method call.
@@ -40,6 +52,7 @@ public interface JavaCodeCallElement extends IVilType {
      * @param scope the import scope
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope);
 
 }

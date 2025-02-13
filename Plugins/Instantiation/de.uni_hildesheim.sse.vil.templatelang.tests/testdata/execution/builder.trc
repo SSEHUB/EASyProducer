@@ -1,0 +1,171 @@
+out <- 
+-> main(Configuration, FileArtifact) with (<config>, test.texts)
+    ( o |...        -> func(Integer) with (10)
+        -> func2(String) with (10)
+            -> +(String, Any) with (, func2 10
+) = func2 10
+
+            out <- func2 10
+
+            -> +(String, Any) with (func2 , 10) = func2 10
+    -> build(String) with (10)
+        -> +(String, Any) with (func2 10
+, build 10
+) = func2 10
+build 10
+
+        out <- func2 10
+build 10
+
+    ( i |...        -> func(Integer) with (15)
+        -> func2(String) with (15)
+            -> +(String, Any) with (func2 10
+build 10
+, func2 15
+) = func2 10
+build 10
+func2 15
+
+            out <- func2 10
+build 10
+func2 15
+
+            -> +(String, Any) with (func2 , 15) = func2 15
+    -> build(String) with (15)
+        -> +(String, Any) with (func2 10
+build 10
+func2 15
+, build 15
+) = func2 10
+build 10
+func2 15
+build 15
+
+        out <- func2 10
+build 10
+func2 15
+build 15
+
+    ( i |...        -> func(Integer) with (20)
+        -> func2(String) with (20)
+            -> +(String, Any) with (func2 10
+build 10
+func2 15
+build 15
+, func2 20
+) = func2 10
+build 10
+func2 15
+build 15
+func2 20
+
+            out <- func2 10
+build 10
+func2 15
+build 15
+func2 20
+
+            -> +(String, Any) with (func2 , 20) = func2 20
+    -> build(String) with (20)
+        -> +(String, Any) with (func2 10
+build 10
+func2 15
+build 15
+func2 20
+, build 20
+) = func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+
+        out <- func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+
+    ( i |...        -> func(Integer) with (25)
+        ( o |...            -> func3(String) with (25)
+                -> +(String, Any) with (func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+, func3 25
+) = func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+
+                out <- func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+
+            -> func2(String) with (func3 25)
+                -> +(String, Any) with (func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+, func2 func3 25
+) = func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+func2 func3 25
+
+                out <- func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+func2 func3 25
+
+                -> +(String, Any) with (func2 , func3 25) = func2 func3 25
+    -> build(String) with (25)
+        -> +(String, Any) with (func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+func2 func3 25
+, build 25
+) = func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+func2 func3 25
+build 25
+
+        out <- func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+func2 func3 25
+build 25

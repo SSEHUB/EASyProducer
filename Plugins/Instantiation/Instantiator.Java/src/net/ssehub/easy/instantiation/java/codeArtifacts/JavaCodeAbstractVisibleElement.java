@@ -49,7 +49,7 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
      * @param isAbstract if the element is abstract
      * @return <b>this</b> for chaining
      */
-    @OperationMeta(name = {"abstract"})
+    @OperationMeta(name = {"setAbstract", "abstract"})
     public JavaCodeAbstractVisibleElement setAbstract(boolean isAbstract) {
         this.isAbstract = isAbstract;
         return this;
@@ -60,7 +60,7 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
      * 
      * @return <b>this</b> for chaining
      */
-    @OperationMeta(name = {"abstract"})
+    @OperationMeta(name = {"setAbstract", "abstract"})
     public JavaCodeAbstractVisibleElement setAbstract() {
         setAbstract(true);
         return this;
@@ -81,6 +81,7 @@ public abstract class JavaCodeAbstractVisibleElement extends JavaCodeVisibleElem
      * @param generic the generic
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addGeneric", "generic"})
     public JavaCodeAbstractVisibleElement addGeneric(String generic) {
         if (null == generics) {
             generics = new ArrayList<>();

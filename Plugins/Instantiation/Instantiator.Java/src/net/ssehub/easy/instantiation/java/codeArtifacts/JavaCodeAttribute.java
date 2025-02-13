@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 
 /**
@@ -137,6 +138,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         return this;
     }
     
+    @OperationMeta(name = {"addInitializer", "initializer"})
     public JavaCodeAttribute addInitializer(JavaCodeExpression initializer) {
         this.initializer = initializer;
         if (null != this.initializer) {
@@ -145,6 +147,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         return this;
     }
     
+    @OperationMeta(name = {"addStringInitializer", "stringInitializer"})
     public JavaCodeAttribute addStringInitializer(String stringEx) {
         this.initializer = new JavaCodeStringExpression(this, stringEx);
         return this;

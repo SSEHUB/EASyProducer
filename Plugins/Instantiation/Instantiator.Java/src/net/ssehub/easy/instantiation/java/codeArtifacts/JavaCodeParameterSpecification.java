@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a Java method parameter (specification).
@@ -70,6 +71,7 @@ public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
      * @param type the annotation type, may be fully qualified
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addAnnotation", "annotate"})
     public JavaCodeAnnotation addAnnotation(String type) {
         if (null == annotations) {
             annotations = new ArrayList<>();

@@ -264,7 +264,7 @@ NumValue :
 ;
 
 Identifier:
-    ID | VERSION | EXPONENT | "version"
+    ID | VERSION | EXPONENT | "version" | "for" | "protected" | "switch" | "if" | "else" | "extends" | "static"
 ;
 
 Type:

@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents an if-then-else alternative. The element itself is the if-block. By default, the alternative
@@ -45,6 +46,7 @@ public class JavaCodeAlternative extends JavaCodeBlock {
      * 
      * @return the else block
      */
+    @OperationMeta(name = {"addElse", "else"})
     public JavaCodeBlock addElse() {
         elseBlock = new JavaCodeBlock(this, true, true);
         return elseBlock;
@@ -56,6 +58,7 @@ public class JavaCodeAlternative extends JavaCodeBlock {
      * @param condition the condition
      * @return the else-if alternative
      */
+    @OperationMeta(name = {"addElseIf", "elseIf"})
     public JavaCodeAlternative addElseIf(String condition) {
         JavaCodeAlternative result = new JavaCodeAlternative(this, condition);
         elseBlock = result;

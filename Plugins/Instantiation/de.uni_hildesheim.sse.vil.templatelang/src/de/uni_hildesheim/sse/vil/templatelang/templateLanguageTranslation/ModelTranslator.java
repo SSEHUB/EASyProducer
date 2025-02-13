@@ -32,6 +32,7 @@ import de.uni_hildesheim.sse.vil.templatelang.templateLang.StmtBlock;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.SwitchPart;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.TemplateLangPackage;
 import de.uni_hildesheim.sse.vil.templatelang.templateLang.VilDef;
+import de.uni_hildesheim.sse.vil.templatelang.templateLanguageTranslation.ExpressionTranslator.IStatementTranslator;
 import net.ssehub.easy.basics.modelManagement.ImportResolver;
 import net.ssehub.easy.basics.modelManagement.IndentationConfiguration;
 import net.ssehub.easy.basics.modelManagement.ModelImport;
@@ -85,7 +86,8 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.IvmlTypes
  * @author Holger Eichelberger
  */
 public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.translation.ModelTranslator
-    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> {
+    <Template, VariableDeclaration, Resolver, ExpressionStatement, ExpressionTranslator> 
+    implements IStatementTranslator {
     
     private ExpressionTranslator expressionTranslator;
     private Resolver resolver;
@@ -96,6 +98,7 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
     public ModelTranslator() {
         super(new ExpressionTranslator(), new Resolver(new TypeRegistry(TypeRegistry.DEFAULT)));
         expressionTranslator = getExpressionTranslator();
+        expressionTranslator.setStatementTranslator(this);
         resolver = getResolver();
     }
     
@@ -532,15 +535,9 @@ public class ModelTranslator extends de.uni_hildesheim.sse.vil.expressions.trans
         }
         return result;
     }
-    
-    /**
-     * Processes a statement.
-     * 
-     * @param stmt the statement to be resolved
-     * @return the resolved elements
-     * @throws TranslatorException in case that the translation fails due to semantic reasons
-     */
-    private ITemplateElement processStatement(Stmt stmt) throws TranslatorException {
+
+    @Override
+    public ITemplateElement processStatement(Stmt stmt) throws TranslatorException {
         ITemplateElement result = null;
         if (null != stmt) {
             if (null != stmt.getAlt()) {

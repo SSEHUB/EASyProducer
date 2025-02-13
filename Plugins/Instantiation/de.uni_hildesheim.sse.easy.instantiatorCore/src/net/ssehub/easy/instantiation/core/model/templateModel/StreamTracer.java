@@ -93,6 +93,22 @@ public class StreamTracer extends net.ssehub.easy.instantiation.core.model.commo
     }
 
     @Override
+    public void visitBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment) {
+        if (isEnabled()) {
+            printIndentation();
+            print("( " + ex.getVariable().getName() + " |...");
+            increaseIndentation();
+        }
+    }
+
+    @Override
+    public void visitedBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment, Object result) {
+        if (isEnabled()) {
+            decreaseIndentation();
+        }
+    }
+
+    @Override
     public void visitedSwitch(Object select, int alternative, Object value) {
         if (isEnabled()) {
             printIndentation();

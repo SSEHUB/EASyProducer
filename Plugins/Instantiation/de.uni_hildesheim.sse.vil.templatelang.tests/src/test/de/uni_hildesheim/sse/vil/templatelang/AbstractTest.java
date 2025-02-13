@@ -32,6 +32,7 @@ import net.ssehub.easy.instantiation.core.model.templateModel.ExtensionClassLoad
 import net.ssehub.easy.instantiation.core.model.templateModel.StreamTracer;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangExecution;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangMetricsVisitor;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.varModel.management.VarModel;
@@ -147,11 +148,9 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
         File file = data.getFile();
         if (file.exists()) {
             URI uri = URI.createFileURI(file.getAbsolutePath());
-
             // parse the model
             TranslationResult<Template> result = TemplateLangModelUtility.INSTANCE.parse(uri);
             List<Message> messages = result.getMessageListSpecific();
-            
             Assert.assertTrue("no result produced: " + toString(messages), result.getResultCount() > 0);
             if (0 == result.getErrorCount()) {
                 // read model file into memory
@@ -168,7 +167,6 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                 }
             }
             Assert.assertTrue("multiple templates are not possible in VIL", 1 == result.getResultCount());
-            
             File expectedTrace = data.getExpectedTrace();
             if (null != expectedTrace && 0 == result.getErrorCount()) {
                 // for debugging insert DelegatingSysoutWriter here
@@ -197,6 +195,9 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                         errorMsg = checkEqualsAndPrepareMessage(fileAsString, writer, false);
                         Assert.assertTrue(errorMsg, null == errorMsg);
                     }
+                    // just to test it
+                    System.setProperty("easy.vtl.metrics", "true");
+                    TemplateLangMetricsVisitor.recordMetrics(result.getResult(0), 0);
                 } catch (VilException e) {
                     if (null == messages) {
                         messages = new ArrayList<Message>();

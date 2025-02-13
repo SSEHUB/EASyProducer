@@ -1,0 +1,42 @@
+template builder(Configuration config, FileArtifact target) {
+
+    String out = "";
+
+    def String func(Integer i) {
+        "$i";
+    }
+
+    def func2(String s) {
+        out = out + "func2 ${s}\n";
+        "func2 " + s;
+    }
+
+    def func3(String s) {
+        out = out + "func3 ${s}\n";
+        "func3 ${s}";
+    }
+
+    def build(String s) {
+        out = out + "build ${s}\n";
+        "build ${s}";
+    }
+
+    def main(Configuration config, FileArtifact target) {
+        build(func(10).({
+            func2(o);
+        }));
+        build(func(15).(i|{
+            func2(i);
+        }));
+        build(func(20).(String i|{
+            func2(i);
+        }));
+        build(func(25).(i|{
+            func3(i).({
+                func2(o);
+            });
+        }));
+        '${out}'
+    }
+
+}

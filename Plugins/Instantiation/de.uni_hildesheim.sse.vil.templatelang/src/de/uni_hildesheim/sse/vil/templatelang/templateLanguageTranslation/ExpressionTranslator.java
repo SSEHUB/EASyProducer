@@ -8,7 +8,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.Call;
 import de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage;
+import de.uni_hildesheim.sse.vil.expressions.expressionDsl.SubCall;
 import de.uni_hildesheim.sse.vil.templatelang.TemplateLangModelUtility;
+import de.uni_hildesheim.sse.vil.templatelang.templateLang.Stmt;
 import net.ssehub.easy.basics.modelManagement.RestrictionEvaluationException;
 import net.ssehub.easy.dslCore.translation.MessageHandler;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
@@ -20,9 +22,12 @@ import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestriction;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionVersionRestrictionValidator;
 import net.ssehub.easy.instantiation.core.model.expressions.ResolvableOperationCallExpression;
+import net.ssehub.easy.instantiation.core.model.templateModel.BuilderBlockExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.ExpressionStatement;
+import net.ssehub.easy.instantiation.core.model.templateModel.ITemplateElement;
 import net.ssehub.easy.instantiation.core.model.templateModel.ImplicitVariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateBlock;
 import net.ssehub.easy.instantiation.core.model.templateModel.VariableDeclaration;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 
@@ -34,6 +39,25 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 public class ExpressionTranslator 
     extends de.uni_hildesheim.sse.vil.expressions.translation.ExpressionTranslator<VariableDeclaration, Resolver, 
     ExpressionStatement> {
+    
+    private IStatementTranslator sTranslator;
+    
+    public interface IStatementTranslator {
+        
+        /**
+         * Processes a statement.
+         * 
+         * @param stmt the statement to be resolved
+         * @return the resolved elements
+         * @throws TranslatorException in case that the translation fails due to semantic reasons
+         */
+        public ITemplateElement processStatement(Stmt stmt) throws TranslatorException;
+
+    }
+    
+    public void setStatementTranslator(IStatementTranslator sTranslator) {
+        this.sTranslator = sTranslator;
+    }
     
     /**
      * Processes a function call.
@@ -145,6 +169,55 @@ public class ExpressionTranslator
     @Override
     protected String cannotAssignHint() {
         return "VTL cannot assign values to configurable elements.";
+    }
+
+    @Override
+    protected Expression processSubCall(Expression result, SubCall call, CallType callType, Resolver resolver) 
+        throws TranslatorException {
+        Expression subCallResult = null;
+        if (call instanceof de.uni_hildesheim.sse.vil.templatelang.templateLang.SubCall) {
+            de.uni_hildesheim.sse.vil.templatelang.templateLang.SubCall sc = 
+                (de.uni_hildesheim.sse.vil.templatelang.templateLang.SubCall) call;
+            if (null == sc.getType() && null == sc.getArrayEx()) { // exclude other alternatives than builder block
+                resolver.pushLevel();
+                try {
+                    BuilderBlockExpression.Mode mode = BuilderBlockExpression.Mode.NONE;
+                    TypeDescriptor<?> varType = result.inferType();
+                    String varName = "o"; // default
+                    if (sc.getId() != null) { // we have parts of the optional type declaration before the |
+                        mode = BuilderBlockExpression.Mode.NAME;
+                        if (sc.getVarType() != null) { // we have a specific type
+                            varType = processType(sc.getVarType(), resolver);
+                            mode = BuilderBlockExpression.Mode.TYPE_NAME;
+                        }
+                        varName = sc.getId();
+                    }
+                    VariableDeclaration varDecl = new VariableDeclaration(varName, varType, false, result);
+                    resolver.add(varDecl);
+                    List<ITemplateElement> blockElements = new ArrayList<>();
+                    if (sTranslator != null) {
+                        for (Stmt stmt: sc.getNested()) {
+                            /*Expression ex = processCall(null, unqEx.getCall(), CallType.OTHER, null, resolver);
+                            ex = processSubCalls(ex, unqEx.getCalls(), resolver);
+                            blockElements.add(createExpressionStatement(ex, resolver));*/
+                            blockElements.add(sTranslator.processStatement(stmt));
+                        }
+                    } else {
+                        throw new TranslatorException("No statement translator given", sc, 
+                            ExpressionDslPackage.Literals.SUB_CALL__TYPE, TranslatorException.INTERNAL);
+                    }
+                    subCallResult = new BuilderBlockExpression(varDecl, mode,
+                        new TemplateBlock(blockElements.toArray(new ITemplateElement[0])));
+                } catch (VilException e) {
+                    throw new TranslatorException(e, sc, ExpressionDslPackage.Literals.SUB_CALL__TYPE);
+                }
+                resolver.popLevel();
+            }
+        }
+        if (null == subCallResult) {
+            subCallResult = super.processSubCall(result, call, callType, resolver);
+        }
+        return subCallResult;
     }
 
 }

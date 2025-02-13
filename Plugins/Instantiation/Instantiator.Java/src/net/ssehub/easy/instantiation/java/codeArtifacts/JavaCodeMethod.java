@@ -112,6 +112,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param comment optional comment, may be <b>null</b> or empty for none
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addGeneric", "generic"})
     public JavaCodeMethod addGeneric(String generic, String comment) {
         if (null != generic && generic.length() > 0) {
             if (null == generics) {
@@ -161,6 +162,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addOverrideAnnotation", "override"})
     public JavaCodeAnnotation addOverrideAnnotation() {
         return addAnnotation(Override.class.getSimpleName());
     }
@@ -170,6 +172,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addSuppressWarningsUncheckedAnnotation", "suppressUnchecked"})
     public JavaCodeAnnotation addSuppressWarningsUncheckedAnnotation() {
         return addSuppressWarningsAnnotation().addStringArgument("unchecked");
     }
@@ -179,6 +182,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addJunitTestAnnotation", "junitTest"})
     public JavaCodeAnnotation addJunitTestAnnotation() {
         return addAnnotation("org.junit.Test");
     }
@@ -189,6 +193,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param methodName the assert method to call
      * @return the method call
      */
+    @OperationMeta(name = {"addJunitAssertCall", "junitAssert"})
     public JavaCodeMethodCall addJunitAssertCall(String methodName) {
         return block.addJunitAssertCall(methodName);        
     }
@@ -198,6 +203,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addJunitBeforeAnnotation", "junitBefore"})
     public JavaCodeAnnotation addJunitBeforeAnnotation() {
         return addAnnotation("org.junit.Before");
     }
@@ -207,6 +213,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addJunitAfterAnnotation", "junitAfter"})
     public JavaCodeAnnotation addJunitAfterAnnotation() {
         return addAnnotation("org.junit.After");
     }
@@ -218,6 +225,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param name the name of the parameter
      * @return the parameter instance
      */
+    @OperationMeta(name = {"addParameter", "param"})
     public JavaCodeParameterSpecification addParameter(String type, String name) {
         return addParameter(type, name, null);
     }
@@ -230,6 +238,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param comment the Javadoc comment to be linked to this parameter (just the text), may be <b>null</b> for none
      * @return the parameter instance
      */
+    @OperationMeta(name = {"addParameter", "param"})
     public JavaCodeParameterSpecification addParameter(String type, String name, String comment) {
         if (null == parameter) {
             parameter = new ArrayList<>();
@@ -248,7 +257,8 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param comment the Javadoc comment to be linked to this parameter (just the text), may be <b>null</b> for none
      * @return the parameter instance
      */
-    public JavaCodeParameterSpecification addParameter(JavaCodeTypeSpecification type, String name, String comment) {
+    //@OperationMeta(name = {"addParameter", "param"})
+    JavaCodeParameterSpecification addParameter(JavaCodeTypeSpecification type, String name, String comment) {
         if (null == parameter) {
             parameter = new ArrayList<>();
         }
@@ -264,6 +274,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param type the exception type
      * @return the type specification of the exception
      */
+    @OperationMeta(name = {"addException", "addThrows", "throws"})
     public JavaCodeTypeSpecification addException(String type) {
         return addException(type, null);
     }
@@ -275,6 +286,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param comment Javadoc description of the exception
      * @return the type specification of the exception
      */
+    @OperationMeta(name = {"addException", "addThrows", "throws"})
     public JavaCodeTypeSpecification addException(String type, String comment) {
         if (null == exceptions) {
             exceptions = new ArrayList<>();
@@ -293,6 +305,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
 
     @Override
+    @OperationMeta(name = {"addAsStatement", "statement"})
     public JavaCodeMethod addAsStatement(String text) {
         block.addAsStatement(text);
         return this;
@@ -317,59 +330,70 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     @Override
+    @OperationMeta(name = {"addDoLoop", "do"})
     public JavaCodeDoLoop addDoLoop(String condition) {
         return block.addDoLoop(condition);
     }
 
     @Override
+    @OperationMeta(name = {"addWhileLoop", "while"})
     public JavaCodeWhileLoop addWhileLoop(String condition) {
         return block.addWhileLoop(condition);
     }
 
     @Override
+    @OperationMeta(name = {"addForLoop", "for"})
     public JavaCodeForLoop addForLoop(String type, String variableName, String expression) {
         return block.addForLoop(type, variableName, expression);
     }
     
-    @Override
-    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
+    //@Override
+    //@OperationMeta(name = {"addForLoop", "for"})
+    JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
         String expression) {
         return block.addForLoop(type, variableName, expression);
     }
 
     @Override
+    @OperationMeta(name = {"addForLoop", "for"})
     public JavaCodeForLoop addForLoop(String type, String variableName, String initializer, 
         String condition, String update) {
         return block.addForLoop(type, variableName, initializer, condition, update);
     }
 
-    @Override
-    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
+    //@Override
+    //@OperationMeta(name = {"addForLoop", "for"})
+    JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, 
         String initializer, String condition, String update) {
         return block.addForLoop(type, variableName, initializer, condition, update);
     }
     
     @Override
+    @OperationMeta(name = {"addIf", "if"})
     public JavaCodeAlternative addIf(String condition) {
         return block.addIf(condition);
     }
     
     @Override
+    @OperationMeta(name = {"addThrow", "throw"})
     public JavaCodeThrow addThrow(String expression) {
         return block.addThrow(expression);
     }
     
     @Override
+    @OperationMeta(name = {"addSwitch", "switch"})
     public JavaCodeSwitch addSwitch(JavaCodeExpression expression) {
         return block.addSwitch(expression);
     }
 
     @Override
+    @OperationMeta(name = {"addSynchronized", "synchronized"})
     public JavaCodeSynchronizedBlock addSynchronized() {
         return block.addSynchronized();
     }
 
     @Override
+    @OperationMeta(name = {"addTry", "try"})
     public JavaCodeTryBlock addTry() {
         return block.addTry();
     }
@@ -384,81 +408,97 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         return block.addPostfixDecrement(variable);
     }
 
-    @OperationMeta(name = {"addAssignment", "addAssign"})
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     @Override
     public JavaCodeAssignment addAssignment(String variable) {
         return block.addAssignment(variable);
     }
 
-    @OperationMeta(name = {"addAssignment", "addAssign"})
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     @Override
     public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression) {
         return block.addAssignment(variable, expression);
     }
 
-    @OperationMeta(name = {"addAssignment", "addAssign"})
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     @Override
     public JavaCodeAssignment addAssignment(String variable, String operator, JavaCodeExpression expression) {
         return block.addAssignment(variable, operator, expression);
     }
 
     @Override
+    @OperationMeta(name = {"addEmptyLine", "emptyLine"})
     public JavaCodeMethod addEmptyLine() {
         block.addEmptyLine();
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"addSLComment", "SLComment"})
     public JavaCodeMethod addSLComment(String text) {
         block.addSLComment(text);
         return this;
     }
     
     @Override
+    @OperationMeta(name = {"addSuperCall", "super"})
     public JavaCodeMethodCall addSuperCall() {
         return block.addSuperCall();
     }
 
     @Override
+    @OperationMeta(name = {"addThisCall", "this"})
     public JavaCodeMethodCall addThisCall() {
         return block.addThisCall();
     }    
     
     @Override
+    @OperationMeta(name = {"addSystemOutPrintlnCall", "SystemOutPrintln", "sysoutprintln"})
     public JavaCodeMethodCall addSystemOutPrintlnCall() {
         return block.addSystemOutPrintlnCall();
     }    
     
     @Override
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName) {
         return block.addCall(methodName);
     }
 
     @Override
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         return block.addCall(methodName, scope);
     }
+    
+    @OperationMeta(name = "callQualified")
+    public JavaCodeMethodCall addCallQualified(String methodName) {
+        return block.addCallQualified(methodName);
+    }
 
     @Override
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         JavaCodeExpression initializer) {
         return block.addVariable(type, variableName, initializer);
     }
 
-    @Override
-    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+    //@Override
+    //@OperationMeta(name = {"addVariable", "var"})
+    JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         JavaCodeExpression initializer) {        
         return block.addVariable(type, variableName, initializer);
     }
 
     @Override
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         boolean isFinal, JavaCodeExpression initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
     }
 
-    @Override
-    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+    //@Override
+    //@OperationMeta(name = {"addVariable", "var"})
+    JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, JavaCodeExpression initializer) {
         return block.addVariable(type, variableName, isFinal, initializer);
     }
@@ -481,6 +521,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param valueEx the return value
      * @return the return statement
      */
+    @OperationMeta(name = {"addReturn", "return"})
     public JavaCodeMethod addReturn(JavaCodeExpression valueEx) {
         return addReturn(valueEx, null);
     }
@@ -491,6 +532,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
      * @return <b>this</b>
      */
+    @OperationMeta(name = {"addReturnClass", "returnClass"})
     public JavaCodeMethod addReturnClass(String cls) {
         return addReturnClass(cls, null);
     }
@@ -502,6 +544,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param comment the Javadoc comment for the return
      * @return <b>this</b>
      */
+    @OperationMeta(name = {"addReturnClass", "returnClass"})
     public JavaCodeMethod addReturnClass(String cls, String comment) {
         JavaCodeTypeSpecification type = JavaCodeTypeSpecification.toClassType(cls, this);
         if (null != type) {
@@ -517,6 +560,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param comment the Javadoc comment for the return
      * @return <b>this</b>
      */
+    @OperationMeta(name = {"addReturn", "return"})
     public JavaCodeMethod addReturn(JavaCodeExpression valueEx, String comment) {
         valueEx.setParent(this);
         block.addReturn(valueEx);
@@ -537,6 +581,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param withBrackets shall brackets be emitted
      * @return the code block
      */
+    @OperationMeta(name = {"addBlock", "block"})
     public JavaCodeBlock addBlock(boolean outputWhitespaceBefore, boolean outputLnAfter, 
         boolean isStatic, boolean withBrackets) {
         return block.addBlock(outputWhitespaceBefore, outputLnAfter, isStatic, withBrackets);
@@ -548,6 +593,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * @param block the added block
      * @return {@code block} for chaining
      */
+    @OperationMeta(name = {"addBlock", "block"})
     public JavaCodeBlock addBlock(JavaCodeBlock block) {
         return block.addBlock(block);
     }
@@ -639,48 +685,56 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     @Override
+    @OperationMeta(name = {"setVisibility", "visibility"})
     public JavaCodeMethod setVisibility(String visibility) {
         super.setVisibility(visibility);
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"setVisibility", "visibility"})
     public JavaCodeMethod setVisibility(JavaCodeVisibility visibility) {
         super.setVisibility(visibility);
         return this;
     }
     
     @Override
+    @OperationMeta(name = {"setPublic", "public"})
     public JavaCodeMethod setPublic() {
         super.setPublic();
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"setPrivate", "private"})
     public JavaCodeMethod setPrivate() {
         super.setPrivate();
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"setProtected", "protected"})
     public JavaCodeMethod setProtected() {
         super.setProtected();
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"setPackage", "package"})
     public JavaCodeMethod setPackage() {
         super.setPackage();
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"setStatic", "static"})
     public JavaCodeMethod setStatic(boolean isStatic) {
         super.setStatic(isStatic);
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"setStatic", "static"})
     public JavaCodeMethod setStatic() {
         super.setStatic();
         return this;
@@ -711,6 +765,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     /**
      * Sets this method to default.
      */
+    @OperationMeta(name = {"setDefault", "dflt"})
     public void setDefault() {
         dflt = true;
     }
@@ -720,6 +775,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      * 
      * @param isDefault if the method is method
      */
+    @OperationMeta(name = {"setDefault", "dflt"})
     public void setDefault(boolean isDefault) {
         this.dflt = isDefault;
     }

@@ -23,6 +23,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Sequence;
 
 /**
@@ -75,6 +76,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param value the value
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(Object value) {
         return addArgument(null, value);
     }
@@ -85,6 +87,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param value the String value
      * @return <b>this</b> for chaining
      */    
+    @OperationMeta(name = {"addStringArgument", "stringArg"})
     public JavaCodeAnnotation addStringArgument(String value) {
         addArgument("\"" + StringEscapeUtils.escapeJava(value) + "\"");    
         return this;
@@ -96,6 +99,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param values the values
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(Sequence<?> values) {
         return addArgument(null, values);
     }
@@ -107,6 +111,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param values the values
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(String name, Sequence<?> values) {
         ensureArguments();
         List<JavaCodeExpression> tmp = new ArrayList<>();
@@ -125,6 +130,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param value the value
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(String name, Object value) {
         return addArgument(name, value, false);
     }
@@ -136,6 +142,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param value the String value
      * @return <b>this</b> for chaining
      */    
+    @OperationMeta(name = {"addStringArgument", "stringArg"})
     public JavaCodeAnnotation addStringArgument(String name, String value) {
         return addArgument(name, "\"" + StringEscapeUtils.escapeJava(value) + "\"");    
     }
@@ -171,6 +178,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param cls the class name
      * @return <b>this</b> for chaining
      */    
+    @OperationMeta(name = {"addClassArgument", "classArg"})
     public JavaCodeAnnotation addClassArgument(String cls) {
         return addClassArgument(null, cls);
     }
@@ -183,6 +191,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param cls the class name
      * @return <b>this</b> for chaining
      */    
+    @OperationMeta(name = {"addClassArgument", "classArg"})
     public JavaCodeAnnotation addClassArgument(String name, String cls) {
         if (cls.endsWith(".class")) {
             cls = cls.substring(0, cls.length() - 6);
@@ -202,6 +211,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param valueAsString shall the value be escaped and surrounded by quotes if not already given?
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(String name, Object value, boolean valueAsString) {
         return addArgument(name, value, null, false, valueAsString);
     }
@@ -247,6 +257,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param valuesAsTypes shall the values be considered as types
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(Sequence<String> values, boolean valuesAsTypes) {
         return addArgument(null, values, valuesAsTypes);
     }
@@ -259,6 +270,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param valuesAsTypes shall the values be considered as types
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(Sequence<String> values, boolean splitLines, boolean valuesAsTypes) {
         return addArgument(null, values, splitLines, valuesAsTypes);
     }
@@ -271,6 +283,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param valuesAsTypes shall the values be considered as types
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(String name, Sequence<String> values, boolean valuesAsTypes) {
         return addArgument(name, values, false, valuesAsTypes);
     }
@@ -284,6 +297,7 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
      * @param valuesAsTypes shall the values be considered as types
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeAnnotation addArgument(String name, Sequence<String> values, boolean splitAndIndent, 
         boolean valuesAsTypes) {
         List<JavaCodeExpression> tmp = new ArrayList<>();

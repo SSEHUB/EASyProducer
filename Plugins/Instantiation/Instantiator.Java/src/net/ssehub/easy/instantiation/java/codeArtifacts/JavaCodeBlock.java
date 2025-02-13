@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a code block.
@@ -208,60 +209,71 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }
     
     @Override
+    @OperationMeta(name = {"addDoLoop", "do"})
     public JavaCodeDoLoop addDoLoop(String condition) {
         return IJavaCodeElement.add(elements, new JavaCodeDoLoop(this, condition));
     }
 
     @Override
+    @OperationMeta(name = {"addWhileLoop", "while"})
     public JavaCodeWhileLoop addWhileLoop(String condition) {
         return IJavaCodeElement.add(elements, new JavaCodeWhileLoop(this, condition));
     }
 
     @Override
+    @OperationMeta(name = {"addForLoop", "for"})
     public JavaCodeForLoop addForLoop(String type, String variableName, String expression) {
         return addForLoop(new JavaCodeTypeSpecification(type, getParentClass()), variableName, expression);
     }
     
-    @Override
-    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String expression) {
+    //@Override
+    //@OperationMeta(name = {"addForLoop", "for"})
+    JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String expression) {
         return IJavaCodeElement.add(elements, new JavaCodeForLoop(this, type, variableName, expression));
     }
 
     @Override
+    @OperationMeta(name = {"addForLoop", "for"})
     public JavaCodeForLoop addForLoop(String type, String variableName, String initializer, 
         String condition, String update) {
         return addForLoop(new JavaCodeTypeSpecification(type, getParentClass()), variableName, initializer, 
             condition, update);
     }
 
-    @Override
-    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String initializer, 
+    //@Override
+    //@OperationMeta(name = {"addForLoop", "for"})
+    JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String initializer, 
         String condition, String update) {
         return IJavaCodeElement.add(elements, new JavaCodeForLoop(this, type, variableName, initializer, 
             condition, update));
     }
     
     @Override
+    @OperationMeta(name = {"addIf", "if"})
     public JavaCodeAlternative addIf(String condition) {
         return IJavaCodeElement.add(elements, new JavaCodeAlternative(this, condition));
     }
 
     @Override
+    @OperationMeta(name = {"addThrow", "throw"})
     public JavaCodeThrow addThrow(String expression) {
         return IJavaCodeElement.add(elements, new JavaCodeThrow(this, expression));
     }
 
     @Override
+    @OperationMeta(name = {"addSwitch", "switch"})
     public JavaCodeSwitch addSwitch(JavaCodeExpression expression) {
         return IJavaCodeElement.add(elements, new JavaCodeSwitch(this, expression));
     }
 
     @Override
+    @OperationMeta(name = {"addSynchronized", "synchronized"})
     public JavaCodeSynchronizedBlock addSynchronized() {
         return IJavaCodeElement.add(elements, new JavaCodeSynchronizedBlock(this));
     }
 
     @Override
+    @OperationMeta(name = {"addTry", "try"})
     public JavaCodeTryBlock addTry() {
         return IJavaCodeElement.add(elements, new JavaCodeTryBlock(this));
     }
@@ -282,43 +294,51 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }
 
     @Override
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     public JavaCodeAssignment addAssignment(String variable) {
         return addAssignment(variable, "=", null);
     }
     
     @Override
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression) {
         return addAssignment(variable, "=", expression);
     }
 
     @Override
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     public JavaCodeAssignment addAssignment(String variable, String operator, JavaCodeExpression expression) {
         return IJavaCodeElement.add(elements, new JavaCodeAssignment(this, variable, operator, expression));
     }
 
     @Override
+    @OperationMeta(name = {"addEmptyLine", "emptyLine"})
     public JavaCodeBlock addEmptyLine() {
         IJavaCodeElement.add(elements, new JavaCodeEmptyLine(this));
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"addSLComment", "SLComment"})
     public JavaCodeBlock addSLComment(String text) {
         IJavaCodeElement.add(elements, new JavaCodeSingleLineComment(this, text));
         return this;
     }
 
     @Override
+    @OperationMeta(name = {"addSuperCall", "super"})
     public JavaCodeMethodCall addSuperCall() {
         return addCall("super");
     }
 
     @Override
+    @OperationMeta(name = {"addThisCall", "this"})
     public JavaCodeMethodCall addThisCall() {
         return addCall("this");
     }
 
     @Override
+    @OperationMeta(name = {"addSystemOutPrintlnCall", "SystemOutPrintln", "sysoutprintln"})
     public JavaCodeMethodCall addSystemOutPrintlnCall() {
         return addCall("System.out.println");
     }
@@ -334,36 +354,47 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }    
     
     @Override
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName) {
         return addCall(methodName, JavaCodeImportScope.NONE);
     }
 
     @Override
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         return IJavaCodeElement.add(elements, new JavaCodeMethodCall(this, methodName, scope, true,
             ";" + System.lineSeparator()));
     }
+    
+    @OperationMeta(name = "callQualified")
+    public JavaCodeMethodCall addCallQualified(String methodName) {
+        return addCall(methodName, JavaCodeImportScope.METHOD_CLASS_IMPORT);
+    }
 
     @Override
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         JavaCodeExpression initializer) {
         return addVariable(type, variableName, false, initializer);
     }
 
-    @Override
-    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+    //@Override
+    //@OperationMeta(name = {"addVariable", "var"})
+    JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         JavaCodeExpression initializer) {
         return addVariable(type, variableName, false, initializer);
     }
 
     @Override
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         boolean isFinal, JavaCodeExpression initializer) {
         return IJavaCodeElement.add(elements, createVariable(type, variableName, isFinal, initializer));
     }
 
-    @Override
-    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+    //@Override
+    //@OperationMeta(name = {"addVariable", "var"})
+    JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
         boolean isFinal, JavaCodeExpression initializer) {
         return IJavaCodeElement.add(elements, new JavaCodeVariableDeclaration(this, type, variableName, 
             isFinal, initializer));
@@ -389,6 +420,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      * @param valueEx the return value
      * @return the return statement
      */
+    @OperationMeta(name = {"addReturn", "return"})
     public JavaCodeBlock addReturn(JavaCodeExpression valueEx) {
         IJavaCodeElement.add(elements, new JavaCodeReturn(this, valueEx));
         return this;

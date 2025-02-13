@@ -1680,5 +1680,14 @@ public class ExecutionTests extends AbstractExecutionTest {
         assertEqualWithIvml("dynamicImports", "adviceTestVM1");
     }
 
+    /**
+     * Tests VTL builder blocks.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testBuilder() throws IOException {
+        assertEqual("builder");
+    }
 
 }

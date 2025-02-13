@@ -499,6 +499,16 @@ public abstract class AbstractIvmlVariable extends IvmlElement implements IActua
     public boolean isConfigured() {
         return AssignmentState.UNDEFINED != origVariable.getState() && null != origVariable.getValue();
     }
+    
+    /**
+     * Returns whether this variable {@link #isConfigured()} and not {@link #isNull()}.
+     * 
+     * @return <code>true</code> if the variable is configured and has a value, <code>false</code> else
+     */
+    @OperationMeta(name = {"hasConfiguredValue", "hasDefinedValue"})
+    boolean hasConfiguredValue() {
+        return isConfigured() && !isNull(); 
+    }
 
     /**
      * Returns whether this element is frozen.

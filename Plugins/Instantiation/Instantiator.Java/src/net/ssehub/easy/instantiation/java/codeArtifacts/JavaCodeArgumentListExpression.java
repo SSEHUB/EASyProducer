@@ -21,6 +21,7 @@ import java.util.List;
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a Java argument list as a pseudo expression. The output will not contain argument list parenthesis
@@ -56,6 +57,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param arg the argument (ignored if equivalent to empty or null)
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeArgumentListExpression addArgument(Object arg) {
         arg = IVilType.convertVilValue(arg);
         if (null != arg) {
@@ -82,6 +84,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param val the String value
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addStringArgument", "stringArg"})
     public JavaCodeArgumentListExpression addStringArgument(String val) {
         return addArgument(new JavaCodeStringExpression(this, val));
     }
@@ -106,6 +109,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param cls the (qualified) class name, optionally ending with ".class", ignored if <b>null</b> or empty
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addClassArgument", "classArg"})
     public JavaCodeArgumentListExpression addClassArgument(String cls) {
         JavaCodeTypeSpecification type = JavaCodeTypeSpecification.toClassType(cls, this);
         if (null != type) {
@@ -129,6 +133,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param arg the argument, may be empty or <b>null</b> to ignore this argument
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeArgumentListExpression addArgument(String arg) {
         if (null != arg && arg.length() > 0) {
             arguments.add(new JavaCodeText(arg, false, false));
@@ -142,6 +147,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param ex the expression, may be <b>null</b> for none
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeArgumentListExpression addArgument(JavaCodeExpression ex) {
         if (null != ex && !ex.isEmpty()) {
             ex.setParent(this);
@@ -156,6 +162,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param var the variable declaration, may be <b>null</b> for none
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeArgumentListExpression addArgument(JavaCodeVariableDeclaration var) {
         if (null != var) {
             arguments.add(new JavaCodeVariableExpression(this, var));
@@ -169,6 +176,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param param the parameter declaration, may be <b>null</b> for none
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeArgumentListExpression addArgument(JavaCodeParameterSpecification param) {
         if (null != param) {
             arguments.add(new JavaCodeTextExpression(this, param.getName())); // might also be a specific instance
@@ -200,6 +208,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * 
      * @return the lambda expression
      */
+    @OperationMeta(name = {"addLambdaArgument", "lambdaArg"})
     public JavaCodeLambdaExpression addLambdaArgument() {
         return addLambdaArgument(null);
     }
@@ -210,6 +219,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param variable the variable name, may be <b>null</b> or empty for none
      * @return the lambda expression
      */
+    @OperationMeta(name = {"addLambdaArgument", "lambdaArg"})
     public JavaCodeLambdaExpression addLambdaArgument(String variable) {
         return addArgumentImpl(new JavaCodeLambdaExpression(this).addVariable(variable));
     }
@@ -220,6 +230,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param arguments the arguments
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addArguments", "args"})
     public JavaCodeArgumentListExpression addArguments(JavaCodeArgumentListExpression arguments) {
         this.arguments.addAll(arguments.arguments);
         return this;

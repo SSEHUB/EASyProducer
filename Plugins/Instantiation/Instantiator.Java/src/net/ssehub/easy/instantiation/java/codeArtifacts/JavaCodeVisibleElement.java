@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Potentially visible code element.
@@ -246,6 +247,7 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      * @param type the annotation type, may be fully qualified
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addAnnotation", "annotate"})
     public JavaCodeAnnotation addAnnotation(String type) {
         return addAnnotation(type, null);
     }
@@ -255,6 +257,7 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addSuppressWarningsAnnotation", "suppressWarnings"})
     public JavaCodeAnnotation addSuppressWarningsAnnotation() {
         return addAnnotation(SuppressWarnings.class.getSimpleName());
     }
@@ -266,6 +269,7 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      * @param nested a nested type qualification within {@code type}, may be empty or <b>null</b> for none
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addAnnotation", "annotate"})
     public JavaCodeAnnotation addAnnotation(String type, String nested) {
         if (null == annotations) {
             annotations = new ArrayList<>();

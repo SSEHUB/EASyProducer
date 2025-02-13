@@ -25,7 +25,7 @@
 ']'=69
 'abstract'=39
 'and'=48
-'callOf'=79
+'callOf'=81
 'compound'=40
 'const'=38
 'else'=33
@@ -43,7 +43,7 @@
 'join'=34
 'load'=21
 'map'=29
-'mapOf'=78
+'mapOf'=80
 'new'=66
 'not'=63
 'null'=75
@@ -52,9 +52,11 @@
 'protected'=26
 'refines'=41
 'requireVTL'=13
-'sequenceOf'=77
-'setOf'=76
+'sequenceOf'=79
+'setOf'=78
+'static'=77
 'super'=65
+'switch'=76
 'true'=73
 'typedef'=42
 'version'=44
@@ -141,3 +143,5 @@ T__76=76
 T__77=77
 T__78=78
 T__79=79
+T__80=80
+T__81=81

@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a variable assignment. An explicit expression call takes precedence over a String expression.
@@ -79,6 +80,18 @@ public class JavaCodeAssignment extends JavaCodeStatement {
         expression = new JavaCodeMethodCall(this, methodName, scope, false, "");
         return (JavaCodeMethodCall) expression;
     }
+    
+    /**
+     * Adds a qualified non-static method call where the class (but not the method) shall be imported, i.e., calls 
+     * {@link #addCall(String, JavaCodeImportScope)} with {@link JavaCodeImportScope#METHOD_CLASS_IMPORT}.
+     * 
+     * @param methodName the method name, qualified or statically qualified expression to call the method
+     * @return the method call (for chaining)
+     */
+    @OperationMeta(name = "callQualified")
+    public JavaCodeMethodCall addCallQualified(String methodName) {
+        return addCall(methodName, JavaCodeImportScope.METHOD_CLASS_IMPORT);
+    }    
     
     /**
      * Adds a constructor call as value to assign.

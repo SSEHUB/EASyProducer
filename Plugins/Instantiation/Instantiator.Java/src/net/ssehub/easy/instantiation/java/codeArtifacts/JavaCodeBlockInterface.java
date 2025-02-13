@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a code block.
@@ -100,6 +101,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param condition the loop condition
      * @return the loop block
      */
+    @OperationMeta(name = {"addDoLoop", "do"})
     public JavaCodeDoLoop addDoLoop(String condition);
 
     /**
@@ -108,6 +110,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param condition the loop condition
      * @return the loop block
      */
+    @OperationMeta(name = {"addWhileLoop", "while"})
     public JavaCodeWhileLoop addWhileLoop(String condition);
 
     /**
@@ -118,6 +121,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the expression determining the iterable to loop over
      * @return the for loop block
      */
+    @OperationMeta(name = {"addForLoop", "for"})
     public JavaCodeForLoop addForLoop(String type, String variableName, String expression);
     
     /**
@@ -128,7 +132,8 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the expression determining the iterable to loop over
      * @return the for loop block
      */
-    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String expression);
+    //@OperationMeta(name = {"addForLoop", "for"})
+    //public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String expression);
 
     /**
      * Creates a traditional for-loop.
@@ -140,6 +145,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param update the iterator variable update, e.g., increment, decrement (may be <b>null</b> or empty)
      * @return the for loop block
      */
+    @OperationMeta(name = {"addForLoop", "for"})
     public JavaCodeForLoop addForLoop(String type, String variableName, String initializer, 
         String condition, String update);
 
@@ -153,8 +159,9 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param update the iterator variable update, e.g., increment, decrement (may be <b>null</b> or empty)
      * @return the for loop block
      */
-    public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String initializer, 
-        String condition, String update);
+    //@OperationMeta(name = {"addForLoop", "for"})
+    //public JavaCodeForLoop addForLoop(JavaCodeTypeSpecification type, String variableName, String initializer, 
+    //    String condition, String update);
     
     /**
      * Adds a if-then-else block.
@@ -162,6 +169,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param condition the loop condition
      * @return the if-then-else block
      */
+    @OperationMeta(name = {"addIf", "if"})
     public JavaCodeAlternative addIf(String condition);
 
     /**
@@ -170,6 +178,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the expression to throw
      * @return throw statement
      */
+    @OperationMeta(name = {"addThrow", "throw"})
     public JavaCodeThrow addThrow(String expression);
 
     /**
@@ -178,6 +187,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the switch expression
      * @return the switch block
      */
+    @OperationMeta(name = {"addSwitch", "switch"})
     public JavaCodeSwitch addSwitch(JavaCodeExpression expression);
 
     /**
@@ -185,6 +195,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * 
      * @return the synchronized block
      */
+    @OperationMeta(name = {"addSynchronized", "synchronized"})
     public JavaCodeSynchronizedBlock addSynchronized();
 
     /**
@@ -192,6 +203,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * 
      * @return the synchronized block
      */
+    @OperationMeta(name = {"addTry", "try"})
     public JavaCodeTryBlock addTry();
 
     /**
@@ -216,6 +228,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param variable the variable to change
      * @return the assignment
      */
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     public JavaCodeAssignment addAssignment(String variable);
 
     /**
@@ -225,6 +238,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the expression determining the value
      * @return the assignment
      */
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     public JavaCodeAssignment addAssignment(String variable, JavaCodeExpression expression);
 
     /**
@@ -235,6 +249,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param expression the expression determining the value
      * @return the assignment
      */
+    @OperationMeta(name = {"addAssignment", "addAssign", "assign"})
     public JavaCodeAssignment addAssignment(String variable, String operator, JavaCodeExpression expression);
 
     /**
@@ -242,6 +257,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * 
      * @return <b>this</b>
      */
+    @OperationMeta(name = {"addEmptyLine", "emptyLine"})
     public JavaCodeBlockInterface addEmptyLine();
 
     /**
@@ -250,6 +266,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param text the comment text
      * @return <b>this</b>
      */
+    @OperationMeta(name = {"addSLComment", "SLComment"})
     public JavaCodeBlockInterface addSLComment(String text);
 
     /**
@@ -257,6 +274,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * 
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addSuperCall", "super"})
     public JavaCodeMethodCall addSuperCall();
 
     /**
@@ -264,6 +282,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * 
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addThisCall", "this"})
     public JavaCodeMethodCall addThisCall();
 
     /**
@@ -271,6 +290,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * 
      * @return the method call (for chaining)
      */
+    @OperationMeta(name = {"addSystemOutPrintlnCall", "SystemOutPrintln", "sysoutprintln"})
     public JavaCodeMethodCall addSystemOutPrintlnCall();
 
     /**
@@ -281,6 +301,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param initializer the initializer, may be <b>null</b> for none
      * @return the variable declaration (for chaining)
      */
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         JavaCodeExpression initializer);
 
@@ -291,6 +312,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param variableName the variable name
      * @return the variable declaration (for chaining)
      */
+    @OperationMeta(name = {"addVariable", "var"})
     public default JavaCodeVariableDeclaration addVariable(String type, String variableName) {
         return addVariable(type, variableName, null);
     }
@@ -303,8 +325,9 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param initializer the initializer, may be <b>null</b> or empty for none
      * @return the variable declaration (for chaining)
      */
-    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        JavaCodeExpression initializer);
+    //@OperationMeta(name = {"addVariable", "var"})
+    //public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+    //    JavaCodeExpression initializer);
 
     /**
      * Creates a variable declaration.
@@ -315,6 +338,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param initializer the initializer, may be <b>null</b> or empty for none
      * @return the variable declaration (for chaining)
      */
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeVariableDeclaration addVariable(String type, String variableName, 
         boolean isFinal, JavaCodeExpression initializer);
 
@@ -327,8 +351,9 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @param initializer the initializer, may be <b>null</b> or empty for none
      * @return the variable declaration (for chaining)
      */
-    public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
-        boolean isFinal, JavaCodeExpression initializer);
+    //@OperationMeta(name = {"addVariable", "var"})
+    //public JavaCodeVariableDeclaration addVariable(JavaCodeTypeSpecification type, String variableName, 
+    //    boolean isFinal, JavaCodeExpression initializer);
     
     /**
      * Creates a variable declaration without initialization and without adding it.

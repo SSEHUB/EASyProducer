@@ -22,7 +22,7 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_STRING", "RULE_VERSION", "RULE_NUMBER", "RULE_ID", "RULE_EXPONENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'requireVTL'", "';'", "'vilScript'", "'('", "')'", "'{'", "'}'", "'extends'", "'load'", "'properties'", "'='", "':'", "','", "'protected'", "'.'", "'instantiate'", "'map'", "'for'", "'while'", "'if'", "'else'", "'join'", "'with'", "'exclude'", "'execute'", "'const'", "'abstract'", "'compound'", "'refines'", "'typedef'", "'@advice'", "'version'", "'import'", "'insert'", "'*'", "'and'", "'or'", "'xor'", "'implies'", "'iff'", "'=='", "'<>'", "'!='", "'>'", "'<'", "'>='", "'<='", "'+'", "'-'", "'/'", "'not'", "'!'", "'super'", "'new'", "'->'", "'['", "']'", "'|'", "'@'", "'::'", "'true'", "'false'", "'null'", "'setOf'", "'sequenceOf'", "'mapOf'", "'callOf'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_STRING", "RULE_VERSION", "RULE_NUMBER", "RULE_ID", "RULE_EXPONENT", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'requireVTL'", "';'", "'vilScript'", "'('", "')'", "'{'", "'}'", "'extends'", "'load'", "'properties'", "'='", "':'", "','", "'protected'", "'.'", "'instantiate'", "'map'", "'for'", "'while'", "'if'", "'else'", "'join'", "'with'", "'exclude'", "'execute'", "'const'", "'abstract'", "'compound'", "'refines'", "'typedef'", "'@advice'", "'version'", "'import'", "'insert'", "'*'", "'and'", "'or'", "'xor'", "'implies'", "'iff'", "'=='", "'<>'", "'!='", "'>'", "'<'", "'>='", "'<='", "'+'", "'-'", "'/'", "'not'", "'!'", "'super'", "'new'", "'->'", "'['", "']'", "'|'", "'@'", "'::'", "'true'", "'false'", "'null'", "'switch'", "'static'", "'setOf'", "'sequenceOf'", "'mapOf'", "'callOf'"
     };
     public static final int T__50=50;
     public static final int T__19=19;
@@ -87,6 +87,8 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
     public static final int T__75=75;
     public static final int T__32=32;
     public static final int T__76=76;
+    public static final int T__80=80;
+    public static final int T__81=81;
     public static final int RULE_WS=11;
     public static final int RULE_ANY_OTHER=12;
     public static final int RULE_NUMBER=6;
@@ -751,7 +753,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt5=2;
             int LA5_0 = input.LA(1);
 
-            if ( (LA5_0==RULE_VERSION||(LA5_0>=RULE_ID && LA5_0<=RULE_EXPONENT)||LA5_0==44||(LA5_0>=76 && LA5_0<=79)) ) {
+            if ( (LA5_0==RULE_VERSION||(LA5_0>=RULE_ID && LA5_0<=RULE_EXPONENT)||LA5_0==20||LA5_0==26||LA5_0==30||(LA5_0>=32 && LA5_0<=33)||LA5_0==44||(LA5_0>=76 && LA5_0<=81)) ) {
                 alt5=1;
             }
             switch (alt5) {
@@ -1734,7 +1736,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     int LA12_0 = input.LA(1);
 
                     if ( (LA12_0==26) ) {
-                        alt12=1;
+                        int LA12_1 = input.LA(2);
+
+                        if ( (synpred15_InternalVilBuildLanguage()) ) {
+                            alt12=1;
+                        }
                     }
                     switch (alt12) {
                         case 1 :
@@ -1748,7 +1754,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                               						newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0());
                               					
                             }
-                            pushFollow(FOLLOW_22);
+                            pushFollow(FOLLOW_21);
                             lv_modifier_2_0=ruleRuleModifier();
 
                             state._fsp--;
@@ -1777,53 +1783,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     // InternalVilBuildLanguage.g:663:4: ( (lv_type_3_0= ruleType ) )?
                     int alt13=2;
-                    switch ( input.LA(1) ) {
-                        case RULE_ID:
-                            {
-                            int LA13_1 = input.LA(2);
-
-                            if ( (LA13_1==RULE_VERSION||(LA13_1>=RULE_ID && LA13_1<=RULE_EXPONENT)||LA13_1==44||LA13_1==72) ) {
-                                alt13=1;
-                            }
-                            }
-                            break;
-                        case RULE_VERSION:
-                            {
-                            int LA13_2 = input.LA(2);
-
-                            if ( (LA13_2==RULE_VERSION||(LA13_2>=RULE_ID && LA13_2<=RULE_EXPONENT)||LA13_2==44||LA13_2==72) ) {
-                                alt13=1;
-                            }
-                            }
-                            break;
-                        case RULE_EXPONENT:
-                            {
-                            int LA13_3 = input.LA(2);
-
-                            if ( (LA13_3==RULE_VERSION||(LA13_3>=RULE_ID && LA13_3<=RULE_EXPONENT)||LA13_3==44||LA13_3==72) ) {
-                                alt13=1;
-                            }
-                            }
-                            break;
-                        case 44:
-                            {
-                            int LA13_4 = input.LA(2);
-
-                            if ( (LA13_4==RULE_VERSION||(LA13_4>=RULE_ID && LA13_4<=RULE_EXPONENT)||LA13_4==44||LA13_4==72) ) {
-                                alt13=1;
-                            }
-                            }
-                            break;
-                        case 76:
-                        case 77:
-                        case 78:
-                        case 79:
-                            {
-                            alt13=1;
-                            }
-                            break;
-                    }
-
+                    alt13 = dfa13.predict(input);
                     switch (alt13) {
                         case 1 :
                             // InternalVilBuildLanguage.g:664:5: (lv_type_3_0= ruleType )
@@ -1908,7 +1868,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     int alt14=2;
                     int LA14_0 = input.LA(1);
 
-                    if ( (LA14_0==RULE_VERSION||(LA14_0>=RULE_ID && LA14_0<=RULE_EXPONENT)||LA14_0==44||(LA14_0>=76 && LA14_0<=79)) ) {
+                    if ( (LA14_0==RULE_VERSION||(LA14_0>=RULE_ID && LA14_0<=RULE_EXPONENT)||LA14_0==20||LA14_0==26||LA14_0==30||(LA14_0>=32 && LA14_0<=33)||LA14_0==44||(LA14_0>=76 && LA14_0<=81)) ) {
                         alt14=1;
                     }
                     switch (alt14) {
@@ -1950,13 +1910,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    otherlv_7=(Token)match(input,17,FOLLOW_23); if (state.failed) return current;
+                    otherlv_7=(Token)match(input,17,FOLLOW_22); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_7, grammarAccess.getRuleDeclarationAccess().getRightParenthesisKeyword_1_6());
                       			
                     }
-                    otherlv_8=(Token)match(input,23,FOLLOW_24); if (state.failed) return current;
+                    otherlv_8=(Token)match(input,23,FOLLOW_23); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_8, grammarAccess.getRuleDeclarationAccess().getEqualsSignKeyword_1_7());
@@ -1972,7 +1932,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt16=2;
             int LA16_0 = input.LA(1);
 
-            if ( ((LA16_0>=RULE_STRING && LA16_0<=RULE_EXPONENT)||LA16_0==16||LA16_0==24||(LA16_0>=28 && LA16_0<=29)||LA16_0==34||LA16_0==37||LA16_0==44||LA16_0==61||(LA16_0>=63 && LA16_0<=66)||(LA16_0>=73 && LA16_0<=75)) ) {
+            if ( ((LA16_0>=RULE_STRING && LA16_0<=RULE_EXPONENT)||LA16_0==16||LA16_0==20||LA16_0==24||LA16_0==26||(LA16_0>=28 && LA16_0<=30)||(LA16_0>=32 && LA16_0<=34)||LA16_0==37||LA16_0==44||LA16_0==61||(LA16_0>=63 && LA16_0<=66)||(LA16_0>=73 && LA16_0<=77)) ) {
                 alt16=1;
             }
             switch (alt16) {
@@ -1987,7 +1947,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       					newCompositeNode(grammarAccess.getRuleDeclarationAccess().getConditionsRuleConditionsParserRuleCall_2_0());
                       				
                     }
-                    pushFollow(FOLLOW_24);
+                    pushFollow(FOLLOW_23);
                     lv_conditions_9_0=ruleRuleConditions();
 
                     state._fsp--;
@@ -2182,7 +2142,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt18=2;
             int LA18_0 = input.LA(1);
 
-            if ( ((LA18_0>=RULE_STRING && LA18_0<=RULE_EXPONENT)||LA18_0==16||(LA18_0>=28 && LA18_0<=29)||LA18_0==34||LA18_0==37||LA18_0==44||LA18_0==61||(LA18_0>=63 && LA18_0<=66)||(LA18_0>=73 && LA18_0<=75)) ) {
+            if ( ((LA18_0>=RULE_STRING && LA18_0<=RULE_EXPONENT)||LA18_0==16||LA18_0==20||LA18_0==26||(LA18_0>=28 && LA18_0<=30)||(LA18_0>=32 && LA18_0<=34)||LA18_0==37||LA18_0==44||LA18_0==61||(LA18_0>=63 && LA18_0<=66)||(LA18_0>=73 && LA18_0<=77)) ) {
                 alt18=1;
             }
             switch (alt18) {
@@ -2197,7 +2157,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       					newCompositeNode(grammarAccess.getRuleConditionsAccess().getPostconditionLogicalExpressionParserRuleCall_1_0());
                       				
                     }
-                    pushFollow(FOLLOW_25);
+                    pushFollow(FOLLOW_24);
                     lv_postcondition_1_0=ruleLogicalExpression();
 
                     state._fsp--;
@@ -2224,7 +2184,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_2=(Token)match(input,24,FOLLOW_26); if (state.failed) return current;
+            otherlv_2=(Token)match(input,24,FOLLOW_25); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_2, grammarAccess.getRuleConditionsAccess().getColonKeyword_2());
@@ -2234,7 +2194,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt20=2;
             int LA20_0 = input.LA(1);
 
-            if ( ((LA20_0>=RULE_STRING && LA20_0<=RULE_EXPONENT)||LA20_0==16||(LA20_0>=28 && LA20_0<=29)||LA20_0==34||LA20_0==37||LA20_0==44||LA20_0==61||(LA20_0>=63 && LA20_0<=66)||(LA20_0>=73 && LA20_0<=75)) ) {
+            if ( ((LA20_0>=RULE_STRING && LA20_0<=RULE_EXPONENT)||LA20_0==16||LA20_0==20||LA20_0==26||(LA20_0>=28 && LA20_0<=30)||(LA20_0>=32 && LA20_0<=34)||LA20_0==37||LA20_0==44||LA20_0==61||(LA20_0>=63 && LA20_0<=66)||(LA20_0>=73 && LA20_0<=77)) ) {
                 alt20=1;
             }
             switch (alt20) {
@@ -2252,7 +2212,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       						newCompositeNode(grammarAccess.getRuleConditionsAccess().getPreconditionsLogicalExpressionParserRuleCall_3_0_0());
                       					
                     }
-                    pushFollow(FOLLOW_27);
+                    pushFollow(FOLLOW_26);
                     lv_preconditions_3_0=ruleLogicalExpression();
 
                     state._fsp--;
@@ -2291,7 +2251,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     	case 1 :
                     	    // InternalVilBuildLanguage.g:850:5: otherlv_4= ',' ( (lv_preconditions_5_0= ruleLogicalExpression ) )
                     	    {
-                    	    otherlv_4=(Token)match(input,25,FOLLOW_28); if (state.failed) return current;
+                    	    otherlv_4=(Token)match(input,25,FOLLOW_27); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	      					newLeafNode(otherlv_4, grammarAccess.getRuleConditionsAccess().getCommaKeyword_3_1_0());
@@ -2308,7 +2268,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     	      							newCompositeNode(grammarAccess.getRuleConditionsAccess().getPreconditionsLogicalExpressionParserRuleCall_3_1_1_0());
                     	      						
                     	    }
-                    	    pushFollow(FOLLOW_27);
+                    	    pushFollow(FOLLOW_26);
                     	    lv_preconditions_5_0=ruleLogicalExpression();
 
                     	    state._fsp--;
@@ -2449,7 +2409,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,18,FOLLOW_29); if (state.failed) return current;
+            otherlv_1=(Token)match(input,18,FOLLOW_28); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getRuleElementBlockAccess().getLeftCurlyBracketKeyword_1());
@@ -2461,7 +2421,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 int alt21=2;
                 int LA21_0 = input.LA(1);
 
-                if ( ((LA21_0>=RULE_STRING && LA21_0<=RULE_EXPONENT)||LA21_0==16||LA21_0==18||(LA21_0>=28 && LA21_0<=32)||LA21_0==34||(LA21_0>=37 && LA21_0<=38)||LA21_0==44||LA21_0==61||(LA21_0>=63 && LA21_0<=66)||(LA21_0>=73 && LA21_0<=79)) ) {
+                if ( ((LA21_0>=RULE_STRING && LA21_0<=RULE_EXPONENT)||LA21_0==16||LA21_0==18||LA21_0==20||LA21_0==26||(LA21_0>=28 && LA21_0<=34)||(LA21_0>=37 && LA21_0<=38)||LA21_0==44||LA21_0==61||(LA21_0>=63 && LA21_0<=66)||(LA21_0>=73 && LA21_0<=81)) ) {
                     alt21=1;
                 }
 
@@ -2478,7 +2438,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getRuleElementBlockAccess().getElementsRuleElementParserRuleCall_2_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_29);
+            	    pushFollow(FOLLOW_28);
             	    lv_elements_2_0=ruleRuleElement();
 
             	    state._fsp--;
@@ -3019,21 +2979,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             {
             // InternalVilBuildLanguage.g:1094:2: ( ( ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';' ) | ( ( (lv_alt_6_0= ruleAlternative ) ) (otherlv_7= ';' )? ) )
             int alt28=2;
-            int LA28_0 = input.LA(1);
-
-            if ( ((LA28_0>=RULE_STRING && LA28_0<=RULE_EXPONENT)||LA28_0==16||LA28_0==18||(LA28_0>=28 && LA28_0<=29)||LA28_0==34||LA28_0==37||LA28_0==44||LA28_0==61||(LA28_0>=63 && LA28_0<=66)||(LA28_0>=73 && LA28_0<=75)) ) {
-                alt28=1;
-            }
-            else if ( (LA28_0==32) ) {
-                alt28=2;
-            }
-            else {
-                if (state.backtracking>0) {state.failed=true; return current;}
-                NoViableAltException nvae =
-                    new NoViableAltException("", 28, 0, input);
-
-                throw nvae;
-            }
+            alt28 = dfa28.predict(input);
             switch (alt28) {
                 case 1 :
                     // InternalVilBuildLanguage.g:1095:3: ( ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';' )
@@ -3059,7 +3005,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                               							newCompositeNode(grammarAccess.getExpressionStatementAccess().getVarIdentifierParserRuleCall_0_0_0_0());
                               						
                             }
-                            pushFollow(FOLLOW_30);
+                            pushFollow(FOLLOW_29);
                             lv_var_0_0=ruleIdentifier();
 
                             state._fsp--;
@@ -3111,7 +3057,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                                       								newCompositeNode(grammarAccess.getExpressionStatementAccess().getFieldIdentifierParserRuleCall_0_0_1_1_0());
                                       							
                                     }
-                                    pushFollow(FOLLOW_23);
+                                    pushFollow(FOLLOW_22);
                                     lv_field_2_0=ruleIdentifier();
 
                                     state._fsp--;
@@ -3141,7 +3087,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                             }
 
-                            otherlv_3=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                            otherlv_3=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                             if ( state.backtracking==0 ) {
 
                               					newLeafNode(otherlv_3, grammarAccess.getExpressionStatementAccess().getEqualsSignKeyword_0_0_2());
@@ -3789,7 +3735,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             // InternalVilBuildLanguage.g:1394:2: (otherlv_0= 'instantiate' ( ( (lv_project_1_0= ruleIdentifier ) ) | ( (lv_ruleName_2_0= RULE_STRING ) ) ) otherlv_3= '(' ( (lv_param_4_0= ruleArgumentList ) )? otherlv_5= ')' ( (lv_versionSpec_6_0= ruleVersionSpec ) )? )
             // InternalVilBuildLanguage.g:1395:3: otherlv_0= 'instantiate' ( ( (lv_project_1_0= ruleIdentifier ) ) | ( (lv_ruleName_2_0= RULE_STRING ) ) ) otherlv_3= '(' ( (lv_param_4_0= ruleArgumentList ) )? otherlv_5= ')' ( (lv_versionSpec_6_0= ruleVersionSpec ) )?
             {
-            otherlv_0=(Token)match(input,28,FOLLOW_32); if (state.failed) return current;
+            otherlv_0=(Token)match(input,28,FOLLOW_31); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getInstantiateAccess().getInstantiateKeyword_0());
@@ -3799,7 +3745,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt30=2;
             int LA30_0 = input.LA(1);
 
-            if ( (LA30_0==RULE_VERSION||(LA30_0>=RULE_ID && LA30_0<=RULE_EXPONENT)||LA30_0==44) ) {
+            if ( (LA30_0==RULE_VERSION||(LA30_0>=RULE_ID && LA30_0<=RULE_EXPONENT)||LA30_0==20||LA30_0==26||LA30_0==30||(LA30_0>=32 && LA30_0<=33)||LA30_0==44||(LA30_0>=76 && LA30_0<=77)) ) {
                 alt30=1;
             }
             else if ( (LA30_0==RULE_STRING) ) {
@@ -3893,7 +3839,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,16,FOLLOW_33); if (state.failed) return current;
+            otherlv_3=(Token)match(input,16,FOLLOW_32); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_3, grammarAccess.getInstantiateAccess().getLeftParenthesisKeyword_2());
@@ -3903,7 +3849,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt31=2;
             int LA31_0 = input.LA(1);
 
-            if ( ((LA31_0>=RULE_STRING && LA31_0<=RULE_EXPONENT)||LA31_0==16||LA31_0==18||(LA31_0>=28 && LA31_0<=29)||LA31_0==34||LA31_0==37||LA31_0==44||LA31_0==61||(LA31_0>=63 && LA31_0<=66)||(LA31_0>=73 && LA31_0<=75)) ) {
+            if ( ((LA31_0>=RULE_STRING && LA31_0<=RULE_EXPONENT)||LA31_0==16||LA31_0==18||LA31_0==20||LA31_0==26||(LA31_0>=28 && LA31_0<=30)||(LA31_0>=32 && LA31_0<=34)||LA31_0==37||LA31_0==44||LA31_0==61||(LA31_0>=63 && LA31_0<=66)||(LA31_0>=73 && LA31_0<=77)) ) {
                 alt31=1;
             }
             switch (alt31) {
@@ -3945,7 +3891,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_5=(Token)match(input,17,FOLLOW_34); if (state.failed) return current;
+            otherlv_5=(Token)match(input,17,FOLLOW_33); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_5, grammarAccess.getInstantiateAccess().getRightParenthesisKeyword_4());
@@ -4083,53 +4029,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             {
             // InternalVilBuildLanguage.g:1504:3: ( (lv_type_0_0= ruleType ) )?
             int alt33=2;
-            switch ( input.LA(1) ) {
-                case RULE_ID:
-                    {
-                    int LA33_1 = input.LA(2);
-
-                    if ( (LA33_1==RULE_VERSION||(LA33_1>=RULE_ID && LA33_1<=RULE_EXPONENT)||LA33_1==44||LA33_1==72) ) {
-                        alt33=1;
-                    }
-                    }
-                    break;
-                case RULE_VERSION:
-                    {
-                    int LA33_2 = input.LA(2);
-
-                    if ( (LA33_2==RULE_VERSION||(LA33_2>=RULE_ID && LA33_2<=RULE_EXPONENT)||LA33_2==44||LA33_2==72) ) {
-                        alt33=1;
-                    }
-                    }
-                    break;
-                case RULE_EXPONENT:
-                    {
-                    int LA33_3 = input.LA(2);
-
-                    if ( (LA33_3==RULE_VERSION||(LA33_3>=RULE_ID && LA33_3<=RULE_EXPONENT)||LA33_3==44||LA33_3==72) ) {
-                        alt33=1;
-                    }
-                    }
-                    break;
-                case 44:
-                    {
-                    int LA33_4 = input.LA(2);
-
-                    if ( (LA33_4==RULE_VERSION||(LA33_4>=RULE_ID && LA33_4<=RULE_EXPONENT)||LA33_4==44||LA33_4==72) ) {
-                        alt33=1;
-                    }
-                    }
-                    break;
-                case 76:
-                case 77:
-                case 78:
-                case 79:
-                    {
-                    alt33=1;
-                    }
-                    break;
-            }
-
+            alt33 = dfa33.predict(input);
             switch (alt33) {
                 case 1 :
                     // InternalVilBuildLanguage.g:1505:4: (lv_type_0_0= ruleType )
@@ -4304,7 +4204,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               			newLeafNode(otherlv_0, grammarAccess.getMapAccess().getMapKeyword_0());
               		
             }
-            otherlv_1=(Token)match(input,16,FOLLOW_22); if (state.failed) return current;
+            otherlv_1=(Token)match(input,16,FOLLOW_21); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getMapAccess().getLeftParenthesisKeyword_1());
@@ -4321,7 +4221,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_2_0());
               				
             }
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_var_2_0=ruleLoopVariable();
 
             state._fsp--;
@@ -4360,7 +4260,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	case 1 :
             	    // InternalVilBuildLanguage.g:1589:4: otherlv_3= ',' ( (lv_var_4_0= ruleLoopVariable ) )
             	    {
-            	    otherlv_3=(Token)match(input,25,FOLLOW_22); if (state.failed) return current;
+            	    otherlv_3=(Token)match(input,25,FOLLOW_21); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_3, grammarAccess.getMapAccess().getCommaKeyword_3_0());
@@ -4377,7 +4277,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getMapAccess().getVarLoopVariableParserRuleCall_3_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_35);
+            	    pushFollow(FOLLOW_34);
             	    lv_var_4_0=ruleLoopVariable();
 
             	    state._fsp--;
@@ -4437,7 +4337,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 1 :
                     // InternalVilBuildLanguage.g:1616:6: lv_separator_5_1= '='
                     {
-                    lv_separator_5_1=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                    lv_separator_5_1=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_separator_5_1, grammarAccess.getMapAccess().getSeparatorEqualsSignKeyword_4_0_0());
@@ -4457,7 +4357,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 2 :
                     // InternalVilBuildLanguage.g:1627:6: lv_separator_5_2= ':'
                     {
-                    lv_separator_5_2=(Token)match(input,24,FOLLOW_31); if (state.failed) return current;
+                    lv_separator_5_2=(Token)match(input,24,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_separator_5_2, grammarAccess.getMapAccess().getSeparatorColonKeyword_4_0_1());
@@ -4518,7 +4418,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_7=(Token)match(input,17,FOLLOW_24); if (state.failed) return current;
+            otherlv_7=(Token)match(input,17,FOLLOW_23); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_7, grammarAccess.getMapAccess().getRightParenthesisKeyword_6());
@@ -4659,7 +4559,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               			newLeafNode(otherlv_0, grammarAccess.getForAccess().getForKeyword_0());
               		
             }
-            otherlv_1=(Token)match(input,16,FOLLOW_22); if (state.failed) return current;
+            otherlv_1=(Token)match(input,16,FOLLOW_21); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getForAccess().getLeftParenthesisKeyword_1());
@@ -4676,7 +4576,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getForAccess().getVarLoopVariableParserRuleCall_2_0());
               				
             }
-            pushFollow(FOLLOW_35);
+            pushFollow(FOLLOW_34);
             lv_var_2_0=ruleLoopVariable();
 
             state._fsp--;
@@ -4715,7 +4615,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	case 1 :
             	    // InternalVilBuildLanguage.g:1729:4: otherlv_3= ',' ( (lv_var_4_0= ruleLoopVariable ) )
             	    {
-            	    otherlv_3=(Token)match(input,25,FOLLOW_22); if (state.failed) return current;
+            	    otherlv_3=(Token)match(input,25,FOLLOW_21); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_3, grammarAccess.getForAccess().getCommaKeyword_3_0());
@@ -4732,7 +4632,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getForAccess().getVarLoopVariableParserRuleCall_3_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_35);
+            	    pushFollow(FOLLOW_34);
             	    lv_var_4_0=ruleLoopVariable();
 
             	    state._fsp--;
@@ -4792,7 +4692,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 1 :
                     // InternalVilBuildLanguage.g:1756:6: lv_separator_5_1= '='
                     {
-                    lv_separator_5_1=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                    lv_separator_5_1=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_separator_5_1, grammarAccess.getForAccess().getSeparatorEqualsSignKeyword_4_0_0());
@@ -4812,7 +4712,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 2 :
                     // InternalVilBuildLanguage.g:1767:6: lv_separator_5_2= ':'
                     {
-                    lv_separator_5_2=(Token)match(input,24,FOLLOW_31); if (state.failed) return current;
+                    lv_separator_5_2=(Token)match(input,24,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_separator_5_2, grammarAccess.getForAccess().getSeparatorColonKeyword_4_0_1());
@@ -4873,7 +4773,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_7=(Token)match(input,17,FOLLOW_24); if (state.failed) return current;
+            otherlv_7=(Token)match(input,17,FOLLOW_23); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_7, grammarAccess.getForAccess().getRightParenthesisKeyword_6());
@@ -5007,7 +4907,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               			newLeafNode(otherlv_0, grammarAccess.getWhileAccess().getWhileKeyword_0());
               		
             }
-            otherlv_1=(Token)match(input,16,FOLLOW_31); if (state.failed) return current;
+            otherlv_1=(Token)match(input,16,FOLLOW_30); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getWhileAccess().getLeftParenthesisKeyword_1());
@@ -5048,7 +4948,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,17,FOLLOW_24); if (state.failed) return current;
+            otherlv_3=(Token)match(input,17,FOLLOW_23); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_3, grammarAccess.getWhileAccess().getRightParenthesisKeyword_3());
@@ -5185,7 +5085,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               			newLeafNode(otherlv_0, grammarAccess.getAlternativeAccess().getIfKeyword_0());
               		
             }
-            otherlv_1=(Token)match(input,16,FOLLOW_31); if (state.failed) return current;
+            otherlv_1=(Token)match(input,16,FOLLOW_30); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getAlternativeAccess().getLeftParenthesisKeyword_1());
@@ -5226,7 +5126,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,17,FOLLOW_36); if (state.failed) return current;
+            otherlv_3=(Token)match(input,17,FOLLOW_23); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_3, grammarAccess.getAlternativeAccess().getRightParenthesisKeyword_3());
@@ -5243,7 +5143,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getAlternativeAccess().getIfStatementOrBlockParserRuleCall_4_0());
               				
             }
-            pushFollow(FOLLOW_37);
+            pushFollow(FOLLOW_35);
             lv_if_4_0=ruleStatementOrBlock();
 
             state._fsp--;
@@ -5285,7 +5185,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     // InternalVilBuildLanguage.g:1961:4: ( ( 'else' )=>otherlv_5= 'else' )
                     // InternalVilBuildLanguage.g:1962:5: ( 'else' )=>otherlv_5= 'else'
                     {
-                    otherlv_5=(Token)match(input,33,FOLLOW_36); if (state.failed) return current;
+                    otherlv_5=(Token)match(input,33,FOLLOW_23); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       					newLeafNode(otherlv_5, grammarAccess.getAlternativeAccess().getElseKeyword_5_0());
@@ -5601,7 +5501,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               			newLeafNode(otherlv_0, grammarAccess.getJoinAccess().getJoinKeyword_0());
               		
             }
-            otherlv_1=(Token)match(input,16,FOLLOW_38); if (state.failed) return current;
+            otherlv_1=(Token)match(input,16,FOLLOW_36); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getJoinAccess().getLeftParenthesisKeyword_1());
@@ -5618,7 +5518,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getJoinAccess().getVar1JoinVariableParserRuleCall_2_0());
               				
             }
-            pushFollow(FOLLOW_39);
+            pushFollow(FOLLOW_37);
             lv_var1_2_0=ruleJoinVariable();
 
             state._fsp--;
@@ -5642,7 +5542,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,25,FOLLOW_38); if (state.failed) return current;
+            otherlv_3=(Token)match(input,25,FOLLOW_36); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_3, grammarAccess.getJoinAccess().getCommaKeyword_3());
@@ -5683,7 +5583,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_5=(Token)match(input,17,FOLLOW_34); if (state.failed) return current;
+            otherlv_5=(Token)match(input,17,FOLLOW_33); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_5, grammarAccess.getJoinAccess().getRightParenthesisKeyword_5());
@@ -5706,7 +5606,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       				newLeafNode(otherlv_6, grammarAccess.getJoinAccess().getWithKeyword_6_0());
                       			
                     }
-                    otherlv_7=(Token)match(input,16,FOLLOW_31); if (state.failed) return current;
+                    otherlv_7=(Token)match(input,16,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_7, grammarAccess.getJoinAccess().getLeftParenthesisKeyword_6_1());
@@ -5893,7 +5793,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getJoinVariableAccess().getVarIdentifierParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_25);
+            pushFollow(FOLLOW_24);
             lv_var_1_0=ruleIdentifier();
 
             state._fsp--;
@@ -5917,7 +5817,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_2=(Token)match(input,24,FOLLOW_31); if (state.failed) return current;
+            otherlv_2=(Token)match(input,24,FOLLOW_30); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_2, grammarAccess.getJoinVariableAccess().getColonKeyword_2());
@@ -6060,7 +5960,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getSystemExecutionAccess().getCallCallParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_40);
+            pushFollow(FOLLOW_38);
             lv_call_1_0=ruleCall();
 
             state._fsp--;
@@ -6107,7 +6007,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getSystemExecutionAccess().getCallsSubCallParserRuleCall_2_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_40);
+            	    pushFollow(FOLLOW_38);
             	    lv_calls_2_0=ruleSubCall();
 
             	    state._fsp--;
@@ -6240,7 +6140,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     // InternalVilBuildLanguage.g:2308:4: (lv_const_0_0= 'const' )
                     // InternalVilBuildLanguage.g:2309:5: lv_const_0_0= 'const'
                     {
-                    lv_const_0_0=(Token)match(input,38,FOLLOW_22); if (state.failed) return current;
+                    lv_const_0_0=(Token)match(input,38,FOLLOW_21); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       					newLeafNode(lv_const_0_0, grammarAccess.getVariableDeclarationAccess().getConstConstKeyword_0_0());
@@ -6309,7 +6209,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getVariableDeclarationAccess().getNameIdentifierParserRuleCall_2_0());
               				
             }
-            pushFollow(FOLLOW_41);
+            pushFollow(FOLLOW_39);
             lv_name_2_0=ruleIdentifier();
 
             state._fsp--;
@@ -6344,7 +6244,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 1 :
                     // InternalVilBuildLanguage.g:2360:4: otherlv_3= '=' ( (lv_expression_4_0= ruleExpression ) )
                     {
-                    otherlv_3=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                    otherlv_3=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_3, grammarAccess.getVariableDeclarationAccess().getEqualsSignKeyword_3_0());
@@ -6503,7 +6403,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     // InternalVilBuildLanguage.g:2408:4: (lv_abstract_0_0= 'abstract' )
                     // InternalVilBuildLanguage.g:2409:5: lv_abstract_0_0= 'abstract'
                     {
-                    lv_abstract_0_0=(Token)match(input,39,FOLLOW_42); if (state.failed) return current;
+                    lv_abstract_0_0=(Token)match(input,39,FOLLOW_40); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       					newLeafNode(lv_abstract_0_0, grammarAccess.getCompoundAccess().getAbstractAbstractKeyword_0_0());
@@ -6543,7 +6443,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getCompoundAccess().getNameIdentifierParserRuleCall_2_0());
               				
             }
-            pushFollow(FOLLOW_43);
+            pushFollow(FOLLOW_41);
             lv_name_2_0=ruleIdentifier();
 
             state._fsp--;
@@ -6625,7 +6525,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_5=(Token)match(input,18,FOLLOW_44); if (state.failed) return current;
+            otherlv_5=(Token)match(input,18,FOLLOW_42); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_5, grammarAccess.getCompoundAccess().getLeftCurlyBracketKeyword_4());
@@ -6637,7 +6537,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 int alt47=2;
                 int LA47_0 = input.LA(1);
 
-                if ( (LA47_0==RULE_VERSION||(LA47_0>=RULE_ID && LA47_0<=RULE_EXPONENT)||LA47_0==38||LA47_0==44||(LA47_0>=76 && LA47_0<=79)) ) {
+                if ( (LA47_0==RULE_VERSION||(LA47_0>=RULE_ID && LA47_0<=RULE_EXPONENT)||LA47_0==20||LA47_0==26||LA47_0==30||(LA47_0>=32 && LA47_0<=33)||LA47_0==38||LA47_0==44||(LA47_0>=76 && LA47_0<=81)) ) {
                     alt47=1;
                 }
 
@@ -6654,7 +6554,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getCompoundAccess().getVarsVariableDeclarationParserRuleCall_5_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_44);
+            	    pushFollow(FOLLOW_42);
             	    lv_vars_6_0=ruleVariableDeclaration();
 
             	    state._fsp--;
@@ -6816,7 +6716,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getTypeDefAccess().getNameIdentifierParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_22);
+            pushFollow(FOLLOW_21);
             lv_name_1_0=ruleIdentifier();
 
             state._fsp--;
@@ -7015,7 +6915,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_3=(Token)match(input,17,FOLLOW_34); if (state.failed) return current;
+            otherlv_3=(Token)match(input,17,FOLLOW_33); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_3, grammarAccess.getAdviceAccess().getRightParenthesisKeyword_3());
@@ -7150,7 +7050,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             // InternalVilBuildLanguage.g:2654:2: (otherlv_0= 'with' ( (lv_restriction_1_0= ruleExpression ) ) )
             // InternalVilBuildLanguage.g:2655:3: otherlv_0= 'with' ( (lv_restriction_1_0= ruleExpression ) )
             {
-            otherlv_0=(Token)match(input,35,FOLLOW_31); if (state.failed) return current;
+            otherlv_0=(Token)match(input,35,FOLLOW_30); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getVersionSpecAccess().getWithKeyword_0());
@@ -7287,7 +7187,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getParameterListAccess().getParamParameterParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_27);
+            pushFollow(FOLLOW_26);
             lv_param_0_0=ruleParameter();
 
             state._fsp--;
@@ -7326,7 +7226,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	case 1 :
             	    // InternalVilBuildLanguage.g:2717:4: otherlv_1= ',' ( (lv_param_2_0= ruleParameter ) )
             	    {
-            	    otherlv_1=(Token)match(input,25,FOLLOW_22); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,25,FOLLOW_21); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_1, grammarAccess.getParameterListAccess().getCommaKeyword_1_0());
@@ -7343,7 +7243,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getParameterListAccess().getParamParameterParserRuleCall_1_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_27);
+            	    pushFollow(FOLLOW_26);
             	    lv_param_2_0=ruleParameter();
 
             	    state._fsp--;
@@ -7509,7 +7409,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getParameterAccess().getNameIdentifierParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_45);
+            pushFollow(FOLLOW_43);
             lv_name_1_0=ruleIdentifier();
 
             state._fsp--;
@@ -7544,7 +7444,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 1 :
                     // InternalVilBuildLanguage.g:2799:4: otherlv_2= '=' ( (lv_dflt_3_0= ruleExpression ) )
                     {
-                    otherlv_2=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                    otherlv_2=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_2, grammarAccess.getParameterAccess().getEqualsSignKeyword_2_0());
@@ -7674,7 +7574,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             // InternalVilBuildLanguage.g:2841:2: (otherlv_0= 'version' ( (lv_version_1_0= RULE_VERSION ) ) otherlv_2= ';' )
             // InternalVilBuildLanguage.g:2842:3: otherlv_0= 'version' ( (lv_version_1_0= RULE_VERSION ) ) otherlv_2= ';'
             {
-            otherlv_0=(Token)match(input,44,FOLLOW_46); if (state.failed) return current;
+            otherlv_0=(Token)match(input,44,FOLLOW_44); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getVersionStmtAccess().getVersionKeyword_0());
@@ -7880,7 +7780,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getImportAccess().getNameIdentifierParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_47);
+            pushFollow(FOLLOW_45);
             lv_name_2_0=ruleIdentifier();
 
             state._fsp--;
@@ -7918,7 +7818,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     // InternalVilBuildLanguage.g:2928:4: (lv_wildcard_3_0= '*' )
                     // InternalVilBuildLanguage.g:2929:5: lv_wildcard_3_0= '*'
                     {
-                    lv_wildcard_3_0=(Token)match(input,47,FOLLOW_48); if (state.failed) return current;
+                    lv_wildcard_3_0=(Token)match(input,47,FOLLOW_46); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       					newLeafNode(lv_wildcard_3_0, grammarAccess.getImportAccess().getWildcardAsteriskKeyword_2_0());
@@ -8078,7 +7978,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt55=2;
             int LA55_0 = input.LA(1);
 
-            if ( ((LA55_0>=RULE_STRING && LA55_0<=RULE_EXPONENT)||LA55_0==16||(LA55_0>=28 && LA55_0<=29)||LA55_0==34||LA55_0==37||LA55_0==44||LA55_0==61||(LA55_0>=63 && LA55_0<=66)||(LA55_0>=73 && LA55_0<=75)) ) {
+            if ( ((LA55_0>=RULE_STRING && LA55_0<=RULE_EXPONENT)||LA55_0==16||LA55_0==20||LA55_0==26||(LA55_0>=28 && LA55_0<=30)||(LA55_0>=32 && LA55_0<=34)||LA55_0==37||LA55_0==44||LA55_0==61||(LA55_0>=63 && LA55_0<=66)||(LA55_0>=73 && LA55_0<=77)) ) {
                 alt55=1;
             }
             else if ( (LA55_0==18) ) {
@@ -8269,7 +8169,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getLogicalExpressionAccess().getLeftEqualityExpressionParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_49);
+            pushFollow(FOLLOW_47);
             lv_left_0_0=ruleEqualityExpression();
 
             state._fsp--;
@@ -8368,7 +8268,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getLogicalExpressionAccess().getRightLogicalExpressionPartParserRuleCall_1_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_49);
+            	    pushFollow(FOLLOW_47);
             	    lv_right_1_0=ruleLogicalExpressionPart();
 
             	    state._fsp--;
@@ -8493,7 +8393,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getLogicalExpressionPartAccess().getOpLogicalOperatorParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_28);
+            pushFollow(FOLLOW_27);
             lv_op_0_0=ruleLogicalOperator();
 
             state._fsp--;
@@ -8827,7 +8727,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getEqualityExpressionAccess().getLeftRelationalExpressionParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_50);
+            pushFollow(FOLLOW_48);
             lv_left_0_0=ruleRelationalExpression();
 
             state._fsp--;
@@ -9017,7 +8917,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getEqualityExpressionPartAccess().getOpEqualityOperatorParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_28);
+            pushFollow(FOLLOW_27);
             lv_op_0_0=ruleEqualityOperator();
 
             state._fsp--;
@@ -9317,7 +9217,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getRelationalExpressionAccess().getLeftAdditiveExpressionParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_51);
+            pushFollow(FOLLOW_49);
             lv_left_0_0=ruleAdditiveExpression();
 
             state._fsp--;
@@ -9397,7 +9297,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       						newCompositeNode(grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0_0());
                       					
                     }
-                    pushFollow(FOLLOW_51);
+                    pushFollow(FOLLOW_49);
                     lv_right_1_0=ruleRelationalExpressionPart();
 
                     state._fsp--;
@@ -9602,7 +9502,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getRelationalExpressionPartAccess().getOpRelationalOperatorParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_28);
+            pushFollow(FOLLOW_27);
             lv_op_0_0=ruleRelationalOperator();
 
             state._fsp--;
@@ -9918,7 +9818,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getAdditiveExpressionAccess().getLeftMultiplicativeExpressionParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_52);
+            pushFollow(FOLLOW_50);
             lv_left_0_0=ruleMultiplicativeExpression();
 
             state._fsp--;
@@ -9980,7 +9880,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getAdditiveExpressionAccess().getRightAdditiveExpressionPartParserRuleCall_1_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_52);
+            	    pushFollow(FOLLOW_50);
             	    lv_right_1_0=ruleAdditiveExpressionPart();
 
             	    state._fsp--;
@@ -10105,7 +10005,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getAdditiveExpressionPartAccess().getOpAdditiveOperatorParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_28);
+            pushFollow(FOLLOW_27);
             lv_op_0_0=ruleAdditiveOperator();
 
             state._fsp--;
@@ -10381,7 +10281,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getMultiplicativeExpressionAccess().getLeftUnaryExpressionParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_53);
+            pushFollow(FOLLOW_51);
             lv_left_0_0=ruleUnaryExpression();
 
             state._fsp--;
@@ -10557,7 +10457,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getMultiplicativeExpressionPartAccess().getOpMultiplicativeOperatorParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_28);
+            pushFollow(FOLLOW_27);
             lv_op_0_0=ruleMultiplicativeOperator();
 
             state._fsp--;
@@ -10841,7 +10741,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       					newCompositeNode(grammarAccess.getUnaryExpressionAccess().getOpUnaryOperatorParserRuleCall_0_0());
                       				
                     }
-                    pushFollow(FOLLOW_28);
+                    pushFollow(FOLLOW_27);
                     lv_op_0_0=ruleUnaryOperator();
 
                     state._fsp--;
@@ -11250,7 +11150,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt69=2;
             int LA69_0 = input.LA(1);
 
-            if ( ((LA69_0>=RULE_STRING && LA69_0<=RULE_EXPONENT)||LA69_0==44||(LA69_0>=73 && LA69_0<=75)) ) {
+            if ( ((LA69_0>=RULE_STRING && LA69_0<=RULE_EXPONENT)||LA69_0==20||LA69_0==26||LA69_0==30||(LA69_0>=32 && LA69_0<=33)||LA69_0==44||(LA69_0>=73 && LA69_0<=77)) ) {
                 alt69=1;
             }
             else if ( (LA69_0==16) ) {
@@ -11278,7 +11178,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       						newCompositeNode(grammarAccess.getExpressionOrQualifiedExecutionAccess().getValConstantParserRuleCall_0_0_0());
                       					
                     }
-                    pushFollow(FOLLOW_40);
+                    pushFollow(FOLLOW_38);
                     lv_val_0_0=ruleConstant();
 
                     state._fsp--;
@@ -11311,7 +11211,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     // InternalVilBuildLanguage.g:3968:4: (otherlv_1= '(' ( (lv_parenthesis_2_0= ruleExpression ) ) otherlv_3= ')' )
                     // InternalVilBuildLanguage.g:3969:5: otherlv_1= '(' ( (lv_parenthesis_2_0= ruleExpression ) ) otherlv_3= ')'
                     {
-                    otherlv_1=(Token)match(input,16,FOLLOW_31); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,16,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       					newLeafNode(otherlv_1, grammarAccess.getExpressionOrQualifiedExecutionAccess().getLeftParenthesisKeyword_0_1_0());
@@ -11352,7 +11252,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    otherlv_3=(Token)match(input,17,FOLLOW_40); if (state.failed) return current;
+                    otherlv_3=(Token)match(input,17,FOLLOW_38); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       					newLeafNode(otherlv_3, grammarAccess.getExpressionOrQualifiedExecutionAccess().getRightParenthesisKeyword_0_1_2());
@@ -11390,7 +11290,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getExpressionOrQualifiedExecutionAccess().getCallsSubCallParserRuleCall_1_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_40);
+            	    pushFollow(FOLLOW_38);
             	    lv_calls_4_0=ruleSubCall();
 
             	    state._fsp--;
@@ -11515,7 +11415,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getUnqualifiedExecutionAccess().getCallCallParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_40);
+            pushFollow(FOLLOW_38);
             lv_call_0_0=ruleCall();
 
             state._fsp--;
@@ -11562,7 +11462,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getUnqualifiedExecutionAccess().getCallsSubCallParserRuleCall_1_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_40);
+            	    pushFollow(FOLLOW_38);
             	    lv_calls_1_0=ruleSubCall();
 
             	    state._fsp--;
@@ -11678,7 +11578,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             // InternalVilBuildLanguage.g:4092:2: (otherlv_0= 'super' otherlv_1= '.' ( (lv_call_2_0= ruleCall ) ) ( (lv_calls_3_0= ruleSubCall ) )* )
             // InternalVilBuildLanguage.g:4093:3: otherlv_0= 'super' otherlv_1= '.' ( (lv_call_2_0= ruleCall ) ) ( (lv_calls_3_0= ruleSubCall ) )*
             {
-            otherlv_0=(Token)match(input,65,FOLLOW_54); if (state.failed) return current;
+            otherlv_0=(Token)match(input,65,FOLLOW_52); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getSuperExecutionAccess().getSuperKeyword_0());
@@ -11701,7 +11601,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getSuperExecutionAccess().getCallCallParserRuleCall_2_0());
               				
             }
-            pushFollow(FOLLOW_40);
+            pushFollow(FOLLOW_38);
             lv_call_2_0=ruleCall();
 
             state._fsp--;
@@ -11748,7 +11648,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getSuperExecutionAccess().getCallsSubCallParserRuleCall_3_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_40);
+            	    pushFollow(FOLLOW_38);
             	    lv_calls_3_0=ruleSubCall();
 
             	    state._fsp--;
@@ -11867,7 +11767,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             // InternalVilBuildLanguage.g:4157:2: (otherlv_0= 'new' ( (lv_type_1_0= ruleType ) ) otherlv_2= '(' ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ( (lv_calls_5_0= ruleSubCall ) )* )
             // InternalVilBuildLanguage.g:4158:3: otherlv_0= 'new' ( (lv_type_1_0= ruleType ) ) otherlv_2= '(' ( (lv_param_3_0= ruleArgumentList ) )? otherlv_4= ')' ( (lv_calls_5_0= ruleSubCall ) )*
             {
-            otherlv_0=(Token)match(input,66,FOLLOW_22); if (state.failed) return current;
+            otherlv_0=(Token)match(input,66,FOLLOW_21); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getConstructorExecutionAccess().getNewKeyword_0());
@@ -11908,7 +11808,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_2=(Token)match(input,16,FOLLOW_33); if (state.failed) return current;
+            otherlv_2=(Token)match(input,16,FOLLOW_32); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_2, grammarAccess.getConstructorExecutionAccess().getLeftParenthesisKeyword_2());
@@ -11918,7 +11818,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt73=2;
             int LA73_0 = input.LA(1);
 
-            if ( ((LA73_0>=RULE_STRING && LA73_0<=RULE_EXPONENT)||LA73_0==16||LA73_0==18||(LA73_0>=28 && LA73_0<=29)||LA73_0==34||LA73_0==37||LA73_0==44||LA73_0==61||(LA73_0>=63 && LA73_0<=66)||(LA73_0>=73 && LA73_0<=75)) ) {
+            if ( ((LA73_0>=RULE_STRING && LA73_0<=RULE_EXPONENT)||LA73_0==16||LA73_0==18||LA73_0==20||LA73_0==26||(LA73_0>=28 && LA73_0<=30)||(LA73_0>=32 && LA73_0<=34)||LA73_0==37||LA73_0==44||LA73_0==61||(LA73_0>=63 && LA73_0<=66)||(LA73_0>=73 && LA73_0<=77)) ) {
                 alt73=1;
             }
             switch (alt73) {
@@ -11960,7 +11860,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_4=(Token)match(input,17,FOLLOW_40); if (state.failed) return current;
+            otherlv_4=(Token)match(input,17,FOLLOW_38); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_4, grammarAccess.getConstructorExecutionAccess().getRightParenthesisKeyword_4());
@@ -11989,7 +11889,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      					newCompositeNode(grammarAccess.getConstructorExecutionAccess().getCallsSubCallParserRuleCall_5_0());
             	      				
             	    }
-            	    pushFollow(FOLLOW_40);
+            	    pushFollow(FOLLOW_38);
             	    lv_calls_5_0=ruleSubCall();
 
             	    state._fsp--;
@@ -12248,7 +12148,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     // InternalVilBuildLanguage.g:4295:3: (otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']' )
                     // InternalVilBuildLanguage.g:4296:4: otherlv_2= '[' ( (lv_arrayEx_3_0= ruleExpression ) ) otherlv_4= ']'
                     {
-                    otherlv_2=(Token)match(input,68,FOLLOW_31); if (state.failed) return current;
+                    otherlv_2=(Token)match(input,68,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_2, grammarAccess.getSubCallAccess().getLeftSquareBracketKeyword_1_0());
@@ -12265,7 +12165,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       						newCompositeNode(grammarAccess.getSubCallAccess().getArrayExExpressionParserRuleCall_1_1_0());
                       					
                     }
-                    pushFollow(FOLLOW_55);
+                    pushFollow(FOLLOW_53);
                     lv_arrayEx_3_0=ruleExpression();
 
                     state._fsp--;
@@ -12398,7 +12298,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getDeclaratorAccess().getDeclDeclarationParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_56);
+            pushFollow(FOLLOW_54);
             lv_decl_0_0=ruleDeclaration();
 
             state._fsp--;
@@ -12437,7 +12337,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	case 1 :
             	    // InternalVilBuildLanguage.g:4363:4: otherlv_1= ';' ( (lv_decl_2_0= ruleDeclaration ) )
             	    {
-            	    otherlv_1=(Token)match(input,14,FOLLOW_22); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,14,FOLLOW_21); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_1, grammarAccess.getDeclaratorAccess().getSemicolonKeyword_1_0());
@@ -12454,7 +12354,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getDeclaratorAccess().getDeclDeclarationParserRuleCall_1_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_56);
+            	    pushFollow(FOLLOW_54);
             	    lv_decl_2_0=ruleDeclaration();
 
             	    state._fsp--;
@@ -12582,53 +12482,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             {
             // InternalVilBuildLanguage.g:4410:3: ( (lv_type_0_0= ruleType ) )?
             int alt78=2;
-            switch ( input.LA(1) ) {
-                case RULE_ID:
-                    {
-                    int LA78_1 = input.LA(2);
-
-                    if ( (LA78_1==RULE_VERSION||(LA78_1>=RULE_ID && LA78_1<=RULE_EXPONENT)||LA78_1==44||LA78_1==72) ) {
-                        alt78=1;
-                    }
-                    }
-                    break;
-                case RULE_VERSION:
-                    {
-                    int LA78_2 = input.LA(2);
-
-                    if ( (LA78_2==RULE_VERSION||(LA78_2>=RULE_ID && LA78_2<=RULE_EXPONENT)||LA78_2==44||LA78_2==72) ) {
-                        alt78=1;
-                    }
-                    }
-                    break;
-                case RULE_EXPONENT:
-                    {
-                    int LA78_3 = input.LA(2);
-
-                    if ( (LA78_3==RULE_VERSION||(LA78_3>=RULE_ID && LA78_3<=RULE_EXPONENT)||LA78_3==44||LA78_3==72) ) {
-                        alt78=1;
-                    }
-                    }
-                    break;
-                case 44:
-                    {
-                    int LA78_4 = input.LA(2);
-
-                    if ( (LA78_4==RULE_VERSION||(LA78_4>=RULE_ID && LA78_4<=RULE_EXPONENT)||LA78_4==44||LA78_4==72) ) {
-                        alt78=1;
-                    }
-                    }
-                    break;
-                case 76:
-                case 77:
-                case 78:
-                case 79:
-                    {
-                    alt78=1;
-                    }
-                    break;
-            }
-
+            alt78 = dfa78.predict(input);
             switch (alt78) {
                 case 1 :
                     // InternalVilBuildLanguage.g:4411:4: (lv_type_0_0= ruleType )
@@ -12641,7 +12495,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       					newCompositeNode(grammarAccess.getDeclarationAccess().getTypeTypeParserRuleCall_0_0());
                       				
                     }
-                    pushFollow(FOLLOW_22);
+                    pushFollow(FOLLOW_21);
                     lv_type_0_0=ruleType();
 
                     state._fsp--;
@@ -12679,7 +12533,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getDeclarationAccess().getUnitsDeclarationUnitParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_27);
+            pushFollow(FOLLOW_26);
             lv_units_1_0=ruleDeclarationUnit();
 
             state._fsp--;
@@ -12718,7 +12572,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	case 1 :
             	    // InternalVilBuildLanguage.g:4449:4: otherlv_2= ',' ( (lv_units_3_0= ruleDeclarationUnit ) )
             	    {
-            	    otherlv_2=(Token)match(input,25,FOLLOW_22); if (state.failed) return current;
+            	    otherlv_2=(Token)match(input,25,FOLLOW_21); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_2, grammarAccess.getDeclarationAccess().getCommaKeyword_2_0());
@@ -12735,7 +12589,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getDeclarationAccess().getUnitsDeclarationUnitParserRuleCall_2_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_27);
+            	    pushFollow(FOLLOW_26);
             	    lv_units_3_0=ruleDeclarationUnit();
 
             	    state._fsp--;
@@ -12864,7 +12718,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getDeclarationUnitAccess().getIdIdentifierParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_45);
+            pushFollow(FOLLOW_43);
             lv_id_0_0=ruleIdentifier();
 
             state._fsp--;
@@ -12899,7 +12753,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 case 1 :
                     // InternalVilBuildLanguage.g:4512:4: otherlv_1= '=' ( (lv_deflt_2_0= ruleExpression ) )
                     {
-                    otherlv_1=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_1, grammarAccess.getDeclarationUnitAccess().getEqualsSignKeyword_1_0());
@@ -13079,7 +12933,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getAnnotationDeclarationsAccess().getIdIdentifierParserRuleCall_1_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_57);
+            	    pushFollow(FOLLOW_55);
             	    lv_id_2_0=ruleIdentifier();
 
             	    state._fsp--;
@@ -13235,7 +13089,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,16,FOLLOW_58); if (state.failed) return current;
+            otherlv_1=(Token)match(input,16,FOLLOW_56); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getCallAccess().getLeftParenthesisKeyword_1());
@@ -13256,7 +13110,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       					newCompositeNode(grammarAccess.getCallAccess().getDeclDeclaratorParserRuleCall_2_0());
                       				
                     }
-                    pushFollow(FOLLOW_33);
+                    pushFollow(FOLLOW_32);
                     lv_decl_2_0=ruleDeclarator();
 
                     state._fsp--;
@@ -13287,7 +13141,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             int alt83=2;
             int LA83_0 = input.LA(1);
 
-            if ( ((LA83_0>=RULE_STRING && LA83_0<=RULE_EXPONENT)||LA83_0==16||LA83_0==18||(LA83_0>=28 && LA83_0<=29)||LA83_0==34||LA83_0==37||LA83_0==44||LA83_0==61||(LA83_0>=63 && LA83_0<=66)||(LA83_0>=73 && LA83_0<=75)) ) {
+            if ( ((LA83_0>=RULE_STRING && LA83_0<=RULE_EXPONENT)||LA83_0==16||LA83_0==18||LA83_0==20||LA83_0==26||(LA83_0>=28 && LA83_0<=30)||(LA83_0>=32 && LA83_0<=34)||LA83_0==37||LA83_0==44||LA83_0==61||(LA83_0>=63 && LA83_0<=66)||(LA83_0>=73 && LA83_0<=77)) ) {
                 alt83=1;
             }
             switch (alt83) {
@@ -13431,7 +13285,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getArgumentListAccess().getParamNamedArgumentParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_27);
+            pushFollow(FOLLOW_26);
             lv_param_0_0=ruleNamedArgument();
 
             state._fsp--;
@@ -13470,7 +13324,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	case 1 :
             	    // InternalVilBuildLanguage.g:4713:4: otherlv_1= ',' ( (lv_param_2_0= ruleNamedArgument ) )
             	    {
-            	    otherlv_1=(Token)match(input,25,FOLLOW_31); if (state.failed) return current;
+            	    otherlv_1=(Token)match(input,25,FOLLOW_30); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_1, grammarAccess.getArgumentListAccess().getCommaKeyword_1_0());
@@ -13487,7 +13341,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getArgumentListAccess().getParamNamedArgumentParserRuleCall_1_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_27);
+            	    pushFollow(FOLLOW_26);
             	    lv_param_2_0=ruleNamedArgument();
 
             	    state._fsp--;
@@ -13607,45 +13461,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             {
             // InternalVilBuildLanguage.g:4756:3: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )?
             int alt85=2;
-            switch ( input.LA(1) ) {
-                case RULE_ID:
-                    {
-                    int LA85_1 = input.LA(2);
-
-                    if ( (LA85_1==23) ) {
-                        alt85=1;
-                    }
-                    }
-                    break;
-                case RULE_VERSION:
-                    {
-                    int LA85_2 = input.LA(2);
-
-                    if ( (LA85_2==23) ) {
-                        alt85=1;
-                    }
-                    }
-                    break;
-                case RULE_EXPONENT:
-                    {
-                    int LA85_3 = input.LA(2);
-
-                    if ( (LA85_3==23) ) {
-                        alt85=1;
-                    }
-                    }
-                    break;
-                case 44:
-                    {
-                    int LA85_4 = input.LA(2);
-
-                    if ( (LA85_4==23) ) {
-                        alt85=1;
-                    }
-                    }
-                    break;
-            }
-
+            alt85 = dfa85.predict(input);
             switch (alt85) {
                 case 1 :
                     // InternalVilBuildLanguage.g:4757:4: ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '='
@@ -13661,7 +13477,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                       						newCompositeNode(grammarAccess.getNamedArgumentAccess().getNameIdentifierParserRuleCall_0_0_0());
                       					
                     }
-                    pushFollow(FOLLOW_23);
+                    pushFollow(FOLLOW_22);
                     lv_name_0_0=ruleIdentifier();
 
                     state._fsp--;
@@ -13685,7 +13501,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    otherlv_1=(Token)match(input,23,FOLLOW_31); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,23,FOLLOW_30); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_1, grammarAccess.getNamedArgumentAccess().getEqualsSignKeyword_0_1());
@@ -13828,7 +13644,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getQualifiedPrefixAccess().getQnameIdentifierParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_59);
+            pushFollow(FOLLOW_57);
             lv_qname_0_0=ruleIdentifier();
 
             state._fsp--;
@@ -13904,7 +13720,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getQualifiedPrefixAccess().getQnameIdentifierParserRuleCall_1_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_59);
+            	    pushFollow(FOLLOW_57);
             	    lv_qname_2_0=ruleIdentifier();
 
             	    state._fsp--;
@@ -14033,7 +13849,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
               					newCompositeNode(grammarAccess.getQualifiedNameAccess().getPrefixQualifiedPrefixParserRuleCall_0_0());
               				
             }
-            pushFollow(FOLLOW_60);
+            pushFollow(FOLLOW_58);
             lv_prefix_0_0=ruleQualifiedPrefix();
 
             state._fsp--;
@@ -14061,60 +13877,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             loop87:
             do {
                 int alt87=2;
-                int LA87_0 = input.LA(1);
-
-                if ( (LA87_0==27) ) {
-                    switch ( input.LA(2) ) {
-                    case RULE_ID:
-                        {
-                        int LA87_3 = input.LA(3);
-
-                        if ( (LA87_3==EOF||(LA87_3>=14 && LA87_3<=15)||(LA87_3>=17 && LA87_3<=19)||(LA87_3>=24 && LA87_3<=25)||LA87_3==27||LA87_3==43||(LA87_3>=47 && LA87_3<=62)||(LA87_3>=67 && LA87_3<=70)) ) {
-                            alt87=1;
-                        }
-
-
-                        }
-                        break;
-                    case RULE_VERSION:
-                        {
-                        int LA87_4 = input.LA(3);
-
-                        if ( (LA87_4==EOF||(LA87_4>=14 && LA87_4<=15)||(LA87_4>=17 && LA87_4<=19)||(LA87_4>=24 && LA87_4<=25)||LA87_4==27||LA87_4==43||(LA87_4>=47 && LA87_4<=62)||(LA87_4>=67 && LA87_4<=70)) ) {
-                            alt87=1;
-                        }
-
-
-                        }
-                        break;
-                    case RULE_EXPONENT:
-                        {
-                        int LA87_5 = input.LA(3);
-
-                        if ( (LA87_5==EOF||(LA87_5>=14 && LA87_5<=15)||(LA87_5>=17 && LA87_5<=19)||(LA87_5>=24 && LA87_5<=25)||LA87_5==27||LA87_5==43||(LA87_5>=47 && LA87_5<=62)||(LA87_5>=67 && LA87_5<=70)) ) {
-                            alt87=1;
-                        }
-
-
-                        }
-                        break;
-                    case 44:
-                        {
-                        int LA87_6 = input.LA(3);
-
-                        if ( (LA87_6==EOF||(LA87_6>=14 && LA87_6<=15)||(LA87_6>=17 && LA87_6<=19)||(LA87_6>=24 && LA87_6<=25)||LA87_6==27||LA87_6==43||(LA87_6>=47 && LA87_6<=62)||(LA87_6>=67 && LA87_6<=70)) ) {
-                            alt87=1;
-                        }
-
-
-                        }
-                        break;
-
-                    }
-
-                }
-
-
+                alt87 = dfa87.predict(input);
                 switch (alt87) {
             	case 1 :
             	    // InternalVilBuildLanguage.g:4912:4: ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) )
@@ -14156,7 +13919,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             	      						newCompositeNode(grammarAccess.getQualifiedNameAccess().getQnameIdentifierParserRuleCall_1_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_60);
+            	    pushFollow(FOLLOW_58);
             	    lv_qname_2_0=ruleIdentifier();
 
             	    state._fsp--;
@@ -14290,7 +14053,14 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 break;
             case RULE_ID:
             case RULE_EXPONENT:
+            case 20:
+            case 26:
+            case 30:
+            case 32:
+            case 33:
             case 44:
+            case 76:
+            case 77:
                 {
                 alt89=3;
                 }
@@ -14769,7 +14539,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleIdentifier"
-    // InternalVilBuildLanguage.g:5135:1: ruleIdentifier returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' ) ;
+    // InternalVilBuildLanguage.g:5135:1: ruleIdentifier returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' | kw= 'for' | kw= 'protected' | kw= 'switch' | kw= 'if' | kw= 'else' | kw= 'extends' | kw= 'static' ) ;
     public final AntlrDatatypeRuleToken ruleIdentifier() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
@@ -14782,11 +14552,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	enterRule();
 
         try {
-            // InternalVilBuildLanguage.g:5141:2: ( (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' ) )
-            // InternalVilBuildLanguage.g:5142:2: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' )
+            // InternalVilBuildLanguage.g:5141:2: ( (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' | kw= 'for' | kw= 'protected' | kw= 'switch' | kw= 'if' | kw= 'else' | kw= 'extends' | kw= 'static' ) )
+            // InternalVilBuildLanguage.g:5142:2: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' | kw= 'for' | kw= 'protected' | kw= 'switch' | kw= 'if' | kw= 'else' | kw= 'extends' | kw= 'static' )
             {
-            // InternalVilBuildLanguage.g:5142:2: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' )
-            int alt90=4;
+            // InternalVilBuildLanguage.g:5142:2: (this_ID_0= RULE_ID | this_VERSION_1= RULE_VERSION | this_EXPONENT_2= RULE_EXPONENT | kw= 'version' | kw= 'for' | kw= 'protected' | kw= 'switch' | kw= 'if' | kw= 'else' | kw= 'extends' | kw= 'static' )
+            int alt90=11;
             switch ( input.LA(1) ) {
             case RULE_ID:
                 {
@@ -14806,6 +14576,41 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             case 44:
                 {
                 alt90=4;
+                }
+                break;
+            case 30:
+                {
+                alt90=5;
+                }
+                break;
+            case 26:
+                {
+                alt90=6;
+                }
+                break;
+            case 76:
+                {
+                alt90=7;
+                }
+                break;
+            case 32:
+                {
+                alt90=8;
+                }
+                break;
+            case 33:
+                {
+                alt90=9;
+                }
+                break;
+            case 20:
+                {
+                alt90=10;
+                }
+                break;
+            case 77:
+                {
+                alt90=11;
                 }
                 break;
             default:
@@ -14881,6 +14686,97 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
                     break;
+                case 5 :
+                    // InternalVilBuildLanguage.g:5173:3: kw= 'for'
+                    {
+                    kw=(Token)match(input,30,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getForKeyword_4());
+                      		
+                    }
+
+                    }
+                    break;
+                case 6 :
+                    // InternalVilBuildLanguage.g:5179:3: kw= 'protected'
+                    {
+                    kw=(Token)match(input,26,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getProtectedKeyword_5());
+                      		
+                    }
+
+                    }
+                    break;
+                case 7 :
+                    // InternalVilBuildLanguage.g:5185:3: kw= 'switch'
+                    {
+                    kw=(Token)match(input,76,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getSwitchKeyword_6());
+                      		
+                    }
+
+                    }
+                    break;
+                case 8 :
+                    // InternalVilBuildLanguage.g:5191:3: kw= 'if'
+                    {
+                    kw=(Token)match(input,32,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getIfKeyword_7());
+                      		
+                    }
+
+                    }
+                    break;
+                case 9 :
+                    // InternalVilBuildLanguage.g:5197:3: kw= 'else'
+                    {
+                    kw=(Token)match(input,33,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getElseKeyword_8());
+                      		
+                    }
+
+                    }
+                    break;
+                case 10 :
+                    // InternalVilBuildLanguage.g:5203:3: kw= 'extends'
+                    {
+                    kw=(Token)match(input,20,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getExtendsKeyword_9());
+                      		
+                    }
+
+                    }
+                    break;
+                case 11 :
+                    // InternalVilBuildLanguage.g:5209:3: kw= 'static'
+                    {
+                    kw=(Token)match(input,77,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      			current.merge(kw);
+                      			newLeafNode(kw, grammarAccess.getIdentifierAccess().getStaticKeyword_10());
+                      		
+                    }
+
+                    }
+                    break;
 
             }
 
@@ -14906,7 +14802,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleType"
-    // InternalVilBuildLanguage.g:5176:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
+    // InternalVilBuildLanguage.g:5218:1: entryRuleType returns [EObject current=null] : iv_ruleType= ruleType EOF ;
     public final EObject entryRuleType() throws RecognitionException {
         EObject current = null;
 
@@ -14914,8 +14810,8 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // InternalVilBuildLanguage.g:5176:45: (iv_ruleType= ruleType EOF )
-            // InternalVilBuildLanguage.g:5177:2: iv_ruleType= ruleType EOF
+            // InternalVilBuildLanguage.g:5218:45: (iv_ruleType= ruleType EOF )
+            // InternalVilBuildLanguage.g:5219:2: iv_ruleType= ruleType EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeRule()); 
@@ -14946,7 +14842,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleType"
-    // InternalVilBuildLanguage.g:5183:1: ruleType returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) ;
+    // InternalVilBuildLanguage.g:5225:1: ruleType returns [EObject current=null] : ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) ;
     public final EObject ruleType() throws RecognitionException {
         EObject current = null;
 
@@ -14971,36 +14867,43 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	enterRule();
 
         try {
-            // InternalVilBuildLanguage.g:5189:2: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) )
-            // InternalVilBuildLanguage.g:5190:2: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
+            // InternalVilBuildLanguage.g:5231:2: ( ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) ) )
+            // InternalVilBuildLanguage.g:5232:2: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
             {
-            // InternalVilBuildLanguage.g:5190:2: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
+            // InternalVilBuildLanguage.g:5232:2: ( ( (lv_name_0_0= ruleQualifiedPrefix ) ) | ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) ) | ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) ) | ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) ) | ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) ) )
             int alt92=5;
             switch ( input.LA(1) ) {
             case RULE_VERSION:
             case RULE_ID:
             case RULE_EXPONENT:
+            case 20:
+            case 26:
+            case 30:
+            case 32:
+            case 33:
             case 44:
+            case 76:
+            case 77:
                 {
                 alt92=1;
                 }
                 break;
-            case 76:
+            case 78:
                 {
                 alt92=2;
                 }
                 break;
-            case 77:
+            case 79:
                 {
                 alt92=3;
                 }
                 break;
-            case 78:
+            case 80:
                 {
                 alt92=4;
                 }
                 break;
-            case 79:
+            case 81:
                 {
                 alt92=5;
                 }
@@ -15015,13 +14918,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             switch (alt92) {
                 case 1 :
-                    // InternalVilBuildLanguage.g:5191:3: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+                    // InternalVilBuildLanguage.g:5233:3: ( (lv_name_0_0= ruleQualifiedPrefix ) )
                     {
-                    // InternalVilBuildLanguage.g:5191:3: ( (lv_name_0_0= ruleQualifiedPrefix ) )
-                    // InternalVilBuildLanguage.g:5192:4: (lv_name_0_0= ruleQualifiedPrefix )
+                    // InternalVilBuildLanguage.g:5233:3: ( (lv_name_0_0= ruleQualifiedPrefix ) )
+                    // InternalVilBuildLanguage.g:5234:4: (lv_name_0_0= ruleQualifiedPrefix )
                     {
-                    // InternalVilBuildLanguage.g:5192:4: (lv_name_0_0= ruleQualifiedPrefix )
-                    // InternalVilBuildLanguage.g:5193:5: lv_name_0_0= ruleQualifiedPrefix
+                    // InternalVilBuildLanguage.g:5234:4: (lv_name_0_0= ruleQualifiedPrefix )
+                    // InternalVilBuildLanguage.g:5235:5: lv_name_0_0= ruleQualifiedPrefix
                     {
                     if ( state.backtracking==0 ) {
 
@@ -15056,18 +14959,18 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // InternalVilBuildLanguage.g:5211:3: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5253:3: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
                     {
-                    // InternalVilBuildLanguage.g:5211:3: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
-                    // InternalVilBuildLanguage.g:5212:4: ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5253:3: ( ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5254:4: ( (lv_set_1_0= 'setOf' ) ) ( (lv_param_2_0= ruleTypeParameters ) )
                     {
-                    // InternalVilBuildLanguage.g:5212:4: ( (lv_set_1_0= 'setOf' ) )
-                    // InternalVilBuildLanguage.g:5213:5: (lv_set_1_0= 'setOf' )
+                    // InternalVilBuildLanguage.g:5254:4: ( (lv_set_1_0= 'setOf' ) )
+                    // InternalVilBuildLanguage.g:5255:5: (lv_set_1_0= 'setOf' )
                     {
-                    // InternalVilBuildLanguage.g:5213:5: (lv_set_1_0= 'setOf' )
-                    // InternalVilBuildLanguage.g:5214:6: lv_set_1_0= 'setOf'
+                    // InternalVilBuildLanguage.g:5255:5: (lv_set_1_0= 'setOf' )
+                    // InternalVilBuildLanguage.g:5256:6: lv_set_1_0= 'setOf'
                     {
-                    lv_set_1_0=(Token)match(input,76,FOLLOW_11); if (state.failed) return current;
+                    lv_set_1_0=(Token)match(input,78,FOLLOW_11); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_set_1_0, grammarAccess.getTypeAccess().getSetSetOfKeyword_1_0_0());
@@ -15087,11 +14990,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // InternalVilBuildLanguage.g:5226:4: ( (lv_param_2_0= ruleTypeParameters ) )
-                    // InternalVilBuildLanguage.g:5227:5: (lv_param_2_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5268:4: ( (lv_param_2_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5269:5: (lv_param_2_0= ruleTypeParameters )
                     {
-                    // InternalVilBuildLanguage.g:5227:5: (lv_param_2_0= ruleTypeParameters )
-                    // InternalVilBuildLanguage.g:5228:6: lv_param_2_0= ruleTypeParameters
+                    // InternalVilBuildLanguage.g:5269:5: (lv_param_2_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5270:6: lv_param_2_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
 
@@ -15129,18 +15032,18 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 3 :
-                    // InternalVilBuildLanguage.g:5247:3: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5289:3: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
                     {
-                    // InternalVilBuildLanguage.g:5247:3: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
-                    // InternalVilBuildLanguage.g:5248:4: ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5289:3: ( ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5290:4: ( (lv_seq_3_0= 'sequenceOf' ) ) ( (lv_param_4_0= ruleTypeParameters ) )
                     {
-                    // InternalVilBuildLanguage.g:5248:4: ( (lv_seq_3_0= 'sequenceOf' ) )
-                    // InternalVilBuildLanguage.g:5249:5: (lv_seq_3_0= 'sequenceOf' )
+                    // InternalVilBuildLanguage.g:5290:4: ( (lv_seq_3_0= 'sequenceOf' ) )
+                    // InternalVilBuildLanguage.g:5291:5: (lv_seq_3_0= 'sequenceOf' )
                     {
-                    // InternalVilBuildLanguage.g:5249:5: (lv_seq_3_0= 'sequenceOf' )
-                    // InternalVilBuildLanguage.g:5250:6: lv_seq_3_0= 'sequenceOf'
+                    // InternalVilBuildLanguage.g:5291:5: (lv_seq_3_0= 'sequenceOf' )
+                    // InternalVilBuildLanguage.g:5292:6: lv_seq_3_0= 'sequenceOf'
                     {
-                    lv_seq_3_0=(Token)match(input,77,FOLLOW_11); if (state.failed) return current;
+                    lv_seq_3_0=(Token)match(input,79,FOLLOW_11); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_seq_3_0, grammarAccess.getTypeAccess().getSeqSequenceOfKeyword_2_0_0());
@@ -15160,11 +15063,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // InternalVilBuildLanguage.g:5262:4: ( (lv_param_4_0= ruleTypeParameters ) )
-                    // InternalVilBuildLanguage.g:5263:5: (lv_param_4_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5304:4: ( (lv_param_4_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5305:5: (lv_param_4_0= ruleTypeParameters )
                     {
-                    // InternalVilBuildLanguage.g:5263:5: (lv_param_4_0= ruleTypeParameters )
-                    // InternalVilBuildLanguage.g:5264:6: lv_param_4_0= ruleTypeParameters
+                    // InternalVilBuildLanguage.g:5305:5: (lv_param_4_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5306:6: lv_param_4_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
 
@@ -15202,18 +15105,18 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 4 :
-                    // InternalVilBuildLanguage.g:5283:3: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5325:3: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
                     {
-                    // InternalVilBuildLanguage.g:5283:3: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
-                    // InternalVilBuildLanguage.g:5284:4: ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5325:3: ( ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5326:4: ( (lv_map_5_0= 'mapOf' ) ) ( (lv_param_6_0= ruleTypeParameters ) )
                     {
-                    // InternalVilBuildLanguage.g:5284:4: ( (lv_map_5_0= 'mapOf' ) )
-                    // InternalVilBuildLanguage.g:5285:5: (lv_map_5_0= 'mapOf' )
+                    // InternalVilBuildLanguage.g:5326:4: ( (lv_map_5_0= 'mapOf' ) )
+                    // InternalVilBuildLanguage.g:5327:5: (lv_map_5_0= 'mapOf' )
                     {
-                    // InternalVilBuildLanguage.g:5285:5: (lv_map_5_0= 'mapOf' )
-                    // InternalVilBuildLanguage.g:5286:6: lv_map_5_0= 'mapOf'
+                    // InternalVilBuildLanguage.g:5327:5: (lv_map_5_0= 'mapOf' )
+                    // InternalVilBuildLanguage.g:5328:6: lv_map_5_0= 'mapOf'
                     {
-                    lv_map_5_0=(Token)match(input,78,FOLLOW_11); if (state.failed) return current;
+                    lv_map_5_0=(Token)match(input,80,FOLLOW_11); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_map_5_0, grammarAccess.getTypeAccess().getMapMapOfKeyword_3_0_0());
@@ -15233,11 +15136,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // InternalVilBuildLanguage.g:5298:4: ( (lv_param_6_0= ruleTypeParameters ) )
-                    // InternalVilBuildLanguage.g:5299:5: (lv_param_6_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5340:4: ( (lv_param_6_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5341:5: (lv_param_6_0= ruleTypeParameters )
                     {
-                    // InternalVilBuildLanguage.g:5299:5: (lv_param_6_0= ruleTypeParameters )
-                    // InternalVilBuildLanguage.g:5300:6: lv_param_6_0= ruleTypeParameters
+                    // InternalVilBuildLanguage.g:5341:5: (lv_param_6_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5342:6: lv_param_6_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
 
@@ -15275,18 +15178,18 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 5 :
-                    // InternalVilBuildLanguage.g:5319:3: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5361:3: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
                     {
-                    // InternalVilBuildLanguage.g:5319:3: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
-                    // InternalVilBuildLanguage.g:5320:4: ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5361:3: ( ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) ) )
+                    // InternalVilBuildLanguage.g:5362:4: ( (lv_call_7_0= 'callOf' ) ) ( (lv_return_8_0= ruleType ) )? ( (lv_param_9_0= ruleTypeParameters ) )
                     {
-                    // InternalVilBuildLanguage.g:5320:4: ( (lv_call_7_0= 'callOf' ) )
-                    // InternalVilBuildLanguage.g:5321:5: (lv_call_7_0= 'callOf' )
+                    // InternalVilBuildLanguage.g:5362:4: ( (lv_call_7_0= 'callOf' ) )
+                    // InternalVilBuildLanguage.g:5363:5: (lv_call_7_0= 'callOf' )
                     {
-                    // InternalVilBuildLanguage.g:5321:5: (lv_call_7_0= 'callOf' )
-                    // InternalVilBuildLanguage.g:5322:6: lv_call_7_0= 'callOf'
+                    // InternalVilBuildLanguage.g:5363:5: (lv_call_7_0= 'callOf' )
+                    // InternalVilBuildLanguage.g:5364:6: lv_call_7_0= 'callOf'
                     {
-                    lv_call_7_0=(Token)match(input,79,FOLLOW_61); if (state.failed) return current;
+                    lv_call_7_0=(Token)match(input,81,FOLLOW_59); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       						newLeafNode(lv_call_7_0, grammarAccess.getTypeAccess().getCallCallOfKeyword_4_0_0());
@@ -15306,19 +15209,19 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // InternalVilBuildLanguage.g:5334:4: ( (lv_return_8_0= ruleType ) )?
+                    // InternalVilBuildLanguage.g:5376:4: ( (lv_return_8_0= ruleType ) )?
                     int alt91=2;
                     int LA91_0 = input.LA(1);
 
-                    if ( (LA91_0==RULE_VERSION||(LA91_0>=RULE_ID && LA91_0<=RULE_EXPONENT)||LA91_0==44||(LA91_0>=76 && LA91_0<=79)) ) {
+                    if ( (LA91_0==RULE_VERSION||(LA91_0>=RULE_ID && LA91_0<=RULE_EXPONENT)||LA91_0==20||LA91_0==26||LA91_0==30||(LA91_0>=32 && LA91_0<=33)||LA91_0==44||(LA91_0>=76 && LA91_0<=81)) ) {
                         alt91=1;
                     }
                     switch (alt91) {
                         case 1 :
-                            // InternalVilBuildLanguage.g:5335:5: (lv_return_8_0= ruleType )
+                            // InternalVilBuildLanguage.g:5377:5: (lv_return_8_0= ruleType )
                             {
-                            // InternalVilBuildLanguage.g:5335:5: (lv_return_8_0= ruleType )
-                            // InternalVilBuildLanguage.g:5336:6: lv_return_8_0= ruleType
+                            // InternalVilBuildLanguage.g:5377:5: (lv_return_8_0= ruleType )
+                            // InternalVilBuildLanguage.g:5378:6: lv_return_8_0= ruleType
                             {
                             if ( state.backtracking==0 ) {
 
@@ -15352,11 +15255,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // InternalVilBuildLanguage.g:5353:4: ( (lv_param_9_0= ruleTypeParameters ) )
-                    // InternalVilBuildLanguage.g:5354:5: (lv_param_9_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5395:4: ( (lv_param_9_0= ruleTypeParameters ) )
+                    // InternalVilBuildLanguage.g:5396:5: (lv_param_9_0= ruleTypeParameters )
                     {
-                    // InternalVilBuildLanguage.g:5354:5: (lv_param_9_0= ruleTypeParameters )
-                    // InternalVilBuildLanguage.g:5355:6: lv_param_9_0= ruleTypeParameters
+                    // InternalVilBuildLanguage.g:5396:5: (lv_param_9_0= ruleTypeParameters )
+                    // InternalVilBuildLanguage.g:5397:6: lv_param_9_0= ruleTypeParameters
                     {
                     if ( state.backtracking==0 ) {
 
@@ -15418,7 +15321,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleTypeParameters"
-    // InternalVilBuildLanguage.g:5377:1: entryRuleTypeParameters returns [EObject current=null] : iv_ruleTypeParameters= ruleTypeParameters EOF ;
+    // InternalVilBuildLanguage.g:5419:1: entryRuleTypeParameters returns [EObject current=null] : iv_ruleTypeParameters= ruleTypeParameters EOF ;
     public final EObject entryRuleTypeParameters() throws RecognitionException {
         EObject current = null;
 
@@ -15426,8 +15329,8 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // InternalVilBuildLanguage.g:5377:55: (iv_ruleTypeParameters= ruleTypeParameters EOF )
-            // InternalVilBuildLanguage.g:5378:2: iv_ruleTypeParameters= ruleTypeParameters EOF
+            // InternalVilBuildLanguage.g:5419:55: (iv_ruleTypeParameters= ruleTypeParameters EOF )
+            // InternalVilBuildLanguage.g:5420:2: iv_ruleTypeParameters= ruleTypeParameters EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getTypeParametersRule()); 
@@ -15458,7 +15361,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleTypeParameters"
-    // InternalVilBuildLanguage.g:5384:1: ruleTypeParameters returns [EObject current=null] : (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) ;
+    // InternalVilBuildLanguage.g:5426:1: ruleTypeParameters returns [EObject current=null] : (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) ;
     public final EObject ruleTypeParameters() throws RecognitionException {
         EObject current = null;
 
@@ -15474,30 +15377,30 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	enterRule();
 
         try {
-            // InternalVilBuildLanguage.g:5390:2: ( (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) )
-            // InternalVilBuildLanguage.g:5391:2: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
+            // InternalVilBuildLanguage.g:5432:2: ( (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' ) )
+            // InternalVilBuildLanguage.g:5433:2: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
             {
-            // InternalVilBuildLanguage.g:5391:2: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
-            // InternalVilBuildLanguage.g:5392:3: otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')'
+            // InternalVilBuildLanguage.g:5433:2: (otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')' )
+            // InternalVilBuildLanguage.g:5434:3: otherlv_0= '(' ( (lv_param_1_0= ruleType ) ) (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )* otherlv_4= ')'
             {
-            otherlv_0=(Token)match(input,16,FOLLOW_22); if (state.failed) return current;
+            otherlv_0=(Token)match(input,16,FOLLOW_21); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getTypeParametersAccess().getLeftParenthesisKeyword_0());
               		
             }
-            // InternalVilBuildLanguage.g:5396:3: ( (lv_param_1_0= ruleType ) )
-            // InternalVilBuildLanguage.g:5397:4: (lv_param_1_0= ruleType )
+            // InternalVilBuildLanguage.g:5438:3: ( (lv_param_1_0= ruleType ) )
+            // InternalVilBuildLanguage.g:5439:4: (lv_param_1_0= ruleType )
             {
-            // InternalVilBuildLanguage.g:5397:4: (lv_param_1_0= ruleType )
-            // InternalVilBuildLanguage.g:5398:5: lv_param_1_0= ruleType
+            // InternalVilBuildLanguage.g:5439:4: (lv_param_1_0= ruleType )
+            // InternalVilBuildLanguage.g:5440:5: lv_param_1_0= ruleType
             {
             if ( state.backtracking==0 ) {
 
               					newCompositeNode(grammarAccess.getTypeParametersAccess().getParamTypeParserRuleCall_1_0());
               				
             }
-            pushFollow(FOLLOW_62);
+            pushFollow(FOLLOW_60);
             lv_param_1_0=ruleType();
 
             state._fsp--;
@@ -15521,7 +15424,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            // InternalVilBuildLanguage.g:5415:3: (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )*
+            // InternalVilBuildLanguage.g:5457:3: (otherlv_2= ',' ( (lv_param_3_0= ruleType ) ) )*
             loop93:
             do {
                 int alt93=2;
@@ -15534,26 +15437,26 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                 switch (alt93) {
             	case 1 :
-            	    // InternalVilBuildLanguage.g:5416:4: otherlv_2= ',' ( (lv_param_3_0= ruleType ) )
+            	    // InternalVilBuildLanguage.g:5458:4: otherlv_2= ',' ( (lv_param_3_0= ruleType ) )
             	    {
-            	    otherlv_2=(Token)match(input,25,FOLLOW_22); if (state.failed) return current;
+            	    otherlv_2=(Token)match(input,25,FOLLOW_21); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_2, grammarAccess.getTypeParametersAccess().getCommaKeyword_2_0());
             	      			
             	    }
-            	    // InternalVilBuildLanguage.g:5420:4: ( (lv_param_3_0= ruleType ) )
-            	    // InternalVilBuildLanguage.g:5421:5: (lv_param_3_0= ruleType )
+            	    // InternalVilBuildLanguage.g:5462:4: ( (lv_param_3_0= ruleType ) )
+            	    // InternalVilBuildLanguage.g:5463:5: (lv_param_3_0= ruleType )
             	    {
-            	    // InternalVilBuildLanguage.g:5421:5: (lv_param_3_0= ruleType )
-            	    // InternalVilBuildLanguage.g:5422:6: lv_param_3_0= ruleType
+            	    // InternalVilBuildLanguage.g:5463:5: (lv_param_3_0= ruleType )
+            	    // InternalVilBuildLanguage.g:5464:6: lv_param_3_0= ruleType
             	    {
             	    if ( state.backtracking==0 ) {
 
             	      						newCompositeNode(grammarAccess.getTypeParametersAccess().getParamTypeParserRuleCall_2_1_0());
             	      					
             	    }
-            	    pushFollow(FOLLOW_62);
+            	    pushFollow(FOLLOW_60);
             	    lv_param_3_0=ruleType();
 
             	    state._fsp--;
@@ -15617,7 +15520,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleContainerInitializer"
-    // InternalVilBuildLanguage.g:5448:1: entryRuleContainerInitializer returns [EObject current=null] : iv_ruleContainerInitializer= ruleContainerInitializer EOF ;
+    // InternalVilBuildLanguage.g:5490:1: entryRuleContainerInitializer returns [EObject current=null] : iv_ruleContainerInitializer= ruleContainerInitializer EOF ;
     public final EObject entryRuleContainerInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -15625,8 +15528,8 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // InternalVilBuildLanguage.g:5448:61: (iv_ruleContainerInitializer= ruleContainerInitializer EOF )
-            // InternalVilBuildLanguage.g:5449:2: iv_ruleContainerInitializer= ruleContainerInitializer EOF
+            // InternalVilBuildLanguage.g:5490:61: (iv_ruleContainerInitializer= ruleContainerInitializer EOF )
+            // InternalVilBuildLanguage.g:5491:2: iv_ruleContainerInitializer= ruleContainerInitializer EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getContainerInitializerRule()); 
@@ -15657,7 +15560,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleContainerInitializer"
-    // InternalVilBuildLanguage.g:5455:1: ruleContainerInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) ;
+    // InternalVilBuildLanguage.g:5497:1: ruleContainerInitializer returns [EObject current=null] : ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) ;
     public final EObject ruleContainerInitializer() throws RecognitionException {
         EObject current = null;
 
@@ -15673,14 +15576,14 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	enterRule();
 
         try {
-            // InternalVilBuildLanguage.g:5461:2: ( ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) )
-            // InternalVilBuildLanguage.g:5462:2: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
+            // InternalVilBuildLanguage.g:5503:2: ( ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' ) )
+            // InternalVilBuildLanguage.g:5504:2: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
             {
-            // InternalVilBuildLanguage.g:5462:2: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
-            // InternalVilBuildLanguage.g:5463:3: () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}'
+            // InternalVilBuildLanguage.g:5504:2: ( () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}' )
+            // InternalVilBuildLanguage.g:5505:3: () otherlv_1= '{' ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )? otherlv_5= '}'
             {
-            // InternalVilBuildLanguage.g:5463:3: ()
-            // InternalVilBuildLanguage.g:5464:4: 
+            // InternalVilBuildLanguage.g:5505:3: ()
+            // InternalVilBuildLanguage.g:5506:4: 
             {
             if ( state.backtracking==0 ) {
 
@@ -15697,35 +15600,35 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
             }
 
-            otherlv_1=(Token)match(input,18,FOLLOW_63); if (state.failed) return current;
+            otherlv_1=(Token)match(input,18,FOLLOW_61); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_1, grammarAccess.getContainerInitializerAccess().getLeftCurlyBracketKeyword_1());
               		
             }
-            // InternalVilBuildLanguage.g:5477:3: ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )?
+            // InternalVilBuildLanguage.g:5519:3: ( ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )* )?
             int alt95=2;
             int LA95_0 = input.LA(1);
 
-            if ( ((LA95_0>=RULE_STRING && LA95_0<=RULE_EXPONENT)||LA95_0==16||LA95_0==18||(LA95_0>=28 && LA95_0<=29)||LA95_0==34||LA95_0==37||LA95_0==44||LA95_0==61||(LA95_0>=63 && LA95_0<=66)||(LA95_0>=73 && LA95_0<=75)) ) {
+            if ( ((LA95_0>=RULE_STRING && LA95_0<=RULE_EXPONENT)||LA95_0==16||LA95_0==18||LA95_0==20||LA95_0==26||(LA95_0>=28 && LA95_0<=30)||(LA95_0>=32 && LA95_0<=34)||LA95_0==37||LA95_0==44||LA95_0==61||(LA95_0>=63 && LA95_0<=66)||(LA95_0>=73 && LA95_0<=77)) ) {
                 alt95=1;
             }
             switch (alt95) {
                 case 1 :
-                    // InternalVilBuildLanguage.g:5478:4: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
+                    // InternalVilBuildLanguage.g:5520:4: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) ) (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
                     {
-                    // InternalVilBuildLanguage.g:5478:4: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) )
-                    // InternalVilBuildLanguage.g:5479:5: (lv_exprs_2_0= ruleContainerInitializerExpression )
+                    // InternalVilBuildLanguage.g:5520:4: ( (lv_exprs_2_0= ruleContainerInitializerExpression ) )
+                    // InternalVilBuildLanguage.g:5521:5: (lv_exprs_2_0= ruleContainerInitializerExpression )
                     {
-                    // InternalVilBuildLanguage.g:5479:5: (lv_exprs_2_0= ruleContainerInitializerExpression )
-                    // InternalVilBuildLanguage.g:5480:6: lv_exprs_2_0= ruleContainerInitializerExpression
+                    // InternalVilBuildLanguage.g:5521:5: (lv_exprs_2_0= ruleContainerInitializerExpression )
+                    // InternalVilBuildLanguage.g:5522:6: lv_exprs_2_0= ruleContainerInitializerExpression
                     {
                     if ( state.backtracking==0 ) {
 
                       						newCompositeNode(grammarAccess.getContainerInitializerAccess().getExprsContainerInitializerExpressionParserRuleCall_2_0_0());
                       					
                     }
-                    pushFollow(FOLLOW_64);
+                    pushFollow(FOLLOW_62);
                     lv_exprs_2_0=ruleContainerInitializerExpression();
 
                     state._fsp--;
@@ -15749,7 +15652,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                     }
 
-                    // InternalVilBuildLanguage.g:5497:4: (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
+                    // InternalVilBuildLanguage.g:5539:4: (otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) ) )*
                     loop94:
                     do {
                         int alt94=2;
@@ -15762,26 +15665,26 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
                         switch (alt94) {
                     	case 1 :
-                    	    // InternalVilBuildLanguage.g:5498:5: otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
+                    	    // InternalVilBuildLanguage.g:5540:5: otherlv_3= ',' ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,25,FOLLOW_31); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,25,FOLLOW_30); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	      					newLeafNode(otherlv_3, grammarAccess.getContainerInitializerAccess().getCommaKeyword_2_1_0());
                     	      				
                     	    }
-                    	    // InternalVilBuildLanguage.g:5502:5: ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
-                    	    // InternalVilBuildLanguage.g:5503:6: (lv_exprs_4_0= ruleContainerInitializerExpression )
+                    	    // InternalVilBuildLanguage.g:5544:5: ( (lv_exprs_4_0= ruleContainerInitializerExpression ) )
+                    	    // InternalVilBuildLanguage.g:5545:6: (lv_exprs_4_0= ruleContainerInitializerExpression )
                     	    {
-                    	    // InternalVilBuildLanguage.g:5503:6: (lv_exprs_4_0= ruleContainerInitializerExpression )
-                    	    // InternalVilBuildLanguage.g:5504:7: lv_exprs_4_0= ruleContainerInitializerExpression
+                    	    // InternalVilBuildLanguage.g:5545:6: (lv_exprs_4_0= ruleContainerInitializerExpression )
+                    	    // InternalVilBuildLanguage.g:5546:7: lv_exprs_4_0= ruleContainerInitializerExpression
                     	    {
                     	    if ( state.backtracking==0 ) {
 
                     	      							newCompositeNode(grammarAccess.getContainerInitializerAccess().getExprsContainerInitializerExpressionParserRuleCall_2_1_1_0());
                     	      						
                     	    }
-                    	    pushFollow(FOLLOW_64);
+                    	    pushFollow(FOLLOW_62);
                     	    lv_exprs_4_0=ruleContainerInitializerExpression();
 
                     	    state._fsp--;
@@ -15851,7 +15754,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "entryRuleContainerInitializerExpression"
-    // InternalVilBuildLanguage.g:5531:1: entryRuleContainerInitializerExpression returns [EObject current=null] : iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF ;
+    // InternalVilBuildLanguage.g:5573:1: entryRuleContainerInitializerExpression returns [EObject current=null] : iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF ;
     public final EObject entryRuleContainerInitializerExpression() throws RecognitionException {
         EObject current = null;
 
@@ -15859,8 +15762,8 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
         try {
-            // InternalVilBuildLanguage.g:5531:71: (iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF )
-            // InternalVilBuildLanguage.g:5532:2: iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF
+            // InternalVilBuildLanguage.g:5573:71: (iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF )
+            // InternalVilBuildLanguage.g:5574:2: iv_ruleContainerInitializerExpression= ruleContainerInitializerExpression EOF
             {
             if ( state.backtracking==0 ) {
                newCompositeNode(grammarAccess.getContainerInitializerExpressionRule()); 
@@ -15891,7 +15794,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
 
     // $ANTLR start "ruleContainerInitializerExpression"
-    // InternalVilBuildLanguage.g:5538:1: ruleContainerInitializerExpression returns [EObject current=null] : ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) ;
+    // InternalVilBuildLanguage.g:5580:1: ruleContainerInitializerExpression returns [EObject current=null] : ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) ;
     public final EObject ruleContainerInitializerExpression() throws RecognitionException {
         EObject current = null;
 
@@ -15904,14 +15807,14 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	enterRule();
 
         try {
-            // InternalVilBuildLanguage.g:5544:2: ( ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) )
-            // InternalVilBuildLanguage.g:5545:2: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
+            // InternalVilBuildLanguage.g:5586:2: ( ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) ) )
+            // InternalVilBuildLanguage.g:5587:2: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
             {
-            // InternalVilBuildLanguage.g:5545:2: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
+            // InternalVilBuildLanguage.g:5587:2: ( ( (lv_logical_0_0= ruleLogicalExpression ) ) | ( (lv_container_1_0= ruleContainerInitializer ) ) )
             int alt96=2;
             int LA96_0 = input.LA(1);
 
-            if ( ((LA96_0>=RULE_STRING && LA96_0<=RULE_EXPONENT)||LA96_0==16||(LA96_0>=28 && LA96_0<=29)||LA96_0==34||LA96_0==37||LA96_0==44||LA96_0==61||(LA96_0>=63 && LA96_0<=66)||(LA96_0>=73 && LA96_0<=75)) ) {
+            if ( ((LA96_0>=RULE_STRING && LA96_0<=RULE_EXPONENT)||LA96_0==16||LA96_0==20||LA96_0==26||(LA96_0>=28 && LA96_0<=30)||(LA96_0>=32 && LA96_0<=34)||LA96_0==37||LA96_0==44||LA96_0==61||(LA96_0>=63 && LA96_0<=66)||(LA96_0>=73 && LA96_0<=77)) ) {
                 alt96=1;
             }
             else if ( (LA96_0==18) ) {
@@ -15926,13 +15829,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             }
             switch (alt96) {
                 case 1 :
-                    // InternalVilBuildLanguage.g:5546:3: ( (lv_logical_0_0= ruleLogicalExpression ) )
+                    // InternalVilBuildLanguage.g:5588:3: ( (lv_logical_0_0= ruleLogicalExpression ) )
                     {
-                    // InternalVilBuildLanguage.g:5546:3: ( (lv_logical_0_0= ruleLogicalExpression ) )
-                    // InternalVilBuildLanguage.g:5547:4: (lv_logical_0_0= ruleLogicalExpression )
+                    // InternalVilBuildLanguage.g:5588:3: ( (lv_logical_0_0= ruleLogicalExpression ) )
+                    // InternalVilBuildLanguage.g:5589:4: (lv_logical_0_0= ruleLogicalExpression )
                     {
-                    // InternalVilBuildLanguage.g:5547:4: (lv_logical_0_0= ruleLogicalExpression )
-                    // InternalVilBuildLanguage.g:5548:5: lv_logical_0_0= ruleLogicalExpression
+                    // InternalVilBuildLanguage.g:5589:4: (lv_logical_0_0= ruleLogicalExpression )
+                    // InternalVilBuildLanguage.g:5590:5: lv_logical_0_0= ruleLogicalExpression
                     {
                     if ( state.backtracking==0 ) {
 
@@ -15967,13 +15870,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                     }
                     break;
                 case 2 :
-                    // InternalVilBuildLanguage.g:5566:3: ( (lv_container_1_0= ruleContainerInitializer ) )
+                    // InternalVilBuildLanguage.g:5608:3: ( (lv_container_1_0= ruleContainerInitializer ) )
                     {
-                    // InternalVilBuildLanguage.g:5566:3: ( (lv_container_1_0= ruleContainerInitializer ) )
-                    // InternalVilBuildLanguage.g:5567:4: (lv_container_1_0= ruleContainerInitializer )
+                    // InternalVilBuildLanguage.g:5608:3: ( (lv_container_1_0= ruleContainerInitializer ) )
+                    // InternalVilBuildLanguage.g:5609:4: (lv_container_1_0= ruleContainerInitializer )
                     {
-                    // InternalVilBuildLanguage.g:5567:4: (lv_container_1_0= ruleContainerInitializer )
-                    // InternalVilBuildLanguage.g:5568:5: lv_container_1_0= ruleContainerInitializer
+                    // InternalVilBuildLanguage.g:5609:4: (lv_container_1_0= ruleContainerInitializer )
+                    // InternalVilBuildLanguage.g:5610:5: lv_container_1_0= ruleContainerInitializer
                     {
                     if ( state.backtracking==0 ) {
 
@@ -16158,6 +16061,35 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
     }
     // $ANTLR end synpred14_InternalVilBuildLanguage
 
+    // $ANTLR start synpred15_InternalVilBuildLanguage
+    public final void synpred15_InternalVilBuildLanguage_fragment() throws RecognitionException {   
+        EObject lv_modifier_2_0 = null;
+
+
+        // InternalVilBuildLanguage.g:645:5: ( (lv_modifier_2_0= ruleRuleModifier ) )
+        // InternalVilBuildLanguage.g:645:5: (lv_modifier_2_0= ruleRuleModifier )
+        {
+        // InternalVilBuildLanguage.g:645:5: (lv_modifier_2_0= ruleRuleModifier )
+        // InternalVilBuildLanguage.g:646:6: lv_modifier_2_0= ruleRuleModifier
+        {
+        if ( state.backtracking==0 ) {
+
+          						newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0());
+          					
+        }
+        pushFollow(FOLLOW_2);
+        lv_modifier_2_0=ruleRuleModifier();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+
+
+        }
+    }
+    // $ANTLR end synpred15_InternalVilBuildLanguage
+
     // $ANTLR start synpred18_InternalVilBuildLanguage
     public final void synpred18_InternalVilBuildLanguage_fragment() throws RecognitionException {   
         Token otherlv_5=null;
@@ -16211,7 +16143,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         int LA98_0 = input.LA(1);
 
         if ( (LA98_0==26) ) {
-            alt98=1;
+            int LA98_1 = input.LA(2);
+
+            if ( (synpred15_InternalVilBuildLanguage()) ) {
+                alt98=1;
+            }
         }
         switch (alt98) {
             case 1 :
@@ -16225,7 +16161,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                   						newCompositeNode(grammarAccess.getRuleDeclarationAccess().getModifierRuleModifierParserRuleCall_1_1_0());
                   					
                 }
-                pushFollow(FOLLOW_22);
+                pushFollow(FOLLOW_21);
                 lv_modifier_2_0=ruleRuleModifier();
 
                 state._fsp--;
@@ -16241,53 +16177,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
         // InternalVilBuildLanguage.g:663:4: ( (lv_type_3_0= ruleType ) )?
         int alt99=2;
-        switch ( input.LA(1) ) {
-            case RULE_ID:
-                {
-                int LA99_1 = input.LA(2);
-
-                if ( (LA99_1==RULE_VERSION||(LA99_1>=RULE_ID && LA99_1<=RULE_EXPONENT)||LA99_1==44||LA99_1==72) ) {
-                    alt99=1;
-                }
-                }
-                break;
-            case RULE_VERSION:
-                {
-                int LA99_2 = input.LA(2);
-
-                if ( (LA99_2==RULE_VERSION||(LA99_2>=RULE_ID && LA99_2<=RULE_EXPONENT)||LA99_2==44||LA99_2==72) ) {
-                    alt99=1;
-                }
-                }
-                break;
-            case RULE_EXPONENT:
-                {
-                int LA99_3 = input.LA(2);
-
-                if ( (LA99_3==RULE_VERSION||(LA99_3>=RULE_ID && LA99_3<=RULE_EXPONENT)||LA99_3==44||LA99_3==72) ) {
-                    alt99=1;
-                }
-                }
-                break;
-            case 44:
-                {
-                int LA99_4 = input.LA(2);
-
-                if ( (LA99_4==RULE_VERSION||(LA99_4>=RULE_ID && LA99_4<=RULE_EXPONENT)||LA99_4==44||LA99_4==72) ) {
-                    alt99=1;
-                }
-                }
-                break;
-            case 76:
-            case 77:
-            case 78:
-            case 79:
-                {
-                alt99=1;
-                }
-                break;
-        }
-
+        alt99 = dfa99.predict(input);
         switch (alt99) {
             case 1 :
                 // InternalVilBuildLanguage.g:664:5: (lv_type_3_0= ruleType )
@@ -16341,7 +16231,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         int alt100=2;
         int LA100_0 = input.LA(1);
 
-        if ( (LA100_0==RULE_VERSION||(LA100_0>=RULE_ID && LA100_0<=RULE_EXPONENT)||LA100_0==44||(LA100_0>=76 && LA100_0<=79)) ) {
+        if ( (LA100_0==RULE_VERSION||(LA100_0>=RULE_ID && LA100_0<=RULE_EXPONENT)||LA100_0==20||LA100_0==26||LA100_0==30||(LA100_0>=32 && LA100_0<=33)||LA100_0==44||(LA100_0>=76 && LA100_0<=81)) ) {
             alt100=1;
         }
         switch (alt100) {
@@ -16370,12 +16260,207 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
 
         }
 
-        otherlv_7=(Token)match(input,17,FOLLOW_23); if (state.failed) return ;
+        otherlv_7=(Token)match(input,17,FOLLOW_22); if (state.failed) return ;
         otherlv_8=(Token)match(input,23,FOLLOW_2); if (state.failed) return ;
 
         }
     }
     // $ANTLR end synpred18_InternalVilBuildLanguage
+
+    // $ANTLR start synpred25_InternalVilBuildLanguage
+    public final void synpred25_InternalVilBuildLanguage_fragment() throws RecognitionException {   
+        EObject lv_varDecl_0_0 = null;
+
+
+        // InternalVilBuildLanguage.g:950:3: ( ( (lv_varDecl_0_0= ruleVariableDeclaration ) ) )
+        // InternalVilBuildLanguage.g:950:3: ( (lv_varDecl_0_0= ruleVariableDeclaration ) )
+        {
+        // InternalVilBuildLanguage.g:950:3: ( (lv_varDecl_0_0= ruleVariableDeclaration ) )
+        // InternalVilBuildLanguage.g:951:4: (lv_varDecl_0_0= ruleVariableDeclaration )
+        {
+        // InternalVilBuildLanguage.g:951:4: (lv_varDecl_0_0= ruleVariableDeclaration )
+        // InternalVilBuildLanguage.g:952:5: lv_varDecl_0_0= ruleVariableDeclaration
+        {
+        if ( state.backtracking==0 ) {
+
+          					newCompositeNode(grammarAccess.getRuleElementAccess().getVarDeclVariableDeclarationParserRuleCall_0_0());
+          				
+        }
+        pushFollow(FOLLOW_2);
+        lv_varDecl_0_0=ruleVariableDeclaration();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+
+
+        }
+
+
+        }
+    }
+    // $ANTLR end synpred25_InternalVilBuildLanguage
+
+    // $ANTLR start synpred26_InternalVilBuildLanguage
+    public final void synpred26_InternalVilBuildLanguage_fragment() throws RecognitionException {   
+        EObject lv_exprStmt_1_0 = null;
+
+
+        // InternalVilBuildLanguage.g:970:3: ( ( (lv_exprStmt_1_0= ruleExpressionStatement ) ) )
+        // InternalVilBuildLanguage.g:970:3: ( (lv_exprStmt_1_0= ruleExpressionStatement ) )
+        {
+        // InternalVilBuildLanguage.g:970:3: ( (lv_exprStmt_1_0= ruleExpressionStatement ) )
+        // InternalVilBuildLanguage.g:971:4: (lv_exprStmt_1_0= ruleExpressionStatement )
+        {
+        // InternalVilBuildLanguage.g:971:4: (lv_exprStmt_1_0= ruleExpressionStatement )
+        // InternalVilBuildLanguage.g:972:5: lv_exprStmt_1_0= ruleExpressionStatement
+        {
+        if ( state.backtracking==0 ) {
+
+          					newCompositeNode(grammarAccess.getRuleElementAccess().getExprStmtExpressionStatementParserRuleCall_1_0());
+          				
+        }
+        pushFollow(FOLLOW_2);
+        lv_exprStmt_1_0=ruleExpressionStatement();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+
+
+        }
+
+
+        }
+    }
+    // $ANTLR end synpred26_InternalVilBuildLanguage
+
+    // $ANTLR start synpred32_InternalVilBuildLanguage
+    public final void synpred32_InternalVilBuildLanguage_fragment() throws RecognitionException {   
+        Token otherlv_1=null;
+        Token otherlv_3=null;
+        Token otherlv_5=null;
+        AntlrDatatypeRuleToken lv_var_0_0 = null;
+
+        AntlrDatatypeRuleToken lv_field_2_0 = null;
+
+        EObject lv_expr_4_0 = null;
+
+
+        // InternalVilBuildLanguage.g:1095:3: ( ( ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';' ) )
+        // InternalVilBuildLanguage.g:1095:3: ( ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';' )
+        {
+        // InternalVilBuildLanguage.g:1095:3: ( ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';' )
+        // InternalVilBuildLanguage.g:1096:4: ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';'
+        {
+        // InternalVilBuildLanguage.g:1096:4: ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )?
+        int alt105=2;
+        alt105 = dfa105.predict(input);
+        switch (alt105) {
+            case 1 :
+                // InternalVilBuildLanguage.g:1097:5: ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '='
+                {
+                // InternalVilBuildLanguage.g:1097:5: ( (lv_var_0_0= ruleIdentifier ) )
+                // InternalVilBuildLanguage.g:1098:6: (lv_var_0_0= ruleIdentifier )
+                {
+                // InternalVilBuildLanguage.g:1098:6: (lv_var_0_0= ruleIdentifier )
+                // InternalVilBuildLanguage.g:1099:7: lv_var_0_0= ruleIdentifier
+                {
+                if ( state.backtracking==0 ) {
+
+                  							newCompositeNode(grammarAccess.getExpressionStatementAccess().getVarIdentifierParserRuleCall_0_0_0_0());
+                  						
+                }
+                pushFollow(FOLLOW_29);
+                lv_var_0_0=ruleIdentifier();
+
+                state._fsp--;
+                if (state.failed) return ;
+
+                }
+
+
+                }
+
+                // InternalVilBuildLanguage.g:1116:5: (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )?
+                int alt104=2;
+                int LA104_0 = input.LA(1);
+
+                if ( (LA104_0==27) ) {
+                    alt104=1;
+                }
+                switch (alt104) {
+                    case 1 :
+                        // InternalVilBuildLanguage.g:1117:6: otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) )
+                        {
+                        otherlv_1=(Token)match(input,27,FOLLOW_10); if (state.failed) return ;
+                        // InternalVilBuildLanguage.g:1121:6: ( (lv_field_2_0= ruleIdentifier ) )
+                        // InternalVilBuildLanguage.g:1122:7: (lv_field_2_0= ruleIdentifier )
+                        {
+                        // InternalVilBuildLanguage.g:1122:7: (lv_field_2_0= ruleIdentifier )
+                        // InternalVilBuildLanguage.g:1123:8: lv_field_2_0= ruleIdentifier
+                        {
+                        if ( state.backtracking==0 ) {
+
+                          								newCompositeNode(grammarAccess.getExpressionStatementAccess().getFieldIdentifierParserRuleCall_0_0_1_1_0());
+                          							
+                        }
+                        pushFollow(FOLLOW_22);
+                        lv_field_2_0=ruleIdentifier();
+
+                        state._fsp--;
+                        if (state.failed) return ;
+
+                        }
+
+
+                        }
+
+
+                        }
+                        break;
+
+                }
+
+                otherlv_3=(Token)match(input,23,FOLLOW_30); if (state.failed) return ;
+
+                }
+                break;
+
+        }
+
+        // InternalVilBuildLanguage.g:1146:4: ( (lv_expr_4_0= ruleExpression ) )
+        // InternalVilBuildLanguage.g:1147:5: (lv_expr_4_0= ruleExpression )
+        {
+        // InternalVilBuildLanguage.g:1147:5: (lv_expr_4_0= ruleExpression )
+        // InternalVilBuildLanguage.g:1148:6: lv_expr_4_0= ruleExpression
+        {
+        if ( state.backtracking==0 ) {
+
+          						newCompositeNode(grammarAccess.getExpressionStatementAccess().getExprExpressionParserRuleCall_0_1_0());
+          					
+        }
+        pushFollow(FOLLOW_8);
+        lv_expr_4_0=ruleExpression();
+
+        state._fsp--;
+        if (state.failed) return ;
+
+        }
+
+
+        }
+
+        otherlv_5=(Token)match(input,14,FOLLOW_2); if (state.failed) return ;
+
+        }
+
+
+        }
+    }
+    // $ANTLR end synpred32_InternalVilBuildLanguage
 
     // $ANTLR start synpred33_InternalVilBuildLanguage
     public final void synpred33_InternalVilBuildLanguage_fragment() throws RecognitionException {   
@@ -16402,7 +16487,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         // InternalVilBuildLanguage.g:1961:4: ( ( 'else' )=>otherlv_5= 'else' )
         // InternalVilBuildLanguage.g:1962:5: ( 'else' )=>otherlv_5= 'else'
         {
-        otherlv_5=(Token)match(input,33,FOLLOW_36); if (state.failed) return ;
+        otherlv_5=(Token)match(input,33,FOLLOW_23); if (state.failed) return ;
 
         }
 
@@ -16576,7 +16661,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
           						newCompositeNode(grammarAccess.getRelationalExpressionAccess().getRightRelationalExpressionPartParserRuleCall_1_0_0());
           					
         }
-        pushFollow(FOLLOW_51);
+        pushFollow(FOLLOW_49);
         lv_right_1_0=ruleRelationalExpressionPart();
 
         state._fsp--;
@@ -16794,6 +16879,20 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         state.failed=false;
         return success;
     }
+    public final boolean synpred26_InternalVilBuildLanguage() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred26_InternalVilBuildLanguage_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred33_InternalVilBuildLanguage() {
         state.backtracking++;
         int start = input.mark();
@@ -16827,6 +16926,34 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         int start = input.mark();
         try {
             synpred14_InternalVilBuildLanguage_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred15_InternalVilBuildLanguage() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred15_InternalVilBuildLanguage_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
+    public final boolean synpred32_InternalVilBuildLanguage() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred32_InternalVilBuildLanguage_fragment(); // can never throw exception
         } catch (RecognitionException re) {
             System.err.println("impossible: "+re);
         }
@@ -16934,6 +17061,20 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         state.failed=false;
         return success;
     }
+    public final boolean synpred25_InternalVilBuildLanguage() {
+        state.backtracking++;
+        int start = input.mark();
+        try {
+            synpred25_InternalVilBuildLanguage_fragment(); // can never throw exception
+        } catch (RecognitionException re) {
+            System.err.println("impossible: "+re);
+        }
+        boolean success = !state.failed;
+        input.rewind(start);
+        state.backtracking--;
+        state.failed=false;
+        return success;
+    }
     public final boolean synpred18_InternalVilBuildLanguage() {
         state.backtracking++;
         int start = input.mark();
@@ -17009,20 +17150,28 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
     protected DFA10 dfa10 = new DFA10(this);
     protected DFA15 dfa15 = new DFA15(this);
     protected DFA11 dfa11 = new DFA11(this);
+    protected DFA13 dfa13 = new DFA13(this);
     protected DFA24 dfa24 = new DFA24(this);
+    protected DFA28 dfa28 = new DFA28(this);
     protected DFA26 dfa26 = new DFA26(this);
     protected DFA29 dfa29 = new DFA29(this);
+    protected DFA33 dfa33 = new DFA33(this);
     protected DFA39 dfa39 = new DFA39(this);
+    protected DFA78 dfa78 = new DFA78(this);
     protected DFA82 dfa82 = new DFA82(this);
+    protected DFA85 dfa85 = new DFA85(this);
+    protected DFA87 dfa87 = new DFA87(this);
     protected DFA97 dfa97 = new DFA97(this);
-    static final String dfa_1s = "\42\uffff";
-    static final String dfa_2s = "\1\1\41\uffff";
-    static final String dfa_3s = "\1\4\3\uffff\10\0\26\uffff";
-    static final String dfa_4s = "\1\117\3\uffff\10\0\26\uffff";
-    static final String dfa_5s = "\1\uffff\1\5\1\uffff\1\1\10\uffff\1\2\1\uffff\1\3\1\4\22\uffff";
-    static final String dfa_6s = "\4\uffff\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\26\uffff}>";
+    protected DFA99 dfa99 = new DFA99(this);
+    protected DFA105 dfa105 = new DFA105(this);
+    static final String dfa_1s = "\50\uffff";
+    static final String dfa_2s = "\1\1\47\uffff";
+    static final String dfa_3s = "\1\4\3\uffff\17\0\25\uffff";
+    static final String dfa_4s = "\1\121\3\uffff\17\0\25\uffff";
+    static final String dfa_5s = "\1\uffff\1\5\1\uffff\1\1\17\uffff\1\2\1\uffff\1\3\1\4\21\uffff";
+    static final String dfa_6s = "\4\uffff\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16\25\uffff}>";
     static final String[] dfa_7s = {
-            "\1\17\1\5\1\17\1\4\1\6\7\uffff\1\17\1\uffff\1\17\1\1\4\uffff\1\17\1\uffff\1\17\1\uffff\2\17\4\uffff\1\17\2\uffff\1\17\1\3\2\14\1\uffff\1\16\1\uffff\1\7\20\uffff\1\17\1\uffff\4\17\4\uffff\1\17\1\uffff\3\17\1\10\1\11\1\12\1\13",
+            "\1\26\1\5\1\26\1\4\1\6\7\uffff\1\26\1\uffff\1\26\1\1\1\15\3\uffff\1\26\1\uffff\1\11\1\uffff\2\26\1\10\1\uffff\1\13\1\14\1\26\2\uffff\1\26\1\3\2\23\1\uffff\1\25\1\uffff\1\7\20\uffff\1\26\1\uffff\4\26\4\uffff\1\26\1\uffff\3\26\1\12\1\16\1\17\1\20\1\21\1\22",
             "",
             "",
             "",
@@ -17034,7 +17183,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             "\1\uffff",
             "\1\uffff",
             "\1\uffff",
-            "",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "",
             "",
             "",
@@ -17095,7 +17250,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_4);
@@ -17110,7 +17265,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_5);
@@ -17125,7 +17280,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_6);
@@ -17140,7 +17295,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_7);
@@ -17155,7 +17310,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_8);
@@ -17170,7 +17325,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_9);
@@ -17185,7 +17340,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_10);
@@ -17200,10 +17355,115 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
 
-                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 15;}
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
 
                          
                         input.seek(index10_11);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 8 : 
+                        int LA10_12 = input.LA(1);
+
+                         
+                        int index10_12 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_12);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 9 : 
+                        int LA10_13 = input.LA(1);
+
+                         
+                        int index10_13 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_13);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 10 : 
+                        int LA10_14 = input.LA(1);
+
+                         
+                        int index10_14 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_14);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 11 : 
+                        int LA10_15 = input.LA(1);
+
+                         
+                        int index10_15 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_15);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 12 : 
+                        int LA10_16 = input.LA(1);
+
+                         
+                        int index10_16 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_16);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 13 : 
+                        int LA10_17 = input.LA(1);
+
+                         
+                        int index10_17 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_17);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 14 : 
+                        int LA10_18 = input.LA(1);
+
+                         
+                        int index10_18 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred10_InternalVilBuildLanguage()) ) {s = 3;}
+
+                        else if ( (synpred13_InternalVilBuildLanguage()) ) {s = 22;}
+
+                         
+                        input.seek(index10_18);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -17214,15 +17474,21 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             throw nvae;
         }
     }
-    static final String dfa_8s = "\34\uffff";
-    static final String dfa_9s = "\1\4\2\uffff\4\0\25\uffff";
-    static final String dfa_10s = "\1\117\2\uffff\4\0\25\uffff";
-    static final String dfa_11s = "\1\uffff\1\1\11\uffff\1\2\20\uffff";
-    static final String dfa_12s = "\3\uffff\1\0\1\1\1\2\1\3\25\uffff}>";
+    static final String dfa_8s = "\42\uffff";
+    static final String dfa_9s = "\1\4\1\uffff\13\0\25\uffff";
+    static final String dfa_10s = "\1\121\1\uffff\13\0\25\uffff";
+    static final String dfa_11s = "\1\uffff\1\1\17\uffff\1\2\20\uffff";
+    static final String dfa_12s = "\2\uffff\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\25\uffff}>";
     static final String[] dfa_13s = {
-            "\1\13\1\4\1\13\1\3\1\5\7\uffff\1\13\1\uffff\1\13\5\uffff\1\13\1\uffff\1\1\1\uffff\2\13\4\uffff\1\13\2\uffff\1\13\6\uffff\1\6\20\uffff\1\13\1\uffff\4\13\4\uffff\1\1\1\uffff\3\13\4\1",
+            "\1\21\1\4\1\21\1\3\1\5\7\uffff\1\21\1\uffff\1\21\1\uffff\1\13\3\uffff\1\21\1\uffff\1\2\1\uffff\2\21\1\7\1\uffff\1\11\1\12\1\21\2\uffff\1\21\6\uffff\1\6\20\uffff\1\21\1\uffff\4\21\4\uffff\1\1\1\uffff\3\21\1\10\1\14\4\1",
             "",
-            "",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "\1\uffff",
             "\1\uffff",
             "\1\uffff",
@@ -17278,6 +17544,21 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	int _s = s;
             switch ( s ) {
                     case 0 : 
+                        int LA15_2 = input.LA(1);
+
+                         
+                        int index15_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_2);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
                         int LA15_3 = input.LA(1);
 
                          
@@ -17286,13 +17567,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index15_3);
                         if ( s>=0 ) return s;
                         break;
-                    case 1 : 
+                    case 2 : 
                         int LA15_4 = input.LA(1);
 
                          
@@ -17301,13 +17582,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index15_4);
                         if ( s>=0 ) return s;
                         break;
-                    case 2 : 
+                    case 3 : 
                         int LA15_5 = input.LA(1);
 
                          
@@ -17316,13 +17597,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index15_5);
                         if ( s>=0 ) return s;
                         break;
-                    case 3 : 
+                    case 4 : 
                         int LA15_6 = input.LA(1);
 
                          
@@ -17331,10 +17612,100 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index15_6);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 5 : 
+                        int LA15_7 = input.LA(1);
+
+                         
+                        int index15_7 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_7);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 6 : 
+                        int LA15_8 = input.LA(1);
+
+                         
+                        int index15_8 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_8);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 7 : 
+                        int LA15_9 = input.LA(1);
+
+                         
+                        int index15_9 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_9);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 8 : 
+                        int LA15_10 = input.LA(1);
+
+                         
+                        int index15_10 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_10);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 9 : 
+                        int LA15_11 = input.LA(1);
+
+                         
+                        int index15_11 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_11);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 10 : 
+                        int LA15_12 = input.LA(1);
+
+                         
+                        int index15_12 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred18_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index15_12);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -17345,14 +17716,20 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             throw nvae;
         }
     }
-    static final String dfa_14s = "\14\uffff";
-    static final String dfa_15s = "\1\5\1\uffff\11\0\1\uffff";
-    static final String dfa_16s = "\1\117\1\uffff\11\0\1\uffff";
-    static final String dfa_17s = "\1\uffff\1\1\11\uffff\1\2";
-    static final String dfa_18s = "\2\uffff\1\4\1\0\1\1\1\2\1\3\1\5\1\7\1\10\1\6\1\uffff}>";
+    static final String dfa_14s = "\22\uffff";
+    static final String dfa_15s = "\1\5\1\uffff\17\0\1\uffff";
+    static final String dfa_16s = "\1\121\1\uffff\17\0\1\uffff";
+    static final String dfa_17s = "\1\uffff\1\1\17\uffff\1\2";
+    static final String dfa_18s = "\2\uffff\1\5\1\0\1\1\1\2\1\13\1\6\1\7\1\14\1\10\1\15\1\16\1\11\1\3\1\4\1\12\1\uffff}>";
     static final String[] dfa_19s = {
-            "\1\4\1\uffff\1\3\1\5\21\uffff\1\2\21\uffff\1\6\32\uffff\1\1\4\uffff\1\7\1\10\1\11\1\12",
+            "\1\4\1\uffff\1\3\1\5\13\uffff\1\13\5\uffff\1\2\3\uffff\1\7\1\uffff\1\11\1\12\12\uffff\1\6\32\uffff\1\1\4\uffff\1\10\1\14\1\15\1\16\1\17\1\20",
             "",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "\1\uffff",
             "\1\uffff",
             "\1\uffff",
@@ -17401,7 +17778,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_3);
@@ -17416,7 +17793,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_4);
@@ -17431,28 +17808,43 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_5);
                         if ( s>=0 ) return s;
                         break;
                     case 3 : 
-                        int LA11_6 = input.LA(1);
+                        int LA11_14 = input.LA(1);
 
                          
-                        int index11_6 = input.index();
+                        int index11_14 = input.index();
                         input.rewind();
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
-                        input.seek(index11_6);
+                        input.seek(index11_14);
                         if ( s>=0 ) return s;
                         break;
                     case 4 : 
+                        int LA11_15 = input.LA(1);
+
+                         
+                        int index11_15 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_15);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 5 : 
                         int LA11_2 = input.LA(1);
 
                          
@@ -17461,13 +17853,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_2);
                         if ( s>=0 ) return s;
                         break;
-                    case 5 : 
+                    case 6 : 
                         int LA11_7 = input.LA(1);
 
                          
@@ -17476,25 +17868,10 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_7);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 6 : 
-                        int LA11_10 = input.LA(1);
-
-                         
-                        int index11_10 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
-
-                        else if ( (true) ) {s = 11;}
-
-                         
-                        input.seek(index11_10);
                         if ( s>=0 ) return s;
                         break;
                     case 7 : 
@@ -17506,13 +17883,73 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_8);
                         if ( s>=0 ) return s;
                         break;
                     case 8 : 
+                        int LA11_10 = input.LA(1);
+
+                         
+                        int index11_10 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_10);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 9 : 
+                        int LA11_13 = input.LA(1);
+
+                         
+                        int index11_13 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_13);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 10 : 
+                        int LA11_16 = input.LA(1);
+
+                         
+                        int index11_16 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_16);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 11 : 
+                        int LA11_6 = input.LA(1);
+
+                         
+                        int index11_6 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_6);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 12 : 
                         int LA11_9 = input.LA(1);
 
                          
@@ -17521,10 +17958,40 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index11_9);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 13 : 
+                        int LA11_11 = input.LA(1);
+
+                         
+                        int index11_11 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_11);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 14 : 
+                        int LA11_12 = input.LA(1);
+
+                         
+                        int index11_12 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index11_12);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -17536,25 +18003,25 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         }
     }
     static final String dfa_20s = "\16\uffff";
-    static final String dfa_21s = "\1\4\1\uffff\4\5\3\uffff\5\5";
-    static final String dfa_22s = "\1\117\1\uffff\4\110\3\uffff\1\54\4\110";
-    static final String dfa_23s = "\1\uffff\1\1\4\uffff\1\2\1\3\1\4\5\uffff";
+    static final String dfa_21s = "\14\5\2\uffff";
+    static final String dfa_22s = "\1\121\13\115\2\uffff";
+    static final String dfa_23s = "\14\uffff\1\1\1\2";
     static final String dfa_24s = "\16\uffff}>";
     static final String[] dfa_25s = {
-            "\1\6\1\3\1\6\1\2\1\4\7\uffff\1\6\1\uffff\1\6\11\uffff\2\6\1\10\1\7\1\6\1\uffff\1\6\2\uffff\1\6\1\1\5\uffff\1\5\20\uffff\1\6\1\uffff\4\6\6\uffff\3\6\4\1",
+            "\1\2\1\uffff\1\1\1\3\13\uffff\1\12\5\uffff\1\6\3\uffff\1\5\1\uffff\1\10\1\11\12\uffff\1\4\37\uffff\1\7\1\13\4\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\7\uffff\1\15\3\uffff\1\14\5\uffff\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
             "",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\6\uffff\1\6\3\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\6\uffff\1\6\3\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\6\uffff\1\6\3\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\6\uffff\1\6\3\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "",
-            "",
-            "",
-            "\1\13\1\uffff\1\12\1\14\43\uffff\1\15",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\12\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\12\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\12\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11",
-            "\1\1\1\uffff\2\1\5\uffff\1\6\1\uffff\1\6\12\uffff\1\6\20\uffff\1\1\2\uffff\20\6\4\uffff\2\6\3\uffff\1\11"
+            ""
     };
 
     static final short[] dfa_20 = DFA.unpackEncodedString(dfa_20s);
@@ -17564,11 +18031,11 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
     static final short[] dfa_24 = DFA.unpackEncodedString(dfa_24s);
     static final short[][] dfa_25 = unpackEncodedStringArray(dfa_25s);
 
-    class DFA24 extends DFA {
+    class DFA13 extends DFA {
 
-        public DFA24(BaseRecognizer recognizer) {
+        public DFA13(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 24;
+            this.decisionNumber = 13;
             this.eot = dfa_20;
             this.eof = dfa_20;
             this.min = dfa_21;
@@ -17578,78 +18045,291 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             this.transition = dfa_25;
         }
         public String getDescription() {
-            return "949:2: ( ( (lv_varDecl_0_0= ruleVariableDeclaration ) ) | ( (lv_exprStmt_1_0= ruleExpressionStatement ) ) | ( ( (lv_while_2_0= ruleWhile ) ) (otherlv_3= ';' )? ) | ( ( (lv_for_4_0= ruleFor ) ) (otherlv_5= ';' )? ) )";
+            return "663:4: ( (lv_type_3_0= ruleType ) )?";
         }
     }
-    static final String dfa_26s = "\1\4\4\16\1\uffff\1\5\1\uffff\4\16";
-    static final String dfa_27s = "\1\113\4\110\1\uffff\1\54\1\uffff\4\110";
-    static final String dfa_28s = "\5\uffff\1\2\1\uffff\1\1\4\uffff";
-    static final String dfa_29s = "\14\uffff}>";
-    static final String[] dfa_30s = {
-            "\1\5\1\2\1\5\1\1\1\3\7\uffff\1\5\1\uffff\1\5\11\uffff\2\5\4\uffff\1\5\2\uffff\1\5\6\uffff\1\4\20\uffff\1\5\1\uffff\4\5\6\uffff\3\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\6\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\6\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\6\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\6\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
+    static final String dfa_26s = "\43\uffff";
+    static final String dfa_27s = "\1\4\1\uffff\13\0\26\uffff";
+    static final String dfa_28s = "\1\121\1\uffff\13\0\26\uffff";
+    static final String dfa_29s = "\1\uffff\1\1\17\uffff\1\2\17\uffff\1\3\1\4";
+    static final String dfa_30s = "\2\uffff\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\26\uffff}>";
+    static final String[] dfa_31s = {
+            "\1\21\1\3\1\21\1\2\1\4\7\uffff\1\21\1\uffff\1\21\1\uffff\1\13\5\uffff\1\7\1\uffff\2\21\1\6\1\41\1\11\1\12\1\21\2\uffff\1\21\1\1\5\uffff\1\5\20\uffff\1\21\1\uffff\4\21\6\uffff\3\21\1\10\1\14\4\1",
             "",
-            "\1\11\1\uffff\1\10\1\12\43\uffff\1\13",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\5\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\5\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\5\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5",
-            "\1\5\1\uffff\1\5\6\uffff\1\7\3\uffff\1\5\23\uffff\20\5\4\uffff\2\5\3\uffff\1\5"
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
     };
-    static final char[] dfa_26 = DFA.unpackEncodedStringToUnsignedChars(dfa_26s);
+
+    static final short[] dfa_26 = DFA.unpackEncodedString(dfa_26s);
     static final char[] dfa_27 = DFA.unpackEncodedStringToUnsignedChars(dfa_27s);
-    static final short[] dfa_28 = DFA.unpackEncodedString(dfa_28s);
+    static final char[] dfa_28 = DFA.unpackEncodedStringToUnsignedChars(dfa_28s);
     static final short[] dfa_29 = DFA.unpackEncodedString(dfa_29s);
-    static final short[][] dfa_30 = unpackEncodedStringArray(dfa_30s);
+    static final short[] dfa_30 = DFA.unpackEncodedString(dfa_30s);
+    static final short[][] dfa_31 = unpackEncodedStringArray(dfa_31s);
 
-    class DFA26 extends DFA {
+    class DFA24 extends DFA {
 
-        public DFA26(BaseRecognizer recognizer) {
+        public DFA24(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 26;
-            this.eot = dfa_14;
-            this.eof = dfa_14;
-            this.min = dfa_26;
-            this.max = dfa_27;
-            this.accept = dfa_28;
-            this.special = dfa_29;
-            this.transition = dfa_30;
+            this.decisionNumber = 24;
+            this.eot = dfa_26;
+            this.eof = dfa_26;
+            this.min = dfa_27;
+            this.max = dfa_28;
+            this.accept = dfa_29;
+            this.special = dfa_30;
+            this.transition = dfa_31;
         }
         public String getDescription() {
-            return "1096:4: ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )?";
+            return "949:2: ( ( (lv_varDecl_0_0= ruleVariableDeclaration ) ) | ( (lv_exprStmt_1_0= ruleExpressionStatement ) ) | ( ( (lv_while_2_0= ruleWhile ) ) (otherlv_3= ';' )? ) | ( ( (lv_for_4_0= ruleFor ) ) (otherlv_5= ';' )? ) )";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 : 
+                        int LA24_2 = input.LA(1);
+
+                         
+                        int index24_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_2);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
+                        int LA24_3 = input.LA(1);
+
+                         
+                        int index24_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 2 : 
+                        int LA24_4 = input.LA(1);
+
+                         
+                        int index24_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_4);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 3 : 
+                        int LA24_5 = input.LA(1);
+
+                         
+                        int index24_5 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_5);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 4 : 
+                        int LA24_6 = input.LA(1);
+
+                         
+                        int index24_6 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                        else if ( (true) ) {s = 34;}
+
+                         
+                        input.seek(index24_6);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 5 : 
+                        int LA24_7 = input.LA(1);
+
+                         
+                        int index24_7 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_7);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 6 : 
+                        int LA24_8 = input.LA(1);
+
+                         
+                        int index24_8 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_8);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 7 : 
+                        int LA24_9 = input.LA(1);
+
+                         
+                        int index24_9 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_9);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 8 : 
+                        int LA24_10 = input.LA(1);
+
+                         
+                        int index24_10 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_10);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 9 : 
+                        int LA24_11 = input.LA(1);
+
+                         
+                        int index24_11 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_11);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 10 : 
+                        int LA24_12 = input.LA(1);
+
+                         
+                        int index24_12 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred25_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (synpred26_InternalVilBuildLanguage()) ) {s = 17;}
+
+                         
+                        input.seek(index24_12);
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 24, _s, input);
+            error(nvae);
+            throw nvae;
         }
     }
-    static final String dfa_31s = "\22\uffff";
-    static final String dfa_32s = "\2\uffff\4\1\10\uffff\4\1";
-    static final String dfa_33s = "\1\4\1\uffff\4\16\6\uffff\1\5\1\uffff\4\16";
-    static final String dfa_34s = "\1\113\1\uffff\4\110\6\uffff\1\54\1\uffff\4\110";
-    static final String dfa_35s = "\1\uffff\1\1\4\uffff\1\3\1\4\1\5\1\6\1\7\1\10\1\uffff\1\2\4\uffff";
-    static final String dfa_36s = "\22\uffff}>";
+    static final String dfa_32s = "\35\uffff";
+    static final String dfa_33s = "\1\4\7\uffff\1\0\24\uffff";
+    static final String dfa_34s = "\1\115\7\uffff\1\0\24\uffff";
+    static final String dfa_35s = "\1\uffff\1\1\32\uffff\1\2";
+    static final String dfa_36s = "\10\uffff\1\0\24\uffff}>";
     static final String[] dfa_37s = {
-            "\1\1\1\3\1\1\1\2\1\4\7\uffff\1\1\13\uffff\1\12\1\10\4\uffff\1\11\2\uffff\1\7\6\uffff\1\5\24\uffff\1\6\1\13\6\uffff\3\1",
-            "",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
+            "\5\1\7\uffff\1\1\1\uffff\1\1\1\uffff\1\1\5\uffff\1\1\1\uffff\3\1\1\uffff\1\10\2\1\2\uffff\1\1\6\uffff\1\1\20\uffff\1\1\1\uffff\4\1\6\uffff\5\1",
             "",
             "",
             "",
             "",
             "",
             "",
-            "\1\17\1\uffff\1\16\1\20\43\uffff\1\21",
             "",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14",
-            "\2\1\1\15\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\14"
+            "\1\uffff",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
     };
 
-    static final short[] dfa_31 = DFA.unpackEncodedString(dfa_31s);
     static final short[] dfa_32 = DFA.unpackEncodedString(dfa_32s);
     static final char[] dfa_33 = DFA.unpackEncodedStringToUnsignedChars(dfa_33s);
     static final char[] dfa_34 = DFA.unpackEncodedStringToUnsignedChars(dfa_34s);
@@ -17657,12 +18337,12 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
     static final short[] dfa_36 = DFA.unpackEncodedString(dfa_36s);
     static final short[][] dfa_37 = unpackEncodedStringArray(dfa_37s);
 
-    class DFA29 extends DFA {
+    class DFA28 extends DFA {
 
-        public DFA29(BaseRecognizer recognizer) {
+        public DFA28(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 29;
-            this.eot = dfa_31;
+            this.decisionNumber = 28;
+            this.eot = dfa_32;
             this.eof = dfa_32;
             this.min = dfa_33;
             this.max = dfa_34;
@@ -17671,16 +18351,208 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             this.transition = dfa_37;
         }
         public String getDescription() {
+            return "1094:2: ( ( ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )? ( (lv_expr_4_0= ruleExpression ) ) otherlv_5= ';' ) | ( ( (lv_alt_6_0= ruleAlternative ) ) (otherlv_7= ';' )? ) )";
+        }
+        public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
+            TokenStream input = (TokenStream)_input;
+        	int _s = s;
+            switch ( s ) {
+                    case 0 : 
+                        int LA28_8 = input.LA(1);
+
+                         
+                        int index28_8 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred32_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 28;}
+
+                         
+                        input.seek(index28_8);
+                        if ( s>=0 ) return s;
+                        break;
+            }
+            if (state.backtracking>0) {state.failed=true; return -1;}
+            NoViableAltException nvae =
+                new NoViableAltException(getDescription(), 28, _s, input);
+            error(nvae);
+            throw nvae;
+        }
+    }
+    static final String dfa_38s = "\32\uffff";
+    static final String dfa_39s = "\1\4\13\16\1\uffff\1\5\1\uffff\13\16";
+    static final String dfa_40s = "\1\115\13\110\1\uffff\1\115\1\uffff\13\110";
+    static final String dfa_41s = "\14\uffff\1\2\1\uffff\1\1\13\uffff";
+    static final String dfa_42s = "\32\uffff}>";
+    static final String[] dfa_43s = {
+            "\1\14\1\2\1\14\1\1\1\3\7\uffff\1\14\1\uffff\1\14\1\uffff\1\12\5\uffff\1\6\1\uffff\2\14\1\5\1\uffff\1\10\1\11\1\14\2\uffff\1\14\6\uffff\1\4\20\uffff\1\14\1\uffff\4\14\6\uffff\3\14\1\7\1\13",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\15\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "",
+            "\1\20\1\uffff\1\17\1\21\13\uffff\1\30\5\uffff\1\24\3\uffff\1\23\1\uffff\1\26\1\27\12\uffff\1\22\37\uffff\1\25\1\31",
+            "",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\1\14\1\uffff\1\14\6\uffff\1\16\3\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14"
+    };
+
+    static final short[] dfa_38 = DFA.unpackEncodedString(dfa_38s);
+    static final char[] dfa_39 = DFA.unpackEncodedStringToUnsignedChars(dfa_39s);
+    static final char[] dfa_40 = DFA.unpackEncodedStringToUnsignedChars(dfa_40s);
+    static final short[] dfa_41 = DFA.unpackEncodedString(dfa_41s);
+    static final short[] dfa_42 = DFA.unpackEncodedString(dfa_42s);
+    static final short[][] dfa_43 = unpackEncodedStringArray(dfa_43s);
+
+    class DFA26 extends DFA {
+
+        public DFA26(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 26;
+            this.eot = dfa_38;
+            this.eof = dfa_38;
+            this.min = dfa_39;
+            this.max = dfa_40;
+            this.accept = dfa_41;
+            this.special = dfa_42;
+            this.transition = dfa_43;
+        }
+        public String getDescription() {
+            return "1096:4: ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )?";
+        }
+    }
+    static final String dfa_44s = "\40\uffff";
+    static final String dfa_45s = "\2\uffff\13\1\10\uffff\13\1";
+    static final String dfa_46s = "\1\4\1\uffff\13\16\6\uffff\1\5\1\uffff\13\16";
+    static final String dfa_47s = "\1\115\1\uffff\13\110\6\uffff\1\115\1\uffff\13\110";
+    static final String dfa_48s = "\1\uffff\1\1\13\uffff\1\3\1\4\1\5\1\6\1\7\1\10\1\uffff\1\2\13\uffff";
+    static final String dfa_49s = "\40\uffff}>";
+    static final String[] dfa_50s = {
+            "\1\1\1\3\1\1\1\2\1\4\7\uffff\1\1\3\uffff\1\13\5\uffff\1\7\1\uffff\1\21\1\17\1\6\1\uffff\1\11\1\12\1\20\2\uffff\1\16\6\uffff\1\5\24\uffff\1\15\1\22\6\uffff\3\1\1\10\1\14",
+            "",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\26\1\uffff\1\25\1\27\13\uffff\1\36\5\uffff\1\32\3\uffff\1\31\1\uffff\1\34\1\35\12\uffff\1\30\37\uffff\1\33\1\37",
+            "",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23",
+            "\2\1\1\24\3\1\4\uffff\2\1\1\uffff\1\1\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1\1\uffff\1\23"
+    };
+
+    static final short[] dfa_44 = DFA.unpackEncodedString(dfa_44s);
+    static final short[] dfa_45 = DFA.unpackEncodedString(dfa_45s);
+    static final char[] dfa_46 = DFA.unpackEncodedStringToUnsignedChars(dfa_46s);
+    static final char[] dfa_47 = DFA.unpackEncodedStringToUnsignedChars(dfa_47s);
+    static final short[] dfa_48 = DFA.unpackEncodedString(dfa_48s);
+    static final short[] dfa_49 = DFA.unpackEncodedString(dfa_49s);
+    static final short[][] dfa_50 = unpackEncodedStringArray(dfa_50s);
+
+    class DFA29 extends DFA {
+
+        public DFA29(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 29;
+            this.eot = dfa_44;
+            this.eof = dfa_45;
+            this.min = dfa_46;
+            this.max = dfa_47;
+            this.accept = dfa_48;
+            this.special = dfa_49;
+            this.transition = dfa_50;
+        }
+        public String getDescription() {
             return "1216:2: ( ( (lv_otherEx_0_0= ruleExpressionOrQualifiedExecution ) ) | ( (lv_unqEx_1_0= ruleUnqualifiedExecution ) ) | ( (lv_superEx_2_0= ruleSuperExecution ) ) | ( (lv_sysEx_3_0= ruleSystemExecution ) ) | ( (lv_map_4_0= ruleMap ) ) | ( (lv_join_5_0= ruleJoin ) ) | ( (lv_instantiate_6_0= ruleInstantiate ) ) | ( (lv_newEx_7_0= ruleConstructorExecution ) ) )";
         }
     }
-    static final String dfa_38s = "\27\uffff";
-    static final String dfa_39s = "\1\4\23\uffff\1\0\2\uffff";
-    static final String dfa_40s = "\1\113\23\uffff\1\0\2\uffff";
-    static final String dfa_41s = "\1\uffff\1\1\24\uffff\1\2";
-    static final String dfa_42s = "\24\uffff\1\0\2\uffff}>";
-    static final String[] dfa_43s = {
-            "\5\1\7\uffff\1\1\1\uffff\1\24\11\uffff\2\1\2\uffff\1\1\1\uffff\1\1\2\uffff\1\1\6\uffff\1\1\20\uffff\1\1\1\uffff\4\1\6\uffff\3\1",
+    static final String dfa_51s = "\1\uffff\13\15\2\uffff";
+    static final String[] dfa_52s = {
+            "\1\2\1\uffff\1\1\1\3\13\uffff\1\12\5\uffff\1\6\3\uffff\1\5\1\uffff\1\10\1\11\12\uffff\1\4\37\uffff\1\7\1\13\4\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\13\uffff\1\14\2\uffff\3\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\33\uffff\1\14\3\uffff\2\14",
+            "",
+            ""
+    };
+    static final short[] dfa_51 = DFA.unpackEncodedString(dfa_51s);
+    static final short[][] dfa_52 = unpackEncodedStringArray(dfa_52s);
+
+    class DFA33 extends DFA {
+
+        public DFA33(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 33;
+            this.eot = dfa_20;
+            this.eof = dfa_51;
+            this.min = dfa_21;
+            this.max = dfa_22;
+            this.accept = dfa_23;
+            this.special = dfa_24;
+            this.transition = dfa_52;
+        }
+        public String getDescription() {
+            return "1504:3: ( (lv_type_0_0= ruleType ) )?";
+        }
+    }
+    static final String dfa_53s = "\1\4\32\uffff\1\0\1\uffff";
+    static final String dfa_54s = "\1\115\32\uffff\1\0\1\uffff";
+    static final String dfa_55s = "\33\uffff\1\0\1\uffff}>";
+    static final String[] dfa_56s = {
+            "\5\1\7\uffff\1\1\1\uffff\1\33\1\uffff\1\1\5\uffff\1\1\1\uffff\3\1\1\uffff\3\1\2\uffff\1\1\6\uffff\1\1\20\uffff\1\1\1\uffff\4\1\6\uffff\5\1",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "",
             "",
             "",
@@ -17701,29 +18573,25 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             "",
             "",
             "\1\uffff",
-            "",
             ""
     };
-
-    static final short[] dfa_38 = DFA.unpackEncodedString(dfa_38s);
-    static final char[] dfa_39 = DFA.unpackEncodedStringToUnsignedChars(dfa_39s);
-    static final char[] dfa_40 = DFA.unpackEncodedStringToUnsignedChars(dfa_40s);
-    static final short[] dfa_41 = DFA.unpackEncodedString(dfa_41s);
-    static final short[] dfa_42 = DFA.unpackEncodedString(dfa_42s);
-    static final short[][] dfa_43 = unpackEncodedStringArray(dfa_43s);
+    static final char[] dfa_53 = DFA.unpackEncodedStringToUnsignedChars(dfa_53s);
+    static final char[] dfa_54 = DFA.unpackEncodedStringToUnsignedChars(dfa_54s);
+    static final short[] dfa_55 = DFA.unpackEncodedString(dfa_55s);
+    static final short[][] dfa_56 = unpackEncodedStringArray(dfa_56s);
 
     class DFA39 extends DFA {
 
         public DFA39(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
             this.decisionNumber = 39;
-            this.eot = dfa_38;
-            this.eof = dfa_38;
-            this.min = dfa_39;
-            this.max = dfa_40;
-            this.accept = dfa_41;
-            this.special = dfa_42;
-            this.transition = dfa_43;
+            this.eot = dfa_32;
+            this.eof = dfa_32;
+            this.min = dfa_53;
+            this.max = dfa_54;
+            this.accept = dfa_35;
+            this.special = dfa_55;
+            this.transition = dfa_56;
         }
         public String getDescription() {
             return "2006:2: ( ( (lv_exStmt_0_0= ruleExpressionStatement ) ) | ( (lv_block_1_0= ruleRuleElementBlock ) ) )";
@@ -17733,18 +18601,18 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA39_20 = input.LA(1);
+                        int LA39_27 = input.LA(1);
 
                          
-                        int index39_20 = input.index();
+                        int index39_27 = input.index();
                         input.rewind();
                         s = -1;
                         if ( (synpred51_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 22;}
+                        else if ( (true) ) {s = 28;}
 
                          
-                        input.seek(index39_20);
+                        input.seek(index39_27);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -17755,13 +18623,55 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             throw nvae;
         }
     }
-    static final String dfa_44s = "\32\uffff";
-    static final String dfa_45s = "\1\4\4\0\25\uffff";
-    static final String dfa_46s = "\1\117\4\0\25\uffff";
-    static final String dfa_47s = "\5\uffff\1\1\3\uffff\1\2\20\uffff";
-    static final String dfa_48s = "\1\uffff\1\0\1\1\1\2\1\3\25\uffff}>";
-    static final String[] dfa_49s = {
-            "\1\11\1\2\1\11\1\1\1\3\7\uffff\3\11\11\uffff\2\11\4\uffff\1\11\2\uffff\1\11\6\uffff\1\4\20\uffff\1\11\1\uffff\4\11\6\uffff\3\11\4\5",
+    static final String[] dfa_57s = {
+            "\1\2\1\uffff\1\1\1\3\13\uffff\1\12\5\uffff\1\6\3\uffff\1\5\1\uffff\1\10\1\11\12\uffff\1\4\37\uffff\1\7\1\13\4\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "\1\14\1\uffff\2\14\5\uffff\1\15\5\uffff\1\14\2\uffff\1\15\1\uffff\1\15\1\14\3\uffff\1\14\1\uffff\2\14\12\uffff\1\14\31\uffff\1\15\1\uffff\1\14\3\uffff\2\14",
+            "",
+            ""
+    };
+    static final short[][] dfa_57 = unpackEncodedStringArray(dfa_57s);
+
+    class DFA78 extends DFA {
+
+        public DFA78(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 78;
+            this.eot = dfa_20;
+            this.eof = dfa_51;
+            this.min = dfa_21;
+            this.max = dfa_22;
+            this.accept = dfa_23;
+            this.special = dfa_24;
+            this.transition = dfa_57;
+        }
+        public String getDescription() {
+            return "4410:3: ( (lv_type_0_0= ruleType ) )?";
+        }
+    }
+    static final String dfa_58s = "\41\uffff";
+    static final String dfa_59s = "\1\4\13\0\25\uffff";
+    static final String dfa_60s = "\1\121\13\0\25\uffff";
+    static final String dfa_61s = "\14\uffff\1\1\3\uffff\1\2\20\uffff";
+    static final String dfa_62s = "\1\uffff\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\25\uffff}>";
+    static final String[] dfa_63s = {
+            "\1\20\1\2\1\20\1\1\1\3\7\uffff\3\20\1\uffff\1\12\5\uffff\1\6\1\uffff\2\20\1\5\1\uffff\1\10\1\11\1\20\2\uffff\1\20\6\uffff\1\4\20\uffff\1\20\1\uffff\4\20\6\uffff\3\20\1\7\1\13\4\14",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
+            "\1\uffff",
             "\1\uffff",
             "\1\uffff",
             "\1\uffff",
@@ -17789,25 +18699,25 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             ""
     };
 
-    static final short[] dfa_44 = DFA.unpackEncodedString(dfa_44s);
-    static final char[] dfa_45 = DFA.unpackEncodedStringToUnsignedChars(dfa_45s);
-    static final char[] dfa_46 = DFA.unpackEncodedStringToUnsignedChars(dfa_46s);
-    static final short[] dfa_47 = DFA.unpackEncodedString(dfa_47s);
-    static final short[] dfa_48 = DFA.unpackEncodedString(dfa_48s);
-    static final short[][] dfa_49 = unpackEncodedStringArray(dfa_49s);
+    static final short[] dfa_58 = DFA.unpackEncodedString(dfa_58s);
+    static final char[] dfa_59 = DFA.unpackEncodedStringToUnsignedChars(dfa_59s);
+    static final char[] dfa_60 = DFA.unpackEncodedStringToUnsignedChars(dfa_60s);
+    static final short[] dfa_61 = DFA.unpackEncodedString(dfa_61s);
+    static final short[] dfa_62 = DFA.unpackEncodedString(dfa_62s);
+    static final short[][] dfa_63 = unpackEncodedStringArray(dfa_63s);
 
     class DFA82 extends DFA {
 
         public DFA82(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
             this.decisionNumber = 82;
-            this.eot = dfa_44;
-            this.eof = dfa_44;
-            this.min = dfa_45;
-            this.max = dfa_46;
-            this.accept = dfa_47;
-            this.special = dfa_48;
-            this.transition = dfa_49;
+            this.eot = dfa_58;
+            this.eof = dfa_58;
+            this.min = dfa_59;
+            this.max = dfa_60;
+            this.accept = dfa_61;
+            this.special = dfa_62;
+            this.transition = dfa_63;
         }
         public String getDescription() {
             return "4632:3: ( (lv_decl_2_0= ruleDeclarator ) )?";
@@ -17823,9 +18733,9 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         int index82_1 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
 
-                        else if ( (true) ) {s = 9;}
+                        else if ( (true) ) {s = 16;}
 
                          
                         input.seek(index82_1);
@@ -17838,9 +18748,9 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         int index82_2 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
 
-                        else if ( (true) ) {s = 9;}
+                        else if ( (true) ) {s = 16;}
 
                          
                         input.seek(index82_2);
@@ -17853,9 +18763,9 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         int index82_3 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
 
-                        else if ( (true) ) {s = 9;}
+                        else if ( (true) ) {s = 16;}
 
                          
                         input.seek(index82_3);
@@ -17868,12 +18778,117 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         int index82_4 = input.index();
                         input.rewind();
                         s = -1;
-                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 5;}
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
 
-                        else if ( (true) ) {s = 9;}
+                        else if ( (true) ) {s = 16;}
 
                          
                         input.seek(index82_4);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 4 : 
+                        int LA82_5 = input.LA(1);
+
+                         
+                        int index82_5 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_5);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 5 : 
+                        int LA82_6 = input.LA(1);
+
+                         
+                        int index82_6 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_6);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 6 : 
+                        int LA82_7 = input.LA(1);
+
+                         
+                        int index82_7 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_7);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 7 : 
+                        int LA82_8 = input.LA(1);
+
+                         
+                        int index82_8 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_8);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 8 : 
+                        int LA82_9 = input.LA(1);
+
+                         
+                        int index82_9 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_9);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 9 : 
+                        int LA82_10 = input.LA(1);
+
+                         
+                        int index82_10 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_10);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 10 : 
+                        int LA82_11 = input.LA(1);
+
+                         
+                        int index82_11 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred101_InternalVilBuildLanguage()) ) {s = 12;}
+
+                        else if ( (true) ) {s = 16;}
+
+                         
+                        input.seek(index82_11);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -17884,8 +18899,100 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             throw nvae;
         }
     }
-    static final String dfa_50s = "\2\uffff\1\5\1\0\1\1\1\2\1\3\1\4\1\7\1\10\1\6\1\uffff}>";
-    static final short[] dfa_50 = DFA.unpackEncodedString(dfa_50s);
+    static final String dfa_64s = "\1\uffff\13\14\2\uffff";
+    static final String dfa_65s = "\1\4\13\20\2\uffff";
+    static final String dfa_66s = "\1\115\13\110\2\uffff";
+    static final String dfa_67s = "\14\uffff\1\2\1\1";
+    static final String[] dfa_68s = {
+            "\1\14\1\2\1\14\1\1\1\3\7\uffff\1\14\1\uffff\1\14\1\uffff\1\12\5\uffff\1\6\1\uffff\2\14\1\5\1\uffff\1\10\1\11\1\14\2\uffff\1\14\6\uffff\1\4\20\uffff\1\14\1\uffff\4\14\6\uffff\3\14\1\7\1\13",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "\2\14\5\uffff\1\15\1\uffff\1\14\1\uffff\1\14\23\uffff\20\14\4\uffff\2\14\3\uffff\1\14",
+            "",
+            ""
+    };
+    static final short[] dfa_64 = DFA.unpackEncodedString(dfa_64s);
+    static final char[] dfa_65 = DFA.unpackEncodedStringToUnsignedChars(dfa_65s);
+    static final char[] dfa_66 = DFA.unpackEncodedStringToUnsignedChars(dfa_66s);
+    static final short[] dfa_67 = DFA.unpackEncodedString(dfa_67s);
+    static final short[][] dfa_68 = unpackEncodedStringArray(dfa_68s);
+
+    class DFA85 extends DFA {
+
+        public DFA85(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 85;
+            this.eot = dfa_20;
+            this.eof = dfa_64;
+            this.min = dfa_65;
+            this.max = dfa_66;
+            this.accept = dfa_67;
+            this.special = dfa_24;
+            this.transition = dfa_68;
+        }
+        public String getDescription() {
+            return "4756:3: ( ( (lv_name_0_0= ruleIdentifier ) ) otherlv_1= '=' )?";
+        }
+    }
+    static final String dfa_69s = "\17\uffff";
+    static final String dfa_70s = "\1\1\2\uffff\13\16\1\uffff";
+    static final String dfa_71s = "\1\16\1\uffff\1\5\13\16\1\uffff";
+    static final String dfa_72s = "\1\106\1\uffff\1\115\13\110\1\uffff";
+    static final String dfa_73s = "\1\uffff\1\2\14\uffff\1\1";
+    static final String dfa_74s = "\17\uffff}>";
+    static final String[] dfa_75s = {
+            "\2\1\1\uffff\3\1\4\uffff\2\1\1\uffff\1\2\17\uffff\1\1\3\uffff\20\1\4\uffff\4\1",
+            "",
+            "\1\4\1\uffff\1\3\1\5\13\uffff\1\14\5\uffff\1\10\3\uffff\1\7\1\uffff\1\12\1\13\12\uffff\1\6\37\uffff\1\11\1\15",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            "\2\16\1\1\3\16\4\uffff\2\16\1\uffff\1\16\17\uffff\1\16\3\uffff\20\16\4\uffff\4\16\1\uffff\1\1",
+            ""
+    };
+
+    static final short[] dfa_69 = DFA.unpackEncodedString(dfa_69s);
+    static final short[] dfa_70 = DFA.unpackEncodedString(dfa_70s);
+    static final char[] dfa_71 = DFA.unpackEncodedStringToUnsignedChars(dfa_71s);
+    static final char[] dfa_72 = DFA.unpackEncodedStringToUnsignedChars(dfa_72s);
+    static final short[] dfa_73 = DFA.unpackEncodedString(dfa_73s);
+    static final short[] dfa_74 = DFA.unpackEncodedString(dfa_74s);
+    static final short[][] dfa_75 = unpackEncodedStringArray(dfa_75s);
+
+    class DFA87 extends DFA {
+
+        public DFA87(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 87;
+            this.eot = dfa_69;
+            this.eof = dfa_70;
+            this.min = dfa_71;
+            this.max = dfa_72;
+            this.accept = dfa_73;
+            this.special = dfa_74;
+            this.transition = dfa_75;
+        }
+        public String getDescription() {
+            return "()* loopback of 4911:3: ( ( (lv_qname_1_0= '.' ) ) ( (lv_qname_2_0= ruleIdentifier ) ) )*";
+        }
+    }
+    static final String dfa_76s = "\2\uffff\1\16\1\10\1\11\1\12\1\2\1\13\1\14\1\3\1\15\1\4\1\5\1\6\1\0\1\1\1\7\1\uffff}>";
+    static final short[] dfa_76 = DFA.unpackEncodedString(dfa_76s);
 
     class DFA97 extends DFA {
 
@@ -17897,7 +19004,7 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
             this.min = dfa_15;
             this.max = dfa_16;
             this.accept = dfa_17;
-            this.special = dfa_50;
+            this.special = dfa_76;
             this.transition = dfa_19;
         }
         public String getDescription() {
@@ -17908,51 +19015,36 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
         	int _s = s;
             switch ( s ) {
                     case 0 : 
-                        int LA97_3 = input.LA(1);
+                        int LA97_14 = input.LA(1);
 
                          
-                        int index97_3 = input.index();
+                        int index97_14 = input.index();
                         input.rewind();
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
-                        input.seek(index97_3);
+                        input.seek(index97_14);
                         if ( s>=0 ) return s;
                         break;
                     case 1 : 
-                        int LA97_4 = input.LA(1);
+                        int LA97_15 = input.LA(1);
 
                          
-                        int index97_4 = input.index();
+                        int index97_15 = input.index();
                         input.rewind();
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
-                        input.seek(index97_4);
+                        input.seek(index97_15);
                         if ( s>=0 ) return s;
                         break;
                     case 2 : 
-                        int LA97_5 = input.LA(1);
-
-                         
-                        int index97_5 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
-
-                        else if ( (true) ) {s = 11;}
-
-                         
-                        input.seek(index97_5);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 3 : 
                         int LA97_6 = input.LA(1);
 
                          
@@ -17961,73 +19053,13 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index97_6);
                         if ( s>=0 ) return s;
                         break;
-                    case 4 : 
-                        int LA97_7 = input.LA(1);
-
-                         
-                        int index97_7 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
-
-                        else if ( (true) ) {s = 11;}
-
-                         
-                        input.seek(index97_7);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 5 : 
-                        int LA97_2 = input.LA(1);
-
-                         
-                        int index97_2 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
-
-                        else if ( (true) ) {s = 11;}
-
-                         
-                        input.seek(index97_2);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 6 : 
-                        int LA97_10 = input.LA(1);
-
-                         
-                        int index97_10 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
-
-                        else if ( (true) ) {s = 11;}
-
-                         
-                        input.seek(index97_10);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 7 : 
-                        int LA97_8 = input.LA(1);
-
-                         
-                        int index97_8 = input.index();
-                        input.rewind();
-                        s = -1;
-                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
-
-                        else if ( (true) ) {s = 11;}
-
-                         
-                        input.seek(index97_8);
-                        if ( s>=0 ) return s;
-                        break;
-                    case 8 : 
+                    case 3 : 
                         int LA97_9 = input.LA(1);
 
                          
@@ -18036,10 +19068,175 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                         s = -1;
                         if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
 
-                        else if ( (true) ) {s = 11;}
+                        else if ( (true) ) {s = 17;}
 
                          
                         input.seek(index97_9);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 4 : 
+                        int LA97_11 = input.LA(1);
+
+                         
+                        int index97_11 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_11);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 5 : 
+                        int LA97_12 = input.LA(1);
+
+                         
+                        int index97_12 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_12);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 6 : 
+                        int LA97_13 = input.LA(1);
+
+                         
+                        int index97_13 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_13);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 7 : 
+                        int LA97_16 = input.LA(1);
+
+                         
+                        int index97_16 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_16);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 8 : 
+                        int LA97_3 = input.LA(1);
+
+                         
+                        int index97_3 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_3);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 9 : 
+                        int LA97_4 = input.LA(1);
+
+                         
+                        int index97_4 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_4);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 10 : 
+                        int LA97_5 = input.LA(1);
+
+                         
+                        int index97_5 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_5);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 11 : 
+                        int LA97_7 = input.LA(1);
+
+                         
+                        int index97_7 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_7);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 12 : 
+                        int LA97_8 = input.LA(1);
+
+                         
+                        int index97_8 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_8);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 13 : 
+                        int LA97_10 = input.LA(1);
+
+                         
+                        int index97_10 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_10);
+                        if ( s>=0 ) return s;
+                        break;
+                    case 14 : 
+                        int LA97_2 = input.LA(1);
+
+                         
+                        int index97_2 = input.index();
+                        input.rewind();
+                        s = -1;
+                        if ( (synpred14_InternalVilBuildLanguage()) ) {s = 1;}
+
+                        else if ( (true) ) {s = 17;}
+
+                         
+                        input.seek(index97_2);
                         if ( s>=0 ) return s;
                         break;
             }
@@ -18048,6 +19245,42 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
                 new NoViableAltException(getDescription(), 97, _s, input);
             error(nvae);
             throw nvae;
+        }
+    }
+
+    class DFA99 extends DFA {
+
+        public DFA99(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 99;
+            this.eot = dfa_20;
+            this.eof = dfa_20;
+            this.min = dfa_21;
+            this.max = dfa_22;
+            this.accept = dfa_23;
+            this.special = dfa_24;
+            this.transition = dfa_25;
+        }
+        public String getDescription() {
+            return "663:4: ( (lv_type_3_0= ruleType ) )?";
+        }
+    }
+
+    class DFA105 extends DFA {
+
+        public DFA105(BaseRecognizer recognizer) {
+            this.recognizer = recognizer;
+            this.decisionNumber = 105;
+            this.eot = dfa_38;
+            this.eof = dfa_38;
+            this.min = dfa_39;
+            this.max = dfa_40;
+            this.accept = dfa_41;
+            this.special = dfa_42;
+            this.transition = dfa_43;
+        }
+        public String getDescription() {
+            return "1096:4: ( ( (lv_var_0_0= ruleIdentifier ) ) (otherlv_1= '.' ( (lv_field_2_0= ruleIdentifier ) ) )? otherlv_3= '=' )?";
         }
     }
  
@@ -18061,60 +19294,58 @@ public class InternalVilBuildLanguageParser extends AbstractInternalAntlrParser 
     public static final BitSet FOLLOW_7 = new BitSet(new long[]{0x0000000800000000L});
     public static final BitSet FOLLOW_8 = new BitSet(new long[]{0x0000000000004000L});
     public static final BitSet FOLLOW_9 = new BitSet(new long[]{0x0000080000008000L});
-    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x00001000000001A0L});
+    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x00001003441001A0L,0x0000000000003000L});
     public static final BitSet FOLLOW_11 = new BitSet(new long[]{0x0000000000010000L});
-    public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x00001000000201A0L,0x000000000000F000L});
+    public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x00001003441201A0L,0x000000000003F000L});
     public static final BitSet FOLLOW_13 = new BitSet(new long[]{0x0000000000020000L});
     public static final BitSet FOLLOW_14 = new BitSet(new long[]{0x0000000000140000L});
     public static final BitSet FOLLOW_15 = new BitSet(new long[]{0x0000000000040000L});
-    public static final BitSet FOLLOW_16 = new BitSet(new long[]{0xA00015E4352D01F0L,0x000000000000FE87L});
+    public static final BitSet FOLLOW_16 = new BitSet(new long[]{0xA00015E7753D01F0L,0x000000000003FE87L});
     public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0000000000080000L});
     public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000000000004002L});
     public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000000000400000L});
-    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0xA00015E4350501F2L,0x000000000000FE87L});
-    public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x00001000040001A0L,0x000000000000F000L});
-    public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x00001000000001A0L,0x000000000000F000L});
-    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0xA00015E4350501F0L,0x000000000000FE87L});
-    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x0000000001000000L});
-    public static final BitSet FOLLOW_26 = new BitSet(new long[]{0xA0001024300101F2L,0x0000000000000E07L});
-    public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000002000002L});
-    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0xA0001024300101F0L,0x0000000000000E07L});
-    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0xA0001065F00D01F0L,0x000000000000FE07L});
-    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x0000000008800000L});
-    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0xA0001024300501F0L,0x0000000000000E07L});
-    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x00001000000001B0L});
-    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0xA0001024300701F0L,0x0000000000000E07L});
-    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x0000000800000002L});
-    public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0000000003800000L});
-    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0xA00015E5350501F0L,0x000000000000FE87L});
-    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000200000002L});
-    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x00001010000001A0L});
-    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0000000002000000L});
-    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x0000000008000002L,0x0000000000000018L});
-    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x0000000000804000L});
-    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000020000040000L});
-    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x00001040000801A0L,0x000000000000F000L});
-    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000800002L});
-    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000020L});
-    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x0000800800004000L});
-    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x0000000800004000L});
-    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x001F000000000002L});
-    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x00E0000000000002L});
-    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x0F00000000000002L});
-    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x3000000000000002L});
-    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x4000800000000002L});
-    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000008000000L});
-    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
-    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0000000000004000L,0x0000000000000040L});
-    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
-    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0xA0001024300701F0L,0x000000000000FE07L});
-    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000100L});
-    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000008000002L});
-    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x00001000000101A0L,0x000000000000F000L});
-    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000002020000L});
-    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0xA0001024300D01F0L,0x0000000000000E07L});
-    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0000000002080000L});
+    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0xA00015E7751501F2L,0x000000000003FE87L});
+    public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x00001003441001A0L,0x000000000003F000L});
+    public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0xA00015E7751501F0L,0x000000000003FE87L});
+    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000000001000000L});
+    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0xA0001027741101F2L,0x0000000000003E07L});
+    public static final BitSet FOLLOW_26 = new BitSet(new long[]{0x0000000002000002L});
+    public static final BitSet FOLLOW_27 = new BitSet(new long[]{0xA0001027741101F0L,0x0000000000003E07L});
+    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0xA0001067F41D01F0L,0x000000000003FE07L});
+    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000008800000L});
+    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0xA0001027741501F0L,0x0000000000003E07L});
+    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x00001003441001B0L,0x0000000000003000L});
+    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0xA0001027741701F0L,0x0000000000003E07L});
+    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x0000000800000002L});
+    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x0000000003800000L});
+    public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0000000200000002L});
+    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x00001013441001A0L,0x0000000000003000L});
+    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000002000000L});
+    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000008000002L,0x0000000000000018L});
+    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0000000000804000L});
+    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x0000010000000000L});
+    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x0000020000040000L});
+    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x00001043441801A0L,0x000000000003F000L});
+    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000000000800002L});
+    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000020L});
+    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000800800004000L});
+    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000800004000L});
+    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x001F000000000002L});
+    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x00E0000000000002L});
+    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0F00000000000002L});
+    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x3000000000000002L});
+    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x4000800000000002L});
+    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0000000008000000L});
+    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000020L});
+    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000000004000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000080L});
+    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0xA0001027741701F0L,0x000000000003FE07L});
+    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000100L});
+    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0000000008000002L});
+    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x00001003441101A0L,0x000000000003F000L});
+    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000002020000L});
+    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0xA0001027741D01F0L,0x0000000000003E07L});
+    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000002080000L});
 
 }

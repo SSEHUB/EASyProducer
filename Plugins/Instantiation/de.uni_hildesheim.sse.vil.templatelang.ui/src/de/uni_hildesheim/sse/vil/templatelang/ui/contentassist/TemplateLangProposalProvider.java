@@ -243,7 +243,7 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
     
     @Override
     public void completeVariableDeclaration_Expression(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeVariableDeclaration_Expression");
+        debug(">completeVariableDeclaration_Expression");
         // Propose all operations (as we do not know what the user wants to define)
         proposeOperations(model, assignment, context, acceptor, true);
         /*
@@ -252,15 +252,17 @@ public class TemplateLangProposalProvider extends AbstractTemplateLangProposalPr
          *  variables and parameters of these parent-elements.
          */
         proposeParentParamsVars(model, assignment, context, acceptor, true);
+        debug("<completeVariableDeclaration_Expression");
     }
     
 
     @Override
     public void complete_VilDef(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("complete_VilDef");
+        debug(">complete_VilDef");
         String proposalString = "<DefName>() {\n\n    }";
         acceptor.accept(createCompletionProposal(proposalString, new StyledString("Def"),
             imageHelper.getImage(Images.NAME_DEF), 700, context.getPrefix(), context));
+        debug("<complete_VilDef");
     }
 
     @Override

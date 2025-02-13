@@ -42,6 +42,23 @@ public interface ITracer extends net.ssehub.easy.instantiation.core.model.common
     public void visitedDef(Def def, RuntimeEnvironment<?, ?> environment, Object result);
     
     /**
+     * Starts visiting a builder block.
+     * 
+     * @param ex the expression
+     * @param environment the runtime environment
+     */
+    public void visitBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment);
+    
+    /**
+     * Ends visiting a builder block.
+     * 
+     * @param ex the expression
+     * @param environment the runtime environment
+     * @param result the execution result
+     */
+    public void visitedBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment, Object result);
+    
+    /**
      * A switch statement was visited.
      * 
      * @param select the select value

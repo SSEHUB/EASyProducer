@@ -1,0 +1,9 @@
+func2 10
+build 10
+func2 15
+build 15
+func2 20
+build 20
+func3 25
+func2 func3 25
+build 25

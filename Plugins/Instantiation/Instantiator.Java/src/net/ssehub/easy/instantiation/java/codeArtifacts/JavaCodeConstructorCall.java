@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a constructor call.
@@ -88,36 +89,43 @@ public class JavaCodeConstructorCall extends JavaCodeMethodCall {
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeConstructorCall addArgument(JavaCodeExpression arg) {
         return (JavaCodeConstructorCall) super.addArgument(arg);
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeConstructorCall addArgument(JavaCodeParameterSpecification param) {
         return (JavaCodeConstructorCall) super.addArgument(param);
     }
     
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeConstructorCall addArgument(Object arg) {
         return (JavaCodeConstructorCall) super.addArgument(arg);
     }
 
     @Override
+    @OperationMeta(name = {"addStringArgument", "stringArg"})
     public JavaCodeConstructorCall addStringArgument(String val) {
         return (JavaCodeConstructorCall) super.addStringArgument(val);
     }
 
     @Override
+    @OperationMeta(name = {"addClassArgument", "classArg"})
     public JavaCodeConstructorCall addClassArgument(String cls) {
         return (JavaCodeConstructorCall) super.addClassArgument(cls);
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeConstructorCall addArgument(String arg) {
         return (JavaCodeConstructorCall) super.addArgument(arg);
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(String methodName, JavaCodeImportScope scope) {
         return super.addArgument(methodName, scope); // returns a method call, not this
     }

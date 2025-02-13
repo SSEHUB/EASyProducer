@@ -27,7 +27,7 @@ import de.uni_hildesheim.sse.vil.expressions.ui.resources.Images;
  */
 public class ExpressionDslProposalProvider extends AbstractExpressionDslProposalProvider {
 
-    protected static final boolean DEBUG = false;
+    protected static final boolean DEBUG = true;
 
     @Inject
     private IImageHelper imageHelper;
@@ -59,9 +59,10 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
 
     @Override
     public void completeSubCall_Call(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeSubCall_Call");
+        debug(">completeSubCall_Call");
         proposeFields(model, assignment, context, acceptor);
         proposeOperations(model, assignment, context, acceptor, false);
+        debug("<completeSubCall_Call");
     }
 
     protected void debugPath2Root(INode node) {
@@ -82,9 +83,10 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
 
     @Override
     public void completeArgumentList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeArgumentList_Param");
+        debug(">completeArgumentList_Param");
         debugPath2Root(context.getLastCompleteNode());
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+        debug("<completeArgumentList_Param");
     }
 
     @Override
@@ -97,23 +99,26 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
 //              acceptor.accept(proposal);
 //          }
 //      }
-        debug("completeCall_Decl");
+        debug(">completeCall_Decl");
         debugPath2Root(context.getLastCompleteNode());
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+        debug("<completeCall_Decl");
     }
     
     @Override
     public void completeCall_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeCall_Param");
+        debug(">completeCall_Param");
         debugPath2Root(context.getLastCompleteNode());
+        debug("<completeCall_Param");
     }
 
     @Override
     public void completeParameterList_Param(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeParameterList_Param");
+        debug(">completeParameterList_Param");
         // Reuse variable declaration type proposal as parameters are defined equal to variables in VIL
         completeVariableDeclaration_Type(model, assignment, context, acceptor);
         proposeParamsWithSpecifiedTypes(model, assignment, context, acceptor);
+        debug("<completeParameterList_Param");
     }
 
     protected void proposeOperations(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor, boolean allOperations) {
@@ -142,7 +147,7 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
 
     @Override
     public void completeEqualityExpressionPart_Ex(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeEqualityExpressionPart_Ex");
+        debug(">completeEqualityExpressionPart_Ex");
         debugPath2Root(context.getLastCompleteNode());
         EObject semanticElement = context.getLastCompleteNode().getSemanticElement();
         if (semanticElement instanceof EqualityExpressionPartImpl) {
@@ -154,16 +159,18 @@ public class ExpressionDslProposalProvider extends AbstractExpressionDslProposal
                         imageHelper.getImage(Images.NAME_VARIABLEDECLARATION), 500, context.getPrefix(), context));
             }
         }
+        debug("<completeEqualityExpressionPart_Ex");
     }
 
     @Override
     public void completeVariableDeclaration_Type(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
-        debug("completeVariableDeclaration_Type");
+        debug(">completeVariableDeclaration_Type");
         List<String> allTypes = getUtility().getAllTypes(context.getLastCompleteNode());
         for (String type : allTypes) {
             acceptor.accept(createCompletionProposal(type, new StyledString(type),
                     imageHelper.getImage(Images.NAME_TYPE), 80, context.getPrefix(), context));
         }
+        debug("<completeVariableDeclaration_Type");
     }
 
     public ExpressionDslProposalProviderUtility getUtility() {

@@ -460,5 +460,36 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         println("}");
         return null;
     }
+    
+    @Override
+    public Object visitBuilderBlockExpression(BuilderBlockExpression ex) throws VilException {
+        ex.getVariable().getExpression().accept(this);
+        print(".(");
+        switch (ex.getMode()) {
+        case TYPE_NAME:
+            print(ex.getVariable().getType().getName());
+            print(" ");
+            // falls through
+        case NAME:
+            print(ex.getVariable().getName());
+            print("|");
+            break;
+        default:
+            break;
+        }
+        print("{");
+        TemplateBlock block = ex.getBlock();
+        if (block.getBodyElementCount() > 0) {
+            println();
+            increaseIndentation();
+            for (int e = 0; e < block.getBodyElementCount(); e++) {
+                block.getBodyElement(e).accept(this);
+            }
+            decreaseIndentation();
+            printIndentation();
+        }
+        print("})");
+        return null;
+    }
 
 }

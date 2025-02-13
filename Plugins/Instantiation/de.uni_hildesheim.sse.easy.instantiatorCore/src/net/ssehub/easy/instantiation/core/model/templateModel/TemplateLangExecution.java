@@ -1059,4 +1059,16 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
         return null; // declaration is not executed
     }
 
+    @Override
+    public Object visitBuilderBlockExpression(BuilderBlockExpression ex) throws VilException {
+        environment.pushLevel();
+        tracer.visitBuilderBlock(ex, environment);
+        Object result = ex.getVariable().getExpression().accept(this);
+        environment.addValue(ex.getVariable(), result); // value unclear
+        visitTemplateBlock(ex.getBlock()); // increases indentation
+        tracer.visitedBuilderBlock(ex, environment, result);
+        environment.popLevel();
+        return result;
+    }
+
 }

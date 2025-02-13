@@ -842,10 +842,25 @@ public abstract class ExpressionTranslator<I extends VariableDeclaration, R exte
                         }
                     }
                 }
-                result = processCall(result, c, callType, call.getArrayEx(), resolver);
+                //result = processCall(result, c, callType, call.getArrayEx(), resolver); // delegated to processSubCall
+                result = processSubCall(result, call, callType, resolver);
             }
         }
         return result;
+    }
+
+    /**
+     * Processes a single sub call, i.e., calls connected by ".".
+     * @param result the expression created so far, to connect to
+     * @param call the subCall
+     * @param callType the call type
+     * @param resolver a resolver instance for resolving variables etc.
+     * @return the resulting expression node
+     * @throws TranslatorException in case that the translation fails for some reason
+     */
+    protected Expression processSubCall(Expression result, SubCall call, CallType callType, R resolver) 
+        throws TranslatorException {
+        return processCall(result, call.getCall(), callType, call.getArrayEx(), resolver);
     }
 
     /**

@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Representes a Java class in code.
@@ -180,6 +181,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * @param isStatic whether the initializer shall be static
      * @return the created initializer
      */
+    @OperationMeta(name = {"addInitializer", "initializer"})
     public JavaCodeInitializer addInitializer(boolean isStatic) {
         return IJavaCodeElement.add(elements, new JavaCodeInitializer(this, isStatic));
     }
@@ -196,6 +198,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         }
     }
     
+    @OperationMeta(name = {"addAttribute", "attribute"})
     public JavaCodeAttribute addAttribute(String type, String name) {
         return createAttribute(type, name, true);
     }
@@ -208,7 +211,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         return result;
     }
 
-    public JavaCodeAttribute addAttribute(JavaCodeTypeSpecification type, String name) {
+    JavaCodeAttribute addAttribute(JavaCodeTypeSpecification type, String name) {
         return IJavaCodeElement.add(elements, new JavaCodeAttribute(type, name, this), 
             lastAttribute(elements));
     }
@@ -221,6 +224,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         return pos;
     }
     
+    @OperationMeta(name = {"addExtends", "extends"})
     public JavaCodeClass addExtends(String type) {
         if (null != type && type.length() > 0) {
             extendingClass = JavaCodeTypeSpecification.create(type, this);
@@ -234,6 +238,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * @param type the (qualified) name of the interface, ignored if empty
      * @return <b>this</b>
      */
+    @OperationMeta(name = {"addInterface", "implements"})
     public JavaCodeClass addInterface(String type) {
         if (null != type && type.length() > 0) {
             if (null == implementedInterfaces) {
@@ -281,14 +286,17 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         return this;
     }
 
+    @OperationMeta(name = {"addMainMethod", "main"})
     public JavaCodeMethod addMainMethod() {
         return addMainMethod("The main method.", "args", "command line arguments");
     }
 
+    @OperationMeta(name = {"addMainMethod", "main"})
     public JavaCodeMethod addMainMethod(String methodComment) {
         return addMainMethod(methodComment, "args", "command line arguments");
     }
 
+    @OperationMeta(name = {"addMainMethod", "main"})
     public JavaCodeMethod addMainMethod(String methodComment, String param, String paramComment) {
         JavaCodeMethod result = addMethod("void", "main", methodComment)
             .setStatic();
@@ -296,10 +304,12 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         return result;
     }
 
+    @OperationMeta(name = {"addConstructor", "constructor"})
     public JavaCodeMethod addConstructor() {
         return addConstructor(null);
     }
 
+    @OperationMeta(name = {"addConstructor", "constructor"})
     public JavaCodeMethod addConstructor(String comment) {
         return IJavaCodeElement.add(elements, 
             configureConstructor(new JavaCodeMethod(null, getName(), this, comment)));
@@ -309,31 +319,35 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         return cons;
     }
 
+    @OperationMeta(name = {"addMethod", "method"})
     public JavaCodeMethod addMethod(String name) {
         return IJavaCodeElement.add(elements, new JavaCodeMethod(name, this));
     }
 
+    @OperationMeta(name = {"addMethod", "method"})
     public JavaCodeMethod addMethod(String type, String name) {
         return IJavaCodeElement.add(elements, 
             new JavaCodeMethod(JavaCodeTypeSpecification.create(type, this), name, this));
     }
 
+    @OperationMeta(name = {"addMethod", "method"})
     public JavaCodeMethod addMethod(String type, String name, String comment) {
         return IJavaCodeElement.add(elements, 
             new JavaCodeMethod(JavaCodeTypeSpecification.create(type, this), name, this, comment));
     }
 
+    @OperationMeta(name = {"addMethod", "method"})
     public JavaCodeMethod addMethod(String type, String name, String comment, String returnComment) {
         JavaCodeMethod result = addMethod(type, name, comment);
         result.getJavadocComment().addReturnComment(returnComment);
         return result;
     }
 
-    public JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name, String comment) {
+    JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name, String comment) {
         return IJavaCodeElement.add(elements, new JavaCodeMethod(type, name, this, comment));
     }
 
-    public JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name) {
+    JavaCodeMethod addMethod(JavaCodeTypeSpecification type, String name) {
         return IJavaCodeElement.add(elements, new JavaCodeMethod(type, name, this));
     }
     

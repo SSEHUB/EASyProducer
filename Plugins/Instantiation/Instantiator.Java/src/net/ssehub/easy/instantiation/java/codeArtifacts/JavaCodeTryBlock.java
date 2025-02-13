@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a try-catch block.
@@ -70,7 +71,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
          * 
          * @param type the type
          */
-        public void addType(JavaCodeTypeSpecification type) {
+        void addType(JavaCodeTypeSpecification type) {
             types.add(type);
         }
 
@@ -103,7 +104,8 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
      * @param variableName the exception variable name
      * @return the catch block
      */
-    public JavaCodeCatchBlock addCatch(JavaCodeTypeSpecification type, String variableName) {
+    /*@OperationMeta(name = {"addCatch", "catch"})*/
+    JavaCodeCatchBlock addCatch(JavaCodeTypeSpecification type, String variableName) {
         return IJavaCodeElement.add(catches, new JavaCodeCatchBlock(this, type, variableName));
     }
 
@@ -114,6 +116,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
      * @param variableName the exception variable name
      * @return the catch block
      */
+    @OperationMeta(name = {"addCatch", "catch"})
     public JavaCodeCatchBlock addCatch(String type, String variableName) {
         return addCatch(new JavaCodeTypeSpecification(type, getParentClass()), variableName);
     }
@@ -123,6 +126,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
      * 
      * @return the finally block
      */
+    @OperationMeta(name = {"addFinally", "finally"})
     public JavaCodeBlock addFinally() {
         finallyBlock = new JavaCodeBlock(this, true, false);
         return finallyBlock;
@@ -134,6 +138,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
      * @param tryDecl the try-resource declaration as single tring
      * @return <b>this</b> (for chaining)
      */
+    @OperationMeta(name = {"addResource", "resource"})
     public JavaCodeTryBlock addResource(String tryDecl) {
         this.tryDecl = tryDecl;
         return this;
@@ -147,6 +152,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
      * @param initializer the initializer, may be <b>null</b> for none
      * @return the variable declaration (for chaining)
      */
+    @OperationMeta(name = {"addResource", "resource"})
     public JavaCodeVariableDeclaration addResource(String type, String variableName, 
         JavaCodeExpression initializer) {
         if (null == tryDecls) {

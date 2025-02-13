@@ -23,6 +23,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionWriter;
 import net.ssehub.easy.instantiation.core.model.expressions.AbstractTracerBase;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
+import net.ssehub.easy.instantiation.core.model.templateModel.BuilderBlockExpression;
 import net.ssehub.easy.instantiation.core.model.templateModel.Def;
 import net.ssehub.easy.instantiation.core.model.templateModel.ITemplateLangElement;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
@@ -362,6 +363,21 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     @Override
     public void visitedDef(Def def, RuntimeEnvironment<?, ?> environment, Object result) {
         if (filter.isEnabled(LanguageElementKind.FUNCTION_DEFINITION)) {
+            decreaseIndentation();
+        }
+    }
+    
+    @Override
+    public void visitBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment) {
+        if (isEnabled()) {
+            write("{ " + ex.getVariable().getName() + " |...");
+            increaseIndentation();
+        }
+    }
+
+    @Override
+    public void visitedBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment, Object result) {
+        if (isEnabled()) {
             decreaseIndentation();
         }
     }

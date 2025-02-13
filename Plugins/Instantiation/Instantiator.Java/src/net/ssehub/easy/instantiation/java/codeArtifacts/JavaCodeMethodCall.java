@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a static/non-static method call. For static method calls, imports may be created automatically.
@@ -164,6 +165,7 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(Object arg) {
         return (JavaCodeMethodCall) super.addArgument(arg);
     }
@@ -174,16 +176,19 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     }
 
     @Override
+    @OperationMeta(name = {"addStringArgument", "stringArg"})
     public JavaCodeMethodCall addStringArgument(String val) {
         return (JavaCodeMethodCall) super.addStringArgument(val); 
     }
     
     @Override
+    @OperationMeta(name = {"addStringArgumentNotEmpty", "stringArgNotEmpty"})
     public JavaCodeMethodCall addStringArgumentNotEmpty(String val) {
         return (JavaCodeMethodCall) super.addStringArgumentNotEmpty(val); 
     }    
 
     @Override
+    @OperationMeta(name = {"addClassArgument", "classArg"})
     public JavaCodeMethodCall addClassArgument(String cls) {
         return (JavaCodeMethodCall) super.addClassArgument(cls);
     }
@@ -194,21 +199,25 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(String arg) {
         return (JavaCodeMethodCall) super.addArgument(arg);
     }
 
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(JavaCodeExpression ex) {
         return (JavaCodeMethodCall) super.addArgument(ex);
     }
     
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(JavaCodeVariableDeclaration var) {
         return (JavaCodeMethodCall) super.addArgument(var);
     }
     
     @Override
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(JavaCodeParameterSpecification param) {
         return (JavaCodeMethodCall) super.addArgument(param);
     }
@@ -266,6 +275,7 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
      * @param scope the import scope
      * @return the created method call for chaining
      */
+    @OperationMeta(name = {"addArgument", "arg"})
     public JavaCodeMethodCall addArgument(String methodName, JavaCodeImportScope scope) {
         return addArgumentImpl(new JavaCodeMethodCall(this, methodName, scope, false, ""));
     }
@@ -276,10 +286,12 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
      * @param cls the class to create an instance from
      * @return the create constructor call for chaining
      */
+    @OperationMeta(name = {"addNewArgument", "newArg"})
     public JavaCodeConstructorCall addNewArgument(String cls) {
         return addArgumentImpl(new JavaCodeConstructorCall(this, cls, false, ""));
     }
     
+    @OperationMeta(name = {"addNewArrayArgument", "newArrayArg"})
     public JavaCodeNewArrayExpression addNewArrayArgument(String type) {
         return addArgumentImpl(new JavaCodeNewArrayExpression(this, type));
     }
@@ -307,11 +319,18 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     }
     
     @Override
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName) {
         return addCall(methodName, JavaCodeImportScope.NONE);
     }
+    
+    @OperationMeta(name = "callQualified")
+    public JavaCodeMethodCall addCallQualified(String methodName) {
+        return addCall(methodName, JavaCodeImportScope.METHOD_CLASS_IMPORT);
+    }    
 
     @Override
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         JavaCodeMethodCall result = new JavaCodeMethodCall(this, methodName, scope, false, postfix);
         if (chained == null) {

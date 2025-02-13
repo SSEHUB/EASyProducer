@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a lambda expression. 
@@ -69,6 +70,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param variable the variable (may be <b>null</b> or empty to ignore)
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addVariable", "var"})
     public JavaCodeLambdaExpression addVariable(String variable) {
         if (null != variable && variable.length() > 0) {
             if (null == variables) {
@@ -87,6 +89,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param variables the variables, may be empty or null
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addVariables", "vars"})
     public JavaCodeLambdaExpression addVariables(String variables) {
         if (null != variables && variables.length() > 0) {
             for (String v : variables.split(",")) {
@@ -103,6 +106,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param element the element
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addAsExpression", "asExpr"})
     public JavaCodeLambdaExpression addAsExpression(JavaCodeElement element) {
         if (element instanceof JavaCodeExpression) {
             addExpression((JavaCodeExpression) element);
@@ -120,6 +124,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param expression the expression
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addExpression", "expr"})
     public JavaCodeLambdaExpression addExpression(JavaCodeExpression expression) {
         this.expression = expression;
         return this;
@@ -131,6 +136,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param expression the expression
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addExpression", "expr"})
     public JavaCodeLambdaExpression addExpression(String expression) { // TODO remove? -> JavaCodeExpressino
         this.expression = new JavaCodeTextExpression(this, expression);
         return this;
@@ -141,6 +147,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * 
      * @return the block
      */
+    @OperationMeta(name = {"addBlock", "block"})
     public JavaCodeBlock addBlock() {
         block = new JavaCodeBlock(getParent(), false, false, false, true, true);
         return block;
@@ -163,6 +170,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param methodName the method name
      * @return the call
      */
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName) {
         return addCall(methodName, JavaCodeImportScope.NONE);
     }
@@ -174,6 +182,7 @@ public class JavaCodeLambdaExpression extends JavaCodeExpression {
      * @param scope the import resolution scope
      * @return the call
      */
+    @OperationMeta(name = {"addCall", "call"})
     public JavaCodeMethodCall addCall(String methodName, JavaCodeImportScope scope) {
         expression = new JavaCodeMethodCall(this, methodName, scope, false, "");
         return (JavaCodeMethodCall) expression;

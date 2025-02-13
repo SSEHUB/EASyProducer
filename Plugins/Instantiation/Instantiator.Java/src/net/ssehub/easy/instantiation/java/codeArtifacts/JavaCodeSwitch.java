@@ -17,6 +17,7 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a switch block with cases and default.
@@ -95,11 +96,13 @@ public class JavaCodeSwitch extends JavaCodeBlock {
         this.expression = expression;
     }
     
+    @OperationMeta(name = {"addStringCase", "stringCase"})
     public JavaCodeBlock addStringCase(String expression, boolean asBlock, boolean withClosingBreak) {
         return add(new JavaCodeCaseBlock(getParent(), new JavaCodeStringExpression(this, expression), asBlock, 
             withClosingBreak), caseAddPosition());
     }
     
+    @OperationMeta(name = {"addCase", "case"})
     public JavaCodeBlock addCase(JavaCodeExpression expression, boolean asBlock, boolean withClosingBreak) {
         return add(new JavaCodeCaseBlock(getParent(), expression, asBlock, withClosingBreak), caseAddPosition());
     }
@@ -109,6 +112,7 @@ public class JavaCodeSwitch extends JavaCodeBlock {
         return elementsStream().anyMatch(c -> ((JavaCodeCaseBlock) c).isDefault()) ? size - 1 : size;
     }
 
+    @OperationMeta(name = {"addDefault", "dflt"})
     public JavaCodeBlock addDefault(boolean asBlock, boolean withClosingBreak) {
         return addElement(new JavaCodeCaseBlock(getParent(), null, asBlock, withClosingBreak));
     }
