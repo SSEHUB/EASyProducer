@@ -175,6 +175,12 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         return (JavaCodeConstructorCall) initEx;
     }
     
+    @OperationMeta(name = {"addNewArray", "newArray"})
+    public JavaCodeNewArrayExpression addNewArray(String type) {
+        initEx = new JavaCodeNewArrayExpression(this, type);
+        return (JavaCodeNewArrayExpression) initEx;
+    }
+    
     public JavaCodeAnonymousClass addAnonymous(String cls) {
         JavaCodeAnonymousClass ano = new JavaCodeAnonymousClass(cls, JavaCodeClass.getParentCodeClass(this));
         initEx = JavaCodeAnonymousClass.toExpression(ano);
@@ -207,6 +213,7 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
      * 
      * @return the annotation for further processing
      */
+    @OperationMeta(name = {"addSuppressWarningsUncheckedAnnotation", "suppressWarningsUnchecked"})
     public JavaCodeAnnotation addSuppressWarningsUncheckedAnnotation() {
         return addSuppressWarningsAnnotation().addStringArgument("unchecked");
     }

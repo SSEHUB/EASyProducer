@@ -369,7 +369,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
     
     @Override
     public void visitBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment) {
-        if (isEnabled()) {
+        if (filter.isEnabled(LanguageElementKind.BUILDER_EXECUTION)) {
             write("{ " + ex.getVariable().getName() + " |...");
             increaseIndentation();
         }
@@ -377,7 +377,7 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
 
     @Override
     public void visitedBuilderBlock(BuilderBlockExpression ex, RuntimeEnvironment<?, ?> environment, Object result) {
-        if (isEnabled()) {
+        if (filter.isEnabled(LanguageElementKind.BUILDER_EXECUTION)) {
             decreaseIndentation();
         }
     }

@@ -20,6 +20,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents an array constructor.
@@ -58,6 +59,7 @@ public class JavaCodeNewArrayExpression extends JavaCodeExpression {
      * @param dimension the dimension expression
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addDimension", "dimension"})
     public JavaCodeNewArrayExpression addDimension(JavaCodeExpression dimension) {
         dimensions.add(dimension);
         return this;

@@ -68,7 +68,12 @@ public interface ITraceFilter {
          * Execution of a built-in alternative.
          */
         ALTERNATIVE_EXECUTION,
-        
+
+        /**
+         * Execution of a builder-expression.
+         */
+        BUILDER_EXECUTION,
+
         /**
          * Failure situation.
          */
