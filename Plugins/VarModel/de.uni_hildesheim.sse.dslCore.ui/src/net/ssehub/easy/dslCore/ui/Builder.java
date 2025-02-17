@@ -184,7 +184,7 @@ public class Builder extends IncrementalProjectBuilder {
     
     private void updateMarkers(IProgressMonitor monitor) {
         SubMonitor subMonitor = SubMonitor.convert(monitor, "Updating markers", 2);
-        subMonitor.subTask("Updating");
+        subMonitor.subTask("Updating resources");
         IProject project = getProject();
         IResourceDelta delta = getDelta(project);
         ToBeBuilt toBeBuilt;
@@ -200,6 +200,7 @@ public class Builder extends IncrementalProjectBuilder {
             }
         }
         
+        subMonitor.subTask("Collecting work units");
         List<ResourceWorkUnit> workUnits = new LinkedList<>();
         for (ModelUtility<?, ?> utility : ModelUtility.instances()) {
             try {
@@ -226,9 +227,12 @@ public class Builder extends IncrementalProjectBuilder {
         }
 
         subMonitor.setWorkRemaining(workUnits.size() / MONITOR_CHUNK_SIZE_CLEAN + 1);
+        subMonitor.subTask("Validating resources");
 
         int doneCount = 0;
         for (ResourceWorkUnit unit: workUnits) {
+            subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "):" 
+                + unit.resource.getURI());
             if (monitor.isCanceled()) {
                 throw new OperationCanceledException();
             }
@@ -242,6 +246,8 @@ public class Builder extends IncrementalProjectBuilder {
                 subMonitor.worked(1);
             }
         }
+        subMonitor.subTask("Completed");
+        subMonitor.setWorkRemaining(0);
     }
 
     public class TaskMarkerContributor implements IMarkerContributor {
