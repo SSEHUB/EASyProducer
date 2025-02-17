@@ -190,6 +190,7 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
      * @param arg the argument
      * @return <b>this</b> for chaining
      */
+    @OperationMeta(name = {"addConstantArgument", "constArg"})
     public JavaCodeArgumentListExpression addConstantArgument(String arg) {
         int pos = arg.lastIndexOf('.');
         if (pos > 0) {

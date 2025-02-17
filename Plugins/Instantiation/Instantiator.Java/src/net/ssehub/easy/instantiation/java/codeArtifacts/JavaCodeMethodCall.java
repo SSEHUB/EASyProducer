@@ -232,6 +232,7 @@ public class JavaCodeMethodCall extends JavaCodeArgumentListExpression
     }    
 
     @Override
+    @OperationMeta(name = {"addConstantArgument", "constArg"})
     public JavaCodeMethodCall addConstantArgument(String arg) {
         return (JavaCodeMethodCall) super.addConstantArgument(arg);
     }

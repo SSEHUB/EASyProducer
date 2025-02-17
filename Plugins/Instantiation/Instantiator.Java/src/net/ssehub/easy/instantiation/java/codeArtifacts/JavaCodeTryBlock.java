@@ -86,6 +86,13 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
             super.store(out);
         }
         
+        @Invisible
+        @Override
+        public void setParent(IJavaCodeElement parent) {
+            super.setParent(parent);
+            types.forEach(e -> e.setParent(this));
+        }
+        
     }
     
     /**
@@ -185,6 +192,21 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
             finallyBlock.store(out);
         }
         out.println();
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        if (catches != null) {
+            catches.forEach(e -> e.setParent(this));
+        }
+        if (tryDecls != null) {
+            tryDecls.forEach(e -> e.setParent(this));
+        }
+        if (finallyBlock != null) {
+            finallyBlock.setParent(this);
+        }
     }
 
 }
