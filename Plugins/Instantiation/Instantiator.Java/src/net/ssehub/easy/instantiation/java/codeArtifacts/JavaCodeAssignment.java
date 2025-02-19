@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
@@ -115,6 +116,15 @@ public class JavaCodeAssignment extends JavaCodeStatement {
             expression.store(out);
         }
         out.println(";");
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        if (null != expression) {
+            expression.setParent(this);
+        }
     }
 
 }

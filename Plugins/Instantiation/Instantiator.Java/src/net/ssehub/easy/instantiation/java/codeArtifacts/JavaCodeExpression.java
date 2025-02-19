@@ -43,7 +43,7 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
     /**
      * Creates an instance.
      *
-     * @param parent the parent
+     * @param parent the parent, may be <b>null</b> ({@see #setParent(IJavaCodeElement)})
      */
     protected JavaCodeExpression(IJavaCodeElement parent) {
         super(parent);

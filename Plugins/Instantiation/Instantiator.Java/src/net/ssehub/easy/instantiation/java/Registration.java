@@ -28,6 +28,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlockInterface;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeCallElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeCastExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstantExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeConstructorCall;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeDoLoop;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeElement;
@@ -179,6 +180,7 @@ public class Registration implements IRegistration {
         TypeRegistry.DEFAULT.register(JavaCodePostfixExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeOperatorExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeExpressionStatement.class);
+        TypeRegistry.DEFAULT.register(JavaCodeConstantExpression.class);
     }
     
     /**

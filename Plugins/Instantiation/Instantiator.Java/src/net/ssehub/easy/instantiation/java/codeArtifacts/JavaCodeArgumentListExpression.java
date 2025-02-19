@@ -187,20 +187,14 @@ public class JavaCodeArgumentListExpression extends JavaCodeExpression {
     /**
      * Adds a call argument as raw string.
      * 
-     * @param arg the argument
+     * @param arg the argument (ignored if <b>null</b> or empty)
      * @return <b>this</b> for chaining
      */
     @OperationMeta(name = {"addConstantArgument", "constArg"})
     public JavaCodeArgumentListExpression addConstantArgument(String arg) {
-        int pos = arg.lastIndexOf('.');
-        if (pos > 0) {
-            int classPos = arg.lastIndexOf('.', pos - 1);
-            if (classPos > 0) {
-                getArtifact().validateType(new JavaCodeTypeSpecification(arg.substring(0, pos), this));
-                arg = arg.substring(classPos + 1);
-            }
+        if (arg != null && arg.length() > 0) {
+            arguments.add(new JavaCodeConstantExpression(arg, this));
         }
-        arguments.add(new JavaCodeText(arg, false, false));
         return this;
     }
     
