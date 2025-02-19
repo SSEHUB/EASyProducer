@@ -98,6 +98,32 @@ public class LocalRealTests extends RealTests {
     }
     
     /**
+     * Tests the oktoflow model / instantiation (from Oct 22, 2024).
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testOktoflowOct24() throws IOException {
+        final String folder = "beforeMig";
+        File f = new File(getTestFolder(), "IIP-Ecosphere/" + folder);
+        if (f.exists()) {
+            // ensure passthrough states
+            boolean origMvnPassThrough = MavenMock.setPassThrough(false);
+            
+            // tests
+            executeIipCase(folder, "ApiPlatformConfiguration", "generateApi", "tests/api", "tests/common");
+            executeIipCase(folder, "PlatformConfiguration", "generateApps", "tests/simpleMesh3", "tests/common");
+            executeIipCase(folder, "SerializerConfig1", "main", "tests/single", "tests/common");
+            executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
+            executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
+            executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+            
+            // reset passthrough
+            MavenMock.setPassThrough(origMvnPassThrough);
+        }
+    }
+    
+    /**
      * Tests the oktoflow model / instantiation (updated recent model).
      * 
      * @throws IOException shall not occur
@@ -117,6 +143,7 @@ public class LocalRealTests extends RealTests {
             executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
             executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
             executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
+//executeIipCase(folder, "Rest", "generateApps", "tests/rest");
             
             // reset passthrough
             MavenMock.setPassThrough(origMvnPassThrough);
