@@ -17,7 +17,6 @@ services:
      applicationId: SimpleMeshApp3
      name: Simple Data Receiver3
      version: 0.1.0
-     description: 
      deployable: true
      kind: SINK_SERVICE
      topLevel: true
@@ -38,7 +37,6 @@ services:
      applicationId: SimpleMeshApp3
      name: Simple Data Source3
      version: 0.1.0
-     description: 
      deployable: true
      kind: SOURCE_SERVICE
      topLevel: true
@@ -59,7 +57,6 @@ services:
      applicationId: SimpleMeshApp3
      name: Simple Data Transformer3
      version: 0.1.0
-     description: 
      deployable: true
      kind: TRANSFORMATION_SERVICE
      topLevel: true

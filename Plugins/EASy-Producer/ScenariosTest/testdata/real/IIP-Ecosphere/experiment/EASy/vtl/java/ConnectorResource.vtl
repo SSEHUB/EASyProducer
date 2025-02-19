@@ -80,9 +80,10 @@ template ConnectorResource(Configuration config, FileArtifact target, Connector 
                 endpoint = endpointPrefix + endpoint;
             }
             JsonNode n = json.getData();
-            n.addObject("${field.name}")
+            JsonNode o = n.addObject("${field.name}")
                .addValue("endpoint", endpoint)
-               .addValue("type", type);
+               .addValue("type", type)
+               .addValue("asSingleValue", field.asSingleValue);
         }
     }
     

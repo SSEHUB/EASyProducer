@@ -9,6 +9,7 @@ insert PythonMeshElementTemplatePart*;
 template PythonMeshElementTemplate(Configuration config, PythonCodeArtifact target, MeshElement elt, String pkg, PythonService service) extends PythonMeshElementTemplateBase {
 
     def main(Configuration config, PythonCodeArtifact target, MeshElement elt, String pkg, PythonService service) {
+        enableMeshQualifiedTypes(false);
         IIPEcosphere cfg = config;
         initTypeAdd(cfg);
         String clsName = asTypeName(service.name);

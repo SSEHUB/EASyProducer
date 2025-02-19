@@ -380,8 +380,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public ContactInformationBuilder setRoleOfContactPerson(IRoleOfContactPerson roleOfContactPerson) {
             roleOfContactPersonCounter++;
-            createPropertyBuilder("RoleOfContactPerson").setSemanticId(irdi("0173-1#02-AAO204#003")).setValue(Type.
-                STRING, roleOfContactPerson.getValue()).build();
+            createPropertyBuilder("RoleOfContactPerson")
+                .setSemanticId(irdi("0173-1#02-AAO204#003"))
+                .setValue(Type.STRING, roleOfContactPerson.getValue())
+                .build();
             return this;
         }
         
@@ -408,9 +410,11 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public ContactInformationBuilder setLanguage(String language) {
             // counting -> composition of idShort
-            createPropertyBuilder(getCountingIdShort("Language", ++languageCounter)).setSemanticId(iri(
-                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Language")).setValue(Type.STRING, 
-                language).build();
+            createPropertyBuilder(getCountingIdShort("Language", ++languageCounter))
+                .setSemanticId(iri(
+                    "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/Language"))
+                .setValue(Type.STRING, language)
+                .build();
             return this;
         }
         
@@ -422,9 +426,11 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public ContactInformationBuilder setTimeZone(String timeZone) {
             timeZoneCounter++;
-            createPropertyBuilder("TimeZone").setSemanticId(iri(
-                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/TimeZone")).setValue(Type.STRING,
-                timeZone).build();
+            createPropertyBuilder("TimeZone")
+                .setSemanticId(iri(
+                    "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/TimeZone"))
+                .setValue(Type.STRING, timeZone)
+                .build();
             return this;
         }
         
@@ -686,8 +692,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public ContactInformationBuilder setAddressOfAdditionalLink(String addressOfAdditionalLink) {
             addressOfAdditionalLinkCounter++;
-            createPropertyBuilder("AddressOfAdditionalLink").setSemanticId(irdi("0173-1#02-AAQ326#002")).setValue(Type.
-                STRING, addressOfAdditionalLink).build();
+            createPropertyBuilder("AddressOfAdditionalLink")
+                .setSemanticId(irdi("0173-1#02-AAQ326#002"))
+                .setValue(Type.STRING, addressOfAdditionalLink)
+                .build();
             return this;
         }
         
@@ -801,8 +809,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public PhoneBuilder setTypeOfTelephone(TypeOfTelephone typeOfTelephone) {
             typeOfTelephoneCounter++;
-            createPropertyBuilder("TypeOfTelephone").setSemanticId(irdi("0173-1#02-AAO137#003")).setValue(Type.STRING, 
-                typeOfTelephone.getValue()).build();
+            createPropertyBuilder("TypeOfTelephone")
+                .setSemanticId(irdi("0173-1#02-AAO137#003"))
+                .setValue(Type.STRING, typeOfTelephone.getValue())
+                .build();
             return this;
         }
         
@@ -817,8 +827,7 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
                 availableTimeCounter++;
             }
             createMultiLanguageProperty(getDelegate(), createMultiLanguageProperties, "AvailableTime", iri(
-                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"), 
-                availableTime);
+                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/AvailableTime/"), availableTime);
             return this;
         }
         
@@ -888,8 +897,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public FaxBuilder setTypeOfFaxNumber(TypeOfFaxNumber typeOfFaxNumber) {
             typeOfFaxNumberCounter++;
-            createPropertyBuilder("TypeOfFaxNumber").setSemanticId(irdi("0173-1#02-AAO196#003")).setValue(Type.STRING, 
-                typeOfFaxNumber.getValue()).build();
+            createPropertyBuilder("TypeOfFaxNumber")
+                .setSemanticId(irdi("0173-1#02-AAO196#003"))
+                .setValue(Type.STRING, typeOfFaxNumber.getValue())
+                .build();
             return this;
         }
         
@@ -943,8 +954,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public EmailBuilder setEmailAddress(String emailAddress) {
             emailAddressCounter++;
-            createPropertyBuilder("EmailAddress").setSemanticId(irdi("0173-1#02-AAO198#002")).setValue(Type.STRING, 
-                emailAddress).build();
+            createPropertyBuilder("EmailAddress")
+                .setSemanticId(irdi("0173-1#02-AAO198#002"))
+                .setValue(Type.STRING, emailAddress)
+                .build();
             return this;
         }
         
@@ -971,8 +984,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public EmailBuilder setTypeOfEmailAddress(TypeOfEmailAddress typeOfEmailAddress) {
             typeOfEmailAddressCounter++;
-            createPropertyBuilder("TypeOfEmailAddress").setSemanticId(irdi("0173-1#02-AAO199#003")).setValue(Type.
-                STRING, typeOfEmailAddress.getValue()).build();
+            createPropertyBuilder("TypeOfEmailAddress")
+                .setSemanticId(irdi("0173-1#02-AAO199#003"))
+                .setValue(Type.STRING, typeOfEmailAddress.getValue())
+                .build();
             return this;
         }
         
@@ -993,7 +1008,8 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         
         @Override
         public SubmodelElementCollection build() {
-            assertThat(emailAddressCounter == 1, "Cardinality {} of EmailAddress must be equal 1.", emailAddressCounter);
+            assertThat(emailAddressCounter == 1, "Cardinality {} of EmailAddress must be equal 1.", 
+                emailAddressCounter);
             assertThat(0 <= publicKeyCounter && publicKeyCounter <= 1, "Cardinality {} of PublicKey must be greater or "
                 + "equal 0 and less or equal 1.", publicKeyCounter);
             assertThat(0 <= typeOfEmailAddressCounter && typeOfEmailAddressCounter <= 1, "Cardinality {} of TypeOfEmail"
@@ -1047,8 +1063,10 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public IPCommunicationBuilder setAddressOfAdditionalLink(String addressOfAdditionalLink) {
             addressOfAdditionalLinkCounter++;
-            createPropertyBuilder("AddressOfAdditionalLink").setSemanticId(irdi("0173-1#02-AAQ326#002")).setValue(Type.
-                STRING, addressOfAdditionalLink).build();
+            createPropertyBuilder("AddressOfAdditionalLink")
+                .setSemanticId(irdi("0173-1#02-AAQ326#002"))
+                .setValue(Type.STRING, addressOfAdditionalLink)
+                .build();
             return this;
         }
         
@@ -1060,9 +1078,12 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         */
         public IPCommunicationBuilder setTypeOfCommunication(String typeOfCommunication) {
             typeOfCommunicationCounter++;
-            createPropertyBuilder("TypeOfCommunication").setSemanticId(iri(
-                "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication/TypeOfCommunication")).
-                setValue(Type.STRING, typeOfCommunication).build();
+            createPropertyBuilder("TypeOfCommunication")
+                .setSemanticId(iri(
+                    "https://admin-shell.io/zvei/nameplate/1/0/ContactInformations/ContactInformation/IPCommunication"
+                    + "/TypeOfCommunication"))
+                .setValue(Type.STRING, typeOfCommunication)
+                .build();
             return this;
         }
         
@@ -1085,7 +1106,7 @@ public class ContactInformationsBuilder extends DelegatingSubmodelBuilder {
         @Override
         public SubmodelElementCollection build() {
             assertThat(addressOfAdditionalLinkCounter == 1, "Cardinality {} of AddressOfAdditionalLink must be equal 1."
-                + "", addressOfAdditionalLinkCounter);
+                , addressOfAdditionalLinkCounter);
             assertThat(0 <= typeOfCommunicationCounter && typeOfCommunicationCounter <= 1, "Cardinality {} of TypeOfCom"
                 + "munication must be greater or equal 0 and less or equal 1.", typeOfCommunicationCounter);
             assertThat(0 <= availableTimeCounter && availableTimeCounter <= 1, "Cardinality {} of AvailableTime must be"

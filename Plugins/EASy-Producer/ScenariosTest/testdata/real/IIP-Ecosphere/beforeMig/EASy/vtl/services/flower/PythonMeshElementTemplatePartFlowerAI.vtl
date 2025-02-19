@@ -1,0 +1,46 @@
+import PythonBasics;
+import MeshBasics;
+import PythonMeshElementTemplateBase;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template PythonMeshElementTemplatePartFlowerAI(Configuration config, FileArtifact target, MeshElement elt, String pkg, PythonService service) {
+
+    def generateAsyncProcessorInMethodImpl(FlowerFederatedAiService service, Boolean forward) {
+        if (forward) {
+            'client = Client()
+            fl.client.start_numpy_client(server_address=self.IP, client=client)'
+        } else {
+            'pass'
+        }
+    } 
+        
+    def generateSyncProcessorMethodImpl(FlowerFederatedAiService service) {
+        'client = Client()
+        fl.client.start_numpy_client(server_address=self.IP ,client=client)'
+    } 
+    
+    def generateImports(FlowerFederatedAiService service) {
+        'from Service import Service
+        from services.flowers.Client import Client
+        import flwr as fl
+        '  
+    }
+    
+    def inheritsFrom(String cls) {
+        cls; // may add flower stuff here
+    }
+
+    def generateFurtherMethods(FlowerFederatedAiService service) {
+        '${generateReceiveClientServer(service.server)|e}'
+    } 
+    
+    def produceConstructorRest(FlowerFederatedAiService service) {
+        FlowerFederatedAiServer server = service.server;
+        'self.IP = self.getNetMgtKeyAddress()
+        if self.IP is None:
+            # fallback, then server is not relocatable anymore
+            self.IP = "${server.host}:${server.port}"'
+    }
+
+}

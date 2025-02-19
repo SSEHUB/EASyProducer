@@ -1,9 +1,10 @@
 import Basics;
 import JavaBasics;
+import JavaType;
 
 @advice(IIPEcosphere)
 @indent(indentation = 4, additional = 0)
-@format(profile="java", profileArg_javadocIndent="* ", lineLength = 120, profileArg_eltSorting="CONS")
+@format(profile="java", profileArg_javadocIndent=" * ", lineLength = 120, profileArg_eltSorting="CONS")
 template JavaConnectorRestType(Configuration config, JavaCodeArtifact target, RecordType type, String pkg) {
     
     def main(Configuration config, JavaCodeArtifact target, RecordType type, String pkg) {
@@ -13,16 +14,42 @@ template JavaConnectorRestType(Configuration config, JavaCodeArtifact target, Re
         String clsName = typeName + "RestType";
 
         JavaCodeClass mainCls = codeCreateClass(target, pkg, clsName, 'Rest type for the application data type ${typeName}');
-        mainCls.addImport("java.math.*"); // preliminary, BigInt
-        mainCls.addExtends("de.iip_ecosphere.platform.connectors.rest.RESTServerResponse");
+        mainCls.addAnnotation("com.fasterxml.jackson.annotation.JsonIgnoreProperties").addArgument("ignoreUnknown", true);
 
+        String getValueToWrite = "null";
         for (Field f: type.fields) {
-            JavaCodeAttribute attr = mainCls.addAttribute(getTypeName(f), asMethodFieldIdentifier(f.name));
+            JavaCodeAttribute attr = mainCls.addAttribute(mapTypeName(f), asMethodFieldIdentifier(f.name));
+            if (getValueToWrite == "null") {
+                getValueToWrite = attr.getName(); 
+            }
+            if (not(f.type.isKindOf(RecordType))) {
+	            attr.addAnnotation("com.fasterxml.jackson.annotation.JsonProperty").addStringArgument(f.name);
+            }
             mainCls.addGetter(attr);
             mainCls.addSetter(attr, "value");
         }
 
         mainCls.addConstructor("Default constructor. Fields are pre-allocated with default Java values.");
+    }
+    
+    def String mapTypeName(Field f) {
+        mapTypeName(f.type);
+    }
+    
+    def String mapTypeName(AasField f) {
+        getTypeName(f);
+    }
+    
+    def String mapTypeName(DataType type) {
+        toTypeName(type);
+    }
+
+    def String mapTypeName(ArrayType type) {
+        mapTypeName(type.type) + "[]";
+    }
+    
+    def String mapTypeName(RecordType type) {
+        toTypeName(type) + "RestType";
     }
     
 }

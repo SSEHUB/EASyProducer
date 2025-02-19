@@ -1,20 +1,18 @@
 package iip.nodes;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.*;
-import static de.iip_ecosphere.platform.support.function.IOVoidFunction.optional;
-import de.iip_ecosphere.platform.support.function.*;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.InputConverter;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.ParseResult;
-import de.iip_ecosphere.platform.connectors.parser.*;
-import de.iip_ecosphere.platform.connectors.formatter.OutputFormatter.OutputConverter;
-import de.iip_ecosphere.platform.connectors.formatter.*;
-import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;        
-import iip.datatypes.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import de.iip_ecosphere.platform.connectors.formatter.FormatterUtils;
+import de.iip_ecosphere.platform.connectors.formatter.TextLineFormatter;
+import de.iip_ecosphere.platform.connectors.formatter.TextLineFormatter.TextLineFormatterConverter;
+import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;
+
+import iip.datatypes.MyConnMachineInImpl;
+import iip.datatypes.MyConnPltfOut;
+import iip.datatypes.MyConnPltfOutImpl;
+import iip.datatypes.MyNested;
 
 /**
  * Parser/formatter connector serializer for MyConnPltfOut.
@@ -29,8 +27,8 @@ public class MyMqttConnExampleFormatterSerializer implements ChanneledSerializer
     public MyMqttConnExampleFormatterSerializer(String encoding, Map<String, Integer> mapping, Supplier<String> pathSupplier) {
         this.mapping = mapping;
         this.pathSupplier = pathSupplier;
-        formatter = (TextLineFormatter) FormatterUtils.createInstance(
-            MyMqttConnExampleFormatterSerializer.class.getClassLoader(), "TextLineFormatter", encoding);
+        formatter = (TextLineFormatter) FormatterUtils.createInstance(MyMqttConnExampleFormatterSerializer.class.
+            getClassLoader(), "de.iip_ecosphere.platform.connectors.formatter.TextLineFormatter", encoding);
     }
 
     @Override             
@@ -42,7 +40,8 @@ public class MyMqttConnExampleFormatterSerializer implements ChanneledSerializer
     @Override    
     public byte[] to(MyConnPltfOut source) throws IOException {
         final String path = pathSupplier == null ? "" : pathSupplier.get();
-        TextLineFormatter.TextLineFormatterConverter outConverter = formatter.getConverter();
+        TextLineFormatterConverter outConverter = formatter.getConverter();
+        MyConnMachineInImpl tmp = new MyConnMachineInImpl();
         formatter.add(path + "cmdField", outConverter.fromString(source.getCmdField()));
         
         formatter.startArrayStructure("nested");

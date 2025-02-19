@@ -1,7 +1,10 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.DataIngestor;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.MyConnPltfIn;
+import iip.datatypes.Rec1;
 
 /**
  * IIP-Ecosphere service interface for 'myAnonymizer example'.
@@ -12,24 +15,26 @@ public interface MyAnonymizerExampleInterface extends Service {
     public static final String SERVICE_ID = "myAnonymizer";
 
     /**
-     * Processes a data item of type "String" asynchronously. Use the respective ingestor for the return
-     * type to pass back the result of processing.
+     * Processes a data item of type "String" asynchronously. Use the respective ingestor for the return type to pass
+     * back the result of processing.
      *
      * @param data the data item to be processed
      */
     public void processString(String data);
+
     /**
-     * Processes a data item of type "MyConnPltfIn" asynchronously. Use the respective ingestor for the return
-     * type to pass back the result of processing.
+     * Processes a data item of type "MyConnPltfIn" asynchronously. Use the respective ingestor for the return type to
+     * pass back the result of processing.
      *
      * @param data the data item to be processed
      */
     public void processMyConnPltfIn(MyConnPltfIn data);
+
     /**
      * Attaches a return value ingestor for asynchronous processing.
      *
      * @param ingestor the ingestor instance
      */
     public void attachRec1Ingestor(DataIngestor<Rec1> ingestor);
-    
+
 }

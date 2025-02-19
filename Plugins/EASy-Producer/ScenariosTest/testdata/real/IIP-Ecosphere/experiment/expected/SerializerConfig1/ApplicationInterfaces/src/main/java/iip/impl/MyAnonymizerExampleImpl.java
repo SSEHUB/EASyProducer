@@ -1,12 +1,23 @@
 package iip.impl;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
+import de.iip_ecosphere.platform.services.environment.AbstractService;
+import de.iip_ecosphere.platform.services.environment.DataIngestor;
+import de.iip_ecosphere.platform.services.environment.DefaultServiceImpl;
+import de.iip_ecosphere.platform.services.environment.ParameterConfigurer;
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+import de.iip_ecosphere.platform.services.environment.YamlService;
 import de.iip_ecosphere.platform.transport.serialization.TypeTranslators;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.interfaces.*;
+
+import iip.datatypes.Rec1;
+import iip.interfaces.MyAnonymizerExampleInterface;
 
 /**
  * IIP-Ecosphere supporting service implementation for 'myAnonymizer example'.
@@ -32,11 +43,11 @@ public abstract class MyAnonymizerExampleImpl extends DefaultServiceImpl impleme
     /**
      * Fallback constructor setting most fields to "empty" default values.
      * 
-     * @param id the id of the service
+     * @param serviceId the id of the service
      * @param kind the service kind
      */
-    protected MyAnonymizerExampleImpl(String id, ServiceKind kind) {
-        super(id, kind);
+    protected MyAnonymizerExampleImpl(String serviceId, ServiceKind kind) {
+        super(serviceId, kind);
         registerParameterConfigurers();
     }
 
@@ -53,7 +64,7 @@ public abstract class MyAnonymizerExampleImpl extends DefaultServiceImpl impleme
     /**
     * Creates a service instance from a service id and a YAML artifact.
     * 
-    * @param serviceId the service id
+    * @param serviceId the id of the service
     * @param ymlFile the YML file containing the YAML artifact with the service descriptor
     */
     protected MyAnonymizerExampleImpl(String serviceId, InputStream ymlFile) {
@@ -75,15 +86,17 @@ public abstract class MyAnonymizerExampleImpl extends DefaultServiceImpl impleme
     * Registers the configurers.
     */
     protected void registerParameterConfigurers() {
-        AbstractService.addConfigurer(paramConfigurers, "passThrough", Boolean.class, TypeTranslators.BOOLEAN, v -> setParameterPassThrough(v), () -> getParameterPassThrough(), "iip.app.sc1.passThrough");
+        AbstractService.addConfigurer(paramConfigurers, "passThrough", Boolean.class, TypeTranslators.BOOLEAN, v -> 
+            setParameterPassThrough(v), () -> getParameterPassThrough(), "iip.app.sc1.passThrough");
     }
 
     /**
     * Changes the service parameter "passThrough".
     *
     * @param passThrough the parameter value
-    * @throws ExecutionException if setting the value fails, e.g., as the service is in the wrong state such as 
-    *    startup vs. runtime
+    * 
+    * @throws ExecutionException if setting the value fails, e.g., as the service is in the wrong state such as startup
+    * vs. runtime
     */
     public void setParameterPassThrough(boolean passThrough) throws ExecutionException {
         this.passThrough = passThrough;
@@ -129,9 +142,9 @@ public abstract class MyAnonymizerExampleImpl extends DefaultServiceImpl impleme
     */
     protected void ingestRec1(Rec1 data) {
         for (int i = 0; i < rec1Ingestors.size(); i++) {
-            rec1Ingestors.get(i).ingest(data);
+            rec1Ingestors.get(i)
+                .ingest(data);
         }
     }
-    
-    
+
 }

@@ -537,8 +537,9 @@ project Connectors {
 
    compound RestField refines Field {
        String endpoint = "";
+       Boolean asSingleValue = false;
    } 
-   
+
    compound RestConnector refines Connector { // fixed template types see JavaConnector.vtl
        assign (uiGroup = UiInvisibleGroup) to {
            String class = "de.iip_ecosphere.platform.connectors.rest.RESTConnector";

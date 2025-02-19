@@ -46,9 +46,10 @@ public class MyOpcConnExampleTest {
         // as configured, or create own and customize
         ConnectorParameter params = MyOpcConnExample.createConnectorParameter();
             
-        OpcUaConnector<MyConnPltfOut, MyConnPltfIn> conn = new OpcUaConnector<>(MyOpcConnExample.
-            createConnectorAdapter());
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> conn.disconnectSafe()));
+        OpcUaConnector<MyConnPltfOut, MyConnPltfIn> conn = new OpcUaConnector<>(MyOpcConnExample.createConnectorAdapter(
+            ));
+        Runtime.getRuntime()
+            .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
         conn.connect(params);
         conn.setReceptionCallback(callback);
         System.out.println("Connector myOpcConn example created...");

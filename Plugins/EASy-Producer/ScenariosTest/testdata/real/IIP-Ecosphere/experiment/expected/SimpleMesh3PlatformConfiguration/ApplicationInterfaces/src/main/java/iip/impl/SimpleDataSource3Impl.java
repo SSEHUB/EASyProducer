@@ -1,12 +1,16 @@
 package iip.impl;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.io.InputStream;
-import de.iip_ecosphere.platform.transport.serialization.TypeTranslators;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.interfaces.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import de.iip_ecosphere.platform.services.environment.DefaultServiceImpl;
+import de.iip_ecosphere.platform.services.environment.ParameterConfigurer;
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+import de.iip_ecosphere.platform.services.environment.YamlService;
+
+import iip.interfaces.SimpleDataSource3Interface;
 
 /**
  * IIP-Ecosphere supporting service implementation for 'Simple Data Source3'.
@@ -28,11 +32,11 @@ public abstract class SimpleDataSource3Impl extends DefaultServiceImpl implement
     /**
      * Fallback constructor setting most fields to "empty" default values.
      * 
-     * @param id the id of the service
+     * @param serviceId the id of the service
      * @param kind the service kind
      */
-    protected SimpleDataSource3Impl(String id, ServiceKind kind) {
-        super(id, kind);
+    protected SimpleDataSource3Impl(String serviceId, ServiceKind kind) {
+        super(serviceId, kind);
         registerParameterConfigurers();
     }
 
@@ -49,7 +53,7 @@ public abstract class SimpleDataSource3Impl extends DefaultServiceImpl implement
     /**
     * Creates a service instance from a service id and a YAML artifact.
     * 
-    * @param serviceId the service id
+    * @param serviceId the id of the service
     * @param ymlFile the YML file containing the YAML artifact with the service descriptor
     */
     protected SimpleDataSource3Impl(String serviceId, InputStream ymlFile) {
@@ -70,6 +74,7 @@ public abstract class SimpleDataSource3Impl extends DefaultServiceImpl implement
     /**
     * Registers the configurers.
     */
-    protected void registerParameterConfigurers() {            }
-                        
+    protected void registerParameterConfigurers() {
+    }
+
 }

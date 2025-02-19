@@ -48,7 +48,8 @@ public class MyMqttConnExampleTest {
             
         PahoMqttv3Connector<MyConnPltfOut, MyConnPltfIn> conn = new PahoMqttv3Connector<>(MyMqttConnExample.
             createConnectorAdapter());
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> conn.disconnectSafe()));
+        Runtime.getRuntime()
+            .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
         conn.connect(params);
         conn.setReceptionCallback(callback);
         System.out.println("Connector myMqttConnExample created...");

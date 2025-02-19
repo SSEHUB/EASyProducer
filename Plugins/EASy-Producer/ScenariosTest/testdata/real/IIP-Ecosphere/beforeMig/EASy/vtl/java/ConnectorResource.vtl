@@ -1,0 +1,91 @@
+import JavaBasics;
+
+@advice(IIPEcosphere)
+@format(profile="json", indentSteps = 4, profileArg_prettyPrint = "true", profileArg_sorting = "COLLATOR")
+template ConnectorResource(Configuration config, FileArtifact target, Connector conn) {
+
+    mapOf(String, String) modbusTypes = {
+       {"Boolean", "boolean"}, 
+       {"int", "integer"}, // initial, superfluous?
+       {"Int16", "short"},
+       {"Short", "short"},
+       {"UnsignedInt16", "ushort"}, 
+       {"Int32", "integer"},
+       {"Integer", "integer"}, 
+       {"UnsignedInt32", "uinteger"}, 
+       {"UnsignedInt64", "ulong"}, // unmapped?
+       {"Float", "float"},
+       {"Int64", "long"},
+       {"Long", "long"},
+       {"Double", "double"},
+       {"String", "ascii"},
+       {"DateTime", "datetime"}
+    };
+
+    @DispatchBasis
+    def genContents(Connector conn, JsonFileArtifact json) {
+    }
+    
+    @DispatchBasis
+    def genContents(ModbusTcpV1Connector conn, JsonFileArtifact json) {
+        collectIOTypes(conn.input, json);
+        collectIOTypes(conn.output, json);
+        collectIOType(conn.inInterface, json);
+        collectIOType(conn.outInterface, json);
+    }
+    
+    def collectIOTypes(sequenceOf(IOType) types, JsonFileArtifact json) {
+        for (IOType t: types) {
+            collectIOType(t, json);
+        }
+    }
+    
+    def collectIOType(IOType t, JsonFileArtifact json) {
+        collectFields(t.type, json);
+    }
+
+    @DispatchBasis
+    def collectFields(DataType t, JsonFileArtifact json) {
+    }
+
+    @DispatchCase
+    def collectFields(RecordType t, JsonFileArtifact json) {
+       for (Field f: t.fields) {
+           collectField(f, json);
+       }
+    }
+    
+    @DispatchBasis
+    def collectField(Field field, JsonFileArtifact json) {
+    }
+
+    @DispatchCase
+    def collectField(ModbusField field, JsonFileArtifact json) {
+        String type = getDirectTypeName(field.type);
+        type = modbusTypes.get(type, type);
+        if (type <> "") {
+           JsonNode n = json.getData();
+           n.addObject("${field.name}")
+               .addValue("offset", field.offset)
+               .addValue("type", type);
+        }
+    }
+    
+    // returns the directly defined type name, not via JavaBasics as then a different name occurs
+    @DispatchBasis
+    def getDirectTypeName(DataType type) {
+        type.name;
+    }
+
+    // returns the directly defined type name, not via JavaBasics as then a different name occurs
+    @DispatchCase
+    def getDirectTypeName(AliasType type) {
+        getDirectTypeName(type.represents);
+    }    
+
+    def main(Configuration config, FileArtifact target, Connector conn) {
+        JsonFileArtifact json = target;
+        genContents(conn, json);
+    }
+    
+}

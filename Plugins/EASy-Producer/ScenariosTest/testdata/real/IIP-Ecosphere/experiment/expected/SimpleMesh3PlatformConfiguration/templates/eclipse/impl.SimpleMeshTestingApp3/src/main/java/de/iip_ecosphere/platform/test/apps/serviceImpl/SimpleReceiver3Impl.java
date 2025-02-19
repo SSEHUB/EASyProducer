@@ -1,9 +1,11 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.Rec13;
+import iip.impl.SimpleDataReceiver3Impl;
 
 /**
  * Service implementation for net node 'Simple Data Receiver3'.
@@ -32,6 +34,5 @@ public class SimpleReceiver3Impl extends SimpleDataReceiver3Impl {
     public void processRec13(Rec13 data) {
         // TODO Store, emit, pass on your data here. This is the sink.
     }
-                
-    
+
 }

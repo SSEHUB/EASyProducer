@@ -1,9 +1,13 @@
 package MyKi2Impl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.Rec1;
+import iip.datatypes.RtsaTestInput;
+import iip.datatypes.RtsaTestInputImpl;
+import iip.impl.KIFamilyExampleImpl;
 
 /**
  * Service implementation for net node 'KI family example'.
@@ -34,8 +38,5 @@ public class MyKi2Impl extends KIFamilyExampleImpl {
         // TODO add your code here
         return result;
     }
-    
-    
-    
-    
+
 }

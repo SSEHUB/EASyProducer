@@ -54,7 +54,8 @@ public class ReceiverImplTest {
         try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Cannot start service: {}", e);
+            LoggerFactory.getLogger(getClass())
+                .error("Cannot start service: {}", e);
         }
     }
 
@@ -66,7 +67,8 @@ public class ReceiverImplTest {
         try {
             service.setState(ServiceState.STOPPING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
+            LoggerFactory.getLogger(getClass())
+                .error("Cannot stop service: {}", e);
         }
     }
 

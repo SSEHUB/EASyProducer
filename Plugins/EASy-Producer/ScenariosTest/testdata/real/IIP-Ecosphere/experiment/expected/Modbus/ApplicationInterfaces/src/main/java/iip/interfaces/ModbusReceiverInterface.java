@@ -1,7 +1,9 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.ModbusPhoenixEEM;
+import iip.datatypes.ModbusSiemensSentron;
 
 /**
  * IIP-Ecosphere service interface for 'Modbus Receiver'.
@@ -12,17 +14,19 @@ public interface ModbusReceiverInterface extends Service {
     public static final String SERVICE_ID = "ModbusReceiver";
 
     /**
-     * Processes a data item of type "ModbusPhoenixEEM" asynchronously. Use the respective ingestor for the return
-     * type to pass back the result of processing.
+     * Processes a data item of type "ModbusPhoenixEEM" asynchronously. Use the respective ingestor for the return type
+     * to pass back the result of processing.
      *
      * @param data the data item to be processed
      */
     public void processModbusPhoenixEEM(ModbusPhoenixEEM data);
+
     /**
      * Processes a data item of type "ModbusSiemensSentron" asynchronously. Use the respective ingestor for the return
      * type to pass back the result of processing.
      *
      * @param data the data item to be processed
      */
-    public void processModbusSiemensSentron(ModbusSiemensSentron data);            
+    public void processModbusSiemensSentron(ModbusSiemensSentron data);
+
 }

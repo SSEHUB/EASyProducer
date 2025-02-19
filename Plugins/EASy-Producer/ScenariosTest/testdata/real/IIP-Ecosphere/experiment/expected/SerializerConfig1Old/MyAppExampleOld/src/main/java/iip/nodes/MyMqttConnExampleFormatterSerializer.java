@@ -1,20 +1,16 @@
 package iip.nodes;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.*;
-import static de.iip_ecosphere.platform.support.function.IOVoidFunction.optional;
-import de.iip_ecosphere.platform.support.function.*;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.InputConverter;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.ParseResult;
-import de.iip_ecosphere.platform.connectors.parser.*;
-import de.iip_ecosphere.platform.connectors.formatter.OutputFormatter.OutputConverter;
-import de.iip_ecosphere.platform.connectors.formatter.*;
-import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;        
-import iip.datatypes.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import de.iip_ecosphere.platform.connectors.formatter.TextLineFormatter;
+import de.iip_ecosphere.platform.connectors.formatter.TextLineFormatter.TextLineFormatterConverter;
+import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;
+
+import iip.datatypes.MyConnMachineIn;
+import iip.datatypes.MyConnPltfOut;
+import iip.datatypes.MyNested;
 
 /**
  * Parser/formatter connector serializer for MyConnPltfOut.
@@ -41,15 +37,14 @@ public class MyMqttConnExampleFormatterSerializer implements ChanneledSerializer
     @Override    
     public byte[] to(MyConnPltfOut source) throws IOException {
         final String path = pathSupplier == null ? "/opc/machIn/" : pathSupplier.get();
-        TextLineFormatter.TextLineFormatterConverter outConverter = formatter.getConverter();
+        TextLineFormatterConverter outConverter = formatter.getConverter();
+        MyConnMachineIn tmp = new MyConnMachineIn();         
         formatter.add("cmdField", outConverter.fromString(source.getCmdField()));
-        
         formatter.startArrayStructure("nested");
         formatter.startObjectStructure(null);
         MyNested[] array1 = source.getNested();
         for (int i = 0; i < array1.length; i++) {
             formatter.add("state", outConverter.fromString(array1[i].getState()));
-            
         }
         formatter.endStructure();
         formatter.endStructure();

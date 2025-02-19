@@ -1,8 +1,7 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type MipMqttInput.
@@ -11,80 +10,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("MipMqttInput")
 public interface MipMqttInput {
  
-
     /**
-      * Returns the value of {@code mipcontext}.
-      * 
-      * @return the value
-      */
+     * Returns the value of {@code mipcontext}.
+     * 
+     * @return the value
+     */
     @JsonIgnore
     public String getMipcontext();
-    
-    /**
-      * Returns the value of {@code mipdate}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipdate();
-    
-    /**
-      * Returns the value of {@code mipto}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipto();
-    
-    /**
-      * Returns the value of {@code mipfrom}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipfrom();
-    
-    /**
-      * Returns the value of {@code mipcommand}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipcommand();
-    
-    /**
-      * Returns the value of {@code mipbitstream_ai_clock}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipbitstream_ai_clock();
-    
-    /**
-      * Returns the value of {@code mipbitstream_ai_data1}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipbitstream_ai_data1();
-    
-    /**
-      * Returns the value of {@code mipbitstream_ai_data2}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipbitstream_ai_data2();
-    
-    /**
-      * Returns the value of {@code mipreader}.
-      * 
-      * @return the value
-      */
-    @JsonIgnore
-    public String getMipreader();
-    
-    
+
     /**
      * Changes the value of {@code mipcontext}.
      * 
@@ -92,7 +25,15 @@ public interface MipMqttInput {
      */
     @JsonIgnore
     public void setMipcontext(String value);
-    
+
+    /**
+     * Returns the value of {@code mipdate}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipdate();
+
     /**
      * Changes the value of {@code mipdate}.
      * 
@@ -102,12 +43,28 @@ public interface MipMqttInput {
     public void setMipdate(String value);
     
     /**
+     * Returns the value of {@code mipto}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipto();
+
+    /**
      * Changes the value of {@code mipto}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setMipto(String value);
+
+    /**
+     * Returns the value of {@code mipfrom}.
+     * 
+     * @return the value
+     */
+    @JsonIgnore
+    public String getMipfrom();
     
     /**
      * Changes the value of {@code mipfrom}.
@@ -116,7 +73,15 @@ public interface MipMqttInput {
      */
     @JsonIgnore
     public void setMipfrom(String value);
-    
+
+    /**
+      * Returns the value of {@code mipcommand}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getMipcommand();
+
     /**
      * Changes the value of {@code mipcommand}.
      * 
@@ -126,6 +91,14 @@ public interface MipMqttInput {
     public void setMipcommand(String value);
     
     /**
+      * Returns the value of {@code mipbitstream_ai_clock}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getMipbitstream_ai_clock();
+
+    /**
      * Changes the value of {@code mipbitstream_ai_clock}.
      * 
      * @param value the new value
@@ -133,6 +106,14 @@ public interface MipMqttInput {
     @JsonIgnore
     public void setMipbitstream_ai_clock(String value);
     
+    /**
+      * Returns the value of {@code mipbitstream_ai_data1}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getMipbitstream_ai_data1();
+
     /**
      * Changes the value of {@code mipbitstream_ai_data1}.
      * 
@@ -142,6 +123,14 @@ public interface MipMqttInput {
     public void setMipbitstream_ai_data1(String value);
     
     /**
+      * Returns the value of {@code mipbitstream_ai_data2}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getMipbitstream_ai_data2();
+
+    /**
      * Changes the value of {@code mipbitstream_ai_data2}.
      * 
      * @param value the new value
@@ -150,13 +139,19 @@ public interface MipMqttInput {
     public void setMipbitstream_ai_data2(String value);
     
     /**
+      * Returns the value of {@code mipreader}.
+      * 
+      * @return the value
+      */
+    @JsonIgnore
+    public String getMipreader();
+    
+    /**
      * Changes the value of {@code mipreader}.
      * 
      * @param value the new value
      */
     @JsonIgnore
     public void setMipreader(String value);
-    
-    
 
 }

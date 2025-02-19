@@ -1,9 +1,10 @@
 package MySourceImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.impl.MySourceExampleImpl;
 
 /**
  * Service implementation for net node 'mySource example'.
@@ -27,6 +28,5 @@ public class MySourceImpl extends MySourceExampleImpl {
     public MySourceImpl(String serviceId, InputStream ymlFile) {
         super(serviceId, ymlFile);
     }
-                
-    
+
 }

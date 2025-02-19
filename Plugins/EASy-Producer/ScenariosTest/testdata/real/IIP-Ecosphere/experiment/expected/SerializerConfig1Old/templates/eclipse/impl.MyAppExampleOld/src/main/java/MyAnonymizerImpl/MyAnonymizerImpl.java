@@ -1,9 +1,11 @@
 package MyAnonymizerImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.MyConnPltfIn;
+import iip.impl.MyAnonymizerExampleImpl;
 
 /**
  * Service implementation for net node 'myAnonymizer example'.
@@ -36,6 +38,5 @@ public class MyAnonymizerImpl extends MyAnonymizerExampleImpl {
     public void processMyConnPltfIn(MyConnPltfIn data) {
         // TODO call ingest<Type>(instance). Possible output types: Rec1
     }
-                
-    
+
 }

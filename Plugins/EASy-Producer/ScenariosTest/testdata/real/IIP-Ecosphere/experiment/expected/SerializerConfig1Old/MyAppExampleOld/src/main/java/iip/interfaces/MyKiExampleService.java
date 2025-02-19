@@ -1,7 +1,8 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.Rec1;
 
 /**
  * IIP-Ecosphere service interface for net node 'myKi example'.
@@ -15,7 +16,6 @@ public interface MyKiExampleService extends Service {
     * @param data the arrived data
     * @return the transformation result, <b>null</b> for no data
     */
-    public abstract String transformRec1String(Rec1 data);
+    public String transformRec1String(Rec1 data);
 
-            
 }

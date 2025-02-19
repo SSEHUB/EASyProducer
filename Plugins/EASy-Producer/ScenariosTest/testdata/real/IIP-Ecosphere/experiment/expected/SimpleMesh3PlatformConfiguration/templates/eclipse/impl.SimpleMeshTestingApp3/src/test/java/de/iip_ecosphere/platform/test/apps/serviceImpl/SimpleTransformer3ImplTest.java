@@ -1,15 +1,18 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+import de.iip_ecosphere.platform.test.apps.serviceImpl.SimpleTransformer3Impl;
+
+import iip.datatypes.Rec13;
+import iip.datatypes.Rec13Impl;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'Simple Data Transformer3'.
@@ -27,7 +30,7 @@ public class SimpleTransformer3ImplTest {
         Rec13 data = new Rec13Impl();
         // TODO fill data via setters
         Rec13 res = service.transformRec13(data);
-        Assert.assertNotNull(res); // contract, see platform handbook
+        Assert.assertNotNull(res);
         // TODO assert fields of res
     }
     
@@ -37,11 +40,12 @@ public class SimpleTransformer3ImplTest {
      */
     @Before
     public void startup() {
-        service = new SimpleTransformer3Impl(); // constructor for testing, does not set up service management values!        
-        try {
+        // constructor for testing, does not set up service management values!
+        service = new SimpleTransformer3Impl();        try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Cannot start service: {}", e);
+            LoggerFactory.getLogger(getClass())
+                .error("Cannot start service: {}", e);
         }
     }
 
@@ -53,8 +57,9 @@ public class SimpleTransformer3ImplTest {
         try {
             service.setState(ServiceState.STOPPING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
+            LoggerFactory.getLogger(getClass())
+                .error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

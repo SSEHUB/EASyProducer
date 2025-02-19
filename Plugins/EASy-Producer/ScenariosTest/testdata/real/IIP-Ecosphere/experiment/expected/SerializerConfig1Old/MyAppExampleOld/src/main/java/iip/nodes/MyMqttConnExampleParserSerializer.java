@@ -1,20 +1,18 @@
 package iip.nodes;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.*;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import de.iip_ecosphere.platform.connectors.parser.TextLineParser;
+import de.iip_ecosphere.platform.connectors.parser.TextLineParser.TextLineParseResult;
+import de.iip_ecosphere.platform.connectors.parser.TextLineParser.TextLineParserConverter;
+import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;
+
+import iip.datatypes.MyConnPltfIn;
+import iip.datatypes.MyNested;
+
 import static de.iip_ecosphere.platform.support.function.IOVoidFunction.optional;
-import de.iip_ecosphere.platform.support.function.*;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.InputConverter;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.ParseResult;
-import de.iip_ecosphere.platform.connectors.parser.*;
-import de.iip_ecosphere.platform.connectors.formatter.OutputFormatter.OutputConverter;
-import de.iip_ecosphere.platform.connectors.formatter.*;
-import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;        
-import iip.datatypes.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Parser/formatter connector serializer for MyConnPltfIn.
@@ -35,30 +33,21 @@ public class MyMqttConnExampleParserSerializer implements ChanneledSerializer<My
     @Override             
     public MyConnPltfIn from(String channel, byte[] data) throws IOException {
         final String path = pathSupplier == null ? "/opc/machOut/" : pathSupplier.get();
-        TextLineParser.TextLineParseResult pr = parser.parse(data);
-        TextLineParser.TextLineParserConverter inConverter = parser.getConverter(); 
+        TextLineParseResult pr = parser.parse(data);
+        TextLineParserConverter inConverter = parser.getConverter(); 
         MyConnPltfIn result = new MyConnPltfIn();
         optional(() -> result.setAxis(inConverter.toInteger(pr.getLocalData("dataValue", 2)) + 100));
-        
-        
         optional(() -> result.setDataField(inConverter.toString(pr.getLocalData("dataField"))));
-        
-        TextLineParser.TextLineParseResult prArray1 = pr.stepInto("nested", 2);
+        TextLineParseResult prArray1 = pr.stepInto("nested", 2);
         MyNested[] array1 = new MyNested[prArray1.getArraySize()];
         for (int i = 0, size = prArray1.getArraySize(); i < size; i++) {
-            TextLineParser.TextLineParseResult prElement = prArray1.stepInto("", i);
+            TextLineParseResult prElement = prArray1.stepInto("", i);
             array1[i] = new MyNested();
-            
-        
-            
             array1[i].setState(inConverter.toString(prElement.getLocalData("state", 0)));
-            
             prElement.stepOut();
         }
         prArray1.stepOut();
-        
         result.setNested(array1);
-        
         return result;
     }
 

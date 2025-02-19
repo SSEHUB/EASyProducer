@@ -1,0 +1,333 @@
+import Basics;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template PythonBasics(Configuration config, FileArtifact target) {
+
+    def String toBoolean(Boolean b) {
+        if (b) {
+            "True";
+        } else {
+            "False";
+        }
+    }
+
+    def String asIdentifier(String s) {
+        String tmp = substNonIdCharacters(s);
+        s.replace(" ", "").replace("$","D").toIdentifier();
+    }
+    
+    def String asMethodFieldIdentifier(String s) {
+        asIdentifier(s.replace(".", "_"));
+    }    
+
+    def String asMethodNameSuffix(String s) {
+        asMethodFieldIdentifier(s.firstToUpperCase());
+    }
+    
+    def String asTypeName(String s) {
+        s.toCamelCaseIdentifier().asIdentifier().firstToUpperCase();
+    }
+    
+    def String toTypeName(IOType type) {
+        toTypeName(type.type);
+    }
+    
+    @DispatchBasis
+    def String toTypeName(DataType type) {
+        type.name;
+    }
+    
+    @DispatchCase
+    def String toTypeName(AliasType type) {
+        toTypeName(type.represents);
+    }    
+    
+    @DispatchCase
+    def String toTypeName(RecordType type) {
+        asTypeName(type.name);
+    }
+    
+    @DispatchCase
+    def String toTypeName(EnumType type) {
+        asTypeName(type.name);
+    }
+    
+    @DispatchCase
+    def String toTypeName(PrimitiveType type) {
+        type.name; // fallback
+    }
+
+    @DispatchCase
+    def String toTypeName(ShortTypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(IntegerTypeType type) {
+        "int";
+    }
+
+    @DispatchCase
+    def String toTypeName(LongTypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(StringTypeType type) {
+        "str";
+    }
+
+    @DispatchCase
+    def String toTypeName(BooleanTypeType type) {
+        "bool";
+    }
+
+    @DispatchCase
+    def String toTypeName(FloatTypeType type) {
+        "float";
+    }
+
+    @DispatchCase
+    def String toTypeName(DoubleTypeType type) {
+        "float";
+    }
+
+    @DispatchCase
+    def String toTypeName(ByteTypeType type) {
+        "int"; // ??
+    }
+
+    @DispatchCase
+    def String toTypeName(ObjectTypeType type) {
+        "Any";
+    }
+
+    @DispatchCase
+    def String toTypeName(Integer16TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(Integer32TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(Integer64TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(SByteTypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(UnsignedInteger16TypeType type) {
+        "int";
+    }
+
+    @DispatchCase
+    def String toTypeName(UnsignedInteger32TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(UnsignedInteger64TypeType type) {
+        "int";
+    }
+    
+    @DispatchCase
+    def String toTypeName(ByteStringTypeType type) {
+        "bytearray";
+    }
+    
+    @DispatchCase
+    def String toTypeName(DateTimeTypeType type) {
+        "datetime";
+    }
+	
+    @DispatchCase
+    def String toTypeName(ArrayType type) {
+        "list";
+    } // implies ByteArrayTypeType, IntegerArrayTypeType, DoubleArrayTypeType, StringArrayTypeType 
+
+    @DispatchCase
+    def String toTypeName(ByteArrayTypeType type) {
+        "bytearray";
+    }
+
+    @DispatchCase
+    def String toTypeName(IEC61131_3DateTimeTypeType type) {
+        "datetime";
+    }
+
+    @DispatchCase
+    def String toTypeName(ListType type) {
+        "list[" + toTypeName(type.type) + "]";
+    } 
+    
+    // --------------------------------- default values ---------------------------
+    
+    def String defaultValue(DataType type) {
+        "None";
+    }
+    
+    def String defaultValue(NumericPrimitiveType type) {
+        "0";
+    }
+
+    def String defaultValue(FloatTypeType type) {
+        "0.0";
+    }
+
+    def String defaultValue(DoubleTypeType type) {
+        "0.0";
+    }
+    
+    def String defaultValue(StringTypeType type) {
+        "\"\"";
+    }
+    
+    // --------------------- parameter ------------------------
+    
+    def produceParameterFields(Parameters params) {
+        for (Parameter p: params) {
+            'param_${p.name} = ${produceParameterDefault(p)}'
+        }
+    }
+
+    def produceSetStateStarting(PythonService service) {
+        '#code for set state to STARTING
+        pass'
+    }
+
+    def produceSetStateStopping(PythonService service) {
+        '#code for set state to STOPPING
+        pass'
+    }
+
+    def produceParameterDefault(Parameter p) {
+        'None'
+    }
+
+    def produceParameterDefault(IntegerParameter p) {
+        '${p.defaultValue}'
+    }
+
+    def produceParameterDefault(StringParameter p) {
+        '"${p.defaultValue}"'
+    }
+
+    def produceParameterDefault(RealParameter p) {
+        '${p.defaultValue}'
+    }
+
+    def produceParameterDefault(BooleanParameter p) {
+        '${toBoolean(p.defaultValue)}'
+    }
+
+    def produceParameterDefault(LongParameter p) {
+        '${toBoolean(p.defaultValue)}'
+    }
+    
+    def produceReconfigure(Parameters params) {
+        if (params.size() > 0) {
+            'def notifyReconfigured(self, values: dict):
+                """Called to inform the implementing class that a parameter reconfiguration happened.
+                   
+                   Parameters:
+                     - values -- the new param names/values
+                   """ 
+                pass
+            
+            def reconfigure(self, values:dict):
+                """Called by ServiceEnvironment to initialize service parameters or to reconfigure them at runtime.
+                   
+                   Parameters:
+                     - values -- the new param names/values
+                   """ 
+                ${produceReconfigureCode(params)}
+                self.notifyReconfigured(values)
+                
+            ${produceParameterGetter(params)}
+            
+            '
+        } else {
+            ''
+        }
+    }
+
+    def produceParameterGetter(Parameters params) {
+        for (Parameter p: params) {
+            'def get${asMethodNameSuffix(p.name)}(self):
+                """Returns the value of parameter ${p.name}. May change at runtime upon reconfiguration.
+                   
+                   Result:
+                     - the value of the parameter
+                   """ 
+
+                return self.param_${p.name}'
+        }
+    }
+
+    def produceReconfigureCode(Parameters params) {
+        for (Parameter p: params) {
+            String expr = 'values["${p.name}"]';
+            'if "${p.name}" in values:
+                self.param_${p.name} = ${convertValue(p, expr)}'
+        }
+    }
+    
+    def convertValue(Parameter param, String expr) {
+        expr; // keep, also for string
+    }
+
+    def convertValue(IntegerParameter param, String expr) {
+        'Decimal(${expr})'
+    }
+
+    def convertValue(LongParameter param, String expr) {
+        'Decimal(${expr})'
+    }
+
+    def convertValue(RealParameter param, String expr) {
+        'Decimal(${expr})'
+    }
+
+    def convertValue(BooleanParameter param, String expr) {
+        'str(${expr}).lower() == "true"'
+    }
+
+    def generateReceiveClientServer(PythonServer server) {
+        if (isDefined(server.transportChannel) and server.transportChannel.length() > 0) {
+            'def receivedClientServer(self, data):
+                """Called when data on client-server connection arrives.
+                
+                Parameters:
+                  - data -- the data (type depends on client-server implementation)
+                """
+                
+                pass'
+        } else {
+            ''
+        }
+    }
+    
+    def generatePossibleOutputTypes(ServiceBase base, IIPEcosphere cfg) {
+        String res = "";
+        String typeAdd = "";
+        if (cfg.sharedInterfaces) {
+            typeAdd = "Impl";
+        }
+        for (IOType t : base.output) {
+            res = appendWithSeparator(res, ", ", toTypeName(t) + typeAdd);
+        }
+        if (res.length() > 0) {
+            res = "Possible output types: " + res;
+        }
+        res;
+    }
+    
+}

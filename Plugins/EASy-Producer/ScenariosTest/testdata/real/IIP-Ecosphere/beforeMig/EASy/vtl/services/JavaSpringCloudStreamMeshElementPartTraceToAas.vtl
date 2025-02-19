@@ -1,0 +1,112 @@
+import Basics;
+import JavaBasics;
+import SpringBasics;
+import SpringCloudStreamBasics;
+import MeshBasics;
+import JavaConnector;
+import ServiceBasics;
+import JavaSpringCloudStreamMeshElementBase;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaSpringCloudStreamMeshElementPartTraceToAas(Configuration config, FileArtifact target, MeshElement elt, String pkg, 
+    Application app, Boolean sharedInterfaces, String familyInterface, ServiceBase familyMember, setOf(MeshElement) nodes) {
+    
+    def initialService(MeshElement elt, TraceToAasService service, setOf(String) serviceVars) {
+        String clsName = "TraceToAasService";
+        serviceVars.add("service");
+        '${getYamlServiceFragment("serviceData", clsName, "${service.id}", appVar="app")};\n'
+        'service = new TraceToAasService(app, serviceData);'
+        '${generateOutTransport(service)|e}'
+    }
+
+    def initialServiceRest(TraceToAasJavaService service) {
+        if (isDefined(service.outTransport) and service.outTransport <> null) {
+            '${generateOutTransport(service.outTransport)|e}'
+        }
+    }
+
+    def generateOutTransport(TraceToAasService service) {
+        if (isDefined(service.outTransport) and service.outTransport <> null) {
+            '${generateOutTransport(service.outTransport)|e}'
+        }
+    }
+
+    @DispatchCase
+    def generateClassRest(MeshElement elt, TraceToAasJavaService service) {
+        if (isDefined(service.outTransport) and service.outTransport <> null) {
+            '/**
+            * Returns the configured transport parameter.
+            *
+            * @return the transport parameter instance (may be <b>null</b>)
+            */
+            public static TransportParameter createOutTransportParameter() {
+                ${generateOutTransportParams(service.outTransport)|e}
+            }
+            '
+        }
+    }
+
+    def generateOutTransport(TraceToAasOutTransport outTransport) {
+        String outTpHost = getStringValueSafe(outTransport.host, "");
+        Integer outTpPort = getIntegerValueSafe(outTransport.port, 0);
+        if (outTpHost <> "" and outTpPort <> "") {
+            'service.setTransportParameter(createOutTransportParameter());'
+        } else {
+            ''
+        }
+    }
+    
+    def generateOutTransportParams(TraceToAasOutTransport outTransport) {
+        String outTpHost = getStringValueSafe(outTransport.host, "");
+        Integer outTpPort = getIntegerValueSafe(outTransport.port, 0);
+        if (outTpHost <> "" and outTpPort <> "") {
+            'TransportParameter.TransportParameterBuilder tpBuilder = TransportParameter.TransportParameterBuilder.newBuilder("${outTpHost}", ${outTpPort});'
+            if (isDefined(outTransport.security) and outTransport.security <> null) {
+                SecuritySettings outTpSec = outTransport.security;
+                'tpBuilder.setAuthenticationKey("${outTpSec.authenticationKey}");'
+                if (isDefined(outTpSec.keystoreKey) and outTpSec.keystoreKey <> "") {
+                    'tpBuilder.setKeystoreKey("${outTpSec.keystoreKey}");'
+                }
+                'tpBuilder.setKeyAlias("${outTpSec.keyAlias}");'
+                'tpBuilder.setHostnameVerification(${outTpSec.hostNameVerification});'
+            }
+            'return tpBuilder.build();'
+        } else {
+            'return null;'
+        }
+    }
+    
+    def generateImports(TraceToAasService service) {
+        'import de.iip_ecosphere.platform.services.environment.services.TraceToAasService;
+        import de.iip_ecosphere.platform.support.iip_aas.ApplicationSetup;
+        import de.iip_ecosphere.platform.support.iip_aas.ApplicationSetup.Address;'
+    }
+
+    def generateServiceAttribute(MeshElement elt, TraceToAasService service) {
+        'private TraceToAasService service;'
+    }
+    
+    def getServiceType(MeshElement elt, TraceToAasService service) {
+        "de.iip_ecosphere.platform.services.environment.services.TraceToAasService";
+    }
+
+    def generateAsyncProcessorBody(MeshElement proc, TraceToAasService service, String methodSuffix, String methodSuffixWithServiceId, String type) {
+        'return data -> {}; // ignore, shall not be called'
+    }
+    
+    def generateSyncProcessorBody(MeshProcessor proc, TraceToAasService service, String methodSuffix, String methodSuffixWithServiceId, String inType, String outType) {
+        'return data -> null; // ignore, shall not be called'
+    }
+
+    def genIngestor(TraceToAasService service, String methodSuffix, String conn, String type, String dir, ServiceBase target, String connPlaceHolder) {
+    }
+
+    def generateReceptionCallback(MeshProcessor elt, TraceToAasService service) {
+    }
+    
+    def generateSinkMethodBody(MeshSink snk, TraceToAasService service, String methodName, String methodSuffixWithServiceId, String type) {
+        'return data -> {}; // ignore'
+    }
+    
+}

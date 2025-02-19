@@ -1,6 +1,6 @@
 package iip.datatypes;
 
-import java.math.*;
+import java.math.BigInteger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
@@ -17,7 +17,7 @@ public interface ModbusSiemensSentron {
      * @return the value
      */
     @JsonIgnore
-    public long getDisplayContrast();
+    public BigInteger getDisplayContrast();
 
     /**
      * Changes the value of {@code DisplayContrast}. Display Contrast
@@ -25,7 +25,7 @@ public interface ModbusSiemensSentron {
      * @param value the new value
      */
     @JsonIgnore
-    public void setDisplayContrast(long value);
+    public void setDisplayContrast(BigInteger value);
     
     /**
      * Returns the value of {@code DisplayBrightness}. Display Brightness
@@ -33,7 +33,7 @@ public interface ModbusSiemensSentron {
      * @return the value
      */
     @JsonIgnore
-    public long getDisplayBrightness();
+    public BigInteger getDisplayBrightness();
 
     /**
      * Changes the value of {@code DisplayBrightness}. Display Brightness
@@ -41,7 +41,7 @@ public interface ModbusSiemensSentron {
      * @param value the new value
      */
     @JsonIgnore
-    public void setDisplayBrightness(long value);
+    public void setDisplayBrightness(BigInteger value);
     
     /**
      * Returns the value of {@code BrightnessDuration}. BrightnessDuration
@@ -49,7 +49,7 @@ public interface ModbusSiemensSentron {
      * @return the value
      */
     @JsonIgnore
-    public long getBrightnessDuration();
+    public BigInteger getBrightnessDuration();
 
     /**
      * Changes the value of {@code BrightnessDuration}. BrightnessDuration
@@ -57,7 +57,7 @@ public interface ModbusSiemensSentron {
      * @param value the new value
      */
     @JsonIgnore
-    public void setBrightnessDuration(long value);
+    public void setBrightnessDuration(BigInteger value);
     
     /**
      * Returns the value of {@code Frequency}. Power Frequency

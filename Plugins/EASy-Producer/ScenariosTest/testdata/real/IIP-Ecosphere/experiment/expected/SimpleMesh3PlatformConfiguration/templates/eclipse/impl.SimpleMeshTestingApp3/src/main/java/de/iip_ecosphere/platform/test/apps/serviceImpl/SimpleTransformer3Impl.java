@@ -1,9 +1,12 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.Rec13;
+import iip.datatypes.Rec13Impl;
+import iip.impl.SimpleDataTransformer3Impl;
 
 /**
  * Service implementation for net node 'Simple Data Transformer3'.
@@ -34,8 +37,5 @@ public class SimpleTransformer3Impl extends SimpleDataTransformer3Impl {
         // TODO add your code here
         return result;
     }
-    
-    
-    
-    
+
 }

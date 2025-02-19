@@ -1,7 +1,8 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.Rec13;
 
 /**
  * IIP-Ecosphere service interface for 'Simple Data Source3'.
@@ -11,12 +12,11 @@ public interface SimpleDataSource3Interface extends Service {
 
     public static final String SERVICE_ID = "SimpleSource3";
 
-    
     /**
      * Synchronous source method, called to produce data items of type "Rec13".
      *
      * @return the data value to be ingested
      */
     public Rec13 produceRec13();
-    
+
 }

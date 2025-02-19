@@ -1,14 +1,19 @@
-
-
 package iip.impl;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
+import de.iip_ecosphere.platform.services.environment.AbstractService;
+import de.iip_ecosphere.platform.services.environment.DefaultServiceImpl;
+import de.iip_ecosphere.platform.services.environment.ParameterConfigurer;
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+import de.iip_ecosphere.platform.services.environment.YamlService;
 import de.iip_ecosphere.platform.transport.serialization.TypeTranslators;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.interfaces.*;
+
+import iip.interfaces.KIFamilyExampleInterface;
 
 /**
  * IIP-Ecosphere supporting service implementation for 'KI family example'.
@@ -17,7 +22,8 @@ import iip.interfaces.*;
 public abstract class KIFamilyExampleImpl extends DefaultServiceImpl implements KIFamilyExampleInterface {
 
 
-    private int threshold = 15;            private Map<String, ParameterConfigurer<?>> paramConfigurers = new HashMap<>();
+    private int threshold = 15;
+    private Map<String, ParameterConfigurer<?>> paramConfigurers = new HashMap<>();
 
     /**
      * Fallback constructor setting most fields to "empty" default values.
@@ -32,11 +38,11 @@ public abstract class KIFamilyExampleImpl extends DefaultServiceImpl implements 
     /**
      * Fallback constructor setting most fields to "empty" default values.
      * 
-     * @param id the id of the service
+     * @param serviceId the id of the service
      * @param kind the service kind
      */
-    protected KIFamilyExampleImpl(String id, ServiceKind kind) {
-        super(id, kind);
+    protected KIFamilyExampleImpl(String serviceId, ServiceKind kind) {
+        super(serviceId, kind);
         registerParameterConfigurers();
     }
 
@@ -53,7 +59,7 @@ public abstract class KIFamilyExampleImpl extends DefaultServiceImpl implements 
     /**
     * Creates a service instance from a service id and a YAML artifact.
     * 
-    * @param serviceId the service id
+    * @param serviceId the id of the service
     * @param ymlFile the YML file containing the YAML artifact with the service descriptor
     */
     protected KIFamilyExampleImpl(String serviceId, InputStream ymlFile) {
@@ -75,19 +81,22 @@ public abstract class KIFamilyExampleImpl extends DefaultServiceImpl implements 
     * Registers the configurers.
     */
     protected void registerParameterConfigurers() {
-        AbstractService.addConfigurer(paramConfigurers, "threshold", Integer.class, TypeTranslators.INTEGER, v -> setParameterThreshold(v), () -> getParameterThreshold());
+        AbstractService.addConfigurer(paramConfigurers, "threshold", Integer.class, TypeTranslators.INTEGER, v -> 
+            setParameterThreshold(v), () -> getParameterThreshold());
     }
 
     /**
     * Changes the service parameter "threshold".
     *
     * @param threshold the parameter value
-    * @throws ExecutionException if setting the value fails, e.g., as the service is in the wrong state such as 
-    *    startup vs. runtime
+    * 
+    * @throws ExecutionException if setting the value fails, e.g., as the service is in the wrong state such as startup
+    * vs. runtime
     */
     public void setParameterThreshold(int threshold) throws ExecutionException {
         this.threshold = threshold;
     }
+
     /**
     * Returns the service parameter "threshold".
     *
@@ -96,5 +105,5 @@ public abstract class KIFamilyExampleImpl extends DefaultServiceImpl implements 
     public int getParameterThreshold() {
         return this.threshold;
     }
-                
+
 }

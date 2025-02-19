@@ -1,8 +1,8 @@
 package iip.datatypes;
 
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
 /**
  * Interface of the application data type Rec13.
@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @ConfiguredName("Rec13")
 public interface Rec13 {
  
-
     /**
       * Returns the value of {@code intField}.
       * 
@@ -19,7 +18,15 @@ public interface Rec13 {
       */
     @JsonIgnore
     public int getIntField();
-    
+
+    /**
+     * Changes the value of {@code intField}.
+     * 
+     * @param value the new value
+     */
+    @JsonIgnore
+    public void setIntField(int value);
+
     /**
       * Returns the value of {@code stringField}.
       * 
@@ -28,15 +35,6 @@ public interface Rec13 {
     @JsonIgnore
     public String getStringField();
     
-    
-    /**
-     * Changes the value of {@code intField}.
-     * 
-     * @param value the new value
-     */
-    @JsonIgnore
-    public void setIntField(int value);
-    
     /**
      * Changes the value of {@code stringField}.
      * 
@@ -44,7 +42,5 @@ public interface Rec13 {
      */
     @JsonIgnore
     public void setStringField(String value);
-    
-    
 
 }

@@ -1,7 +1,7 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.DataIngestor;
+import de.iip_ecosphere.platform.services.environment.Service;
 
 /**
  * IIP-Ecosphere service interface for 'mySource example'.
@@ -10,11 +10,12 @@ import iip.datatypes.*;
 public interface MySourceExampleInterface extends Service {
 
     public static final String SERVICE_ID = "mySource";
-            /**
+    
+    /**
      * Attaches a return value ingestor for asynchronous processing.
      *
      * @param ingestor the ingestor instance
      */
     public void attachStringIngestor(DataIngestor<String> ingestor);
-    
+
 }

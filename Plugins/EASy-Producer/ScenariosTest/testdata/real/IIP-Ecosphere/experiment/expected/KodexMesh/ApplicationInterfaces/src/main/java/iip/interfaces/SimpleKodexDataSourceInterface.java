@@ -1,7 +1,8 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.KRec13;
 
 /**
  * IIP-Ecosphere service interface for 'Simple Kodex Data Source'.
@@ -10,7 +11,6 @@ import iip.datatypes.*;
 public interface SimpleKodexDataSourceInterface extends Service {
 
     public static final String SERVICE_ID = "SimpleKodexSource";
-
     
     /**
      * Synchronous source method, called to produce data items of type "KRec13".
@@ -18,5 +18,5 @@ public interface SimpleKodexDataSourceInterface extends Service {
      * @return the data value to be ingested
      */
     public KRec13 produceKRec13();
-    
+
 }

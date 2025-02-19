@@ -16,7 +16,8 @@ public class MipMqttOutputImplSerializer implements Serializer<MipMqttOutputImpl
     private static final ObjectMapper MAPPER = new ObjectMapper();
     
     static {
-        JsonUtils.defineOptionals(MAPPER, MipMqttOutputImpl.class, "mipraw_signal_clock", "mipraw_signal_data1", "mipraw_signal_data2");
+        JsonUtils.defineOptionals(MAPPER, MipMqttOutputImpl.class, "mipraw_signal_clock", "mipraw_signal_data1", 
+            "mipraw_signal_data2");
         JsonUtils.handleIipDataClasses(MAPPER);
     }
 

@@ -1,7 +1,9 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.Rec1;
+import iip.datatypes.RtsaTestInput;
 
 /**
  * IIP-Ecosphere service interface for 'KI family example'.
@@ -20,6 +22,5 @@ public interface KIFamilyExampleInterface extends Service {
      * @return the result of processing (must not be <b>null</b>)
      */
     public RtsaTestInput transformRec1(Rec1 data);
-    
-    
+
 }

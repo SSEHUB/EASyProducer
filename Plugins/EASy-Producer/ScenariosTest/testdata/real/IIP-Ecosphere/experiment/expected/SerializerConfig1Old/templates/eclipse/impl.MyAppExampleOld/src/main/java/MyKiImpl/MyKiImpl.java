@@ -1,9 +1,11 @@
 package MyKiImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.Rec1;
+import iip.impl.MyKiExampleImpl;
 
 /**
  * Service implementation for net node 'myKi example'.
@@ -34,8 +36,5 @@ public class MyKiImpl extends MyKiExampleImpl {
         // TODO add your code here
         return result;
     }
-    
-    
-    
-    
+
 }

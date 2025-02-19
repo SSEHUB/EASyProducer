@@ -1,7 +1,8 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.Rec13;
 
 /**
  * IIP-Ecosphere service interface for 'Simple Data Receiver3'.
@@ -12,10 +13,11 @@ public interface SimpleDataReceiver3Interface extends Service {
     public static final String SERVICE_ID = "SimpleReceiver3";
 
     /**
-     * Processes a data item of type "Rec13" asynchronously. Use the respective ingestor for the return
-     * type to pass back the result of processing.
+     * Processes a data item of type "Rec13" asynchronously. Use the respective ingestor for the return type to pass back
+     * the result of processing.
      *
      * @param data the data item to be processed
      */
-    public void processRec13(Rec13 data);            
+    public void processRec13(Rec13 data);
+
 }

@@ -1,9 +1,12 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.Rec13;
+import iip.datatypes.Rec13Impl;
+import iip.impl.SimpleDataSource3Impl;
 
 /**
  * Service implementation for net node 'Simple Data Source3'.
@@ -27,8 +30,6 @@ public class SimpleSource3Impl extends SimpleDataSource3Impl {
     public SimpleSource3Impl(String serviceId, InputStream ymlFile) {
         super(serviceId, ymlFile);
     }
-
-    
     
     @Override
     public Rec13 produceRec13() {
@@ -36,6 +37,5 @@ public class SimpleSource3Impl extends SimpleDataSource3Impl {
         // TODO add your code here
         return result;
     }
-    
-    
+
 }

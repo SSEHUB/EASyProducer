@@ -31,19 +31,19 @@ types:
     - name: ModbusSiemensRwSentron
       fields:
         - name: DisplayContrast
-          type: long
+          type: java.math.BigInteger
         - name: DisplayBrightness
-          type: long
+          type: java.math.BigInteger
         - name: BrightnessDuration
-          type: long
+          type: java.math.BigInteger
     - name: ModbusSiemensSentron
       fields:
         - name: DisplayContrast
-          type: long
+          type: java.math.BigInteger
         - name: DisplayBrightness
-          type: long
+          type: java.math.BigInteger
         - name: BrightnessDuration
-          type: long
+          type: java.math.BigInteger
         - name: Frequency
           type: float
         - name: VoltageL1N

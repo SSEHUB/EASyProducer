@@ -1,4 +1,5 @@
 package iip.datatypes;
+
 import de.iip_ecosphere.platform.transport.serialization.IipEnum;
 
 /**

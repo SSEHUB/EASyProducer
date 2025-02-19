@@ -1,12 +1,19 @@
 package iip.impl;
 
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.io.InputStream;
-import de.iip_ecosphere.platform.transport.serialization.TypeTranslators;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.interfaces.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import de.iip_ecosphere.platform.services.environment.DataIngestor;
+import de.iip_ecosphere.platform.services.environment.DefaultServiceImpl;
+import de.iip_ecosphere.platform.services.environment.ParameterConfigurer;
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+import de.iip_ecosphere.platform.services.environment.YamlService;
+
+import iip.interfaces.MySourceExampleInterface;
 
 /**
  * IIP-Ecosphere supporting service implementation for 'mySource example'.
@@ -30,11 +37,11 @@ public abstract class MySourceExampleImpl extends DefaultServiceImpl implements 
     /**
      * Fallback constructor setting most fields to "empty" default values.
      * 
-     * @param id the id of the service
+     * @param serviceId the id of the service
      * @param kind the service kind
      */
-    protected MySourceExampleImpl(String id, ServiceKind kind) {
-        super(id, kind);
+    protected MySourceExampleImpl(String serviceId, ServiceKind kind) {
+        super(serviceId, kind);
         registerParameterConfigurers();
     }
 
@@ -51,7 +58,7 @@ public abstract class MySourceExampleImpl extends DefaultServiceImpl implements 
     /**
     * Creates a service instance from a service id and a YAML artifact.
     * 
-    * @param serviceId the service id
+    * @param serviceId the id of the service
     * @param ymlFile the YML file containing the YAML artifact with the service descriptor
     */
     protected MySourceExampleImpl(String serviceId, InputStream ymlFile) {
@@ -72,7 +79,8 @@ public abstract class MySourceExampleImpl extends DefaultServiceImpl implements 
     /**
     * Registers the configurers.
     */
-    protected void registerParameterConfigurers() {            }
+    protected void registerParameterConfigurers() {
+    }
             
     @Override
     public void attachStringIngestor(DataIngestor<String> ingestor) {
@@ -106,9 +114,9 @@ public abstract class MySourceExampleImpl extends DefaultServiceImpl implements 
     */
     protected void ingestString(String data) {
         for (int i = 0; i < stringIngestors.size(); i++) {
-            stringIngestors.get(i).ingest(data);
+            stringIngestors.get(i)
+                .ingest(data);
         }
     }
-    
-    
+
 }

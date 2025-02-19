@@ -92,15 +92,17 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
 
     @Override
     protected void createAas() {
-        Aas refAas = AasFactory.getInstance().createAasBuilder("ContactInformationsExampleRef", 
-            "urn:::AAS:::ContactInformationsRefExample#").build();
+        Aas refAas = AasFactory.getInstance()
+            .createAasBuilder("ContactInformationsExampleRef", "urn:::AAS:::ContactInformationsRefExample#")
+            .build();
         testReference = refAas.createReference();
         testSmBuilder = refAas.createSubmodelBuilder("test_sm", null);
         testRange = testSmBuilder.createRangeBuilder("test_rng", Type.AAS_INTEGER, 1, 2).build();
         
-        AasBuilder aasBuilder = AasFactory.getInstance().createAasBuilder("ContactInformationsExample", 
-            "urn:::AAS:::ContactInformationsExample#");
-        aasBuilder.createAssetBuilder("ci", "urn:::Asset:::ci#", AssetKind.INSTANCE).build();
+        AasBuilder aasBuilder = AasFactory.getInstance()
+            .createAasBuilder("ContactInformationsExample", "urn:::AAS:::ContactInformationsExample#");
+        aasBuilder.createAssetBuilder("ci", "urn:::Asset:::ci#", AssetKind.INSTANCE)
+            .build();
 
         ContactInformationsBuilder smBuilder = new ContactInformationsBuilder(aasBuilder, 
             "urn:::SM:::ContactInformations#");
@@ -327,8 +329,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
         Assert.assertNotNull(instance.getPOBoxProperty());
         assertLangStringsEquals(toTestLangString("12345@de", "test@en"), first(instance.getZipCodeOfPOBox()));
         Assert.assertNotNull(instance.getZipCodeOfPOBoxProperty());
-        assertLangStringsEquals(toTestLangString("Muster-Bundesland@de", "test@en"), first(instance.getStateCounty(
-            )));
+        assertLangStringsEquals(toTestLangString("Muster-Bundesland@de", "test@en"), first(instance.getStateCounty()));
         Assert.assertNotNull(instance.getStateCountyProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getNameOfContact()));
         Assert.assertNotNull(instance.getNameOfContactProperty());
@@ -355,8 +356,7 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
     * @throws ExecutionException if property accesses/conversions fail
     */
     private static void test(Phone instance, int depth) throws ExecutionException {
-        assertLangStringsEquals(toTestLangString("+491234567890@de", "test@en"), first(instance.getTelephoneNumber(
-            )));
+        assertLangStringsEquals(toTestLangString("+491234567890@de", "test@en"), first(instance.getTelephoneNumber()));
         Assert.assertNotNull(instance.getTelephoneNumberProperty());
         assertEquals(toTestEnum(TypeOfTelephone.class, "0173-1#07-AAS754#001"), first(instance.getTypeOfTelephone()));
         Assert.assertNotNull(instance.getTypeOfTelephoneProperty());
@@ -393,8 +393,8 @@ public class ContactInformationsBuilderTest extends AbstractAasExample {
         Assert.assertNotNull(instance.getEmailAddressProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getPublicKey()));
         Assert.assertNotNull(instance.getPublicKeyProperty());
-        assertEquals(toTestEnum(TypeOfEmailAddress.class, "0173-1#07-AAS754#001"), first(instance.
-            getTypeOfEmailAddress()));
+        assertEquals(toTestEnum(TypeOfEmailAddress.class, "0173-1#07-AAS754#001"), first(instance.getTypeOfEmailAddress(
+            )));
         Assert.assertNotNull(instance.getTypeOfEmailAddressProperty());
         assertLangStringsEquals(toTestLangString("", "test@en"), first(instance.getTypeOfPublicKey()));
         Assert.assertNotNull(instance.getTypeOfPublicKeyProperty());

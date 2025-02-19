@@ -1,55 +1,62 @@
 package iip.nodes;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
-import java.util.concurrent.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.cloud.stream.function.StreamBridge;
-import org.springframework.stereotype.Component;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import io.micrometer.core.instrument.*;
-import static de.iip_ecosphere.platform.connectors.model.ModelAccessProvider.optional;
-import de.iip_ecosphere.platform.support.*;
-import de.iip_ecosphere.platform.support.identities.*;
-import de.iip_ecosphere.platform.support.resources.*;
-import de.iip_ecosphere.platform.support.iip_aas.*;
-import de.iip_ecosphere.platform.support.json.JsonUtils;
-import de.iip_ecosphere.platform.support.net.*;
-import de.iip_ecosphere.platform.transport.Transport;
-import de.iip_ecosphere.platform.transport.status.TraceRecord;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.transport.connectors.*;
-import de.iip_ecosphere.platform.transport.spring.SerializerMessageConverter;
-import de.iip_ecosphere.platform.services.environment.switching.ServiceSelector;
-import de.iip_ecosphere.platform.services.environment.*;
-import de.iip_ecosphere.platform.services.environment.switching.*;
-import de.iip_ecosphere.platform.services.environment.metricsProvider.MonitoredTranslatingProtocolAdapter;
-import de.iip_ecosphere.platform.services.environment.spring.Starter;
-import de.iip_ecosphere.platform.services.environment.spring.SpringAsyncServiceBase;
-import de.iip_ecosphere.platform.services.environment.spring.metricsProvider.MetricsProvider;
+
 import de.iip_ecosphere.platform.connectors.Connector;
 import de.iip_ecosphere.platform.connectors.ConnectorFactory;
 import de.iip_ecosphere.platform.connectors.ConnectorParameter;
 import de.iip_ecosphere.platform.connectors.ConnectorParameter.CacheMode;
-import de.iip_ecosphere.platform.connectors.types.*;
-import de.iip_ecosphere.platform.connectors.model.*;
-import iip.datatypes.*;
-import iip.serializers.*;
+import de.iip_ecosphere.platform.connectors.ConnectorParameter.ConnectorParameterBuilder;
+import de.iip_ecosphere.platform.connectors.model.ModelAccess;
+import de.iip_ecosphere.platform.connectors.model.ModelInputConverter;
+import de.iip_ecosphere.platform.connectors.model.ModelOutputConverter;
+import de.iip_ecosphere.platform.connectors.opcuav1.DataItem;
+import de.iip_ecosphere.platform.connectors.types.AbstractConnectorInputTypeTranslator;
+import de.iip_ecosphere.platform.connectors.types.AbstractConnectorOutputTypeTranslator;
+import de.iip_ecosphere.platform.connectors.types.TranslatingProtocolAdapter;
+import de.iip_ecosphere.platform.services.environment.ConnectorServiceWrapper;
+import de.iip_ecosphere.platform.services.environment.MonitoringService;
+import de.iip_ecosphere.platform.services.environment.YamlArtifact;
+import de.iip_ecosphere.platform.services.environment.YamlService;
+import de.iip_ecosphere.platform.services.environment.metricsProvider.MonitoredTranslatingProtocolAdapter;
+import de.iip_ecosphere.platform.services.environment.spring.SpringAsyncServiceBase;
+import de.iip_ecosphere.platform.services.environment.spring.Starter;
+import de.iip_ecosphere.platform.services.environment.spring.metricsProvider.MetricsProvider;
+import de.iip_ecosphere.platform.services.environment.switching.ServiceBase;
+import de.iip_ecosphere.platform.support.ServerAddress;
+import de.iip_ecosphere.platform.support.iip_aas.NameplateSetup;
+import de.iip_ecosphere.platform.support.iip_aas.NameplateSetup.Service;
+import de.iip_ecosphere.platform.support.net.NetworkManagerFactory;
+import de.iip_ecosphere.platform.support.resources.ResourceLoader;
+import de.iip_ecosphere.platform.transport.Transport;
+import de.iip_ecosphere.platform.transport.connectors.ReceptionCallback;
+
+import iip.datatypes.MyConnPltfIn;
+import iip.datatypes.MyConnPltfInImpl;
+import iip.datatypes.MyConnPltfOut;
+import iip.datatypes.MyNested;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
+
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
 
 /**
  * Spring Cloud Stream service frame for net node 'myOpcConn example'.
- *
- * @author EASy-Producer.
+ * Generated by: EASy-Producer.
  */
 @Component
-@ConditionalOnProperty(value="iip.service.myOpcConn", havingValue="true", matchIfMissing=true)
+@ConditionalOnProperty(value = "iip.service.myOpcConn", havingValue = "true", matchIfMissing = true)
 @EnableScheduling
 public class MyOpcConnExample extends SpringAsyncServiceBase {
 
@@ -57,13 +64,12 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     private String activated;
     @Autowired
     private StreamBridge streamBridge;
-    private ConnectorServiceWrapper<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> service;
-    // so far plain delegation, preparation but so far no support for service switching
+    private ConnectorServiceWrapper<DataItem, Object, MyConnPltfIn, MyConnPltfOut> service;
     @Autowired
     private MetricsProvider metrics;
     private Counter serviceSent;
     private Counter serviceReceived;
-    private io.micrometer.core.instrument.Timer processingTime;
+    private Timer processingTime;
     private String appInstId = "";
 
      /**
@@ -71,14 +77,13 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
      */
     public MyOpcConnExample() {
         ConnectorParameter param = createConnectorParameter();
-        Connector<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> conn = ConnectorFactory.createConnector(
-            "de.iip_ecosphere.platform.connectors.opcuav1.OpcUaConnector", () -> param, 
-            createConnectorAdapter(()->service.getInPath(""), ()->service.getOutPath("")));
-        conn.enablePolling(false); // independent of notifications, disable as @Autowired may not be
-        YamlArtifact art = YamlArtifact.readFromYamlSafe(ResourceLoader
-            .getResourceAsStream("deployment.yml"));
+        Connector<DataItem, Object, MyConnPltfIn, MyConnPltfOut> conn = ConnectorFactory.createConnector(
+            "de.iip_ecosphere.platform.connectors.opcuav1.OpcUaConnector", () -> param, createConnectorAdapter((
+            )->service.getInPath(""), ()->service.getOutPath("")));
+        conn.enablePolling(false);
+        YamlArtifact art = YamlArtifact.readFromYamlSafe(ResourceLoader.getResourceAsStream("deployment.yml"));
         YamlService serviceData = art.getServiceSafe("myOpcConn"); 
-        service = new ConnectorServiceWrapper<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut>(serviceData, conn, 
+        service = new ConnectorServiceWrapper<DataItem, Object, MyConnPltfIn, MyConnPltfOut>(serviceData, conn, 
             () -> param);
         service.setReceptionCallback(new ConnectorReceptionCallback());
         appInstId = getAppInstIdSuffix(service, "_");
@@ -89,7 +94,7 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     *
     * @return the connector adapter
     */
-    public static TranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter() {
+    public static TranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter() {
         return createConnectorAdapter(null, null, null, null);
     }
     
@@ -100,20 +105,21 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     * @param outPathSupplier function returning the actual output base path to use for data accesses, may be <b>null</b>
     * @return the connector adapter
     */
-    public static TranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter(Supplier<String> inPathSupplier, Supplier<String> outPathSupplier) {
+    public static TranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter(
+        Supplier<String> inPathSupplier, Supplier<String> outPathSupplier) {
         return createConnectorAdapter(null, null, inPathSupplier, outPathSupplier);
     }
     
     /**
-    * Creates the connector adapter without path suppliers. [public for testing]
+    * Creates the connector adapter. [public for testing]
     *
     * @param metrics the metrics provider to use, <b>null</b> for no metric measurements
-    * @param log the log file to use to record individual measurements in experiments, <b>null</b> for no logging.
-    *      Only becomes active if {@code metrics} is not <b>null</b>
+    * @param log the log file to use to record individual measurements in experiments, <b>null</b> for no logging. Only
+    * becomes active if {@code metrics} is not <b>null</b>
     * @return the connector adapter
     */
-    public static TranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter(
-        de.iip_ecosphere.platform.services.environment.metricsProvider.MetricsProvider metrics, File log) {
+    public static TranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter(de.
+        iip_ecosphere.platform.services.environment.metricsProvider.MetricsProvider metrics, File log) {
         return createConnectorAdapter(metrics, log, null, null);
     }
     
@@ -121,25 +127,23 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     * Creates the connector adapter. [public for testing]
     *
     * @param metrics the metrics provider to use, <b>null</b> for no metric measurements
-    * @param log the log file to use to record individual measurements in experiments, <b>null</b> for no logging.
-    *      Only becomes active if {@code metrics} is not <b>null</b>
+    * @param log the log file to use to record individual measurements in experiments, <b>null</b> for no logging. Only
+    * becomes active if {@code metrics} is not <b>null</b>
     * @param inPathSupplier function returning the actual input base path to use for data accesses, may be <b>null</b>
     * @param outPathSupplier function returning the actual output base path to use for data accesses, may be <b>null</b>
     * @return the connector adapter
     */
-    public static TranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter(
-        de.iip_ecosphere.platform.services.environment.metricsProvider.MetricsProvider metrics, File log, Supplier<String> inPathSupplier, Supplier<String> outPathSupplier) {
-        TranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut> adapter;
+    public static TranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut> createConnectorAdapter(de.
+        iip_ecosphere.platform.services.environment.metricsProvider.MetricsProvider metrics, File log, Supplier<String>
+        inPathSupplier, Supplier<String> outPathSupplier) {
+        TranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut> adapter;
         if (metrics != null) {
-            adapter = new MonitoredTranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut>(
-                new MachineOutputTranslator(outPathSupplier), 
-                new MachineInputTranslator(inPathSupplier), 
-                metrics, log);
+            adapter = new MonitoredTranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut>(new 
+                MachineOutputTranslator(outPathSupplier), new MachineInputTranslator(inPathSupplier), metrics, log);
         } else {
-            adapter = new TranslatingProtocolAdapter<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, Object, MyConnPltfIn, MyConnPltfOut>(
-                new MachineOutputTranslator(outPathSupplier), 
-                new MachineInputTranslator(inPathSupplier));
-        };
+            adapter = new TranslatingProtocolAdapter<DataItem, Object, MyConnPltfIn, MyConnPltfOut>(new 
+                MachineOutputTranslator(outPathSupplier), new MachineInputTranslator(inPathSupplier));
+        }
         return adapter;
     }
     /**
@@ -150,9 +154,9 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     @Bean
     public Consumer<MyConnPltfOut> createMyConnPltfOut_myOpcConn() {
         return data -> {
-    MetricsProvider.increaseCounterBy(serviceReceived, 1.0); 
-    processingTime.record(() -> service.send(data)); 
-    };
+            MetricsProvider.increaseCounterBy(serviceReceived, 1.0); 
+            processingTime.record(() -> service.send(data)); 
+        };
     }
     
     /**
@@ -161,33 +165,33 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     * @return the instance to be passed to the connector
     */
     public static ConnectorParameter createConnectorParameter() {
-        YamlArtifact art = YamlArtifact.readFromYamlSafe(ResourceLoader
-            .getResourceAsStream("deployment.yml"));
+        YamlArtifact art = YamlArtifact.readFromYamlSafe(ResourceLoader.getResourceAsStream("deployment.yml"));
         YamlService yaml = art.getServiceSafe("myOpcConn"); 
         String host = "localhost";
         String hostOverride = null;
         int port = 1234;
         if (null != yaml.getNetMgtKey() && yaml.getNetMgtKey().length() > 0) {
-            ServerAddress netKeyMgtAddress = NetworkManagerFactory.getInstance().getPort(yaml.getNetMgtKey());
+            ServerAddress netKeyMgtAddress = NetworkManagerFactory.getInstance()
+                .getPort(yaml.getNetMgtKey());
             if (null != netKeyMgtAddress) {
                 host = netKeyMgtAddress.getHost();
                 hostOverride = host;
                 port = netKeyMgtAddress.getPort();
                 System.out.println(host+" "+port);
             }
-        }NameplateSetup.Service svc = NameplateSetup.resolveServiceFromAas("opcua");
-        if (null != svc) { // device has precedence
+        }
+        Service svc = NameplateSetup.resolveServiceFromAas("opcua");
+        if (null != svc) {
             host = svc.getHost();
             port = svc.getPort();
         }
-        return ConnectorParameter.ConnectorParameterBuilder
-                .newBuilder(host, port)
-                .setService(svc)
-                .setApplicationInformation("myApp", "")
-                .setCacheMode(CacheMode.NONE)
-                .setNotificationInterval(0)
-                .build();
-        }
+        return ConnectorParameterBuilder.newBuilder(host, port)
+            .setService(svc)
+            .setApplicationInformation("myApp", "")
+            .setCacheMode(CacheMode.NONE)
+            .setNotificationInterval(0)
+            .build();
+    }
 
     /**
      * Initializes the service when feasible in Spring lifecycle.
@@ -195,10 +199,11 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
     @PostConstruct
     public void initService() {
         if (null == activated || "".equals(activated) || "true".equals(activated)) {
-            LoggerFactory.getLogger(getClass()).info("Initializing service myOpcConn: {}", activated);
+            LoggerFactory.getLogger(getClass())
+                .info("Initializing service myOpcConn: {}", activated);
             String iId;
             String sId;
-            sId = Starter.getServiceId(service); // service.getId() is "static"
+            sId = Starter.getServiceId(service);
             iId = ServiceBase.getApplicationInstanceId(sId);
             if (iId == null || iId.length() == 0) {
                 iId = "dflt";
@@ -208,98 +213,99 @@ public class MyOpcConnExample extends SpringAsyncServiceBase {
             processingTime = metrics.createServiceProcessingTimer("myOpcConn", sId, "myApp", iId);
             MonitoringService.setUp(service, metrics);
             Starter.mapService(service);
-            service.enablePolling(true); // if notifications enabled, enable now also polling as @Autowired is done
-            
+            // if notifications enabled, enable now also polling as @Autowired is done
+            service.enablePolling(true);
         }
     }
+
+    private static class MachineInputTranslator extends AbstractConnectorInputTypeTranslator<MyConnPltfOut, Object> {
     
-
-private static class MachineInputTranslator extends AbstractConnectorInputTypeTranslator<MyConnPltfOut, Object> {
-
-private Supplier<String> pathSupplier;
-
-    private MachineInputTranslator(Supplier<String> pathSupplier) {
-        this.pathSupplier = pathSupplier;
-    }
-
-    @Override
-public Object from(MyConnPltfOut data) throws IOException {
-    ModelAccess access = getModelAccess();
-    final ModelOutputConverter outConverter = access.getOutputConverter();
-    final ModelInputConverter inConverter = access.getInputConverter();
-    final String path = pathSupplier == null ? "" : pathSupplier.get();
-                access.set(path + "cmdField", outConverter.fromString(data.getCmdField()));
-    access.set(path + "nested", outConverter.fromObject(data.getNested()));
+        private Supplier<String> pathSupplier;
     
-    return null; // done, no instance of pseudo type
-}
-
-    @Override
-    public Class<? extends Object> getSourceType() {
-        return Object.class;
-    }
-
-    @Override
-    public Class<? extends MyConnPltfOut> getTargetType() {
-        return MyConnPltfOut.class;
-    }
-
-}
-
-private static class MachineOutputTranslator extends AbstractConnectorOutputTypeTranslator<de.iip_ecosphere.platform.connectors.opcuav1.DataItem, MyConnPltfIn> {
-
-private Supplier<String> pathSupplier;
-
-    private MachineOutputTranslator(Supplier<String> pathSupplier) {
-        this.pathSupplier = pathSupplier;
-    }
-
-    @Override
-public MyConnPltfIn to(de.iip_ecosphere.platform.connectors.opcuav1.DataItem source) throws IOException {
-    ModelAccess access = getModelAccess();
-    final ModelInputConverter inConverter = access.getInputConverter();
-    final ModelOutputConverter outConverter = access.getOutputConverter();
-    final String path = pathSupplier == null ? "" : pathSupplier.get();
-    
-    MyConnPltfIn result = new MyConnPltfInImpl();
-    result.setNested((MyNested[]) inConverter.toObject(access.get(path + "nested", -1)));
-    
-    return result; 
-}
-
-    @Override
-    public void initializeModelAccess() throws IOException {
-        ModelAccess access = getModelAccess();
-        access.useNotifications(true);
-    }
-
-    @Override
-    public Class<? extends de.iip_ecosphere.platform.connectors.opcuav1.DataItem> getSourceType() {
-        return de.iip_ecosphere.platform.connectors.opcuav1.DataItem.class;
-    }
-
-    @Override
-    public Class<? extends MyConnPltfIn> getTargetType() {
-        return MyConnPltfIn.class;
-    }
-
-}
-            private class ConnectorReceptionCallback implements ReceptionCallback<MyConnPltfIn> {
-            
-                {
-                    Starter.getSetup(); // initialize Transport if needed
-                }
-            
-                @Override
-                public void received(MyConnPltfIn data) {
-                    MetricsProvider.increaseCounterBy(serviceSent, 1.0);
-                    Transport.send(c -> c.asyncSend("data_myOpcConn_MyConnPltfIn_myApp" + appInstId, data), "myOpcConn", "processMyConnPltfIn_myAnonymizer-in-0");
-                }
-            
-                @Override
-                public Class<MyConnPltfIn> getType() {
-                    return MyConnPltfIn.class;
-                }
-                    
-            }
+        private MachineInputTranslator(Supplier<String> pathSupplier) {
+            this.pathSupplier = pathSupplier;
         }
+    
+        @Override
+        public Object from(MyConnPltfOut data) throws IOException {
+            ModelAccess access = getModelAccess();
+            final ModelInputConverter inConverter = access.getInputConverter();
+            final ModelOutputConverter outConverter = access.getOutputConverter();
+            final String path = pathSupplier == null ? "" : pathSupplier.get();
+            access.set(path + "cmdField", outConverter.fromString(data.getCmdField()));
+            access.set(path + "nested", outConverter.fromObject(data.getNested()));
+            // done, no instance of pseudo type
+            return null;
+        }
+    
+        @Override
+        public Class<? extends Object> getSourceType() {
+            return Object.class;
+        }
+    
+        @Override
+        public Class<? extends MyConnPltfOut> getTargetType() {
+            return MyConnPltfOut.class;
+        }
+    
+    }
+
+    private static class MachineOutputTranslator extends AbstractConnectorOutputTypeTranslator<DataItem, MyConnPltfIn> {
+    
+        private Supplier<String> pathSupplier;
+    
+        private MachineOutputTranslator(Supplier<String> pathSupplier) {
+            this.pathSupplier = pathSupplier;
+        }
+    
+        @Override
+        public MyConnPltfIn to(DataItem source) throws IOException {
+            ModelAccess access = getModelAccess();
+            final ModelInputConverter inConverter = access.getInputConverter();
+            final ModelOutputConverter outConverter = access.getOutputConverter();
+            final String path = pathSupplier == null ? "" : pathSupplier.get();
+            MyConnPltfIn result = new MyConnPltfInImpl();
+            result.setNested((MyNested[]) inConverter.toObject(access.get(path + "nested", -1)));
+            return result; 
+        }
+    
+        @Override
+        public void initializeModelAccess() throws IOException {
+            ModelAccess access = getModelAccess();
+            access.useNotifications(true);
+        }
+    
+        @Override
+        public Class<? extends DataItem> getSourceType() {
+            return DataItem.class;
+        }
+    
+        @Override
+        public Class<? extends MyConnPltfIn> getTargetType() {
+            return MyConnPltfIn.class;
+        }
+    
+    }
+
+    private class ConnectorReceptionCallback implements ReceptionCallback<MyConnPltfIn> {
+    
+        {
+            // initialize Transport if needed
+            Starter.getSetup();
+        }
+    
+        @Override
+        public void received(MyConnPltfIn data) {
+            MetricsProvider.increaseCounterBy(serviceSent, 1.0);
+            Transport.send(c -> c.asyncSend("data_myOpcConn_MyConnPltfIn_myApp" + appInstId, data), "myOpcConn", 
+                "processMyConnPltfIn_myAnonymizer-in-0");
+        }
+    
+        @Override
+        public Class<MyConnPltfIn> getType() {
+            return MyConnPltfIn.class;
+        }
+            
+    }
+
+}

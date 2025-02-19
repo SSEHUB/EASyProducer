@@ -49,9 +49,10 @@ public class MyModbusConnExampleTest {
         // as configured, or create own and customize
         ConnectorParameter params = MyModbusConnExample.createConnectorParameter();
             
-        ModbusTcpIpConnector<ModbusPhoenixRwEEM, ModbusPhoenixEEM> conn = new ModbusTcpIpConnector<>(
-            MyModbusConnExample.createConnectorAdapter());
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> conn.disconnectSafe()));
+        ModbusTcpIpConnector<ModbusPhoenixRwEEM, ModbusPhoenixEEM> conn = new ModbusTcpIpConnector<>(MyModbusConnExample.
+            createConnectorAdapter());
+        Runtime.getRuntime()
+            .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
         conn.connect(params);
         conn.setReceptionCallback(callback);
         System.out.println("Connector myModbusConn example created...");

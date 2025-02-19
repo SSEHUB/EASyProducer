@@ -1,7 +1,6 @@
 package iip.server;
 
 import java.io.InputStream;
-
 import java.util.concurrent.ExecutionException;
 
 import de.iip_ecosphere.platform.services.environment.PythonAsyncProcessService;
@@ -11,6 +10,7 @@ import de.iip_ecosphere.platform.services.environment.YamlArtifact;
 import de.iip_ecosphere.platform.services.environment.YamlServer;
 import de.iip_ecosphere.platform.support.Server;
 import de.iip_ecosphere.platform.support.resources.ResourceLoader;
+import de.iip_ecosphere.platform.transport.serialization.TypeTranslators;
 
 import org.slf4j.LoggerFactory;
 
@@ -34,13 +34,10 @@ public class TestpyServerServer implements Server {
         if (null == yServer) {
             throw new ExecutionException("No such server known: test-pyServer", null);
         }
-        
         service = new PythonAsyncProcessService(yServer.toService());
         service.addParameterConfigurer(c -> {});
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            stop(true);
-        }));
-        
+        Runtime.getRuntime()
+            .addShutdownHook(new Thread(() -> { stop(true); }));
     }
     
     @Override
@@ -49,8 +46,8 @@ public class TestpyServerServer implements Server {
         try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Starting server service test-pyServer: {}", 
-                e.getMessage());
+            LoggerFactory.getLogger(getClass())
+                .error("Starting server service test-pyServer: {}", e.getMessage());
         }
         return this;
     }
@@ -60,8 +57,8 @@ public class TestpyServerServer implements Server {
         try {
             service.setState(ServiceState.STOPPING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Stopping server service test-pyServer: {}", 
-                e.getMessage());
+            LoggerFactory.getLogger(getClass())
+                .error("Stopping server service test-pyServer: {}", e.getMessage());
         }
     }
 

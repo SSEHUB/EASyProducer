@@ -1,20 +1,19 @@
 package iip.nodes;
 
 import java.io.IOException;
-import java.util.*;
-import java.util.function.*;
-import static de.iip_ecosphere.platform.support.function.IOVoidFunction.optional;
-import de.iip_ecosphere.platform.support.function.*;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.InputConverter;
-import de.iip_ecosphere.platform.connectors.parser.InputParser.ParseResult;
-import de.iip_ecosphere.platform.connectors.parser.*;
-import de.iip_ecosphere.platform.connectors.formatter.OutputFormatter.OutputConverter;
-import de.iip_ecosphere.platform.connectors.formatter.*;
-import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;        
-import iip.datatypes.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import java.util.Map;
+import java.util.function.Supplier;
+
+import de.iip_ecosphere.platform.connectors.parser.JsonInputParser;
+import de.iip_ecosphere.platform.connectors.parser.JsonInputParser.JsonInputConverter;
+import de.iip_ecosphere.platform.connectors.parser.JsonInputParser.JsonInputParser.JsonParseResult;
+import de.iip_ecosphere.platform.connectors.parser.ParserUtils;
+import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;
+
+import iip.datatypes.MyConnPltfIn;
+import iip.datatypes.MyConnPltfInImpl;
+import iip.datatypes.MyNested;
+import iip.datatypes.MyNestedImpl;
 
 /**
  * Parser/formatter connector serializer for MyConnPltfIn.
@@ -29,30 +28,26 @@ public class MyMqttConnExampleParserSerializer implements ChanneledSerializer<My
     public MyMqttConnExampleParserSerializer(String encoding, Map<String, Integer> mapping, Supplier<String> pathSupplier) {
         this.mapping = mapping;
         this.pathSupplier = pathSupplier;
-        parser = (JsonInputParser) ParserUtils.createInstance(
-            MyMqttConnExampleParserSerializer.class.getClassLoader(), "JsonInputParser", encoding);
+        parser = (JsonInputParser) ParserUtils.createInstance(MyMqttConnExampleParserSerializer.class.getClassLoader(), 
+            "de.iip_ecosphere.platform.connectors.parser.JsonInputParser", encoding);
     }
 
     @Override             
     public MyConnPltfIn from(String channel, byte[] data) throws IOException {
         final String path = pathSupplier == null ? "" : pathSupplier.get();
-        JsonInputParser.JsonParseResult pr = parser.parse(data);
-        JsonInputParser.JsonInputConverter inConverter = parser.getConverter(); 
+        JsonParseResult pr = parser.parse(data);
+        JsonInputConverter inConverter = parser.getConverter(); 
         MyConnPltfIn result = new MyConnPltfInImpl();
-        JsonInputParser.JsonParseResult prArray1 = pr.stepInto(path + "nested", 2);
+        JsonParseResult prArray1 = pr.stepInto(path + "nested", 2);
         MyNested[] array1 = new MyNested[prArray1.getArraySize()];
         for (int i = 0, size = prArray1.getArraySize(); i < size; i++) {
-            JsonInputParser.JsonParseResult prElement = prArray1.stepInto("", i);
+            JsonParseResult prElement = prArray1.stepInto("", i);
             array1[i] = new MyNestedImpl();
-            
-        array1[i].setState(inConverter.toString(prElement.getLocalData(path + "state", 0)));
-            
+            array1[i].setState(inConverter.toString(prElement.getLocalData(path + "state", 0)));
             prElement.stepOut();
         }
         prArray1.stepOut();
-        
         result.setNested(array1);
-        
         return result;
     }
 

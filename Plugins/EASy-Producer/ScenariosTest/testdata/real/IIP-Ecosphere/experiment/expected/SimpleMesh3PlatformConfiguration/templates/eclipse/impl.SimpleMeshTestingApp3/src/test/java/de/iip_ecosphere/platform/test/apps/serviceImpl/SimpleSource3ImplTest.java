@@ -1,15 +1,17 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
 import java.util.concurrent.ExecutionException;
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
 
-import org.slf4j.LoggerFactory;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+import de.iip_ecosphere.platform.test.apps.serviceImpl.SimpleSource3Impl;
+
+import iip.datatypes.Rec13;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 /**
  * IIP-Ecosphere service jUnit test for 'Simple Data Source3'.
@@ -18,17 +20,14 @@ import org.junit.Test;
 public class SimpleSource3ImplTest {
 
     private SimpleSource3Impl service;
-
     
     /**
      * Synchronous source method, called to produce data items of type "Rec13".
-     *
-     * @return the data value to be ingested
      */
     @Test
     public void testProduceRec13() {
         Rec13 res = service.produceRec13();
-        Assert.assertNotNull(res); // contract, see platform handbook
+        Assert.assertNotNull(res);
         // TODO assert fields of res
     }
 
@@ -37,11 +36,12 @@ public class SimpleSource3ImplTest {
      */
     @Before
     public void startup() {
-        service = new SimpleSource3Impl(); // constructor for testing, does not set up service management values!        
-        try {
+        // constructor for testing, does not set up service management values!
+        service = new SimpleSource3Impl();        try {
             service.setState(ServiceState.STARTING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Cannot start service: {}", e);
+            LoggerFactory.getLogger(getClass())
+                .error("Cannot start service: {}", e);
         }
     }
 
@@ -53,8 +53,9 @@ public class SimpleSource3ImplTest {
         try {
             service.setState(ServiceState.STOPPING);
         } catch (ExecutionException e) {
-            LoggerFactory.getLogger(getClass()).error("Cannot stop service: {}", e);
+            LoggerFactory.getLogger(getClass())
+                .error("Cannot stop service: {}", e);
         }
     }
-    
+
 }

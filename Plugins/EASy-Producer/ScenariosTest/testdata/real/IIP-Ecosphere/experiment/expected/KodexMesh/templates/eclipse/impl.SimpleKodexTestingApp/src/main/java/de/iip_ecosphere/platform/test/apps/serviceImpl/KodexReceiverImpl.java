@@ -1,9 +1,11 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.KRec13Anon;
+import iip.impl.KodexDataReceiverImpl;
 
 /**
  * Service implementation for net node 'Kodex Data Receiver'.
@@ -32,6 +34,5 @@ public class KodexReceiverImpl extends KodexDataReceiverImpl {
     public void processKRec13Anon(KRec13Anon data) {
         // TODO Store, emit, pass on your data here. This is the sink.
     }
-                
-    
+
 }

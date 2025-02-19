@@ -1,9 +1,12 @@
 package de.iip_ecosphere.platform.test.apps.serviceImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.KRec13;
+import iip.datatypes.KRec13Impl;
+import iip.impl.SimpleKodexDataSourceImpl;
 
 /**
  * Service implementation for net node 'Simple Kodex Data Source'.
@@ -28,14 +31,11 @@ public class SimpleSourceKodexImpl extends SimpleKodexDataSourceImpl {
         super(serviceId, ymlFile);
     }
 
-    
-    
     @Override
     public KRec13 produceKRec13() {
         KRec13 result = new KRec13Impl();
         // TODO add your code here
         return result;
     }
-    
-    
+
 }

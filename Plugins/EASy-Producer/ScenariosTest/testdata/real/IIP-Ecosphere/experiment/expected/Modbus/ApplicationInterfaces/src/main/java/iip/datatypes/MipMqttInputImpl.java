@@ -1,6 +1,5 @@
 package iip.datatypes;
 
-import java.math.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
@@ -207,12 +206,12 @@ public class MipMqttInputImpl implements MipMqttInput {
             eq &= getMipto() != null ? getMipto().equals(oth.getMipto()) : true;
             eq &= getMipfrom() != null ? getMipfrom().equals(oth.getMipfrom()) : true;
             eq &= getMipcommand() != null ? getMipcommand().equals(oth.getMipcommand()) : true;
-            eq &= getMipbitstream_ai_clock() != null ? getMipbitstream_ai_clock().equals(oth.getMipbitstream_ai_clock(
-                )) : true;
-            eq &= getMipbitstream_ai_data1() != null ? getMipbitstream_ai_data1().equals(oth.getMipbitstream_ai_data1(
-                )) : true;
-            eq &= getMipbitstream_ai_data2() != null ? getMipbitstream_ai_data2().equals(oth.getMipbitstream_ai_data2(
-                )) : true;
+            eq &= getMipbitstream_ai_clock() != null ? getMipbitstream_ai_clock().equals(oth.getMipbitstream_ai_clock()) 
+                : true;
+            eq &= getMipbitstream_ai_data1() != null ? getMipbitstream_ai_data1().equals(oth.getMipbitstream_ai_data1()) 
+                : true;
+            eq &= getMipbitstream_ai_data2() != null ? getMipbitstream_ai_data2().equals(oth.getMipbitstream_ai_data2())
+                : true;
             eq &= getMipreader() != null ? getMipreader().equals(oth.getMipreader()) : true;
         } else {
             eq = false;

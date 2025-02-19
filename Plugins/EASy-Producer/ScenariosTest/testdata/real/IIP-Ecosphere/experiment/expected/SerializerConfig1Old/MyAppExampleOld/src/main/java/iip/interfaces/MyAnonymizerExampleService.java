@@ -1,7 +1,10 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.DataIngestor;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.MyConnPltfIn;
+import iip.datatypes.Rec1;
 
 /**
  * IIP-Ecosphere service interface for net node 'myAnonymizer example'.
@@ -14,17 +17,20 @@ public interface MyAnonymizerExampleService extends Service {
     *
     * @param data the arrived data 
     */
-    public abstract void processString(String data);/**
+    public void processString(String data);
+    
+    /**
     * Called when data arrived that shall be processed (asynchronously).
     *
     * @param data the arrived data 
     */
-    public abstract void processMyConnPltfIn(MyConnPltfIn data);
+    public void processMyConnPltfIn(MyConnPltfIn data);
 
     /**
-                 * Called by the platform to attach an asynchronous data ingestor for type "Rec1".
-                 *
-                 * @param ingestor the "Rec1" ingestor instance
-                 */
-                 public abstract void attachprocessRec1_myAnonymizerIngestor(DataIngestor<Rec1> ingestor);        
+     * Called by the platform to attach an asynchronous data ingestor for type "Rec1".
+     *
+     * @param ingestor the "Rec1" ingestor instance
+     */
+    public void attachprocessRec1_myAnonymizerIngestor(DataIngestor<Rec1> ingestor);
+
 }

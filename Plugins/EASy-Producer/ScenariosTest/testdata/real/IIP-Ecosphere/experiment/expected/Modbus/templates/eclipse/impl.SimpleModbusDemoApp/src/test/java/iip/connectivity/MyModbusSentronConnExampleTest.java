@@ -18,8 +18,8 @@ import iip.nodes.MyModbusSentronConnExample;
  */
 public class MyModbusSentronConnExampleTest {
 
-    private static ReceptionCallback<ModbusSiemensRwSentron> callback = new ReceptionCallback<ModbusSiemensRwSentron>(
-        ) {
+    private static ReceptionCallback<ModbusSiemensRwSentron> callback = new ReceptionCallback<ModbusSiemensRwSentron>()
+        {
     
         @Override
         public void received(ModbusSiemensRwSentron data) {
@@ -51,7 +51,8 @@ public class MyModbusSentronConnExampleTest {
             
         ModbusTcpIpConnector<ModbusSiemensRwSentron, ModbusSiemensSentron> conn = new ModbusTcpIpConnector<>(
             MyModbusSentronConnExample.createConnectorAdapter());
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> conn.disconnectSafe()));
+        Runtime.getRuntime()
+            .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
         conn.connect(params);
         conn.setReceptionCallback(callback);
         System.out.println("Connector myModbusSentronConn example created...");

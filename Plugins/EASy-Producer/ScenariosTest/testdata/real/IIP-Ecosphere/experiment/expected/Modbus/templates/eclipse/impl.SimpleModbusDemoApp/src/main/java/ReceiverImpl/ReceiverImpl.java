@@ -1,9 +1,12 @@
 package ReceiverImpl;
 
-import java.io.*;        
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
-import iip.impl.*;
+import java.io.InputStream;
+
+import de.iip_ecosphere.platform.services.environment.ServiceKind;
+
+import iip.datatypes.ModbusPhoenixEEM;
+import iip.datatypes.ModbusSiemensSentron;
+import iip.impl.ModbusReceiverImpl;
 
 /**
  * Service implementation for net node 'Modbus Receiver'.
@@ -36,6 +39,5 @@ public class ReceiverImpl extends ModbusReceiverImpl {
     public void processModbusSiemensSentron(ModbusSiemensSentron data) {
         // TODO Store, emit, pass on your data here. This is the sink.
     }
-                
-    
+
 }

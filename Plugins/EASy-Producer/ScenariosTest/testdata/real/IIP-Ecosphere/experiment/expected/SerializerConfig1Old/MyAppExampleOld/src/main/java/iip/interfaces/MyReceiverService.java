@@ -1,7 +1,6 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
 
 /**
  * IIP-Ecosphere service interface for net node 'MyReceiver'.
@@ -14,6 +13,5 @@ public interface MyReceiverService extends Service {
     *
     * @param data the data received data
     */
-    public abstract void receiveString(String data);
-
-}
+    public void receiveString(String data);
+}

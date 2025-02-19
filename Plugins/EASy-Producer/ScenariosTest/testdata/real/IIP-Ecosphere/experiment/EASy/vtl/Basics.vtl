@@ -230,7 +230,7 @@ template Basics(Configuration config, FileArtifact target) {
         }
     } 
     
-    def getStringValueSafe(DecisionVariable var, String dflt) {
+    def String getStringValueSafe(DecisionVariable var, String dflt) {
         String res;
         if (isDefined(var) and var <> null) {
             res = var;
@@ -240,7 +240,7 @@ template Basics(Configuration config, FileArtifact target) {
         res;
     }
 
-    def getIntegerValueSafe(DecisionVariable var, Integer dflt) {
+    def Integer getIntegerValueSafe(DecisionVariable var, Integer dflt) {
         Integer res;
         if (isDefined(var) and var <> null) {
             res = var;

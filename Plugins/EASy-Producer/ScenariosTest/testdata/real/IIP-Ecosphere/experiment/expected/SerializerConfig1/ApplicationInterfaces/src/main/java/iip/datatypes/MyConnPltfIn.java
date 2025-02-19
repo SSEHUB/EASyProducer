@@ -1,6 +1,5 @@
 package iip.datatypes;
 
-import java.math.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
 
@@ -36,8 +35,8 @@ public interface MyConnPltfIn {
     public String getDataField();
 
     /**
-     * Changes the value of {@code dataField}. This field is read only, but needs an accessor for connector 
-     * serializers. Although you can change it, a connector may ignore the value.
+     * Changes the value of {@code dataField}. This field is read only, but needs an accessor for connector serializers.
+     * Although you can change it, a connector may ignore the value.
      * 
      * @param value the new value
      */

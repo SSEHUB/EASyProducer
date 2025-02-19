@@ -1,0 +1,21 @@
+import Basics;
+import JavaBasics;
+import SpringBasics;
+import SpringCloudStreamBasics;
+import MeshBasics;
+import JavaConnector;
+import ServiceBasics;
+import JavaSpringCloudStreamMeshElementBase;
+insert JavaSpringCloudStreamMeshElementPart*;
+
+@advice(IIPEcosphere)
+@indent(indentation = 4, additional = 0)
+template JavaSpringCloudStreamMeshElement(Configuration config, FileArtifact target, MeshElement elt, String pkg, 
+    Application app, Boolean sharedInterfaces, String familyInterface, ServiceBase familyMember, setOf(MeshElement) nodes) extends JavaSpringCloudStreamMeshElementBase {
+
+    def main(Configuration config, FileArtifact target, MeshElement elt, String pkg, Application app, 
+        Boolean sharedInterfaces, String familyInterface, ServiceBase familyMember, setOf(MeshElement) nodes) {
+        gen(config, target, elt, pkg, app, sharedInterfaces, familyInterface, familyMember, nodes);
+    }
+    
+}

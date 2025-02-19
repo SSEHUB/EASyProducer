@@ -1,9 +1,11 @@
 package iip.datatypes;
 
-import iip.datatypes.Rec13;
-import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+
+import iip.datatypes.Rec13;
 
 /**
  * Implementation of the application data type Rec13.
@@ -20,7 +22,6 @@ public class Rec13Impl implements Rec13 {
     @ConfiguredName("stringField")
     private String stringField;
     
-
     /**
      * Default constructor. Fields are pre-allocated with default Java values.
      */
@@ -40,32 +41,26 @@ public class Rec13Impl implements Rec13 {
     @Override
     @JsonIgnore
     public int getIntField() {
-    
         return intField;
     }
-    
-    @Override
-    @JsonIgnore
-    public String getStringField() {
-    
-        return stringField;
-    }
-    
-    
+
     @Override
     @JsonIgnore
     public void setIntField(int value) {
-    
         this.intField = value;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getStringField() {
+        return stringField;
     }
     
     @Override
     @JsonIgnore
     public void setStringField(String value) {
-    
         this.stringField = value;
     }
-    
 
     @Override
     public int hashCode() {

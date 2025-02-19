@@ -1,7 +1,8 @@
 package iip.interfaces;
 
-import de.iip_ecosphere.platform.services.environment.*;
-import iip.datatypes.*;
+import de.iip_ecosphere.platform.services.environment.Service;
+
+import iip.datatypes.Rec13;
 
 /**
  * IIP-Ecosphere service interface for 'Simple Data Transformer3'.
@@ -18,6 +19,5 @@ public interface SimpleDataTransformer3Interface extends Service {
      * @return the result of processing (must not be <b>null</b>)
      */
     public Rec13 transformRec13(Rec13 data);
-    
-    
+
 }

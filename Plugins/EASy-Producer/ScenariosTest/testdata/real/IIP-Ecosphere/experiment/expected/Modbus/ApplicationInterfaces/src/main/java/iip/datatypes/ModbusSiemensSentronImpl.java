@@ -1,6 +1,6 @@
 package iip.datatypes;
 
-import java.math.*;
+import java.math.BigInteger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
@@ -15,15 +15,15 @@ public class ModbusSiemensSentronImpl implements ModbusSiemensSentron {
  
     @JsonProperty("DisplayContrast")
     @ConfiguredName("DisplayContrast")
-    private long DisplayContrast;
+    private BigInteger DisplayContrast;
     
     @JsonProperty("DisplayBrightness")
     @ConfiguredName("DisplayBrightness")
-    private long DisplayBrightness;
+    private BigInteger DisplayBrightness;
     
     @JsonProperty("BrightnessDuration")
     @ConfiguredName("BrightnessDuration")
-    private long BrightnessDuration;
+    private BigInteger BrightnessDuration;
     
     @JsonProperty("Frequency")
     @ConfiguredName("Frequency")
@@ -59,37 +59,37 @@ public class ModbusSiemensSentronImpl implements ModbusSiemensSentron {
 
     @Override
     @JsonIgnore
-    public long getDisplayContrast() {
+    public BigInteger getDisplayContrast() {
         return DisplayContrast;
     }
 
     @Override
     @JsonIgnore
-    public void setDisplayContrast(long value) {
+    public void setDisplayContrast(BigInteger value) {
         this.DisplayContrast = value;
     }
     
     @Override
     @JsonIgnore
-    public long getDisplayBrightness() {
+    public BigInteger getDisplayBrightness() {
         return DisplayBrightness;
     }
 
     @Override
     @JsonIgnore
-    public void setDisplayBrightness(long value) {
+    public void setDisplayBrightness(BigInteger value) {
         this.DisplayBrightness = value;
     }
     
     @Override
     @JsonIgnore
-    public long getBrightnessDuration() {
+    public BigInteger getBrightnessDuration() {
         return BrightnessDuration;
     }
 
     @Override
     @JsonIgnore
-    public void setBrightnessDuration(long value) {
+    public void setBrightnessDuration(BigInteger value) {
         this.BrightnessDuration = value;
     }
     
@@ -132,9 +132,9 @@ public class ModbusSiemensSentronImpl implements ModbusSiemensSentron {
     @Override
     public int hashCode() {
         int hc = 0;
-        hc += Long.hashCode(getDisplayContrast());
-        hc += Long.hashCode(getDisplayBrightness());
-        hc += Long.hashCode(getBrightnessDuration());
+        hc += getDisplayContrast() != null ? getDisplayContrast().hashCode() : 0;
+        hc += getDisplayBrightness() != null ? getDisplayBrightness().hashCode() : 0;
+        hc += getBrightnessDuration() != null ? getBrightnessDuration().hashCode() : 0;
         hc += Float.hashCode(getFrequency());
         hc += Float.hashCode(getVoltageL1N());
         hc += Float.hashCode(getCurrentL1());
@@ -147,9 +147,9 @@ public class ModbusSiemensSentronImpl implements ModbusSiemensSentron {
         if (other instanceof ModbusSiemensSentron) {
             ModbusSiemensSentron oth = (ModbusSiemensSentron) other;
             eq = true;
-            eq &= getDisplayContrast() == oth.getDisplayContrast();
-            eq &= getDisplayBrightness() == oth.getDisplayBrightness();
-            eq &= getBrightnessDuration() == oth.getBrightnessDuration();
+            eq &= getDisplayContrast() != null ? getDisplayContrast().equals(oth.getDisplayContrast()) : true;
+            eq &= getDisplayBrightness() != null ? getDisplayBrightness().equals(oth.getDisplayBrightness()) : true;
+            eq &= getBrightnessDuration() != null ? getBrightnessDuration().equals(oth.getBrightnessDuration()) : true;
             eq &= getFrequency() == oth.getFrequency();
             eq &= getVoltageL1N() == oth.getVoltageL1N();
             eq &= getCurrentL1() == oth.getCurrentL1();

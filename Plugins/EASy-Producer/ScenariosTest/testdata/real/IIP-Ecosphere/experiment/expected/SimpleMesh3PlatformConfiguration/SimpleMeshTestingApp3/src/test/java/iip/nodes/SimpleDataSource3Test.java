@@ -1,83 +1,72 @@
-
-
 package iip.nodes;
 
-import java.io.*;
-import java.util.*;
-import java.util.function.*;
-import java.util.concurrent.BlockingQueue;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
 
-import de.iip_ecosphere.platform.support.*;
+import de.iip_ecosphere.platform.services.environment.DataMapper.BaseDataUnit;
+import de.iip_ecosphere.platform.services.environment.DataMapper.BaseMappingConsumer;
+import de.iip_ecosphere.platform.services.environment.IipStringStyle;
+import de.iip_ecosphere.platform.services.environment.Service;
+import de.iip_ecosphere.platform.services.environment.ServiceState;
+import de.iip_ecosphere.platform.services.environment.YamlArtifact;
+import de.iip_ecosphere.platform.services.environment.YamlService;
+import de.iip_ecosphere.platform.services.environment.spring.SpringAsyncServiceBase;
+import de.iip_ecosphere.platform.support.FileUtils;
+import de.iip_ecosphere.platform.support.TimeUtils;
 import de.iip_ecosphere.platform.support.iip_aas.ActiveAasBase;
 import de.iip_ecosphere.platform.support.iip_aas.ActiveAasBase.NotificationMode;
-import de.iip_ecosphere.platform.support.setup.CmdLine;
 import de.iip_ecosphere.platform.support.resources.ResourceLoader;
-import de.iip_ecosphere.platform.transport.Transport;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.services.environment.*;
-import de.iip_ecosphere.platform.services.environment.spring.SpringAsyncServiceBase;
+import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 
-import org.slf4j.LoggerFactory;
+import iip.Starter;
+import iip.datatypes.Rec13;
 
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.integration.support.MessageBuilder;
-import org.springframework.messaging.Message;
-import org.springframework.cloud.stream.messaging.*;
-import org.springframework.messaging.Message;
-
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.cloud.stream.binder.test.InputDestination;
-import org.springframework.cloud.stream.binder.test.OutputDestination;
-
-import org.junit.*;
-import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.hamcrest.core.IsAnything;
+import org.junit.Test;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
-import org.hamcrest.core.IsAnything;
-
-import iip.datatypes.*;
-import iip.serializers.*;
-import iip.nodes.*;
-import iip.interfaces.*;
+import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.stream.binder.test.TestChannelBinderConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.Assert.assertTrue;
 
 /**
-* Implements tests for "SimpleDataSource3". The generated class is meant to be re-usable and extensible, e.g.,
-* regarding the assert predicates. We provide a main method to ease startup. 
-* There is no guarantee on the sequence of received data, in particular not when 
-* the service is declared to be asynchronous. The test loads input data file from the system 
-* property "iip.test.dataFile", "../../src/test/resources/testData-SimpleSource3.json", the default resource "testData-SimpleSource3.json" 
-* or "resources/software" if you want to deploy it, e.g., in case of a mocked connector.
-* The input data file is a JSON file, one data unit per line, following a generic structure per data unit. 
-* A data unit consists of one optional object entry per input type of the service under test (attribute name
-* is the type name with first character in small case) - the contents of the same structure as defined in the
-* configuration model. The structure for this service is: {@code {, "$period": p, "$repeats": r}}. Depending
-* on your data type definitions in the model, individual fields may be mandatory (indicated by <i>m</i>), 
-* optional (indicated by <i>o</i>) or nested fields (not indicated further). "$period" is 
-* an optional generic entry that defines the delay period <i>p</i> between the actual
-* and the next data entry (if unspecified the initial value is {@link #getInitialPeriod()}.
-* "$repeats" is the number of repeats of the specifying line (0: none, positive: #repeats, negative: endless).
-*
-* @author EASy-Producer
-*/        
-@SpringBootTest(classes = iip.Starter.class)
+ * Implements tests for "SimpleDataSource3". The generated class is meant to be re-usable and extensible, e.g., regarding
+ * the assert predicates. We provide a main method to ease startup.
+ * There is no guarantee on the sequence of received data, in particular not when the service is declared to be
+ * asynchronous. The test loads input data file from the system property "iip.test.dataFile",
+ * "../../src/test/resources/testData-SimpleSource3.json", the default resource
+ * "testData-SimpleSource3.json" or "resources/software" if you want to deploy it, e.g., in case of a mocked
+ * connector. The input data file is a JSON file, one data unit per line, following a generic structure per data
+ * unit. A data unit consists of one optional object entry per input type of the service under test (attribute
+ * name is the type name with first character in small case) - the contents of the same structure as defined
+ * in the configuration model. The structure for this service is: {@code {, "$period": p, "$repeats": r}}.
+ * Depending on your data type definitions in the model, individual fields may be mandatory (indicated by
+ * <i>m</i>), optional (indicated by <i>o</i>) or nested fields (not indicated further). "$period" is an optional
+ * generic entry that defines the delay period <i>p</i> between the actual and the next data entry (if
+ * unspecified the initial value is {@link #getInitialPeriod()}. "$repeats" is the number of repeats of the
+ * specifying line (0: none, positive: #repeats, negative: endless).
+ * Generated by: EASy-Producer.
+ */
+@SpringBootTest(classes = Starter.class)
 @ImportAutoConfiguration(TestChannelBinderConfiguration.class)
 @TestPropertySource(properties = {
-    "spring.cloud.stream.poller.fixedDelay=800",
-        "spring.cloud.function.definition=createRec13_SimpleSource3",
-        "spring.cloud.stream.source=data_createRec13_SimpleSource3_SimpleMeshApp3",
-        "iip.service.SimpleReceiver3=false",
-        "iip.service.SimpleSource3=true",
-        "iip.service.SimpleTransformer3=false"})
+"spring.cloud.stream.poller.fixedDelay=800",
+"spring.cloud.function.definition=createRec13_SimpleSource3",
+"spring.cloud.stream.source=data_createRec13_SimpleSource3_SimpleMeshApp3",
+"iip.service.SimpleReceiver3=false",
+"iip.service.SimpleSource3=true",
+"iip.service.SimpleTransformer3=false"})
 @RunWith(SpringRunner.class)
 public class SimpleDataSource3Test extends SpringAsyncServiceBase {
 
@@ -87,30 +76,19 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
     
     /**
     * Represents all potential inputs to the service and the JSON input format.
-    *
-    * @author EASy-Producer
     */
-    public static class DataUnit extends DataMapper.BaseDataUnit {
-    
-        
-    
-        
-        
-        
+    public static class DataUnit extends BaseDataUnit {
         
         @Override
         public String toString() {
-            return org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString(this, 
-                de.iip_ecosphere.platform.services.environment.IipStringStyle.SHORT_STRING_STYLE);
+            return ReflectionToStringBuilder.toString(this, IipStringStyle.SHORT_STRING_STYLE);
         }
         
     }
     
     /**
-    * A predicate-based matcher for spring-based output testing. Class generated here, because we do not want to 
-    * include the testing artifact of services.environment and hamcrest shall not be a major production dependency.
-    *
-    * @author EASy-Producer
+    * A predicate-based matcher for spring-based output testing. Class generated here, because we do not want to include
+    * the testing artifact of services.environment and hamcrest shall not be a major production dependency.
     */
     private class TestMatcher extends IsAnything<Object> {
     
@@ -154,9 +132,7 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
             Predicate<T> pred = (Predicate<T>) predicates.get(obj.getClass());
             return null == pred ? true : pred.test(obj);
         }
-    };
-    
-    
+    }
     
     /**
     * Creates an instance and registers the application serializers.
@@ -178,22 +154,23 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
     * @throws IOException if setting up the source fails
     */
     public void testSource() throws IOException {
-        DataMapper.BaseMappingConsumer<DataUnit> consumer = 
-            new DataMapper.BaseMappingConsumer<DataUnit>(DataUnit.class, getInitialPeriod());
+        BaseMappingConsumer<DataUnit> consumer = new BaseMappingConsumer<DataUnit>(DataUnit.class, getInitialPeriod());
         final Predicate<Rec13> predRec13 = getAssertPredicateRec13();
         createReceptionCallback("data_SimpleSource3_Rec13_SimpleMeshApp3", d -> {
             incrementReceived(Rec13.class); 
             printReceivedData(d);
-            Assert.assertTrue(predRec13.test(d));
+            assertTrue(predRec13.test(d));
         }, Rec13.class);
         TimeUtils.sleep(5000);
-        Service svc = iip.Starter.getMappedService("SimpleSource3");
+        Service svc = Starter.getMappedService("SimpleSource3");
         if (null != svc) {
             try {
-                LoggerFactory.getLogger(getClass()).info("Service autostop (test): SimpleSource3");
+                LoggerFactory.getLogger(getClass())
+                    .info("Service autostop (test): SimpleSource3");
                 svc.setState(ServiceState.STOPPING);
             } catch (ExecutionException e) {
-                LoggerFactory.getLogger(getClass()).error("Stopping service SimpleSource3: {}", e.getMessage());
+                LoggerFactory.getLogger(getClass())
+                    .error("Stopping service SimpleSource3: {}", e.getMessage());
             }
         }
         System.exit(0);
@@ -214,9 +191,8 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
     }
     
     /**
-    * Creates/returns a predicate asserting that the received data of type Rec13
-    * as output of the testing object is ok (or not). Allows for overriding the test behavior
-    * with "semantic" expectations.
+    * Creates/returns a predicate asserting that the received data of type Rec13 as output of the testing object is ok 
+    * (or not). Allows for overriding the test behavior with "semantic" expectations.
     *
     * @return the predicate (default: lambda function always returning {@code true})
     */ 
@@ -260,22 +236,22 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
     public void testSimpleSource3Service() throws IOException {
         NotificationMode oldM = ActiveAasBase.setNotificationMode(NotificationMode.NONE);
         testSource();
-        Assert.assertTrue("Received counters not as expected", 
-            createReceivedCounterAssertPredicate().test(Collections.unmodifiableMap(received)));
+        assertTrue("Received counters not as expected", createReceivedCounterAssertPredicate().test(Collections.
+            unmodifiableMap(received)));
         ActiveAasBase.setNotificationMode(oldM);
     }
-    
     
     /**
     * Starts the configured version of this service/connector as main program.
     *
-    * @param args the command line arguments
+    * @param args command line arguments
+    * 
     * @throws IOException shall not occur
     */
     public static void main(String[] args) throws IOException {
         cmdArgs = args;
-        iip.Starter.setServiceAutostart(true);
-        iip.Starter.setOnServiceAutostartAttachShutdownHook(false);
+        Starter.setServiceAutostart(true);
+        Starter.setOnServiceAutostartAttachShutdownHook(false);
         
         YamlService yaml = YamlArtifact.readFromYamlSafe(ResourceLoader.getResourceAsStream("deployment.yml"))
             .getServiceSafe("SimpleSource3");
@@ -283,12 +259,13 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
         if (null != f && null != yaml.getProcess()) {
             Starter.extractProcessArtifacts("SimpleSource3", yaml.getProcess(), f, null);
         } else {
-            LoggerFactory.getLogger(SimpleDataSource3Test.class).info("Service artifact {} not found in {}", "SimpleMeshTestingApp3-0.1.0-SNAPSHOT-bin.jar", "..");
+            LoggerFactory.getLogger(SimpleDataSource3Test.class)
+                .info("Service artifact {} not found in {}", "SimpleMeshTestingApp3-0.1.0-SNAPSHOT-bin.jar", "..");
         }
         
         JUnitCore junit = new JUnitCore();
         junit.addListener(new TextListener(System.out));
         junit.run(SimpleDataSource3Test.class);
     }
-    
+
 }

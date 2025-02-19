@@ -1,11 +1,11 @@
 package iip.serializers;
 
 import java.io.IOException;
-import de.iip_ecosphere.platform.transport.serialization.*;
-import de.iip_ecosphere.platform.support.json.JsonUtils;
-import iip.datatypes.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.iip_ecosphere.platform.support.json.JsonUtils;
+import de.iip_ecosphere.platform.transport.serialization.Serializer;
+import iip.datatypes.*;
 
 /**
  * JSON transport serializer for MipMqttInput.
@@ -14,9 +14,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class MipMqttInputImplSerializer implements Serializer<MipMqttInputImpl> {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
     static {
-        JsonUtils.defineOptionals(MAPPER, MipMqttInputImpl.class, "mipfrom", "mipcommand", "mipbitstream_ai_clock", "mipbitstream_ai_data1", "mipbitstream_ai_data2", "mipreader");
-        JsonUtils.handleIipDataClasses(MAPPER); // only if nested?
+        JsonUtils.defineOptionals(MAPPER, MipMqttInputImpl.class, "mipfrom", "mipcommand", "mipbitstream_ai_clock",
+            "mipbitstream_ai_data1", "mipbitstream_ai_data2", "mipreader");
+        JsonUtils.handleIipDataClasses(MAPPER);
     }
 
     @Override             
