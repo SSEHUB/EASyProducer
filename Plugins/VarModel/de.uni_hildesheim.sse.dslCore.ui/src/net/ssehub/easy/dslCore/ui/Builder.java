@@ -231,7 +231,7 @@ public class Builder extends IncrementalProjectBuilder {
 
         int doneCount = 0;
         for (ResourceWorkUnit unit: workUnits) {
-            subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "):" 
+            subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " 
                 + unit.resource.getURI());
             if (monitor.isCanceled()) {
                 throw new OperationCanceledException();
@@ -248,6 +248,7 @@ public class Builder extends IncrementalProjectBuilder {
         }
         subMonitor.subTask("Completed");
         subMonitor.setWorkRemaining(0);
+        subMonitor.done();
     }
 
     public class TaskMarkerContributor implements IMarkerContributor {
