@@ -70,7 +70,7 @@ public class ValidationUtils {
     }
     
     public static boolean isOnSaveEnabled() {
-        return performValidationOnSave;
+        return performValidationOnSave && ValidationMode.ON_SAVE == mode;
     }
     
     /**

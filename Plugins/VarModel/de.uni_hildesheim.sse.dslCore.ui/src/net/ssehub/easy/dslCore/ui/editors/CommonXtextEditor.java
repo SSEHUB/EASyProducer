@@ -71,7 +71,8 @@ public abstract class CommonXtextEditor <T extends EObject, R> extends org.eclip
     public void updateEditor() {
         // run this for sure in the UI thread
         Display display = Display.getDefault();
-        if (!display.isDisposed()) {
+        // may cause a build loop loop
+        if (!display.isDisposed() && ValidationUtils.isOnSaveEnabled()) {
             display.asyncExec(new Runnable() {
                 
                 @Override
