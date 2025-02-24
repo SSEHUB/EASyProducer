@@ -527,7 +527,7 @@ public class TemplateLangSemanticSequencer extends ExpressionDslSemanticSequence
 	 *     SubCall returns SubCall
 	 *
 	 * Constraint:
-	 *     (((type='.' | type='-&gt;') call=Call) | arrayEx=Expression | ((varType=Type? id=Identifier)? nested+=Stmt nested+=Stmt*))
+	 *     (((type='.' | type='-&gt;') call=Call) | arrayEx=Expression | ((varType=Type? id=Identifier)? nested+=Stmt*))?
 	 * </pre>
 	 */
 	protected void sequence_SubCall(ISerializationContext context, SubCall semanticObject) {

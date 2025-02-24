@@ -1109,16 +1109,15 @@ public class TemplateLangGrammarAccess extends AbstractElementFinder.AbstractGra
 		private final RuleCall cArrayExExpressionParserRuleCall_1_1_0 = (RuleCall)cArrayExAssignment_1_1.eContents().get(0);
 		private final Keyword cRightSquareBracketKeyword_1_2 = (Keyword)cGroup_1.eContents().get(2);
 		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
-		private final Keyword cFullStopLeftParenthesisKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Group cGroup_2_1 = (Group)cGroup_2.eContents().get(1);
-		private final Assignment cVarTypeAssignment_2_1_0 = (Assignment)cGroup_2_1.eContents().get(0);
-		private final RuleCall cVarTypeTypeParserRuleCall_2_1_0_0 = (RuleCall)cVarTypeAssignment_2_1_0.eContents().get(0);
-		private final Assignment cIdAssignment_2_1_1 = (Assignment)cGroup_2_1.eContents().get(1);
-		private final RuleCall cIdIdentifierParserRuleCall_2_1_1_0 = (RuleCall)cIdAssignment_2_1_1.eContents().get(0);
-		private final Keyword cVerticalLineKeyword_2_1_2 = (Keyword)cGroup_2_1.eContents().get(2);
-		private final Keyword cLeftCurlyBracketKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
-		private final Assignment cNestedAssignment_2_3 = (Assignment)cGroup_2.eContents().get(3);
-		private final RuleCall cNestedStmtParserRuleCall_2_3_0 = (RuleCall)cNestedAssignment_2_3.eContents().get(0);
+		private final Action cSubCallAction_2_0 = (Action)cGroup_2.eContents().get(0);
+		private final Keyword cFullStopLeftParenthesisKeyword_2_1 = (Keyword)cGroup_2.eContents().get(1);
+		private final Group cGroup_2_2 = (Group)cGroup_2.eContents().get(2);
+		private final Assignment cVarTypeAssignment_2_2_0 = (Assignment)cGroup_2_2.eContents().get(0);
+		private final RuleCall cVarTypeTypeParserRuleCall_2_2_0_0 = (RuleCall)cVarTypeAssignment_2_2_0.eContents().get(0);
+		private final Assignment cIdAssignment_2_2_1 = (Assignment)cGroup_2_2.eContents().get(1);
+		private final RuleCall cIdIdentifierParserRuleCall_2_2_1_0 = (RuleCall)cIdAssignment_2_2_1.eContents().get(0);
+		private final Keyword cVerticalLineKeyword_2_2_2 = (Keyword)cGroup_2_2.eContents().get(2);
+		private final Keyword cLeftCurlyBracketKeyword_2_3 = (Keyword)cGroup_2.eContents().get(3);
 		private final Assignment cNestedAssignment_2_4 = (Assignment)cGroup_2.eContents().get(4);
 		private final RuleCall cNestedStmtParserRuleCall_2_4_0 = (RuleCall)cNestedAssignment_2_4.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_2_5 = (Keyword)cGroup_2.eContents().get(5);
@@ -1128,13 +1127,13 @@ public class TemplateLangGrammarAccess extends AbstractElementFinder.AbstractGra
 		//SubCall:
 		//    type=('.' | '->') call=Call
 		//    | '[' arrayEx=Expression ']' // IVML addition to OCL
-		//    | '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt (nested+=Stmt)* '}' ')' // implicit block with variable from last result
+		//    | {SubCall} '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt* '}' ')' // implicit block with variable from last result
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//type=('.' | '->') call=Call
 		//| '[' arrayEx=Expression ']' // IVML addition to OCL
-		//| '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt (nested+=Stmt)* '}' ')'
+		//| {SubCall} '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt* '}' ')'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//type=('.' | '->') call=Call
@@ -1173,40 +1172,37 @@ public class TemplateLangGrammarAccess extends AbstractElementFinder.AbstractGra
 		//']'
 		public Keyword getRightSquareBracketKeyword_1_2() { return cRightSquareBracketKeyword_1_2; }
 		
-		//'.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt (nested+=Stmt)* '}' ')'
+		//{SubCall} '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt* '}' ')'
 		public Group getGroup_2() { return cGroup_2; }
 		
+		//{SubCall}
+		public Action getSubCallAction_2_0() { return cSubCallAction_2_0; }
+		
 		//'.('
-		public Keyword getFullStopLeftParenthesisKeyword_2_0() { return cFullStopLeftParenthesisKeyword_2_0; }
+		public Keyword getFullStopLeftParenthesisKeyword_2_1() { return cFullStopLeftParenthesisKeyword_2_1; }
 		
 		//(varType=Type? id=Identifier '|')?
-		public Group getGroup_2_1() { return cGroup_2_1; }
+		public Group getGroup_2_2() { return cGroup_2_2; }
 		
 		//varType=Type?
-		public Assignment getVarTypeAssignment_2_1_0() { return cVarTypeAssignment_2_1_0; }
+		public Assignment getVarTypeAssignment_2_2_0() { return cVarTypeAssignment_2_2_0; }
 		
 		//Type
-		public RuleCall getVarTypeTypeParserRuleCall_2_1_0_0() { return cVarTypeTypeParserRuleCall_2_1_0_0; }
+		public RuleCall getVarTypeTypeParserRuleCall_2_2_0_0() { return cVarTypeTypeParserRuleCall_2_2_0_0; }
 		
 		//id=Identifier
-		public Assignment getIdAssignment_2_1_1() { return cIdAssignment_2_1_1; }
+		public Assignment getIdAssignment_2_2_1() { return cIdAssignment_2_2_1; }
 		
 		//Identifier
-		public RuleCall getIdIdentifierParserRuleCall_2_1_1_0() { return cIdIdentifierParserRuleCall_2_1_1_0; }
+		public RuleCall getIdIdentifierParserRuleCall_2_2_1_0() { return cIdIdentifierParserRuleCall_2_2_1_0; }
 		
 		//'|'
-		public Keyword getVerticalLineKeyword_2_1_2() { return cVerticalLineKeyword_2_1_2; }
+		public Keyword getVerticalLineKeyword_2_2_2() { return cVerticalLineKeyword_2_2_2; }
 		
 		//'{'
-		public Keyword getLeftCurlyBracketKeyword_2_2() { return cLeftCurlyBracketKeyword_2_2; }
+		public Keyword getLeftCurlyBracketKeyword_2_3() { return cLeftCurlyBracketKeyword_2_3; }
 		
-		//nested+=Stmt
-		public Assignment getNestedAssignment_2_3() { return cNestedAssignment_2_3; }
-		
-		//Stmt
-		public RuleCall getNestedStmtParserRuleCall_2_3_0() { return cNestedStmtParserRuleCall_2_3_0; }
-		
-		//(nested+=Stmt)*
+		//nested+=Stmt*
 		public Assignment getNestedAssignment_2_4() { return cNestedAssignment_2_4; }
 		
 		//Stmt
@@ -1772,7 +1768,7 @@ public class TemplateLangGrammarAccess extends AbstractElementFinder.AbstractGra
 	//SubCall:
 	//    type=('.' | '->') call=Call
 	//    | '[' arrayEx=Expression ']' // IVML addition to OCL
-	//    | '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt (nested+=Stmt)* '}' ')' // implicit block with variable from last result
+	//    | {SubCall} '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt* '}' ')' // implicit block with variable from last result
 	//;
 	public SubCallElements getSubCallAccess() {
 		return pSubCall;

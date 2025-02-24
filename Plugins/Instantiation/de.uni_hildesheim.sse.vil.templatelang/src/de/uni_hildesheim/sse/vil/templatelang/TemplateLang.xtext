@@ -108,7 +108,7 @@ While:
 SubCall:
     type=('.' | '->') call=Call 
     | '[' arrayEx=Expression ']' // IVML addition to OCL
-    | '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt (nested+=Stmt)* '}' ')' // implicit block with variable from last result
+    | {SubCall} '.(' (varType=Type? id=Identifier '|')? '{' nested+=Stmt* '}' ')' // implicit block with variable from last result
 ;
 
 Flush:

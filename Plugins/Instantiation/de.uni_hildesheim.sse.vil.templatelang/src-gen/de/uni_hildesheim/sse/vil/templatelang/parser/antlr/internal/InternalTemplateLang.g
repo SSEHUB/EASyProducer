@@ -1936,17 +1936,27 @@ ruleSubCall returns [EObject current=null]
 		)
 		    |
 		(
-			otherlv_5='.('
+			(
+				{
+					/* */
+				}
+				{
+					$current = forceCreateModelElement(
+						grammarAccess.getSubCallAccess().getSubCallAction_2_0(),
+						$current);
+				}
+			)
+			otherlv_6='.('
 			{
-				newLeafNode(otherlv_5, grammarAccess.getSubCallAccess().getFullStopLeftParenthesisKeyword_2_0());
+				newLeafNode(otherlv_6, grammarAccess.getSubCallAccess().getFullStopLeftParenthesisKeyword_2_1());
 			}
 			(
 				(
 					(
 						{
-							newCompositeNode(grammarAccess.getSubCallAccess().getVarTypeTypeParserRuleCall_2_1_0_0());
+							newCompositeNode(grammarAccess.getSubCallAccess().getVarTypeTypeParserRuleCall_2_2_0_0());
 						}
-						lv_varType_6_0=ruleType
+						lv_varType_7_0=ruleType
 						{
 							if ($current==null) {
 								$current = createModelElementForParent(grammarAccess.getSubCallRule());
@@ -1954,7 +1964,7 @@ ruleSubCall returns [EObject current=null]
 							set(
 								$current,
 								"varType",
-								lv_varType_6_0,
+								lv_varType_7_0,
 								"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Type");
 							afterParserOrEnumRuleCall();
 						}
@@ -1963,9 +1973,9 @@ ruleSubCall returns [EObject current=null]
 				(
 					(
 						{
-							newCompositeNode(grammarAccess.getSubCallAccess().getIdIdentifierParserRuleCall_2_1_1_0());
+							newCompositeNode(grammarAccess.getSubCallAccess().getIdIdentifierParserRuleCall_2_2_1_0());
 						}
-						lv_id_7_0=ruleIdentifier
+						lv_id_8_0=ruleIdentifier
 						{
 							if ($current==null) {
 								$current = createModelElementForParent(grammarAccess.getSubCallRule());
@@ -1973,40 +1983,21 @@ ruleSubCall returns [EObject current=null]
 							set(
 								$current,
 								"id",
-								lv_id_7_0,
+								lv_id_8_0,
 								"de.uni_hildesheim.sse.vil.expressions.ExpressionDsl.Identifier");
 							afterParserOrEnumRuleCall();
 						}
 					)
 				)
-				otherlv_8='|'
+				otherlv_9='|'
 				{
-					newLeafNode(otherlv_8, grammarAccess.getSubCallAccess().getVerticalLineKeyword_2_1_2());
+					newLeafNode(otherlv_9, grammarAccess.getSubCallAccess().getVerticalLineKeyword_2_2_2());
 				}
 			)?
-			otherlv_9='{'
+			otherlv_10='{'
 			{
-				newLeafNode(otherlv_9, grammarAccess.getSubCallAccess().getLeftCurlyBracketKeyword_2_2());
+				newLeafNode(otherlv_10, grammarAccess.getSubCallAccess().getLeftCurlyBracketKeyword_2_3());
 			}
-			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSubCallAccess().getNestedStmtParserRuleCall_2_3_0());
-					}
-					lv_nested_10_0=ruleStmt
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSubCallRule());
-						}
-						add(
-							$current,
-							"nested",
-							lv_nested_10_0,
-							"de.uni_hildesheim.sse.vil.templatelang.TemplateLang.Stmt");
-						afterParserOrEnumRuleCall();
-					}
-				)
-			)
 			(
 				(
 					{

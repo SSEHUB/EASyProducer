@@ -87,7 +87,7 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSubCallAccess().getGroup_0(), "rule__SubCall__Group_0__0");
 			builder.put(grammarAccess.getSubCallAccess().getGroup_1(), "rule__SubCall__Group_1__0");
 			builder.put(grammarAccess.getSubCallAccess().getGroup_2(), "rule__SubCall__Group_2__0");
-			builder.put(grammarAccess.getSubCallAccess().getGroup_2_1(), "rule__SubCall__Group_2_1__0");
+			builder.put(grammarAccess.getSubCallAccess().getGroup_2_2(), "rule__SubCall__Group_2_2__0");
 			builder.put(grammarAccess.getFlushAccess().getGroup(), "rule__Flush__Group__0");
 			builder.put(grammarAccess.getGenericMultiselectAccess().getGroup(), "rule__GenericMultiselect__Group__0");
 			builder.put(grammarAccess.getMultiSelectPartAccess().getGroup(), "rule__MultiSelectPart__Group__0");
@@ -223,9 +223,8 @@ public class TemplateLangParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSubCallAccess().getTypeAssignment_0_0(), "rule__SubCall__TypeAssignment_0_0");
 			builder.put(grammarAccess.getSubCallAccess().getCallAssignment_0_1(), "rule__SubCall__CallAssignment_0_1");
 			builder.put(grammarAccess.getSubCallAccess().getArrayExAssignment_1_1(), "rule__SubCall__ArrayExAssignment_1_1");
-			builder.put(grammarAccess.getSubCallAccess().getVarTypeAssignment_2_1_0(), "rule__SubCall__VarTypeAssignment_2_1_0");
-			builder.put(grammarAccess.getSubCallAccess().getIdAssignment_2_1_1(), "rule__SubCall__IdAssignment_2_1_1");
-			builder.put(grammarAccess.getSubCallAccess().getNestedAssignment_2_3(), "rule__SubCall__NestedAssignment_2_3");
+			builder.put(grammarAccess.getSubCallAccess().getVarTypeAssignment_2_2_0(), "rule__SubCall__VarTypeAssignment_2_2_0");
+			builder.put(grammarAccess.getSubCallAccess().getIdAssignment_2_2_1(), "rule__SubCall__IdAssignment_2_2_1");
 			builder.put(grammarAccess.getSubCallAccess().getNestedAssignment_2_4(), "rule__SubCall__NestedAssignment_2_4");
 			builder.put(grammarAccess.getMultiselectAccess().getGenAssignment_0(), "rule__Multiselect__GenAssignment_0");
 			builder.put(grammarAccess.getMultiselectAccess().getUserAssignment_1(), "rule__Multiselect__UserAssignment_1");
