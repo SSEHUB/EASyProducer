@@ -199,7 +199,6 @@ public class Builder extends IncrementalProjectBuilder {
                 e.printStackTrace(); // preliminary
             }
         }
-        
         subMonitor.subTask("Collecting work units");
         List<ResourceWorkUnit> workUnits = new LinkedList<>();
         for (ModelUtility<?, ?> utility : ModelUtility.instances()) {
@@ -217,7 +216,10 @@ public class Builder extends IncrementalProjectBuilder {
                         updated = true;
                     }
                     if (add || deleted || updated) {
-                        workUnits.add(new ResourceWorkUnit(utility, resource, deleted, updated));
+                        URI eURI = resource.getURI();
+                        if (!ValidationUtils.excludeBinTarget(eURI) && ValidationUtils.isInPath(eURI)) {
+                            workUnits.add(new ResourceWorkUnit(utility, resource, deleted, updated));
+                        }
                     }
                 }
             } catch (ConcurrentModificationException e) {
