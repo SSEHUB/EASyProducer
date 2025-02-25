@@ -187,6 +187,11 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         return ano;
     }
     
+    public JavaCodeCastExpression addCast(String cls, JavaCodeExpression initEx) {
+        initEx = new JavaCodeCastExpression(this, cls, initEx);
+        return (JavaCodeCastExpression) initEx;
+    }
+    
     /**
      * Adds an annotation.
      * 

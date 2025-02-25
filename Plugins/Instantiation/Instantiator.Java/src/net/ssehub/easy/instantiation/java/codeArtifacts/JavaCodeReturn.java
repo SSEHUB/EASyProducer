@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a return statement.
@@ -43,9 +44,34 @@ public class JavaCodeReturn extends JavaCodeStatement {
      * 
      * @param expr the value expression
      */
+    @OperationMeta(name = {"setValue", "val"})
     public void setValue(JavaCodeExpression expr) {
         expr.setParent(this);
         this.valueEx = expr;
+    }
+    
+    /**
+     * Adds an annotation argument representing an array initializer.
+     * 
+     * @param name the annotation field name (may be empty or <b>null</b> for the implicit/default "value" field).
+     * @param lineBreaks add line breaks/indents between subsequent values, except for the last
+     * @return the array initializer for adding values
+     */
+    @OperationMeta(name = {"addArrayValue", "arrayVal"})
+    public JavaCodeArrayInitializerExpression addArrayValue(String name, boolean lineBreaks) {
+        valueEx = new JavaCodeArrayInitializerExpression(this, lineBreaks);
+        return (JavaCodeArrayInitializerExpression) valueEx;
+    }
+
+    /**
+     * Adds an annotation argument representing an array initializer as default argument.
+     * 
+     * @param lineBreaks add line breaks/indents between subsequent values, except for the last
+     * @return the array initializer for adding values
+     */  
+    @OperationMeta(name = {"addArrayValue", "arrayVal"})
+    public JavaCodeArrayInitializerExpression addArrayValue(boolean lineBreaks) {
+        return addArrayValue(null, lineBreaks);
     }
 
     @Override
