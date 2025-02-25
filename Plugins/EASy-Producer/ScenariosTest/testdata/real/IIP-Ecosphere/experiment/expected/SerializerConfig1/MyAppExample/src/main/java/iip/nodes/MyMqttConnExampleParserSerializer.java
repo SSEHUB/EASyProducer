@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import de.iip_ecosphere.platform.connectors.parser.JsonInputParser;
 import de.iip_ecosphere.platform.connectors.parser.JsonInputParser.JsonInputConverter;
-import de.iip_ecosphere.platform.connectors.parser.JsonInputParser.JsonInputParser.JsonParseResult;
+import de.iip_ecosphere.platform.connectors.parser.JsonInputParser.JsonParseResult;
 import de.iip_ecosphere.platform.connectors.parser.ParserUtils;
 import de.iip_ecosphere.platform.connectors.types.ChanneledConnectorOutputTypeAdapter.ChanneledSerializer;
 

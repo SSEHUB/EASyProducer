@@ -1,10 +1,16 @@
 package iip.datatypes;
 
 import java.math.BigInteger;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import de.iip_ecosphere.platform.services.environment.IipStringStyle;
 import de.iip_ecosphere.platform.support.iip_aas.ConfiguredName;
+
 import iip.datatypes.ModbusSiemensRwSentron;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  * Implementation of the application data type ModbusSiemensRwSentron.
@@ -104,8 +110,7 @@ public class ModbusSiemensRwSentronImpl implements ModbusSiemensRwSentron {
     
     @Override
     public String toString() {
-        return org.apache.commons.lang3.builder.ReflectionToStringBuilder.toString(this, 
-            de.iip_ecosphere.platform.services.environment.IipStringStyle.SHORT_STRING_STYLE);
+        return ReflectionToStringBuilder.toString(this, IipStringStyle.SHORT_STRING_STYLE);
     }
 
 }
