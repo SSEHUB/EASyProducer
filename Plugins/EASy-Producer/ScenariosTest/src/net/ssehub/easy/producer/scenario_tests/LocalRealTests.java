@@ -143,7 +143,6 @@ public class LocalRealTests extends RealTests {
             executeIipCase(folder, "SerializerConfig1Old", "generateApps", "tests/single", "tests/common");
             executeIipCase(folder, "KodexMesh", "generateApps", "tests/single", "tests/common");
             executeIipCase(folder, "Modbus", "generateApps", "tests/modbus");
-//executeIipCase(folder, "Rest", "generateApps", "tests/rest");
             
             // reset passthrough
             MavenMock.setPassThrough(origMvnPassThrough);

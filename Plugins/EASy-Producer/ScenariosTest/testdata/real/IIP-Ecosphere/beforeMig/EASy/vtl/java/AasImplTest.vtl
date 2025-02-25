@@ -56,8 +56,9 @@ template AasImplTest(Configuration config, FileArtifact target, AasSubmodelType 
         if (isDefined(field.examples) and field.examples <> null) {
             for (String e: field.examples) {
                 if (result.length() == 0) {
-                    e = e.replace("“", "").replace("”", ""); // potentially unmappable characters
-                    result = '${e}'; 
+                    String tmp = '${e}'; // EASY-Bug, not string
+                    tmp = tmp.replace("“", "").replace("”", ""); // potentially unmappable characters
+                    result = '${tmp}'; // VTL bug, keeps "reference"
                 }
             }
         }
@@ -179,8 +180,8 @@ template AasImplTest(Configuration config, FileArtifact target, AasSubmodelType 
     @DispatchCase
     def genPopulateField(AasField field, AasRelationTypeType type, Integer mode) {
         if (notSkip(field)) {
-            String firstEx = 'toTestRelationshipElementFirst("${getExample(field)}", getTestReference())';
-            String secondEx = 'toTestRelationshipElementSecond("${getExample(field)}", getTestReference())';
+            Reference firstEx = 'toTestRelationshipElementFirst("${getExample(field)}", getTestReference())';
+            Reference secondEx = 'toTestRelationshipElementSecond("${getExample(field)}", getTestReference())';
             String methodNameSuffix = asMethodNameSuffix(field.name);
             String idShortEx = "";
             String idShortEx2 = "";
