@@ -60,11 +60,11 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
         return false;
     }    
 
-    @Invisible
+    /*@Invisible // not yet working with classical VTL
     @Override
     public boolean enableContentStore() {
         return false;
-    }
+    }*/
 
     public PythonCodeArtifact disable() {
         this.store = false;
