@@ -1,0 +1,11 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, JavaCodeArtifact) with (<config>, JCATest9.java)
+    -> addClass(JavaCodeArtifact, String, String) with (JCATest9.java, SomeClass, ) = JavaCodeClass: SomeClass
+    mainCls <- JavaCodeClass: SomeClass
+    ( m |...        -> addMethod(JavaCodeClass, String, String) with (JavaCodeClass: SomeClass, , doA) = JavaCodeMethod: doA
+        -> aContent()
+        -> addRaw(JavaCodeMethod, String, Boolean) with (JavaCodeMethod: doA, int test = 0;
+if (test >= 0) {
+    System.out.println("HERE");
+}, true) = JavaCodeMethod: doA
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (JavaCode9Tpl, <config>, JCATest9.java, {}) = {JCATest9.java}

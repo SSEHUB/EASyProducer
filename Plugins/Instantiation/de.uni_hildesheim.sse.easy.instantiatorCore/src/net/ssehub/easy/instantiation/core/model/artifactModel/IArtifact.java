@@ -112,5 +112,16 @@ public interface IArtifact extends IVilType {
     public default boolean enableAutoStore() {
         return true;
     }
-    
+
+    /**
+     * Stores results of content expressions in this artifact via the {@link #getText() textual representation}.
+     * 
+     * @return {@code true} enables storing content expressions by default, {@code false} disables storing content 
+     *     expressions
+     */
+    @Invisible
+    public default boolean enableContentStore() {
+        return true;
+    }
+
 }

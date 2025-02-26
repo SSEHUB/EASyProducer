@@ -9,10 +9,10 @@ template testAdd(Configuration config, PythonCodeArtifact target) {
     	target.addEmptyLine();
 
     	PythonCodeBlock b2 = target.addIf('True');
-    	b2.addRaw('print("something")');
+    	b2.addRaw('print("something")', false);
     	b2.addSLComment('some comment');
 
-    	target.addRaw('print("something")');
+    	target.addRaw('print("something")', false);
     	target.add('print("something")');
     }
 }

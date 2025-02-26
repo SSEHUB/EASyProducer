@@ -202,10 +202,16 @@ public class VilTemplateProcessor implements IVilType {
         StringWriter out = new StringWriter();
         out.append(instantiatedContent);
         out.flush();
-        String tmp = out.toString();
-        if (tmp.length() > 0) {
-            target.getText().setText(tmp);
-            target.store(); // just to be sure for the moment
+        if (target.enableContentStore()) {
+            String tmp = out.toString();
+            if (tmp.length() > 0) {
+                target.getText().setText(tmp);
+                target.store(); // just to be sure for the moment
+            }
+        } else {
+            if (target instanceof FileArtifact) { // reset flag that may have been set by artifact conversion
+                ((FileArtifact) target).setEnableContentStore(false);
+            }
         }
         // returning the affected file(s)
         result.add(target);

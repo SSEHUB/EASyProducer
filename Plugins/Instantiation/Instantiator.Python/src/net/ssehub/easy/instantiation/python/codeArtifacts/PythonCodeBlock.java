@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 /**
  * Represents a Python code block in VTL.
@@ -56,8 +57,8 @@ public class PythonCodeBlock extends PythonCodeStmt {
         elements.add(new PythonCodeText(text, true, true));
     }
 
-    public void addRaw(String text) {
-        elements.add(new PythonCodeText(text, false, true));
+    public void addRaw(String text, boolean indent) {
+        elements.add(new PythonCodeText(text, indent, true));
     }
 
     public void addEmptyLine() {
@@ -118,10 +119,12 @@ public class PythonCodeBlock extends PythonCodeStmt {
         return addElt(new PythonCodeTypeAlias(this, name, expr));
     }
 
+    @OperationMeta(name = {"addAssign", "addAssignment", "assign"})
     public PythonCodeAssign addAssign(String varName, String expr) {
         return addElt(new PythonCodeAssign(this, varName, expr));
     }
 
+    @OperationMeta(name = {"addAssign", "addAssignment", "assign"})
     public PythonCodeAssign addAssign(String varName, String type, String expr) {
         return addElt(new PythonCodeAssign(this, varName, type, expr));
     }

@@ -446,4 +446,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertJavaCode("javaCode8", "JCATest8");
     }
 
+    /**
+     * Test the JavaCode artifact with text, string/contents.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCode9() throws IOException {
+        assertJavaCode("javaCode9", "JCATest9");
+    }
+
 }

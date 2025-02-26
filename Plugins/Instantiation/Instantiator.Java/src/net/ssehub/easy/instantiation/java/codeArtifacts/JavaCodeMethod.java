@@ -324,8 +324,8 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
 
     @Override
-    public JavaCodeMethod addRaw(String text) {
-        block.addRaw(text);
+    public JavaCodeMethod addRaw(String text, boolean indent) {
+        block.addRaw(text, indent);
         return this;
     }
     

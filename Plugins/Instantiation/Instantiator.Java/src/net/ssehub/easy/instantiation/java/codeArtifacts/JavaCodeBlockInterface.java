@@ -91,9 +91,10 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * Adds text without indentation/pre-indended.
      * 
      * @param text the text
+     * @param indent {@code true} if {@code text} shall be indented, {@code false} if the text is preformatted
      * @return <b>this</b> for chaining
      */
-    public JavaCodeBlockInterface addRaw(String text);
+    public JavaCodeBlockInterface addRaw(String text, boolean indent);
     
     /**
      * Adds a do-loop block.

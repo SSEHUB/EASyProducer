@@ -914,16 +914,19 @@ public class TemplateLangExecution extends ExecutionVisitor<Template, Def, Varia
     
     /**
      * Explicitly stores the concatenated results of the content statements to the target artifact.
+     * {@link IArtifact#enableContentStore()} may disable this function
      * 
      * @param target the target artifact
      * @param out the output writer to take the produced content from
      * @throws VilException if storing the content fails for some reason
      */
     public static void storeContent(IArtifact target, StringWriter out) throws VilException {
-        String tmp = out.toString();
-        if (tmp.length() > 0) {
-            target.getText().setText(tmp);
-        }
+        if (target.enableContentStore()) {
+            String tmp = out.toString();
+            if (tmp.length() > 0) {
+                target.getText().setText(tmp);
+            }
+        } 
         target.store();
     }
 

@@ -69,6 +69,7 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     private List<JavaClass> classList;
 
     private boolean changed = false;
+    private boolean enableContentStore = true;
 
     /**
      * Creates a new class file artifact.
@@ -720,6 +721,17 @@ public class JavaFileArtifact extends FileArtifact implements IJavaParent {
     @Conversion
     public static JavaFileArtifact convert(Path path) throws VilException {
         return ArtifactFactory.createArtifact(JavaFileArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
+    }
+    
+    @Invisible
+    @Override
+    public boolean enableContentStore() {
+        return enableContentStore;
+    }
+    
+    @Override
+    public void setEnableContentStore(boolean enableContentStore) {
+        this.enableContentStore = enableContentStore;
     }
 
 }

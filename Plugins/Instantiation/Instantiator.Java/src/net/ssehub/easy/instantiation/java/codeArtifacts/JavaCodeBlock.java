@@ -201,9 +201,9 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     }
 
     @Override
-    public JavaCodeBlock addRaw(String text) {
+    public JavaCodeBlock addRaw(String text, boolean indent) {
         if (text != null && text.length() > 0) {
-            elements.add(new JavaCodeText(text, false, true));
+            elements.add(new JavaCodeText(text, indent, true));
         }
         return this;
     }

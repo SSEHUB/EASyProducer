@@ -120,6 +120,15 @@ public class CodeWriter implements Closeable {
     }
 
     /**
+     * Returns the line end used by this writer.
+     * 
+     * @return the line end
+     */
+    public String getLineEnd() {
+        return lineEnd;
+    }
+
+    /**
      * Prints the actual indentation.
      */
     public void printIndent() {
@@ -226,6 +235,35 @@ public class CodeWriter implements Closeable {
         if (null != out) {
             this.out.flush();
         }
+    }
+    
+    public boolean printLinesWi(String text, boolean always, boolean endWithNewLine) {
+        boolean printed = false;
+        if (text.contains("\n") || text.contains("\r")) {
+            String[] lines = text.split(getLineEnd());
+            int count = 1;
+            for (String l : lines) {
+                if (count < lines.length) {
+                    printlnwi(l);
+                } else {
+                    if (endWithNewLine) {
+                        printlnwi(l);
+                    } else {
+                        printwi(l);
+                    }
+                }
+                count++;
+            }
+            printed = true;
+        } else if (always) {
+            if (endWithNewLine) {
+                printlnwi(text);
+            } else {
+                printwi(text);
+            }
+            printed = true;
+        }
+        return printed;
     }
 
 }

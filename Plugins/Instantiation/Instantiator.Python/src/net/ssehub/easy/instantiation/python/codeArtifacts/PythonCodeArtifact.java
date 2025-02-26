@@ -54,10 +54,17 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
         return new PythonCodeArtifact(moduleName);
     }
     
+    @Invisible
     @Override
     public boolean enableAutoStore() {
         return false;
     }    
+
+    @Invisible
+    @Override
+    public boolean enableContentStore() {
+        return false;
+    }
 
     public PythonCodeArtifact disable() {
         this.store = false;
@@ -87,7 +94,8 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
             FileArtifact fa = (FileArtifact) val;
             try {
                 convertedValue = ArtifactFactory.createArtifact(PythonCodeArtifact.class,
-                                fa.getPath().getAbsolutePath(), null);
+                    fa.getPath().getAbsolutePath(), null);
+                fa.setEnableContentStore(false); // decisions are made based on the original artifact
             } catch (VilException e) {
                 EASyLoggerFactory.INSTANCE.getLogger(PythonCodeArtifact.class, Bundle.ID).error(e.getMessage());
             }
@@ -196,8 +204,8 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
         block.add(text);
     }
 
-    public void addRaw(String text) {
-        block.addRaw(text);
+    public void addRaw(String text, boolean indent) {
+        block.addRaw(text, indent);
     }
 
     /**
@@ -242,10 +250,12 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
         return block.addEnum(name, comment);
     }
     
+    @OperationMeta(name = {"addAssign", "addAssignment", "assign"})
     public PythonCodeAssign addAssign(String varName, String expr) {
         return block.addAssign(varName, expr);
     }
 
+    @OperationMeta(name = {"addAssign", "addAssignment", "assign"})
     public PythonCodeAssign addAssign(String varName, String type, String expr) {
         return block.addAssign(varName, type, expr);
     }

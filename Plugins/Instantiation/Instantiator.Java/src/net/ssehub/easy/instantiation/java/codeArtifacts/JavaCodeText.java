@@ -19,9 +19,12 @@ import org.apache.commons.lang.StringUtils;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 
 /**
- * Represents raw text.
+ * Represents raw text. The raw text may consist of multiple lines. If no indentation is requested, 
+ * the raw text is emitted as given. Applies {@link PseudoString#content(String)} to handle empty 
+ * content expressions.
  * 
  * @author Holger Eichelberger
  */
@@ -46,12 +49,18 @@ public class JavaCodeText implements IJavaCodeElement {
     
     @Override
     public void store(CodeWriter out) {
+        boolean done = false;
         if (indent) {
-            out.printIndent();
-        } 
-        out.print(text);
-        if (endWithNewline) {
-            out.println();
+            done = out.printLinesWi(text, false, endWithNewline);
+        }
+        if (!done) {
+            if (indent) {
+                out.printIndent();
+            } 
+            out.print(text);
+            if (endWithNewline) {
+                out.println();
+            }
         }
     }
 

@@ -469,9 +469,10 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * Adds text without indentation/pre-indended.
      * 
      * @param text the text
+     * @param indent {@code true} if {@code text} shall be indented, {@code false} if the text is preformatted
      */
-    public void addRaw(String text) {
-        elements.add(new JavaCodeText(text, false, true));
+    public void addRaw(String text, boolean indent) {
+        elements.add(new JavaCodeText(text, indent, true));
     }
 
     /**

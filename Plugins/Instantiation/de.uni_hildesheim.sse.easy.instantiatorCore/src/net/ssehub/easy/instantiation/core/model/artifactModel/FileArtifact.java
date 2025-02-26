@@ -359,4 +359,14 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         }
     }
     
+    /**
+     * Changes the content store flag/behavior, i.e., enables/disables content storing on this artifact.
+     * This method is typically implemented by a primary artifact that is not passed on as converted secondary file 
+     * artifact instance. This implementation does nothing.
+     * 
+     * @param enableContentStore whether content storing is enabled
+     */
+    public void setEnableContentStore(boolean enableContentStore) {
+    }
+    
 }
