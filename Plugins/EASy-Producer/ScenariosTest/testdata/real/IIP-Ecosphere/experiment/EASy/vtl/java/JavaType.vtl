@@ -184,17 +184,18 @@ template JavaType(Configuration config, JavaCodeArtifact target, RecordType type
 
     def configureGetterSetter(JavaCodeMethod method, boolean getter, Field f) {
         if (emitJavadoc) {
-            JavaCodeJavadocComment comment = method.getJavadocComment();
-            if (getter) {
-                comment.setComment('Returns the value of {@code ${asMethodFieldIdentifier(f.name)}}.${prependIfNotEmpty(" ", stripLang(f.description))}');
-                comment.addReturnComment("the value");
-            } else {
-                comment.setComment('Changes the value of {@code ${asMethodFieldIdentifier(f.name)}}.${prependIfNotEmpty(" ", stripLang(f.description))}');
-                if (f.readOnly) {
-                    comment.addComment(" This field is read only, but needs an accessor for connector serializers. Although you can change it, a connector may ignore the value.");
-                } 
-                comment.addParameterComment("value", "the new value");
-            }
+            method.getJavadocComment().(comment|{
+                if (getter) {
+                    comment.setComment('Returns the value of {@code ${asMethodFieldIdentifier(f.name)}}.${prependIfNotEmpty(" ", stripLang(f.description))}');
+                    comment.addReturnComment("the value");
+                } else {
+                    comment.setComment('Changes the value of {@code ${asMethodFieldIdentifier(f.name)}}.${prependIfNotEmpty(" ", stripLang(f.description))}');
+                    if (f.readOnly) {
+                        comment.addComment(" This field is read only, but needs an accessor for connector serializers. Although you can change it, a connector may ignore the value.");
+                    } 
+                    comment.addParameterComment("value", "the new value");
+                }
+            });
         } else {
             method.addOverrideAnnotation();
         }
