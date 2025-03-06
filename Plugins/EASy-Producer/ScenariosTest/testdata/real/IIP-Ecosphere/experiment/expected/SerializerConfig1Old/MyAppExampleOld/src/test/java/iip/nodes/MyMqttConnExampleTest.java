@@ -18,6 +18,16 @@ import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 
 import iip.datatypes.MyConnPltfIn;
 import iip.datatypes.MyConnPltfOut;
+import iip.serializers.AvaMqttOutputSerializer;
+import iip.serializers.MipMqttInputSerializer;
+import iip.serializers.MipMqttOutputSerializer;
+import iip.serializers.MyConnMachineInSerializer;
+import iip.serializers.MyConnMachineOutSerializer;
+import iip.serializers.MyConnPltfInSerializer;
+import iip.serializers.MyConnPltfOutSerializer;
+import iip.serializers.MyNestedSerializer;
+import iip.serializers.Rec1Serializer;
+import iip.serializers.TestTypeSerializer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.hamcrest.core.IsAnything;
@@ -121,16 +131,16 @@ public class MyMqttConnExampleTest {
     * Creates an instance and registers the application serializers.
     */
     public MyMqttConnExampleTest() {
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnMachineInSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnMachineOutSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfInSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfOutSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyNestedSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.Rec1Serializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.TestTypeSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnMachineInSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnMachineOutSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfInSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfOutSerializer.class);
+        SerializerRegistry.registerSerializer(MyNestedSerializer.class);
+        SerializerRegistry.registerSerializer(Rec1Serializer.class);
+        SerializerRegistry.registerSerializer(TestTypeSerializer.class);
     }
     
     /**

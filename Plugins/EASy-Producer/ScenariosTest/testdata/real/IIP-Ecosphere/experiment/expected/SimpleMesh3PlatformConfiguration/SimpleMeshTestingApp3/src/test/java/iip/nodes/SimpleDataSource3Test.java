@@ -25,6 +25,14 @@ import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 
 import iip.Starter;
 import iip.datatypes.Rec13;
+import iip.serializers.AvaMqttOutputImplSerializer;
+import iip.serializers.AvaMqttOutputSerializer;
+import iip.serializers.MipMqttInputImplSerializer;
+import iip.serializers.MipMqttInputSerializer;
+import iip.serializers.MipMqttOutputImplSerializer;
+import iip.serializers.MipMqttOutputSerializer;
+import iip.serializers.Rec13ImplSerializer;
+import iip.serializers.Rec13Serializer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.hamcrest.core.IsAnything;
@@ -138,14 +146,14 @@ public class SimpleDataSource3Test extends SpringAsyncServiceBase {
     * Creates an instance and registers the application serializers.
     */
     public SimpleDataSource3Test() {
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.Rec13ImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.Rec13Serializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(Rec13ImplSerializer.class);
+        SerializerRegistry.registerSerializer(Rec13Serializer.class);
     }
     
     /**

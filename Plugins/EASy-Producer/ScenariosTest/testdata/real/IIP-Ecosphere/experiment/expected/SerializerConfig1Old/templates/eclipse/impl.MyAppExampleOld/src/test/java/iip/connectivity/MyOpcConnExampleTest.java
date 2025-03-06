@@ -11,6 +11,8 @@ import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 import iip.datatypes.MyConnPltfIn;
 import iip.datatypes.MyConnPltfOut;
 import iip.nodes.MyOpcConnExample;
+import iip.serializers.MyConnPltfInSerializer;
+import iip.serializers.MyConnPltfOutSerializer;
 
 /**
  * Technical connection test for connector "myOpcConn example".
@@ -18,16 +20,16 @@ import iip.nodes.MyOpcConnExample;
  */
 public class MyOpcConnExampleTest {
 
-    private static ReceptionCallback<MyConnPltfOut> callback = new ReceptionCallback<MyConnPltfOut>() {
+    private static ReceptionCallback<MyConnPltfIn> callback = new ReceptionCallback<MyConnPltfIn>() {
     
         @Override
-        public void received(MyConnPltfOut data) {
+        public void received(MyConnPltfIn data) {
             System.out.println("Connector received: " + data);
         }
     
         @Override
-        public Class<MyConnPltfOut> getType() {
-            return MyConnPltfOut.class;
+        public Class<MyConnPltfIn> getType() {
+            return MyConnPltfIn.class;
         }
     
     };
@@ -40,13 +42,13 @@ public class MyOpcConnExampleTest {
      * @throws IOException if intended connectivity fails
      */
     public static void main(String[] args) throws IOException {
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfIn.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfOut.class);
+        SerializerRegistry.registerSerializer(MyConnPltfInSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfOutSerializer.class);
         
         // as configured, or create own and customize
         ConnectorParameter params = MyOpcConnExample.createConnectorParameter();
             
-        OpcUaConnector<MyConnPltfOut, MyConnPltfIn> conn = new OpcUaConnector<>(MyOpcConnExample.createConnectorAdapter(
+        OpcUaConnector<MyConnPltfIn, MyConnPltfOut> conn = new OpcUaConnector<>(MyOpcConnExample.createConnectorAdapter(
             ));
         Runtime.getRuntime()
             .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
@@ -55,6 +57,7 @@ public class MyOpcConnExampleTest {
         System.out.println("Connector myOpcConn example created...");
 
         // wait for data
+        System.out.println("Requesting data until <CTRL>+C...");
         while (true) {
             TimeUtils.sleep(300);
         }

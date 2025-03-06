@@ -11,6 +11,10 @@ import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 import iip.datatypes.ModbusPhoenixEEM;
 import iip.datatypes.ModbusPhoenixRwEEM;
 import iip.nodes.MyModbusConnExample;
+import iip.serializers.ModbusPhoenixEEMImplSerializer;
+import iip.serializers.ModbusPhoenixEEMSerializer;
+import iip.serializers.ModbusPhoenixRwEEMImplSerializer;
+import iip.serializers.ModbusPhoenixRwEEMSerializer;
 
 /**
  * Technical connection test for connector "myModbusConn example".
@@ -18,17 +22,17 @@ import iip.nodes.MyModbusConnExample;
  */
 public class MyModbusConnExampleTest {
 
-    private static ReceptionCallback<ModbusPhoenixRwEEM> callback
-        = new ReceptionCallback<ModbusPhoenixRwEEM>() {
+    private static ReceptionCallback<ModbusPhoenixEEM> callback
+        = new ReceptionCallback<ModbusPhoenixEEM>() {
     
         @Override
-        public void received(ModbusPhoenixRwEEM data) {
+        public void received(ModbusPhoenixEEM data) {
             System.out.println("Connector received: " + data);
         }
     
         @Override
-        public Class<ModbusPhoenixRwEEM> getType() {
-            return ModbusPhoenixRwEEM.class;
+        public Class<ModbusPhoenixEEM> getType() {
+            return ModbusPhoenixEEM.class;
         }
     
     };
@@ -41,15 +45,15 @@ public class MyModbusConnExampleTest {
      * @throws IOException if intended connectivity fails
      */
     public static void main(String[] args) throws IOException {
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixEEMImpl.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixEEM.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixRwEEMImpl.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixRwEEM.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixEEMImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixEEMSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixRwEEMImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixRwEEMSerializer.class);
         
         // as configured, or create own and customize
         ConnectorParameter params = MyModbusConnExample.createConnectorParameter();
             
-        ModbusTcpIpConnector<ModbusPhoenixRwEEM, ModbusPhoenixEEM> conn = new ModbusTcpIpConnector<>(MyModbusConnExample.
+        ModbusTcpIpConnector<ModbusPhoenixEEM, ModbusPhoenixRwEEM> conn = new ModbusTcpIpConnector<>(MyModbusConnExample.
             createConnectorAdapter());
         Runtime.getRuntime()
             .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
@@ -58,6 +62,7 @@ public class MyModbusConnExampleTest {
         System.out.println("Connector myModbusConn example created...");
 
         // wait for data
+        System.out.println("Requesting data until <CTRL>+C...");
         while (true) {
             TimeUtils.sleep(300);
         }

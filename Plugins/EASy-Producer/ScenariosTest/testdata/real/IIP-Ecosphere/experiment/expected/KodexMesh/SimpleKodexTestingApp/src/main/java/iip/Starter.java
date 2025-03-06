@@ -7,6 +7,17 @@ import de.iip_ecosphere.platform.services.environment.YamlArtifact;
 import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 import de.iip_ecosphere.platform.transport.spring.SerializerMessageConverter;
 
+import iip.serializers.AvaMqttOutputImplSerializer;
+import iip.serializers.AvaMqttOutputSerializer;
+import iip.serializers.KRec13AnonImplSerializer;
+import iip.serializers.KRec13AnonSerializer;
+import iip.serializers.KRec13ImplSerializer;
+import iip.serializers.KRec13Serializer;
+import iip.serializers.MipMqttInputImplSerializer;
+import iip.serializers.MipMqttInputSerializer;
+import iip.serializers.MipMqttOutputImplSerializer;
+import iip.serializers.MipMqttOutputSerializer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -52,16 +63,16 @@ public class Starter extends de.iip_ecosphere.platform.services.environment.spri
     * Registers required, generated serializers.
     */
     public static void registerSerializers() {
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.KRec13AnonImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.KRec13AnonSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.KRec13ImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.KRec13Serializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(KRec13AnonImplSerializer.class);
+        SerializerRegistry.registerSerializer(KRec13AnonSerializer.class);
+        SerializerRegistry.registerSerializer(KRec13ImplSerializer.class);
+        SerializerRegistry.registerSerializer(KRec13Serializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputSerializer.class);
     }
 
     /**

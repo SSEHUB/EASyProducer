@@ -47,7 +47,6 @@ template JavaSpringCloudStreamMeshElementTest(Configuration config, JavaCodeArti
             c.setPublic().setStatic();
             c.addImport("de.iip_ecosphere.platform.services.environment.DataMapper.BaseDataUnit");
             c.addExtends("BaseDataUnit");
-            
             for (IOType in: service.input) {
                 String typeName = toTypeName(in);
                 String implTypeName = toImplTypeName(in, typeAdd);
@@ -250,14 +249,6 @@ template JavaSpringCloudStreamMeshElementTest(Configuration config, JavaCodeArti
     protected def genAssertPredicates(MeshSink elt, ServiceBase service) {
     }
     
-    def getConnectorCls(Connector connector) {
-        toSimpleName(connector.class) + "<>";
-    }
-    
-    def getConnectorCls(RestConnector connector) {
-        "iip.nodes." + asTypeName(connector.name) + "Impl";
-    }
-    
     def genMethods(MeshSource elt, Connector connector, String clsName) {
         String connGen = getConnectorGenerics(connector, false);
         String outType = asTypeName(getFirstTypeName(connector.output));
@@ -270,7 +261,7 @@ template JavaSpringCloudStreamMeshElementTest(Configuration config, JavaCodeArti
             m.addSLComment("disable AAS connector registration");
             m.addCall("de.iip_ecosphere.platform.support.iip_aas.ActiveAasBase.setNotificationMode", JavaCodeImportScope.METHOD_CLASS_IMPORT)
                 .addArgument("NotificationMode.NONE");
-            m.var(connector.class + connGen, "conn", "new ${getConnectorCls(connector)}(${clsName}.createConnectorAdapter())");
+            m.var(connector.class + connGen, "conn").addNew(getConnectorCls(connector) + getConnectorInstanceGenerics(connector)).arg("${clsName}.createConnectorAdapter()");
             m.addCall("conn.connect").addArgument("params");
             m.addCall("conn.setReceptionCallback").addArgument("callback");
             m.addCall("conn.request").addArgument(true);

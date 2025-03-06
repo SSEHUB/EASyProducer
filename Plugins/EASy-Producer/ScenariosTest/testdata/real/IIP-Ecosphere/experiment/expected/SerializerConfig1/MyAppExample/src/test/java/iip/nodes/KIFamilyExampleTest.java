@@ -29,6 +29,28 @@ import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 import iip.Starter;
 import iip.datatypes.Rec1Impl;
 import iip.datatypes.RtsaTestInput;
+import iip.serializers.AvaMqttOutputImplSerializer;
+import iip.serializers.AvaMqttOutputSerializer;
+import iip.serializers.MipMqttInputImplSerializer;
+import iip.serializers.MipMqttInputSerializer;
+import iip.serializers.MipMqttOutputImplSerializer;
+import iip.serializers.MipMqttOutputSerializer;
+import iip.serializers.MyConnMachineInImplSerializer;
+import iip.serializers.MyConnMachineInSerializer;
+import iip.serializers.MyConnMachineOutImplSerializer;
+import iip.serializers.MyConnMachineOutSerializer;
+import iip.serializers.MyConnPltfInImplSerializer;
+import iip.serializers.MyConnPltfInSerializer;
+import iip.serializers.MyConnPltfOutImplSerializer;
+import iip.serializers.MyConnPltfOutSerializer;
+import iip.serializers.MyNestedImplSerializer;
+import iip.serializers.MyNestedSerializer;
+import iip.serializers.Rec1ImplSerializer;
+import iip.serializers.Rec1Serializer;
+import iip.serializers.RtsaTestInputImplSerializer;
+import iip.serializers.RtsaTestInputSerializer;
+import iip.serializers.RtsaTestOutputImplSerializer;
+import iip.serializers.RtsaTestOutputSerializer;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.hamcrest.core.IsAnything;
@@ -175,28 +197,28 @@ public class KIFamilyExampleTest extends SpringAsyncServiceBase {
     * Creates an instance and registers the application serializers.
     */
     public KIFamilyExampleTest() {
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnMachineInImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnMachineInSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnMachineOutImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnMachineOutSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfInImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfInSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfOutImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyConnPltfOutSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyNestedImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MyNestedSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.Rec1ImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.Rec1Serializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.RtsaTestInputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.RtsaTestInputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.RtsaTestOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.RtsaTestOutputSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnMachineInImplSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnMachineInSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnMachineOutImplSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnMachineOutSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfInImplSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfInSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfOutImplSerializer.class);
+        SerializerRegistry.registerSerializer(MyConnPltfOutSerializer.class);
+        SerializerRegistry.registerSerializer(MyNestedImplSerializer.class);
+        SerializerRegistry.registerSerializer(MyNestedSerializer.class);
+        SerializerRegistry.registerSerializer(Rec1ImplSerializer.class);
+        SerializerRegistry.registerSerializer(Rec1Serializer.class);
+        SerializerRegistry.registerSerializer(RtsaTestInputImplSerializer.class);
+        SerializerRegistry.registerSerializer(RtsaTestInputSerializer.class);
+        SerializerRegistry.registerSerializer(RtsaTestOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(RtsaTestOutputSerializer.class);
     }
     
     /**

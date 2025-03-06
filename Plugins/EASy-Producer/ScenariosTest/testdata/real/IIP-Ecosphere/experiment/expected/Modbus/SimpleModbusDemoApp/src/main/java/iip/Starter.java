@@ -7,6 +7,21 @@ import de.iip_ecosphere.platform.services.environment.YamlArtifact;
 import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 import de.iip_ecosphere.platform.transport.spring.SerializerMessageConverter;
 
+import iip.serializers.AvaMqttOutputImplSerializer;
+import iip.serializers.AvaMqttOutputSerializer;
+import iip.serializers.MipMqttInputImplSerializer;
+import iip.serializers.MipMqttInputSerializer;
+import iip.serializers.MipMqttOutputImplSerializer;
+import iip.serializers.MipMqttOutputSerializer;
+import iip.serializers.ModbusPhoenixEEMImplSerializer;
+import iip.serializers.ModbusPhoenixEEMSerializer;
+import iip.serializers.ModbusPhoenixRwEEMImplSerializer;
+import iip.serializers.ModbusPhoenixRwEEMSerializer;
+import iip.serializers.ModbusSiemensRwSentronImplSerializer;
+import iip.serializers.ModbusSiemensRwSentronSerializer;
+import iip.serializers.ModbusSiemensSentronImplSerializer;
+import iip.serializers.ModbusSiemensSentronSerializer;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -52,20 +67,20 @@ public class Starter extends de.iip_ecosphere.platform.services.environment.spri
     * Registers required, generated serializers.
     */
     public static void registerSerializers() {
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.AvaMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttInputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.MipMqttOutputSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixEEMImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixEEMSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixRwEEMImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusPhoenixRwEEMSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensRwSentronImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensRwSentronSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensSentronImplSerializer.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensSentronSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(AvaMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttInputSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputImplSerializer.class);
+        SerializerRegistry.registerSerializer(MipMqttOutputSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixEEMImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixEEMSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixRwEEMImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusPhoenixRwEEMSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensRwSentronImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensRwSentronSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensSentronImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensSentronSerializer.class);
     }
 
     /**

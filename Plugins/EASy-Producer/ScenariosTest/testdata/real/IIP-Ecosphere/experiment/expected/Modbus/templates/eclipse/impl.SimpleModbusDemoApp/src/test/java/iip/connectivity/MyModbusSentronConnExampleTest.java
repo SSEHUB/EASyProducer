@@ -11,6 +11,10 @@ import de.iip_ecosphere.platform.transport.serialization.SerializerRegistry;
 import iip.datatypes.ModbusSiemensRwSentron;
 import iip.datatypes.ModbusSiemensSentron;
 import iip.nodes.MyModbusSentronConnExample;
+import iip.serializers.ModbusSiemensRwSentronImplSerializer;
+import iip.serializers.ModbusSiemensRwSentronSerializer;
+import iip.serializers.ModbusSiemensSentronImplSerializer;
+import iip.serializers.ModbusSiemensSentronSerializer;
 
 /**
  * Technical connection test for connector "myModbusSentronConn example".
@@ -18,17 +22,17 @@ import iip.nodes.MyModbusSentronConnExample;
  */
 public class MyModbusSentronConnExampleTest {
 
-    private static ReceptionCallback<ModbusSiemensRwSentron> callback = new ReceptionCallback<ModbusSiemensRwSentron>()
+    private static ReceptionCallback<ModbusSiemensSentron> callback = new ReceptionCallback<ModbusSiemensSentron>()
         {
     
         @Override
-        public void received(ModbusSiemensRwSentron data) {
+        public void received(ModbusSiemensSentron data) {
             System.out.println("Connector received: " + data);
         }
     
         @Override
-        public Class<ModbusSiemensRwSentron> getType() {
-            return ModbusSiemensRwSentron.class;
+        public Class<ModbusSiemensSentron> getType() {
+            return ModbusSiemensSentron.class;
         }
     
     };
@@ -41,15 +45,15 @@ public class MyModbusSentronConnExampleTest {
      * @throws IOException if intended connectivity fails
      */
     public static void main(String[] args) throws IOException {
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensSentronImpl.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensSentron.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensRwSentronImpl.class);
-        SerializerRegistry.registerSerializer(iip.serializers.ModbusSiemensRwSentron.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensSentronImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensSentronSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensRwSentronImplSerializer.class);
+        SerializerRegistry.registerSerializer(ModbusSiemensRwSentronSerializer.class);
         
         // as configured, or create own and customize
         ConnectorParameter params = MyModbusSentronConnExample.createConnectorParameter();
             
-        ModbusTcpIpConnector<ModbusSiemensRwSentron, ModbusSiemensSentron> conn = new ModbusTcpIpConnector<>(
+        ModbusTcpIpConnector<ModbusSiemensSentron, ModbusSiemensRwSentron> conn = new ModbusTcpIpConnector<>(
             MyModbusSentronConnExample.createConnectorAdapter());
         Runtime.getRuntime()
             .addShutdownHook(new Thread(() -> conn.disconnectSafe()));
@@ -58,6 +62,7 @@ public class MyModbusSentronConnExampleTest {
         System.out.println("Connector myModbusSentronConn example created...");
 
         // wait for data
+        System.out.println("Requesting data until <CTRL>+C...");
         while (true) {
             TimeUtils.sleep(300);
         }
