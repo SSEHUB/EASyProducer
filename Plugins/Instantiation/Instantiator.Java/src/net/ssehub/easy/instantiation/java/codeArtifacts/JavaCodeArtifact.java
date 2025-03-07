@@ -672,5 +672,10 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             }
         }
     }
+    
+    @Invisible
+    public Iterable<IJavaCodeImport> imports() {
+        return imports;
+    }
    
 }

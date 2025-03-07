@@ -1,0 +1,4 @@
+public void format(Path filePath) {
+    String msg = STR."The file \{filePath} \{Files.exists(filePath) ? "does" : "does not"} exist";
+    System.out.println(msg);
+}

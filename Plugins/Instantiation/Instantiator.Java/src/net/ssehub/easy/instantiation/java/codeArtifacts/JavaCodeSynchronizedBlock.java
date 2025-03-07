@@ -25,20 +25,33 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  */
 public class JavaCodeSynchronizedBlock extends JavaCodeBlock {
     
+    private JavaCodeExpression objEx;
+    
     /**
      * Creates a synchronized block.
      * 
      * @param parent the parent instance
+     * @param objEx the object to synchronize with
      */
-    public JavaCodeSynchronizedBlock(IJavaCodeElement parent) {
+    public JavaCodeSynchronizedBlock(IJavaCodeElement parent, JavaCodeExpression objEx) {
         super(parent, true, true);
+        this.objEx = objEx;
     }
 
     @Invisible
     @Override
     public void store(CodeWriter out) {
-        out.printwi("synchronized");
+        out.printwi("synchronized (");
+        objEx.store(out);
+        out.print(")");
         super.store(out);
+    }
+    
+    @Invisible
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        objEx.setParent(this);
     }
 
 }

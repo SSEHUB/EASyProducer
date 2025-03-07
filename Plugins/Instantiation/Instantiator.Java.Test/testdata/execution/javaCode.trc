@@ -39,7 +39,7 @@
     -> addCall(JavaCodeBlock, String) with (JavaCodeForLoop, System.out.println) = JavaCodeMethodCall
     -> addForLoop(JavaCodeMethod, String, String, String, String, String) with (JavaCodeMethod: getIntegerList, int, c, 0, c < 10, c++) = JavaCodeForLoop
     -> addCall(JavaCodeBlock, String) with (JavaCodeForLoop, System.out.println) = JavaCodeMethodCall
-    -> addSynchronized(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeSynchronizedBlock
+    -> addSynchronized(JavaCodeMethod, JavaCodeExpression) with (JavaCodeMethod: getIntegerList, JavaCodeTextExpression) = JavaCodeSynchronizedBlock
     -> add(JavaCodeBlock, String) with (JavaCodeSynchronizedBlock, length++;) = JavaCodeSynchronizedBlock
     -> addTry(JavaCodeMethod) with (JavaCodeMethod: getIntegerList) = JavaCodeTryBlock
     try <- JavaCodeTryBlock

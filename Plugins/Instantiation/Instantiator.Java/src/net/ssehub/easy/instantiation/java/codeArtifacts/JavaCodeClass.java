@@ -102,6 +102,16 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
         super(name, JavaCodeVisibility.PUBLIC, comment);
         this.enclosing = enclosing;
     }
+    
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @return the parsed class, may just contain default values if text cannot be parsed
+     */
+    public static JavaCodeClass create(String text) {
+        return AST2ArtifactVisitor.parseCompilationUnit(text).getCls();
+    }
 
     @Override
     protected String validateName(String name) {
@@ -116,7 +126,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
     @Override
     public IJavaCodeArtifact getArtifact() {
         if (null == artifact) {
-            return enclosing.getArtifact();
+            return null == enclosing ? null : enclosing.getArtifact();
         } else {
             return artifact;
         }
@@ -317,6 +327,11 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
     
     protected JavaCodeMethod configureConstructor(JavaCodeMethod cons) {
         return cons;
+    }
+    
+    public JavaCodeMethod addMethod(JavaCodeMethod method) {
+        method.setParent(this);
+        return IJavaCodeElement.add(elements, method);
     }
 
     @OperationMeta(name = {"addMethod", "method"})
@@ -752,7 +767,7 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * @return the code class parent or <b>null</b>
      */
     static JavaCodeClass getParentCodeClass(IJavaCodeElement element) {
-        IJavaCodeElement iter = null;
+        IJavaCodeElement iter = element;
         if (null != element && !(element instanceof JavaCodeClass)) {
             iter = element.getParent();
             while (iter != null && !(iter instanceof JavaCodeClass)) {

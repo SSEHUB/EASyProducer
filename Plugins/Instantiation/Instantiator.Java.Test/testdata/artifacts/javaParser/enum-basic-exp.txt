@@ -1,0 +1,5 @@
+public enum Test implements java.io.Serializable {
+
+    VAL_A,
+    VAL_B
+}

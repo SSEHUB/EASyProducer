@@ -290,6 +290,9 @@ public class JavaCodeVariableDeclaration extends JavaCodeStatement {
         if (null != type) {
             type.setParent(this);
         }
+        if (null != initEx) {
+            initEx.setParent(this);
+        }
     }
 
     @Override

@@ -1,0 +1,6 @@
+public void printAll(List<?> list) {
+    for (Object o : list) {
+        System.out.println(o);
+    }
+    sort(list, String::compareByObject);
+}

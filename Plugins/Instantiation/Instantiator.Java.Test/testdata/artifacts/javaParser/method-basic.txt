@@ -1,0 +1,7 @@
+/** 
+ * Also says hello.
+ * @param name some name
+ */
+@VTL(comment="Says hello.",enabled=true) public void sayHello(@VTL(comment="the name") String name){
+  System.out.println("Hello " + name + "!");
+}

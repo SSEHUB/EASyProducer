@@ -1,0 +1,8 @@
+public String combine(String name) {
+    String test = "";
+    while (true) {
+        test += "x";
+    }
+    // this was a while-loop
+    return test;
+}

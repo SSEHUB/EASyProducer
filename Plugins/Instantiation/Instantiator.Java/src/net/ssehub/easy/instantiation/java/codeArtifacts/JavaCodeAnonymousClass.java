@@ -17,11 +17,15 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
+import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
 public class JavaCodeAnonymousClass extends JavaCodeClass {
 
+    private JavaCodeArgumentListExpression args;
+    
     JavaCodeAnonymousClass(String name, JavaCodeClass enclosing) {
         super(name, enclosing);
+        args = new JavaCodeArgumentListExpression(this);
     }
     
     static JavaCodeExpression toExpression(JavaCodeAnonymousClass cls) {
@@ -35,13 +39,27 @@ public class JavaCodeAnonymousClass extends JavaCodeClass {
         };
     }
     
+    /**
+     * Adds an expression as call argument.
+     * 
+     * @param ex the expression, may be <b>null</b> for none
+     * @return <b>this</b> for chaining
+     */
+    @OperationMeta(name = {"addArgument", "arg"})
+    public JavaCodeAnonymousClass addArgument(JavaCodeExpression ex) {
+        args.addArgument(ex);
+        return this;
+    }
+    
     @Invisible
     @Override
     public void store(CodeWriter out) {
         out.print("new ");
         out.print(getName());
         storeGenerics(out);
-        out.print("()"); // TODO arguments
+        out.print("(");
+        args.store(out);
+        out.print(")");
         storeBlock(out);
     }
 

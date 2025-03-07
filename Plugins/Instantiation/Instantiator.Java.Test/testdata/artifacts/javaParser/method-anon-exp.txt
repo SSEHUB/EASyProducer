@@ -1,0 +1,20 @@
+public void combine(int size) {
+    IType t = new IType() {
+
+        private String value = "";
+
+        @Override
+        public void acc(String value) {
+            this.value += value;
+        }
+
+        @Override
+        public String get() {
+            return value;
+        }
+
+    };
+    t.acc("a");
+    t.acc("b");
+    System.out.println(t.get());
+}

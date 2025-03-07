@@ -1,0 +1,15 @@
+public void doIt() {
+    char c = 'a';
+    boolean b = false;
+    String s = null;
+    if (s instanceof Object) {
+        System.out.println("yeah!");
+    }
+    s = b ? "true" : false;
+    Class<? extends Object> cls = String.class;
+    int i = 0;
+    ++i;
+    i++;
+    int j = (int) Math.PI;
+    ;
+}

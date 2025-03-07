@@ -1,0 +1,8 @@
+public void combine(int size) {
+int[] test = new int[size];
+for (int i = 0; i < test.length; i++) {
+ test[i] = 100 * (i + 1);
+}
+int[] test2 = {1, 2, 3, 5, 5};
+int[] test3 = {};
+}

@@ -1,0 +1,4 @@
+public class Test<T> implements Comparable<T> {
+
+    private T value;
+}

@@ -1,0 +1,11 @@
+public String combine(String name) {
+    test(l -> print(l));
+    test(l -> {
+        print(l);
+        return l;
+    });
+    test((l, k) -> {
+        print(l);
+        return k;
+    });
+}

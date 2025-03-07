@@ -27,6 +27,13 @@ public interface IJavaCodeTypeSpecification extends IJavaCodeElement, Storable {
     public static final String VARARG_TYPE_POSTFIX = "...";
 
     /**
+     * Returns the full name as given initially without any manipulation, shortening.
+     * 
+     * @return the name
+     */
+    public String getFullName();
+    
+    /**
      * Returns the output type name (plain name, potentially unqualified, without generics).
      * 
      * @return the name

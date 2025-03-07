@@ -27,10 +27,11 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
+public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification implements JavaCodeAnnotationParent {
 
     private String name;
     private List<JavaCodeAnnotation> annotations;
+    private boolean isFinal;
 
     /**
      * Creates a parameter specification.
@@ -66,6 +67,26 @@ public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
     }
 
     /**
+     * Sets this parameter declaration to final.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeParameterSpecification setFinal() {
+        return setFinal(true);
+    }
+
+    /**
+     * Sets this parameter declaration conditionally to final.
+     * 
+     * @param isFinal whether this variable shall be final
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeParameterSpecification setFinal(boolean isFinal) {
+        this.isFinal = isFinal;
+        return this;
+    }    
+    
+    /**
      * Adds an annotation.
      * 
      * @param type the annotation type, may be fully qualified
@@ -87,6 +108,9 @@ public class JavaCodeParameterSpecification extends JavaCodeTypeSpecification {
             for (JavaCodeAnnotation a : annotations) {
                 a.storeNoLn(out);
             }
+        }
+        if (isFinal) {
+            out.print("final ");
         }
         super.store(out);
         out.print(" ");

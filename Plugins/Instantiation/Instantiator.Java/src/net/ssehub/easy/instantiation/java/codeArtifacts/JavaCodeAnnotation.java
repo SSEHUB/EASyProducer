@@ -61,7 +61,9 @@ public class JavaCodeAnnotation implements IJavaCodeElement {
         this.annotated = annotated;
         this.type = type;
         this.nested = nested;
-        getArtifact().validateType(type);
+        if (null != getArtifact()) {
+            getArtifact().validateType(type);
+        }
     }
     
     @Invisible(inherit = true)

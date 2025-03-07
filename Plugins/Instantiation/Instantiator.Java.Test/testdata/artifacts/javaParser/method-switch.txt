@@ -1,0 +1,11 @@
+public String doit(int i) {
+ switch(i) {
+ case 0:
+ case 1:
+   System.out.println(i);
+   break;
+ default:
+   System.out.println("else");
+   break;
+ }
+}

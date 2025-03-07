@@ -63,6 +63,10 @@ public class JavaCodeExpressionStatement extends JavaCodeStatement {
         boolean increment) {
         return new JavaCodeExpressionStatement(parent, new JavaCodePostfixExpression(null, variable, increment));
     }
+    
+    public JavaCodeExpression getExpression() {
+        return expression;
+    }
 
     @Override
     public void store(CodeWriter out) {

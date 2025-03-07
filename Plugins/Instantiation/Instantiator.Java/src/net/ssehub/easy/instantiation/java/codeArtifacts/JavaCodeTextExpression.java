@@ -67,5 +67,15 @@ public class JavaCodeTextExpression extends JavaCodeExpression {
         }
         return this;
     }
+    
+    JavaCodeTextExpression append(String text) {
+        if (text != null) {
+            if (null == this.text) {
+                this.text = "";
+            }
+            this.text = text.toString() + " " + text;
+        }
+        return this;
+    }
 
 }

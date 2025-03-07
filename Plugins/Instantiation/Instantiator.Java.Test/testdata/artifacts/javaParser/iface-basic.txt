@@ -1,0 +1,4 @@
+public interface Test {
+public static final int VAL = 0;
+public String acc(String val);
+}

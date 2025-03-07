@@ -25,15 +25,15 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  */
 public class JavaCodeThrow extends JavaCodeStatement {
 
-    private String expression;
+    private JavaCodeExpression expression;
     
     /**
-     * Creates an if-then-else alternative.
+     * Creates a throw statement.
      * 
      * @param parent the parent instance
      * @param expression the expression representing the exception
      */
-    public JavaCodeThrow(IJavaCodeElement parent, String expression) {
+    public JavaCodeThrow(IJavaCodeElement parent, JavaCodeExpression expression) {
         super(parent);
         this.expression = expression;
     }
@@ -42,8 +42,14 @@ public class JavaCodeThrow extends JavaCodeStatement {
     @Override
     public void store(CodeWriter out) {
         out.printwi("throw ");
-        out.print(expression);
+        expression.store(out);
         out.println(";");
+    }
+    
+    @Override
+    public void setParent(IJavaCodeElement parent) {
+        super.setParent(parent);
+        expression.setParent(this);
     }
 
 }

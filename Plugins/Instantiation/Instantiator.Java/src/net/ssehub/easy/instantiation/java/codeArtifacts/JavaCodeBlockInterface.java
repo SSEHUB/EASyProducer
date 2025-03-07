@@ -180,7 +180,7 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * @return throw statement
      */
     @OperationMeta(name = {"addThrow", "throw"})
-    public JavaCodeThrow addThrow(String expression);
+    public JavaCodeThrow addThrow(JavaCodeExpression expression);
 
     /**
      * Adds a switch block.
@@ -194,10 +194,11 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
     /**
      * Adds a synchronized block.
      * 
+     * @param objEx the object expression to synchronize on 
      * @return the synchronized block
      */
     @OperationMeta(name = {"addSynchronized", "synchronized"})
-    public JavaCodeSynchronizedBlock addSynchronized();
+    public JavaCodeSynchronizedBlock addSynchronized(JavaCodeExpression objEx);
 
     /**
      * Adds a synchronized block.

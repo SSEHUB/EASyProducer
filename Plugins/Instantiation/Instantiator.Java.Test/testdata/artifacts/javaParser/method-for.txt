@@ -1,0 +1,10 @@
+public void countUp(){
+ for (int i = 0; i < 10; i++) {
+   System.out.println("Nr " + i);
+   if (i < 4) {
+     continue;
+   } else {
+     break;
+   }
+ }
+}

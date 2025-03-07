@@ -30,6 +30,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     private JavaCodeTypeSpecification type;
     private JavaCodeClass enclosing;
     private JavaCodeExpression initializer;
+    private boolean isTransient;
 
     /**
      * Creates an attribute.
@@ -67,6 +68,10 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     public void store(CodeWriter out) {
         super.store(out); // comment, annotations
         out.printwi(getModifier());
+        if (isTransient) {
+            out.print("transient");
+            out.print(" ");
+        }
         type.store(out); 
         out.print(" ");
         out.print(getName());
@@ -130,6 +135,30 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         super.setStatic();
         return this;
     }
+    
+    /**
+     * Sets this attribute to transient.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
+    @OperationMeta(name = {"setTransient", "transient"})    
+    public JavaCodeVisibleElement setTransient() {
+        setTransient(true);
+        return this;
+    }
+
+    /**
+     * Sets this attribute to transient.
+     * 
+     * @param isTransient whether the attribute shall be transient
+     * 
+     * @return <b>this</b> (for chaining)
+     */    
+    @OperationMeta(name = {"setTransient", "transient"})  
+    public JavaCodeVisibleElement setTransient(boolean isTransient) {
+        this.isTransient = isTransient;
+        return this;
+    }    
     
     public JavaCodeAttribute setPublicStaticFinal() {
         super.setPublic();

@@ -85,6 +85,16 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
     public static JavaCodeExpression create() {
         return EMPTY;
     }
+    
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @return the parsed class, may just contain default values if text cannot be parsed
+     */
+    public static JavaCodeExpression create(String text) {
+        return AST2ArtifactVisitor.parseExpression(text).getExpression();
+    }    
 
     /**
      * Helper method to conditionally set the parent of {@code elt} if {@code elt} is not <b>null</b>.

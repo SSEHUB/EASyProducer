@@ -1,0 +1,8 @@
+public @interface TestAnnotation {
+
+
+    public int someValue();
+
+    public int otherValue() default 1;
+
+}

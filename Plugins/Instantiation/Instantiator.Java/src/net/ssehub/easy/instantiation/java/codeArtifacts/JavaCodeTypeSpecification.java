@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.core.dom.Type;
+
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeToStringWriter;
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
@@ -31,6 +33,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
 
     public static final JavaCodeTypeSpecification VOID = new JavaCodeTypeSpecification(); 
     
+    private String origType;
     private String type;
     private List<JavaCodeTypeSpecification> generics;
     private String arrays;
@@ -62,6 +65,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
      */
     protected JavaCodeTypeSpecification(String type, JavaCodeClass enclosing) {
         this.enclosing = enclosing;
+        this.origType = type;
         this.type = type; // -> validateType
         int startPos = type.indexOf("<");
         int endPos = type.lastIndexOf(">");
@@ -79,7 +83,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
             arrays = this.type.substring(startPos, endPos + 1).replaceAll("\\s+", "");
             this.type = this.type.substring(0, startPos) + this.type.substring(endPos + 1);
         }
-        if (null != enclosing) {
+        if (null != enclosing && null != getArtifact()) {
             getArtifact().validateType(this);
         }
     }
@@ -107,6 +111,20 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
      */
     public static JavaCodeTypeSpecification create(String type) {
         return new JavaCodeTypeSpecification(type, null);
+    }
+    
+    /**
+     * Creates a type specification from an AST node.
+     * 
+     * @param type the type
+     * @return the created type specification
+     */
+    public static JavaCodeTypeSpecification create(Type type) {
+        JavaCodeTypeSpecification result = null;
+        if (null != type) {
+            result = create(type.toString());
+        }
+        return result;
     }
 
     /**
@@ -278,6 +296,11 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
         store(out);
         return out.getString();
     }
+    
+    @Override
+    public String getFullName() {
+        return origType;
+    }
 
     @Override
     public void setOutputTypeName(String typeName) {
@@ -312,7 +335,7 @@ public class JavaCodeTypeSpecification implements IJavaCodeElement, IJavaCodeTyp
     @Override
     public void setParent(IJavaCodeElement parent) {
         JavaCodeClass.setParent(parent, p -> this.enclosing = p);
-        if (null != enclosing) {
+        if (null != enclosing) {            
             getArtifact().validateType(this);
         }
     }

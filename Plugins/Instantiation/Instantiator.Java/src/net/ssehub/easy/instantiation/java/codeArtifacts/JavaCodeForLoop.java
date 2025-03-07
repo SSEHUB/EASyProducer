@@ -31,7 +31,6 @@ public class JavaCodeForLoop extends JavaCodeBlock {
     private JavaCodeTypeSpecification type;
     private LoopVariable variable;
     private List<LoopVariable> furtherVariables = null;
-    private String expression;
     private String condition;
     private List<String> updates;
     
@@ -131,9 +130,9 @@ public class JavaCodeForLoop extends JavaCodeBlock {
             out.print(" ");
             out.print(variable.name);
         }
-        if (null != expression) {
+        if (null == updates) {
             out.print(" : ");
-            out.print(expression);
+            out.print(variable.initializer);
         } else {
             if (hasVariable && variable.hasInitializer()) {
                 out.print(" = ");

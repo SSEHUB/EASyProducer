@@ -188,7 +188,7 @@ public class JavaCodeTryBlock extends JavaCodeBlock {
             c.store(out);
         }
         if (finallyBlock != null) {
-            out.print(" finally ");
+            out.print(" finally");
             finallyBlock.store(out);
         }
         out.println();

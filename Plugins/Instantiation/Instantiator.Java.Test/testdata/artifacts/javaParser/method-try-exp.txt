@@ -1,0 +1,14 @@
+public void emit(byte[] data, OutputStream out) throws ExecutionException {
+    try {
+        out.write(data);
+    } catch (IOException e) {
+        System.out.println(e.getMessage());
+    }
+    try {
+        out.write(data);
+    } catch (IOException e) {
+        throw new ExecutionException(e);
+    } finally {
+        System.out.println("always");
+    }
+}

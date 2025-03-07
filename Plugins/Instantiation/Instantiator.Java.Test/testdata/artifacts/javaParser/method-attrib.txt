@@ -1,0 +1,8 @@
+public int scaleValue() {
+int result = this.value;
+{
+   int scaling = 1000;
+   result *= scaling * super.factor * super.scaleValue();
+}
+return result;
+}

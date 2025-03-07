@@ -1,0 +1,6 @@
+public void format(Path filePath) {
+String msg = STR."The file \{filePath} \{
+    // The Files class is in the package java.nio.file
+    Files.exists(filePath) ? "does" : "does not"} exist";
+System.out.println(msg);
+}

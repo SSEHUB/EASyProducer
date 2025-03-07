@@ -1,0 +1,3 @@
+public String combine(String name) {
+ super.combine(name);
+}

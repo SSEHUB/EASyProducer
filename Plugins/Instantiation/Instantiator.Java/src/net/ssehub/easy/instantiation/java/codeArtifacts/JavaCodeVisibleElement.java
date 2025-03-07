@@ -30,7 +30,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
  * 
  * @author Holger Eichelberger
  */
-public abstract class JavaCodeVisibleElement extends JavaCodeElement {
+public abstract class JavaCodeVisibleElement extends JavaCodeElement implements JavaCodeAnnotationParent {
 
     private boolean isStatic;
     private boolean isFinal;
@@ -405,6 +405,20 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement {
      */
     public JavaCodeJavadocComment getJavadocComment() {
         return comment;
+    }
+    
+    /**
+     * Takes over or changes the javadoc comment based on the given comment.
+     * 
+     * @param comment the comment to take information from, may be <b>null</b>
+     */
+    void setJavadocComment(JavaCodeJavadocComment comment) {
+        if (null == this.comment) {
+            this.comment = comment;
+            this.comment.setAttachedTo(this);
+        } else {
+            this.comment.copyFrom(comment);
+        }
     }
     
     @Override

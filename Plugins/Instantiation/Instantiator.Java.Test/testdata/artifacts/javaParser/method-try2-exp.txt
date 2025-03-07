@@ -1,0 +1,7 @@
+public void emit(byte[] data) {
+    try (OutputStream out = new FileOutputStream("test.txt")) {
+        out.write(data);
+    } catch (IOException e) {
+        System.out.println(e.getMessage());
+    }
+}

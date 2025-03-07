@@ -1,0 +1,10 @@
+/**
+ * Says hello.
+ *
+ * @param name the name
+ *
+ * @throws IOException If I/O fails
+ */
+public void sayHello(String name) throws IOException {
+    System.out.println("Hello " + name + "!");
+}

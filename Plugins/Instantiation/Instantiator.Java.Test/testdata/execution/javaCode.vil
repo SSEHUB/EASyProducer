@@ -28,7 +28,7 @@ vilScript JavaCode (Project source, Configuration config, Project target) {
         m.addWhileLoop("!cont").addAssignment("cont", "true");
         m.addForLoop("String", "s", "args").addCall("System.out.println");
         m.addForLoop("int", "c", "0", "c < 10", "c++").addCall("System.out.println");
-        m.addSynchronized().add("length++;");
+        m.addSynchronized("this").add("length++;");
         JavaCodeTryBlock try = m.addTry();
         try.addSLComment("try");
         try.addCatch("java.io.IOException", "e").addCall("e.printStackTrace");

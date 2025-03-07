@@ -1,0 +1,3 @@
+/* Says hello. */ public void sayHello(/* the name */ String name) throws /* If I/O fails */ java.io.IOException {
+  System.out.println("Hello " + name + "!");
+}

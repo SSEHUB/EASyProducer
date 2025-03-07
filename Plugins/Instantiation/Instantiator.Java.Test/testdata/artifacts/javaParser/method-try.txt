@@ -1,0 +1,14 @@
+public void emit(byte[] data, java.io.OutputStream out) throws java.util.concurrent.ExecutionException {
+ try {
+     out.write(data);
+ } catch (java.io.IOException e) {
+     System.out.println(e.getMessage());
+ }
+ try {
+     out.write(data);
+ } catch (java.io.IOException e) {
+     throw new java.util.concurrent.ExecutionException(e);
+ } finally {
+     System.out.println("always");
+ }
+}

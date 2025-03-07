@@ -1,0 +1,8 @@
+/**
+ * Says hello.
+ *
+ * @param name the name
+ */
+public void sayHello(String name) {
+    System.out.println("Hello " + name + "!");
+}

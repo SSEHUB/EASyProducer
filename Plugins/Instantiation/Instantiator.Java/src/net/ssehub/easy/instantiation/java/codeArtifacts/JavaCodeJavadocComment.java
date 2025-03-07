@@ -50,11 +50,13 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
      */
     JavaCodeJavadocComment(String comment, IJavaCodeElement attachedTo) {
         this.comment = comment;
-        final String marker = Tag.RETURN.getTag();
-        int pos = comment.lastIndexOf(marker);
-        if (pos > 0) {
-            addReturnComment(comment.substring(pos + marker.length()).trim());
-            this.comment = comment.substring(0, pos);
+        if (null != comment) {
+            final String marker = Tag.RETURN.getTag();
+            int pos = comment.lastIndexOf(marker);
+            if (pos > 0) {
+                addReturnComment(comment.substring(pos + marker.length()).trim());
+                this.comment = comment.substring(0, pos);
+            }
         }
         this.attachedTo = attachedTo;
     }
@@ -128,7 +130,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
     }
     
     private void storeTags(CodeWriter out) {
-        if (null != taggedParts) {
+        if (null != taggedParts && !taggedParts.isEmpty()) {
             storeTagsImpl(out);
         }
     }
@@ -179,17 +181,27 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         return taggedParts.stream().filter(t -> t.tag == tag);
     }
     
+    private Optional<NameTaggedComment> getTag(Tag tag, String name) {
+        return null == taggedParts 
+            ? Optional.empty() 
+            : taggedParts.stream().filter(p -> p.tag == tag && p.name.equals(name)).findAny();
+    }
+    
     private JavaCodeJavadocComment addTaggedPart(Tag tag, String name, String comment) {
         if (null == taggedParts) {
             taggedParts = new ArrayList<>();
         }
-        Optional<NameTaggedComment> t = taggedParts.stream().filter(p -> p.tag == tag && p.name.equals(name)).findAny();
+        Optional<NameTaggedComment> t = getTag(tag, name);
         if (t.isEmpty()) {
             taggedParts.add(new NameTaggedComment(tag, name, comment));
         } else {
             t.get().comment = comment;
         }
         return this;
+    }
+    
+    void setAttachedTo(IJavaCodeElement attachedTo) {
+        this.attachedTo = attachedTo;
     }
     
     public String getComment() {
@@ -254,6 +266,11 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
      */
     public JavaCodeJavadocComment addParameterComment(String name, String comment) {
         return addTaggedPart(Tag.PARAM, name, comment);
+    }
+    
+    public JavaCodeJavadocComment deleteParameterComment(String name) {
+        taggedParts.removeIf(t -> t.tag == Tag.PARAM && t.name.equals(name));
+        return this;
     }
 
     /**
@@ -351,6 +368,7 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
      * @return the escaped text
      * @see #escapeHtmlImpl(String)
      */
+    @Invisible
     public static String escapeHtml(String text) {
         String[] split = text.split("\"");
         for (int i = 0; i < split.length; i++) {
@@ -382,6 +400,32 @@ public class JavaCodeJavadocComment implements IJavaCodeElement {
         }
         text = String.join("\"", split);
         return text;
+    }
+
+    /**
+     * Copies comment information over from {@code comment}, may overwrite existing information.
+     * 
+     * @param comment the comment to take information from, may be <b>null</b>
+     */
+    @Invisible
+    public void copyFrom(JavaCodeJavadocComment comment) {
+        if (null != comment) {
+            if (null != comment.comment) {
+                this.comment = comment.comment;
+            }
+            if (null != comment.taggedParts) {
+                for (NameTaggedComment part : comment.taggedParts) {
+                    addTaggedPart(part.tag, part.name, part.comment);
+                }
+            }
+        }
+    }
+
+    void adjustException(JavaCodeTypeSpecification exc) {
+        Optional<NameTaggedComment> t = getTag(Tag.THROWS, exc.getFullName());
+        if (t.isPresent()) {
+            t.get().name = exc.getOutputTypeName();
+        }
     }
 
 }

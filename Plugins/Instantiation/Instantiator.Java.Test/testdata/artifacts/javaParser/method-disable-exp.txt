@@ -1,0 +1,6 @@
+/**
+ * Says hello.
+ */
+public void sayHello() {
+    System.out.println("Hello !");
+}

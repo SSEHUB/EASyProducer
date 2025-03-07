@@ -38,6 +38,8 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     private boolean forceJavadoc;
     private boolean dflt;
     private List<String> generics;
+    private boolean isSynchronized;
+    private JavaCodeExpression dfltEx;
 
     /**
      * Creates a void method without comment.
@@ -82,7 +84,17 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      */
     public static JavaCodeMethod create() {
         return new JavaCodeMethod("", null);
-    }    
+    }
+    
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @return the parsed method, may just contain default values if text cannot be parsed
+     */
+    public static JavaCodeMethod create(String text) {
+        return AST2ArtifactVisitor.parseCompilationUnit(text).getMethod();
+    }
     
     /**
      * Overrides the original type specification. This may lead to unintended imports.
@@ -97,7 +109,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
 
     @Invisible
     public IJavaCodeArtifact getArtifact() {
-        return enclosing.getArtifact();
+        return null == enclosing ? null : enclosing.getArtifact();
     }
     
     @Invisible
@@ -229,7 +241,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public JavaCodeParameterSpecification addParameter(String type, String name) {
         return addParameter(type, name, null);
     }
-
+    
     /**
      * Adds a (formal) method parameter.
      * 
@@ -240,13 +252,17 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      */
     @OperationMeta(name = {"addParameter", "param"})
     public JavaCodeParameterSpecification addParameter(String type, String name, String comment) {
+        return addParameter(new JavaCodeParameterSpecification(type, name, this), comment);
+    }
+    
+    JavaCodeParameterSpecification addParameter(JavaCodeParameterSpecification param, String comment) {
         if (null == parameter) {
             parameter = new ArrayList<>();
         }
         if (null != comment && getJavadocComment() != null) {
-            getJavadocComment().addParameterComment(name, comment);
+            getJavadocComment().addParameterComment(param.getName(), comment);
         }
-        return IJavaCodeElement.add(parameter, new JavaCodeParameterSpecification(type, name, this));
+        return IJavaCodeElement.add(parameter, param);
     }
 
     /**
@@ -376,7 +392,7 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     
     @Override
     @OperationMeta(name = {"addThrow", "throw"})
-    public JavaCodeThrow addThrow(String expression) {
+    public JavaCodeThrow addThrow(JavaCodeExpression  expression) {
         return block.addThrow(expression);
     }
     
@@ -388,8 +404,8 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
 
     @Override
     @OperationMeta(name = {"addSynchronized", "synchronized"})
-    public JavaCodeSynchronizedBlock addSynchronized() {
-        return block.addSynchronized();
+    public JavaCodeSynchronizedBlock addSynchronized(JavaCodeExpression objEx) {
+        return block.addSynchronized(objEx);
     }
 
     @Override
@@ -513,6 +529,18 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public JavaCodeVariableDeclaration createVariable(String type, String variableName, 
         boolean isFinal, JavaCodeExpression initializer) {
         return block.createVariable(type, variableName, isFinal, initializer);
+    }
+    
+    @OperationMeta(name = {"addBreak", "break"})
+    public JavaCodeMethod addBreak() {
+        block.addBreak();
+        return this;
+    }
+
+    @OperationMeta(name = {"addContinue", "continue"})
+    public JavaCodeMethod addContinue() {
+        block.addContinue();
+        return this;
     }
     
     /**
@@ -649,8 +677,13 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public void store(CodeWriter out) {
         super.store(out); // comment, annotations
         out.printwi(getModifier());
-        boolean enclosingIsInterface = enclosing.getKind() == Kind.INTERFACE;
+        boolean enclosingIsInterface = null != enclosing && enclosing.getKind() == Kind.INTERFACE;
+        boolean enclosingIsAnnotation = null != enclosing && enclosing.getKind() == Kind.ANNOTATION;
         if (!isConstructor()) {
+            if (isSynchronized) {
+                out.print("synchronized");
+                out.print(" ");
+            }
             if (enclosingIsInterface && isDefault()) {
                 out.print("default");
                 out.print(" ");
@@ -669,8 +702,13 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         out.print("(");
         IJavaCodeElement.storeList(parameter, ", ", out);
         out.print(")");
+        if (enclosingIsAnnotation && dfltEx != null) {
+            out.print(" default ");
+            dfltEx.store(out);
+        }
         IJavaCodeElement.storeList(" throws ", exceptions, ", ", out);
         boolean signatureOnly = isAbstract() || (enclosingIsInterface && (!isDefault() || !isStatic()));
+        signatureOnly |= enclosingIsAnnotation;
         if (signatureOnly) {
             out.println(";");
         } else {
@@ -740,6 +778,30 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
         return this;
     }
 
+    /**
+     * Sets this method to synchronized.
+     * 
+     * @return <b>this</b> (for chaining)
+     */
+    @OperationMeta(name = {"setSynchronized", "synchronized"})    
+    public JavaCodeVisibleElement setSynchronized() {
+        setSynchronized(true);
+        return this;
+    }
+
+    /**
+     * Sets this method to synchronized.
+     * 
+     * @param isSynchronized whether the method shall be synchronized
+     * 
+     * @return <b>this</b> (for chaining)
+     */    
+    @OperationMeta(name = {"setSynchronized", "synchronized"})  
+    public JavaCodeVisibleElement setSynchronized(boolean isSynchronized) {
+        this.isSynchronized = isSynchronized;
+        return this;
+    }
+    
     @Override
     public IJavaCodeElement getParent() {
         return enclosing;
@@ -750,6 +812,20 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     public void setParent(IJavaCodeElement parent) {
         super.setParent(parent);
         JavaCodeClass.setParent(parent, p -> this.enclosing = p);
+        if (null != exceptions) {
+            exceptions.forEach(e -> {
+                e.setParent(this);
+                if (null != getJavadocComment()) {
+                    getJavadocComment().adjustException(e);
+                }
+            });
+        }
+        if (null != parameter) {
+            parameter.forEach(p -> p.setParent(this));
+        }
+        if (null != block) {
+            block.setParent(this);
+        }
     }
 
     @Override
@@ -760,6 +836,17 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Override
     public boolean isMethod() {
         return null != type;
+    }
+    
+    /**
+     * Adds a default value, only valid/used in annotation types.
+     * 
+     * @param expr the expression
+     * @return <b>this</b> for chaining
+     */
+    public JavaCodeMethod addDefault(JavaCodeExpression expr) {
+        this.dfltEx = expr;
+        return this;
     }
     
     /**
@@ -796,6 +883,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
      */
     public JavaCodeBlock getBlock() {
         return block;
+    }
+    
+    public JavaCodeMethod deleteParameter(String name) {
+        parameter.removeIf(p -> p.getName().equals(name));
+        getJavadocComment().deleteParameterComment(name);
+        return this;
     }
     
 }

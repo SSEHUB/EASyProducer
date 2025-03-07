@@ -1,0 +1,5 @@
+public String doit(int i, int j) {
+ synchronized(this) {
+    System.out.println("Result: " + (i + j));
+ }
+}

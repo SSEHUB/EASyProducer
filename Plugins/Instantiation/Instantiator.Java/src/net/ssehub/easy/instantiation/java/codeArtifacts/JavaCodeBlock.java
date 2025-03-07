@@ -36,6 +36,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     private boolean isLambdaBlock;
     private boolean isStatic;
     private boolean withBrackets;
+    private boolean indentBefore;
 
     /**
      * Creates a new instance.
@@ -154,6 +155,12 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
         return element;
     }
     
+    @Invisible
+    public JavaCodeBlock indentBefore(boolean indentBefore) {
+        this.indentBefore = indentBefore;
+        return this;
+    }
+    
     /**
      * Returns the elements as stream.
      * 
@@ -256,7 +263,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
 
     @Override
     @OperationMeta(name = {"addThrow", "throw"})
-    public JavaCodeThrow addThrow(String expression) {
+    public JavaCodeThrow addThrow(JavaCodeExpression expression) {
         return IJavaCodeElement.add(elements, new JavaCodeThrow(this, expression));
     }
 
@@ -268,8 +275,8 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
 
     @Override
     @OperationMeta(name = {"addSynchronized", "synchronized"})
-    public JavaCodeSynchronizedBlock addSynchronized() {
-        return IJavaCodeElement.add(elements, new JavaCodeSynchronizedBlock(this));
+    public JavaCodeSynchronizedBlock addSynchronized(JavaCodeExpression objEx) {
+        return IJavaCodeElement.add(elements, new JavaCodeSynchronizedBlock(this, objEx));
     }
 
     @Override
@@ -341,6 +348,18 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @OperationMeta(name = {"addSystemOutPrintlnCall", "SystemOutPrintln", "sysoutprintln"})
     public JavaCodeMethodCall addSystemOutPrintlnCall() {
         return addCall("System.out.println");
+    }
+    
+    @OperationMeta(name = {"addBreak", "break"})
+    public JavaCodeBlock addBreak() {
+        add("break;");
+        return this;
+    }
+
+    @OperationMeta(name = {"addContinue", "continue"})
+    public JavaCodeBlock addContinue() {
+        add("continue;");
+        return this;
     }
 
     /**
@@ -449,6 +468,7 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      * @return {@code block} for chaining
      */
     public JavaCodeBlock addBlock(JavaCodeBlock block) {
+        block.setParent(this);
         return IJavaCodeElement.add(elements, block);
     }
     
@@ -503,6 +523,9 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @Invisible
     @Override
     public void store(CodeWriter out) {
+        if (indentBefore) {
+            out.printIndent();
+        }
         if (withBrackets) {
             if (isStatic) {
                 out.print("static");
@@ -524,8 +547,8 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
                 out.println();
             }
             out.increaseIndent();
-            for (IJavaCodeElement attr: elements) {
-                attr.store(out);
+            for (IJavaCodeElement e: elements) {
+                e.store(out);
             }
             storeBeforeBlockEnd(out);
             out.decreaseIndent();
@@ -612,6 +635,6 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     
     protected boolean withBrackets() {
         return withBrackets;
-    }
+    }    
     
 }
