@@ -116,55 +116,120 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.Bundle;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
+
 /**
  * AST-to-Artifact visitor.
  * 
  * @author Holger Eichelberger
  */
 class AST2ArtifactVisitor extends ASTVisitor {
+
+    /**
+     * A parsing problem consumer.
+     * 
+     * @author Holger Eichelberger
+     */
+    interface ProblemConsumer {
+        
+        /**
+         * Accepts a problem.
+         * 
+         * @param problem the problem, may be <b>null</b> to signal last problem if problems have been signaled before 
+         *     in the same parsing process
+         * @throws VilException if parsing failed
+         */
+        void accept(IProblem problem) throws VilException;
+        
+    }
+
+    static final ProblemConsumer LOG_CONSUMER = p -> {
+        if (p != null) {
+            EASyLoggerFactory.INSTANCE.getLogger(JavaCodeArtifact.class, Bundle.ID).warn(p.getMessage());
+        }
+    };
     
     private Stack<JavaCodeBlock> blocks = new Stack<>();
     private Stack<JavaCodeClass> classes = new Stack<>();
     private JavaCodeClass cls;
     private JavaCodeEnum enumeration;
     private JavaCodeMethod method;
-    private JavaCodeExpression ex;
+    private JavaCodeParsedExpression ex;
     private Map<Integer, Comment> comments;
     private char[] source;
-    
+
     AST2ArtifactVisitor(ASTNode unit, char[] source) {
         this.source = source;
         if (unit instanceof CompilationUnit) {
             comments = CodeParser.mapComments((CompilationUnit) unit);
+        } else if (unit instanceof Block) {
+            blocks.push(new JavaCodeBlock(null, false, false, false, false, false));
         }
     }
     
-    AST2ArtifactVisitor(JavaCodeBlock result, Map<Integer, Comment> comments, char[] source) {
-        blocks.push(result);
-        this.comments = comments;
-        this.source = source;
+    static ProblemConsumer logConsumer() {
+        return LOG_CONSUMER;
+    }
+    
+    static ProblemConsumer vilExceptionConsumer() {
+        return new ProblemConsumer() {
+            
+            private String messages = "";
+            
+            @Override
+            public void accept(IProblem problem) throws VilException {
+                if (null == problem) {
+                    throw new VilException(messages, VilException.ID_UNKNOWN);
+                } else {
+                    if (messages.length() > 0) {
+                        messages += "; ";
+                    }
+                }
+                messages += problem.getMessage();
+            }
+        };
     }
     
     /**
      * Parses {@code text} on compilation unit level.
      * 
      * @param text the text to parse from
+     * @param problems parsing problem consumer, may be null
      * @return the created visitor instance carrying the result, depending on input, result is in 
      * {@link #getClass()}, {@link #getEnum()}, {@link #getMethod()}.
+     * @throws VilException if parsing fails, the problem consumer decides to throw an exception
      */
-    public static AST2ArtifactVisitor parseCompilationUnit(String text) {
-        return parse(text, ASTParser.K_COMPILATION_UNIT);
+    public static AST2ArtifactVisitor parseCompilationUnit(String text, ProblemConsumer problems) 
+        throws VilException {
+        return parse(text, ASTParser.K_COMPILATION_UNIT, problems);
     }
     
     /**
      * Parses {@code text} on expression level.
      * 
      * @param text the text to parse from
+     * @param problems parsing problem consumer, may be null
      * @return the created visitor instance carrying the result, depending on input, result is in 
      * {@link #getExpression()}.
+     * @throws VilException if parsing fails, the problem consumer decides to throw an exception
      */
-    public static AST2ArtifactVisitor parseExpression(String text) {
-        return parse(text, ASTParser.K_EXPRESSION);
+    public static AST2ArtifactVisitor parseExpression(String text, ProblemConsumer problems) throws VilException {
+        return parse(text, ASTParser.K_EXPRESSION, problems);
+    }    
+
+    /**
+     * Parses {@code text} on statements level.
+     * 
+     * @param text the text to parse from
+     * @param problems parsing problem consumer, may be null
+     * @return the created visitor instance carrying the result, depending on input, result is in 
+     * {@link #getBlock()}.
+     * @throws VilException if parsing fails, the problem consumer decides to throw an exception
+     */
+    public static AST2ArtifactVisitor parseStatements(String text, ProblemConsumer problems) throws VilException {
+        return parse(text, ASTParser.K_STATEMENTS, problems);
     }    
 
     /**
@@ -172,9 +237,12 @@ class AST2ArtifactVisitor extends ASTVisitor {
      * 
      * @param text the text to parse from
      * @param parserKind the expected kind of source level to start parsing at
+     * @param problems parsing problem consumer, may be null
      * @return the created visitor instance carrying the result
+     * @throws VilException if parsing fails, the problem consumer decides to throw an exception
      */
-    private static AST2ArtifactVisitor parse(String text, int parserKind) {
+    private static AST2ArtifactVisitor parse(String text, int parserKind, ProblemConsumer problems) 
+        throws VilException {
         char[] source = text.toCharArray();
         ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
         parser.setKind(parserKind);
@@ -187,13 +255,18 @@ class AST2ArtifactVisitor extends ASTVisitor {
         ASTNode node = parser.createAST(null);
         AST2ArtifactVisitor vis = new AST2ArtifactVisitor(node, source);
         node.accept(vis);
-        if (node instanceof CompilationUnit) {
+        if (node instanceof CompilationUnit && null != problems) {
             CompilationUnit unit = (CompilationUnit) node;
             if (null != unit.getProblems()) { // preliminary
+                int problemCount = 0;
                 for (IProblem p : unit.getProblems()) {
                     if (p.getID() != 4195409) { // 4195409: The preview feature...
-                        System.out.println("Problem: " + p.getMessage());
+                        problems.accept(p);
+                        problemCount++;
                     }
+                }
+                if (problemCount > 0) {
+                    problems.accept(null);
                 }
             }
         }
@@ -241,10 +314,10 @@ class AST2ArtifactVisitor extends ASTVisitor {
      * 
      * @return the expression, may be <b>null</b> for none/syntax error
      */
-    public JavaCodeExpression getExpression() {
+    public JavaCodeParsedExpression getExpression() {
         return ex;
     }
-    
+
     private JavaCodeClass getCurrentClass() {
         return classes.isEmpty() ? null : classes.peek();
     }
@@ -446,8 +519,8 @@ class AST2ArtifactVisitor extends ASTVisitor {
      * 
      * @return the expression
      */
-    private JavaCodeExpression getEx() {
-        JavaCodeExpression result = ex;
+    private JavaCodeParsedExpression getEx() {
+        JavaCodeParsedExpression result = ex;
         ex = null;
         return result;
     }

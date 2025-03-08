@@ -29,7 +29,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeArgumentListExpression extends JavaCodeExpression {
+public class JavaCodeArgumentListExpression extends JavaCodeParsedExpression {
 
     private List<IJavaCodeElement> arguments = new ArrayList<>();
     

@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.instantiation.java.codeArtifacts;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 
@@ -47,11 +48,21 @@ public interface JavaCodeBlockInterface extends IJavaCodeElement, JavaCodeCallEl
      * Adds all elements in {@code block} to this block.
      * 
      * @param block the block to take the elements from (remove them)
-     * @return this boick for chaining
+     * @return this block for chaining
      * @see #transferElementsTo(JavaCodeBlockInterface)
      */
     public JavaCodeBlockInterface addAll(JavaCodeBlockInterface block);
 
+    /**
+     * Parses the code in {@code text} to java code elements. Nothing may happen inf
+     * {@code text} is not syntactically valid Java code.
+     * 
+     * @param text the text to parse
+     * @return this block for chaining
+     * @throws VilException if parsing fails
+     */
+    public JavaCodeBlockInterface parse(String text) throws VilException;
+    
     /**
      * Adds a statement and indents it.
      * 

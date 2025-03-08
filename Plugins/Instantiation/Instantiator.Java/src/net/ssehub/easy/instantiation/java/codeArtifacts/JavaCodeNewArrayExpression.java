@@ -27,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeNewArrayExpression extends JavaCodeExpression {
+public class JavaCodeNewArrayExpression extends JavaCodeParsedExpression {
 
     private List<JavaCodeExpression> dimensions = new ArrayList<>();
     private JavaCodeTypeSpecification type;

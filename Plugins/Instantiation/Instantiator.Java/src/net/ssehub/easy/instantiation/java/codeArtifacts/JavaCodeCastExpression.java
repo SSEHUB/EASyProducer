@@ -23,7 +23,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeCastExpression extends JavaCodeExpression {
+public class JavaCodeCastExpression extends JavaCodeParsedExpression {
 
     private String typeName;
     private JavaCodeTypeSpecification type;

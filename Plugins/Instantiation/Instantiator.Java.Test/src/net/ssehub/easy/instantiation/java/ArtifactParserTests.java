@@ -18,7 +18,6 @@ package net.ssehub.easy.instantiation.java;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.function.Function;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
@@ -27,9 +26,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.java.codeArtifacts.IJavaCodeElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.IJavaCodeImport;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeArtifact;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeBlock;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeMethod;
@@ -76,6 +77,19 @@ public class ArtifactParserTests extends AbstractExecutionTest<Script> {
         }
     }
     
+    @FunctionalInterface
+    public interface Function<T, R> {
+
+        /**
+         * Applies this function to the given argument.
+         *
+         * @param arg the function argument
+         * @return the function result
+         * @throws VilException if executing the function fails
+         */
+        R apply(T arg) throws VilException;
+    }
+    
     /**
      * Tests the case with given {@code name} in {@code testdata/artifacts/javaParser} by executing
      * the given parsing {@code testFunc} and comparing the result with the expected output in the {@code -exp} file.
@@ -91,10 +105,14 @@ public class ArtifactParserTests extends AbstractExecutionTest<Script> {
         String input = FileUtils.readFileToString(inputFile, Charset.defaultCharset());
         File expectedFile = new File(dir, name + "-exp.txt");
         String expected = FileUtils.readFileToString(expectedFile, Charset.defaultCharset());
-        IJavaCodeElement elt = testFunc.apply(input);
-        Assert.assertNotNull(elt);
-        Assert.assertEquals(expected, elt.toCode());
-        return elt;
+        try {
+            IJavaCodeElement elt = testFunc.apply(input);
+            Assert.assertNotNull(elt);
+            Assert.assertEquals(expected, elt.toCode());
+            return elt;
+        } catch (VilException e) {
+            throw new IOException(e);
+        }
     }
     
     /**
@@ -365,6 +383,16 @@ public class ArtifactParserTests extends AbstractExecutionTest<Script> {
     @Test
     public void testExpressionArray() throws IOException {
         test("expr-int", s -> JavaCodeExpression.create(s));
+    }
+
+    /**
+     * Tests parsing block contents.
+     * 
+     * @throws IOException shall not occur
+     */
+    @Test
+    public void testBlockBasic() throws IOException {
+        test("block-basic", s -> JavaCodeBlock.create(s));
     }
 
 }

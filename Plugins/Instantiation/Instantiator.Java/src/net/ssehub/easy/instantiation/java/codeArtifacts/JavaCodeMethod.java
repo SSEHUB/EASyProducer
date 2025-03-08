@@ -18,9 +18,13 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.java.codeArtifacts.AST2ArtifactVisitor.ProblemConsumer;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeClass.Kind;
 
 /**
@@ -87,13 +91,46 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     }
     
     /**
+     * Creates an instance by parsing from {@code text}. Must be hooked in 
+     * by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param text the text representing the expression/value
+     * @return the instance
+     * @throws VilException if the conversion fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaCodeMethod convert(Object text) throws VilException {
+        JavaCodeMethod result = null;
+        Object tmp = IVilType.convertVilValue(text);
+        if (tmp != null) {
+            result = create(text.toString(), AST2ArtifactVisitor.vilExceptionConsumer());
+        }
+        return result;
+    }
+
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @param problemConsumer the parsing problem consumer
+     * @return the parsed method, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
+     */
+    private static JavaCodeMethod create(String text, ProblemConsumer problemConsumer) 
+        throws VilException {
+        return AST2ArtifactVisitor.parseCompilationUnit(text, problemConsumer).getMethod();
+    }
+
+    /**
      * Creates a temporary instance without parent by parsing it from {@code text}.
      * 
      * @param text the text to parse from
      * @return the parsed method, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
      */
-    public static JavaCodeMethod create(String text) {
-        return AST2ArtifactVisitor.parseCompilationUnit(text).getMethod();
+    public static JavaCodeMethod create(String text) throws VilException {
+        return create(text, AST2ArtifactVisitor.logConsumer());
     }
     
     /**
@@ -641,6 +678,12 @@ public class JavaCodeMethod extends JavaCodeAbstractVisibleElement implements Ja
     @Override
     public JavaCodeMethod addAll(JavaCodeBlockInterface block) {
         this.block.addAll(block);
+        return this;
+    }
+    
+    @Override
+    public JavaCodeMethod parse(String text) throws VilException {
+        this.block.parse(text);
         return this;
     }
 

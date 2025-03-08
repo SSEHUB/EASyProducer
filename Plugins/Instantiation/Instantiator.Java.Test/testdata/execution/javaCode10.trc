@@ -1,0 +1,26 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, JavaCodeArtifact) with (<config>, JCATest10.java)
+    -> addClass(JavaCodeArtifact, String, String) with (JCATest10.java, SomeClass, ) = JavaCodeClass: SomeClass
+    mainCls <- JavaCodeClass: SomeClass
+    -> create JavaCodeMethod(String) with (
+            public void doA(java.io.InputStream in) {
+                int test = 0;
+                if (test >= 0) {
+                    System.out.println("HERE");
+                }
+            }
+        ) = JavaCodeMethod: doA
+    -> addMethod(JavaCodeClass, JavaCodeMethod) with (JavaCodeClass: SomeClass, JavaCodeMethod: doA) = JavaCodeMethod: doA
+    ( m |...        -> addMethod(JavaCodeClass, String, String) with (JavaCodeClass: SomeClass, , doFurther) = JavaCodeMethod: doFurther
+        -> param(JavaCodeMethod, String, String) with (JavaCodeMethod: doFurther, String, data) = JavaCodeParameterSpecification String data
+        -> parse(JavaCodeMethod, String) with (JavaCodeMethod: doFurther, 
+                if (data.length() > 0) {
+                    data += " TEST";
+                }
+                System.out.println(data);
+            ) = JavaCodeMethod: doFurther
+    ( m |...        -> addMethod(JavaCodeClass, String, String) with (JavaCodeClass: SomeClass, , doFurther2) = JavaCodeMethod: doFurther2
+        -> param(JavaCodeMethod, String, String) with (JavaCodeMethod: doFurther2, String, data) = JavaCodeParameterSpecification String data
+        b <- JavaCodeBlock
+        -> addAll(JavaCodeMethod, JavaCodeBlockInterface) with (JavaCodeMethod: doFurther2, JavaCodeBlock) = JavaCodeMethod: doFurther2
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (JavaCode10Tpl, <config>, JCATest10.java, {}) = {JCATest10.java}

@@ -1,0 +1,38 @@
+import javaLib;
+
+@indent(indentation = 4, additional = 0)
+@format(profile="java", profileArg_javadocIndent="* ", lineLength = 120, profileArg_eltSorting="CONS_ALPHA")
+template JavaCode10Tpl(Configuration config, JavaCodeArtifact target) {
+
+    def main(Configuration config, JavaCodeArtifact target) {
+        JavaCodeClass mainCls = target.addClass("SomeClass", "");
+        mainCls.addMethod(new JavaCodeMethod('
+            public void doA(java.io.InputStream in) {
+                int test = 0;
+                if (test >= 0) {
+                    System.out.println("HERE");
+                }
+            }
+        '));
+        mainCls.addMethod("", "doFurther").(m|{
+            m.param("String", "data");
+            m.parse('
+                if (data.length() > 0) {
+                    data += " TEST";
+                }
+                System.out.println(data);
+            ');
+        });
+        mainCls.addMethod("", "doFurther2").(m|{
+            m.param("String", "data");
+            JavaCodeBlock b = '
+                if (data.length() > 0) {
+                    data += " TEST";
+                }
+                System.out.println(data);
+            ';
+            m.addAll(b);
+        });
+    }
+    
+}

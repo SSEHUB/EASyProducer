@@ -20,9 +20,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.java.codeArtifacts.AST2ArtifactVisitor.ProblemConsumer;
 
 /**
  * Representes a Java class in code.
@@ -104,13 +108,45 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
     }
     
     /**
+     * Creates an instance by parsing from {@code text}. Must be hooked in 
+     * by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param text the text representing the expression/value
+     * @return the instance
+     * @throws VilException if the conversion fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaCodeClass convert(Object text) throws VilException {
+        JavaCodeClass result = null;
+        Object tmp = IVilType.convertVilValue(text);
+        if (tmp != null) {
+            result = create(text.toString(), AST2ArtifactVisitor.vilExceptionConsumer());
+        }
+        return result;
+    }
+
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @param problem the problem consumer
+     * @return the parsed class, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
+     */
+    private static JavaCodeClass create(String text, ProblemConsumer problem) throws VilException {
+        return AST2ArtifactVisitor.parseCompilationUnit(text, problem).getCls();
+    }
+
+    /**
      * Creates a temporary instance without parent by parsing it from {@code text}.
      * 
      * @param text the text to parse from
      * @return the parsed class, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
      */
-    public static JavaCodeClass create(String text) {
-        return AST2ArtifactVisitor.parseCompilationUnit(text).getCls();
+    public static JavaCodeClass create(String text) throws VilException {
+        return create(text, AST2ArtifactVisitor.logConsumer());
     }
 
     @Override

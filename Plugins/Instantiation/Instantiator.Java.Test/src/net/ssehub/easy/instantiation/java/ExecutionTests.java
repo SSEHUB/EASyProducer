@@ -456,4 +456,14 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
         assertJavaCode("javaCode9", "JCATest9");
     }
 
+    /**
+     * Test the JavaCode artifact with parsed text.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testJavaCode10() throws IOException {
+        assertJavaCode("javaCode10", "JCATest10");
+    }
+
 }

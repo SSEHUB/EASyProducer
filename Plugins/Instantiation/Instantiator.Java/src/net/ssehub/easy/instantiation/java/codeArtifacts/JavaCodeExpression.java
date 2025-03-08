@@ -91,9 +91,10 @@ public abstract class JavaCodeExpression extends JavaCodeElement {
      * 
      * @param text the text to parse from
      * @return the parsed class, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
      */
-    public static JavaCodeExpression create(String text) {
-        return AST2ArtifactVisitor.parseExpression(text).getExpression();
+    public static JavaCodeExpression create(String text) throws VilException {
+        return AST2ArtifactVisitor.parseExpression(text, AST2ArtifactVisitor.logConsumer()).getExpression();
     }    
 
     /**

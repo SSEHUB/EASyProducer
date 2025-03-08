@@ -48,6 +48,7 @@ import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeNewArrayExpressi
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeOperatorExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParameterSpecification;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParenthesisExpression;
+import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeParsedExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodePostfixExpression;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeQualifiableElement;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeReturn;
@@ -135,6 +136,7 @@ public class Registration implements IRegistration {
         TypeRegistry.DEFAULT.register(JavaCodeElement.class);
         TypeRegistry.DEFAULT.register(JavaCodeStatement.class);
         TypeRegistry.DEFAULT.register(JavaCodeExpression.class);
+        TypeRegistry.DEFAULT.register(JavaCodeParsedExpression.class);
         TypeRegistry.DEFAULT.register(JavaCodeImportScope.class);
         TypeRegistry.DEFAULT.register(JavaCodeVisibility.class);
         TypeRegistry.DEFAULT.register(JavaCodeAnnotation.class);

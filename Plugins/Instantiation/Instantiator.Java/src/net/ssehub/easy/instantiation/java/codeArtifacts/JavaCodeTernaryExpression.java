@@ -23,7 +23,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeTernaryExpression extends JavaCodeExpression {
+public class JavaCodeTernaryExpression extends JavaCodeParsedExpression {
     
     private JavaCodeExpression condition;
     private JavaCodeExpression ifEx;

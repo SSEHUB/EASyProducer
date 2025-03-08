@@ -27,7 +27,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeLambdaExpression extends JavaCodeExpression {
+public class JavaCodeLambdaExpression extends JavaCodeParsedExpression {
     
     private List<String> variables;
     private JavaCodeExpression expression;

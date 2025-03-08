@@ -19,9 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
+import net.ssehub.easy.instantiation.core.model.vilTypes.Conversion;
+import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
+import net.ssehub.easy.instantiation.java.codeArtifacts.AST2ArtifactVisitor.ProblemConsumer;
 
 /**
  * Represents a code block.
@@ -92,6 +96,48 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
      */
     public static JavaCodeBlock create() {
         return create(false, false, false, true);
+    }
+    
+    /**
+     * Creates an instance by parsing from {@code text}. Must be hooked in 
+     * by {@link #setParent(IJavaCodeElement)} later.
+     * 
+     * @param text the text representing the expression/value
+     * @return the instance
+     * @throws VilException if the conversion fails
+     */
+    @Invisible
+    @Conversion
+    public static JavaCodeBlock convert(Object text) throws VilException {
+        JavaCodeBlock result = null;
+        Object tmp = IVilType.convertVilValue(text);
+        if (tmp != null) {
+            result = create(text.toString(), AST2ArtifactVisitor.vilExceptionConsumer());
+        }
+        return result;
+    }
+
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @param problem the problem consumer
+     * @return the parsed method, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
+     */
+    private static JavaCodeBlock create(String text, ProblemConsumer problem) throws VilException {
+        return AST2ArtifactVisitor.parseStatements(text, problem).getBlock();
+    }
+    
+    /**
+     * Creates a temporary instance without parent by parsing it from {@code text}.
+     * 
+     * @param text the text to parse from
+     * @return the parsed method, may just contain default values if text cannot be parsed
+     * @throws VilException if parsing fails
+     */
+    public static JavaCodeBlock create(String text) throws VilException {
+        return create(text, AST2ArtifactVisitor.logConsumer());
     }
     
     /**
@@ -500,6 +546,12 @@ public class JavaCodeBlock extends JavaCodeStatement implements JavaCodeBlockInt
     @Override
     public JavaCodeBlock addAll(JavaCodeBlockInterface block) {
         block.transferElementsTo(this);
+        return this;
+    }
+    
+    @Override
+    public JavaCodeBlock parse(String text) throws VilException {
+        addAll(create(text));
         return this;
     }
 

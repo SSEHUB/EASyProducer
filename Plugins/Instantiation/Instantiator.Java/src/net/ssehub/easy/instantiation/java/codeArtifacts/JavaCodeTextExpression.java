@@ -23,7 +23,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.IVilType;
  * 
  * @author Holger Eichelberger
  */
-public class JavaCodeTextExpression extends JavaCodeExpression {
+public class JavaCodeTextExpression extends JavaCodeParsedExpression {
 
     private Object text;
 

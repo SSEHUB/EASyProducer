@@ -28,8 +28,8 @@ public class JavaCodeAnonymousClass extends JavaCodeClass {
         args = new JavaCodeArgumentListExpression(this);
     }
     
-    static JavaCodeExpression toExpression(JavaCodeAnonymousClass cls) {
-        return new JavaCodeExpression(null) {
+    static JavaCodeParsedExpression toExpression(JavaCodeAnonymousClass cls) {
+        return new JavaCodeParsedExpression(null) {
 
             @Override
             public void store(CodeWriter out) {
