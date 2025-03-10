@@ -115,16 +115,11 @@ public class Registration implements IRegistration {
                 SettingsInitializerRegistry.register(new JavaSettingsInitializer());
                 TypeRegistry.DEFAULT.register(JavaSettings.class);
                 TypeRegistry.DEFAULT.register(JavaImport.class);
+                registerJavaCodeTypes();
+                DefaultLib.appendDefaultLibURLQuietly(Registration.class.getClassLoader(), 
+                    Bundle.ID, context, "Instantiator.Java");
             }
         });
-        
-        // plain Java
-        if (!plainRegistered) {
-            plainRegistered = true;
-            registerJavaCodeTypes();
-            DefaultLib.appendDefaultLibURLQuietly(Registration.class.getClassLoader(), 
-                Bundle.ID, context, "Instantiator.Java");
-        }
     }
 
     /**
