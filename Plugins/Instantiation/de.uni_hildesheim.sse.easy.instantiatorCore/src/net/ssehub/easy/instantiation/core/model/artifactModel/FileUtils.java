@@ -224,11 +224,16 @@ public class FileUtils {
                     }
                     target = new File(target, source.getName());
                 } else {
+                    boolean executable = source.canExecute();
+                    boolean writable = source.canWrite();
+                    // if not readable, we cannot copy/move it
                     if (move) {
                         org.apache.commons.io.FileUtils.moveFile(source, target);
                     } else {
                         org.apache.commons.io.FileUtils.copyFile(source, target, false);
                     }
+                    target.setExecutable(executable);
+                    target.setWritable(writable);
                 }
             } catch (IOException e) {
                 throw new VilException(e, VilException.ID_IO);
