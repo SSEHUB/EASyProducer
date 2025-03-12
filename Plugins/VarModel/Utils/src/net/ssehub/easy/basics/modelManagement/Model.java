@@ -24,9 +24,11 @@ import java.util.List;
  * @author Holger Eichelberger
  */
 public abstract class Model implements IModel {
+    
     private Version version;
     private List<ModelImport<?>> imports;
     private String name;
+    private long timestamp = System.currentTimeMillis();
 
     /**
      * Creates a model instance.
@@ -121,6 +123,11 @@ public abstract class Model implements IModel {
 
     @Override
     public void dispose() {
+    }
+
+    @Override
+    public long getLastModification() {
+        return timestamp;
     }
 
 }

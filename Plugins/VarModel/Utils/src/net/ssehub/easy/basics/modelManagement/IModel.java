@@ -90,4 +90,11 @@ public interface IModel extends IModelData {
      */
     public IRestrictionEvaluationContext getRestrictionEvaluationContext();
     
+    /**
+     * Returns the last modification timestamp.
+     * 
+     * @return the last modification timestamp, invalid if {@code 0}
+     */
+    public long getLastModification();
+    
 }
