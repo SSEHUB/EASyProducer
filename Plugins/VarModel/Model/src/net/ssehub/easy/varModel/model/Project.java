@@ -51,6 +51,7 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     private int interfaceCount = 0; // speeds up search, consider when removing elements!
     private Project parent;
     private Map<String, ContainableModelElement> names = new HashMap<String, ContainableModelElement>();
+    private long timestamp = System.currentTimeMillis();
 
     /**
      * Stores the (pseudo) variable for this project. We need this variable to attribute a project.
@@ -585,4 +586,10 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     public void addConstraint(Constraint constraint) {
         add(constraint);
     }
+
+    @Override
+    public long getLastModification() {
+        return timestamp;
+    }
+
 }
