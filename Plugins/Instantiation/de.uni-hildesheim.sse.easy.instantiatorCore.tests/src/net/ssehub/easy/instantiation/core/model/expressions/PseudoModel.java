@@ -268,4 +268,9 @@ class PseudoModel implements IResolvableModel<VarDecl, PseudoModel>, IModel {
         return null;
     }
 
+    @Override
+    public long getLastModification() {
+        return 0;
+    }
+    
 }

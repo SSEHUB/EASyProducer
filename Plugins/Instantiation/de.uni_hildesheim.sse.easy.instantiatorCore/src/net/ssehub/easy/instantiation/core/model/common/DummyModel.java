@@ -261,4 +261,9 @@ class DummyModel<V extends IMetaParameterDeclaration, M extends IModel> implemen
         return null;
     }
 
+    @Override
+    public long getLastModification() {
+        return 0;
+    }
+
 }

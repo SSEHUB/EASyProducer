@@ -36,6 +36,7 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     private List<Def> defs;
     private IndentationConfiguration indentationConfiguration;
     private FormattingConfiguration formattingConfiguration;
+    private long timestamp = System.currentTimeMillis();
     
     /**
      * Constructor for serialization.
@@ -397,6 +398,11 @@ public class Template extends AbstractResolvableModel<VariableDeclaration, Templ
     @Override
     public List<IMetaOperation> getCandidates(String name, int unnamedArgsCount) {
         return TypeDescriptor.getCandidates(this, name, unnamedArgsCount);
+    }
+
+    @Override
+    public long getLastModification() {
+        return timestamp;
     }
 
 }

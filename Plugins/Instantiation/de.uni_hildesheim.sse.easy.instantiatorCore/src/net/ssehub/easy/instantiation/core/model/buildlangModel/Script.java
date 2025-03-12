@@ -81,6 +81,7 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
     private List<VariableDeclaration> declarations;
     private List<AbstractRule> rules;
     private List<LoadProperties> loadProperties;
+    private long timestamp = System.currentTimeMillis();
 
     /**
      * A descriptor class used for creating scripts (maximum parameter constraint).
@@ -805,6 +806,11 @@ public class Script extends AbstractResolvableModel<VariableDeclaration, Script>
      */
     public String getLanguageName() {
         return "VIL";
+    }
+
+    @Override
+    public long getLastModification() {
+        return timestamp;
     }
 
 }
