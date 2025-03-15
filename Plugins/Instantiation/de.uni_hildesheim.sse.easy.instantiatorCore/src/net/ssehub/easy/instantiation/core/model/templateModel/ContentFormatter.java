@@ -569,7 +569,7 @@ public class ContentFormatter {
                 result = bld.toString();
             }
         }
-        if (null != fConf) {
+        if (null != fConf && result != null) {
             String lineBreak = fConf.getLineEnding();
             if (lineBreak != null) {
                 if (lineBreak.equals("\n")) {
