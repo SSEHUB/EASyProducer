@@ -148,7 +148,7 @@ public class TemplateLangWriter extends WriterVisitor<VariableDeclaration> imple
         if (null != config) {
             printIndentation();
             print("@format(");
-            printFormattingHintEntry(FORMATTING_HINT_LINEEND, config.getLineEnding());
+            printFormattingHintEntry(FORMATTING_HINT_LINEEND, config.getLineEndingOrig());
             println(")");
         }
     }

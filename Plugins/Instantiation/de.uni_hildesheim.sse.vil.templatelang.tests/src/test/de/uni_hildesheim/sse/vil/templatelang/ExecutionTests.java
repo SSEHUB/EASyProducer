@@ -1124,7 +1124,7 @@ public class ExecutionTests extends AbstractExecutionTest {
     }
     
     /**
-     * Tests a line end formatting hint.
+     * Tests a line end (windows) formatting hint.
      * 
      * @throws IOException should not occur
      */
@@ -1132,7 +1132,37 @@ public class ExecutionTests extends AbstractExecutionTest {
     public void testLineEnd2() throws IOException {
         assertEqual("lineEnd2");
     }
-    
+
+    /**
+     * Tests a line end (linux) formatting hint.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLineEnd3() throws IOException {
+        assertEqual("lineEnd3");
+    }
+
+    /**
+     * Tests a line end (windows-by-name) formatting hint.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLineEnd4() throws IOException {
+        assertEqual("lineEnd4");
+    }
+
+    /**
+     * Tests a line end (Linux-by-name) formatting hint.
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testLineEnd5() throws IOException {
+        assertEqual("lineEnd5");
+    }
+
     /**
      * Tests the basic implementation of isValid.
      * 

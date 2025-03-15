@@ -31,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
 import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
+import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilModel;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.RtVilWriter;
 import net.ssehub.easy.instantiation.rt.core.model.rtVil.Script;
 
@@ -260,6 +261,11 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
             }
         }
         return result;
+    }
+
+    @Override
+    public ModelInfo<Script> getInfo(java.net.URI uri) {
+        return RtVilModel.INSTANCE.availableModels().getInfo(uri);
     }
 
 }

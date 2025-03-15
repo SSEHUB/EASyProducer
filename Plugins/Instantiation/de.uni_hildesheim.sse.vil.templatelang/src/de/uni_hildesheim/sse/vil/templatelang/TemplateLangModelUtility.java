@@ -34,6 +34,7 @@ import net.ssehub.easy.instantiation.core.model.expressions.IRuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.templateModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.templateModel.Template;
 import net.ssehub.easy.instantiation.core.model.templateModel.TemplateLangWriter;
+import net.ssehub.easy.instantiation.core.model.templateModel.TemplateModel;
 
 /**
  * Provides language-wide functionality.
@@ -239,6 +240,13 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
             }
         }
         return result;
+        
+    }
+
+    @Override
+    public ModelInfo<Template> getInfo(java.net.URI uri) {
+System.out.println(TemplateModel.INSTANCE.availableModels());        
+        return TemplateModel.INSTANCE.availableModels().getInfo(uri);
     }
 
 }

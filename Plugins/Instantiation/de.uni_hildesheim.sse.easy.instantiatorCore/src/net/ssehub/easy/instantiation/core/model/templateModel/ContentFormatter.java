@@ -569,8 +569,18 @@ public class ContentFormatter {
                 result = bld.toString();
             }
         }
-        if (null != fConf && fConf.getCharset() != null) {
-            result = new String(result.getBytes(), fConf.getCharset());
+        if (null != fConf) {
+            String lineBreak = fConf.getLineEnding();
+            if (lineBreak != null) {
+                if (lineBreak.equals("\n")) {
+                    result = result.replace("\r\n", lineBreak);
+                } else if (lineBreak.equals("\r\n")) {
+                    result = result.replaceAll("([^\r])\n", "$1" + lineBreak);
+                }
+            }
+            if (fConf.getCharset() != null) {
+                result = new String(result.getBytes(), fConf.getCharset());
+            }
         }
         return result;
     }

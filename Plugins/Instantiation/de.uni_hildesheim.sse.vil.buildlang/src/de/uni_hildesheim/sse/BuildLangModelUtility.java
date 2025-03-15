@@ -26,6 +26,7 @@ import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
+import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
@@ -213,6 +214,11 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
             }
         }
         return result;
+    }
+
+    @Override
+    public ModelInfo<Script> getInfo(java.net.URI uri) {
+        return BuildModel.INSTANCE.availableModels().getInfo(uri);
     }
 
 }

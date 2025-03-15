@@ -27,6 +27,7 @@ import java.util.Map;
 public class FormattingConfiguration {
     
     private String lineEnding;
+    private String lineEndingOrig;
     private int lineLength;
     private String profile;
     private boolean useTabs = false;
@@ -48,7 +49,7 @@ public class FormattingConfiguration {
      */
     public FormattingConfiguration(int lineLength, String lineEnding) {
         this.lineLength = lineLength;
-        this.lineEnding = lineEnding;
+        setLineEnding(lineEnding);
     }
 
     /**
@@ -57,16 +58,34 @@ public class FormattingConfiguration {
      * @param lineEnding the line ending
      */
     public void setLineEnding(String lineEnding) {
+        this.lineEndingOrig = lineEnding;
+        if (null != lineEnding) {
+            String tmp = lineEnding.toLowerCase();
+            if (tmp.equals("windows")) {
+                lineEnding = "\r\n";
+            } else if ((tmp.equals("linux") || tmp.equals("unix") || tmp.equals("mac") || tmp.equals("macos"))) {
+                lineEnding = "\n";
+            }
+        }
         this.lineEnding = lineEnding;
     }
 
     /**
-     * Returns the line ending. Call {@link #setLineEnding(String)} before.
+     * Returns the effective line ending. Call {@link #setLineEnding(String)} before.
      * 
      * @return the line ending
      */
     public String getLineEnding() {
         return lineEnding;
+    }
+
+    /**
+     * Returns the line ending as specified originally. Call {@link #setLineEnding(String)} before.
+     * 
+     * @return the line ending
+     */
+    public String getLineEndingOrig() {
+        return lineEndingOrig;
     }
 
     /**
