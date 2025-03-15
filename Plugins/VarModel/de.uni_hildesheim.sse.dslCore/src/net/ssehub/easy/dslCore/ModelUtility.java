@@ -440,6 +440,30 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      *             in case that an I/O error happens during parsing
      */
     public abstract List<ModelInfo<R>> obtainInfo(URI uri) throws IOException;
+
+    /**
+     * Returns model information from the underlying model repository.
+     * 
+     * @param uri the URI to return the info for
+     * @return the project info instance related to <code>uri</code>, may be <b>null</b> for none
+     */
+    public abstract ModelInfo<R> getInfo(java.net.URI uri);
+
+    /**
+     * Return model information from the underlying model repository.
+     * 
+     * @param uri the URI to return the info for
+     * @return the project info instance related to <code>uri</code>, may be <b>null</b> for none
+     * @see #toNetUri(URI)
+     * @see #getInfo(java.net.URI)
+     */
+    public ModelInfo<R> getInfo(URI uri) {
+        try {
+            return getInfo(toNetUri(uri));
+        } catch (URISyntaxException e) {
+            return null;
+        }
+    }
     
     @Override
     public net.ssehub.easy.basics.modelManagement.IModelLoader.LoadResult<R> load(ModelInfo<R> info, 
