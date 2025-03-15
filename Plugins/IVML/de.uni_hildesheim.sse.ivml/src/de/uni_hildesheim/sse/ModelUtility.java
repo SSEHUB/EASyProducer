@@ -484,4 +484,9 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
         return "ivml";
     }
 
+    @Override
+    public ModelInfo<Project> getInfo(java.net.URI uri) {
+        return VarModel.INSTANCE.availableModels().getInfo(uri);
+    }
+
 }
