@@ -222,6 +222,9 @@ public class PersistenceUtils {
      */
     public static final void processLocation(Configuration config, boolean add, boolean dfltLib, 
         ProgressObserver observer) throws ModelManagementException {
+        if (add && !dfltLib) { // always allow dfltLib, filter on project
+            ModelManagement.addProjectFolder(config.getProjectFolder());
+        }
         ModelManagementException returnExc = null;
         try {
             processLocations(config, PathKind.IVML, VarModel.INSTANCE.locations(), add, dfltLib, observer);
@@ -256,6 +259,9 @@ public class PersistenceUtils {
                     returnExc = exc;
                 }
             }
+        }
+        if (!add && !dfltLib) { // always allow dfltLib, filter on project
+            ModelManagement.removeProjectFolder(config.getProjectFolder());
         }
         
         if (null != returnExc) {

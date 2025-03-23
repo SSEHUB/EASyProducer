@@ -477,5 +477,14 @@ public class Configuration {
             writer.println("\" />");
         }
     }
+    
+    /**
+     * Returns the project folder.
+     * 
+     * @return the project folder
+     */
+    public File getProjectFolder() {
+        return projectFolder;
+    }
 
 }
