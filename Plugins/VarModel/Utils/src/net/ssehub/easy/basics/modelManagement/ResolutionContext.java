@@ -459,5 +459,15 @@ class ResolutionContext <M extends IModel> {
     public void filterByLocation(Location location) {
     }
 
+    /**
+     * Returns whether {@code info} is in a project folder relevant for this resolution context.
+     * 
+     * @param info the model info to check for
+     * @return {@code true} if in project folder or there is no project folder, {@code false} if there are 
+     *     project folders but {@code info} is in none
+     */
+    public boolean isInProjectFolder(ModelInfo<M> info) {
+        return ModelManagement.isInProjectFolder(modelUri, info.getLocation());
+    }
     
 }

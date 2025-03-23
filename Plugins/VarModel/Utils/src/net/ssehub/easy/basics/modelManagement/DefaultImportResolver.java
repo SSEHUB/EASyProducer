@@ -316,7 +316,7 @@ public class DefaultImportResolver<M extends IModel> extends ImportResolver<M> {
                         try {
                             boolean isOk = null == restriction 
                                 || restriction.evaluate(context.getEvaluationContext(), info.getVersion());
-                            if (isOk) {
+                            if (isOk && context.isInProjectFolder(info)) {
                                 if (context.isConflict(info)) {
                                     hasConflicts = true;
                                 } else {

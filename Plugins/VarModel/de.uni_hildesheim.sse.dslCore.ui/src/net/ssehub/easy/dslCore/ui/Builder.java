@@ -55,6 +55,7 @@ import org.eclipse.xtext.validation.CheckMode;
 import com.google.inject.Inject;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.BundleId;
 import net.ssehub.easy.dslCore.ModelUtility;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
@@ -62,6 +63,9 @@ import net.ssehub.easy.dslCore.validation.ValidationUtils.ValidationMode;
 
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+
+import static net.ssehub.easy.dslCore.validation.ValidationUtils.excludeBinTarget;
+import static net.ssehub.easy.dslCore.validation.ValidationUtils.isInPath;
 
 /**
  * A simplified version of the XtextBuilder, just focusing on markers. The XtextBuilder collides with our 
@@ -114,6 +118,14 @@ public class Builder extends IncrementalProjectBuilder {
         private boolean considerUpdated() {
             return updated || (!updated && !deleted); // second, full build
         }
+        
+        private IResourceDescription.Delta getResourceDelta() {
+            IResourceServiceProvider serviceProvider = getInstance(IResourceServiceProvider.class);
+            IResourceDescription resourceDescription = serviceProvider.getResourceDescriptionManager()
+                .getResourceDescription(resource);        
+            return new DefaultResourceDescriptionDelta(resourceDescription, null);
+        }
+        
     }
     
     protected boolean isOpened(IResourceDelta delta) {
@@ -201,6 +213,7 @@ public class Builder extends IncrementalProjectBuilder {
         }
         subMonitor.subTask("Collecting work units");
         List<ResourceWorkUnit> workUnits = new LinkedList<>();
+        long now = System.currentTimeMillis();
         for (ModelUtility<?, ?> utility : ModelUtility.instances()) {
             try {
                 for (Resource resource : utility.getResourceSet().getResources()) {
@@ -216,8 +229,7 @@ public class Builder extends IncrementalProjectBuilder {
                         updated = true;
                     }
                     if (add || deleted || updated) {
-                        URI eURI = resource.getURI();
-                        if (!ValidationUtils.excludeBinTarget(eURI) && ValidationUtils.isInPath(eURI)) {
+                        if (!excludeBinTarget(uri) && isInPath(uri) && enableUpdate(utility, uri, now)) {
                             workUnits.add(new ResourceWorkUnit(utility, resource, deleted, updated));
                         }
                     }
@@ -227,22 +239,18 @@ public class Builder extends IncrementalProjectBuilder {
                     + "resource set. Cannot obtain resources, cannot update markers.");
             }
         }
-
         subMonitor.setWorkRemaining(workUnits.size() / MONITOR_CHUNK_SIZE_CLEAN + 1);
         subMonitor.subTask("Validating resources");
-
         int doneCount = 0;
         for (ResourceWorkUnit unit: workUnits) {
-            subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " 
-                + unit.resource.getURI());
+            URI uri = unit.resource.getURI();
+            subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " + uri);
             if (monitor.isCanceled()) {
                 throw new OperationCanceledException();
             }
-            IResourceServiceProvider serviceProvider = unit.getInstance(IResourceServiceProvider.class);
-            IResourceDescription resourceDescription = serviceProvider.getResourceDescriptionManager()
-                .getResourceDescription(unit.resource);        
-            IResourceDescription.Delta resourceDelta = new DefaultResourceDescriptionDelta(resourceDescription, null);
-            updateMarkers(resourceDelta, unit.resource.getResourceSet(), subMonitor, unit);
+            if (enableUpdate(unit.utility, uri, now)) { // may change during update
+                updateMarkers(unit.getResourceDelta(), unit.resource.getResourceSet(), subMonitor, unit);
+            }
             doneCount++;
             if (doneCount % MONITOR_CHUNK_SIZE_CLEAN == 0) {
                 subMonitor.worked(1);
@@ -251,6 +259,17 @@ public class Builder extends IncrementalProjectBuilder {
         subMonitor.subTask("Completed");
         subMonitor.setWorkRemaining(0);
         subMonitor.done();
+    }
+    
+    private boolean enableUpdate(ModelUtility<?, ?> utility, URI uri, long timestamp) {
+        boolean result = true;
+        ModelInfo<?> info = utility.getInfo(uri);
+        if (null != info) {
+            if (info.getResolved() != null) {
+                result = info.getResolved().getLastModification() < timestamp;
+            }
+        }
+        return result;
     }
 
     public class TaskMarkerContributor implements IMarkerContributor {

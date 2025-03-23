@@ -62,6 +62,7 @@ public abstract class ModelManagement <M extends IModel> {
 
     private static final EASyLogger LOGGER = EASyLoggerFactory.INSTANCE.getLogger(ModelManagement.class, Bundle.ID);
 
+    private static List<String> projectFolders = new ArrayList<String>();
     private ModelLocale locale = new ModelLocale();
 
     // required for visiting!
@@ -1142,6 +1143,56 @@ public abstract class ModelManagement <M extends IModel> {
             result.add(name);
         }
         return result;
+    }
+    
+    /**
+     * Adds a project folder, which acts as common base folder for IVML, VIL and VTL models. Project
+     * folders support identifying/filtering related models. Relevant only if models from different projects
+     * are maintained together, e.g., in Eclipse.
+     * 
+     * @param folder the folder, ignored if <b>null</b>
+     */
+    public static void addProjectFolder(File folder) {
+        if (null != folder) {
+            projectFolders.add(folder.toURI().getPath());
+        }
+    }
+    
+    /**
+     * Returns whether {@code query} is in a project folder determined by {@link projectUri}.
+     * 
+     * @param projectUri the URI determining the project
+     * @param query the URI to query for
+     * @return {@code true} if {@code query} is in a project folder or there is no project folder, {@code false} if 
+     *     there are project folders but {@code query} is in none
+     */
+    public static boolean isInProjectFolder(URI projectUri, URI query) {
+        boolean result = true;
+        if (null != projectUri && null != query && !projectFolders.isEmpty()) {
+            result = false;
+            String projectUriPath = projectUri.getPath();
+            String queryPath = query.getPath();
+            for (String p : projectFolders) {
+                if (projectUriPath.startsWith(p) && queryPath.startsWith(p)) {
+                    result = true;
+                    break;
+                }
+            }
+        }        
+        return result;
+    }
+
+    /**
+     * Removes a project folder, which acts as common base folder for IVML, VIL and VTL models. Project
+     * folders support identifying/filtering related models. Relevant only if models from different projects
+     * are maintained together, e.g., in Eclipse.
+     * 
+     * @param folder the folder, ignored if <b>null</b>
+     */
+    public static void removeProjectFolder(File folder) {
+        if (null != folder) {
+            projectFolders.remove(folder.toURI().getPath());
+        }
     }
 
 }
