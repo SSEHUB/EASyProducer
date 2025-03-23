@@ -12,10 +12,12 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import net.ssehub.easy.basics.modelManagement.ModelManagement;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.producer.core.AllTests;
 import net.ssehub.easy.producer.core.mgmt.VilTestExectuter.AbstractVilListener;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.reasoning.core.frontend.IReasonerListener;
 import net.ssehub.easy.reasoning.core.reasoner.Message;
 import net.ssehub.easy.reasoning.core.reasoner.ReasoningOperation;
@@ -134,6 +136,8 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
      */
     @Test
     public void testHierarchicalInstantiation() throws PersistenceException, VilException {
+        ModelManagement.clearProjectFolders();
+        boolean epf = PersistenceUtils.setEnableProjectFolders(false);
         // Load projects
         PLPInfo plp1 = loadPLPInfo(TEST_HIERARCHICAL_INSTANTIATION_STEP1);
         Assert.assertNotNull(plp1.getBuildScript());
@@ -148,6 +152,7 @@ public class PLPInfoSenariosTest extends AbstractPLPInfoTest {
         // Hierarchical instantiation
         VilTestExectuter plpInstantiator = new VilTestExectuter();
         plpInstantiator.assertInstantiation(plp3, new AbstractVilListener() { });
+        PersistenceUtils.setEnableProjectFolders(epf);
     }
     
     /**

@@ -105,6 +105,7 @@ public class PersistenceUtils {
     private static final Map<String, Configuration> CONFIGURATIONS = new HashMap<String, Configuration>();
     
     private static boolean defaultModelsLoaded = false;
+    private static boolean enableProjectFolders = true;
     
     /**
      * Returns the (cached) configuration for the given project (in terms of a <code>projectFolder</code>).
@@ -222,7 +223,7 @@ public class PersistenceUtils {
      */
     public static final void processLocation(Configuration config, boolean add, boolean dfltLib, 
         ProgressObserver observer) throws ModelManagementException {
-        if (add && !dfltLib) { // always allow dfltLib, filter on project
+        if (enableProjectFolders && add && !dfltLib) { // always allow dfltLib, filter on project
             ModelManagement.addProjectFolder(config.getProjectFolder());
         }
         ModelManagementException returnExc = null;
@@ -260,13 +261,25 @@ public class PersistenceUtils {
                 }
             }
         }
-        if (!add && !dfltLib) { // always allow dfltLib, filter on project
+        if (enableProjectFolders && !add && !dfltLib) { // always allow dfltLib, filter on project
             ModelManagement.removeProjectFolder(config.getProjectFolder());
         }
         
         if (null != returnExc) {
             throw returnExc;
         }
+    }
+    
+    /**
+     * Enables/disables project location filtering.
+     * 
+     * @param enable enable/disable
+     * @return the setting before calling this method
+     */
+    public static boolean setEnableProjectFolders(boolean enable) {
+        boolean before = enableProjectFolders;
+        enableProjectFolders = enable;
+        return before;
     }
     
     /**
