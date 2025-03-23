@@ -1159,6 +1159,13 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
+     * Clears all project folders.
+     */
+    public static void clearProjectFolders() {
+        projectFolders.clear();
+    }
+    
+    /**
      * Returns whether {@code query} is in a project folder determined by {@link projectUri}.
      * 
      * @param projectUri the URI determining the project
