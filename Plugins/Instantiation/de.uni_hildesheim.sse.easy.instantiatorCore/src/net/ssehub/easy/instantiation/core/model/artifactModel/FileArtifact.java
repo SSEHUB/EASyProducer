@@ -153,6 +153,24 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         return path;
     }
 
+    /**
+     * Returns the OS-dependent name separator in file paths.
+     * 
+     * @return the separator
+     */
+    public String getFileSeparator() {
+        return File.separator;
+    }
+
+    /**
+     * Returns the OS-dependent separator between paths.
+     * 
+     * @return the separator
+     */
+    public String getPathSeparator() {
+        return File.pathSeparator;
+    }
+
     @Override
     @OperationMeta(storeArtifactsBefore = true)
     public void rename(String name) throws VilException {
