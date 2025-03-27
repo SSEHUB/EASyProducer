@@ -58,9 +58,9 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     private static IResourceInitializer resourceInitializer;
     private static List<ModelUtility<?, ?>> instances = 
         Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
-
     private static final List<ModelUtility<?, ?>> SCHEDULED 
         = Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
+    private static boolean forceUnloadOnParse = false;
 
     /**
      * Stores information about files currently being loaded in order to prevent
@@ -107,6 +107,12 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         logger.info("Setting up Standalone resource initializer");
         resourceInitializer = new StandaloneInitializer();
         //}
+    }
+    
+    public static boolean forceUnloadOnParse(boolean force) {
+        boolean old = forceUnloadOnParse;
+        forceUnloadOnParse = force;
+        return old;
     }
     
     public static Iterable<ModelUtility<?, ?>> instances() {
@@ -372,7 +378,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             } else {
                 throw new IOException("resource for uri '" + uri + "' not loaded");
             }
-            if (unload) {
+            if (unload || forceUnloadOnParse) {
                 resource.unload();
             }
         } catch (Throwable t) { // resources may throw ConcurrentModificationExceptions
