@@ -39,6 +39,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * The directory containing all tests.
      */
     private static File testDataDir;
+    private static boolean oldForceUnload;
     
     static {
         setTestDataDir(TESTDATA_SYSTEM_PROPERTY);
@@ -61,6 +62,10 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     protected static void setTestDataDir(String systemProperty) {
         testDataDir = determineTestDataDir(systemProperty);
     }
+    
+    protected static void basicStartUp() {
+        oldForceUnload = ModelUtility.forceUnloadOnParse(true);
+    }
 
     /**
      * Starts up the {@link VarModel} by registering {@link #getTestDataDir()} as
@@ -68,6 +73,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      */
     @BeforeClass
     public static void startUp() {
+        basicStartUp();
         try {
             resourceInitialization();
             VarModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
@@ -91,6 +97,11 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
             Assert.fail();
         }
         VarModel.INSTANCE.loaders().unregisterLoader(ModelUtility.INSTANCE, OBSERVER);
+        basicShutDown();
+    }
+    
+    protected static void basicShutDown() {
+        ModelUtility.forceUnloadOnParse(oldForceUnload);
     }
 
     /**

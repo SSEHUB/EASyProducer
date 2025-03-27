@@ -62,6 +62,7 @@ public class ImportTest extends AbstractTest {
     @BeforeClass
     public static void startUp() {
         // "override" parent startUp
+        basicStartUp();
         resourceInitialization();
         try {
             VarModel.INSTANCE.loaders().registerLoader(ModelUtility.INSTANCE, OBSERVER);
@@ -77,6 +78,7 @@ public class ImportTest extends AbstractTest {
     @AfterClass
     public static void shutDown() {
         // "override" parent shutDown
+        basicShutDown();
     }
     
     /**
