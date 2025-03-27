@@ -83,7 +83,7 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
     @Override
     public TranslationResult<Template> parse(URI uri, ImportResolver<Template> resolver) throws IOException {
         ModelTranslator translator = new ModelTranslator();
-        LanguageUnit root = parse(uri, true, translator, LanguageUnit.class);
+        LanguageUnit root = parse(uri, false, translator, LanguageUnit.class); // do not unload <-> line numbers
         List<Template> result = null;
         if (null != root) {
             try {

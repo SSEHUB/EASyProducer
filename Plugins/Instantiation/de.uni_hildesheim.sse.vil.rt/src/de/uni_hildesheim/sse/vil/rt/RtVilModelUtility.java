@@ -80,7 +80,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
     @Override
     public TranslationResult<Script> parse(URI uri, ImportResolver<Script> resolver) throws IOException {
         ModelTranslator translator = new ModelTranslator();
-        ImplementationUnit root = parse(uri, true, translator, ImplementationUnit.class);
+        ImplementationUnit root = parse(uri, false, translator, ImplementationUnit.class); // unload <-> line numbers
         List<Script> result = null;
         if (null != root) {
             try {
