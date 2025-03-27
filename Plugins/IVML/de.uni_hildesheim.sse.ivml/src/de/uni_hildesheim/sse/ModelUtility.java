@@ -145,7 +145,7 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
         }
         
         ModelTranslator translator = new ModelTranslator();
-        VariabilityUnit root = parse(uri, true, translator, VariabilityUnit.class);
+        VariabilityUnit root = parse(uri, false, translator, VariabilityUnit.class); // do not unload <-> line numbers
         Result mRes = null;
         try {
             if (null != root) {
