@@ -333,7 +333,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * Parses an <code>uri</code> to obtain the top-level element.
      * 
      * @param uri the URI to read
-     * @param unload unload the parsed XText resource
+     * @param unload unload the parsed XText resource, may change AST node adapters and keep source positions internal
      * @param receiver the message receiver used for storing messages (may be
      *        <b>null</b>)
      * @param cls the class of the result
@@ -349,6 +349,8 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             Resource resource = resourceSet.getResource(uri, true);
             if (null == resource) {
                 resource = resourceSet.createResource(uri);    
+            } else {
+                resource.unload(); // get rid of adaptors, line numbers etc., they stay otherwise
             }
             resource.load(null);
             if (resource.isLoaded()) {
