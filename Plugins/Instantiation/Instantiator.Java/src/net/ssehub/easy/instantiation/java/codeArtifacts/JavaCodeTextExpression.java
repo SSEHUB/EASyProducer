@@ -45,6 +45,9 @@ public class JavaCodeTextExpression extends JavaCodeParsedExpression {
      * @return the instance
      */
     public static JavaCodeTextExpression create(Object text) {
+        if (text instanceof IJavaCodeElement) {
+            text = ((IJavaCodeElement) text).toCode();
+        }
         return new JavaCodeTextExpression(null, IVilType.convertVilValue(text));
     }
     
