@@ -49,6 +49,7 @@ import net.ssehub.easy.varModel.model.Attribute;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.IModelElement;
+import net.ssehub.easy.varModel.model.IvmlDatatypeVisitor;
 import net.ssehub.easy.varModel.model.datatypes.BooleanType;
 import net.ssehub.easy.varModel.model.datatypes.Compound;
 import net.ssehub.easy.varModel.model.datatypes.ConstraintType;
@@ -108,7 +109,7 @@ public class ReasoningUtils {
         try {
             result = cst.inferDatatype();
         } catch (CSTSemanticException e) {
-            LOGGER.error(StringProvider.toIvmlString(cst));
+            LOGGER.error(e.getMessage() + "in: " + StringProvider.toIvmlString(cst));
             LOGGER.exception(e); // should not occur, ok to log
         }
         return result;
@@ -204,6 +205,8 @@ public class ReasoningUtils {
                     res = new OCLFeatureCall(res, OclKeyWords.AS_TYPE, createTypeValueConstant(targetType));
                 }
             } catch (CSTSemanticException e) {
+                LOGGER.error("Creating type cast to " + IvmlDatatypeVisitor.getUnqualifiedType(targetType) 
+                    + ": " + e.getMessage());
                 LOGGER.exception(e); // should not occur, ok to log
             } catch (ValueDoesNotMatchTypeException e) {
                 LOGGER.exception(e); // should not occur, ok to log
