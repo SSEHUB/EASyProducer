@@ -102,8 +102,21 @@ public class DefaultValueTranslator {
                 Map<String, AbstractVariable> decls = new HashMap<String, AbstractVariable>();
                 for (String slotName : compValue.getSlotNames()) {
                     Value slotValue = compValue.getNestedValue(slotName);
-                    if (null != slotValue) { // undefined slots
-                        values.put(slotName, translateDefaultValue(new ConstantValue(slotValue)));
+                    ConstraintSyntaxTree slotValueEx = null;
+                    if (null == slotValue) {
+                        ConstraintSyntaxTree dflt = compType.getElement(slotName).getDefaultValue();
+                        if (dflt instanceof ConstantValue) {
+                            slotValueEx = dflt;
+                        } else if (dflt != null) {
+                            // do not evaluate directly, assign as value to be analyzed similar to constraint values
+                            slotValueEx = new DeferInitExpression(dflt);
+                        }
+                    }
+                    if (null != slotValue) {
+                        slotValueEx = new ConstantValue(slotValue);
+                    }
+                    if (null != slotValueEx) { // else: undefined slots
+                        values.put(slotName, translateDefaultValue(slotValueEx));
                         decls.put(slotName, compType.getElement(slotName));
                     }
                 }
@@ -121,7 +134,7 @@ public class DefaultValueTranslator {
                     result = new ContainerInitializer((Container) compValue.getType(), inits);
                 }
             }
-        }
+        }        
         return result;
     }
 
