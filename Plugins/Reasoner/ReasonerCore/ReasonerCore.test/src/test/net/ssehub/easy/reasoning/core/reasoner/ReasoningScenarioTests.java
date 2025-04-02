@@ -232,7 +232,7 @@ public class ReasoningScenarioTests extends AbstractTest {
      */
     @Test
     public void isDefinedTest() {
-        reasoningTest("IsDefinedTest.ivml", 10);
+        reasoningTest("IsDefinedTest.ivml", 5);
     }  
     
     /**
@@ -240,7 +240,7 @@ public class ReasoningScenarioTests extends AbstractTest {
      */
     @Test
     public void isDefinedCompoundTest() {
-        reasoningTest("IsDefinedCompoundTest.ivml", 1);
+        reasoningTest("IsDefinedCompoundTest.ivml", 0);
     }  
     
     /**

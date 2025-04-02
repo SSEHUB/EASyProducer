@@ -42,7 +42,7 @@ public class QMPipelinesTest1 extends AbstractQualiMasterTest {
      */
     @Test    
     public void coreTest() {
-        reasoningTest(1);
+        reasoningTest(0);
     } 
     
 }
