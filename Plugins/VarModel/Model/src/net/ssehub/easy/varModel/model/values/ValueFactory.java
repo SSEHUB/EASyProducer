@@ -266,8 +266,8 @@ public class ValueFactory {
                 if (null == value) {
                     result = new EnumValue(eType);
                 } else {
-                    assert 1 == value.length;
-                    result = new EnumValue(eType, value[0]);
+                    Object val = value.length > 0 ? value[0] : null;
+                    result = new EnumValue(eType, val);
                 }
                 return result;
             }

@@ -114,13 +114,18 @@ public class GenericOperations {
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
             // get state does not work as there may not be a directly underlying variable
             boolean eval;
+            boolean undefined = false;
             EvaluationContext context;
             if (null == operand) {
                 eval = false;
                 context = null; // replaced by caller
             } else {
-                IDecisionVariable var = operand.getVariable();                
-                if (var != null && var.enableWasAssignedForIsDefined()) { // the isDefined workaround/hack for compounds
+                IDecisionVariable var = operand.getVariable();
+                if (var != null && (var.getValue() == null || var.getState() == AssignmentState.UNDEFINED)) {
+                    eval = false;
+                    context = null;
+                    undefined = true;
+                } else if (var != null && var.enableWasAssignedForIsDefined()) { // workaround/hack for compounds
                     eval = operand.getVariable().wasAssigned();
                     context = operand.getContext();
                 } else {
@@ -129,8 +134,13 @@ public class GenericOperations {
                     context = operand.getContext();
                 }
             }
-            BooleanValue result = BooleanValue.toBooleanValue(eval);
-            return ConstantAccessor.POOL.getInstance().bind(result, true, context);
+            EvaluationAccessor result;
+            if (undefined) {
+                result = null;
+            } else {
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(eval), true, context);
+            }
+            return result;
         }
     };
     

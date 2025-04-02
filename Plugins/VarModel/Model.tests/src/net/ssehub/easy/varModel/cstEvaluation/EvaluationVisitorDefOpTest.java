@@ -231,8 +231,7 @@ public class EvaluationVisitorDefOpTest {
         EvaluationVisitor visitor = new EvaluationVisitor();
         visitor.init(config, AssignmentState.DEFAULT, false, null);
         cst.accept(visitor);
-        Assert.assertTrue(visitor.getResult() instanceof BooleanValue);
-        Assert.assertEquals(false, ((BooleanValue) visitor.getResult()).getValue().booleanValue());
+        Assert.assertNull(visitor.getResult());
         visitor.clearResult();
         
         // define b

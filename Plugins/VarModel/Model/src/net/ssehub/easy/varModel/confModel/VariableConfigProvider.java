@@ -88,7 +88,11 @@ abstract class VariableConfigProvider {
         //  unfreeze shall also work on partially configured elements and only change state if variable was frozen
 //      if (null != getValue() && AssignmentState.FROZEN != state) {
         if (AssignmentState.FROZEN != state && AssignmentState.FROZEN == getState()) {
-            setState(state);
+            if (getValue() == null) {
+                setState(AssignmentState.UNDEFINED);
+            } else {
+                setState(state);
+            }
         }
     }
     

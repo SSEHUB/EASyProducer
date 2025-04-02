@@ -53,7 +53,7 @@ class CompoundItemConfigProvider extends NestedVarConfigProvider {
     @Override
     protected Value getValue() {
         Value parentValue = getParent().getValue();
-        return (parentValue instanceof NullValue) ? parentValue
+        return (parentValue instanceof NullValue) ? null // indicate does not exist <-> NullValue
             : ((CompoundValue) parentValue).getNestedValue(slotName);
     }
 
