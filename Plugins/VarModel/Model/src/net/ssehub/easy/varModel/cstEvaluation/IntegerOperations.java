@@ -112,6 +112,7 @@ public class IntegerOperations {
         EvaluatorRegistry.registerEvaluator(EQUALS_INT_REAL, IntegerType.EQUALS_INTEGER_REAL);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, IntegerType.ASSIGNMENT_INTEGER_INTEGER);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, IntegerType.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, IntegerType.FORCE_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, IntegerType.COPY);
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, IntegerType.NOTEQUALS_INTEGER_INTEGER);
         EvaluatorRegistry.registerEvaluator(UNEQUALS_INT_REAL, IntegerType.NOTEQUALS_INTEGER_REAL);

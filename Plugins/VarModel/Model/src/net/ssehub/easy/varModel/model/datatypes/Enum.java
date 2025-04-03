@@ -55,6 +55,8 @@ public class Enum extends CustomDatatype {
         OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
+    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+        .markAsAcceptsNull();
 //    public static final Operation COPY = OperationsHelper.createCopyOperation(TYPE);
     public static final Operation ORDINAL = new Operation(IntegerType.TYPE, OclKeyWords.ORDINAL, TYPE);
     
@@ -68,6 +70,7 @@ public class Enum extends CustomDatatype {
         DTYPE.addOperation(NOTEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(FORCE_DEFINED);
 //        DTYPE.addOperation(COPY);
         DTYPE.addOperation(ORDINAL);
     }

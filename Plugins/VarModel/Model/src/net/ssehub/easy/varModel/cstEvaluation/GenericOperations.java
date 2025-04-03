@@ -145,6 +145,20 @@ public class GenericOperations {
     };
     
     /**
+     * Implements the "force defined" operation.
+     */
+    static final IOperationEvaluator FORCE_DEFINED = new IOperationEvaluator() {
+
+        public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
+            EvaluationAccessor result = IS_DEFINED.evaluate(operand, arguments);
+            if (null == result) {
+                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, true, null);
+            }
+            return result;
+        }
+    };
+    
+    /**
      * Implements the "copy" operation.
      */
     static final IOperationEvaluator COPY = new IOperationEvaluator() {

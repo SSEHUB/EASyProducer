@@ -173,6 +173,7 @@ public class EnumOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Enum.NOTEQUALS, Enum.NOTEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Enum.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Enum.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, Enum.FORCE_DEFINED);
 //        EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, Enum.COPY);
         EvaluatorRegistry.registerEvaluator(ORDINAL, Enum.ORDINAL);
         

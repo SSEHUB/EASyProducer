@@ -475,6 +475,7 @@ public class StringOperations {
         EvaluatorRegistry.registerEvaluator(EQUALS_IGNORE_CASE, StringType.EQUALS_IGNORE_CASE);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, StringType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, StringType.IS_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, StringType.FORCE_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, StringType.COPY);
         EvaluatorRegistry.registerEvaluator(SIZE, StringType.SIZE);
         EvaluatorRegistry.registerEvaluator(TO_INT, StringType.TO_INTEGER);

@@ -46,6 +46,8 @@ public class RealType extends BasisDatatype {
         BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, INTEGER_TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();    
+    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+        .markAsAcceptsNull();    
     public static final Operation COPY = new Operation(TYPE, OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
 
     public static final Operation NOTEQUALS_REAL_REAL = Operation.createInfixOperator(
@@ -150,6 +152,7 @@ public class RealType extends BasisDatatype {
         DTYPE.addOperation(ASSIGNMENT_REAL_REAL);
         DTYPE.addOperation(ASSIGNMENT_REAL_INTEGER);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(FORCE_DEFINED);
         DTYPE.addOperation(COPY);
         DTYPE.addOperation(GREATER_REAL_REAL);
         DTYPE.addOperation(GREATER_REAL_INTEGER);

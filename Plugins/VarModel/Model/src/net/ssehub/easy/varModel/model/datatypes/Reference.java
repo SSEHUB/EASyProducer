@@ -54,6 +54,8 @@ public class Reference extends CustomDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
+    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+        .markAsAcceptsNull();
     public static final Operation COPY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
         OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
     public static final Operation REF_BY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND_DEREF, 
@@ -65,6 +67,7 @@ public class Reference extends CustomDatatype {
         DTYPE.setDelegate(new Reference());
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(FORCE_DEFINED);
         DTYPE.addOperation(COPY);
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(UNEQUALS);

@@ -45,6 +45,8 @@ public class StringType extends BasisDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();    
+    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+        .markAsAcceptsNull();    
     
     // specific operations
     public static final Operation SIZE = new Operation(IntegerType.TYPE, OclKeyWords.SIZE, TYPE);
@@ -85,6 +87,7 @@ public class StringType extends BasisDatatype {
         DTYPE.addOperation(EQUALS_IGNORE_CASE);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
+        DTYPE.addOperation(FORCE_DEFINED);
         DTYPE.addOperation(COPY);
         DTYPE.addOperation(SIZE);
         DTYPE.addOperation(TO_INTEGER);

@@ -160,6 +160,7 @@ public class OclKeyWords {
     @IVMLKeyWord
     public static final String IFF = "iff";
     public static final String IS_DEFINED = "isDefined";
+    public static final String FORCE_DEFINED = "forceDefined";
     public static final String COPY = "copy";
     public static final String TYPE_SELECT = "typeSelect";
     public static final String SELECT_BY_TYPE = "selectByType";

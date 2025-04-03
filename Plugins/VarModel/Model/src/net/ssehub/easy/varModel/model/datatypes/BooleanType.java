@@ -36,6 +36,8 @@ public class BooleanType extends BasisDatatype {
         BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
+    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+            .markAsAcceptsNull();
     public static final Operation COPY = new Operation(TYPE, OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
     
     // unary operation
@@ -60,6 +62,7 @@ public class BooleanType extends BasisDatatype {
         AnyType.BOOLEAN_TYPE.addOperation(UNEQUALS_ALIAS);
         AnyType.BOOLEAN_TYPE.addOperation(ASSIGNMENT);
         AnyType.BOOLEAN_TYPE.addOperation(IS_DEFINED);
+        AnyType.BOOLEAN_TYPE.addOperation(FORCE_DEFINED);
         AnyType.BOOLEAN_TYPE.addOperation(COPY);
         AnyType.BOOLEAN_TYPE.addOperation(NOT);
         AnyType.BOOLEAN_TYPE.addOperation(OR);

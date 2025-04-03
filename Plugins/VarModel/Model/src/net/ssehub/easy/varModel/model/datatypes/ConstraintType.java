@@ -43,6 +43,8 @@ public class ConstraintType extends BasisDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, BooleanType.TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
+    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+        .markAsAcceptsNull();
 
     // checkstyle: resume declaration order check
 
@@ -53,6 +55,7 @@ public class ConstraintType extends BasisDatatype {
         AnyType.CONSTRAINT_TYPE.addOperation(UNEQUALS_ALIAS);
         AnyType.CONSTRAINT_TYPE.addOperation(ASSIGNMENT);
         AnyType.CONSTRAINT_TYPE.addOperation(IS_DEFINED);
+        AnyType.CONSTRAINT_TYPE.addOperation(FORCE_DEFINED);
         AnyType.CONSTRAINT_TYPE.addOperation(TYPE_OF);
     }
     
