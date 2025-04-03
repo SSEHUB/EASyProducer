@@ -1,0 +1,158 @@
+id: myRestApp
+name: Simple REST Demo App
+version: 0.1.0
+application:
+    id: myRestApp
+    name: Simple REST Demo App
+    version: 0.1.0
+types:
+  - name: RestPhoenixEEMMixed
+    fields:
+      - name: tn1
+        type: RestPhoenixEEMResponseTariffNumber
+      - name: tn2
+        type: RestPhoenixEEMResponseTariffNumber
+      - name: f
+        type: RestPhoenixEEMResponseMeasurementSingle
+      - name: U1
+        type: RestPhoenixEEMResponseMeasurementSingle
+      - name: U2
+        type: RestPhoenixEEMResponseMeasurementSingle
+      - name: U3
+        type: RestPhoenixEEMResponseMeasurementSingle
+      - name: all
+        type: RestPhoenixEEMResponseMeasurementSet
+      - name: information
+        type: RestPhoenixEEMResponseInformation
+  - name: RestPhoenixEEMResponseInformation
+    fields:
+      - name: context
+        type: String
+      - name: timestamp
+        type: String
+      - name: rootItems
+        type: RestPhoenixEEMResponseInformationRootItem[]
+      - name: infoItems
+        type: RestPhoenixEEMResponseInformationInfoItem[]
+  - name: RestPhoenixEEMResponseInformationInfoItem
+    fields:
+      - name: href
+        type: String
+      - name: id
+        type: String
+      - name: name
+        type: String
+      - name: value
+        type: Object
+      - name: description
+        type: String
+  - name: RestPhoenixEEMResponseInformationRootItem
+    fields:
+      - name: href
+        type: String
+      - name: description
+        type: String
+  - name: RestPhoenixEEMResponseMeasurementSet
+    fields:
+      - name: context
+        type: String
+      - name: timestamp
+        type: String
+      - name: items
+        type: RestPhoenixEEMResponseMeasurementSetItem[]
+  - name: RestPhoenixEEMResponseMeasurementSetItem
+    fields:
+      - name: href
+        type: String
+      - name: id
+        type: String
+      - name: name
+        type: String
+      - name: value
+        type: Object
+      - name: unit
+        type: String
+      - name: description
+        type: String
+  - name: RestPhoenixEEMResponseMeasurementSingle
+    fields:
+      - name: context
+        type: String
+      - name: id
+        type: String
+      - name: timestamp
+        type: String
+      - name: name
+        type: String
+      - name: value
+        type: Object
+      - name: unit
+        type: String
+      - name: description
+        type: String
+  - name: RestPhoenixEEMResponseTariffNumber
+    fields:
+      - name: context
+        type: String
+      - name: id
+        type: String
+      - name: timestamp
+        type: String
+      - name: name
+        type: String
+      - name: value
+        type: Object
+      - name: description
+        type: String
+  - name: RestPhoenixRwEEMMixed
+    fields:
+      - name: tn1
+        type: RestPhoenixEEMResponseTariffNumber
+      - name: tn2
+        type: RestPhoenixEEMResponseTariffNumber
+services:
+  - id: myRestConnEEMMixed
+    applicationId: myRestApp
+    name: myRestConnEEMMixed example
+    version: 0.1.0
+    description: RESTConnector example for Phoenix Contract EmPro
+    deployable: true
+    kind: SOURCE_SERVICE
+    topLevel: true
+    cmdArg:
+      - --iip.port=${port}
+      - --iip.protocol=${protocol}
+    relations:
+      - endpoint:
+            portArg: --transport.port=${port} --binders.properties.external.environment.mqtt.port=${port}
+                --spring.cloud.stream.binders.properties.external.environment.mqtt.port=${port}
+            hostArg: --transport.host=${host} --binders.properties.external.environment.mqtt.host=${host}
+                --spring.cloud.stream.binders.properties.external.environment.mqtt.host=${host}
+      - channel: receiveRestPhoenixEEMMixed_RestReceiver-out-0
+        direction: OUT
+        id: myRestConnEEMMixed -> RestReceiver
+        type: RestPhoenixEEMMixed
+        service: RestReceiver
+  - id: RestReceiver
+    applicationId: myRestApp
+    name: REST Receiver
+    version: 0.1.0
+    description: Reciver for RESTConnector example
+    deployable: true
+    kind: SINK_SERVICE
+    topLevel: true
+    cmdArg:
+      - --iip.port=${port}
+      - --iip.protocol=${protocol}
+    relations:
+      - endpoint:
+            portArg: --transport.port=${port} --binders.properties.external.environment.mqtt.port=${port}
+                --spring.cloud.stream.binders.properties.external.environment.mqtt.port=${port}
+            hostArg: --transport.host=${host} --binders.properties.external.environment.mqtt.host=${host}
+                --spring.cloud.stream.binders.properties.external.environment.mqtt.host=${host}
+      - channel: receiveRestPhoenixEEMMixed_RestReceiver-in-0
+        direction: IN
+        id: myRestConnEEMMixed -> RestReceiver
+        type: RestPhoenixEEMMixed
+        function: receiveRestPhoenixEEMMixed_RestReceiver
+        service: myRestConnEEMMixed

@@ -1,0 +1,79 @@
+mqtt:
+  host: localhost
+  port: 8883
+  actionTimeout: 3000
+transport:
+  host: ''
+  port: 8883
+  actionTimeout: 3000
+  gatewayPort: 10000
+monitoringUpdatePeriod: 2000
+aas:
+  server:
+    port: 9001
+    host: 127.0.0.1
+    schema: HTTP
+  registry:
+    port: 9002
+    host: 127.0.0.1
+    schema: HTTP
+    path: registry
+  implementation:
+    port: -1
+    host: 127.0.0.1
+    schema: TCP
+    protocol: VAB-TCP
+binders:
+  properties:
+    internal:
+      type: mqttv5Binder
+      environment:
+        mqtt:
+          host: localhost
+          port: 8883
+          actionTimeout: 3000
+    external:
+      type: mqttv5Binder
+      environment:
+        mqtt:
+          host: localhost
+          port: 8883
+          actionTimeout: 3000
+metricsprovider:
+  schedulerrate: 3000
+  memorybaseunit: kilobytes
+  diskbaseunit: megabytes
+management:
+  health:
+    binders:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: metrics
+spring:
+  main:
+    banner-mode: 'off'
+  cloud:
+    function:
+      definition: createRestPhoenixEEMMixed_myRestConnEEMMixed
+    stream:
+      default:
+        contentType: application/iip
+      defaultBinder: internal
+      binders:
+        properties:
+          internal:
+            type: mqttv5Binder
+            environment:
+              mqtt:
+                host: localhost
+                port: 8883
+                actionTimeout: 3000
+          external:
+            type: mqttv5Binder
+            environment:
+              mqtt:
+                host: localhost
+                port: 8883
+                actionTimeout: 3000

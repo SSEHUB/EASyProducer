@@ -1,0 +1,42 @@
+{
+   "all" : {
+      "asSingleValue" : false,
+      "endpoint" : "measurements/all",
+      "type" : "RestPhoenixEEMResponseMeasurementSet"
+   },
+   "f" : {
+      "asSingleValue" : false,
+      "endpoint" : "measurements/f",
+      "type" : "RestPhoenixEEMResponseMeasurementSingle"
+   },
+   "information" : {
+      "asSingleValue" : false,
+      "endpoint" : "information",
+      "type" : "RestPhoenixEEMResponseInformation"
+   },
+   "tn1" : {
+      "asSingleValue" : true,
+      "endpoint" : "tariff-number/tn1",
+      "type" : "RestPhoenixEEMResponseTariffNumber"
+   },
+   "tn2" : {
+      "asSingleValue" : false,
+      "endpoint" : "tariff-number/tn2",
+      "type" : "RestPhoenixEEMResponseTariffNumber"
+   },
+   "U1" : {
+      "asSingleValue" : false,
+      "endpoint" : "measurements/u1",
+      "type" : "RestPhoenixEEMResponseMeasurementSingle"
+   },
+   "U2" : {
+      "asSingleValue" : false,
+      "endpoint" : "measurements/u2",
+      "type" : "RestPhoenixEEMResponseMeasurementSingle"
+   },
+   "U3" : {
+      "asSingleValue" : false,
+      "endpoint" : "measurements/u3",
+      "type" : "RestPhoenixEEMResponseMeasurementSingle"
+   }
+}

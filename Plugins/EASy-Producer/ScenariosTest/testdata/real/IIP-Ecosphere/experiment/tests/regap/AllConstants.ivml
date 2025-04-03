@@ -1,0 +1,17 @@
+project AllConstants {
+
+    import IIPEcosphere;
+    import DataTypes;
+
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+
+    String sentronDevice = "192.168.1.25";
+    Boolean flowTest = false; // do not commit this if set to true!
+
+    // ------------ freezing ------------------
+    
+    freeze {
+        .; // every variable declared in this project
+    } but (f|f.bindingTime >= BindingTime.runtimeMon);
+
+}

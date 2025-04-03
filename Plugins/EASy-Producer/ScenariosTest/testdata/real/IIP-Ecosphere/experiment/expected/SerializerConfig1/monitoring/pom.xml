@@ -198,6 +198,7 @@
                                     <directory>./resources/software</directory>
                                     <filtering>false</filtering>
                                     <include>*.jpg</include>
+                                    <include>*.json</include>
                                     <include>*.png</include>
                                     <include>*.yml</include>
                                 </resource>
@@ -217,6 +218,7 @@
                                     <directory>./resources/platform</directory>
                                     <filtering>false</filtering>
                                     <include>*.jpg</include>
+                                    <include>*.json</include>
                                     <include>*.png</include>
                                     <include>*.yml</include>
                                 </resource>

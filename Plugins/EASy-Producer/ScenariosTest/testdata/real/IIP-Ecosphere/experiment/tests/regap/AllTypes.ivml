@@ -1,0 +1,82 @@
+project AllTypes {
+
+    import AllConstants; 
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    RecordType Empty = {
+        name = "Empty",
+        fields = {}
+    };
+    
+    RecordType sentronOutput = {
+        name = "SentronOutput",
+        fields = {
+            ModbusField {
+                offset = 25,
+                name = "ActivePowerL1",
+                description = "PowerConsumption L1",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 27,
+                name = "ActivePowerL2",
+                description = "PowerConsumption L2",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 29,
+                name = "ActivePowerL3",
+                description = "PowerConsumption L3",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 1,
+                name = "VoltageL1",
+                description = "Voltage L1",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 3,
+                name = "VoltageL2",
+                description = "Voltage L2",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 5,
+                name = "VoltageL3",
+                description = "Voltage L3",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 13,
+                name = "CurrentL1",
+                description = "Current L1",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 15,
+                name = "CurrentL2",
+                description = "Current L2",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 17,
+                name = "CurrentL3",
+                description = "Current L3",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }, ModbusField {
+                offset = 55,
+                name = "Frequency",
+                description = "Frequency",
+                type = refBy(Modbus_float32),
+                cachingTime = CACHE_NONE
+            }
+        }
+    };
+    
+    freeze {
+        .;
+    }
+}

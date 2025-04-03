@@ -1,0 +1,30 @@
+project ServiceMeshPartReGaPMesh {
+
+    import AllServices;
+
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+
+    ServiceMesh myMdzhMesh = {
+        description = "ReGaP mesh",
+        sources = {refBy(myEnergySource)}
+    };
+    
+    MeshSource myEnergySource = {
+       impl = refBy(sModbusConnector),
+       next = {refBy(mEnergySourceReceiverConn)}
+    };
+
+    MeshConnector mEnergySourceReceiverConn = {
+        name = "Modbus -> Receiver",
+        next = refBy(mReceiver)
+    };
+    
+    MeshSink mReceiver = {
+       impl = refBy(csvReceiverService),
+    };
+
+    freeze {
+        .;
+    }
+
+}

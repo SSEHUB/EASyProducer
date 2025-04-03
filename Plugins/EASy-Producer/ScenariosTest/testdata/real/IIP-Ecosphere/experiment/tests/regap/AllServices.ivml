@@ -1,0 +1,55 @@
+project AllServices {
+    
+    import AllTypes; 
+    
+    annotate BindingTime bindingTime = BindingTime::compile to .;
+    
+    ModbusTcpV1Connector sModbusConnector = {
+        id = "SentronModbusConn",
+        name = "Sentron Energy Modbus connector",
+        description = "",
+        ver = "0.1.0",
+        unitId = 1,
+        timeout = 3000,
+        samplingPeriod = 1000,
+        mock = flowTest,
+        bigByteOrder = true, // required for Sentron
+        host = sentronDevice,
+        
+        input = {{type=refBy(Empty)}},
+        output = {{type=refBy(sentronOutput)}},
+        inInterface = {type=refBy(Empty)}, 
+        outInterface = {type=refBy(sentronOutput)}
+    };
+    
+    Service sReceiverService = JavaService {
+        id = "Receiver",
+        name = "Data Receiver",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+        class = "de.oktoflow.platform.examples.regap.ReceiverImpl",
+        artifact = "de.iip-ecosphere.platform.apps:examples.regap:" + iipVer,
+        kind = ServiceKind::SINK_SERVICE,
+        input = {{type=refBy(sentronOutput)}}
+    };
+
+    Service csvReceiverService = CSVConnector {
+        id = "CSVReceiver",
+        name = "CSV Data Receiver",
+        description = "",
+        ver = "0.1.0",
+        deployable = true,
+		readFiles = "dataFiles/",
+		writeFiles = "tmpOutFiles/",
+        kind = ServiceKind::SINK_SERVICE,
+        input = {{type=refBy(sentronOutput)}},
+        output = {{type=refBy(sentronOutput)}},
+        inInterface = {type=refBy(sentronOutput)}, 
+        outInterface = {type=refBy(sentronOutput)}		
+    };
+   
+    freeze {
+        .;
+    }
+}

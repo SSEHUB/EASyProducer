@@ -1,0 +1,42 @@
+{
+   "ActivePowerL1" : {
+      "offset" : 25,
+      "type" : "float"
+   },
+   "ActivePowerL2" : {
+      "offset" : 27,
+      "type" : "float"
+   },
+   "ActivePowerL3" : {
+      "offset" : 29,
+      "type" : "float"
+   },
+   "CurrentL1" : {
+      "offset" : 13,
+      "type" : "float"
+   },
+   "CurrentL2" : {
+      "offset" : 15,
+      "type" : "float"
+   },
+   "CurrentL3" : {
+      "offset" : 17,
+      "type" : "float"
+   },
+   "Frequency" : {
+      "offset" : 55,
+      "type" : "float"
+   },
+   "VoltageL1" : {
+      "offset" : 1,
+      "type" : "float"
+   },
+   "VoltageL2" : {
+      "offset" : 3,
+      "type" : "float"
+   },
+   "VoltageL3" : {
+      "offset" : 5,
+      "type" : "float"
+   }
+}

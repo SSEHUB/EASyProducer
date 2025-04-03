@@ -83,6 +83,25 @@ project Connectors {
     compound JsonFormatter refines GenericMachineFormatter {
     }
     
+    // -------------------------------------- Data Time Diff --------------------------------
+
+    abstract compound DataTimeDiffProvider {
+    }
+    
+    compound JavaDataTimeDiffProvider refines DataTimeDiffProvider {
+       refTo(DataType) type;
+       NonEmptyString class; // optional class name, must comply with DataTimeDiffProvider
+       String artifact; // optional maven artifact
+    }
+    
+    @DispatchBasis
+    def Boolean providerOk(DataTimeDiffProvider provider, Service conn) = 
+        true;
+    
+    @DispatchCase
+    def Boolean providerOk(JavaDataTimeDiffProvider provider, Connector conn) = 
+        provider <> null implies conn.input->exists(t|t.type == provider.type);
+    
     // -------------------------------------- Data Operations -------------------------------
     
     // Post-parser mapping operations forming a simplified expression tree structure with 
@@ -194,6 +213,10 @@ project Connectors {
        String artifact; // may be empty -> same as connector (or other known artifact)
     }
     
+
+    def Boolean handlerOk(ConnectorInputHandler handler, Service conn) = 
+        true;
+
     // prepared for polymorphic handler types hierarchy
     // handler type must be in input types, otherwise handler is useless (no problem, but also no effect)
     def Boolean handlerOk(ConnectorInputHandler handler, Connector conn) = 
@@ -223,6 +246,7 @@ project Connectors {
            String inAdapterClass = ""; // if given, use adapter; may be "*" to use generated transport serializer
            String outAdapterClass = ""; // if given, use adapter; may be "*" to use generated transport serializer
            setOf(ConnectorInputHandler) inputHandlers = {};
+           DataTimeDiffProvider dataTimeDiffProvider = null;
            CacheMode cacheMode = CacheMode::NONE;
            ServiceKind kind = ServiceKind.SOURCE_SERVICE;
            Parameters parameter = {
@@ -236,6 +260,7 @@ project Connectors {
            };
        }
        Constraint inputHandlersOk = inputHandlers->forAll(h|handlerOk(h, self));
+       Constraint dataTimeProviderOk = providerOk(dataTimeDiffProvider, self);
        assign (uiGroup = UiOptionalGroup2) to {
            Boolean mock = false; // in-vivo testing, enable a mocking connector service wrapper
            String deviceServiceKey;
@@ -560,6 +585,48 @@ project Connectors {
        }
        assign (uiGroup = UiOptionalGroup2) to {
            String deviceServiceKey = "REST";
+       }
+   }
+   
+   // ------------------------ file ----------------------------------
+   
+   compound FileConnector refines ChannelConnector {
+       assign (uiGroup = UiInvisibleGroup) to {
+           String class = "de.oktoflow.platform.connectors.file.FileConnector";
+           String artifact ="de.iip-ecosphere.platform:connectors.file:";
+           NameplateInfo nameplateInfo = {
+               manufacturerProductDesignation = "Generic file connector@en",
+               manufacturer = refBy(manufacturer_sse)
+           };
+           NonEmptyString host = "localhost";
+           Port port = 1;
+           String deviceServiceKey = "";
+           String inChannel = "file"; // pseudo, otherwise no code
+           String outChannel = "file"; // pseudo, otherwise no code           
+       }
+       NonEmptyString readFiles;
+       String writeFiles;
+       Integer dataTimeDiff = 0;
+   }
+
+   compound JsonConnector refines FileConnector {
+       assign (uiGroup = UiInvisibleGroup) to {
+           machineFormatter = JsonFormatter{};
+           machineParser = JsonParser{};
+       }
+   }
+
+   compound CSVConnector refines FileConnector {
+       assign (uiGroup = UiInvisibleGroup) to {
+           machineFormatter = TextLineFormatter{separator=","};
+           machineParser = TextLineParser{separator=","};
+       }
+   }
+
+   compound TSVConnector refines FileConnector {
+       assign (uiGroup = UiInvisibleGroup) to {
+           machineFormatter = TextLineFormatter{separator="\\t"};
+           machineParser = TextLineParser{separator="\\t"};
        }
    }
    

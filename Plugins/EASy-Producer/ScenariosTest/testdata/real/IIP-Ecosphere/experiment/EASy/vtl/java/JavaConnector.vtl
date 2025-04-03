@@ -877,7 +877,7 @@ template JavaConnector(Configuration config, JavaCodeArtifact target) extends Da
         }
         String parity = getStringValueSafe(conn.parity, "");
         if (parity <> "") {
-            r.call("setSpecificSetting").stringArg("PARITY").arg(parity);
+            r.call("setSpecificSetting").stringArg("PARITY").stringArg(parity);
         }
     }
 
@@ -894,6 +894,13 @@ template JavaConnector(Configuration config, JavaCodeArtifact target) extends Da
     def generateSpecificSettings(RestConnector conn, JavaCodeMethodCall r) {
         String connectorName = toIdentifier(conn.name);
         r.call("setSpecificSettingFromResourceSafe").stringArg("SERVER_STRUCTURE").stringArg(connectorName + ".server");
+    }
+
+    @DispatchCase
+    def generateSpecificSettings(FileConnector conn, JavaCodeMethodCall r) {
+        r.call("setSpecificSetting").stringArg("READ_FILES").stringArg(getStringValueSafe(conn.readFiles, ""));
+        r.call("setSpecificSetting").stringArg("WRITE_FILES").stringArg(getStringValueSafe(conn.writeFiles, ""));
+        r.call("setSpecificSetting").stringArg("DATA_TIMEDIFF").arg(conn.dataTimeDiff);
     }
     
     @DispatchBasis

@@ -1,0 +1,75 @@
+id: ReGaPApp
+name: ReGaP app
+version: 0.1.0
+application:
+    id: ReGaPApp
+    name: ReGaP app
+    version: 0.1.0
+types:
+  - name: Empty
+  - name: SentronOutput
+    fields:
+      - name: ActivePowerL1
+        type: float
+      - name: ActivePowerL2
+        type: float
+      - name: ActivePowerL3
+        type: float
+      - name: VoltageL1
+        type: float
+      - name: VoltageL2
+        type: float
+      - name: VoltageL3
+        type: float
+      - name: CurrentL1
+        type: float
+      - name: CurrentL2
+        type: float
+      - name: CurrentL3
+        type: float
+      - name: Frequency
+        type: float
+services:
+  - id: CSVReceiver
+    applicationId: ReGaPApp
+    name: CSV Data Receiver
+    version: 0.1.0
+    deployable: true
+    kind: SINK_SERVICE
+    topLevel: true
+    cmdArg:
+      - --iip.port=${port}
+      - --iip.protocol=${protocol}
+    relations:
+      - endpoint:
+            portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port}
+                --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+            hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host}
+                --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+      - channel: receiveSentronOutput_CSVReceiver-in-0
+        direction: IN
+        id: SentronModbusConn -> CSVReceiver
+        type: SentronOutput
+        function: receiveSentronOutput_CSVReceiver
+        service: SentronModbusConn
+  - id: SentronModbusConn
+    applicationId: ReGaPApp
+    name: Sentron Energy Modbus connector
+    version: 0.1.0
+    deployable: true
+    kind: SOURCE_SERVICE
+    topLevel: true
+    cmdArg:
+      - --iip.port=${port}
+      - --iip.protocol=${protocol}
+    relations:
+      - endpoint:
+            portArg: --transport.port=${port} --binders.properties.external.environment.amqp.port=${port}
+                --spring.cloud.stream.binders.properties.external.environment.amqp.port=${port}
+            hostArg: --transport.host=${host} --binders.properties.external.environment.amqp.host=${host}
+                --spring.cloud.stream.binders.properties.external.environment.amqp.host=${host}
+      - channel: receiveSentronOutput_CSVReceiver-out-0
+        direction: OUT
+        id: SentronModbusConn -> CSVReceiver
+        type: SentronOutput
+        service: CSVReceiver

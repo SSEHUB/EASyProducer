@@ -313,6 +313,8 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
                 vilTemplateProcessor("TemplatesEclipsePyDevProject", config, "${appRoot}/.pydevproject", appName=appName);
                 vilTemplateProcessor("TemplatesEclipseGitignore", config, "${appRoot}/.gitignore", appName=appName);
                 vilTemplateProcessor("TemplatesEasyProducer", config, "${appRoot}/.EASyProducer", appName=appName);
+                // currently no separate templates
+                vilTemplateProcessor("TemplatesVsCodeEnvProject", config, "${appRoot}/.env");
 
                 setOf(AssemblyInfo) assemblies = {}; 
                 mapOf(MeshElement, setOf(MeshConnector)) mappedMesh = {};
@@ -410,7 +412,7 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
     
     // dispatch basis
     generateServer(Configuration config, Server server, Path appRoot, Boolean noDeps, setOf(AssemblyInfo) assemblies, setOf(String) artifacts) = {
-        if (isDefined(server.artifact) and server.artifact.length() > 0) {
+        if (not(noDeps) and isDefined(server.artifact) and server.artifact.length() > 0) {
             artifacts.add(server.artifact);
         }
     }
@@ -426,7 +428,7 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
         vilTemplateProcessor("JavaServer", config, "${javaServerSrc}/${clsName}Server.java", server=server, pkg=javaServerPackage);
         //vilTemplateProcessor("PythonServer", config, "${appRoot}/src/main/python/services/${clsName}Server.py", server=server, pkg="services");
         vilTemplateProcessor("PythonServerInterface", config, "${appRoot}/src/main/python/interfaces/${clsName}ServerInterface.py", server=server, pkg="interfaces");
-        if (isDefined(server.artifact) and server.artifact.length() > 0) {
+        if (not(noDeps) and isDefined(server.artifact) and server.artifact.length() > 0) { // artifact available after user services build, only for full app build
             artifacts.add(server.artifact);
             sequenceOf(String) tmp = server.artifact.split(":");
             String artifact = tmp[0]+":"+tmp[1]+":zip:python:"+tmp[2];
@@ -530,6 +532,8 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
         vilTemplateProcessor("JavaConnectorConnectivityTest", config, "${javaConnSrc}/${clsName}Test.java", conn=conn, pkg=javaConnectivityPackage); 
         Path testResourcesSrc = "${appRoot}/resources/software";
         String outName = asTypeName(getFirstTypeName(conn.output));
+        JavaPath connClassFqn = conn.class;
+        clsName = connClassFqn.getName();
         vilTemplateProcessor("TemplatesTestDataJson", config, "${testResourcesSrc}/testData-${clsName}-${outName}.json.tmpl", elt=no);
     }
 
@@ -1210,6 +1214,7 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
         Boolean baseImageMethod = getContainerBaseImageMethodSafe(config.containerBaseImageMethod);
         Boolean newChangeOnContainerFiles = false;
         Boolean newChangeJarFiles = false;
+        String fpFolder = getStringValueSafe(config.footprintFolder, config.footprintFolderDflt);
         
         if (allElements.size() > 1 and getContainerGenerationSafe(config.containerGeneration)) {
 
@@ -2017,6 +2022,27 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
     @DispatchCase
     generateServiceResources(MeshElement no, Connector conn, Path appRoot, setOf(DependencyArtifact) bins, setOf(AssemblyInfo) assemblies, setOf(ResourceInfo) resources, setOf(String) artifacts, Boolean noDeps) = {
         artifacts.add(getArtifact(conn)); // connectors are (currently) platform-supplied
+        if (not(noDeps)) { // application resources
+            if (conn.inputHandlers <> null and conn.inputHandlers.size() > 0) {
+                for (ConnectorInputHandler h: conn.inputHandlers) {
+                    if (h.artifact <> null and h.artifact <> "") {
+                        artifacts.add(h.artifact);
+                    }
+                }
+            }
+            if (conn.dataTimeDiffProvider <> null) {
+                addArtifact(conn.dataTimeDiffProvider, artifacts);
+            }
+        }
+    }
+    
+    @DispatchBasis
+    addArtifact(DataTimeDiffProvider provider, setOf(String) artifacts) = {
+    }
+
+    @DispatchCase
+    addArtifact(JavaDataTimeDiffProvider provider, setOf(String) artifacts) = {
+        artifacts.add(provider.artifact);
     }
 
     @DispatchCase
@@ -2100,6 +2126,7 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
         sequenceOf(String) tmp = service.artifact.split(":");
         String artifact = tmp[0]+":"+tmp[1]+":zip:python:"+tmp[2];
         String shArtifact = "";
+        if (not(noDeps)) { // artifact available after user services build, only for full app build
         if (cfg.sharedInterfaces) {
             //addPythonDependencyArtifact(bins, cfg.sharedArtifact, mvnProjectPySrcDir);
             //addPythonDependencyArtifact(bins, tmp[0]+":"+tmp[1]+":"+tmp[2], mvnProjectPySrcDir);
@@ -2109,10 +2136,13 @@ vilScript IIPEcosphere (Project source, Configuration config, Project target) ex
             artifacts.add(shArtifact);
         }
         artifacts.add(artifact);
+        }
         vilTemplateProcessor("PythonAssembly", config, "${assemblySrc}/python_${serviceFolderName}.xml", withServices=true, dependency=artifact, dependency2=shArtifact);
+        if (not(noDeps)) {
         addAssemblyInfo(assemblies, "python_${serviceFolderName}", "${assemblyRel}/python_${serviceFolderName}.xml", "prepare-package", "${mvnProjectBuildDir}/classes", finalName="python_${serviceFolderName}");
         artifacts.add(getArtifact(service));
         addArtifacts(service.artifacts, service.artifact, bins, noDeps);
+        }
     }
 
     addArtifacts(setOf(String) artifacts, String artifact, setOf(DependencyArtifact) bins, Boolean noDeps) = {
