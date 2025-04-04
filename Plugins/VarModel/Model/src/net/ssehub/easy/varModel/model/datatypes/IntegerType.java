@@ -38,7 +38,7 @@ public class IntegerType extends BasisDatatype {
         BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
-    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+    public static final Operation IF_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IF_DEFINED, TYPE)
         .markAsAcceptsNull();
     public static final Operation COPY = new Operation(TYPE, OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
     
@@ -138,7 +138,7 @@ public class IntegerType extends BasisDatatype {
         RealType.INTEGER_TYPE.addOperation(NOTEQUALS_INTEGER_REAL_ALIAS);
         RealType.INTEGER_TYPE.addOperation(ASSIGNMENT_INTEGER_INTEGER);
         RealType.INTEGER_TYPE.addOperation(IS_DEFINED);
-        RealType.INTEGER_TYPE.addOperation(FORCE_DEFINED);
+        RealType.INTEGER_TYPE.addOperation(IF_DEFINED);
         RealType.INTEGER_TYPE.addOperation(COPY);
         RealType.INTEGER_TYPE.addOperation(GREATER_INTEGER_INTEGER);
         RealType.INTEGER_TYPE.addOperation(GREATER_INTEGER_REAL);

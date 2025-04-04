@@ -105,56 +105,24 @@ public class GenericOperations {
             return result; 
         }
     };
-    
+
     /**
-     * Implements the "is defined" operation.
+     * Implements the "isDefined" operation.
      */
     static final IOperationEvaluator IS_DEFINED = new IOperationEvaluator() {
         
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            // get state does not work as there may not be a directly underlying variable
-            boolean eval;
-            boolean undefined = false;
-            EvaluationContext context;
-            if (null == operand) {
-                eval = false;
-                context = null; // replaced by caller
-            } else {
-                IDecisionVariable var = operand.getVariable();
-                if (var != null && (var.getValue() == null || var.getState() == AssignmentState.UNDEFINED)) {
-                    eval = false;
-                    context = null;
-                    undefined = true;
-                } else if (var != null && var.enableWasAssignedForIsDefined()) { // workaround/hack for compounds
-                    eval = operand.getVariable().wasAssigned();
-                    context = operand.getContext();
-                } else {
-                    Value val = operand.getValue();
-                    eval = !(null == val || NullValue.INSTANCE == val);
-                    context = operand.getContext();
-                }
-            }
-            EvaluationAccessor result;
-            if (undefined) {
-                result = null;
-            } else {
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(eval), true, context);
-            }
-            return result;
+            return checkDefined(operand, arguments, false);
         }
     };
     
     /**
-     * Implements the "force defined" operation.
+     * Implements the "ifDefined" operation.
      */
-    static final IOperationEvaluator FORCE_DEFINED = new IOperationEvaluator() {
+    static final IOperationEvaluator IF_DEFINED = new IOperationEvaluator() {
 
         public EvaluationAccessor evaluate(EvaluationAccessor operand, EvaluationAccessor[] arguments) {
-            EvaluationAccessor result = IS_DEFINED.evaluate(operand, arguments);
-            if (null == result) {
-                result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.FALSE, true, null);
-            }
-            return result;
+            return checkDefined(operand, arguments, true);
         }
     };
     
@@ -507,6 +475,48 @@ public class GenericOperations {
             }
         }
         return result;        
+    }
+    
+    /**
+     * Common implementation of isDefined/ifDefined.
+     * 
+     * @param operand the operand
+     * @param arguments the operation arguments
+     * @param lazy whether an undefined, so far assigned variable causes an error ({@code false}) or not 
+     *     (lazy, {@code true})
+     * @return the evaluation result, may be <b>null</b> for undefined
+     */
+    private static final EvaluationAccessor checkDefined(EvaluationAccessor operand, EvaluationAccessor[] arguments, 
+        boolean lazy) {
+        // get state does not work as there may not be a directly underlying variable
+        boolean eval;
+        boolean undefined = false;
+        EvaluationContext context;
+        if (null == operand) {
+            eval = false;
+            context = null; // replaced by caller
+        } else {
+            IDecisionVariable var = operand.getVariable();
+            if (lazy && var != null && (var.getValue() == null || var.getState() == AssignmentState.UNDEFINED)) {
+                eval = false;
+                context = null;
+                undefined = true;
+            } else if (var != null && var.enableWasAssignedForIsDefined()) { // workaround/hack for compounds
+                eval = operand.getVariable().wasAssigned();
+                context = operand.getContext();
+            } else {
+                Value val = operand.getValue();
+                eval = !(null == val || NullValue.INSTANCE == val);
+                context = operand.getContext();
+            }
+        }
+        EvaluationAccessor result;
+        if (undefined) {
+            result = null;
+        } else {
+            result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.toBooleanValue(eval), true, context);
+        }
+        return result;
     }
 
 }

@@ -67,7 +67,7 @@ public class ReferenceOperations {
         EvaluatorRegistry.registerEvaluator(GenericOperations.UNEQUALS, Reference.UNEQUALS, Reference.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, Reference.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Reference.IS_DEFINED);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, Reference.FORCE_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.IF_DEFINED, Reference.IF_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, Reference.COPY);
         EvaluatorRegistry.registerEvaluator(REF_BY, Reference.REF_BY);
     }

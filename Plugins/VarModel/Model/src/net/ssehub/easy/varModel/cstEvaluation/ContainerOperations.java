@@ -777,7 +777,7 @@ public class ContainerOperations {
         EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(false, true), Container.SELECT_BY_KIND);
         EvaluatorRegistry.registerEvaluator(new TypeSelectEvaluator(true, true), Container.TYPE_REJECT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, Container.IS_DEFINED);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, Container.FORCE_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.IF_DEFINED, Container.IF_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, Container.COPY);
     }
 

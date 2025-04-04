@@ -142,7 +142,7 @@ public class BooleanOperations {
             BooleanType.UNEQUALS, BooleanType.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, BooleanType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, BooleanType.IS_DEFINED);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, BooleanType.FORCE_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.IF_DEFINED, BooleanType.IF_DEFINED);
         EvaluatorRegistry.registerEvaluator(GenericOperations.COPY, BooleanType.COPY);
         EvaluatorRegistry.registerEvaluator(GenericOperations.TO_STRING, BooleanType.TO_STRING);
         EvaluatorRegistry.registerEvaluator(NOT, BooleanType.NOT);

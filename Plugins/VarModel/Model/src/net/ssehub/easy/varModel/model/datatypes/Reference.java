@@ -20,7 +20,6 @@ import net.ssehub.easy.varModel.model.IvmlKeyWords;
 import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.datatypes.Operation.ReturnTypeMode;
 
-
 /** 
  * A reference allows the definition of individual configurations of an (external) element for the referencing element.
  * Currently, operations such as assignments are represented as the respective operations of the base type. Actually, 
@@ -54,7 +53,7 @@ public class Reference extends CustomDatatype {
         = Operation.createInfixOperator(BooleanType.TYPE, OclKeyWords.ASSIGNMENT, TYPE, TYPE);
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
-    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+    public static final Operation IF_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IF_DEFINED, TYPE)
         .markAsAcceptsNull();
     public static final Operation COPY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
         OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
@@ -67,7 +66,7 @@ public class Reference extends CustomDatatype {
         DTYPE.setDelegate(new Reference());
         DTYPE.addOperation(TYPE_OF);
         DTYPE.addOperation(IS_DEFINED);
-        DTYPE.addOperation(FORCE_DEFINED);
+        DTYPE.addOperation(IF_DEFINED);
         DTYPE.addOperation(COPY);
         DTYPE.addOperation(EQUALS);
         DTYPE.addOperation(UNEQUALS);

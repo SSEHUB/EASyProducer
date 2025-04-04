@@ -74,7 +74,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
     
     public static final Operation IS_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IS_DEFINED, TYPE)
         .markAsAcceptsNull();
-    public static final Operation FORCE_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.FORCE_DEFINED, TYPE)
+    public static final Operation IF_DEFINED = new Operation(BooleanType.TYPE, OclKeyWords.IF_DEFINED, TYPE)
         .markAsAcceptsNull();
     public static final Operation COPY = new Operation(TYPE, ReturnTypeMode.IMMEDIATE_OPERAND, 
         OclKeyWords.COPY, TYPE, AnyType.STRING_TYPE);
@@ -88,7 +88,7 @@ public class Compound extends StructuredDatatype implements IResolutionScope, ID
         DTYPE.addOperation(NOTEQUALS_ALIAS);
         DTYPE.addOperation(ASSIGNMENT);
         DTYPE.addOperation(IS_DEFINED);
-        DTYPE.addOperation(FORCE_DEFINED);
+        DTYPE.addOperation(IF_DEFINED);
         DTYPE.addOperation(COPY);
     }
 

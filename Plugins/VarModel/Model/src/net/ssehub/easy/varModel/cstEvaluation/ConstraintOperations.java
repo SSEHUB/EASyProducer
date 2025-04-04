@@ -97,7 +97,7 @@ public class ConstraintOperations {
             ConstraintType.UNEQUALS, ConstraintType.UNEQUALS_ALIAS);
         EvaluatorRegistry.registerEvaluator(GenericOperations.ASSIGNMENT, ConstraintType.ASSIGNMENT);
         EvaluatorRegistry.registerEvaluator(GenericOperations.IS_DEFINED, ConstraintType.IS_DEFINED);
-        EvaluatorRegistry.registerEvaluator(GenericOperations.FORCE_DEFINED, ConstraintType.FORCE_DEFINED);
+        EvaluatorRegistry.registerEvaluator(GenericOperations.IF_DEFINED, ConstraintType.IF_DEFINED);
     }
 
 }
