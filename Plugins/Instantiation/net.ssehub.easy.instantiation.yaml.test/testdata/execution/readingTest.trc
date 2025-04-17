@@ -1,0 +1,10 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, FileArtifact) with (<config>, readingTest.txt)
+    jfa <- testdata/artifacts/readingTest.yaml
+    -> getDocument(YamlFileArtifact, Integer) with (testdata/artifacts/readingTest.yaml, 0) = YamlNode
+    data <- YamlNode
+    -> has(YamlNode, String) with (YamlNode, Dockerfile) = true
+    hasData <- true
+    -> getValue(YamlNode, String) with (YamlNode, Dockerfile) = testHas
+    value <- testHas
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (ReadingTestTpl, <config>, readingTest.txt, {}) = {readingTest.txt}

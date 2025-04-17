@@ -69,9 +69,9 @@ public class YamlNode extends YamlStructure {
      */
     YamlNode(Object data, INodeParent parent) {
         this(parent);
-        if (data instanceof Map) {
-            Map<?, ?> value = (Map<?, ?>) data;
-            for (Object key: value.keys()) {
+        if (data instanceof java.util.Map) {
+            java.util.Map<?, ?> value = (java.util.Map<?, ?>) data;
+            for (Object key: value.keySet()) {
                 Object val = value.get(key);
                 set(key.toString(), val, false); // TODO more key conversion, recursive?
             }

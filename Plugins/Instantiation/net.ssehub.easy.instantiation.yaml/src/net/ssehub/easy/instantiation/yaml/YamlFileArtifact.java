@@ -224,6 +224,17 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
         data.remove(index);
         notifyChanged();
     }
+
+    /**
+     * Removes all contained documents.
+     */
+    public synchronized void deleteAllDocuments() {
+        boolean hadContents = !data.isEmpty();
+        data.clear();
+        if (hadContents) {
+            notify();
+        }
+    }
     
     private DumperOptions createDumperOptions() {
         DumperOptions options = new DumperOptions();

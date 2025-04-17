@@ -77,21 +77,22 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
 
             @Override
             public void assertIn(File base) {
-                File expectedMethodClass2 = new File(getArtifactsFolder(), fName);
-                File tempFileMethodClass2 = new File(base, fName);
+                File expectedFile = new File(getArtifactsFolder(), fName);
+                File tempFile = new File(base, fName);
                 // for debugging
                 try { 
-                    System.out.println(FileUtils.readFileToString(tempFileMethodClass2, Charset.defaultCharset()));
+                    System.out.println(FileUtils.readFileToString(tempFile, Charset.defaultCharset()));
                 } catch (IOException e) {
                 }
-                assertFileEqualitySafe(tempFileMethodClass2, expectedMethodClass2);
+                assertFileEqualitySafe(tempFile, expectedFile);
             }
 
         });
     }
 
     /**
-     * Test the Yaml artifact.
+     * Test the Yaml artifact. VIL script needs "deleteAllDocuments" as being called twice in the test procedure.
+     * Otherwise, a second document would be added failing the test.
      * 
      * @throws IOException
      *             should not occur
@@ -99,6 +100,33 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     @Test
     public void testYamlBasics() throws IOException {
         assertYaml("yamlBasics");
+    }
+
+    /**
+     * Test reading a Json artifact.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testReadingTest() throws IOException {
+        String modelName = "readingTest";
+        String fName = modelName + ".txt";
+        assertSelfInstantiate(modelName, "main", new SelfInstantiationAsserterAdapter() {
+
+            @Override
+            public File determineTestDirectory(File file) {
+                return new File(file, "execution");
+            }
+
+            @Override
+            public void assertIn(File base) {
+                File expectedFile = new File(getArtifactsFolder(), fName);
+                File tempFile = new File(base, fName);
+                assertFileEqualitySafe(tempFile, expectedFile);
+            }
+
+        });
     }
 
 }

@@ -18,6 +18,8 @@ package net.ssehub.easy.instantiation.json;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -81,7 +83,8 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
         try {
             if (f.exists()) {
                 ObjectMapper mapper = new ObjectMapper();
-                java.util.Map<?, ?> data = mapper.readValue(f, java.util.Map.class);
+                java.util.Map<?, ?> data = mapper.readValue(
+                    FileUtils.readFileToByteArray(f), java.util.Map.class);
                 this.data = new JsonNode(data, this);
             }
         } catch (Throwable e) { // if the format is broken/not really correct

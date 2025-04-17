@@ -1,0 +1,7 @@
+vilScript JsonBasics (Project source, Configuration config, Project target) {
+
+    main(Project source, Configuration config, Project target) = : {
+        vilTemplateProcessor("ReadingTestTpl", config, "$target/readingTest.txt");
+    }
+
+}

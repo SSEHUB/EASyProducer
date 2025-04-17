@@ -1,6 +1,7 @@
 -> main(Project, Configuration, Project) with (<project>, <config>, <project>)
 -> main(Configuration, FileArtifact) with (<config>, yamlBasics.yaml)
     art <- yamlBasics.yaml
+    -> deleteAllDocuments(YamlFileArtifact) with (yamlBasics.yaml)
     -> addDocument(YamlFileArtifact) with (yamlBasics.yaml) = YamlNode
     doc <- YamlNode
     -> addValue(YamlNode, String, Any) with (YamlNode, myVal, 1) = YamlNode

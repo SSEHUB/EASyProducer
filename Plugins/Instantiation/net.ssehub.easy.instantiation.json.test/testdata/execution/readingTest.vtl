@@ -1,0 +1,12 @@
+@format(profile="json", indentSteps = 4, profileArg_prettyPrint = "true")
+template ReadingTestTpl(Configuration config, FileArtifact target) {
+
+    def main(Configuration config, FileArtifact target) {
+        JsonFileArtifact jfa = "testdata/artifacts/readingTest.json";
+        JsonNode data = jfa.getData();
+        Boolean hasData = data.has("Dockerfile");
+        String value = data.getValue("Dockerfile");
+        'value is ${value}, hasData ${hasData}'
+    }
+    
+}

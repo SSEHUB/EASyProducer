@@ -3,6 +3,7 @@ template YamlBasicsTpl(Configuration config, FileArtifact target) {
 
     def main(Configuration config, FileArtifact target) {
         YamlFileArtifact art = target;
+        art.deleteAllDocuments();
         YamlNode doc = art.addDocument();
         doc.addValue("myVal", 1);
         doc.addObject("myObject")

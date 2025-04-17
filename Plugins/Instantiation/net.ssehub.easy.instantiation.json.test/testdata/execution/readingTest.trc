@@ -1,0 +1,10 @@
+-> main(Project, Configuration, Project) with (<project>, <config>, <project>)
+-> main(Configuration, FileArtifact) with (<config>, readingTest.txt)
+    jfa <- testdata/artifacts/readingTest.json
+    -> getData(JsonFileArtifact) with (testdata/artifacts/readingTest.json) = JsonNode
+    data <- JsonNode
+    -> has(JsonNode, String) with (JsonNode, Dockerfile) = true
+    hasData <- true
+    -> getValue(JsonNode, String) with (JsonNode, Dockerfile) = testHas
+    value <- testHas
+    -> vilTemplateProcessor(String, Configuration, Artifact) with (ReadingTestTpl, <config>, readingTest.txt, {}) = {readingTest.txt}
