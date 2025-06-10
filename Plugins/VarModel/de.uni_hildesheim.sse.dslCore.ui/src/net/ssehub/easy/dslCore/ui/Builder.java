@@ -19,6 +19,7 @@ import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -34,7 +35,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.xtext.builder.builderState.MarkerUpdaterImpl;
 import org.eclipse.xtext.builder.impl.ToBeBuilt;
 import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
@@ -79,7 +79,7 @@ import static net.ssehub.easy.dslCore.validation.ValidationUtils.isInPath;
 @SuppressWarnings("restriction")
 public class Builder extends IncrementalProjectBuilder {
 
-    public static final Logger LOG = Logger.getLogger(MarkerUpdaterImpl.class);
+    public static final Logger LOG = Logger.getLogger(Builder.class);
     public static final String BUILDER_ID = "de.uni_hildesheim.sse.EASy-Producer.Builderr";
     private static final int MONITOR_CHUNK_SIZE_CLEAN = 50;
     /** Duplicate of ExternalFoldersManager.EXTERNAL_PROJECT_NAME for avoiding any dependency on that (internal) API. */
@@ -194,6 +194,19 @@ public class Builder extends IncrementalProjectBuilder {
         return visitor;
     }
     
+    private boolean containsExtension(Set<URI> uris, String extension) {
+        return uris.stream()
+            .anyMatch(u->extension.equals(u.fileExtension()));
+    }
+    
+    private boolean involvesIvml(ToBeBuilt toBeBuilt) {
+        return null != toBeBuilt && (containsExtension(toBeBuilt.getToBeUpdated(), ".ivml"));
+    }
+    
+    private boolean updateAnyway(boolean involvesIvml, URI uri) {
+        return involvesIvml && !"ivml".equals(uri.fileExtension());
+    }
+    
     private void updateMarkers(IProgressMonitor monitor) {
         SubMonitor subMonitor = SubMonitor.convert(monitor, "Updating markers", 2);
         subMonitor.subTask("Updating resources");
@@ -211,6 +224,7 @@ public class Builder extends IncrementalProjectBuilder {
                 e.printStackTrace(); // preliminary
             }
         }
+        boolean involvesIvml = involvesIvml(toBeBuilt);
         subMonitor.subTask("Collecting work units");
         List<ResourceWorkUnit> workUnits = new LinkedList<>();
         long now = System.currentTimeMillis();
@@ -225,7 +239,7 @@ public class Builder extends IncrementalProjectBuilder {
                         add = true;
                     } else if (toBeBuilt.getToBeDeleted().contains(uri)) {
                         deleted = true;
-                    } else if (toBeBuilt.getToBeUpdated().contains(uri)) {
+                    } else if (toBeBuilt.getToBeUpdated().contains(uri) || updateAnyway(involvesIvml, uri)) {
                         updated = true;
                     }
                     if (add || deleted || updated) {
@@ -242,6 +256,7 @@ public class Builder extends IncrementalProjectBuilder {
         subMonitor.setWorkRemaining(workUnits.size() / MONITOR_CHUNK_SIZE_CLEAN + 1);
         subMonitor.subTask("Validating resources");
         int doneCount = 0;
+        LOG.info(">> Start EASy-Build");        
         for (ResourceWorkUnit unit: workUnits) {
             URI uri = unit.resource.getURI();
             subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " + uri);
@@ -256,6 +271,7 @@ public class Builder extends IncrementalProjectBuilder {
                 subMonitor.worked(1);
             }
         }
+        LOG.info("<< End EASy-Build");
         subMonitor.subTask("Completed");
         subMonitor.setWorkRemaining(0);
         subMonitor.done();
@@ -378,6 +394,7 @@ public class Builder extends IncrementalProjectBuilder {
                 }
                 
                 if (ValidationUtils.ValidationMode.EASY_BUILDER == ValidationUtils.getValidationMode()) {
+                    LOG.info("Validating " + uri);                    
                     unit.utility.validate(unit.resource, r -> MessageUtils.processMessagesQuiet(file, r));
                 }
                 

@@ -15,6 +15,7 @@
  */
 package net.ssehub.easy.dslCore.ui;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -36,6 +37,8 @@ import net.ssehub.easy.dslCore.validation.ValidationUtils;
  * @author Holger Eichelberger
  */
 public class MessageUtils {
+    
+    public static final Logger LOG = Logger.getLogger(MessageUtils.class);
 
     /**
      * Processes the messages in {@code result} to be attached to the given resource {@code res}.
@@ -77,6 +80,7 @@ public class MessageUtils {
         final MarkerCreator markerCreator = new MarkerCreator();
         for (int m = 0; m < messages.getMessageCount(); m++) {
             Message message = messages.getMessage(m);
+            LOG.info("MSG: " + message.getStatus() + " " + message.getDescription());
             conv.convertValidatorDiagnostic(ValidationUtils.processMessage(message), new IAcceptor<Issue>() {
                 
                 @Override
