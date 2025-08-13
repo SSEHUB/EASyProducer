@@ -24,5 +24,6 @@ public class SomeClass {
             data += " TEST";
         }
         System.out.println(data);
+        // Comment
     }
 }

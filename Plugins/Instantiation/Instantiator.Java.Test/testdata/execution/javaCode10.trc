@@ -23,4 +23,6 @@
         -> param(JavaCodeMethod, String, String) with (JavaCodeMethod: doFurther2, String, data) = JavaCodeParameterSpecification String data
         b <- JavaCodeBlock
         -> addAll(JavaCodeMethod, JavaCodeBlockInterface) with (JavaCodeMethod: doFurther2, JavaCodeBlock) = JavaCodeMethod: doFurther2
+        b <- JavaCodeBlock
+        -> addAll(JavaCodeMethod, JavaCodeBlockInterface) with (JavaCodeMethod: doFurther2, JavaCodeBlock) = JavaCodeMethod: doFurther2
     -> vilTemplateProcessor(String, Configuration, Artifact) with (JavaCode10Tpl, <config>, JCATest10.java, {}) = {JCATest10.java}

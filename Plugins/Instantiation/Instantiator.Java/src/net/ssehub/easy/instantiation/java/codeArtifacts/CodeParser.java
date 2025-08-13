@@ -186,7 +186,25 @@ public class CodeParser {
             before.accept(visitor);
         }
     }
-    
+
+    static void visitCommentAfter(ASTNode node, Map<Integer, Comment> comments, ASTVisitor visitor) {
+        Comment after = getCommentAfter(node, comments);
+        if (null != after) {
+            after.accept(visitor);
+        }
+    }
+
+    static Comment getCommentAfter(ASTNode node, Map<Integer, Comment> comments) {
+        Comment result = null; 
+        if (null != comments) {
+            int end = node.getStartPosition() + node.getLength();
+            for (int i = 0; null == result && i <= 1; i++) { // line break
+                result = comments.get(end + i); 
+            }
+        }
+        return result;
+    }
+
     static void processAnnotations(Supplier<List<?>> supplier, Consumer<Boolean> enabledConsumer, 
         Consumer<String> commentConsumer, JavaCodeAnnotationParent elt) {
         CodeParser.apply(supplier, Annotation.class, an -> {

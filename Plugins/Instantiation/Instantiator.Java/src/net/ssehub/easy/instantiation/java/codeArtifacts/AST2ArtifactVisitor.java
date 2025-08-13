@@ -162,9 +162,22 @@ class AST2ArtifactVisitor extends ASTVisitor {
 
     AST2ArtifactVisitor(ASTNode unit, char[] source) {
         this.source = source;
+        CompilationUnit commentUnit = null;
         if (unit instanceof CompilationUnit) {
-            comments = CodeParser.mapComments((CompilationUnit) unit);
-        } else if (unit instanceof Block) {
+            commentUnit = (CompilationUnit) unit;
+        } else { // may be in one of the parents, e.g., statement parsing
+            ASTNode uIter = unit.getParent();
+            while (uIter != null) {
+                if (uIter instanceof CompilationUnit) {
+                    commentUnit = (CompilationUnit) uIter;
+                }
+                uIter = uIter.getParent();
+            }
+        }
+        if (null != commentUnit) {
+            comments = CodeParser.mapComments(commentUnit);
+        } 
+        if (unit instanceof Block) {
             blocks.push(new JavaCodeBlock(null, false, false, false, false, false));
         }
     }
@@ -367,6 +380,7 @@ class AST2ArtifactVisitor extends ASTVisitor {
 
     @Override
     public boolean visit(Block node) {
+        CodeParser.visitCommentBefore(node, comments, this);
         boolean nestedBlock = node.getParent() instanceof Block; // artifact does blocks implicitly
         if (nestedBlock) {
             JavaCodeBlock b = new JavaCodeBlock(getBlock(), false, true).indentBefore(true);
@@ -381,6 +395,7 @@ class AST2ArtifactVisitor extends ASTVisitor {
         if (nestedBlock) {
             blocks.pop();
         }
+        CodeParser.visitCommentAfter(node, comments, this);
         return false;
     }
     
