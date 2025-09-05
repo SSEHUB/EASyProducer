@@ -21,6 +21,7 @@ import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeDescriptor;
 import net.ssehub.easy.instantiation.core.model.vilTypes.TypeRegistry;
 import net.ssehub.easy.instantiation.core.model.vilTypes.IMetaOperation.CompatibilityResult;
+import net.ssehub.easy.varModel.confModel.IDecisionVariable;
 import net.ssehub.easy.varModel.model.DecisionVariableDeclaration;
 import net.ssehub.easy.varModel.model.datatypes.DerivedDatatype;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -61,13 +62,7 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
         if (null == owner) {
             result = null;
         } else if (owner instanceof CompoundValue) {
-            CompoundValue cValue = (CompoundValue) owner;
-            Value val = cValue.getNestedValue(getName());
-            if (null != val) {
-                result = val.getValue();
-            } else {
-                result = null;
-            }
+            result = from((CompoundValue) owner);
         } else {
             if (Utils.isCompatibleToDecisionVariable(owner) != CompatibilityResult.COMPATIBLE) {
                 throw new VilException("incompatible arguments", VilException.ID_TYPE_INCOMPATIBILITY);
@@ -76,8 +71,14 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
             DecisionVariable tmp = ownerVar.getByName(getName());
             if (null == tmp) {
                 result = null;
-                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
-                    + " not accessible by name (omitted frozen?)");
+                IDecisionVariable dv = ownerVar.getDecisionVariable();
+                if (dv.getValue() instanceof CompoundValue) { // nested compound, not full variable somehow
+                    result = from((CompoundValue) dv.getValue());
+                }
+                if (result == null) {
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).info("Configuration field " + getName() 
+                        + " not accessible by name (omitted frozen?)");
+                }
             } else {
                 if (getType().isCollection()) {
                     IDatatype type = tmp.getDecisionVariable().getDeclaration().getType();
@@ -94,6 +95,23 @@ public class IvmlAccessorFieldDescriptor extends AbstractIvmlFieldDescriptor {
                     }
                 }
             }
+        }
+        return result;
+    }
+
+    /**
+     * Extracts the field from the given compound value.
+     * 
+     * @param cValue the compound value
+     * @return the field value or <b>null</b> for none
+     */
+    private Object from(CompoundValue cValue) {
+        Object result;
+        Value val = cValue.getNestedValue(getName());
+        if (null != val) {
+            result = val.getValue();
+        } else {
+            result = null;
         }
         return result;
     }
