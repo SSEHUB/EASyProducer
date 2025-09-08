@@ -176,7 +176,7 @@ public class StaticAccessFinder implements IConstraintTreeVisitor {
         for (int i = 0, n = initializer.getExpressionCount(); i < n; i++) {
             String slotName = initializer.getSlot(i);
             DecisionVariableDeclaration decl = type.getElement(slotName);
-            if (!ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
+            if (null != decl && !ConstraintType.TYPE.isAssignableFrom(decl.getType())) {
                 // don't evaluate constraint variables in initializers - deferred (see EvaluationVisitor)
                 initializer.getExpression(i).accept(this);
             }

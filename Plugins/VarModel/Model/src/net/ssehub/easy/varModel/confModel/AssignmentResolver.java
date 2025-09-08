@@ -500,7 +500,7 @@ public class AssignmentResolver {
         boolean valueResolved = false;
 
         IDatatype type = decl.getType();
-        if (Compound.TYPE.isAssignableFrom(type)) {
+        if (Compound.TYPE.isAssignableFrom(type) && null != variable) {
             Compound cmpType = (Compound) type;
             CompoundVariable cmpVar = (CompoundVariable) variable;
             for (int i = 0, n = cmpType.getInheritedElementCount(); i < n; i++) {
@@ -511,7 +511,7 @@ public class AssignmentResolver {
         }
         
         ConstraintSyntaxTree defaultValue = decl.getDefaultValue();
-        if (null != defaultValue) {
+        if (null != defaultValue && null != variable) {
             if (type == ConstraintType.TYPE) {
                 try {
                     Value value = ValueFactory.createValue(type, defaultValue);
