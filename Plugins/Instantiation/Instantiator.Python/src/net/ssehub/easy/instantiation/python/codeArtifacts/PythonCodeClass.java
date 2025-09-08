@@ -87,7 +87,9 @@ public class PythonCodeClass extends PythonCodeElement {
     }
 
     public PythonCodeClass addBase(String type, PythonCodeImportScope scope) {
-        bases.add(PythonCodeTypeSpec.create(type, this, scope));
+        if (type != null && type.length() > 0) {
+            bases.add(PythonCodeTypeSpec.create(type, this, scope));
+        }
         return this;
     }
 
