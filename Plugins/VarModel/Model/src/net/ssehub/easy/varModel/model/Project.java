@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import net.ssehub.easy.basics.modelManagement.IModel;
 import net.ssehub.easy.basics.modelManagement.IRestrictionEvaluationContext;
@@ -302,6 +303,25 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     }
 
     /**
+     * Method to add an object to the modelElement list of the project, but, if already contained, before the first 
+     * freeze (assuming that freezes as usual are added to the end). Only named elements are considered for checking
+     * duplicates!
+     * 
+     * @param element
+     *            which should be added
+     * @return <code>true</code> if the addition was successful, <code>false</code> else due to duplicated names
+     */
+    public boolean addBeforeFreeze(ContainableModelElement element) {
+        return add(element, () -> {
+            int pos = modelElements.size();
+            while (pos - 1 >= 0 && modelElements.get(pos - 1) instanceof FreezeBlock) {
+                pos--;
+            }
+            return pos;
+        });
+    }
+
+    /**
      * Method to add an object to the modelElement list of the project. Only named elements are considered for checking
      * duplicates!
      * 
@@ -310,6 +330,19 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
      * @return <code>true</code> if the addition was successful, <code>false</code> else due to duplicated names
      */
     public boolean add(ContainableModelElement element) {
+        return add(element, null);
+    }
+
+    /**
+     * Method to add an object to the modelElement list of the project. Only named elements are considered for checking
+     * duplicates!
+     * 
+     * @param element element that should be added
+     * @param position optional position provider function for {@link List#add(int, Object)}, may be <b>null</b> for 
+     *     adding at end
+     * @return <code>true</code> if the addition was successful, <code>false</code> else due to duplicated names
+     */
+    private boolean add(ContainableModelElement element, Supplier<Integer> position) {
         boolean found = false;
         if (null != element) {
             if (element instanceof OperationDefinition) {
@@ -322,7 +355,11 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
                     }
                 }
                 if (!found) {
-                    modelElements.add(element);
+                    if (null == position) {
+                        modelElements.add(element);
+                    } else {
+                        modelElements.add(position.get(), element);
+                    }
                     if (element instanceof ProjectInterface) {
                         interfaceCount++;
                     }
