@@ -196,7 +196,7 @@ public class ContainerOperationCall extends ConstraintSyntaxTree {
                     }
                     // at least the first type must match, allow intermediary temp declarators
                     IDatatype iterType = declarators[0].getType();
-                    if (op.getNestingMode() != NestingMode.NONE) {
+                    if (op.getNestingMode() != NestingMode.NONE && op.getNestingMode() != NestingMode.LEGACY) {
                         while (Container.TYPE.isAssignableFrom(iteratorBase) 
                             && 1 == iteratorBase.getGenericTypeCount()) {
                             iteratorBase = iteratorBase.getGenericType(0);
