@@ -1,0 +1,22 @@
+project constraintVar3 {
+
+    version v0;
+    compound IOType {
+    }
+
+    compound Service {
+        sequenceOf(IOType) input;
+        sequenceOf(IOType) output;
+    }
+
+    compound MeshElement {
+        refTo(Service) impl;
+    }
+
+    compound SubMesh {
+        sequenceOf(refTo(MeshElement)) sources;
+        sequenceOf(IOType) input = inTypes(self);
+    }
+
+    def sequenceOf(IOType) inTypes(SubMesh mesh) = flatten(mesh.sources->collectNested(refTo(MeshElement) e|e.impl.input)->reject(sequenceOf(IOType) i|isEmpty(i)));
+}

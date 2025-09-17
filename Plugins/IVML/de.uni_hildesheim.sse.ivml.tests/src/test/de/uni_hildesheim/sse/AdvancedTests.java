@@ -667,7 +667,17 @@ public class AdvancedTests extends AbstractTest {
     public void testConstraintVariables2() throws IOException {
         assertEqual(createFile("constraintVar2"), "constraintVar2", "0");
     }
-    
+
+    /**
+     * Tests constraint variables in compounds via configuration (Regap).
+     * 
+     * @throws IOException should not occur
+     */
+    @Test
+    public void testConstraintVariables3() throws IOException {
+        assertEqual(createFile("constraintVar3"), "constraintVar3", "0");
+    }
+
     /**
      * Tests enumeration imports. This case was contributed by Jacek Serafinski (NDL).
      * 
