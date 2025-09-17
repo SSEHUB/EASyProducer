@@ -4,6 +4,7 @@ from module2 import *
 import mat.ploting
 from module import someFunc
 from module import someFunc2
+from abc import d
 
 plt.plot()
 plt.plot()

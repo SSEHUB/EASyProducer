@@ -334,4 +334,16 @@ public class PythonCodeBlock extends PythonCodeStmt {
 
         return artifact;
     }
+    
+    @Invisible(inherit = true)
+    public boolean isBlock() {
+        return true;
+    }
+
+    @Invisible
+    @Override
+    public void moveToImports(IPythonCodeImport imp) {
+        IPythonCodeElement.moveTo(elements, imp, PythonCodeImport.class);
+    }
+    
 }

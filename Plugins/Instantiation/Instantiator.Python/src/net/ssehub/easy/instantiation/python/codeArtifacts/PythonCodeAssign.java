@@ -42,6 +42,34 @@ public class PythonCodeAssign extends PythonCodeStmt {
         this.type = new PythonCodeTypeSpec(type, parent);
     }
 
+    /**
+     * Moves this assignment to the attributes at the beginning of the containing class if there is a containing class. 
+     * By default, the assignment occurs wherever it is added.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public PythonCodeAssign toAttributes() {
+        IPythonCodeElement cls = getTopClass();
+        if (null != cls) {
+            cls.moveToAttributes(this);
+        }
+        return this;
+    }
+
+    /**
+     * Moves this assignment conditionally to the attributes at the beginning of the containing class if there is a 
+     * containing class. By default, the assignment occurs wherever it is added.
+     *
+     * @param apply whether this attribute shall be moved
+     * @return <b>this</b> for chaining
+     */
+    public PythonCodeAssign toAttributes(boolean apply) {
+        if (apply) {
+            toAttributes();
+        }
+        return this;
+    }
+
     public PythonCodeFnCall addCall(String fnName) {
         return addCall(fnName, PythonCodeImportScope.NONE);
     }

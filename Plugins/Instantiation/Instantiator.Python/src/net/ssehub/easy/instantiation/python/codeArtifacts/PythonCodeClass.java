@@ -232,4 +232,10 @@ public class PythonCodeClass extends PythonCodeElement {
         return true;
     }
     
+    @Invisible
+    @Override
+    public void moveToAttributes(IPythonCodeElement element) {
+        IPythonCodeElement.moveTo(elements, element, PythonCodeAssign.class);
+    }
+
 }

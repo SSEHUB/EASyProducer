@@ -2,6 +2,7 @@
 class TestClass(BaseClass):
     var1 = 420
     var2: int = 69
+    var3 = 32
 
     def getVar1(self):
         """Returns the value of var1.

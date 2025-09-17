@@ -16,5 +16,7 @@ template testImport(Configuration config, PythonCodeArtifact target) {
 		target.addSLComment("imported from module2");
     	target.addCall("module2.someOtherFunc", PythonCodeImportScope.FUNC);
     	target.addCall("module2.someOtherFunc2", PythonCodeImportScope.FUNC);
+    	
+    	target.addImport("abc", "d").toImports();
     }
 }

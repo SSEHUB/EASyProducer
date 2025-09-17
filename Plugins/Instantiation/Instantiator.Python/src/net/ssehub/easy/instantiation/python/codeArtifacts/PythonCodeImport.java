@@ -38,6 +38,31 @@ public class PythonCodeImport implements IPythonCodeImport {
         return this.alias;
     }
 
+    /**
+     * Moves this import to the imports at the beginning of the artifact. By default, the import occurs wherever
+     * it is added.
+     * 
+     * @return <b>this</b> for chaining
+     */
+    public PythonCodeImport toImports() {
+        this.artifact.moveToImports(this);
+        return this;
+    }
+    
+    /**
+     * Moves this import conditionally to the imports at the beginning of the artifact. By default, the import occurs 
+     * wherever it is added.
+     * 
+     * @param apply whether this import shall be moved or not
+     * @return <b>this</b> for chaining
+     */
+    public PythonCodeImport toImports(boolean apply) {
+        if (apply) {
+            toImports();
+        }
+        return this;
+    }
+
     public PythonCodeImport setAlias(String alias) {
         this.alias = alias;
         return this;

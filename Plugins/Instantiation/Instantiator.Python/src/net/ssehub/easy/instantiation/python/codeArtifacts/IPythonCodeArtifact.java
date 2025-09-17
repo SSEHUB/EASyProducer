@@ -50,4 +50,14 @@ public interface IPythonCodeArtifact {
      */
     public PythonCodeFunction addFunc(String name, String comment);
 
+    
+    /**
+     * Moves the given import after the last import at the beginning of (this) artifact, or, if there are no 
+     * imports, to the front.
+     * 
+     * @param imp the import to move
+     */
+    @Invisible
+    public void moveToImports(IPythonCodeImport imp);
+    
 }

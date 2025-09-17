@@ -393,8 +393,9 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
                 if (pos > 0) {
                     impPrefix = imp.substring(0, pos);
                 }
-
-                found = impPrefix.equals(iName.substring(0, iName.length() - 1));
+                if (impPrefix.length() > 0) {
+                    found = impPrefix.equals(iName.substring(0, iName.length() - 1));
+                }
             } else {
                 found = iName.equals(imp);
             }
@@ -470,4 +471,10 @@ public class PythonCodeArtifact extends FileArtifact implements IPythonCodeArtif
             block.addElt(imp, !explicit);
         }
     }
+    
+    @Invisible
+    public void moveToImports(IPythonCodeImport imp) {
+        block.moveToImports(imp);
+    }
+    
 }

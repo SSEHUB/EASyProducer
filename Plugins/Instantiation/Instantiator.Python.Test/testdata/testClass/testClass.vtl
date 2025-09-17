@@ -18,5 +18,6 @@ template testClass(Configuration config, PythonCodeArtifact target) {
 
     	PythonCodeClass c2 = target.addClass("TestClass2", "comment for TestClass2");
     	c2.addClass("InnerClass");
+    	c1.addAttribute("var3", "32").toAttributes();
     }
 }

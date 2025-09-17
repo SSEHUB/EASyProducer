@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
 import net.ssehub.easy.instantiation.core.model.templateModel.Formatting;
@@ -22,6 +23,19 @@ public interface IPythonCodeElement extends IVilType, IStringValueProvider, Stor
         .compareTo(e2.getSortKey());
 
     public IPythonCodeArtifact getArtifact();
+
+    public default IPythonCodeElement getTopClass() {
+        IPythonCodeElement iter = getParent();
+        if (iter.isBlock()) {
+            while (iter.getParent() != null && iter.getParent().isBlock()) { // inner blocks
+                iter = iter.getParent();
+            }
+        }
+        while (iter.getParent() != null && iter.getParent().isClass()) { // inner classes
+            iter = iter.getParent();
+        }
+        return iter;
+    }
 
     public IPythonCodeElement getParent();
 
@@ -62,7 +76,17 @@ public interface IPythonCodeElement extends IVilType, IStringValueProvider, Stor
     public default boolean isClass() {
         return false;
     }
-    
+
+    /**
+     * Returns whether this element is a block element.
+     * 
+     * @return {@code true} for block, {@code false} else
+     */
+    @Invisible(inherit = true)
+    public default boolean isBlock() {
+        return false;
+    }
+
     /**
      * Returns whether this element is an empty line.
      * 
@@ -171,4 +195,61 @@ public interface IPythonCodeElement extends IVilType, IStringValueProvider, Stor
             Collections.sort(list, comparator);
         }
     }
+
+    /**
+     * Moves {@code elt} after the last instance of {@code cls}. If there is no such instance, move {@code elt} 
+     * to the front. 
+     * 
+     * @param elts the elements to manipulate
+     * @param elt the element to move/insert
+     * @param cls the class to look for
+     */
+    static void moveTo(List<IPythonCodeElement> elts, IPythonCodeElement elt, Class<?> cls) { 
+        moveTo(elts, elt, e -> cls.isInstance(e));
+    }
+
+    /**
+     * Moves {@code elt} after the last acceptance of {@code cond}. If there is no such acceptance, move {@code elt} 
+     * to the front. 
+     * 
+     * @param elts the elements to manipulate
+     * @param elt the element to move/insert
+     * @param cond the condition
+     */
+    static void moveTo(List<IPythonCodeElement> elts, IPythonCodeElement elt, Predicate<IPythonCodeElement> cond) {
+        elts.remove(elt);
+        int pos = 0;
+        int first = 0;
+        while (first < elts.size() && !cond.test(elts.get(first))) {
+            first++;
+        }
+        if (first < elts.size()) {
+            pos = first;
+            while (pos < elts.size() && cond.test(elts.get(pos))) {
+                pos++;
+            }
+        }
+        elts.add(pos, elt);
+    }
+    
+    /**
+     * Moves the given code element after the last attribute at the beginning of (this) class, or, if there are no 
+     * attributes, to the front.
+     * 
+     * @param element the element to move
+     */
+    @Invisible
+    public default void moveToAttributes(IPythonCodeElement element) {
+    }
+ 
+    /**
+     * Moves the given import after the last import at the beginning of (this) artifact, or, if there are no 
+     * imports, to the front.
+     * 
+     * @param imp the import to move
+     */
+    @Invisible
+    public default void moveToImports(IPythonCodeImport imp) {
+    }
+    
 }
