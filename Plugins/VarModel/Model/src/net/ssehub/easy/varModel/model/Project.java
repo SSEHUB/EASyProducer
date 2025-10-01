@@ -374,6 +374,38 @@ public class Project extends ModelElement implements IModel, IAttributableElemen
     }
 
     /**
+     * Renames an element. Use {@code renameVariable} in configuration if a configuration is defined on this project.
+     * 
+     * @param elt the element to be renamed
+     * @param newName the new name
+     * @return {@code true} if the element was found and renamed, {@code false} else
+     */
+    public boolean renameElement(ContainableModelElement elt, String newName) {
+        return renameElement(elt.getName(), newName);
+    }
+
+    /**
+     * Renames an element. Use {@code renameVariable} in configuration if a configuration is defined on this project.
+     * 
+     * @param oldName the old name
+     * @param newName the new name
+     * @return {@code true} if the element was found and renamed, {@code false} else
+     */
+    public boolean renameElement(String oldName, String newName) {
+        boolean done = false;
+        ContainableModelElement elt = getElement(oldName);
+        if (null != elt && !newName.equals(oldName)) {
+            names.remove(elt.getName());
+            names.remove(elt.getQualifiedName());
+            elt.setName(newName);
+            names.put(elt.getName(), elt);
+            names.put(elt.getQualifiedName(), elt);
+            done = true;
+        }
+        return done;
+    }
+
+    /**
      * Method to add an operation definition to the modelElement list of the project.
      * 
      * @param definition

@@ -84,7 +84,7 @@ public abstract class ModelElement implements IModelElement {
      * Changes the name of this model element.
      * @param name the new name
      */
-    public void setName(String name) {
+    protected void setName(String name) {
         this.name = name;
     }
 

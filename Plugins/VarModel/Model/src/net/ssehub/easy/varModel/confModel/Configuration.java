@@ -42,6 +42,7 @@ import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.IFreezable;
 import net.ssehub.easy.varModel.model.IModelElement;
 import net.ssehub.easy.varModel.model.IProjectListener;
+import net.ssehub.easy.varModel.model.IvmlModelQuery;
 import net.ssehub.easy.varModel.model.ModelQuery;
 import net.ssehub.easy.varModel.model.ModelQueryException;
 import net.ssehub.easy.varModel.model.Project;
@@ -505,6 +506,59 @@ public class Configuration implements IConfigurationVisitable, IProjectListener,
             result = ((ICollectionElementVariable) declaration).resolve(this);
         }
         return result;
+    }
+    
+    /**
+     * Renames a variable. Works based on {@code declaration} or its name so that already renamed variables are 
+     * considered.
+     * 
+     * @param declaration the variable defining the the old name
+     * @param newName the new name
+     * @return {@code true} if the element was found and renamed, {@code false} else
+     * @see Project#renameElement(ContainableModelElement, String)
+     */
+    public boolean renameVariable(AbstractVariable declaration, String newName) {
+        boolean done = false;
+        IDecisionVariable result = decisions.get(declaration);
+        AbstractVariable var = null;
+        if (null == result) { // does not exist or already renamed
+            String decQName = declaration.getQualifiedName();
+            for (AbstractVariable v : decisions.keySet()) {
+                if (v.getQualifiedName().equals(decQName)) {
+                    var = v;
+                    break;
+                }
+            }
+        } else {
+            var = declaration;
+        }
+        if (var != null) { // rehash
+            IDecisionVariable dec = decisions.remove(var);
+            var.getProject().renameElement(var, newName);
+            decisions.put(var, dec);
+            done = true;
+        }
+        return done;
+    }
+
+    /**
+     * Renames a variable. Works based on {@code declaration} or its name so that already renamed variables are 
+     * considered.
+     * 
+     * @param oldName the old name
+     * @param newName the new name
+     * @return {@code true} if the element was found and renamed, {@code false} else
+     */
+    public boolean renameVariable(String oldName, String newName) {
+        boolean done = false;
+        try {
+            AbstractVariable var = IvmlModelQuery.findVariable(project, oldName, null);
+            if (null != var) {
+                done = renameVariable(var, newName);
+            }
+        } catch (ModelQueryException e) {
+        }
+        return done;
     }
     
     /**
