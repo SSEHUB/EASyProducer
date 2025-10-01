@@ -156,26 +156,36 @@ import net.ssehub.easy.varModel.model.values.VersionValue;
 public class IVMLWriter extends AbstractVarModelWriter {
 
     private static final List<IVMLWriter> POOL = new ArrayList<IVMLWriter>(); 
-
     private Stack<Value> nestedValues = new Stack<Value>();
-
     private Stack<ConstraintSyntaxTree> nestedExpressions = new Stack<ConstraintSyntaxTree>();
-    
     private Stack<OCLFeatureCall> callStack = new Stack<OCLFeatureCall>();
-
     private boolean emitComments = true;
-    
     private Stack<Comment> lastComment = new Stack<Comment>();
-    
     private java.util.Set<Attribute> handled = new HashSet<Attribute>();
-    
     private VariableUsage variableUsage = new VariableUsage();
-    
     private boolean formatInitializer = false;
-    
     private boolean forceCompoundTypes = false;
-    
     private DecisionVariableDeclaration inDecl;
+    private EmitFilter emitFilter = (var, val) -> true;
+    private boolean emitProjectFreezeDot = false;
+    
+    /**
+     * Controls emitting variables and their values.
+     * 
+     * @author Holger Eichelberger
+     */
+    public interface EmitFilter {
+        
+        /**
+         * Returns whether the given variable with the given value shall be emitted.
+         * 
+         * @param var the variable
+         * @param val the value of the variable
+         * @return {@code true} for emit, {@code false} else
+         */
+        public boolean test(AbstractVariable var, Value val);
+        
+    }
     
     /**
      * Class for writing <code>ivml</code> output appropriate for the EASy-Producer tool.
@@ -195,6 +205,26 @@ public class IVMLWriter extends AbstractVarModelWriter {
     protected IVMLWriter(Writer writer, boolean emitComments) {
         this(writer);
         this.emitComments = emitComments;
+    }
+    
+    /**
+     * Enables/disables whether a project freeze on itself shall be emitted with a ".".
+     * 
+     * @param emitProjectFreezeDot {@code true} for enable, {@code false} else
+     */
+    public void setEmitProjectFreezeDot(boolean emitProjectFreezeDot) {
+        this.emitProjectFreezeDot = emitProjectFreezeDot;
+    }
+    
+    /**
+     * Defines an filter controlling emitting of individual variables/slots.
+     * 
+     * @param emitFilter the emit filter
+     */
+    public void setEmitFilter(EmitFilter emitFilter) {
+        if (null != emitFilter) {
+            this.emitFilter = emitFilter;
+        }
     }
 
     /**
@@ -583,7 +613,8 @@ public class IVMLWriter extends AbstractVarModelWriter {
         int printed, java.util.Set<String> done) {
         for (int e = 0; e < cont.getElementCount(); e++) {
             // be careful with null values -> writing partial configurations
-            String name = cont.getElement(e).getName();
+            DecisionVariableDeclaration elt = cont.getElement(e); 
+            String name = elt.getName();
             boolean emit;
             if (null == done) {
                 emit = true;
@@ -593,7 +624,7 @@ public class IVMLWriter extends AbstractVarModelWriter {
                     done.add(name);
                 }
             }
-            if (emit) {
+            if (emit && emitFilter.test(elt, value.getNestedValue(name))) {
                 Value nestedValue = value.getNestedValue(name);
                 boolean isAbstract = (null != nestedValue) && nestedValue.getType() instanceof Compound
                     && ((Compound) nestedValue.getType()).isAbstract();
@@ -804,7 +835,11 @@ public class IVMLWriter extends AbstractVarModelWriter {
                     appendOutput(freezable.getParent().getName());
                     appendOutput(COMPOUND_ACCESS);
                 }
-                appendOutput(freezable.getName());
+                if (emitProjectFreezeDot && freezable == freeze.getProject()) {
+                    appendOutput(".");
+                } else {
+                    appendOutput(freezable.getName());
+                }
             }
             appendOutput(SEMICOLON);
             appendOutput(LINEFEED);
