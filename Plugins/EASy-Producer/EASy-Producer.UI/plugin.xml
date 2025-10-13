@@ -124,7 +124,7 @@
                   style="push">
             </command>
             <separator
-                  name="EASy-Producer.UI.separator1">
+                  name="EASy-Producer.UI.separator1" visible="true">
             </separator>
             <command
                   commandId="EASy-Producer.UI.pullConfiguration"
@@ -145,12 +145,27 @@
                   style="push">
             </command>
             <separator
-                  name="EASy-Producer.UI.separator2">
+                  name="EASy-Producer.UI.separator2" visible="true">
             </separator>
             <command
                   commandId="EASy-Producer.UI.instantiateSelf"
                   icon="IMG_OBJ_ELEMENT"
                   label="instantiate self"
+                  style="push">
+            </command>
+            <separator
+                  name="EASy-Producer.UI.separator3" visible="true">
+            </separator>
+            <command
+                  commandId="EASy-Producer.UI.refreshModel"
+                  icon="IMG_TOOL_REDO"
+                  label="refresh model"
+                  style="push">
+            </command>
+            <command
+                  commandId="EASy-Producer.UI.reloadModel"
+                  icon="IMG_ELCL_SYNCED"
+                  label="reload model"
                   style="push">
             </command>
          </menu>
@@ -282,6 +297,16 @@ Germany">
             defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.InstantiateSelfHandler"
             id="EASy-Producer.UI.instantiateSelf"
             name="instantiate self">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.RefreshModelHandler"
+            id="EASy-Producer.UI.refreshModel"
+            name="refresh model">
+      </command>
+      <command
+            defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.ReloadModelHandler"
+            id="EASy-Producer.UI.reloadModel"
+            name="reload model">
       </command>
       <command
             defaultHandler="net.ssehub.easy.producer.ui.productline_editor.commands.InstantiateHandler"

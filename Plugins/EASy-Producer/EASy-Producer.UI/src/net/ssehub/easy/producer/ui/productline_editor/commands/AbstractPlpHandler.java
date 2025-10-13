@@ -108,6 +108,25 @@ public abstract class AbstractPlpHandler extends AbstractHandler {
     }
     
     /**
+     * Returns the EASy config file of the current active workbench window selection.
+     * 
+     * @return the selection being <b>null</b> if there is no selection or no EASy project
+     */
+    protected static IFile getEasyConfigFile() {
+        IFile configfile = null;
+        ISelectionService selectionService = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        ISelection selection = selectionService.getSelection();
+        if (selection instanceof IStructuredSelection) {    
+            Object firstElement = ((IStructuredSelection) selection).getFirstElement();   
+            if (firstElement instanceof IAdaptable) {
+                IProject selectedProject = (IProject) ((IAdaptable) firstElement).getAdapter(IProject.class);
+                configfile = EASyUtils.findEasyConfig(selectedProject);
+            }
+        }
+        return configfile;
+    }    
+    
+    /**
      * Shows a warning dialog if there is no selectedPLP and {@code shellSupplier} is given.
      * 
      * @param selected the selected PLP with PLP/project information, may be <b>null</b> or contained PLP may be 
@@ -138,7 +157,16 @@ public abstract class AbstractPlpHandler extends AbstractHandler {
     
     @Override
     public boolean isEnabled() {
-        return isPLP(getPLPInfo()) && super.isEnabled();
+        return isPLP(getPLPInfo()) && isAbstractHandlerEnabled();
+    }
+    
+    /**
+     * Returns whether the parent {@link AbstractHandler} would be enabled.
+     * 
+     * @return {@code true} for enabled, {@code false} else
+     */
+    protected boolean isAbstractHandlerEnabled() {
+        return super.isEnabled();
     }
 
     /**
