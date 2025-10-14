@@ -1,6 +1,9 @@
 package net.ssehub.easy.reasoning.core.reasoner;
 
+import java.util.function.Predicate;
+
 import net.ssehub.easy.reasoning.core.frontend.ReasonerFrontend;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Describes the configuration to be passed via the {@link ReasonerFrontend} to the individual
@@ -43,6 +46,8 @@ public class ReasonerConfiguration {
     private boolean customMessages;
     private boolean incremental;
     private IAdditionalInformationLogger logger = ADDITIONAL_INFO_LOG_SYSOUT; // the legacy behavior
+    private Predicate<Project> projectFilter = p -> true;
+    // see copy constructor
 
     /**
      * Describes an information logger.
@@ -88,7 +93,22 @@ public class ReasonerConfiguration {
         this.timeout = ReasonerFrontend.getInstance().getTimeout();
         this.customMessages = defParamValue;
     }
-    
+
+    /**
+     * Copies a reasoner configuration into a new instance.
+     * 
+     * @param from the configuration to copy from
+     */
+    public ReasonerConfiguration(ReasonerConfiguration from) {
+        this.attributeValues = from.attributeValues;
+        this.timeout = from.timeout;
+        this.defaultReasoner = from.defaultReasoner;
+        this.customMessages = from.customMessages;
+        this.incremental = from.incremental;
+        this.logger = from.logger;
+        this.projectFilter = from.projectFilter;
+    }
+
     /**
      * Changes the timeout for reasoning.
      * 
@@ -278,6 +298,27 @@ public class ReasonerConfiguration {
      */
     public boolean isIncrementalMode() {
         return incremental;
+    }
+    
+    /**
+     * Determines projects that shall be considered while reasoning. While this may decrease reasoning 
+     * speed it may also (if used without care) affect result precision.
+     * 
+     * @param projectFilter the project filter, ignored if <b>null</b>
+     */
+    public void setProjectFilter(Predicate<Project> projectFilter) {
+        if (null != projectFilter) {
+            this.projectFilter = projectFilter;
+        }
+    }
+
+    /**
+     * Returns the project filter.
+     * 
+     * @return the project folter
+     */
+    public Predicate<Project> getProjectFilter() {
+        return projectFilter;
     }
 
 }
