@@ -3,6 +3,7 @@ package net.ssehub.easy.reasoning.sseReasoner.functions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,12 @@ public class FailedElements {
     private Map<Constraint, FailedElementDetails> problemConstraints;
     
     /**
+     * Assigns constraints to their messages so that messages can be cleared if a constraint succeeds after 
+     * initially failing.
+     */
+    private Map<Constraint, List<EvaluationVisitor.Message>> problemMessages;
+    
+    /**
      * Map of failed {@link AbstractVariable}s and {@link FailedElementDetails}s behind it.
      */
     private Map<AbstractVariable, FailedElementDetails> problemVariables;
@@ -40,8 +47,9 @@ public class FailedElements {
      * This constructor is only package visible, as it should only be used inside of the {@link FailedElements} class.
      */
     public FailedElements() {
-        problemConstraints = new HashMap<Constraint, FailedElementDetails>();
-        problemVariables = new HashMap<AbstractVariable, FailedElementDetails>();
+        problemConstraints = new HashMap<>();
+        problemVariables = new HashMap<>();
+        problemMessages = new HashMap<>();
         messages = new ArrayList<EvaluationVisitor.Message>();
     }
     
@@ -61,10 +69,26 @@ public class FailedElements {
      */
     public void removeProblemConstraint(Constraint constraint) {
         problemConstraints.remove(constraint);
+        List<EvaluationVisitor.Message> msg = problemMessages.get(constraint);
+        if (null != msg) {
+            messages.removeAll(msg);
+        }
     }
-    
-    public void addMessage(EvaluationVisitor.Message message) {
+
+    /**
+     * Adds a message for a constraint.
+     * 
+     * @param constraint the constraint causing the message
+     * @param message the message.
+     */
+    public void addMessage(Constraint constraint, EvaluationVisitor.Message message) {
         messages.add(message);
+        List<EvaluationVisitor.Message> msg = problemMessages.get(constraint);
+        if (null == msg) {
+            msg = new LinkedList<>();
+            problemMessages.put(constraint, msg);
+        }
+        msg.add(message);
     }
 
     /**
@@ -170,6 +194,7 @@ public class FailedElements {
     public void clear() {
         problemConstraints.clear();
         problemVariables.clear();
+        problemMessages.clear();
         messages.clear();
     }
    

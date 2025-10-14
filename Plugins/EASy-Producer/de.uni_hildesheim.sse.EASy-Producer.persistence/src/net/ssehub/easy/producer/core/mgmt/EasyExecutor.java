@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -346,13 +347,28 @@ public class EasyExecutor {
 
     /**
      * Sets the reasoner configuration instance. This is initially set to an instance created by 
-     * {@link ReasonerConfiguration#ReasonerConfiguration()}. 
+     * {@link ReasonerConfiguration#ReasonerConfiguration()} and 
+     * {@link ReasonerConfiguration#ReasonerConfiguration(ReasonerConfiguration)}. 
      *  
-     * @param rCfg the configuration instance
+     * @param rCfg the configuration instance (ignored if <b>null</b>)
      * @return <b>this</b> (builder style)
      */
     public EasyExecutor setReasonerConfiguration(ReasonerConfiguration rCfg) {
-        this.rCfg = rCfg;
+        if (null != rCfg) {
+            this.rCfg = rCfg;
+        }
+        return this;
+    }
+    
+    /**
+     * Determines projects that shall be considered while reasoning. While this may decrease reasoning 
+     * speed it may also (if used without care) affect result precision.
+     * 
+     * @param projectFilter the project filter, ignored if <b>null</b>
+     * @return <b>this</b> (builder style)
+     */
+    public EasyExecutor setReasoningProjectFilter(Predicate<Project> projectFilter) {
+        this.rCfg.setProjectFilter(projectFilter);
         return this;
     }
 

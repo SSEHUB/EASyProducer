@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
@@ -343,6 +344,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         evaluator.setScopeAssignments(scopeAssignments);
         endTimestamp = reasonerConfig.getTimeout() <= 0 
             ? -1 : System.currentTimeMillis() + reasonerConfig.getTimeout();
+        Predicate<Project> projectFilter = reasonerConfig.getProjectFilter();
         if (null == copiedState) {
             if (reuseInstance) {
                 copiedState = new ReasonerState();
@@ -350,12 +352,14 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             projects = Utils.discoverImports(config.getProject());
             for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
-                if (Descriptor.LOGGING) {
-                    LOGGER.debug("Project:" + project.getName());                
+                if (projectFilter.test(project)) {
+                    if (Descriptor.LOGGING) {
+                        LOGGER.debug("Project:" + project.getName());                
+                    }
+                    long start = System.currentTimeMillis();
+                    translateConstraints(project);
+                    evaluateConstraintBase(start, project);
                 }
-                long start = System.currentTimeMillis();
-                translateConstraints(project);
-                evaluateConstraintBase(start, project);
             }
         } else {
             variablesMap.clear();
@@ -363,9 +367,11 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             // size corresponds to #projects
             for (int p = 0; !hasTimeout && !wasStopped && p < copiedState.constraintBase.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
-                long start = System.currentTimeMillis();
-                constraintBase.addAll(copiedState.constraintBase.get(p));
-                evaluateConstraintBase(start, project);
+                if (projectFilter.test(project)) {
+                    long start = System.currentTimeMillis();
+                    constraintBase.addAll(copiedState.constraintBase.get(p));
+                    evaluateConstraintBase(start, project);
+                }
             }
         }
         evaluator.clear();
@@ -1585,7 +1591,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                     }
                 }
             } else {
-                failedElements.addMessage(msg);
+                failedElements.addMessage(constraint, msg);
             }
         }
         if (evaluator.constraintFulfilled() && Constraint.Type.DEFAULT == constraint.getType()) {
