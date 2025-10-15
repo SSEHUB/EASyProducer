@@ -350,16 +350,15 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
                 copiedState = new ReasonerState();
             }
             projects = Utils.discoverImports(config.getProject());
+            projects.removeIf(projectFilter.negate()); // filter says what shall stay
             for (int p = 0; !hasTimeout && !wasStopped && p < projects.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
-                if (projectFilter.test(project)) {
-                    if (Descriptor.LOGGING) {
-                        LOGGER.debug("Project:" + project.getName());                
-                    }
-                    long start = System.currentTimeMillis();
-                    translateConstraints(project);
-                    evaluateConstraintBase(start, project);
+                if (Descriptor.LOGGING) {
+                    LOGGER.debug("Project:" + project.getName());                
                 }
+                long start = System.currentTimeMillis();
+                translateConstraints(project);
+                evaluateConstraintBase(start, project);
             }
         } else {
             variablesMap.clear();
@@ -367,11 +366,9 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             // size corresponds to #projects
             for (int p = 0; !hasTimeout && !wasStopped && p < copiedState.constraintBase.size(); p++) {
                 project = projects.get(p); // set global for deeper nested methods
-                if (projectFilter.test(project)) {
-                    long start = System.currentTimeMillis();
-                    constraintBase.addAll(copiedState.constraintBase.get(p));
-                    evaluateConstraintBase(start, project);
-                }
+                long start = System.currentTimeMillis();
+                constraintBase.addAll(copiedState.constraintBase.get(p));
+                evaluateConstraintBase(start, project);
             }
         }
         evaluator.clear();
