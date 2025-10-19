@@ -1706,6 +1706,35 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
     public void visitUnresolvedExpression(UnresolvedExpression expression) {
         clearResult();
     }
+    
+    private static class CompoundSlotInit {
+        private String slotName;
+        private ConstraintSyntaxTree expr;
+        private String message;
+        
+        private void setCannotEvaluateMessage(Compound type) {
+            message = "cannot evaluate expression for compound slot '" + slotName 
+                + "' in type '" + type.getName() + "': " + StringProvider.toIvmlString(expr);
+            
+        }
+    }
+    
+    private List<CompoundSlotInit> createInits(CompoundInitializer initializer) {
+        List<CompoundSlotInit> slotInits = new ArrayList<>(initializer.getSlotCount());
+        for (int s = 0; s < initializer.getSlotCount(); s++) {
+            CompoundSlotInit init = new CompoundSlotInit();
+            init.slotName = initializer.getSlot(s);
+            init.expr = initializer.getExpression(s);
+            slotInits.add(init);
+        }
+        return slotInits;
+    }
+    
+    private CompoundSlotInit pull(List<CompoundSlotInit> slotInits) {
+        CompoundSlotInit slotInit = slotInits.remove(0);
+        slotInit.message = null;
+        return slotInit;
+    }
 
     @Override
     public void visitCompoundInitializer(CompoundInitializer initializer) {
@@ -1714,55 +1743,66 @@ public class EvaluationVisitor implements IConstraintTreeVisitor, IConstraintEva
         int pos = 0;
         values[pos++] = CompoundValue.SPECIAL_SLOT_NAME_TYPE;
         values[pos++] = type;
-        boolean ok = true;
         contextStack.push();
-        for (int s = 0; ok && s < initializer.getSlotCount(); s++) {
-            String slotName = initializer.getSlot(s);
-            contextStack.setCompoundSlot(slotName);
-            values[pos++] = slotName;
-            DecisionVariableDeclaration decl = type.getElement(slotName);
-            if (ConstraintType.isConstraint(decl.getType())) {
-                try {
-                    // do not evaluate a constraint value here - this is just a value as it is / deferred
-                    // see StaticAccessFinder
-                    values[pos++] = ValueFactory.createValue(ConstraintType.TYPE, initializer.getExpression(s));
-                } catch (ValueDoesNotMatchTypeException e) {
-                    exception(e);
-                }
-            } else if (initializer.getExpression(s) instanceof DeferInitExpression) {
-                // e.g., operation used as initializer, may come from decomposed/recomposed compound/container values
-                values[pos++] = ((DeferInitExpression) initializer.getExpression(s)).getExpression();
-            } else {
-                initializer.getExpression(s).accept(this);
-                if (null == result) {
-                    error("cannot evaluate expression for compound slot '" + slotName + "' in type '" 
-                        + type.getName() + "': " + StringProvider.toIvmlString(initializer.getExpression(s)), 
-                        Message.CODE_RESOLUTION);
-                    ok = false;
-                } else {
-                    if (TypeQueries.isReference(decl.getType())) {
-                        values[pos++] = result.getReferenceValue();
-                    } else {
-                        Value val = result.getValue();
-                        // avoid implicit reference semantics of assigning complex variables
-                        if (null != val && modelCopy && !result.isConstant()) {
-                            val = val.clone();
-                        }
-                        values[pos++] = val;
-                        
+        List<CompoundSlotInit> slotInits = createInits(initializer);
+        List<CompoundSlotInit> reEval = new ArrayList<>();
+        int lastSlotInitsSize;
+        do {
+            lastSlotInitsSize = slotInits.size();
+            while (slotInits.size() > 0) {
+                CompoundSlotInit slotInit = pull(slotInits);
+                contextStack.setCompoundSlot(slotInit.slotName);
+                Object slotValue = null;
+                DecisionVariableDeclaration decl = type.getElement(slotInit.slotName);
+                if (ConstraintType.isConstraint(decl.getType())) {
+                    try {
+                        // do not evaluate a constraint value here - this is just a value as it is / deferred
+                        // see StaticAccessFinder
+                        slotValue = ValueFactory.createValue(ConstraintType.TYPE, slotInit.expr);
+                    } catch (ValueDoesNotMatchTypeException e) {
+                        exception(e); // slotValue == null
                     }
+                } else if (slotInit.expr instanceof DeferInitExpression) {
+                    // e.g., operation used as initializer, may come from decomposed/recomposed compound/container vals
+                    slotValue = ((DeferInitExpression) slotInit.expr).getExpression();
+                } else {
+                    slotInit.expr.accept(this);
+                    if (null == result) {
+                        slotInit.setCannotEvaluateMessage(type);
+                    } else {
+                        if (TypeQueries.isReference(decl.getType())) {
+                            slotValue = result.getReferenceValue();
+                        } else {
+                            Value val = result.getValue();
+                            // avoid implicit reference semantics of assigning complex variables
+                            if (null != val && modelCopy && !result.isConstant()) {
+                                val = val.clone();
+                            }
+                            slotValue = val;
+                        }
+                    }
+                    clearResult();
                 }
-                clearResult();
+                if (slotInit.message == null) {
+                    values[pos++] = slotInit.slotName;
+                    values[pos++] = slotValue;
+                } else {
+                    reEval.add(slotInit);
+                }
             }
-        }
+            slotInits.addAll(reEval);
+            reEval.clear();
+        } while (slotInits.size() > 0 && lastSlotInitsSize > slotInits.size()); // still work but decreasing/not looping
         contextStack.pop();
-        if (ok) {
+        if (slotInits.size() == 0) {
             try {
                 Value value = ValueFactory.createValue(initializer.getType(), values);
                 result = ConstantAccessor.POOL.getInstance().bind(value, false, context);
             } catch (ValueDoesNotMatchTypeException e) {
                 exception(e);
             }
+        } else {
+            slotInits.forEach(i -> error(i.message, Message.CODE_RESOLUTION));
         }
         recordIfFailed(initializer);
     }

@@ -27,6 +27,7 @@ import net.ssehub.easy.varModel.model.datatypes.IDatatypeVisitor;
 public abstract class ContainableModelElement extends ModelElement implements IDatatypeVisitable {
 
     private IModelElement parent;
+    private transient String namespace;
     
     /**
      * Constructor for containable model element.
@@ -83,26 +84,31 @@ public abstract class ContainableModelElement extends ModelElement implements ID
     
     @Override
     public String getNameSpace() {
-        String namespace;
-        if (null == parent) {
-            namespace = "";
-        } else {
-            IModelElement p = parent;
-            while (null != p && p.isTransparent()) {
-                p = p.getParent();
-            }
-            if (null == p) {
-                namespace = "";
+        String result;
+        if (null == namespace) {
+            if (null == parent) {
+                result = "";
             } else {
-                if (p instanceof DecisionVariableDeclaration) {
-                    // actually a special case for container
-                    namespace = p.getNameSpace();
+                IModelElement p = parent;
+                while (null != p && p.isTransparent()) {
+                    p = p.getParent();
+                }
+                if (null == p) {
+                    result = "";
                 } else {
-                    namespace = p.getQualifiedName();
+                    if (p instanceof DecisionVariableDeclaration) {
+                        // actually a special case for container
+                        result = p.getNameSpace();
+                    } else {
+                        result = p.getQualifiedName();
+                    }
                 }
             }
-        }
-        return namespace;
+            namespace = result;
+        } else {
+            result = namespace;
+        }        
+        return result;
     }
     
     @Override
