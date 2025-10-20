@@ -15,7 +15,6 @@
  */
 package net.ssehub.easy.dslCore.ui;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -25,6 +24,7 @@ import org.eclipse.xtext.validation.DiagnosticConverterImpl;
 import org.eclipse.xtext.validation.Issue;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.dslCore.BundleId;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
@@ -38,7 +38,7 @@ import net.ssehub.easy.dslCore.validation.ValidationUtils;
  */
 public class MessageUtils {
     
-    public static final Logger LOG = Logger.getLogger(MessageUtils.class);
+    public static final EASyLogger LOG = EASyLoggerFactory.INSTANCE.getLogger(MessageUtils.class, BundleId.ID);
 
     /**
      * Processes the messages in {@code result} to be attached to the given resource {@code res}.

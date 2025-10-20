@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -55,6 +54,7 @@ import org.eclipse.xtext.validation.CheckMode;
 import com.google.inject.Inject;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.BundleId;
 import net.ssehub.easy.dslCore.ModelUtility;
@@ -79,7 +79,7 @@ import static net.ssehub.easy.dslCore.validation.ValidationUtils.isInPath;
 @SuppressWarnings("restriction")
 public class Builder extends IncrementalProjectBuilder {
 
-    public static final Logger LOG = Logger.getLogger(Builder.class);
+    public static final EASyLogger LOG = EASyLoggerFactory.INSTANCE.getLogger(Builder.class, BundleId.ID);
     public static final String BUILDER_ID = "de.uni_hildesheim.sse.EASy-Producer.Builderr";
     private static final int MONITOR_CHUNK_SIZE_CLEAN = 50;
     /** Duplicate of ExternalFoldersManager.EXTERNAL_PROJECT_NAME for avoiding any dependency on that (internal) API. */
@@ -290,7 +290,8 @@ public class Builder extends IncrementalProjectBuilder {
 
     public class TaskMarkerContributor implements IMarkerContributor {
 
-        private static final Logger LOG = Logger.getLogger(TaskMarkerContributor.class);
+        public static final EASyLogger LOG = EASyLoggerFactory.INSTANCE.getLogger(TaskMarkerContributor.class, 
+            BundleId.ID);
 
         @Inject
         private TaskMarkerCreator markerCreator;
@@ -317,7 +318,7 @@ public class Builder extends IncrementalProjectBuilder {
                 deleteMarkers(file, monitor);
                 createTaskMarkers(file, tasks, monitor);
             } catch (CoreException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error(e.getMessage());
             }
         }
 
@@ -332,7 +333,7 @@ public class Builder extends IncrementalProjectBuilder {
             try {
                 file.deleteMarkers(TaskMarkerTypeProvider.XTEXT_TASK_TYPE, true, IResource.DEPTH_ZERO);
             } catch (CoreException e) {
-                LOG.error(e.getMessage(), e);
+                LOG.error(e.getMessage());
             }
         }
     }
@@ -412,7 +413,7 @@ public class Builder extends IncrementalProjectBuilder {
         try {
             file.deleteMarkers(null, true, IResource.DEPTH_INFINITE);
         } catch (CoreException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage());
         }
     }
 
@@ -425,7 +426,7 @@ public class Builder extends IncrementalProjectBuilder {
         try {
             file.deleteMarkers(IMarkerContributor.MARKER_TYPE, true, IResource.DEPTH_ZERO);
         } catch (CoreException e) {
-            LOG.error(e.getMessage(), e);
+            LOG.error(e.getMessage());
         }
     }
 
