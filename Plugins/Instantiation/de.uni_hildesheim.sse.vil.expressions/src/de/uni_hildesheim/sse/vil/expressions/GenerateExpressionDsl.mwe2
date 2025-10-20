@@ -14,7 +14,7 @@ var runtimeProject = "${projectName}"
 
 Workflow {
     bean = StandaloneSetup {
-            scanClassPath = true
+            scanClassPath = false // get rid of scangraph
             platformUri = "${runtimeProject}/.."
             // The following two lines can be removed, if Xbase is not used.
             //registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"

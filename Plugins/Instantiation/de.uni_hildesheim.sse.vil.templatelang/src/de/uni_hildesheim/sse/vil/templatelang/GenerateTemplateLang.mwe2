@@ -14,8 +14,8 @@ var runtimeProject = "${projectName}"
 
 Workflow {
     bean = StandaloneSetup {
-            scanClassPath = true
-            platformUri = "${runtimeProject}/.."
+            scanClassPath = false // get rid of scangraph
+            platformUri = ".."
             registerGeneratedEPackage = "de.uni_hildesheim.sse.vil.expressions.expressionDsl.ExpressionDslPackage"
             registerGenModelFile = "platform:/resource/de.uni_hildesheim.sse.vil.expressions/model/generated/ExpressionDsl.genmodel"
         }

@@ -245,7 +245,6 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
 
     @Override
     public ModelInfo<Template> getInfo(java.net.URI uri) {
-System.out.println(TemplateModel.INSTANCE.availableModels());        
         return TemplateModel.INSTANCE.availableModels().getInfo(uri);
     }
 

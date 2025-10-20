@@ -54,6 +54,12 @@
      <dependency>
          <groupId>org.eclipse.xtext</groupId>
          <artifactId>org.eclipse.xtext</artifactId>
+         <exclusions>
+             <exclusion>
+                <groupId>org.eclipse.xtend</groupId>
+                <artifactId>org.eclipse.xtend.lib</artifactId>
+             </exclusion>
+         </exclusions>
      </dependency>
      <dependency>
          <groupId>org.eclipse.emf</groupId>
@@ -88,10 +94,6 @@
         <artifactId>guava</artifactId>
      </dependency>
      <dependency>
-        <groupId>org.eclipse.xtext</groupId>
-        <artifactId>org.eclipse.xtext.xbase.lib</artifactId>
-     </dependency>
-     <dependency>
         <groupId>org.ow2.asm</groupId>
         <artifactId>asm</artifactId>
      </dependency>
@@ -105,10 +107,6 @@
         <artifactId>net.ssehub.easy.varModel</artifactId>
         <version>${project.version}</version>
      </dependency> 
-     <dependency>
-         <groupId>org.eclipse.xtext</groupId>
-         <artifactId>org.eclipse.xtext.util</artifactId>
-     </dependency>
      <dependency>
          <groupId>org.eclipse.emf</groupId>
          <artifactId>org.eclipse.emf.common</artifactId>
