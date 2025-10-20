@@ -76,10 +76,6 @@
        <artifactId>org.osgi.service.component</artifactId>
      </dependency>
      <dependency>
-       <groupId>org.eclipse.xtext</groupId>
-       <artifactId>org.eclipse.xtext.common.types</artifactId>
-     </dependency>
-     <dependency>
          <groupId>org.eclipse.platform</groupId>
          <artifactId>org.eclipse.equinox.common</artifactId>
      </dependency>
