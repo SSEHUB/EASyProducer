@@ -136,6 +136,11 @@
         <artifact:mvn mavenHome="${maven.bin.dir}" pom="@{pomFile}" fork="true" failonerror="true">
             <arg value="@{goal}"/>
         </artifact:mvn>-->
+        <delete quiet="true">
+            <fileset dir="target" includes="gen/**/jars/*.jar"/>
+            <fileset dir="target" includes="jars/*.jar"/>
+            <fileset dir="target" includes="surefire-reports/*"/>
+        </delete>
       </sequential>
    </macrodef>
 
