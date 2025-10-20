@@ -13,7 +13,7 @@ var runtimeProject = "${projectName}"
 
 Workflow {
     bean = StandaloneSetup {
-        scanClassPath = true
+        scanClassPath = false // get rid of scangraph
         platformUri = "${runtimeProject}/.."
     }
 
