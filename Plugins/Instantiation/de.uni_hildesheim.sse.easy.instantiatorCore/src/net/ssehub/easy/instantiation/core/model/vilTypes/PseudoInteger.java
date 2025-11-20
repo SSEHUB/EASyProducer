@@ -172,7 +172,29 @@ public class PseudoInteger extends PseudoReal {
     public static int intAbs(int i0) {
         return Math.abs(i0);
     }
-    
+
+    /**
+     * Returns the hexadecimal value of the given integer value.
+     * 
+     * @param i0 the integer the hexadecimal value shall be returned for
+     * @return the hexadecimal value as string
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static String toHexString(int i0) {
+        return Integer.toHexString(i0);
+    }
+
+    /**
+     * Returns the octal value of the given integer value.
+     * 
+     * @param i0 the integer the octal value shall be returned for
+     * @return the octal value as string
+     */
+    @OperationMeta(opType = OperationType.FUNCTION)
+    public static String toOctalString(int i0) {
+        return Integer.toOctalString(i0);
+    }
+
     /**
      * Conversion operation.
      * 
