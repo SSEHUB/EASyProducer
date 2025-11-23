@@ -22,7 +22,7 @@
        <java classname="org.codehaus.classworlds.Launcher" fork="true"
              dir="@{basedir}" resultproperty="@{resultproperty}"
              failonerror="true">
-         <jvmarg value="-Xmx512m"/>
+         <jvmarg value="-Xmx1024m"/>
          <jvmarg value="-Dmaven.multiModuleProjectDirectory" />
          <classpath>
            <fileset dir="${maven.bin.dir}/boot">
