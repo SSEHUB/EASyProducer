@@ -109,7 +109,7 @@ public class ReasoningUtils {
         try {
             result = cst.inferDatatype();
         } catch (CSTSemanticException e) {
-            LOGGER.error(e.getMessage() + "in: " + StringProvider.toIvmlString(cst));
+            LOGGER.error(e.getMessage() + " in: " + StringProvider.toIvmlString(cst));
             LOGGER.exception(e); // should not occur, ok to log
         }
         return result;

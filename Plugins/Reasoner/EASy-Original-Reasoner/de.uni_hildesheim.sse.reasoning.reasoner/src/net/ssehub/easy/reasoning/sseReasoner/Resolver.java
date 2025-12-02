@@ -1375,7 +1375,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             if (compound == null) {
                 cst = new AttributeVariable(new Variable(element), attrib);
             } else if (null != origCompound) { // origCompound is the compound accessor, add also element
-                cst = new AttributeVariable(new CompoundAccess(compound, element.getName()), attrib); // not documented
+                cst = new AttributeVariable(origCompound, attrib); // not documented
             } else { // compound now directly maps to element
                 cst = new AttributeVariable(compound, attrib);
             }
