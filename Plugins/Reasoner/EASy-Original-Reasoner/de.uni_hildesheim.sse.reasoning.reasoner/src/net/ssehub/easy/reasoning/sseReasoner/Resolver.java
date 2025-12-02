@@ -1366,7 +1366,7 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
         ConstraintSyntaxTree compound) {
         Attribute attrib = ModelQuery.findAttribute(element, assignment.getName());
         if (null != attrib) {
-            ConstraintSyntaxTree cst;
+            ConstraintSyntaxTree cst = null;
             //handle annotations in compounds
             ConstraintSyntaxTree origCompound = compound;
             if (null == compound) {
@@ -1375,7 +1375,21 @@ final class Resolver implements IResolutionListener, TypeCache.IConstraintTarget
             if (compound == null) {
                 cst = new AttributeVariable(new Variable(element), attrib);
             } else if (null != origCompound) { // origCompound is the compound accessor, add also element
-                cst = new AttributeVariable(origCompound, attrib); // not documented
+                try {  // not documented
+                    IDatatype type = compound.inferDatatype();
+                    type = DerivedDatatype.resolveToBasis(Reference.dereference(type));
+                    if (type instanceof Compound) {
+                        Compound cType = (Compound) type;
+                        if (cType.getElement(element.getName()) != null) {
+                            cst = new AttributeVariable(new CompoundAccess(compound, element.getName()), attrib);
+                        }
+                    }
+                } catch (CSTSemanticException e) {
+                    // cst remains null
+                }
+                if (null == cst) {
+                    cst = new AttributeVariable(origCompound, attrib);
+                }
             } else { // compound now directly maps to element
                 cst = new AttributeVariable(compound, attrib);
             }
