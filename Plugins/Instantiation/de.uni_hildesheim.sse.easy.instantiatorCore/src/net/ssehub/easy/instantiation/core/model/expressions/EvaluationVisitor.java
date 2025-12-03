@@ -1,5 +1,6 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -357,7 +358,15 @@ public class EvaluationVisitor implements IExpressionVisitor {
             }
         } catch (VilException e) {
             // -> undefined
-            TracerFactory.createInstantiatorTracer().traceError(e.getMessage());
+            StringWriter out = new StringWriter();
+            try {
+                ExpressionWriter writer = new ExpressionWriter(out);
+                ex.accept(writer);
+            } catch (VilException e1) {
+                out.append("(exception while printing expression: " + e1.getMessage());
+            }
+            TracerFactory.createInstantiatorTracer().traceError(e.getMessage() 
+                + " while evaluating " + out.toString());
         }
         return result;
     }
