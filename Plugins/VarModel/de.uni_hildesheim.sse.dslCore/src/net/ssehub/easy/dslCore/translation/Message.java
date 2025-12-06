@@ -109,9 +109,11 @@ public class Message extends net.ssehub.easy.basics.messages.Message {
     @Override
     public String getDetailedDescription() {
         String result = super.getDetailedDescription();
-        IssueLocation iLoc = getLocationData(cause, causingFeature, 0);
-        if (null != iLoc) {
-            result += iLoc;
+        if (null != cause && null != causingFeature) {
+            IssueLocation iLoc = getLocationData(cause, causingFeature, 0);
+            if (null != iLoc) {
+                result += iLoc;
+            }
         }
         return result;
     }
