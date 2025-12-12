@@ -514,6 +514,7 @@ public class EasyExecutor {
                     exec.execute();
                 } catch (VilException e) {
                     logger.error("VIL execution failed: " + e.getMessage());
+                    throw e;
                 }
                 TracerFactory.unregisterProgressObserver(observer);
             } else {
