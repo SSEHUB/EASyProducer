@@ -677,5 +677,15 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
     public Iterable<IJavaCodeImport> imports() {
         return imports;
     }
+
+    /**
+     * Returns whether a class with given {@code name} is contained in this artifact.
+     * 
+     * @param name the name of the class
+     * @return {@code true} if the class with {@code name} is contained, {@code false} if not
+     */
+    public boolean containsClass(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeClass.class, name) != null;
+    }
    
 }

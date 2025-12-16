@@ -816,5 +816,35 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
     protected int getElementsCount() {
         return elements.size();
     }
+    
+    /**
+     * Returns whether a class with given {@code name} is contained in this class.
+     * 
+     * @param name the name of the class
+     * @return {@code true} if the class with {@code name} is contained, {@code false} if not
+     */
+    public boolean containsClass(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeClass.class, name) != null;
+    }
+
+    /**
+     * Returns whether a method with given {@code name} is contained in this artifact.
+     * 
+     * @param name the name of the class
+     * @return {@code true} a method with {@code name} is contained, {@code false} if not
+     */
+    public boolean containsMethod(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeMethod.class, name) != null;
+    }
+
+    /**
+     * Returns whether an attribute with given {@code name} is contained in this artifact.
+     * 
+     * @param name the name of the class
+     * @return {@code true} an attribute with {@code name} is contained, {@code false} if not
+     */
+    public boolean containsAttribute(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeAttribute.class, name) != null;
+    }
 
 }

@@ -17,8 +17,10 @@ package net.ssehub.easy.instantiation.java.codeArtifacts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import net.ssehub.easy.instantiation.core.model.templateModel.CodeWriter;
@@ -450,4 +452,53 @@ public abstract class JavaCodeVisibleElement extends JavaCodeElement implements 
         return result;
     }
     
+    /**
+     * Finds the first element with the given {@code cls} matching {@code filter}.
+     * 
+     * @param <T> the specific element type
+     * @param elements the elements to analyze
+     * @param cls the specific class to cast to
+     * @param filter the filter
+     * @return the first element matching {@code name} or <b>null</b> for none
+     */
+    protected static <T extends IJavaCodeElement> T findFirst(Collection<IJavaCodeElement> elements, Class<T> cls, 
+        Predicate<T> filter) {
+        T result = null;
+        for (IJavaCodeElement e: elements) {
+            if (cls.isInstance(e)) {
+                T t = cls.cast(e);
+                if (filter.test(t)) {
+                    result = t;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Finds the first element with the given name.
+     * 
+     * @param <T> the specific element type
+     * @param elements the elements to analyze
+     * @param cls the specific class to cast to
+     * @param name the name to look for
+     * @return the first element matching {@code name} or <b>null</b> for none
+     */
+    protected static <T extends JavaCodeVisibleElement> T findFirstByName(Collection<IJavaCodeElement> elements, 
+        Class<T> cls, String name) {
+        return findFirst(elements, cls, e -> e.getName().equals(name));
+    }
+
+    /**
+     * Finds the first {@code JavaCodeVisibleElement} with the given name.
+     * 
+     * @param elements the elements to analyze
+     * @param name the name to look for
+     * @return the first element matching {@code name} or <b>null</b> for none
+     */
+    protected static JavaCodeVisibleElement findFirstByName(Collection<IJavaCodeElement> elements, String name) {
+        return findFirstByName(elements, JavaCodeVisibleElement.class, name);
+    }
+
 }

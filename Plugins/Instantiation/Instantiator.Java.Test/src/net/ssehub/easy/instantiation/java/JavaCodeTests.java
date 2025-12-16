@@ -78,5 +78,23 @@ public class JavaCodeTests {
         Assert.assertFalse(JavaCodeTypeSpecification.isVoid(null));
         Assert.assertTrue(JavaCodeTypeSpecification.isVoid(JavaCodeTypeSpecification.VOID));
     }
+    
+    /**
+     * Tests the contained functions.
+     */
+    @Test
+    public void testContained() {
+        JavaCodeArtifact art = new JavaCodeArtifact();
+        JavaCodeClass cls = art.addClass("MyClass");
+        cls.addMethod("myMethod");
+        cls.addAttribute("boolean", "myField");
+        
+        Assert.assertTrue(art.containsClass("MyClass"));
+        Assert.assertFalse(art.containsClass("MyClass1"));
+        Assert.assertTrue(cls.containsMethod("myMethod"));
+        Assert.assertFalse(cls.containsMethod("myMethod1"));
+        Assert.assertTrue(cls.containsAttribute("myField"));
+        Assert.assertFalse(cls.containsAttribute("myField1"));
+    }
 
 }
