@@ -373,6 +373,17 @@ public class EasyExecutor {
     }
 
     /**
+     * Determines projects that shall be considered while reasoning. While this may decrease reasoning 
+     * speed it may also (if used without care) affect result precision.
+     * 
+     * @param projectFilter the project filter, ignored if <b>null</b>
+     * @return the reasoning project filter before this call
+     */
+    public Predicate<Project> setReasoningProjectFilterGetOld(Predicate<Project> projectFilter) {
+        return this.rCfg.setProjectFilter(projectFilter);
+    }
+
+    /**
      * Sets the tracer factory. Initially, the {@link ConsoleTracerFactory#INSTANCE console tracer factory} is set. 
      *  
      * @param tracerFactory the factory instance (<b>null</b> for the default one)
