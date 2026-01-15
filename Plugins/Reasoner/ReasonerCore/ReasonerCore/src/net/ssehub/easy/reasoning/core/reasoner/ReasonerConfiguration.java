@@ -305,11 +305,14 @@ public class ReasonerConfiguration {
      * speed it may also (if used without care) affect result precision.
      * 
      * @param projectFilter the project filter, ignored if <b>null</b>
+     * @return the project filter before this operation
      */
-    public void setProjectFilter(Predicate<Project> projectFilter) {
+    public Predicate<Project> setProjectFilter(Predicate<Project> projectFilter) {
+        Predicate<Project> old = this.projectFilter;
         if (null != projectFilter) {
             this.projectFilter = projectFilter;
         }
+        return old;
     }
 
     /**
