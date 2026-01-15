@@ -240,7 +240,7 @@ public class EasyExecutor {
     /**
      * Sets the VIL model folder where to load the VIL model from. This is initially set to the common model folder.
      *  
-     * @param vilFolder the folder 
+     * @param vilFolder the folder (may be <b>null</b>, disabling VIL/VTL execution)
      * @return <b>this</b> (builder style)
      */
     public EasyExecutor setVilFolder(File vilFolder) {
@@ -251,7 +251,7 @@ public class EasyExecutor {
     /**
      * Sets the VTL model folder where to load the VTL models from. This is initially set to the common model folder.
      *  
-     * @param vtlFolder the folder 
+     * @param vtlFolder the folder (may be <b>null</b>, disabling VIL/VTL execution) 
      * @return <b>this</b> (builder style)
      */
     public EasyExecutor setVtlFolder(File vtlFolder) {
@@ -414,10 +414,14 @@ public class EasyExecutor {
                     primary.addDependentLocation(loc);
                 }
             }
-            logger.info("Setting VIL location " + vilFolder);
-            BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
-            logger.info("Setting VTL location " + vtlFolder);
-            TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
+            if (vilFolder != null && vtlFolder != null) {
+                logger.info("Setting VIL location " + vilFolder);
+                BuildModel.INSTANCE.locations().addLocation(vilFolder, observer);
+                logger.info("Setting VTL location " + vtlFolder);
+                TemplateModel.INSTANCE.locations().addLocation(vtlFolder, observer);
+            } else {
+                logger.info("Skipping VIL/VTL setup as disabled");
+            }
         }
     }
 
@@ -486,39 +490,43 @@ public class EasyExecutor {
      */
     public void executeVil() throws ModelManagementException, VilException {
         if (null != cfg) {
-            logger.info("Loading VIL script: " + vilModelName);
-            List<ModelInfo<Script>> vil = BuildModel.INSTANCE.availableModels().getModelInfo(vilModelName);
-            if (null != vil && !vil.isEmpty()) {
-                ModelInfo<Script> vilInfo = vil.get(0);
-                Script script = BuildModel.INSTANCE.load(vilInfo);
-                
-                if (null != tracerFactory) {
-                    TracerFactory.setInstance(tracerFactory);
-                }
-                TracerFactory.registerProgressObserver(observer);
-                logger.info("Executing VIL script: " + vilModelName);
-                Executor exec = new Executor(script)
-                    .addBase(base)
-                    .addSource(vilSource)
-                    .addConfiguration(cfg)
-                    .addTarget(vilTarget);
-                if (null != vilArguments) {
-                    for (Map.Entry<String, Object> ent : vilArguments.entrySet()) {
-                        exec.addCustomArgument(ent.getKey(), ent.getValue());
+            if (null != vilFolder && null != vtlFolder) {
+                logger.info("Loading VIL script: " + vilModelName);
+                List<ModelInfo<Script>> vil = BuildModel.INSTANCE.availableModels().getModelInfo(vilModelName);
+                if (null != vil && !vil.isEmpty()) {
+                    ModelInfo<Script> vilInfo = vil.get(0);
+                    Script script = BuildModel.INSTANCE.load(vilInfo);
+                    
+                    if (null != tracerFactory) {
+                        TracerFactory.setInstance(tracerFactory);
                     }
+                    TracerFactory.registerProgressObserver(observer);
+                    logger.info("Executing VIL script: " + vilModelName);
+                    Executor exec = new Executor(script)
+                        .addBase(base)
+                        .addSource(vilSource)
+                        .addConfiguration(cfg)
+                        .addTarget(vilTarget);
+                    if (null != vilArguments) {
+                        for (Map.Entry<String, Object> ent : vilArguments.entrySet()) {
+                            exec.addCustomArgument(ent.getKey(), ent.getValue());
+                        }
+                    }
+                    if (null != vilStartRuleName) {
+                        exec.addStartRuleName(vilStartRuleName);
+                    }
+                    try {
+                        exec.execute();
+                    } catch (VilException e) {
+                        logger.error("VIL execution failed: " + e.getMessage());
+                        throw e;
+                    }
+                    TracerFactory.unregisterProgressObserver(observer);
+                } else {
+                    logger.error("No VIL script found: " + vilModelName);
                 }
-                if (null != vilStartRuleName) {
-                    exec.addStartRuleName(vilStartRuleName);
-                }
-                try {
-                    exec.execute();
-                } catch (VilException e) {
-                    logger.error("VIL execution failed: " + e.getMessage());
-                    throw e;
-                }
-                TracerFactory.unregisterProgressObserver(observer);
             } else {
-                logger.error("No VIL script found: " + vilModelName);
+                logger.info("Cannot execute VIL as not set up/disabled.");
             }
         } else {
             throw new IllegalStateException("No IVML model loaded / configuration available.");
@@ -535,10 +543,12 @@ public class EasyExecutor {
             logger.info("Discarding locations from EASy-Setup");
             PersistenceUtils.processLocation(easyCfg, false, false, observer);
         } else {
-            logger.info("Discarding VTL location " + vtlFolder);
-            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
-            logger.info("Discarding VIL location " + vilFolder);
-            BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
+            if (vilFolder != null && vtlFolder != null) {
+                logger.info("Discarding VTL location " + vtlFolder);
+                TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+                logger.info("Discarding VIL location " + vilFolder);
+                BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
+            }
             for (int f = ivmlFolder.size() - 1; f >= 0; f--) {
                 File folder = ivmlFolder.get(f);
                 logger.info("Discarding IVML location " + folder);
