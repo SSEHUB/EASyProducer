@@ -548,18 +548,14 @@ public class EasyExecutor {
      * Discards the EASy-Producer locations set up in {@link #setupLocations()}.
      * 
      * @throws ModelManagementException in case that setting up a folders fails for some reasons
+     * @see #discardVILLocations()
      */
     public void discardLocations() throws ModelManagementException {
         if (null != easyCfg) {
             logger.info("Discarding locations from EASy-Setup");
             PersistenceUtils.processLocation(easyCfg, false, false, observer);
         } else {
-            if (vilFolder != null && vtlFolder != null) {
-                logger.info("Discarding VTL location " + vtlFolder);
-                TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
-                logger.info("Discarding VIL location " + vilFolder);
-                BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
-            }
+            discardVILLocations();
             for (int f = ivmlFolder.size() - 1; f >= 0; f--) {
                 File folder = ivmlFolder.get(f);
                 logger.info("Discarding IVML location " + folder);
@@ -567,14 +563,37 @@ public class EasyExecutor {
             }
         }
     }
-    
+
+    /**
+     * Discards the VIL/VTL locations set up in {@link #setupLocations()}.
+     * 
+     * @throws ModelManagementException in case that setting up a folders fails for some reasons
+     */
+    public void discardVILLocations() throws ModelManagementException {
+        if (vilFolder != null && vtlFolder != null) {
+            logger.info("Discarding VTL location " + vtlFolder);
+            TemplateModel.INSTANCE.locations().removeLocation(vtlFolder, observer);
+            logger.info("Discarding VIL location " + vilFolder);
+            BuildModel.INSTANCE.locations().removeLocation(vilFolder, observer);
+        }
+    }
+
     /**
      * Clears model caches (IVML, VIL, VTL) and implicitly forces a re-resolution, in particular of wildcard imports.
+     * 
+     * @see #clearVILModels()
      */
     public void clearModels() {
+        clearVILModels();
+        VarModel.INSTANCE.clear();
+    }
+
+    /**
+     * Clears model caches (VIL, VTL) and implicitly forces a re-resolution, in particular of wildcard imports.
+     */
+    public void clearVILModels() {
         TemplateModel.INSTANCE.clear();
         BuildModel.INSTANCE.clear();
-        VarModel.INSTANCE.clear();
     }
 
     /**
