@@ -62,7 +62,7 @@ public class AvailableModels<M extends IModel> {
      * 
      * @return all known versioned model information objects
      */
-    Collection<List<VersionedModelInfos<M>>> versionedModelInfos() {
+    public Collection<List<VersionedModelInfos<M>>> versionedModelInfos() {
         return availableModels.values();
     }
     
@@ -71,7 +71,7 @@ public class AvailableModels<M extends IModel> {
      * 
      * @return the model names
      */
-    Set<String> modelNames() {
+    public Set<String> modelNames() {
         return availableModels.keySet();
     }
     
