@@ -58,6 +58,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.dslCore.BundleId;
 import net.ssehub.easy.dslCore.ModelUtility;
+import net.ssehub.easy.dslCore.ui.Activator.ModelReloader;
 import net.ssehub.easy.dslCore.validation.ValidationUtils;
 import net.ssehub.easy.dslCore.validation.ValidationUtils.ValidationMode;
 
@@ -226,8 +227,43 @@ public class Builder extends IncrementalProjectBuilder {
         }
         boolean involvesIvml = involvesIvml(toBeBuilt);
         subMonitor.subTask("Collecting work units");
-        List<ResourceWorkUnit> workUnits = new LinkedList<>();
         long now = System.currentTimeMillis();
+        List<ResourceWorkUnit> workUnits = collectWorkUnits(toBeBuilt, involvesIvml, now);
+        ModelReloader reloader = Activator.getModelReloader();
+        if (involvesIvml && reloader != null) {
+            LOG.info(">> Start EASy-Build: model reload");        
+            subMonitor.setWorkRemaining(1);
+            subMonitor.subTask("Reload model");
+            reloader.reload(project);
+            LOG.info("<< End EASy-Build: model reload");
+        } else {
+            subMonitor.setWorkRemaining(workUnits.size() / MONITOR_CHUNK_SIZE_CLEAN + 1);
+            subMonitor.subTask("Validating resources");
+            int doneCount = 0;
+            LOG.info(">> Start EASy-Build");        
+            for (ResourceWorkUnit unit: workUnits) {
+                URI uri = unit.resource.getURI();
+                subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " + uri);
+                if (monitor.isCanceled()) {
+                    throw new OperationCanceledException();
+                }
+                if (enableUpdate(unit.utility, uri, now)) { // may change during update
+                    updateMarkers(unit.getResourceDelta(), unit.resource.getResourceSet(), subMonitor, unit);
+                }
+                doneCount++;
+                if (doneCount % MONITOR_CHUNK_SIZE_CLEAN == 0) {
+                    subMonitor.worked(1);
+                }
+            }
+            LOG.info("<< End EASy-Build");
+        }
+        subMonitor.subTask("Completed");
+        subMonitor.setWorkRemaining(0);
+        subMonitor.done();
+    }
+    
+    private List<ResourceWorkUnit> collectWorkUnits(ToBeBuilt toBeBuilt, boolean involvesIvml, long now) {
+        List<ResourceWorkUnit> workUnits = new LinkedList<>();
         for (ModelUtility<?, ?> utility : ModelUtility.instances()) {
             try {
                 for (Resource resource : utility.getResourceSet().getResources()) {
@@ -253,28 +289,7 @@ public class Builder extends IncrementalProjectBuilder {
                     + "resource set. Cannot obtain resources, cannot update markers.");
             }
         }
-        subMonitor.setWorkRemaining(workUnits.size() / MONITOR_CHUNK_SIZE_CLEAN + 1);
-        subMonitor.subTask("Validating resources");
-        int doneCount = 0;
-        LOG.info(">> Start EASy-Build");        
-        for (ResourceWorkUnit unit: workUnits) {
-            URI uri = unit.resource.getURI();
-            subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " + uri);
-            if (monitor.isCanceled()) {
-                throw new OperationCanceledException();
-            }
-            if (enableUpdate(unit.utility, uri, now)) { // may change during update
-                updateMarkers(unit.getResourceDelta(), unit.resource.getResourceSet(), subMonitor, unit);
-            }
-            doneCount++;
-            if (doneCount % MONITOR_CHUNK_SIZE_CLEAN == 0) {
-                subMonitor.worked(1);
-            }
-        }
-        LOG.info("<< End EASy-Build");
-        subMonitor.subTask("Completed");
-        subMonitor.setWorkRemaining(0);
-        subMonitor.done();
+        return workUnits;
     }
     
     private boolean enableUpdate(ModelUtility<?, ?> utility, URI uri, long timestamp) {
