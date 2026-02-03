@@ -156,12 +156,12 @@
             <separator
                   name="EASy-Producer.UI.separator3" visible="true">
             </separator>
-            <command
+            <!--<command
                   commandId="EASy-Producer.UI.refreshModel"
                   icon="IMG_TOOL_REDO"
                   label="refresh model"
                   style="push">
-            </command>
+            </command>-->
             <command
                   commandId="EASy-Producer.UI.reloadModel"
                   icon="IMG_ELCL_SYNCED"

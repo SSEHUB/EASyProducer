@@ -11,10 +11,16 @@ import org.osgi.framework.BundleContext;
 
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
+import net.ssehub.easy.basics.modelManagement.ModelManagementException;
+import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.dslCore.TopLevelModelAccessor;
 import net.ssehub.easy.dslCore.ui.ConfigurationEditorFactory;
+import net.ssehub.easy.dslCore.ui.Activator.ModelReloader;
 import net.ssehub.easy.producer.core.mgmt.VilArgumentProvider;
+import net.ssehub.easy.producer.core.persistence.Configuration;
+import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.producer.ui.productline_editor.ConfigurationTableEditorFactory;
+import net.ssehub.easy.producer.ui.productline_editor.commands.ReloadModelHandler;
 import net.ssehub.easy.producer.ui.project_management.EclipseProjectConfigurationDescriptor;
 import net.ssehub.easy.producer.ui.project_management.JavaProjectConfigurationDescriptor;
 import net.ssehub.easy.producer.ui.project_management.ProjectConfigurationRegistry;
@@ -38,6 +44,18 @@ public class Activator extends AbstractUIPlugin {
      * The shared instance.
      */
     private static Activator plugin;
+    private static ModelReloader modelReloader = project -> {
+        try {
+            Configuration cfg 
+                = net.ssehub.easy.producer.eclipse.persistency.eclipse.PersistenceUtils.getConfiguration(project);
+            PersistenceUtils.processLocation(cfg, false, false, ProgressObserver.NO_OBSERVER);
+            PersistenceUtils.processLocation(cfg, true, false, ProgressObserver.NO_OBSERVER);
+        } catch (ModelManagementException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(ReloadModelHandler.class, Activator.PLUGIN_ID).warn(
+                "While reloading models: " + e.getMessage());
+        }
+    };
+    
     private static boolean started;
     private static boolean stopped;
     
@@ -45,6 +63,15 @@ public class Activator extends AbstractUIPlugin {
      * The constructor.
      */
     public Activator() {
+    }
+
+    /**
+     * Returns the model reloader.
+     * 
+     * @return the model reloader
+     */
+    public static ModelReloader getModelReloader() {
+        return modelReloader;
     }
 
     /**
@@ -75,6 +102,7 @@ public class Activator extends AbstractUIPlugin {
             TopLevelModelAccessor.register(IvmlModelAccessor.EXTENSION, IvmlModelAccessor.INSTANCE);
             TopLevelModelAccessor.register(VilModelAccessor.EXTENSION, VilModelAccessor.INSTANCE);
             ConfigurationEditorFactory.setCreator(new ConfigurationTableEditorFactory());
+            net.ssehub.easy.dslCore.ui.Activator.setModelReloader(modelReloader);
         }
     }
 

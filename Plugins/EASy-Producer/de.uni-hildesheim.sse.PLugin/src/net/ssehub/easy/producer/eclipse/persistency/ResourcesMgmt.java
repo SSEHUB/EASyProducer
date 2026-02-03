@@ -171,9 +171,8 @@ public class ResourcesMgmt {
                     try {
                         plp = persistency.load();
                     } catch (PersistenceException pExc) {
-                        // TODO SE: handle this exception (invalid configuration
-                        // file) correctly
-                        pExc.printStackTrace();
+                        EASyLoggerFactory.INSTANCE.getLogger(getClass(), projectID).info(
+                            "Cannot load PLP. Ignoring. Reason: " + pExc.getMessage());
                     }
                 }
             }

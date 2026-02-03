@@ -19,13 +19,8 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
 
-import de.uni_hildesheim.sse.ui.Activator;
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
-import net.ssehub.easy.basics.modelManagement.ModelManagementException;
-import net.ssehub.easy.basics.progress.ProgressObserver;
-import net.ssehub.easy.producer.core.persistence.Configuration;
-import net.ssehub.easy.producer.core.persistence.PersistenceUtils;
 import net.ssehub.easy.producer.eclipse.model.ProductLineProject;
+import net.ssehub.easy.producer.ui.internal.Activator;
 
 /**
  * Command handler for re-loading the models of a PLP.
@@ -36,15 +31,7 @@ public class ReloadModelHandler extends AbstractPlpHandler {
 
     @Override
     protected void execute(ExecutionEvent event, IProject project, ProductLineProject plp) throws ExecutionException {
-        try {
-            Configuration cfg 
-                = net.ssehub.easy.producer.eclipse.persistency.eclipse.PersistenceUtils.getConfiguration(project);
-            PersistenceUtils.processLocation(cfg, false, false, ProgressObserver.NO_OBSERVER);
-            PersistenceUtils.processLocation(cfg, true, false, ProgressObserver.NO_OBSERVER);
-        } catch (ModelManagementException e) {
-            EASyLoggerFactory.INSTANCE.getLogger(ReloadModelHandler.class, Activator.PLUGIN_ID).warn(
-                "While reloading models: " + e.getMessage());
-        }
+        Activator.getModelReloader().reload(project);
     }
 
     @Override
