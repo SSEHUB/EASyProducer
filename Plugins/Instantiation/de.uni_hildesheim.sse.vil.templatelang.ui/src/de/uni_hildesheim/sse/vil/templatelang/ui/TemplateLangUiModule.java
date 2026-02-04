@@ -4,6 +4,7 @@
 package de.uni_hildesheim.sse.vil.templatelang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalProvider;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
@@ -20,10 +21,17 @@ import net.ssehub.easy.dslCore.ui.EasyUiResourceServiceProvider;
  * Use this class to register components to be used within the IDE.
  */
 public class TemplateLangUiModule extends de.uni_hildesheim.sse.vil.templatelang.ui.AbstractTemplateLangUiModule {
-	public TemplateLangUiModule(AbstractUIPlugin plugin) {
+
+    public TemplateLangUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
-	
+
+	// disable content proposal provider as it hangs in internal parser
+	@Override
+    public Class<? extends IContentProposalProvider> bindIContentProposalProvider() {
+        return null;
+    }
+
     /**
      * Bind the initial configuration of the highlighting (bold) for the customized
      * highlighting. May be overridden by the user's preferences stored by Eclipse.
