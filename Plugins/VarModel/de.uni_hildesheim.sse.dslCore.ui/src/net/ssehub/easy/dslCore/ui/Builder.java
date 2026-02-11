@@ -158,15 +158,22 @@ public class Builder extends IncrementalProjectBuilder {
      */
     protected IResourceDeltaVisitor createDeltaVisitor(ToBeBuilt toBeBuilt, final SubMonitor progress) {
         IResourceDeltaVisitor visitor = new IResourceDeltaVisitor() {
+            
             @Override
             public boolean visit(IResourceDelta delta) throws CoreException {
                 if (progress.isCanceled()) {
                     throw new OperationCanceledException();
                 }
                 if (delta.getResource() instanceof IProject) {
-                    return true;
+                    return getProject().equals(delta.getResource());
                 }
                 if (delta.getResource() instanceof IStorage) {
+                    IStorage storage = (IStorage) delta.getResource();
+                    if (storage instanceof IResource) {
+                        if (!isInCurrentProject((IResource) storage)) {
+                            return false;
+                        }
+                    }
                     if (delta.getKind() == IResourceDelta.REMOVED) {
                         if (!isHandled(delta)) {
                             return true;
@@ -187,12 +194,24 @@ public class Builder extends IncrementalProjectBuilder {
                         return true;
                     }
                 } else if (delta.getResource() instanceof IFolder) {
-                    return isHandled((IFolder) delta.getResource());
+                    IFolder folder = (IFolder) delta.getResource();
+                    if (isInCurrentProject(folder)) {
+                        return isHandled(folder);
+                    } else {
+                        return false;
+                    }
+                } else if (delta.getResource() instanceof IResource) {
+                    return isInCurrentProject((IResource) delta.getResource());
+
                 }
                 return true;
             }
         };
         return visitor;
+    }
+    
+    private boolean isInCurrentProject(IResource resource) {
+        return resource.getProject().equals(getProject());
     }
     
     private boolean containsExtension(Set<URI> uris, String extension) {
