@@ -16,10 +16,10 @@
 package net.ssehub.easy.varModel.cstEvaluation;
 
 import net.ssehub.easy.basics.DefaultLocale;
-import net.ssehub.easy.varModel.confModel.AllFreezeSelector;
 import net.ssehub.easy.varModel.confModel.AssignmentState;
 import net.ssehub.easy.varModel.confModel.ConfigurationException;
 import net.ssehub.easy.varModel.confModel.IDecisionVariable;
+import net.ssehub.easy.varModel.confModel.VarFreezeSelector;
 import net.ssehub.easy.varModel.cst.CSTSemanticException;
 import net.ssehub.easy.varModel.model.datatypes.AnyType;
 import net.ssehub.easy.varModel.model.datatypes.IDatatype;
@@ -469,7 +469,7 @@ public class GenericOperations {
             if (operand.setValue(arguments[0].getValue(), asAssignment)) {
                 IDecisionVariable var = operand.getVariable();
                 if (null != var && var.getDeclaration().isConstant()) { // auto-freeze constants on assignment
-                    var.freeze(AllFreezeSelector.INSTANCE);
+                    var.freeze(new VarFreezeSelector(var)); // freeze only the variable, not the annotations
                 }
                 result = ConstantAccessor.POOL.getInstance().bind(BooleanValue.TRUE, true, operand.getContext());
             }

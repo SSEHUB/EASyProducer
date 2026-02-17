@@ -236,8 +236,10 @@ abstract class DecisionVariable implements IDecisionVariable {
     public void freeze(IFreezeSelector selector) {
         if (null == selector || selector.shallFreeze(this)) {
             configProvider.freeze(selector);
-            for (int a = 0; a < getAttributesCount(); a++) {
-                getAttribute(a).freeze(selector);
+            if (selector.shallFreezeAnnotations()) {
+                for (int a = 0; a < getAttributesCount(); a++) {
+                    getAttribute(a).freeze(selector);
+                }
             }
         }
     }

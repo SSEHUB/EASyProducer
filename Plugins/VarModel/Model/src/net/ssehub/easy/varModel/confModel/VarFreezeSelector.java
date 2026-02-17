@@ -16,27 +16,32 @@
 package net.ssehub.easy.varModel.confModel;
 
 /**
- * Determines whether a decision variable shall be frozen.
+ * A freeze selector which just freezes the given variable but not it's contained or its annotations.
  * 
  * @author Holger Eichelberger
  */
-public interface IFreezeSelector {
+public class VarFreezeSelector implements IFreezeSelector {
+
+    private IDecisionVariable variable;
     
     /**
-     * Returns whether <code>variable</code> shall be frozen.
+     * Creates an instance.
      * 
-     * @param variable the variable to be tested
-     * @return <code>true</code> if <code>variable</code> shall be frozen, <code>false</code> else
+     * @param variable
      */
-    public boolean shallFreeze(IDecisionVariable variable);
-    
-    /**
-     * Whether while freezing the selected variables also their annotations shall be frozen.
-     * 
-     * @return {@code true} for freezing annotations, {@code false} else
-     */
-    public default boolean shallFreezeAnnotations() {
-        return true;
+    public VarFreezeSelector(IDecisionVariable variable) {
+        this.variable = variable;
     }
+    
+    @Override
+    public boolean shallFreeze(IDecisionVariable variable) {
+        return variable == this.variable; // for compound constants, may be true (?)
+    }
+    
+    @Override
+    public boolean shallFreezeAnnotations() {
+        return false;
+    }
+
 
 }
