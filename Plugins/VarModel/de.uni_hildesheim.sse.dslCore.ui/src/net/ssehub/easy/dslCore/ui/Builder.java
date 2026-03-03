@@ -30,11 +30,11 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IStorage;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.xtext.builder.impl.ToBeBuilt;
 import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.IResourceDescription.Delta;
@@ -96,6 +96,60 @@ public class Builder extends IncrementalProjectBuilder {
     @Override
     protected void clean(IProgressMonitor monitor) throws CoreException {
         updateMarkers(monitor);
+    }
+    
+    /**
+     * Extended set of URIs to be built.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class ToBeBuilt extends org.eclipse.xtext.builder.impl.ToBeBuilt {
+        
+        private boolean hasAdded = false;
+        private boolean hasDeleted = false;
+
+        /**
+         * Adds an URI that shall be updated.
+         * 
+         * @param uri the URI
+         * @param added {@code true} if the URI is new/added, {@code false} if the contents in {@code uri} was changed
+         */
+        private void addToBeUpdated(URI uri, boolean added) {
+            getToBeUpdated().add(uri);
+            if (added) {
+                hasAdded = true;
+            }
+        }
+
+        /**
+         * Adds an URI that shall be deleted.
+         * 
+         * @param uri the URI
+         */
+        private void addToBeDeleted(URI uri) {
+            getToBeDeleted().add(uri);
+            hasDeleted = true;
+        }
+        
+        /**
+         * Whether the set of URIs contains added contents.
+         * 
+         * @return {@code true} for added, {@code false} for no added
+         */
+        private boolean hasAdded() {
+            return hasAdded;
+        }
+
+        /**
+         * Whether the set of URIs contains deleted contents.
+         * 
+         * @return {@code true} for deleted, {@code false} for no deleted
+         */
+        private boolean hasDeleted() {
+            return hasDeleted;
+        }
+
+
     }
     
     private class ResourceWorkUnit {
@@ -180,7 +234,7 @@ public class Builder extends IncrementalProjectBuilder {
                         }
                         URI uri = getUri(delta);
                         if (uri != null) {
-                            toBeBuilt.getToBeDeleted().add(uri);
+                            toBeBuilt.addToBeDeleted(uri);
                         }
                         return true;
                     } else if (delta.getKind() == IResourceDelta.ADDED || delta.getKind() == IResourceDelta.CHANGED) {
@@ -189,7 +243,7 @@ public class Builder extends IncrementalProjectBuilder {
                         }
                         URI uri = getUri(delta);
                         if (uri != null) {
-                            toBeBuilt.getToBeUpdated().add(uri);
+                            toBeBuilt.addToBeUpdated(uri, delta.getKind() == IResourceDelta.ADDED);
                         }
                         return true;
                     }
@@ -213,20 +267,38 @@ public class Builder extends IncrementalProjectBuilder {
     private boolean isInCurrentProject(IResource resource) {
         return resource.getProject().equals(getProject());
     }
-    
-    private boolean containsExtension(Set<URI> uris, String extension) {
-        return uris.stream()
-            .anyMatch(u->extension.equals(u.fileExtension()));
-    }
-    
-    private boolean involvesIvml(ToBeBuilt toBeBuilt) {
-        return null != toBeBuilt && (containsExtension(toBeBuilt.getToBeUpdated(), ".ivml"));
-    }
-    
+
     private boolean updateAnyway(boolean involvesIvml, URI uri) {
-        return involvesIvml && !"ivml".equals(uri.fileExtension());
+        return involvesIvml && !"ivml".equals(uri.fileExtension()); // may be
     }
     
+    /**
+     * Returns whether a set of URIs contains at least one of the given extensions.
+     * 
+     * @param uris the URIs
+     * @param extension the extension(s)
+     * @return {@code true} if at least one of the {@code uris} has at least one of the specified extensions
+     */
+    private boolean containsExtension(Set<URI> uris, String... extension) {
+        return uris.stream()
+            .anyMatch(u-> {
+                String uExt = u.fileExtension(); // may be null
+                boolean found = false;
+                for (int e = 0; !found && e < extension.length; e++) {
+                    found |= extension[e].equals(uExt);
+                }
+                return found;
+            });
+    }
+
+    private boolean involvesExtension(ToBeBuilt toBeBuilt, String... extension) {
+        return null != toBeBuilt && (containsExtension(toBeBuilt.getToBeUpdated(), extension));
+    }
+
+    private boolean containesAddedOrDeleted(ToBeBuilt toBeBuilt) {
+        return null != toBeBuilt && (toBeBuilt.hasAdded() || toBeBuilt.hasDeleted());
+    }
+
     private void updateMarkers(IProgressMonitor monitor) {
         SubMonitor subMonitor = SubMonitor.convert(monitor, "Updating markers", 2);
         subMonitor.subTask("Updating resources");
@@ -244,24 +316,27 @@ public class Builder extends IncrementalProjectBuilder {
                 e.printStackTrace(); // preliminary
             }
         }
-        boolean involvesIvml = involvesIvml(toBeBuilt);
+        boolean involvesIvml = involvesExtension(toBeBuilt, "ivml");
+        boolean involvesVil = involvesExtension(toBeBuilt, "vil");
         subMonitor.subTask("Collecting work units");
         long now = System.currentTimeMillis();
         List<ResourceWorkUnit> workUnits = collectWorkUnits(toBeBuilt, involvesIvml, now);
         ModelReloader reloader = Activator.getModelReloader();
-        if (involvesIvml && reloader != null) {
-            LOG.info(">> Start EASy-Build: model reload");        
+        if ((involvesIvml || involvesVil || containesAddedOrDeleted(toBeBuilt)) && reloader != null) {
+            // this is currently a bit coarse grained; may be we can reduce it to IVML -> all, VIL -> VIL+VTL
+            ILog.get().info(">> End EASy-Build: model reload");
             subMonitor.setWorkRemaining(1);
             subMonitor.subTask("Reload model");
             reloader.reload(project);
-            LOG.info("<< End EASy-Build: model reload");
+            ILog.get().info("<< End EASy-Build: model reload");
         } else {
             subMonitor.setWorkRemaining(workUnits.size() / MONITOR_CHUNK_SIZE_CLEAN + 1);
             subMonitor.subTask("Validating resources");
             int doneCount = 0;
-            LOG.info(">> Start EASy-Build");        
+            ILog.get().info(">> Start EASy-Build");            
             for (ResourceWorkUnit unit: workUnits) {
                 URI uri = unit.resource.getURI();
+                ILog.get().info(" UNIT " + uri);                
                 subMonitor.subTask("Validating resources (" + doneCount + "/" + workUnits.size() + "): " + uri);
                 if (monitor.isCanceled()) {
                     throw new OperationCanceledException();
@@ -274,7 +349,7 @@ public class Builder extends IncrementalProjectBuilder {
                     subMonitor.worked(1);
                 }
             }
-            LOG.info("<< End EASy-Build");
+            ILog.get().info(">> End EASy-Build");            
         }
         subMonitor.subTask("Completed");
         subMonitor.setWorkRemaining(0);
