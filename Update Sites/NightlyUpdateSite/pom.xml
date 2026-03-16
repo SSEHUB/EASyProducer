@@ -144,7 +144,8 @@
          <version>${tycho.version}</version>
          <configuration>
             <destination>bin</destination>
-         </configuration>
+            <productRepository>https://download.eclipse.org/justj/jres/21/updates/release/</productRepository>        
+		</configuration>
          <executions>
             <execution>
                <id>create-products</id>

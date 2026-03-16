@@ -7,3 +7,7 @@ p2.inf
 - https://eclipsesource.com/blogs/2012/06/04/tycho-maven-p2-inf-2/
 - https://www.vogella.com/tutorials/EclipseP2Update/article.html
 - https://help.eclipse.org/latest/index.jsp?topic=/org.eclipse.platform.doc.isv/guide/p2_actions_touchpoints.html
+
+May not build on windows at all (not including OS-specific launcher), but on linux.
+
+Currently fixed to JDK 21 in POM!

@@ -710,6 +710,12 @@ APPENDIX: How to apply the Apache License to your work.
       <plugin id="org.eclipse.team.core"/>
       <plugin id="org.eclipse.team.ui"/>
       <plugin id="org.eclipse.text"/>
+      <plugin id="org.eclipse.remote.core"/>
+      <plugin id="org.eclipse.remote.ui"/>
+      <plugin id="org.eclipse.tm.terminal.control"/>
+      <plugin id="org.eclipse.tm.terminal.view.core"/>
+      <plugin id="org.eclipse.tm.terminal.view.ui"/>
+      <plugin id="org.eclipse.tm.terminal.connector.local"/>
       <plugin id="org.eclipse.ui"/>
       <plugin id="org.eclipse.ui.browser"/>
       <plugin id="org.eclipse.ui.cheatsheets"/>
