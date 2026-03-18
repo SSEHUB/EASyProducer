@@ -264,10 +264,7 @@ public class CompoundValue extends StructuredValue implements Cloneable {
                             ValueDoesNotMatchTypeException.TYPE_MISMATCH);
                     }
                     Value oldValue = getNestedValue(name);
-                    if (oldValue != null && oldValue instanceof CompoundValue && newValue instanceof CompoundValue) {
-                        ((CompoundValue) oldValue).copyValuesFrom((CompoundValue) newValue);
-                        newValue = oldValue;
-                    }
+                    newValue = copyIfAssignable(oldValue, newValue);
                 } else if (value.getClass().isArray()) {
                     newValue = ValueFactory.createValue(field.getType(), (Object[]) value);
                 } else {
@@ -281,6 +278,24 @@ public class CompoundValue extends StructuredValue implements Cloneable {
         } else {
             nestedElements.put(name, null);
         }
+    }
+
+    /**
+     * Copies {@code newValue} into {@code oldValue} if both are compound values and compatible.
+     * 
+     * @param oldValue the old value
+     * @param newValue the new value
+     * @return if {@code newValue} was copied into {@code oldValue}, then {@code oldValue} else {@code newValue}
+     * @throws ValueDoesNotMatchTypeException if values do not match
+     */
+    private Value copyIfAssignable(Value oldValue, Value newValue) throws ValueDoesNotMatchTypeException {
+        if (oldValue != null && oldValue instanceof CompoundValue && newValue instanceof CompoundValue) {
+            if (oldValue.getType().isAssignableFrom(newValue.getType())) {
+                ((CompoundValue) oldValue).copyValuesFrom((CompoundValue) newValue);
+                newValue = oldValue;
+            }
+        }
+        return newValue;
     }
 
     /**
