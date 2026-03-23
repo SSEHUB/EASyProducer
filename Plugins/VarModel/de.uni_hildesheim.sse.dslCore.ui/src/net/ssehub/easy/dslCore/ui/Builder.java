@@ -33,6 +33,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.xtext.resource.IResourceDescription;
@@ -86,10 +87,38 @@ public class Builder extends IncrementalProjectBuilder {
     /** Duplicate of ExternalFoldersManager.EXTERNAL_PROJECT_NAME for avoiding any dependency on that (internal) API. */
     private static final String EXTERNAL_PROJECT_NAME = ".org.eclipse.jdt.core.external.folders";
 
+    private boolean isEnabled(Map<String, String> args, String key, boolean dflt) {
+        boolean enabled = dflt;
+        String tmp = System.getProperty(key);
+        if (tmp != null) {
+            enabled |= Boolean.valueOf(tmp);
+        }
+        if (args != null && args.containsKey(key)) {
+            enabled |= Boolean.valueOf(args.get(key));
+        }
+        QualifiedName qn = new QualifiedName("net.ssehub.easy", key);
+        try {
+            String value = getProject().getPersistentProperty(qn);
+            if (null != value) {
+                enabled |= Boolean.valueOf(value);
+            }
+        } catch (CoreException e) {
+            ILog.get().info("Cannot load persistent property for " + key + ":" + e.getMessage());
+        }
+        return enabled;
+    }
     
     @Override
     protected IProject[] build(int kind, Map<String, String> args, IProgressMonitor monitor) throws CoreException {
-        updateMarkers(monitor);
+        boolean execute = true;
+        if (kind == FULL_BUILD) {
+            execute = isEnabled(args, "easy.builder.full", true);
+        } else if (kind == INCREMENTAL_BUILD || kind == AUTO_BUILD) {
+            execute = isEnabled(args, "easy.builder.incremental", true);
+        }
+        if (execute) {
+            updateMarkers(monitor);
+        }
         return null;
     }
     
