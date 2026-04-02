@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Common functionalities for xText based languages in EASy
 Bundle-SymbolicName: net.ssehub.easy.dslCore;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.dslCore
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-Vendor: SSE University of Hildesheim
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.emf.ecore,

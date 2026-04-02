@@ -1166,7 +1166,7 @@ public abstract class ModelManagement <M extends IModel> {
     }
     
     /**
-     * Returns whether {@code query} is in a project folder determined by {@link projectUri}.
+     * Returns whether {@code query} is in a project folder determined by {@code projectUri}.
      * 
      * @param projectUri the URI determining the project
      * @param query the URI to query for

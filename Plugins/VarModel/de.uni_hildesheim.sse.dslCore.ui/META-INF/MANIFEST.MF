@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: DSL Core UI
 Bundle-SymbolicName: net.ssehub.easy.dslCore.ui;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.dslCore.ui
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-Activator: net.ssehub.easy.dslCore.ui.Activator
 Bundle-Vendor: SSE University of Hildesheim
 Require-Bundle: org.eclipse.ui,
