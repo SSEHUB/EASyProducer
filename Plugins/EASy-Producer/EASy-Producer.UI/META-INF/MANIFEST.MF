@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EASy-Producer.UI
 Bundle-SymbolicName: net.ssehub.easy.producer.ui;singleton:=true
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-Activator: net.ssehub.easy.producer.ui.internal.Activator
 Bundle-Vendor: University of Hildesheim - SSE
 Automatic-Module-Name: net.ssehub.easy.producer.ui

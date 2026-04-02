@@ -169,7 +169,7 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
      * 
      * @param onlyIfEmpty add a document only if the artifact is empty, else return the existing one
      * @return the (new) document instance
-     * @link #addDocument()
+     * @see #addDocument()
      */
     public YamlNode addDocument(boolean onlyIfEmpty) {
         YamlNode result;

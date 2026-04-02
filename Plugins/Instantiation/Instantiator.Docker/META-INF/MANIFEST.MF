@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Docker Instantiation Support
 Bundle-SymbolicName: net.ssehub.easy.instantiation.docker;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.docker
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-Vendor: University of Hildesheim, SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Service-Component: OSGI-INF/instantiator.xml

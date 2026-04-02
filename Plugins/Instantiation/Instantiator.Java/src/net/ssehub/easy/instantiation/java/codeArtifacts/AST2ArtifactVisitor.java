@@ -314,7 +314,7 @@ class AST2ArtifactVisitor extends ASTVisitor {
     }
     
     /**
-     * Returns the top-level or the one passed in by {@link #BlockASTVisitor(JavaCodeBlock, Map, char[])}).
+     * Returns the top-level or the one passed in by {@link #AST2ArtifactVisitor(ASTNode, char[])}.
      * 
      * @return the block, may be <b>null</b> for none/syntax error
      */

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: AspectJ Instantiator Test
 Bundle-SymbolicName: net.ssehub.easy.instantiation.aspectj.tests;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.aspectj.tests
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: de.uni_hildesheim.sse.vil.buildlang.tests,
  net.ssehub.easy.dslCore,

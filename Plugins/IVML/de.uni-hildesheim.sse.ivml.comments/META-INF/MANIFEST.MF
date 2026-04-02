@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: IVML Comments Editor
 Bundle-SymbolicName: de.uni-hildesheim.sse.ivml.ui.comments;singleton:=true
 Automatic-Module-Name: de.uni-hildesheim.sse.ivml.ui.comments
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-Activator: de.uni_hildesheim.sse.ivml.comments.Activator
 Bundle-Vendor: University of Hildesheim- SSE
 Require-Bundle: org.eclipse.ui,

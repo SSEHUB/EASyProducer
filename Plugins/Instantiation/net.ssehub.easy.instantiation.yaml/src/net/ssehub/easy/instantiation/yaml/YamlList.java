@@ -94,7 +94,6 @@ public class YamlList extends YamlStructure {
      * 
      * @param name the name of the field
      * @return the map node for chaining
-     * @see #getMap(String)
      */
     public YamlNode addMap(String name) {
         YamlNode result = new YamlNode(this);

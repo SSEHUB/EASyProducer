@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Yaml Instantiation Support Test
 Bundle-SymbolicName: net.ssehub.easy.instantiation.json.test
 Automatic-Module-Name: net.ssehub.easy.instantiation.json.test
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ClassPath: .
 Require-Bundle: org.eclipse.core.runtime,

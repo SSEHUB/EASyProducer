@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: de.uni_hildesheim.sse.vil.buildlang.ui
 Bundle-Vendor: SSE - University of Hildesheim
-Bundle-Version: 1.3.10.qualifier
+Bundle-Version: 1.3.10
 Bundle-SymbolicName: de.uni_hildesheim.sse.vil.buildlang.ui; singleton:=true
 Automatic-Module-Name: de.uni_hildesheim.sse.vil.buildlang.ui
 Bundle-ActivationPolicy: lazy

@@ -102,7 +102,7 @@ public class JavaCodeAlternative extends JavaCodeBlock {
      * Returns whether this alternative is is part of an if-then-else cascade or whether it is contained in the 
      * parent's else block.
      * 
-     * @return {@code true} for cascaded/not contained, {@false} for contained
+     * @return {@code true} for cascaded/not contained, {@code false} for contained
      */
     private boolean isCascaded() {
         boolean chained = false;
