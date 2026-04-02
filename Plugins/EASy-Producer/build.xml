@@ -20,15 +20,15 @@
         <echo>####################################</echo>
         <ant dir="${home.easy.PLugin.dir}" antfile="${build.script.name}" />
 		
-        <echo>##################################</echo>
-        <echo>###  Compiling EASy-Eclipse-UI ###</echo>
-        <echo>##################################</echo>
-        <ant dir="${home.easy.easy-producer.ui.dir}" antfile="${build.script.name}" /> 
-
         <echo>############################</echo>
         <echo>###  Compiling EASy-Help ###</echo>
         <echo>############################</echo>
         <ant dir="de.uni-hildesheim.sse.easy.help" antfile="${build.script.name}" />
+
+        <echo>##################################</echo>
+        <echo>###  Compiling EASy-Eclipse-UI ###</echo>
+        <echo>##################################</echo>
+        <ant dir="${home.easy.easy-producer.ui.dir}" antfile="${build.script.name}" /> 
 
         <echo>#################################</echo>
         <echo>###  Compiling EASy-Examples  ###</echo>
