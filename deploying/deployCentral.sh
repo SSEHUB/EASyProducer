@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Pre-requisites:
 # 1. install wget into PATH
@@ -40,11 +40,12 @@ DeployArtifact() {
     local LOCAL_FILE_PREFIX=""
 
     if [ -z "$PREFIX" ]; then
-        URL_PATH_PREFIX="net/ssehub/easy/"
-        LOCAL_FILE_PREFIX="net/ssehub/easy/"
+        URL_PATH_PREFIX="${ARTIFACTNAME}/"
+        LOCAL_FILE_PREFIX=""
     else
-        URL_PATH_PREFIX="net/ssehub/easy/${PREFIX}/"
-        LOCAL_FILE_PREFIX="net/ssehub/easy/${PREFIX}-"
+        URL_PATH_PREFIX="${PREFIX}.${ARTIFACTNAME}/"
+        LOCAL_FILE_PREFIX="${PREFIX}.${ARTIFACTNAME}-"
+        ARTIFACTPREFIX="${PREFIX}.${ARTIFACTPREFIX}"
     fi
 
     local POM="${ARTIFACTPREFIX}.pom"
@@ -53,30 +54,34 @@ DeployArtifact() {
     local JAVADOC="${ARTIFACTPREFIX}-javadoc.jar"
     local P2ART="${ARTIFACTPREFIX}-p2artifacts.xml"
     local P2META="${ARTIFACTPREFIX}-p2metadata.xml"
-    
-    local FULL_URL_PREFIX="${LOCALREPO}/${URL_PATH_PREFIX}${ARTIFACTNAME}/${ARTIFACTVERSION}"
+    local FULL_URL_PREFIX="${LOCALREPO}/${URL_PATH_PREFIX}${ARTIFACTVERSION}"
 
     # Download relevant physical artifacts
     wget "${FULL_URL_PREFIX}/${POM}" -O "${DIR}/${LOCAL_FILE_PREFIX}${POM}"
     
-    if [ "$POMONLY" = "false" ]; then
+    local CLASSIFIERS=""
+    local FILES=""
+    if [[ "$POMONLY" = "false" || "$POMONLY" = "cmd" ]]; then
+        CLASSIFIERS=",sources,javadoc"
+        FILES="${DIR}/${LOCAL_FILE_PREFIX}${JAR},${DIR}/${LOCAL_FILE_PREFIX}${SOURCES},${DIR}/${LOCAL_FILE_PREFIX}${JAVADOC}"
         wget "${FULL_URL_PREFIX}/${JAR}" -O "${DIR}/${LOCAL_FILE_PREFIX}${JAR}"
         wget "${FULL_URL_PREFIX}/${SOURCES}" -O "${DIR}/${LOCAL_FILE_PREFIX}${SOURCES}"
         wget "${FULL_URL_PREFIX}/${JAVADOC}" -O "${DIR}/${LOCAL_FILE_PREFIX}${JAVADOC}"
-        wget "${FULL_URL_PREFIX}/${P2ART}" -O "${DIR}/${LOCAL_FILE_PREFIX}${P2ART}"
-        wget "${FULL_URL_PREFIX}/${P2META}" -O "${DIR}/${LOCAL_FILE_PREFIX}${P2META}"
+        if [ "$POMONLY" = "false" ]; then
+		    CLASSIFIERS="${CLASSIFIERS},p2artifacts,p2metadata"
+			FILES="${FILES},${DIR}/${LOCAL_FILE_PREFIX}${P2ART},${DIR}/${LOCAL_FILE_PREFIX}${P2META}"
+            wget "${FULL_URL_PREFIX}/${P2ART}" -O "${DIR}/${LOCAL_FILE_PREFIX}${P2ART}"
+            wget "${FULL_URL_PREFIX}/${P2META}" -O "${DIR}/${LOCAL_FILE_PREFIX}${P2META}"
+		fi
     fi
 
     # Deploy via Maven
     if [ "$POMONLY" = "false" ]; then
-        $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${JAR}"
-        $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${SOURCES}" -Dclassifier=sources
-        $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${JAVADOC}" -Dclassifier=javadoc
-        $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${P2ART}" -Dclassifier=p2artifacts
-        $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${P2META}" -Dclassifier=p2metadata
+        echo "Executing: $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfiles=${FILES} -Dclassifiers=${CLASSIFIERS}"
+        #$DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfiles=${FILES} -Dclassifiers=${CLASSIFIERS}
     else
         echo "Executing: $DEPLOYCMD -DpomFile=${DIR}/${LOCAL_FILE_PREFIX}${POM} -Dfile=${DIR}/${LOCAL_FILE_PREFIX}${POM} -DgeneratePom=false -Dpackaging=pom"
-        $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -DgeneratePom=false -Dpackaging=pom
+        #$DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -DgeneratePom=false -Dpackaging=pom
     fi
 }
 
@@ -93,25 +98,25 @@ DeployArtifact "net.ssehub.easy" "reasoning.sseReasoner" "$EASY_VERSION" false
 DeployArtifact "de.uni_hildesheim.sse" "ivml" "$EASY_VERSION" false
 DeployArtifact "de.uni_hildesheim.sse" "ivml.ide" "$EASY_VERSION" false
 DeployArtifact "de.uni_hildesheim.sse" "ivml.ui" "$EASY_VERSION" false
-DeployArtifact "de.uni_hildesheim.sse" "ivml.ui.comments" "$EASY_VERSION" false
+DeployArtifact "de.uni-hildesheim.sse" "ivml.ui.comments" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "integration.common" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "integration.common.impl" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "integration.common.eclipse" "$EASY_VERSION" false
 DeployArtifact "de.uni-hildesheim.sse.easy" "instantiatorCore.rt" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "instantiation.xvcl" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "instantiation.core" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.buildlang" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.buildlang.ide" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.buildlang.ui" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.expressions" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.expressions.ide" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.expressions.ui" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.rt" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.rt.ide" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.rt.ui" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.templatelang" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.templatelang.ide" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "vil.templatelang.ui" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.buildlang" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.buildlang.ide" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.buildlang.ui" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.expressions" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.expressions.ide" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.expressions.ui" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.rt" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.rt.ide" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.rt.ui" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.templatelang" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.templatelang.ide" "$EASY_VERSION" false
+DeployArtifact "de.uni_hildesheim.sse" "vil.templatelang.ui" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "instantiation.velocity" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "instantiation.ant" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "instantiation.aspectj" "$EASY_VERSION" false
@@ -128,8 +133,9 @@ DeployArtifact "net.ssehub.easy" "producer.eclipse" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "producer.core" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "producer.examples" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "producer.ui" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy.runtime" "EASy-dependencies" "$EASY_VERSION" true
 DeployArtifact "net.ssehub.easy" "loader" "$EASY_VERSION" false
-DeployArtifact "net.ssehub.easy" "CommandLine" "$EASY_VERSION" false
+DeployArtifact "" "CommandLine" "$EASY_VERSION" cmd
+LOCALREPO="${LOCALREPO}/runtime"
+DeployArtifact "" "EASy-dependencies" "$EASY_VERSION" true
 
 echo "Deployment process finished."

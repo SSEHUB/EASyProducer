@@ -33,25 +33,25 @@ call :DeployArtifact net.ssehub.easy reasoning.sseReasoner %EASY_VERSION% false
 call :DeployArtifact de.uni_hildesheim.sse ivml %EASY_VERSION% false
 call :DeployArtifact de.uni_hildesheim.sse ivml.ide %EASY_VERSION% false
 call :DeployArtifact de.uni_hildesheim.sse ivml.ui %EASY_VERSION% false
-call :DeployArtifact de.uni_hildesheim.sse ivml.ui.comments %EASY_VERSION% false
+call :DeployArtifact de.uni-hildesheim.sse ivml.ui.comments %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy integration.common %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy integration.common.impl %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy integration.common.eclipse %EASY_VERSION% false
 call :DeployArtifact de.uni-hildesheim.sse.easy instantiatorCore.rt %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy instantiation.xvcl %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy instantiation.core %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.buildlang %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.buildlang.ide %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.buildlang.ui %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.expressions %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.expressions.ide %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.expressions.ui %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.rt %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.rt.ide %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.rt.ui %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.templateLang %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.templateLang.ide %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy vil.templateLang.ui %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.buildlang %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.buildlang.ide %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.buildlang.ui %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.expressions %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.expressions.ide %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.expressions.ui %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.rt %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.rt.ide %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.rt.ui %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.templateLang %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.templateLang.ide %EASY_VERSION% false
+call :DeployArtifact de.uni_hildesheim.sse vil.templateLang.ui %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy instantiation.velocity %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy instantiation.ant %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy instantiation.aspectj %EASY_VERSION% false
@@ -68,9 +68,10 @@ call :DeployArtifact net.ssehub.easy producer.eclipse %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy producer.core %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy producer.examples %EASY_VERSION% false
 call :DeployArtifact net.ssehub.easy producer.ui %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy.runtime EASy-dependencies %EASY_VERSION% true
 call :DeployArtifact net.ssehub.easy loader %EASY_VERSION% false
-call :DeployArtifact net.ssehub.easy CommandLine %EASY_VERSION% false
+call :DeployArtifact %EMPTY% CommandLine %EASY_VERSION% false
+SET LOCALREPO=%LOCALREPO%/runtime
+call :DeployArtifact %EMPTY% EASy-dependencies %EASY_VERSION% true
 REM currently no bundled versions as sources/javadoc for Eclipse part are missing
 REM call :DeployArtifact runtime EASy %EASY_VERSION% false
 REM call :DeployArtifact runtime Eclipse %EASY_VERSION% false
@@ -92,13 +93,14 @@ REM param4: deploy only the POM
 	SET POMONLY=%4
 	SET ARTIFACTPREFIX=%ARTIFACTNAME%-%ARTIFACTVERSION%
 	IF "%PREFIX%"=="""" (
-	    SET URLPREFIX=net/ssehub/easy/
-		SET LOCALPREFIX=net/ssehub/easy/
+	    SET URLPREFIX=%ARTIFACTNAME%/
+		SET LOCALPREFIX=
 	) ELSE (
-	    SET URLPREFIX=net/ssehub/easy/%PREFIX%/
+	    SET URLPREFIX=%PREFIX%.%ARTIFACTNAME%
 		REM SET TMPPRE=%PREFIX:/=-%
 		REM SET LOCALPREFIX=%TMPPRE%-
-		SET LOCALPREFIX=net/ssehub/easy/%PREFIX%-
+		SET LOCALPREFIX=%PREFIX%.%ARTIFACTNAME%-
+		SET ARTIFACTPREFIX=%PREFIX%.%ARTIFACTPREFIX%
     )
 	SET POM=%ARTIFACTPREFIX%.pom
 	SET JAR=%ARTIFACTPREFIX%.jar
@@ -110,23 +112,34 @@ REM param4: deploy only the POM
 
 	REM download relevant physical artifacts
 	wget %URLPREFIX%/%POM% -O %DIR%\%LOCALPREFIX%%POM%
+
+    SET CLASSIFIERS=
+    SET FILES=
+	if "%POMONLY%"=="false" goto dodownload
+    if "%POMONLY%"=="cmd" goto dodownload
+	goto doDeploy
+
+	:dodownload
+	SET CLASSIFIERS=,sources,javadoc
+    SET FILES=%DIR%\%LOCALPREFIX%%JAR%,%DIR%\%LOCALPREFIX%%SOURCES%,%DIR%\%LOCALPREFIX%%JAVADOC%
+	wget %URLPREFIX%/%JAR% -O %DIR%\%LOCALPREFIX%%JAR%
+	wget %URLPREFIX%/%SOURCES% -O %DIR%\%LOCALPREFIX%%SOURCES%
+	wget %URLPREFIX%/%JAVADOC% -O %DIR%\%LOCALPREFIX%%JAVADOC%
 	IF "%POMONLY%"=="false" (
-	    wget %URLPREFIX%/%JAR% -O %DIR%\%LOCALPREFIX%%JAR%
-	    wget %URLPREFIX%/%SOURCES% -O %DIR%\%LOCALPREFIX%%SOURCES%
-	    wget %URLPREFIX%/%JAVADOC% -O %DIR%\%LOCALPREFIX%%JAVADOC%
+        SET CLASSIFIERS=%CLASSIFIERS%,p2artifacts,p2metadata
+        SET FILES=%FILES%,%DIR%\%LOCALPREFIX%%P2ART%,%DIR%\%LOCALPREFIX%%P2META%
         wget %URLPREFIX%/%JAVADOC% -O %DIR%\%LOCALPREFIX%%P2ART%
         wget %URLPREFIX%/%JAVADOC% -O %DIR%\%LOCALPREFIX%%P2META%
 	)
+	
+	:doDeploy
 	REM deploy jar, sources, docs via POM to central
 	IF "%POMONLY%"=="false" (
-	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%JAR%
-	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%SOURCES% -Dclassifier=sources
-	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%JAVADOC% -Dclassifier=javadoc
-        call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%P2ART% -Dclassifier=p2artifacts
-        call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%P2META% -Dclassifier=p2meta
+        echo %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfiles=%FILES% -Dclassifiers=%CLASSIFIERS%
+	    REM call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfiles=%FILES% -Dclassifiers=%CLASSIFIERS%
 	) ELSE (
 	    echo %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%POM% -DgeneratePom=false -Dpackaging=pom
-	    call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%POM% -DgeneratePom=false -Dpackaging=pom
+	    REM call %DEPLOYCMD% -DpomFile=%DIR%\%LOCALPREFIX%%POM% -Dfile=%DIR%\%LOCALPREFIX%%POM% -DgeneratePom=false -Dpackaging=pom
 	)
 
 	endlocal
