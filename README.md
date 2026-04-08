@@ -10,7 +10,7 @@ EASy-Producer was already successfully applied and tested in various industrial 
 News
 -------------
 
-June 2024: EASy-Producer is on Eclipse 2024-06 and JDK 21, pre-built PDEs ship with embedded JRE.
+April 2026: EASy-Producer release with pre-builds, update-site and Maven central.
 
 As we did not publish a full release for a longer term, we refer here to the nightly builds and their documentation.
 
