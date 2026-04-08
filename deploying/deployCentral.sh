@@ -2,27 +2,56 @@
 
 # Pre-requisites:
 # 1. install wget into PATH
-# 2. install maven into PATH
+# 2. install curl into PATH
 # 3. install GnuPGP, define default secret key (or change script)
-# 4. add your account settings for ossrh into maven setup (use authentication token)
-# 5. copy this script into an empty directory or run it in original directory
+# 4. add your account settings to settings.sh as USER=... and PASSWORD=...
+# 5. copy this script into an empty directory
 # 6. adjust release version number
 # 7. run this script
-# 8. goto https://oss.sonatype.org/#welcome, staging repositories, netssehub-...*, 
-#    "close" for check/deploy, if successful go for "release"
+# 8. goto https://central.sonatype.org and release the artifacts
+
+source settings.sh
+BEARER=$(printf "${USER}:${PASSWORD}" | base64)
 
 # --- Variables ---
-LOCALREPO="http://projects.sse.uni-hildesheim.de/qm/maven/net/ssehub/easy"
+NAMESPACEPATH="net/ssehub/easy"
+LOCALREPO="http://projects.sse.uni-hildesheim.de/qm/maven/${NAMESPACEPATH}"
 EASY_VERSION="1.3.10"
-DIR="./tmp"
-TARGET="https://oss.sonatype.org/service/local/staging/deploy/maven2"
-REPO="ossrh"
+BASEDIR="./tmp"
+DIR="${BASEDIR}/${NAMESPACEPATH}"
+TARGET="https://central.sonatype.com/api/v1/publisher"
+REPO="central.deploy"
 # Note: Maven command parts are kept separate for easier execution in Bash
-DEPLOYCMD="mvn gpg:sign-and-deploy-file -Durl=$TARGET -DrepositoryId=$REPO"
+SIGNCMD="gpg --armor --detach-sign --yes"
+DEPLOYCMD="mvn -X deploy:deploy-file -Durl=$TARGET -DrepositoryId=$REPO"
 EMPTY=""
 
+SCRIPTDIR_ABS=$(realpath .)
+BASEDIR_ABS=$(realpath ${BASEDIR})
 # Create tmp directory
 mkdir -p "$DIR"
+
+# --- Function Definition ---
+DownloadArtifact() {
+   local URL="$1"
+   local FILE="$2"
+
+   wget ${URL} -O ${FILE}
+   if [[ "$URL" == *.pom ]]; then
+       #is it a POM
+       LINE=$(awk '/<license>/{print NR; exit}' ${FILE})
+       #does it have the license, author, SCM stuff included; if yes, parent pom and leave it, if no insert it -> central
+       if [[ -z "${LINE}" ]]; then
+           #if no license, include it before closing tag
+           echo "INSERTING insert.xml into ${FILE}"
+           LINE=$(awk '/<\/project>/{line=NR} END{print line}' ${FILE})
+           sed -i "${LINE}e cat ${SCRIPTDIR_ABS}/insert.xml" ${FILE}
+       fi
+   fi
+   $SIGNCMD ${FILE}
+   md5sum ${FILE} | awk '{print $1}' > ${FILE}.md5
+   sha1sum ${FILE} | awk '{print $1}' > ${FILE}.sha1
+}
 
 # --- Function Definition ---
 # param1: prefix to be added to path ($1)
@@ -34,19 +63,24 @@ DeployArtifact() {
     local ARTIFACTNAME="$2"
     local ARTIFACTVERSION="$3"
     local POMONLY="$4"
-    
+
     local ARTIFACTPREFIX="${ARTIFACTNAME}-${ARTIFACTVERSION}"
     local URL_PATH_PREFIX=""
     local LOCAL_FILE_PREFIX=""
+    local ADIR="${DIR}"
 
     if [ -z "$PREFIX" ]; then
         URL_PATH_PREFIX="${ARTIFACTNAME}/"
         LOCAL_FILE_PREFIX=""
+        ADIR="${ADIR}/${ARTIFACTNAME}"
     else
         URL_PATH_PREFIX="${PREFIX}.${ARTIFACTNAME}/"
-        LOCAL_FILE_PREFIX="${PREFIX}.${ARTIFACTNAME}-"
+        LOCAL_FILE_PREFIX=""
         ARTIFACTPREFIX="${PREFIX}.${ARTIFACTPREFIX}"
+        ADIR="${ADIR}/${PREFIX}.${ARTIFACTNAME}"
     fi
+    ADIR="${ADIR}/${ARTIFACTVERSION}"
+    mkdir -p "${ADIR}"
 
     local POM="${ARTIFACTPREFIX}.pom"
     local JAR="${ARTIFACTPREFIX}.jar"
@@ -57,31 +91,16 @@ DeployArtifact() {
     local FULL_URL_PREFIX="${LOCALREPO}/${URL_PATH_PREFIX}${ARTIFACTVERSION}"
 
     # Download relevant physical artifacts
-    wget "${FULL_URL_PREFIX}/${POM}" -O "${DIR}/${LOCAL_FILE_PREFIX}${POM}"
-    
-    local CLASSIFIERS=""
-    local FILES=""
-    if [[ "$POMONLY" = "false" || "$POMONLY" = "cmd" ]]; then
-        CLASSIFIERS=",sources,javadoc"
-        FILES="${DIR}/${LOCAL_FILE_PREFIX}${JAR},${DIR}/${LOCAL_FILE_PREFIX}${SOURCES},${DIR}/${LOCAL_FILE_PREFIX}${JAVADOC}"
-        wget "${FULL_URL_PREFIX}/${JAR}" -O "${DIR}/${LOCAL_FILE_PREFIX}${JAR}"
-        wget "${FULL_URL_PREFIX}/${SOURCES}" -O "${DIR}/${LOCAL_FILE_PREFIX}${SOURCES}"
-        wget "${FULL_URL_PREFIX}/${JAVADOC}" -O "${DIR}/${LOCAL_FILE_PREFIX}${JAVADOC}"
-        if [ "$POMONLY" = "false" ]; then
-		    CLASSIFIERS="${CLASSIFIERS},p2artifacts,p2metadata"
-			FILES="${FILES},${DIR}/${LOCAL_FILE_PREFIX}${P2ART},${DIR}/${LOCAL_FILE_PREFIX}${P2META}"
-            wget "${FULL_URL_PREFIX}/${P2ART}" -O "${DIR}/${LOCAL_FILE_PREFIX}${P2ART}"
-            wget "${FULL_URL_PREFIX}/${P2META}" -O "${DIR}/${LOCAL_FILE_PREFIX}${P2META}"
-		fi
-    fi
+    DownloadArtifact "${FULL_URL_PREFIX}/${POM}" "${ADIR}/${LOCAL_FILE_PREFIX}${POM}"
 
-    # Deploy via Maven
-    if [ "$POMONLY" = "false" ]; then
-        echo "Executing: $DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfiles=${FILES} -Dclassifiers=${CLASSIFIERS}"
-        #$DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfiles=${FILES} -Dclassifiers=${CLASSIFIERS}
-    else
-        echo "Executing: $DEPLOYCMD -DpomFile=${DIR}/${LOCAL_FILE_PREFIX}${POM} -Dfile=${DIR}/${LOCAL_FILE_PREFIX}${POM} -DgeneratePom=false -Dpackaging=pom"
-        #$DEPLOYCMD -DpomFile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -Dfile="${DIR}/${LOCAL_FILE_PREFIX}${POM}" -DgeneratePom=false -Dpackaging=pom
+    if [[ "$POMONLY" = "false" || "$POMONLY" = "cmd" ]]; then
+        DownloadArtifact "${FULL_URL_PREFIX}/${JAR}" "${ADIR}/${LOCAL_FILE_PREFIX}${JAR}"
+        DownloadArtifact "${FULL_URL_PREFIX}/${SOURCES}" "${ADIR}/${LOCAL_FILE_PREFIX}${SOURCES}"
+        DownloadArtifact "${FULL_URL_PREFIX}/${JAVADOC}" "${ADIR}/${LOCAL_FILE_PREFIX}${JAVADOC}"
+        if [ "$POMONLY" = "false" ]; then
+            DownloadArtifact "${FULL_URL_PREFIX}/${P2ART}" "${ADIR}/${LOCAL_FILE_PREFIX}${P2ART}"
+            DownloadArtifact "${FULL_URL_PREFIX}/${P2META}" "${ADIR}/${LOCAL_FILE_PREFIX}${P2META}"
+        fi
     fi
 }
 
@@ -135,7 +154,16 @@ DeployArtifact "net.ssehub.easy" "producer.examples" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "producer.ui" "$EASY_VERSION" false
 DeployArtifact "net.ssehub.easy" "loader" "$EASY_VERSION" false
 DeployArtifact "" "CommandLine" "$EASY_VERSION" cmd
+DIR="${DIR}/runtime"
 LOCALREPO="${LOCALREPO}/runtime"
 DeployArtifact "" "EASy-dependencies" "$EASY_VERSION" true
 
-echo "Deployment process finished."
+SCRIPT_DIR=$PWD
+cd $BASEDIR
+rm -f ${SCRIPT_DIR}/easy.zip
+zip -r ${SCRIPT_DIR}/easy.zip .
+cd $SCRIPT_DIR
+
+curl --request POST --verbose --header "Authorization: Bearer ${BEARER}" --form bundle=@easy.zip "https://central.sonatype.com/api/v1/publisher/upload?publishingType=USER_MANAGED&name=easy"
+
+echo -e "\n\nDeployment process finished."
