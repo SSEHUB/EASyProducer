@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: InstantiatorCore
 Bundle-SymbolicName: net.ssehub.easy.instantiation.core;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.instantiation.core
-Bundle-Version: 1.3.10
+Bundle-Version: 1.3.11.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Service-Component: OSGI-INF/instantiatorCore.xml

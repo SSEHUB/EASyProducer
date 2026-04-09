@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Model.persistency.Test
 Bundle-SymbolicName: net.ssehub.easy.instantiation.serializer.xml.tests
 Automatic-Module-Name: net.ssehub.easy.instantiation.serializer.xml.tests
-Bundle-Version: 1.3.10
+Bundle-Version: 1.3.11.qualifier
 Bundle-Vendor: University of Hildesheim - SSE
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.junit,

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: SSE IVML Reasoner
 Bundle-SymbolicName: net.ssehub.easy.reasoning.sseReasoner;singleton:=true
 Automatic-Module-Name: net.ssehub.easy.reasoning.sseReasoner
-Bundle-Version: 1.3.10
+Bundle-Version: 1.3.11.qualifier
 Import-Package: de.uni_hildesheim.sse.ivml,
  org.osgi.framework
 Bundle-RequiredExecutionEnvironment: JavaSE-17
