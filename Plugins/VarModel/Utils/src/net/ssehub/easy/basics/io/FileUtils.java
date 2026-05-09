@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.StandardOpenOption;
 
 /**
@@ -33,6 +34,8 @@ import java.nio.file.StandardOpenOption;
  * @author Holger Eichelberger
  */
 public class FileUtils {
+    
+    private static final boolean IS_WINDOWS = System.getProperty("os.name").toLowerCase().contains("win"); 
 
     /**
      * Returns whether the given <code>uri</code> is a file URI as returned, e.g., by a File.
@@ -216,10 +219,10 @@ public class FileUtils {
      * @return the resolved file or {@code file} if it cannot be resolved
      */
     public static final File resolve(File file) {
-        if (file != null) {
+        if (file != null && !IS_WINDOWS) {
             try {
                 file = file.toPath().toRealPath().toFile();
-            } catch (java.io.IOException e) {
+            } catch (IOException | SecurityException | UnsupportedOperationException | InvalidPathException e) {
                 // return file
             }
         }
