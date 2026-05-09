@@ -28,6 +28,7 @@ import net.ssehub.easy.varModel.cst.ConstraintSyntaxTree;
 import net.ssehub.easy.varModel.model.Constraint;
 import net.ssehub.easy.varModel.model.ContainableModelElement;
 import net.ssehub.easy.varModel.model.IDecisionVariableContainer;
+import net.ssehub.easy.varModel.model.ModelElement;
 import net.ssehub.easy.varModel.model.Project;
 import net.ssehub.easy.varModel.model.ProjectImport;
 import net.ssehub.easy.varModel.persistency.StringProvider;
@@ -216,6 +217,7 @@ public class ModelCommentsPersistencer {
      */
     private void assignCommentsToProject(Project project, CommentResource props) {
         int size = project.getElementCount();
+        assignComment(project, props);
         for (int c = 0; c < size; c++) {
             ContainableModelElement element = project.getElement(c);
             assignComment(element, props);
@@ -248,7 +250,7 @@ public class ModelCommentsPersistencer {
      * @param elt the element to assign to (modified as a side effect)
      * @param props the comment resource containing the comments
      */
-    private void assignComment(ContainableModelElement elt, CommentResource props) {
+    private void assignComment(ModelElement elt, CommentResource props) {
         String comment = "";
         String qName = elt.getQualifiedName();
         if (elt instanceof Constraint) {

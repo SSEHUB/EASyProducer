@@ -209,4 +209,55 @@ public class FileUtils {
         }
     }
 
+    /**
+     * Resolves a file or a symlink.
+     * 
+     * @param file the file to be resolved
+     * @return the resolved file or {@code file} if it cannot be resolved
+     */
+    public static final File resolve(File file) {
+        if (file != null) {
+            try {
+                file = file.toPath().toRealPath().toFile();
+            } catch (java.io.IOException e) {
+                // return file
+            }
+        }
+        return file;
+    }
+
+    /**
+     * Resolves files/symlinks.
+     * 
+     * @param files the files to be resolved, may be <b>null</b>
+     * @return the resolved files or <b>null</b>
+     * @see #resolve(File...)
+     */
+    public static final File[] resolve(File... files) {
+        if (null != files) {
+            for (int i = 0; i < files.length; i++) {
+                files[i] = resolve(files[i]);
+            }
+        }
+        return files;
+    }
+    
+    /**
+     * Lists files in {@code file} after resolving {@code file} and its contained files.
+     * 
+     * @param file the file to list the files for, may be <b>null</b>
+     * @return the resolved contained files
+     * @see #resolve(File)
+     * @see #resolve(File...)
+     */
+    public static final File[] listFiles(File file) {
+        File[] result;
+        if (null != file) {
+            result = resolve(resolve(file).listFiles());
+        } else {
+            result = null;
+        }
+        return result;
+    }
+
 }

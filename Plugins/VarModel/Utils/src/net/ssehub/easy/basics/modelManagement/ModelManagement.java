@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.ssehub.easy.basics.internal.Bundle;
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.messages.IMessage;
@@ -722,7 +723,7 @@ public abstract class ModelManagement <M extends IModel> {
     public synchronized void updateModelInformation(File file, ProgressObserver observer) 
         throws ModelManagementException {
         ModelInfoHolder<M> holder = new ModelInfoHolder<M>(availableModels);
-        updateModelInformation(file, holder, observer, null);
+        updateModelInformation(FileUtils.resolve(file), holder, observer, null);
     }
     
     

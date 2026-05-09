@@ -328,7 +328,7 @@ public class ModelLocations <M extends IModel> {
      */
     private synchronized Location getLocationFor(File file, boolean create) throws ModelManagementException {
         try {
-            File cFile = file.getCanonicalFile();
+            File cFile = FileUtils.resolve(file.getCanonicalFile());
             String key = cFile.toString();
             Location location = knownLocations.get(key);
             if (null == location && create) {
@@ -486,7 +486,7 @@ public class ModelLocations <M extends IModel> {
                  */
                 if (null != files) {
                     for (int f = 0; f < files.length; f++) {
-                        count += count(files[f], excludedLocations);
+                        count += count(FileUtils.resolve(files[f]), excludedLocations);
                     }
                 }
             } else {
@@ -548,7 +548,7 @@ public class ModelLocations <M extends IModel> {
                     File[] files = location.listFiles();
                     if (null != files) {
                         for (int f = 0; f < files.length; f++) {
-                            scan(files[f], holder, loader, task, done);
+                            scan(FileUtils.resolve(files[f]), holder, loader, task, done);
                         }
                     }
                 }

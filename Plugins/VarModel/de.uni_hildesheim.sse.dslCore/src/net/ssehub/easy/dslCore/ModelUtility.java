@@ -3,9 +3,13 @@ package net.ssehub.easy.dslCore;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,17 +22,21 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.xtext.AbstractRule;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.XtextPackage;
+import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.BaseEPackageAccess;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.resource.ClasspathUriUtil;
 import org.eclipse.xtext.resource.XtextResourceSet;
+import org.eclipse.xtext.resource.XtextSyntaxDiagnostic;
+import org.eclipse.xtext.util.StringInputStream;
 
 import com.google.inject.Injector;
 
@@ -55,13 +63,17 @@ import net.ssehub.easy.dslCore.translation.MessageReceiver;
  */
 public abstract class ModelUtility <E extends EObject, R extends IModel> implements IModelLoader<R> {
 
+    protected static final Rule RULE_VERSION = new Rule("version", ";", true, true);
+    protected static final Rule RULE_IMPORT = new Rule("import|insert", ";", true, true);
+    protected static final Rule RULE_CONFLICT = new Rule("conflict", ";", true, true);
+
     private static IResourceInitializer resourceInitializer;
     private static List<ModelUtility<?, ?>> instances = 
         Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
     private static final List<ModelUtility<?, ?>> SCHEDULED 
         = Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
     private static boolean forceUnloadOnParse = false;
-
+    
     /**
      * Stores information about files currently being loaded in order to prevent
      * infinite recursions in case of errors in dependent projects.
@@ -283,7 +295,520 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @return the class loader
      */
     protected abstract ClassLoader getLanguageClassLoader();
+
+    /**
+     * Cutoff parser states.
+     * 
+     * @author Holger Eichelberger
+     */
+    private enum ParseState {
+        
+        CODE(false),
+        SLASH(false),
+        SL_COMMENT(true),
+        ML_COMMENT(true),
+        ML_COMMENT_STAR(true),
+        STRING(false),
+        STRING_ESCAPE(false);
+        
+        private boolean isComment;
+        
+        /**
+         * Creates a new value.
+         * 
+         * @param isComment whether this "constant" represents a comment
+         */
+        private ParseState(boolean isComment) {
+            this.isComment = isComment;
+        }
+
+        /**
+         * Returns whether this state is a comment state.
+         * 
+         * @return {@code true} for comment state, {@code false} else
+         */
+        private boolean isComment() {
+            return isComment;
+        }
+    }
+
+    /**
+     * Cutoff parser rule. All rules are matched in sequence until no rule matches. This is the cutoff point.
+     * 
+     * @author Holger Eichelberger
+     */
+    protected static class Rule {
+        
+        private String[] firsts;
+        private String[] follows;
+        private boolean optional;
+        private boolean multi;
+        private boolean includesFollows = true;
+
+        /**
+         * Creates a non-optional single-match rule.
+         * 
+         * @param firsts the leading keywords, may be multiple alternative ones separated by "|"
+         * @param follows the follow symbols, may be multiple alternative ones separated by "|", may be <b>null</b> 
+         *   to use the following rules
+         */
+        public Rule(String firsts, String follows) {
+            this(firsts, follows, false, false);
+        }
+
+        /**
+         * Creates a non-optional single-match rule with self-setting follows.
+         * 
+         * @param firsts the leading keywords, may be multiple alternative ones separated by "|"
+         */
+        public Rule(String firsts) {
+            this(firsts, null);
+        }
+
+        /**
+         * Creates rule with self-setting follows.
+         * 
+         * @param firsts the leading keywords, may be multiple alternative ones separated by "|"
+         * @param optional is the rule optional
+         * @param multi is this a multiple matching rule
+         */
+        public Rule(String firsts, boolean optional, boolean multi) {
+            this(firsts, null, optional, multi);
+        }
+
+        /**
+         * Creates rule.
+         * 
+         * @param firsts the leading keywords, may be multiple alternative ones separated by "|"
+         * @param follows the follow symbols, may be multiple alternative ones separated by "|", may be <b>null</b> 
+         *   to use the following rules
+         * @param optional is the rule optional
+         * @param multi is this a multiple matching rule
+         */
+        public Rule(String firsts, String follows, boolean optional, boolean multi) {
+            this.firsts = split(firsts);
+            setFollows(follows);
+            this.optional = optional;
+            this.multi = multi;
+        }
+        
+        /**
+         * Sets the follow symbols.
+         * 
+         * @param follows the follow symbols, may be multiple alternative ones separated by "|", may be <b>null</b> 
+         *   to use the following rules
+         */
+        private void setFollows(String follows) {
+            this.follows = split(follows);
+        }
+        
+        /**
+         * Splits symbols.
+         * 
+         * @param symbols the symbols given as single or multiple alternative, separated by "|" or <b>null</b>
+         * @return the splitted symbols, <b>null</b> if {@code symbols} was <b>null</b>
+         */
+        private String[] split(String symbols) {
+            String[] result;
+            if (null != symbols) {
+                result = symbols.split("\\|");
+                for (int i = 0; i < result.length; i++) {
+                    result[i] = result[i].trim();
+                }
+            } else {
+                result = null;
+            }
+            return result;
+        }
+        
+        /**
+         * Does this rule match on the given collected parts.
+         * 
+         * @param parts the parts
+         * @return {@code true} for match, {@code false} else
+         */
+        private boolean matches(List<String> parts) {
+            boolean matches = canMatch(parts);
+            if (matches) {
+                matches = false;
+                for (int f = 0; !matches && f < follows.length; f++) {
+                    matches = parts.get(parts.size() - 1).endsWith(follows[f]);
+                }
+            }
+            return matches;
+        }
+
+        /**
+         * Does this rule match at all. Must be consistent with {@link #matches(List)}.
+         * 
+         * @param parts the parts
+         * @return {@code true} for potential match, {@code false} else
+         */
+        private boolean canMatch(List<String> parts) {
+            boolean matches = false;
+            if (parts.size() > 0) {
+                for (int f = 0; !matches && f < firsts.length; f++) {
+                    matches = parts.get(0).startsWith(firsts[f]);
+                }
+            }
+            return matches;
+        }
+        
+        /**
+         * Is this rule optional?
+         * 
+         * @return {@code true} for optional, {@code false} else
+         */
+        private boolean isOptional() {
+            return optional;
+        }
+
+        /**
+         * May this rule match multiple times?
+         * 
+         * @return {@code true} for multi-match, {@code false} else
+         */
+        private boolean isMulti() {
+            return multi;
+        }
+
+        /**
+         * Returns {@code rules} or an instantiated rule sequence to be used for matching if {@link #follows}
+         * is not defined - then fill it with the firsts of the next rules until a mandatory rule comes up.
+         * 
+         * @param rules the rules
+         * @param copy whether the original array and rules shall be returned or whether a new array with potentially 
+         *    the same or instantiated rules shall be returned
+         * @return <b>this</b> or an intantiated version
+         */
+        public static Rule[] instantiate(Rule[] rules, boolean copy) {
+            Rule[] result = rules;
+            if (copy) {
+                result = new Rule[rules.length];
+                System.arraycopy(rules, 0, result, 0, result.length);
+            }
+            // take over or instantiate undefined follows, keep given rules as "templates"
+            for (int r = result.length - 1; r >= 0; r--) {
+                Rule rule = result[r];
+                if (null == rule.follows) {
+                    String fws = "";
+                    for (int p = r + 1; p < result.length; p++) {
+                        Rule r2 = result[p];
+                        if (fws.length() > 0) {
+                            fws += "|";
+                        }
+                        fws += String.join("|", r2.firsts);
+                        if (!r2.isOptional()) {
+                            break;
+                        }
+                    }
+                    if (copy) {
+                        result[r] = new Rule(String.join("|", rule.firsts), fws, rule.optional, rule.multi);
+                    } else {
+                        rule.setFollows(fws);
+                    }
+                    rule.includesFollows = false;
+                }
+            }
+            return rules;
+        }
+
+        /**
+         * Shortcut default instantiation of rules.
+         * 
+         * @param rules the rules to be instantiated
+         * @return the instantiated rules
+         */
+        public static Rule[] instantiate(Rule... rules) {
+            return instantiate(rules, false);
+        }
+        
+        /**
+         * Clears a matched {@code parts} list.
+         * 
+         * @param parts the parts to clear
+         */
+        private void clear(List<String> parts) {
+            if (includesFollows) { // matched, clear all
+                parts.clear();
+            } else { //matched, keep last
+                if (parts.size() > 0) {
+                    String follow = parts.get(parts.size() - 1);
+                    parts.clear();
+                    parts.add(follow);
+                }
+            }
+        }
+        
+        @Override
+        public String toString() {
+            return "f: " + Arrays.toString(firsts) + " w: " + Arrays.toString(follows) + " inc: " + includesFollows 
+                + " opt: " + optional + " multi: " + multi; 
+        }
+        
+    }
     
+    /**
+     * Specific "parser" that identifies a position where to cut the headers from the content.
+     * 
+     * @author Holger Eichelberger
+     */
+    private static class CutLeadInParser {
+        
+        private InputStream in;
+        private StringBuilder out = new StringBuilder();
+        private Rule[] rules;
+        private ParseState state = ParseState.CODE;
+        private int lastStart = 0;
+        private int lastEndMatch = 0;
+        private int ruleIndex = 0;
+        private List<String> parts = new ArrayList<>();
+        private int nestingLevel = 0;
+        private boolean emit = true;
+        
+        /**
+         * Creates a parser instance.
+         * 
+         * @param in the input stream to analyze/cut
+         * @param rules the rules
+         */
+        private CutLeadInParser(InputStream in, Rule... rules) {
+            this.in = in;
+            this.rules = Rule.instantiate(rules, false);
+        }
+        
+        /**
+         * Parse the text and cut it.
+         * 
+         * @return the inital or modified text
+         * @throws IOException if reading a character fails
+         */
+        private String parse() throws IOException {
+            int data;
+            while ((data = in.read()) != -1) {
+                ParseState nextState = state;
+                char c = (char) data;
+                if (ParseState.STRING_ESCAPE == state && c != '\\') {
+                    nextState = ParseState.STRING;
+                } else {
+                    switch (c) {
+                    case '/':
+                        if (ParseState.CODE == state) {
+                            nextState = ParseState.SLASH;
+                        } else if (ParseState.SLASH == state) {
+                            nextState = ParseState.SL_COMMENT;
+                        } else if (ParseState.ML_COMMENT_STAR == state) {
+                            nextState = ParseState.CODE;
+                            lastStart = out.length();
+                        }
+                        break;
+                    case '*':
+                        if (ParseState.SLASH == state) {
+                            nextState = ParseState.ML_COMMENT;
+                        } else if (ParseState.ML_COMMENT == state) {
+                            nextState = ParseState.ML_COMMENT_STAR;
+                        }
+                        break;
+                    case '"':
+                        if (ParseState.CODE == state) {
+                            nextState = ParseState.STRING;
+                        } else if (ParseState.STRING == state) {
+                            nextState = ParseState.CODE;
+                            lastStart = out.length();
+                        }
+                        break;
+                    case '\n':
+                        if (ParseState.SL_COMMENT == state) {
+                            nextState = ParseState.CODE;
+                        }
+                        break;
+                    case '\\':
+                        if (ParseState.STRING == state) {
+                            nextState = ParseState.STRING_ESCAPE;
+                        }
+                        break;
+                    case '{':
+                        if (ParseState.CODE == state || ParseState.SLASH == state) {
+                            nestingLevel++;
+                        }
+                        break;
+                    case '}':
+                        if (ParseState.CODE == state || ParseState.SLASH == state) {
+                            nestingLevel--;
+                        }
+                        if (nestingLevel == 0) { // reset for next file
+                            if (emit && lastEndMatch > 0 && lastEndMatch < out.length() - 1) {
+                                out.delete(lastEndMatch, out.length() - 1);
+                            }
+                            nextState = reset(out.length() + 1); // the }
+                        }
+                        break;
+                    default:
+                        break;
+                    }
+                }
+                state = handleOut(c, nextState);
+            }
+            return out.toString();
+        }
+        
+        /**
+         * Resets the parser for a new top-level unit.
+         * 
+         * @param pos the next position of {@link #lastStart} and {@link #lastEndMatch}.
+         * @return the next state
+         */
+        private ParseState reset(int pos) {
+            lastStart = pos; 
+            lastEndMatch = pos;
+            emit = true;
+            ruleIndex = 0;
+            parts.clear();
+            state = ParseState.CODE;
+            return ParseState.CODE;
+        }
+        
+        /**
+         * Handles fixing or appending to {@link #out}.
+         * 
+         * @param ch the actual character
+         * @param nextState the next state
+         * @return {@code nextState}
+         */
+        private ParseState handleOut(char ch, ParseState nextState) {
+            if (ParseState.SLASH == state && nextState.isComment()) {
+                if (emit) { 
+                    out.deleteCharAt(out.length() - 1);
+                }
+            } else if (!state.isComment() && !nextState.isComment()) {
+                if (emit) {
+                    out.append(ch);
+                }
+            }
+            if (ParseState.CODE == state && enableAnalysis(ch)) {
+                analyze();
+            }
+            return nextState;
+        }
+        
+        /**
+         * Enables token/symbol analysis, i.e., are we at a meaningful separator (in CODE).
+         * 
+         * @param ch the actual character
+         * @return {@code true} for enable analysis, {@code false} else
+         */
+        private static boolean enableAnalysis(char ch) {
+            boolean enableAnalysis = Character.isWhitespace(ch);
+            enableAnalysis |= ch == '{' || ch == '}';
+            enableAnalysis |= ch == '(' || ch == ')';
+            return enableAnalysis;
+        }
+        
+        /**
+         * Analyze a token/constant/value/keyword.
+         */
+        private void analyze() {
+            if (ParseState.CODE == state || ParseState.SL_COMMENT == state) {
+                if (lastStart < out.length()) {
+                    String part = out.substring(lastStart).trim();
+                    if (part.length() > 0) {
+                        parts.add(part);
+                        matchRules();
+                    }
+                    lastStart = out.length();
+                }
+            }
+        }
+        
+        /**
+         * Matches the rules.
+         */
+        private void matchRules() {
+            boolean matched = false;
+            boolean foundMatch = false;
+            do {
+                Rule rule = rules[ruleIndex];
+                matched = rule.matches(parts);
+                if (matched) {
+                    foundMatch = true;
+                    rule.clear(parts);
+                    if (!rule.isMulti()) {
+                        ruleIndex++;
+                        break;
+                    }
+                } else if (parts.size() > 0 && !rule.canMatch(parts)) {
+                    // if optional and cannot match, potentially hop over multiple optional rules
+                    while (!rule.canMatch(parts) && rule.isOptional()) {
+                        ruleIndex++;
+                        if (ruleIndex < rules.length) {
+                            rule = rules[ruleIndex];
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            } while (matched && ruleIndex < rules.length && rules[ruleIndex].isOptional());
+            boolean stopped = ruleIndex >= rules.length;
+            if (stopped) {
+                out.delete(lastEndMatch, out.length());
+                emit = false;
+            } else if (foundMatch) {
+                lastStart = out.length();
+                lastEndMatch = lastStart;
+            }
+        }
+        
+    }
+
+    /**
+     * Cuts the lead-in from the specified grammar text after the first not matching rule, adds a "}".
+     * 
+     * @param in the input stream to analyze/cut
+     * @param rules the rules
+     * @return {@code text} or modified
+     * @throws IOException if reading characters fails
+     */
+    public static String cutLeadin(InputStream in, Rule... rules) throws IOException {
+        return new CutLeadInParser(in, rules).parse();
+    }
+
+    /**
+     * Cuts the lead-in from the specified grammar text after the first not matching rule, adds a "}".
+     * 
+     * @param in the input string to analyze/cut
+     * @param rules the rules
+     * @return {@code text} or modified
+     * @throws IOException if reading characters fails
+     */
+    public static String cutLeadin(String in, Rule... rules) throws IOException {
+        return cutLeadin(new StringInputStream(in), rules);
+    }
+
+    /**
+     * A bit of testing as we do not have a test bundle.
+     * 
+     * @param args ignored
+     * @throws IOException if file reading fails
+     */
+    public static void main(String[] args) throws IOException {
+        Rule[] rules = {new Rule("project", "{"), RULE_VERSION, RULE_IMPORT, RULE_CONFLICT};
+        String o = cutLeadin("project test{ }", rules);
+        System.out.println(o);
+        o = cutLeadin("project test{ version v1; Integer i = 0;}", rules);
+        System.out.println(o);
+        o = cutLeadin("project test{ version v1; import base; Integer i = 0;}", rules);
+        System.out.println(o);
+        o = cutLeadin("project test{ version v1; import base; Integer i = 0;}project test2{ version v1; "
+            + "import base; Integer i = 0;}", rules);
+        System.out.println(o);
+    
+        rules = new Rule[]{RULE_IMPORT, new Rule("@advice", true, true), new Rule("project", "{"), RULE_VERSION};
+    
+        o = cutLeadin("import base; @advice(XYZ) with (ver>0) project test{ Integer i = 0; }", rules);
+        System.out.println(o);
+    
+    }
+
     /**
      * Parses a grammar fragment.
      * 
@@ -292,13 +817,24 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @return the parse result if successful, <b>null</b> in case of instantiation problems
      */
     protected IParseResult parseFragment(String ruleName, String input) {
+        return parseFragment(ruleName, new StringReader(input));
+    }
+
+    /**
+     * Parses a grammar fragment.
+     * 
+     * @param ruleName the name of the grammar rule
+     * @param input the text in the reader be parsed
+     * @return the parse result if successful, <b>null</b> in case of instantiation problems
+     */
+    protected IParseResult parseFragment(String ruleName, Reader input) {
         IParseResult result = null;
         Grammar grammar = getGrammar();
         if (null != grammar) {
             AbstractRule rule = GrammarUtil.findRuleForName(grammar, ruleName);
             if (rule instanceof ParserRule) {
                 IParser parser = getInjector().getInstance(IParser.class);
-                result = parser.parse((ParserRule) rule, new StringReader(input));
+                result = parser.parse((ParserRule) rule, input);
             }
         }
         return result;
@@ -332,8 +868,62 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     public static StringBuilder appendWithNewLine(StringBuilder builder, String text) {
         return append(builder, text, "\n");
     }
-    
+
     // checkstyle: stop exception type check
+
+    /**
+     * Parses an <code>uri</code> to obtain an instance of the grammar {@code ruleName}. Cuts the first {@code rules} if
+     * given, else parses the entire text.
+     * 
+     * @param uri the URI to read
+     * @param ruleName the grammar rule name to start parsing at
+     * @param receiver the message receiver used for storing messages (may be <b>null</b>)
+     * @param cls the class of the result
+     * @param rules optional rules for cutting the header of the contents, removing the remainder for performance
+     * @return the top-level element (or <b>null</b> if not found)
+     * @throws IOException in case of any I/O and parsing problems
+     * @see #cutLeadin(InputStream, Rule...)
+     */
+    public E parse(URI uri, MessageReceiver receiver, String ruleName, Class<E> cls, Rule... rules) throws IOException {
+        E result = null;
+        try {
+            //System.out.println(">IN " + uri);        
+            //InputStream is = URIConverter.INSTANCE.createInputStream(uri);
+            //System.out.println(Files.readStreamIntoString(is));
+            //is.close();
+            //System.out.println("---");        
+            InputStream inputStream = URIConverter.INSTANCE.createInputStream(uri);
+            Reader reader;
+            if (rules.length > 0) {
+                reader = new StringReader(cutLeadin(inputStream, rules));
+                //System.out.println(cutLeadin(URIConverter.INSTANCE.createInputStream(uri), rules));        
+                //System.out.println("<OUT "+ uri);
+            } else {
+                reader = new InputStreamReader(inputStream);
+            }
+            IParseResult pr = parseFragment(ruleName, reader);
+            if ((null == pr || pr.hasSyntaxErrors())) {
+                // fallback, may take longer but kicks in if shortcut or fragment parsing fails
+                result = parse(uri, true, receiver, cls);
+            } else if (null != pr) {
+                if (receiver != null && pr.hasSyntaxErrors()) {
+                    for (INode en : pr.getSyntaxErrors()) {
+                        receiver.error(new XtextSyntaxDiagnostic(en));
+                    }
+                }
+                EObject rootObject = pr.getRootASTElement();
+                if (cls.isInstance(rootObject)) {
+                    result = cls.cast(rootObject);
+                }
+            }    
+            inputStream.close();
+        } catch (Throwable t) { // just in case
+            EASyLoggerFactory.INSTANCE.getLogger(ModelUtility.class, BundleId.ID).warn("While loading URI " + uri 
+                + ": " + t.getMessage());
+            t.printStackTrace(); // preliminary
+        }
+        return result;
+    }
 
     /**
      * Parses an <code>uri</code> to obtain the top-level element.
@@ -347,8 +937,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @throws IOException
      *         in case of any I/O and parsing problems
      */
-    protected E parse(URI uri, boolean unload,
-        MessageReceiver receiver, Class<E> cls) throws IOException {
+    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         E result = null;
         try {
             ResourceSet resourceSet = getResourceSet();

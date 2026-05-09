@@ -20,6 +20,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ssehub.easy.basics.io.FileUtils;
+
 /**
  * Stores model information objects of the same version.
  * 
@@ -341,10 +343,10 @@ public class VersionedModelInfos <M extends IModel> {
                 }
             }
             if (null != parent) {
-                File[] siblings = parent.listFiles();
+                File[] siblings = FileUtils.resolve(parent).listFiles();
                 if (null != siblings) {
                     for (int s = 0; null == result && s < siblings.length; s++) {
-                        File sibling = siblings[s];
+                        File sibling = FileUtils.resolve(siblings[s]);
                         if (sibling.isDirectory() && !sibling.equals(uriParent)) {
                             URI siblingUri = sibling.toURI().normalize();
                             result = search(infos, siblingUri.toString(), modelPath);
@@ -372,11 +374,11 @@ public class VersionedModelInfos <M extends IModel> {
         if (isFileScheme(uri)) {
             List<ModelInfo<M>> tmp = new ArrayList<ModelInfo<M>>();
             File uriFile = new File(uri).getParentFile();
-            File searchFolder = uriFile.getParentFile();
+            File searchFolder = FileUtils.resolve(uriFile.getParentFile());
             if (null != searchFolder) {
                 File[] files = searchFolder.listFiles();
                 for (int f = 0; null != files && f < files.length; f++) {
-                    File file = files[f];
+                    File file = FileUtils.resolve(files[f]);
                     if (file.isDirectory() && !file.equals(uriFile)) {
                         String searchUriText = file.toURI().normalize().toString();
                         ModelInfo<M> searchResult = search(infos, searchUriText, modelPath);
