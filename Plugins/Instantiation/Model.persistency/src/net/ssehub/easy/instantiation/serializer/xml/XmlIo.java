@@ -39,6 +39,7 @@ import net.ssehub.easy.instantiation.serializer.xml.converter.ReflectionTypeDesc
 import net.ssehub.easy.instantiation.serializer.xml.converter.TypeRegistryConverter;
 import net.ssehub.easy.instantiation.serializer.xml.converter.VTLTypeConverter;
 import net.ssehub.easy.instantiation.serializer.xml.mapper.ClassNameAliasingMapper;
+import net.ssehub.easy.varModel.model.Project;
 
 /**
  * Supports storing projects (and referenced projects) into XML format. Please note that the XML format is intended for
@@ -71,6 +72,7 @@ public class XmlIo {
         if (!isIvmlFile) {
             xStream.registerConverter(new ProjectConverter());
         }
+        xStream.omitField(Project.class, "comment");            
         // PRODUCTION
         Writer writer = null;
         FileOutputStream out =  null;
