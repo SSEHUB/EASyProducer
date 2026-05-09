@@ -43,12 +43,12 @@ public class ArtifactModel {
      *   but only as default model for the factory)
      */
     ArtifactModel(File base) {
-        this.base = base;
-        basePath = PathUtils.normalize(base.getAbsolutePath());
+        this.base = FileUtils.resolve(base);
+        basePath = PathUtils.normalize(this.base.getAbsolutePath());
         if (!basePath.endsWith(Path.SEPARATOR)) {
             basePath += Path.SEPARATOR;
         }
-        settings = SettingsInitializerRegistry.initializeSettings(base);
+        settings = SettingsInitializerRegistry.initializeSettings(this.base);
     }
     
     /**

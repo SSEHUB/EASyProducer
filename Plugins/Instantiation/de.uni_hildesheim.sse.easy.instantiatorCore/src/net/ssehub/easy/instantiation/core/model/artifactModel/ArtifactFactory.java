@@ -49,7 +49,7 @@ public class ArtifactFactory {
      */
     private static void initialize() {
         if (MODELS.isEmpty()) {
-            MODELS.add(new ArtifactModel(new File(DEFAULT_MODEL_BASE)));
+            MODELS.add(new ArtifactModel(new File(DEFAULT_MODEL_BASE))); // resolves symlinks
         }
     }
     
@@ -71,7 +71,7 @@ public class ArtifactFactory {
      */
     public static ArtifactModel createArtifactModel(File base) {
         initialize();
-        ArtifactModel model = new ArtifactModel(base);
+        ArtifactModel model = new ArtifactModel(base); // resolves symlinks
         MODELS.add(model);
         return model;
     }
@@ -127,6 +127,9 @@ public class ArtifactFactory {
         if (null == real) {
             throw new VilException("given object must not be null", VilException.ID_IS_NULL);
         }
+        if (real instanceof File) {
+            real = FileUtils.resolve((File) real);
+        }
         
         if (null == model) {
             model = findModel(real);
@@ -163,7 +166,7 @@ public class ArtifactFactory {
      * @see #createArtifact(Class, Object, ArtifactModel)
      */
     public static IFileSystemArtifact createFileSystemArtifact(File real) throws VilException {
-        return createArtifact(IFileSystemArtifact.class, real, null);
+        return createArtifact(IFileSystemArtifact.class, FileUtils.resolve(real), null);
     }
 
     /**
@@ -177,7 +180,7 @@ public class ArtifactFactory {
      * @see #createArtifact(Class, Object, ArtifactModel)
      */
     static IFileSystemArtifact createFileSystemArtifact(File real, ArtifactModel model) throws VilException {
-        return createArtifact(IFileSystemArtifact.class, real, model);
+        return createArtifact(IFileSystemArtifact.class, FileUtils.resolve(real), model);
     }
     
     /**
@@ -394,7 +397,7 @@ public class ArtifactFactory {
     public static synchronized ArtifactModel findModel(Object real) {
         initialize();
         if (real instanceof String) {
-            real = new File(real.toString()).getAbsoluteFile();
+            real = FileUtils.resolve(new File(real.toString()).getAbsoluteFile());
         }
         ArtifactModel result = null;
         int maxPrio = 0;

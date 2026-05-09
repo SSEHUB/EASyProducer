@@ -26,6 +26,7 @@ import org.junit.Assert;
 import org.junit.Before;
 
 import de.uni_hildesheim.sse.ModelUtility;
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -508,7 +509,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     protected final Project loadProject(File testFolder, String path) {
         Project project = null;
         try {
-            File projectFile = new File(testFolder, path.endsWith(".ivml") ? path : path + ".ivml");
+            File projectFile = FileUtils.resolve(new File(testFolder, path.endsWith(".ivml") ? path : path + ".ivml"));
             URI uri = URI.createFileURI(projectFile.getAbsolutePath());
             TranslationResult<Project> result = ModelUtility.INSTANCE.parse(uri);
             StringBuffer errorMsg = new StringBuffer();

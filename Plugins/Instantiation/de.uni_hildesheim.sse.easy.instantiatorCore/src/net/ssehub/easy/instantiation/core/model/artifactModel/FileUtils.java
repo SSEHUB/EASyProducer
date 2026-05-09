@@ -447,5 +447,15 @@ public class FileUtils {
         return new File(targetFile, variablePart.toString());
     }
 
+    /**
+     * Resolves a file or a symlink.
+     * 
+     * @param file the file to be resolved
+     * @return the resolved file or {@code file} if it cannot be resolved
+     * @see net.ssehub.easy.basics.io.FileUtils#resolve(File)
+     */
+    public static File resolve(File file) {
+        return net.ssehub.easy.basics.io.FileUtils.resolve(file);
+    }
     
 }
