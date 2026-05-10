@@ -109,7 +109,7 @@ public class Configuration {
      */
     Configuration(File projectFolder) {
         createStructures();
-        this.projectFolder = projectFolder;
+        this.projectFolder = FileUtils.resolve(projectFolder);
         this.file = new File(this.projectFolder, TOP_LEVEL_CONFIG_NAME);
         if (file.exists()) {
             load();

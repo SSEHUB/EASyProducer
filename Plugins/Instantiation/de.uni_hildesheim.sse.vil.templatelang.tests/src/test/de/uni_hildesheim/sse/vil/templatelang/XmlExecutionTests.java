@@ -39,7 +39,7 @@ public class XmlExecutionTests extends AbstractExecutionTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "xml");
+    private static final File DIR = FileUtils.resolve(new File(TESTDATA_DIR, "xml"));
     
     @Override
     protected File getTestFolder() {

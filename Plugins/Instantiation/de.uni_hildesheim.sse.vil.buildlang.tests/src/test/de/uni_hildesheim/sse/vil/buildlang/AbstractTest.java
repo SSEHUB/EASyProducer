@@ -65,7 +65,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
         }
         test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeInfrastructure();
         addTestDataLocations();
-        configurer.addTestDataLocations(getTestDataDir());
+        configurer.addTestDataLocations(net.ssehub.easy.basics.io.FileUtils.resolve(getTestDataDir()));
         //cleanTemp();
     }
 
@@ -73,15 +73,16 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
      * Adds the test data locations. Override to avoid.
      */
     protected void addTestDataLocations() {
-        System.out.println("Adding default testdata locations: " + getTestDataDir());
+        File tdd = net.ssehub.easy.basics.io.FileUtils.resolve(getTestDataDir());
+        System.out.println("Adding default testdata locations: " + tdd);
         try {
-            VarModel.INSTANCE.locations().addLocation(getTestDataDir(), OBSERVER);
-            configurer.getModelManagement().locations().addLocation(getTestDataDir(), OBSERVER);
+            VarModel.INSTANCE.locations().addLocation(tdd, OBSERVER);
+            configurer.getModelManagement().locations().addLocation(tdd, OBSERVER);
         } catch (ModelManagementException e) {
             e.printStackTrace(System.err);
             Assert.assertTrue(false); // shall not happen
         }
-        test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeLocations(getTestDataDir());
+        test.de.uni_hildesheim.sse.vil.templatelang.AbstractTest.initializeLocations(tdd);
     }
 
     /**
@@ -266,7 +267,8 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
                     ITracer bTracer = TracerFactory.createBuildLanguageTracer();
                     TracerFactory.registerBuildLanguageTracer(bTracer);
                     exec = configurer.createExecutionEnvironment(bTracer, 
-                        getTestDataDir(), data.getStartElement(), data.getParameter());
+                        net.ssehub.easy.basics.io.FileUtils.resolve(getTestDataDir()), data.getStartElement(), 
+                        data.getParameter());
                     assertFailure(data, script.accept(exec));
                     exec.release(true);
                     TracerFactory.unregisterBuildLanguageTracer(bTracer);
@@ -411,7 +413,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
         reInitProject(args, Executor.PARAM_TARGET);
         boolean inputPresent = (args.containsKey(Executor.PARAM_SOURCE) && args.containsKey(Executor.PARAM_TARGET) 
             && args.containsKey(Executor.PARAM_CONFIG));
-        Executor executor = new Executor(script, data.getParameter()).addBase(getTestDataDir())
+        Executor executor = new Executor(script, data.getParameter()).addBase(getTestDataDir()) // resolves
             .addStartRuleName(data.getStartElement());
         try {
             executor.execute();
@@ -481,10 +483,11 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
      * @throws IOException if problems occur when creating the directory 
      */
     protected File createTempDir(String name) throws IOException {
-        File dir = new File(getTempDir(), name);
+        File dir = net.ssehub.easy.basics.io.FileUtils.resolve(new File(getTempDir(), name));
         int i = 0;
         while (dir.exists()) {
-            dir = new File(getTempDir(), String.format("%02d_sc_%s", i, name));
+            dir = net.ssehub.easy.basics.io.FileUtils.resolve(
+                new File(getTempDir(), String.format("%02d_sc_%s", i, name)));
             i++;
         }
         dir.mkdirs();
@@ -496,9 +499,9 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
      */
     public final void cleanTemp() {
         try {
-            File tmp = getTempDir();
+            File tmp = net.ssehub.easy.basics.io.FileUtils.resolve(getTempDir());
             if (tmp.exists()) {
-                File[] files = tmp.listFiles();
+                File[] files = net.ssehub.easy.basics.io.FileUtils.resolve(tmp.listFiles());
                 for (File f : files) {
                     if (f.isDirectory()) {
                         FileUtils.cleanDirectory(f);

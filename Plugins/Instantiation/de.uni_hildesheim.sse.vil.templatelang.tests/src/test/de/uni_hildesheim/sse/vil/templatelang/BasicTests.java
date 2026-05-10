@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.messages.AbstractException;
 import net.ssehub.easy.dslCore.translation.ErrorCodes;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -20,7 +21,7 @@ public class BasicTests extends AbstractTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "basic");
+    private static final File DIR = FileUtils.resolve(new File(TESTDATA_DIR, "basic"));
 
 
     @Override

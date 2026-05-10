@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.instantiation.core.Bundle;
@@ -337,7 +338,7 @@ public class Executor {
      * @return this executor instance
      */
     public Executor addBase(File base) {
-        this.base = base;
+        this.base = FileUtils.resolve(base);
         return this;
     }
 

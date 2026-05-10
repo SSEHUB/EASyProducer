@@ -18,6 +18,7 @@ package net.ssehub.easy.producer.core.persistence.standard;
 
 import java.io.File;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
@@ -100,7 +101,7 @@ public class Persistencer implements IPersistencer, PersistenceConstants {
 
     @Override
     public File getEasyConfigFile() {
-        return new File(storage.getEasyConfigFile());
+        return FileUtils.resolve(new File(storage.getEasyConfigFile()));
     }
 
     /**

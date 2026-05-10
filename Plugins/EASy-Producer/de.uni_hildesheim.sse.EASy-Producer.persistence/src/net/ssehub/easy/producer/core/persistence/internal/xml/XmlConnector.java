@@ -20,12 +20,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import net.ssehub.easy.basics.io.FileUtils;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.producer.core.persistence.PersistenceException;
 import net.ssehub.easy.producer.core.persistence.datatypes.Entity;
 import net.ssehub.easy.producer.core.persistence.datatypes.Model;
 import net.ssehub.easy.producer.core.persistence.datatypes.ModelType;
 import net.ssehub.easy.producer.core.persistence.datatypes.PathEnvironment;
 import net.ssehub.easy.producer.core.persistence.datatypes.PersistentProject;
+import net.ssehub.easy.producer.core.persistence.internal.Activator;
 import net.ssehub.easy.producer.core.persistence.internal.StorageConnector;
 import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
 
@@ -37,7 +41,7 @@ import net.ssehub.easy.producer.core.persistence.standard.PersistenceConstants;
  */
 public class XmlConnector implements StorageConnector {
 
-    private String xmlFilePath;
+    private File xmlFile;
     private PathEnvironment pathEnv;
 
     /**
@@ -46,7 +50,7 @@ public class XmlConnector implements StorageConnector {
      * @param pathEnv a path environment for making files and paths relative
      */
     public XmlConnector(String xmlFilePath, PathEnvironment pathEnv) {
-        this.xmlFilePath = xmlFilePath;
+        this.xmlFile = FileUtils.resolve(new File(xmlFilePath));
         this.pathEnv = pathEnv;
     }
 
@@ -83,7 +87,7 @@ public class XmlConnector implements StorageConnector {
                 expr = xPath.compile(path);
                 result = expr.evaluate(doc, XPathConstants.NODE);
             } catch (XPathExpressionException e) {
-                e.printStackTrace();
+                getLogger().warn("Loading models: " + e.getMessage());
             }
 
             Node nodes = (Node) result;
@@ -119,7 +123,7 @@ public class XmlConnector implements StorageConnector {
 
         Document doc;
         try {
-            doc = db.parse(xmlFilePath);
+            doc = db.parse(xmlFile);
         } catch (SAXException e) {
             throw new PersistenceException(e);
         } catch (IOException e) {
@@ -177,7 +181,7 @@ public class XmlConnector implements StorageConnector {
         xml.append(XMLConstants.CLOSING_ROOT);
         FileWriter writer;
         try {
-            writer = new FileWriter(xmlFilePath);
+            writer = new FileWriter(xmlFile);
             writer.append(xml.toString());
             writer.flush();
             writer.close();
@@ -236,9 +240,8 @@ public class XmlConnector implements StorageConnector {
     @Override
     public String getProjectID() {
         String id = null;
-        File configFile = new File(xmlFilePath);
 
-        if (configFile.exists()) {
+        if (xmlFile.exists()) {
             XPathFactory factory = XPathFactory.newInstance();
             XPath xPath = factory.newXPath();
             XPathExpression expr = null;
@@ -248,19 +251,14 @@ public class XmlConnector implements StorageConnector {
             try {
                 db = dbf.newDocumentBuilder();
             } catch (ParserConfigurationException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                getLogger().warn("Reading EASy XML file: " + e1.getMessage());
             }
 
             Document doc = null;
             try {
-                doc = db.parse(configFile);
-            } catch (SAXException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                doc = db.parse(xmlFile);
+            } catch (SAXException | IOException e1) {
+                getLogger().warn("Reading EASy XML file: " + e1.getMessage());
             }
             doc.normalize();
             String path = XMLConstants.PATH_4_ROOT_NODE;
@@ -269,7 +267,7 @@ public class XmlConnector implements StorageConnector {
                 expr = xPath.compile(path);
                 result = expr.evaluate(doc, XPathConstants.NODE);
             } catch (XPathExpressionException e) {
-                e.printStackTrace();
+                getLogger().warn("Reading EASy XML file: " + e.getMessage());
             }
 
             Node nodes = (Node) result;
@@ -285,6 +283,10 @@ public class XmlConnector implements StorageConnector {
             }
         }
         return id;
+    }
+    
+    private static EASyLogger getLogger() {
+        return EASyLoggerFactory.INSTANCE.getLogger(XmlConnector.class, Activator.PLUGIN_ID);
     }
     
     @Override

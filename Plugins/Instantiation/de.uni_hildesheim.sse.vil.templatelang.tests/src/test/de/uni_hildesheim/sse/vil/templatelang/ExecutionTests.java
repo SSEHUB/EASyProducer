@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.dslCore.translation.Message;
@@ -40,7 +41,7 @@ public class ExecutionTests extends AbstractExecutionTest {
     /**
      * Represents the directory containing the tests.
      */
-    private static final File DIR = new File(TESTDATA_DIR, "execution");
+    private static final File DIR = FileUtils.resolve(new File(TESTDATA_DIR, "execution"));
     
     @Override
     protected File getTestFolder() {
