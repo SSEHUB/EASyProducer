@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.ssehub.easy.basics.io.FileUtils;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.Status;
 import net.ssehub.easy.basics.modelManagement.IModel;
@@ -74,7 +75,7 @@ public abstract class AbstractTest<R extends IModel> {
         } else {
             result = new File(externalLocation);
         }
-        return result;
+        return FileUtils.resolve(result);
     }
 
     /**
