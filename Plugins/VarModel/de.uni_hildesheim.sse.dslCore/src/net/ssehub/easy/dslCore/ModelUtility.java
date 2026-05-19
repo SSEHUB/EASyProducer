@@ -1,5 +1,6 @@
 package net.ssehub.easy.dslCore;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -8,6 +9,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URISyntaxException;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -309,7 +313,9 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         ML_COMMENT(true),
         ML_COMMENT_STAR(true),
         STRING(false),
-        STRING_ESCAPE(false);
+        STRING_ESCAPE(false),
+        STRING2(false),
+        STRING2_ESCAPE(false);
         
         private boolean isComment;
         
@@ -341,6 +347,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         
         private String[] firsts;
         private String[] follows;
+        private String[] terminates;
         private boolean optional;
         private boolean multi;
         private boolean includesFollows = true;
@@ -403,6 +410,19 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         }
         
         /**
+         * Additional optional terminating terminals. Matches like follows but if one of those, considers as part
+         * of the current match.
+         * 
+         * @param terminates the terminating symbols, may be multiple alternative ones separated by "|", may be 
+         *   <b>null</b> for none
+         * @return <b>this</b> for chaining
+         */
+        public Rule terminates(String terminates) {
+            this.terminates = split(terminates);
+            return this;
+        }
+        
+        /**
          * Splits symbols.
          * 
          * @param symbols the symbols given as single or multiple alternative, separated by "|" or <b>null</b>
@@ -430,10 +450,41 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         private boolean matches(List<String> parts) {
             boolean matches = canMatch(parts);
             if (matches) {
-                matches = false;
-                for (int f = 0; !matches && f < follows.length; f++) {
-                    matches = parts.get(parts.size() - 1).endsWith(follows[f]);
+                String last = parts.get(parts.size() - 1);
+                matches = matchesFollow(last, follows);
+                if (!matches && terminates != null) {
+                    matches = matchesFollow(last, terminates);
                 }
+            }
+            return matches;
+        }
+
+        /**
+         * Returns whether {@code text} starts by one of the {@code firsts}.
+         * 
+         * @param text the text to match
+         * @param firsts the firsts
+         * @return {@code true} for match, {@code false} else
+         */
+        private boolean matchesFirst(String text, String[] firsts) {
+            boolean matches = false;
+            for (int f = 0; !matches && f < firsts.length; f++) {
+                matches = text.startsWith(firsts[f]);
+            }
+            return matches;
+        }
+
+        /**
+         * Returns whether {@code text} ends by one of the {@code follows}.
+         * 
+         * @param text the text to match
+         * @param follows the follows
+         * @return {@code true} for match, {@code false} else
+         */
+        private boolean matchesFollow(String text, String[] follows) {
+            boolean matches = false;
+            for (int f = 0; !matches && f < follows.length; f++) {
+                matches = text.endsWith(follows[f]);
             }
             return matches;
         }
@@ -447,9 +498,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         private boolean canMatch(List<String> parts) {
             boolean matches = false;
             if (parts.size() > 0) {
-                for (int f = 0; !matches && f < firsts.length; f++) {
-                    matches = parts.get(0).startsWith(firsts[f]);
-                }
+                matches = matchesFirst(parts.get(0), firsts);
             }
             return matches;
         }
@@ -535,15 +584,27 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                 if (parts.size() > 0) {
                     String follow = parts.get(parts.size() - 1);
                     parts.clear();
-                    parts.add(follow);
+                    boolean addFollow = true;
+                    if (terminates != null) {
+                        if (matchesFollow(follow, terminates)) {
+                            addFollow = false;
+                        }
+                    }
+                    if (addFollow) {
+                        parts.add(follow);
+                    }
                 }
             }
         }
         
         @Override
         public String toString() {
-            return "f: " + Arrays.toString(firsts) + " w: " + Arrays.toString(follows) + " inc: " + includesFollows 
-                + " opt: " + optional + " multi: " + multi; 
+            String ff = "";
+            if (null != terminates) {
+                ff = "-> " + Arrays.toString(terminates) + " ";
+            }
+            return "f: " + Arrays.toString(firsts) + ff + " w: " + Arrays.toString(follows) + " inc: " 
+                + includesFollows + " opt: " + optional + " multi: " + multi; 
         }
         
     }
@@ -564,6 +625,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         private int ruleIndex = 0;
         private List<String> parts = new ArrayList<>();
         private int nestingLevel = 0;
+        private int parLevel = 0;
         private boolean emit = true;
         
         /**
@@ -576,7 +638,95 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             this.in = in;
             this.rules = Rule.instantiate(rules, false);
         }
+
+        /**
+         * Handles the state transitions for an escape character.
+         * 
+         * @param state the actual state
+         * @return the next state, may be <code>state</code>
+         */
+        private ParseState handleEscape(ParseState state) {
+            ParseState result = state;
+            if (ParseState.STRING_ESCAPE == state) {
+                result = ParseState.STRING;
+            } else if (ParseState.STRING2_ESCAPE == state) {
+                result = ParseState.STRING2;
+            }
+            return result;
+        }
         
+        /**
+         * Handles the state transitions when a string starts.
+         * 
+         * @param stringState the state representing the string
+         * @param state the actual state
+         * @param nextState the next state to become active with the next character
+         * @return the next state, may be <code>nextState</code>
+         */
+        private ParseState handleStringStart(final ParseState stringState, ParseState state, ParseState nextState) {
+            ParseState result = nextState;
+            if (ParseState.CODE == state) {
+                result = stringState;
+            } else if (stringState == state) {
+                result = ParseState.CODE;
+            }
+            return result;
+        }
+        
+        /**
+         * Handles the state transitions when an asterisk is found.
+         * 
+         * @param state the actual state
+         * @param nextState the next state to become active with the next character
+         * @return the next state, may be <code>nextState</code>
+         */
+        private ParseState handleAsterisk(ParseState state, ParseState nextState) {
+            ParseState result = nextState;
+            if (ParseState.SLASH == state) {
+                result = ParseState.ML_COMMENT;
+            } else if (ParseState.ML_COMMENT == state) {
+                result = ParseState.ML_COMMENT_STAR;
+            }
+            return result;
+        }
+
+        /**
+         * Handles the state transitions when a slash is found.
+         * 
+         * @param state the actual state
+         * @param nextState the next state to become active with the next character
+         * @return the next state, may be <code>nextState</code>
+         */
+        private ParseState handleSlash(ParseState state, ParseState nextState) {
+            ParseState result = nextState;
+            if (ParseState.CODE == state) {
+                result = ParseState.SLASH;
+            } else if (ParseState.SLASH == state) {
+                result = ParseState.SL_COMMENT;
+            } else if (ParseState.ML_COMMENT_STAR == state) {
+                result = ParseState.CODE;
+                lastStart = out.length();
+            }
+            return result;
+        }
+
+        /**
+         * Handles the state transitions when a backslash is found.
+         * 
+         * @param state the actual state
+         * @param nextState the next state to become active with the next character
+         * @return the next state, may be <code>nextState</code>
+         */
+        private ParseState handleBackSlash(ParseState state, ParseState nextState) {
+            ParseState result = nextState;
+            if (ParseState.STRING == state) {
+                result = ParseState.STRING_ESCAPE;
+            } else if (ParseState.STRING2 == state) {
+                result = ParseState.STRING2_ESCAPE;
+            }
+            return result;
+        }
+
         /**
          * Parse the text and cut it.
          * 
@@ -586,36 +736,21 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         private String parse() throws IOException {
             int data;
             while ((data = in.read()) != -1) {
-                ParseState nextState = state;
                 char c = (char) data;
-                if (ParseState.STRING_ESCAPE == state && c != '\\') {
-                    nextState = ParseState.STRING;
-                } else {
+                ParseState nextState = handleEscape(state);
+                if (nextState == state) { // not changed by handleEscape
                     switch (c) {
                     case '/':
-                        if (ParseState.CODE == state) {
-                            nextState = ParseState.SLASH;
-                        } else if (ParseState.SLASH == state) {
-                            nextState = ParseState.SL_COMMENT;
-                        } else if (ParseState.ML_COMMENT_STAR == state) {
-                            nextState = ParseState.CODE;
-                            lastStart = out.length();
-                        }
+                        nextState = handleSlash(state, nextState);
                         break;
                     case '*':
-                        if (ParseState.SLASH == state) {
-                            nextState = ParseState.ML_COMMENT;
-                        } else if (ParseState.ML_COMMENT == state) {
-                            nextState = ParseState.ML_COMMENT_STAR;
-                        }
+                        nextState = handleAsterisk(state, nextState);
                         break;
                     case '"':
-                        if (ParseState.CODE == state) {
-                            nextState = ParseState.STRING;
-                        } else if (ParseState.STRING == state) {
-                            nextState = ParseState.CODE;
-                            lastStart = out.length();
-                        }
+                        nextState = handleStringStart(ParseState.STRING, state, nextState);
+                        break;
+                    case '\'':
+                        nextState = handleStringStart(ParseState.STRING2, state, nextState);
                         break;
                     case '\n':
                         if (ParseState.SL_COMMENT == state) {
@@ -623,8 +758,16 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                         }
                         break;
                     case '\\':
-                        if (ParseState.STRING == state) {
-                            nextState = ParseState.STRING_ESCAPE;
+                        nextState = handleBackSlash(state, nextState);
+                        break;
+                    case '(', '[':
+                        if (ParseState.CODE == state) {
+                            parLevel++;
+                        }
+                        break;
+                    case ')', ']':
+                        if (ParseState.CODE == state) {
+                            parLevel--;
                         }
                         break;
                     case '{':
@@ -636,7 +779,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                         if (ParseState.CODE == state || ParseState.SLASH == state) {
                             nestingLevel--;
                         }
-                        if (nestingLevel == 0) { // reset for next file
+                        if (nestingLevel == 0 && parLevel == 0) { // reset for next file
                             if (emit && lastEndMatch > 0 && lastEndMatch < out.length() - 1) {
                                 out.delete(lastEndMatch, out.length() - 1);
                             }
@@ -697,10 +840,11 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
          * @param ch the actual character
          * @return {@code true} for enable analysis, {@code false} else
          */
-        private static boolean enableAnalysis(char ch) {
+        private boolean enableAnalysis(char ch) {
             boolean enableAnalysis = Character.isWhitespace(ch);
             enableAnalysis |= ch == '{' || ch == '}';
             enableAnalysis |= ch == '(' || ch == ')';
+            enableAnalysis &= parLevel == 0;
             return enableAnalysis;
         }
         
@@ -726,7 +870,9 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         private void matchRules() {
             boolean matched = false;
             boolean foundMatch = false;
+            boolean cont;
             do {
+                cont = false;
                 Rule rule = rules[ruleIndex];
                 matched = rule.matches(parts);
                 if (matched) {
@@ -746,8 +892,11 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                             break;
                         }
                     }
+                    cont = true;
                 }
-            } while (matched && ruleIndex < rules.length && rules[ruleIndex].isOptional());
+                cont = cont || matched;
+            } while (cont && parts.size() > 0 && ruleIndex < rules.length 
+                && rules[ruleIndex].isOptional());
             boolean stopped = ruleIndex >= rules.length;
             if (stopped) {
                 out.delete(lastEndMatch, out.length());
@@ -868,6 +1017,16 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     public static StringBuilder appendWithNewLine(StringBuilder builder, String text) {
         return append(builder, text, "\n");
     }
+    
+    public static InputStream createInputStream(URI uri) throws IOException {
+        InputStream result = null;
+        if (uri.isFile()) { // seems to be faster on windows
+            File file = new File(uri.toFileString());
+            FileChannel fileChannel = FileChannel.open(file.toPath(), StandardOpenOption.READ);
+            result = Channels.newInputStream(fileChannel);
+        }
+        return null == result ? URIConverter.INSTANCE.createInputStream(uri) : result;
+    }
 
     // checkstyle: stop exception type check
 
@@ -887,21 +1046,28 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
     public E parse(URI uri, MessageReceiver receiver, String ruleName, Class<E> cls, Rule... rules) throws IOException {
         E result = null;
         try {
-            //System.out.println(">IN " + uri);        
+            //System.out.println("- " + uri);        
             //InputStream is = URIConverter.INSTANCE.createInputStream(uri);
             //System.out.println(Files.readStreamIntoString(is));
             //is.close();
-            //System.out.println("---");        
-            InputStream inputStream = URIConverter.INSTANCE.createInputStream(uri);
+            //System.out.println(" ==");        
+            InputStream inputStream = createInputStream(uri);
             Reader reader;
             if (rules.length > 0) {
                 reader = new StringReader(cutLeadin(inputStream, rules));
-                //System.out.println(cutLeadin(URIConverter.INSTANCE.createInputStream(uri), rules));        
+                //System.out.println(cutLeadin(createInputStream(uri), rules));        
                 //System.out.println("<OUT "+ uri);
             } else {
                 reader = new InputStreamReader(inputStream);
             }
+            reader = new BufferedReader(reader);
             IParseResult pr = parseFragment(ruleName, reader);
+            /*if (pr.hasSyntaxErrors()) {
+                System.out.println(cutLeadin(createInputStream(uri), rules));        
+                for (INode n : pr.getSyntaxErrors()) {
+                    System.out.println(" E " + n.getStartLine()+" "+n.getSyntaxErrorMessage().getMessage());
+                }
+            }*/
             if ((null == pr || pr.hasSyntaxErrors())) {
                 // fallback, may take longer but kicks in if shortcut or fragment parsing fails
                 result = parse(uri, true, receiver, cls);
