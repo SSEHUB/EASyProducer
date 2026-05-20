@@ -47,6 +47,7 @@ public class ClassFileArtifact extends FileArtifact {
     @Override
     public void store() throws VilException {
         // TODO consider super, consider if (getRepresentationChanged(true))
+        // TODO consider FileTracker.stored
     }
     
     /**

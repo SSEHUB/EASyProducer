@@ -29,12 +29,15 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.SettingsInitializerRegi
  */
 public class ArtifactModel {
 
+    private static boolean enablePrepareArtifacts = false;
     private File base;
     private String basePath;
     private TreeMap<String, IFileSystemArtifact> fileArtifacts = new TreeMap<String, IFileSystemArtifact>();
     private TreeMap<Object, IArtifact> otherArtifacts = new TreeMap<Object, IArtifact>();
     private Map<ProjectSettings, Object> settings;
     private Map<String, Path> pathCache = new HashMap<String, Path>();
+    private FileTracker tracker;
+    private boolean prepareArtifacts = enablePrepareArtifacts;
     
     /**
      * Creates an artifact model instance as instantiation environment.
@@ -49,6 +52,16 @@ public class ArtifactModel {
             basePath += Path.SEPARATOR;
         }
         settings = SettingsInitializerRegistry.initializeSettings(this.base);
+        tracker = new FileTracker(this.base);
+    }
+    
+    /**
+     * Returns the file tracker.
+     * 
+     * @return the file tracker
+     */
+    public FileTracker getFileTracker() {
+        return tracker;
     }
     
     /**
@@ -561,6 +574,7 @@ public class ArtifactModel {
      * Clears this artifact. For internal use only.
      */
     void clear() {
+        tracker.commit();
         List<IFileSystemArtifact> files = new ArrayList<IFileSystemArtifact>(fileArtifacts.size());
         files.addAll(fileArtifacts.values()); // avoid concurrent modification
         for (IFileSystemArtifact fa : files) {
@@ -594,6 +608,33 @@ public class ArtifactModel {
      */
     public Object getSettings(ProjectSettings key) {
         return settings.get(key);
+    }
+    
+    /**
+     * Sets whether artifacts shall automatically be prepared before explicit use.
+     * 
+     * @param prepare {@code true} if artifacts shall be prepared, {@code false} else
+     */
+    public void setPrepareArtifacts(boolean prepare) {
+        this.prepareArtifacts = prepare;
+    }
+
+    /**
+     * Returns whether artifacts shall automatically be prepared before explicit use.
+     * 
+     * @return {@code true} if artifacts shall be prepared, {@code false} else
+     */
+    public boolean isPrepareArtifacts() {
+        return prepareArtifacts;
+    }
+    
+    /**
+     * Defines the default whether artifacts shall automatically be prepared before explicit use.
+     * 
+     * @param prepare {@code true} if artifacts shall be prepared, {@code false} else (default)
+     */
+    public static void setPrepareArtifactsDefault(boolean prepare) {
+        enablePrepareArtifacts = prepare;
     }
     
 }

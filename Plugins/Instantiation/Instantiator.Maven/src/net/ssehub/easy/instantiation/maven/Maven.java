@@ -37,6 +37,7 @@ import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory.EASyLogger;
 import net.ssehub.easy.instantiation.core.JavaUtilities;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
@@ -288,6 +289,7 @@ public class Maven extends AbstractFileInstantiator {
      */
     private static Set<FileArtifact> build(Path root, String buildFilePath, boolean updateSnapshots, String[] targets, 
         Sequence<String> mvnArgs) throws VilException {
+        FileTracker.commit(root);
         List<FileArtifact> result = new ArrayList<FileArtifact>();
         if (!SKIP) {
             File targetPath = determineTargetPath(root);

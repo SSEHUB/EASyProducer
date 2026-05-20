@@ -71,8 +71,17 @@ public class ArtifactFactory {
      */
     public static ArtifactModel createArtifactModel(File base) {
         initialize();
-        ArtifactModel model = new ArtifactModel(base); // resolves symlinks
-        MODELS.add(model);
+        ArtifactModel model = null;
+        for (ArtifactModel m : MODELS) {
+            if (m.getBase().equals(base)) {
+                model = m;
+                break;
+            }
+        }
+        if (null == model) {
+            model = new ArtifactModel(base); // resolves symlinks
+            MODELS.add(model);
+        }
         return model;
     }
     

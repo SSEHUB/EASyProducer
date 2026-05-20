@@ -325,6 +325,7 @@ public class Project implements IVilType, IStringValueProvider {
     @Invisible
     public void release() {
         if (null != artifactModel) {
+            artifactModel.getFileTracker().commit();
             ArtifactFactory.release(artifactModel);
         }
     }
@@ -386,8 +387,23 @@ public class Project implements IVilType, IStringValueProvider {
     public Object getSettings(ProjectSettings key) {
         return artifactModel.getSettings(key);
     }
-    
-    
 
+    /**
+     * Sets whether artifacts shall automatically be prepared before explicit use.
+     * 
+     * @param prepare {@code true} if artifacts shall be prepared, {@code false} else (default)
+     */
+    public void setPrepareArtifacts(boolean prepare) {
+        artifactModel.setPrepareArtifacts(prepare);
+    }
+
+    /**
+     * Returns whether artifacts shall automatically be prepared before explicit use.
+     * 
+     * @return {@code true} if artifacts shall be prepared, {@code false} else (default)
+     */
+    public boolean isPrepareArtifacts() {
+        return artifactModel.isPrepareArtifacts();
+    }
  
 }

@@ -31,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -397,6 +398,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
             CodeWriter out = new CodeWriter(file);
             store(out);
             out.close();
+            FileTracker.stored(getPath());
         }
     }
     

@@ -41,6 +41,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FragmentArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
@@ -115,6 +116,13 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             lastPersisted = System.currentTimeMillis();
         }
     }
+
+    @Override
+    protected void prepareImpl() {
+        doc = null;
+        rootElement = null;
+        lastPersisted = -1;
+    }
     
     /**
      * Creates a temporary file artifact.
@@ -169,6 +177,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         if (getRepresentationChanged(true)) {
             writeToFile();
             lastPersisted = System.currentTimeMillis();
+            FileTracker.stored(getPath());
         }
     }
     

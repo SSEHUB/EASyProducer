@@ -129,6 +129,12 @@ public class FileUtils {
                 sm = null;
             }
             FileUtils.copyOrMove(sp.getAbsolutePath(), destinationFile, sm, tm, result);
+            if (move) {
+                FileTracker.stored(tp);
+                FileTracker.deleted(source);
+            } else {
+                FileTracker.stored(tp);
+            }
         }
         return new ListSet<IFileSystemArtifact>(result, IFileSystemArtifact.class);
     }

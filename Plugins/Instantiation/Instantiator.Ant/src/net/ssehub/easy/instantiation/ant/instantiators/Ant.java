@@ -9,6 +9,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
@@ -48,7 +49,7 @@ public class Ant extends AbstractFileInstantiator {
     @ReturnGenerics(FileArtifact.class)
     public static Set<FileArtifact> ant(Path root, String buildFilePath, String buildtarget) 
         throws VilException {
-
+        FileTracker.commit(root);
         File buildFile = new File(root.getAbsolutePath(), buildFilePath);
         String fullBuildFilePath = buildFile.getAbsolutePath();
          

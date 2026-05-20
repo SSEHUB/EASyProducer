@@ -8,6 +8,7 @@ import java.util.List;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ArraySet;
@@ -72,7 +73,10 @@ public class Zip implements IVilType {
     @Invisible
     public static Set<FileArtifact> add(Path base, Collection<FileArtifact> artifacts, Path target, ZipHandler handler) 
         throws VilException {
-        List<File> files = toFileList(artifacts);
+        if (target.getArtifactModel().isPrepareArtifacts()) {
+            target.delete();
+        }
+        List<File> files = toFileList(artifacts, target);
         List<File> zipResult;
         try {
             zipResult = handler.add(base.getAbsolutePath(), files, target.getAbsolutePath());
@@ -86,13 +90,18 @@ public class Zip implements IVilType {
      * Turns a collection of file artifacts into files.
      * 
      * @param artifacts the artifacts to be processed
+     * @param target the target artifact path to exclude self-loops
      * @return the corresponding files
      */
     @Invisible
-    public static final List<File> toFileList(Collection<FileArtifact> artifacts) {
+    public static final List<File> toFileList(Collection<FileArtifact> artifacts, Path target) {
         List<File> files = new ArrayList<File>();
+        File tf = target.getAbsolutePath();
         for (FileArtifact artifact : artifacts) {
-            files.add(artifact.getPath().getAbsolutePath());
+            File f = artifact.getPath().getAbsolutePath();
+            if (!f.equals(tf)) { // prevent self-adding if target already exists, incremental
+                files.add(f);
+            }
         }
         return files;
     }
@@ -113,6 +122,7 @@ public class Zip implements IVilType {
             File file = files.get(f);
             if (!file.isDirectory()) {
                 result[f] = ArtifactFactory.createArtifact(FileArtifact.class, file, model);
+                FileTracker.stored(result[f].getPath());
             }
         }
         return new ArraySet<FileArtifact>(result, FileArtifact.class);

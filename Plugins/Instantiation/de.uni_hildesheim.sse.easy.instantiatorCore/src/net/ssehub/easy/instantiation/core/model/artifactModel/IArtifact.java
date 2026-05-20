@@ -124,4 +124,23 @@ public interface IArtifact extends IVilType {
         return true;
     }
 
+    /**
+     * Prepares the artifact for use, e.g., clear a file artifact before writing to it.
+     */
+    @Invisible
+    public default void prepare() {
+    }
+
+    /**
+     * Calls {@link #prepare()}.
+     * 
+     * @param artifact the artifact, may be <b>null</b>
+     */
+    @Invisible
+    public static void prepare(IArtifact artifact) {
+        if (null != artifact) {
+            artifact.prepare();
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.defaultInstantiators;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,7 +51,7 @@ public class ZipHandler {
         }
         ZipOutputStream zos = null;
         try {
-            zos = createOutputStream(new FileOutputStream(zip));
+            zos = createOutputStream(new BufferedOutputStream(new FileOutputStream(zip)));
             String basePath;
             if (null != base) {
                 basePath = FilenameUtils.normalize(base.getAbsolutePath());
@@ -161,18 +163,18 @@ public class ZipHandler {
                 target.delete();
                 target.mkdirs();
             }
-            FileInputStream fis = null;
+            InputStream fis = null;
             try {
-                fis = new FileInputStream(zip);
+                fis = new BufferedInputStream(new FileInputStream(zip));
                 ZipInputStream zis = createInputStream(fis);
                 ZipEntry entry = zis.getNextEntry();
                 while (null != entry) {
                     if (!entry.isDirectory() && matches(entry, pattern)) {
-                        FileOutputStream fos = null;
+                        OutputStream fos = null;
                         try {
                             File out = new File(target, entry.getName());
                             out.getParentFile().mkdirs();
-                            fos = new FileOutputStream(out);
+                            fos = new BufferedOutputStream(new FileOutputStream(out));
                             IOUtils.copy(zis, fos);
                             fos.close();
                             if (null != files) {

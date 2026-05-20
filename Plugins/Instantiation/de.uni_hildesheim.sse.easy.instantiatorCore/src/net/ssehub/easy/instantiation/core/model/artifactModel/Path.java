@@ -280,6 +280,7 @@ public class Path implements IVilType, IStringValueProvider {
                 if (!file.isFile()) {
                     org.apache.commons.io.FileUtils.cleanDirectory(file);
                 }
+                FileTracker.deleted(this);
             } catch (IOException e) {
                 throw new VilException(e, VilException.ID_IO);
             }
@@ -298,6 +299,7 @@ public class Path implements IVilType, IStringValueProvider {
         }
         getAbsolutePath().mkdirs();
         ArtifactFactory.createArtifact(getAbsolutePath());
+        FileTracker.stored(this);
     }
         
     /**
@@ -520,6 +522,7 @@ public class Path implements IVilType, IStringValueProvider {
         } else {
             FileUtils.delete(getAbsolutePath());
         }
+        FileTracker.deleted(this);
     }
     
     /**
@@ -557,6 +560,7 @@ public class Path implements IVilType, IStringValueProvider {
             }
         }
         f.setLastModified(System.currentTimeMillis());
+        FileTracker.stored(this);
     }
     
     /**
@@ -605,6 +609,7 @@ public class Path implements IVilType, IStringValueProvider {
         }
         Path result = this;
         File file = new File(name);
+        File origTarget = file;
         if (!file.isAbsolute()) {
             //file = new File(model.getBase(), name);
             file = getAbsolutePath().getParentFile();
@@ -614,6 +619,7 @@ public class Path implements IVilType, IStringValueProvider {
                 file = new File(file, name);
             }
         }
+        File origSrc = new File(getPath());
         FileUtils.rename(getAbsolutePath(), file);
         ArtifactModel model = ArtifactFactory.findModel(file);
         if (null != model) {
@@ -624,6 +630,7 @@ public class Path implements IVilType, IStringValueProvider {
         if (null != this.model) {
             this.model.afterRename(this);
         }
+        model.getFileTracker().rename(origSrc, origTarget);
         return result;
     }
 

@@ -35,6 +35,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileArtifact;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -98,6 +99,11 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
     }
 
     // checkstyle: resume exception type check
+    
+    @Override
+    protected void prepareImpl() {
+        data.clear();
+    }
     
     @Override
     public void artifactChanged(Object cause) throws VilException {
@@ -316,6 +322,7 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
                 }
                 writer.close();
                 changedByNodes = false;
+                FileTracker.stored(getPath());
             } catch (IOException e) {
                 throw new VilException(e.getMessage(), e, VilException.ID_IO);
             }

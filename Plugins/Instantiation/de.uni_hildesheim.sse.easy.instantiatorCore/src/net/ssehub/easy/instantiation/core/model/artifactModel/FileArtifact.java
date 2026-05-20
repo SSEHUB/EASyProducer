@@ -53,6 +53,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
      */
     protected FileArtifact(File file, ArtifactModel model) {
         path = Path.createInstance(file, model);
+        FileTracker.register(path);
     }
 
     /**
@@ -67,6 +68,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         } else {
             this.path = path;
         }
+        FileTracker.register(this.path);
     }
 
     /**
@@ -87,6 +89,19 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
         }
     }
     
+    @Invisible
+    public void prepare() {
+        if (getArtifactModel().isPrepareArtifacts()) {
+            path.getAbsolutePath().delete();            
+            prepareImpl();
+            FileTracker.prepare(path);
+        }
+    }
+    
+    protected void prepareImpl() {
+        
+    }
+    
     /**
      * Returns whether this artifact is (considered to be) a temporary artifact.
      * 
@@ -101,6 +116,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     @OperationMeta(storeArtifactsBefore = true)
     public void delete() throws VilException {
         path.delete();
+        FileTracker.deleted(path);
     }
     
     /**
@@ -174,9 +190,11 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     @Override
     @OperationMeta(storeArtifactsBefore = true)
     public void rename(String name) throws VilException {
+        Path origPath = path;
         path.getArtifactModel().beforeRename(this);
         path = path.rename(name);
         path.getArtifactModel().afterRename(this);
+        FileTracker.rename(origPath, path);
     }
 
     @Override
@@ -277,7 +295,8 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
     @Invisible
     @Conversion
     public static FileArtifact convert(Path path) throws VilException {
-        return ArtifactFactory.createArtifact(FileArtifact.class, path.getAbsolutePath(), path.getArtifactModel());
+        return ArtifactFactory.createArtifact(FileArtifact.class, path.getAbsolutePath(), 
+            path.getArtifactModel());
     }
 
     @Override
@@ -329,6 +348,7 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
                     throw new VilException(e, VilException.ID_IO);
                 }
             }
+            FileTracker.stored(path);
         }
     }
 

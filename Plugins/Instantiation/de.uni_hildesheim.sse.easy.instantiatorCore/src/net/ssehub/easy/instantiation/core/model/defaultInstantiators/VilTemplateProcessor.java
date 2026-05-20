@@ -622,6 +622,7 @@ public class VilTemplateProcessor implements IVilType {
         // executing the model
         ITracer tracer = TracerFactory.createTemplateLanguageTracer();
         long startTime = System.currentTimeMillis();
+        target.prepare();
         try {
             Map<String, Object> localParam = new HashMap<String, Object>();
             // put default parameter

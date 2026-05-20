@@ -45,6 +45,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      */
     protected FolderArtifact(Path path) {
         this.path = path;
+        FileTracker.register(path);
     }
 
     /**
@@ -56,6 +57,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
      */
     protected FolderArtifact(File file, ArtifactModel model) {
         path = Path.createInstance(file, model);
+        FileTracker.register(path);
     }
     
     /**
@@ -82,6 +84,7 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     @OperationMeta(storeArtifactsBefore = true)
     public void delete() throws VilException {
         path.delete();
+        FileTracker.deleted(path);
     }
 
     @Override
@@ -92,9 +95,11 @@ public class FolderArtifact extends SimpleArtifact implements IFileSystemArtifac
     @Override
     @OperationMeta(storeArtifactsBefore = true)
     public void rename(String name) throws VilException {
+        Path origPath = path;
         path.getArtifactModel().beforeRename(this);
         path = path.rename(name);
         path.getArtifactModel().afterRename(this);
+        FileTracker.rename(origPath, path);
     }
 
     @Override
