@@ -167,7 +167,7 @@ public class FileTracker {
 
     }
 
-    private static boolean enabled = Boolean.valueOf(System.getProperty("easy.vil.incremental", "true")); // TODO false
+    private static boolean enabled = Boolean.valueOf(System.getProperty("easy.vil.incremental", "false"));
     private static List<PathMatcher> matchers = new ArrayList<>();
     private File base;
     private Path basePath;
