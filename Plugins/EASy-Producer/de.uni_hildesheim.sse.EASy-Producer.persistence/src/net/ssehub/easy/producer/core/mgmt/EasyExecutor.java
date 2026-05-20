@@ -32,6 +32,8 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
+import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -688,6 +690,24 @@ public class EasyExecutor {
      */
     public static void printReasoningMessages(ReasoningResult rRes) {
         printReasoningMessages(rRes, System.out);
+    }
+
+    /**
+     * Defines the default whether artifacts shall automatically be prepared before explicit use.
+     * 
+     * @param prepare {@code true} if artifacts shall be prepared, {@code false} else (default)
+     */
+    public static void enablePrepareArtifactsDefault(boolean prepare) {
+        ArtifactModel.setPrepareArtifactsDefault(prepare);
+    }
+    
+    /**
+     * Enables/disables incremental instantation. May require {@link #enablePrepareArtifactsDefault(boolean)}.
+     * 
+     * @param incremental {@code true} if enabled, {@code false} else
+     */
+    public static void enableIncrementalInstantiation(boolean incremental) {
+        FileTracker.setEnabled(incremental);
     }
     
 }
