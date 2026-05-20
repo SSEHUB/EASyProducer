@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="QMProperties" default="all" basedir=".">
-	
+<project name="BuildProperties" default="all" basedir=".">
 	<!-- Targets  -->
 	<target name="copy">
 		<copy file = "./migration.properties" todir="${user.home}"/>
@@ -9,17 +8,8 @@
         <copy file = "./easy-maven-settings.xml" todir="${user.home}"/>
 	</target>
     
-    <target name="updateChLog">
-        <scp todir="jenkins@projects.sse.uni-hildesheim.de:/var/www/easy/docs/" trust="true" keyfile="${user.home}/.ssh/id_rsa">
-            <fileset dir=".">
-                <include name="changelog.html"/>
-            </fileset>
-        </scp>
-    </target>
-    
     <target name="all">
         <antcall target="copy"/>
-        <!--<antcall target="updateChLog"/> outdated handled via github -->
     </target>
 	
 </project>
