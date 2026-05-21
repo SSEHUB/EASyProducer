@@ -243,12 +243,5 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
     public ModelInfo<Script> getInfo(java.net.URI uri) {
         return BuildModel.INSTANCE.availableModels().getInfo(uri);
     }
-    
-public static void main(String[] args) throws IOException {
-    System.out.println("--");
-    URI uri = URI.createURI("file:/W:/offlineFiles/git/IIP-examples/examples.hm22/target/easy/Broker.vil");
-    BuildLangModelUtility m = new BuildLangModelUtility();
-    m.obtainInfo(uri);
-}
 
 }
