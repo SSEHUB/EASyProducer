@@ -26,6 +26,7 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.MessageReceiver;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Resolver;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
@@ -44,6 +45,13 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
     implements IModelLoader<Script> {
     
     public static final RtVilModelUtility INSTANCE = new RtVilModelUtility();
+    
+    private static final Rule[] LEADIN_RULES = Rule.instantiate(
+        RULE_IMPORT, 
+        new Rule("requireVTL", ";", true, true), 
+        new Rule("@advice", true, true).terminates(")"),
+        new Rule("rtVilScript", "{"),
+        RULE_VERSION);
     
     /**
      * Prevents external creation.
@@ -118,7 +126,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
     
     @Override
     protected String getLanguageName() {
-        return "de.uni_hildesheim.sse.VilBuildLanguage";
+        return "de.uni_hildesheim.sse.vil.rt.RtVil";
     }
 
     @Override
@@ -232,6 +240,21 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
     public String getExtension() {
         return "rtvil";
     }
+    
+    /**
+     * Parses an <code>uri</code> to obtain a {@link VariabilityUnit}. Cuts the first {@code rules} if
+     * given, else parses the entire text.
+     * 
+     * @param uri the URI to read
+     * @param receiver the message receiver used for storing messages (may be <b>null</b>)
+     * @param rules optional rules for cutting the header of the contents, removing the remainder for performance
+     * @return the variability unit (or <b>null</b> if not found)
+     * @throws IOException in case of any I/O and parsing problems
+     * @see #cutLeadin(InputStream, Rule...)
+     */
+    public ImplementationUnit parseImplementationUnit(URI uri, MessageReceiver receiver, Rule... rules) throws IOException {
+        return parse(uri, receiver, "ImplementationUnit", ImplementationUnit.class, rules);
+    }
 
     /**
      * Obtains model information.
@@ -243,7 +266,7 @@ public class RtVilModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Impl
      *             in case that an I/O error happens during parsing
      */
     public List<ModelInfo<Script>> obtainInfo(URI uri) throws IOException {
-        ImplementationUnit root = parse(uri, true, null, ImplementationUnit.class);
+        ImplementationUnit root = parseImplementationUnit(uri, null, LEADIN_RULES);
         List<ModelInfo<Script>> result = new ArrayList<ModelInfo<Script>>();
         if (null != root) {
             for (de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit script : root.getScripts()) {

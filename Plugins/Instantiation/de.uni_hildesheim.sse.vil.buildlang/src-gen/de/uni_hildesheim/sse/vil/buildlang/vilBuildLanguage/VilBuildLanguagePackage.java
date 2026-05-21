@@ -41,7 +41,7 @@ public interface VilBuildLanguagePackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http://www.uni_hildesheim.de/sse/VilBuildLanguage";
+  String eNS_URI = "http://www.uni_hildesheim.de/sse/vil/buildlang/VilBuildLanguage";
 
   /**
    * The package namespace name.

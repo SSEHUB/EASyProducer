@@ -25,6 +25,7 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.MessageReceiver;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangWriter;
@@ -43,6 +44,13 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
     implements IModelLoader<Script> {
     
     public static final BuildLangModelUtility INSTANCE = new BuildLangModelUtility();
+    
+    private static final Rule[] LEADIN_RULES = Rule.instantiate(
+        RULE_IMPORT, 
+        new Rule("requireVTL", ";", true, true), 
+        new Rule("@advice", true, true).terminates(")"),
+        new Rule("vilScript", "{"),
+        RULE_VERSION);
     
     /**
      * Prevents external creation.
@@ -187,6 +195,21 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
     }
 
     /**
+     * Parses an <code>uri</code> to obtain a {@link VariabilityUnit}. Cuts the first {@code rules} if
+     * given, else parses the entire text.
+     * 
+     * @param uri the URI to read
+     * @param receiver the message receiver used for storing messages (may be <b>null</b>)
+     * @param rules optional rules for cutting the header of the contents, removing the remainder for performance
+     * @return the variability unit (or <b>null</b> if not found)
+     * @throws IOException in case of any I/O and parsing problems
+     * @see #cutLeadin(InputStream, Rule...)
+     */
+    public ImplementationUnit parseImplementationUnit(URI uri, MessageReceiver receiver, Rule... rules) throws IOException {
+        return parse(uri, receiver, "ImplementationUnit", ImplementationUnit.class, rules);
+    }
+    
+    /**
      * Obtains model information.
      * 
      * @param uri
@@ -196,7 +219,7 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
      *             in case that an I/O error happens during parsing
      */
     public List<ModelInfo<Script>> obtainInfo(URI uri) throws IOException {
-        ImplementationUnit root = parse(uri, true, null, ImplementationUnit.class);
+        ImplementationUnit root = parseImplementationUnit(uri, null, LEADIN_RULES);
         List<ModelInfo<Script>> result = new ArrayList<ModelInfo<Script>>();
         if (null != root) {
             for (de.uni_hildesheim.sse.vil.buildlang.vilBuildLanguage.LanguageUnit script : root.getScripts()) {
@@ -220,5 +243,12 @@ public class BuildLangModelUtility extends net.ssehub.easy.dslCore.ModelUtility<
     public ModelInfo<Script> getInfo(java.net.URI uri) {
         return BuildModel.INSTANCE.availableModels().getInfo(uri);
     }
+    
+public static void main(String[] args) throws IOException {
+    System.out.println("--");
+    URI uri = URI.createURI("file:/W:/offlineFiles/git/IIP-examples/examples.hm22/target/easy/Broker.vil");
+    BuildLangModelUtility m = new BuildLangModelUtility();
+    m.obtainInfo(uri);
+}
 
 }

@@ -27,6 +27,7 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.Version;
 import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
+import net.ssehub.easy.dslCore.translation.MessageReceiver;
 import net.ssehub.easy.dslCore.translation.TranslatorException;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.expressions.Expression;
@@ -45,6 +46,16 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
     implements IModelLoader<Template> {
     
     public static final TemplateLangModelUtility INSTANCE = new TemplateLangModelUtility();
+    
+    private static final Rule[] LEADIN_RULES = Rule.instantiate(
+        RULE_IMPORT, 
+        new Rule("extension", ";", true, true), 
+        new Rule("@advice", true, true).terminates(")"), // look for indent, format, template
+        new Rule("@indent", true, true).terminates(")"),
+        new Rule("@format", true, true).terminates(")"),
+        new Rule("template", "{"),
+        RULE_VERSION
+    );
     
     /**
      * Prevents external creation.
@@ -215,6 +226,21 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
     }
     
     /**
+     * Parses an <code>uri</code> to obtain a {@link LanguageUnit}. Cuts the first {@code rules} if
+     * given, else parses the entire text.
+     * 
+     * @param uri the URI to read
+     * @param receiver the message receiver used for storing messages (may be <b>null</b>)
+     * @param rules optional rules for cutting the header of the contents, removing the remainder for performance
+     * @return the variability unit (or <b>null</b> if not found)
+     * @throws IOException in case of any I/O and parsing problems
+     * @see #cutLeadin(InputStream, Rule...)
+     */
+    public LanguageUnit parseLanguageUnit(URI uri, MessageReceiver receiver, Rule... rules) throws IOException {
+        return parse(uri, receiver, "LanguageUnit", LanguageUnit.class, rules);
+    }
+    
+    /**
      * Obtains model information.
      * 
      * @param uri
@@ -224,7 +250,7 @@ public class TemplateLangModelUtility extends net.ssehub.easy.dslCore.ModelUtili
      *             in case that an I/O error happens during parsing
      */
     public List<ModelInfo<Template>> obtainInfo(URI uri) throws IOException {
-        LanguageUnit template = parse(uri, true, null, LanguageUnit.class);
+        LanguageUnit template = parseLanguageUnit(uri, null, LEADIN_RULES);
         List<ModelInfo<Template>> result = new ArrayList<ModelInfo<Template>>();
         if (null != template) {
             Version version = ModelTranslator.convert(template.getVersion());

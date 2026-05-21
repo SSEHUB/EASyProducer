@@ -30,8 +30,8 @@ public class VilBuildLanguageStandaloneSetupGenerated implements ISetup {
 	}
 	
 	public void register(Injector injector) {
-		if (!EPackage.Registry.INSTANCE.containsKey("http://www.uni_hildesheim.de/sse/VilBuildLanguage")) {
-			EPackage.Registry.INSTANCE.put("http://www.uni_hildesheim.de/sse/VilBuildLanguage", VilBuildLanguagePackage.eINSTANCE);
+		if (!EPackage.Registry.INSTANCE.containsKey("http://www.uni_hildesheim.de/sse/vil/buildlang/VilBuildLanguage")) {
+			EPackage.Registry.INSTANCE.put("http://www.uni_hildesheim.de/sse/vil/buildlang/VilBuildLanguage", VilBuildLanguagePackage.eINSTANCE);
 		}
 		IResourceFactory resourceFactory = injector.getInstance(IResourceFactory.class);
 		IResourceServiceProvider serviceProvider = injector.getInstance(IResourceServiceProvider.class);

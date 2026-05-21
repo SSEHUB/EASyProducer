@@ -5,7 +5,7 @@ generate rtVil "http://www.uni_hildesheim.de/sse/vil/rt/RtVil"
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 @Override
-ImplementationUnit:
+ImplementationUnit:  // sync lead-in with ModelUtility LEADIN_RULES
     {ImplementationUnit}
     imports+=Import*
     requires+=Require*
