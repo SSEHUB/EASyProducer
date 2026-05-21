@@ -3,6 +3,7 @@ package de.uni_hildesheim.sse;
 import static com.google.inject.Guice.createInjector;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -64,6 +65,9 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
     implements IModelLoader<Project> {
 
     public static final ModelUtility INSTANCE = new ModelUtility();
+    private static final Rule[] LEADIN_RULES = Rule.instantiate(
+        new Rule("project", "{"), RULE_VERSION, RULE_IMPORT, RULE_CONFLICT
+    );
     private final LogMessageReceiver logReceiver;
                     
     /**
@@ -146,6 +150,7 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
         
         ModelTranslator translator = new ModelTranslator();
         VariabilityUnit root = parse(uri, false, translator, VariabilityUnit.class); // do not unload <-> line numbers
+        //VariabilityUnit root = parseVariabilityUnit(uri, translator);
         Result mRes = null;
         try {
             if (null != root) {
@@ -162,19 +167,17 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
         }
         return mRes.createTranslationResult();
     }
-
+    
     /**
      * Obtains project info.
      * 
-     * @param uri
-     *            the URI to read the info from
+     * @param uri the URI to read the info from
      * @return the project info instances related to <code>uri</code>
-     * @throws IOException
-     *             in case that an I/O error happens during parsing
+     * @throws IOException in case that an I/O error happens during parsing
      */
     public List<ModelInfo<Project>> obtainInfo(URI uri) throws IOException {
         logReceiver.setLocationHint(uri);
-        VariabilityUnit root = parse(uri, true, logReceiver, VariabilityUnit.class);
+        VariabilityUnit root = parseVariabilityUnit(uri, null, LEADIN_RULES);        
         List<ModelInfo<Project>> result = new ArrayList<ModelInfo<Project>>();
         if (null != root) {
             for (de.uni_hildesheim.sse.ivml.Project project : root
@@ -394,6 +397,21 @@ public class ModelUtility extends net.ssehub.easy.dslCore.ModelUtility<Variabili
             }
         }
         return cst;
+    }
+    
+    /**
+     * Parses an <code>uri</code> to obtain a {@link VariabilityUnit}. Cuts the first {@code rules} if
+     * given, else parses the entire text.
+     * 
+     * @param uri the URI to read
+     * @param receiver the message receiver used for storing messages (may be <b>null</b>)
+     * @param rules optional rules for cutting the header of the contents, removing the remainder for performance
+     * @return the variability unit (or <b>null</b> if not found)
+     * @throws IOException in case of any I/O and parsing problems
+     * @see #cutLeadin(InputStream, Rule...)
+     */
+    public VariabilityUnit parseVariabilityUnit(URI uri, MessageReceiver receiver, Rule... rules) throws IOException {
+        return parse(uri, receiver, "VariabilityUnit", VariabilityUnit.class, rules);
     }
 
     /**

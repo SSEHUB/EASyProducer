@@ -8,7 +8,7 @@ VariabilityUnit:
 	{VariabilityUnit}
 	projects+=Project*;
 
-Project:
+Project: // sync lead-in with ModelUtility LEADIN_RULES
 	'project' name=Identifier 
 	'{'
      //#> Interfaces

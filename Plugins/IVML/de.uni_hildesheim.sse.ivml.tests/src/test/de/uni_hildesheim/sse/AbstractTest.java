@@ -321,7 +321,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
                 if (null != expectedKey && expectedKey.equals(key)) {
                     expectedKey = null;
                 }
-                Assert.assertTrue(null != map.remove(key));
+                Assert.assertTrue("does not contain '" + key + "'", null != map.remove(key));
                 validateParsedProject(uri, project);
             }
             Assert.assertTrue(map.isEmpty());
