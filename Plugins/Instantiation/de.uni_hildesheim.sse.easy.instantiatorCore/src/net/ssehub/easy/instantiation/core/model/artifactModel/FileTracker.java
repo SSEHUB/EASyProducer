@@ -455,7 +455,11 @@ public class FileTracker {
             if (null != model) {
                 FileTracker tracker = model.getFileTracker();
                 File file2 = path2 != null ? new File(tracker.getBase(), path2.getPath()) : null;
-                op.execute(tracker, new File(tracker.getBase(), path.getPath()), file2);
+                File tmp = new File(path.getPath());
+                if (!tmp.isAbsolute()) {
+                    tmp = new File(tracker.getBase(), path.getPath());
+                }
+                op.execute(tracker, tmp, file2);
             }
         }
     }
