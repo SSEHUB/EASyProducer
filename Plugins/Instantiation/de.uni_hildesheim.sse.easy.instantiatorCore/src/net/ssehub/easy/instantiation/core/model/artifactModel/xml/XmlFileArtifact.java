@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.LineNumberReader;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -200,7 +201,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     public XmlElement getRootElement() {
         return this.rootElement;
     }
-    
+
     /**
      * Creates a root element if it does not exist.
      * 
@@ -209,6 +210,22 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * @throws VilException in case that creating the root element fails
      */
     public XmlElement createRootElement(String name) throws VilException {
+        return createRootElement(name, false);
+    }
+
+    /**
+     * Creates a root element.
+     * 
+     * @param name the name of the root element
+     * @param force if {@code true} forces creating a new root element, if {@code false} reuse/return an existing 
+     *    root element
+     * @return the actual root element
+     * @throws VilException in case that creating the root element fails
+     */
+    public XmlElement createRootElement(String name, boolean force) throws VilException {
+        if (force) {
+            prepareImpl();
+        }
         if (null == rootElement) {
             if (null == doc) {
                 try {
@@ -479,7 +496,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private void ensureLineEndedComments(List<String> lineEndedComments) {
         try {
             final String sep = System.getProperty("line.separator");
-            List<String> lines = FileUtils.readLines(file);
+            List<String> lines = FileUtils.readLines(file, Charset.defaultCharset());
             int c = 0;
             int l = 0;
             int lPos = 0;
@@ -540,7 +557,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         if (null == doc && null != text && !text.getText().trim().isEmpty()) {
             try {
                 DocumentBuilder builder = getDocumentBuilderFactory().newDocumentBuilder();
-                InputStream in = IOUtils.toInputStream(text.getText());
+                InputStream in = IOUtils.toInputStream(text.getText(), Charset.defaultCharset());
                 doc = initFromDoc(builder.parse(in));
                 in.reset();
                 synchronizeAttributes(in);

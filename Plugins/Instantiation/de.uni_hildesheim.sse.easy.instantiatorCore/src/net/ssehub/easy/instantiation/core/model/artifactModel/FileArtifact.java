@@ -97,9 +97,12 @@ public class FileArtifact extends CompositeArtifact implements IFileSystemArtifa
             FileTracker.prepare(path);
         }
     }
-    
+
+    /**
+     * Actual, unconditional implementation of {@link #prepare()}. {@link FileTracker} notification and file deletion
+     * happens in {@link #prepare()}.
+     */
     protected void prepareImpl() {
-        
     }
     
     /**
