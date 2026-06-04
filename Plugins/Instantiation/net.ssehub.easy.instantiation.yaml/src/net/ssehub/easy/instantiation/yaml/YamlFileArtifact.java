@@ -283,6 +283,7 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
             options.setIndicatorIndent(indicatorIndent);
         }
         options.setPrettyFlow(Boolean.valueOf(fCfg.getProfileArgument("prettyFlow", "true")));
+        options.setAllowReadOnlyProperties(true); // prevent errors on empty data classes
         return options;
     }
     

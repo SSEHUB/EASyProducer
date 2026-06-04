@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -65,6 +66,7 @@ public class YamlDeserializer {
         }
         InputStream input = new FileInputStream(file);
         Yaml yaml = new Yaml();
+        @SuppressWarnings("unchecked")
         Map<Object, Object> ret = (Map<Object, Object>) yaml.load(new InputStreamReader(input));
         if (null != ret) {
             ret = new HashMap<Object, Object>(ret);
@@ -103,7 +105,7 @@ public class YamlDeserializer {
         FileInputStream inputStream = new FileInputStream(file);
         String fileAsString = "";
         try {
-            fileAsString = IOUtils.toString(inputStream);
+            fileAsString = IOUtils.toString(inputStream, Charset.defaultCharset());
         } finally {
             inputStream.close();
         }
@@ -222,6 +224,7 @@ public class YamlDeserializer {
      * @return Created session
      * @throws JSchException exception
      */
+    @SuppressWarnings("unused")
     private Session createSession(String user, String password, String host) throws JSchException {
         JSch jsch = new JSch();
         Session session = jsch.getSession(user, host, 22);

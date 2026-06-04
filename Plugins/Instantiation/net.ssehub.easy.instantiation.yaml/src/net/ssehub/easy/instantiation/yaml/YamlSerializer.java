@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.yaml;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -60,7 +61,7 @@ public class YamlSerializer {
      *             exception
      */
     public void save(String fileAsString, File source) throws IOException {
-        FileUtils.writeStringToFile(source, fileAsString);
+        FileUtils.writeStringToFile(source, fileAsString, Charset.defaultCharset());
     }
 
     /**
@@ -73,6 +74,7 @@ public class YamlSerializer {
      *            The original file as string.
      * @return file as string with merge results
      */
+    @SuppressWarnings("unchecked")
     public String merge(Map<Object, Object> data, String string) {
         string = string.replace("\r", "");
         for (Object object : data.keySet()) {
