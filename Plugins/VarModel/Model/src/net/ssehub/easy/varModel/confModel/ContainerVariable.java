@@ -164,7 +164,7 @@ public abstract class ContainerVariable extends StructuredVariable {
         
         // set value for nested elements (needed for recursion)
         if (conValue != null) {
-            for (int i = 0; i < conValue.getElementSize(); i++) {
+            for (int i = 0; i < getNestedElementsCount(); i++) {
                 IDecisionVariable nestedVariable = getNestedElement(i);
                 if (AssignmentState.USER_ASSIGNED != nestedVariable.getState()
                     || state == AssignmentState.USER_ASSIGNED) {
