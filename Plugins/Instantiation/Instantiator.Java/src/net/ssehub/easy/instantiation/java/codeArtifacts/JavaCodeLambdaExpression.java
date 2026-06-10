@@ -244,6 +244,46 @@ public class JavaCodeLambdaExpression extends JavaCodeParsedExpression {
             expression.replaceVariable(oldName, newName);
         }
         return this;
-    }        
-    
+    }
+
+    /**
+     * Returns whether an expression defines the behavior of the lambda expression.
+     * 
+     * @return {@code true} for expression, {@code false} for none (yet) or block
+     * @see #hasBlock()
+     */
+    public boolean hasExpression() {
+        return expression != null;
+    }
+
+    /**
+     * Returns the expression defining the behavior of the lambda expression.
+     * 
+     * @return the expression or <b>null</b>
+     * @see #getBlock()
+     */
+    public JavaCodeExpression getExpression() {
+        return expression;
+    }
+
+    /**
+     * Returns whether a block defines the behavior of the lambda expression.
+     * 
+     * @return {@code true} for block, {@code false} for none (yet) or block
+     * @see #hasExpression()
+     */
+    public boolean hasBlock() {
+        return block != null;
+    }
+
+    /**
+     * Returns the block defining the behavior of the lambda expression.
+     * 
+     * @return the block or <b>null</b>
+     * @see #getExpression()
+     */
+    public JavaCodeBlock getBlock() {
+        return block;
+    }
+
 }

@@ -824,7 +824,17 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * @return {@code true} if the class with {@code name} is contained, {@code false} if not
      */
     public boolean containsClass(String name) {
-        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeClass.class, name) != null;
+        return getClass(name) != null;
+    }
+
+    /**
+     * Returns the class with given {@code name} is contained in this class.
+     * 
+     * @param name the name of the class
+     * @return the class or <b>null</b>
+     */
+    public JavaCodeClass getClass(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeClass.class, name);
     }
 
     /**
@@ -834,7 +844,17 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * @return {@code true} a method with {@code name} is contained, {@code false} if not
      */
     public boolean containsMethod(String name) {
-        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeMethod.class, name) != null;
+        return getMethod(name) != null;
+    }
+
+    /**
+     * Returns the first method given {@code name} is contained in this artifact.
+     * 
+     * @param name the name of the class
+     * @return the method or <b>null</b>
+     */
+    public JavaCodeMethod getMethod(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeMethod.class, name);
     }
 
     /**
@@ -844,7 +864,17 @@ public class JavaCodeClass extends JavaCodeAbstractVisibleElement {
      * @return {@code true} an attribute with {@code name} is contained, {@code false} if not
      */
     public boolean containsAttribute(String name) {
-        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeAttribute.class, name) != null;
+        return getAttribute(name) != null;
+    }
+    
+    /**
+     * Returns the attribute with given {@code name} is contained in this artifact.
+     * 
+     * @param name the name of the class
+     * @return the attribute or <b>null</b>
+     */
+    public JavaCodeAttribute getAttribute(String name) {
+        return JavaCodeVisibleElement.findFirstByName(elements, JavaCodeAttribute.class, name);
     }
 
 }

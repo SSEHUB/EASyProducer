@@ -286,4 +286,13 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         JavaCodeClass.setParent(parent, p -> this.enclosing = p);    
     }
     
+    /**
+     * Returns the initializer.
+     * 
+     * @return the initializer or <b>null</b>
+     */
+    public JavaCodeExpression getInitializer() {
+        return initializer;
+    }
+    
 }
