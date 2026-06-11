@@ -227,16 +227,29 @@ public class JsonFileArtifact extends FileArtifact implements IStringValueProvid
         return data.addMap(name, value);
     }
     
-    
     /**
      * Returns the JSON node represented by this artifact.
      * 
      * @return the node
      */
     public JsonNode getData() {
+        return getData(false);
+    }
+
+    /**
+     * Returns the JSON node represented by this artifact.
+     * 
+    * @param force if {@code true} forces creating a new root note, if {@code false} reuse/return an existing 
+    *    root note
+     * @return the node
+     */
+    public JsonNode getData(boolean force) {
+        if (force) {
+            prepareImpl();
+        }
         return data;
     }
-    
+
     @Override
     public void store() throws VilException {
         super.store();
