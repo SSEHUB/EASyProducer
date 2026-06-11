@@ -192,7 +192,10 @@ public class YamlFileArtifact extends FileArtifact implements IStringValueProvid
      */
     public YamlNode addDocument(boolean onlyIfEmpty, boolean force) {
         YamlNode result;
-        if (data.isEmpty() || force) {
+        if (force) {
+            data.clear();
+        }
+        if (data.isEmpty()) {
             result = addDocument();
         } else {
             result = data.get(0);
