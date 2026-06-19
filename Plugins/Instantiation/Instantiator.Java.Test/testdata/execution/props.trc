@@ -1,0 +1,29 @@
+-> main(Project, Project, Configuration) with (<project>, <project>, <config>)
+    pfa <- my.properties
+    -> setComment(PropertiesFileArtifact, String) with (my.properties, MyComment)
+    -> size(PropertiesFileArtifact) with (my.properties) = 0
+    s <- 0
+    -> setValue(PropertiesFileArtifact, String, String) with (my.properties, key, value)
+    mapping <- {}
+    -> add(Map, String, String) with ({}, key, value0)
+    -> add(Map, String, String) with ({{key, value0}}, key1, value1)
+    -> setValues(PropertiesFileArtifact, Map) with (my.properties, {{key, value0}, {key1, value1}})
+    -> size(PropertiesFileArtifact) with (my.properties) = 2
+    s <- 2
+    -> hasValue(PropertiesFileArtifact, String) with (my.properties, key) = true
+    b <- true
+    -> hasValue(PropertiesFileArtifact, String) with (my.properties, key1) = true
+    b <- true
+    -> hasValue(PropertiesFileArtifact, String) with (my.properties, key2) = false
+    b <- false
+    -> getValue(PropertiesFileArtifact, String) with (my.properties, key) = value0
+    v <- value0
+    -> getValue(PropertiesFileArtifact, String, String) with (my.properties, key2, noValue) = noValue
+    v <- noValue
+    -> getValues(PropertiesFileArtifact) with (my.properties) = {{key, value0}, {key1, value1}}
+    -> getKeys(PropertiesFileArtifact) with (my.properties) = {key, key1}
+    pfa1 <- my.properties
+    -> size(PropertiesFileArtifact) with (my.properties) = 2
+    s <- 2
+    -> getComment(PropertiesFileArtifact) with (my.properties) = MyComment
+    v <- MyComment

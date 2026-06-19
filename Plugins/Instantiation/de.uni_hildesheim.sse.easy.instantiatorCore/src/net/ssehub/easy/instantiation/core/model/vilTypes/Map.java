@@ -32,7 +32,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * 
      * @param types the parameter types of this map
      */
-    Map(TypeDescriptor<?>[] types) {
+    public Map(TypeDescriptor<?>[] types) {
         this(types, 0);
     }
 
@@ -42,7 +42,7 @@ public class Map<K, V> implements IVilGenericType, IStringValueProvider {
      * @param types the parameter types of this map
      * @param size the initial size of this map
      */
-    Map(TypeDescriptor<?>[] types, int size) {
+    public Map(TypeDescriptor<?>[] types, int size) {
         assert null != types && 2 == types.length;
         this.generics = types;
         try {

@@ -1,0 +1,25 @@
+vilScript props (Project source, Project target, Configuration config) {
+
+    main(Project source, Project target, Configuration config) = : {
+        PropertiesFileArtifact pfa = "$target/my.properties";
+        pfa.setComment("MyComment");
+        Integer s = pfa.size();
+        pfa.setValue("key", "value");
+        mapOf(String, String) mapping = {};
+        mapping.add("key", "value0");
+        mapping.add("key1", "value1");
+        pfa.setValues(mapping);
+        s = pfa.size();
+        Boolean b = pfa.hasValue("key");
+        b = pfa.hasValue("key1");
+        b = pfa.hasValue("key2");
+        String v = pfa.getValue("key");
+        v = pfa.getValue("key2", "noValue");
+        pfa.getValues();
+        pfa.getKeys();
+        PropertiesFileArtifact pfa1 = "$target/my.properties";
+        s = pfa1.size();
+        v = pfa1.getComment();
+    }
+
+}

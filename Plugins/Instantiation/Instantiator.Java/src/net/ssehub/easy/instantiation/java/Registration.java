@@ -15,6 +15,7 @@ import net.ssehub.easy.instantiation.java.artifacts.JavaClass;
 import net.ssehub.easy.instantiation.java.artifacts.JavaFileArtifact;
 import net.ssehub.easy.instantiation.java.artifacts.JavaImport;
 import net.ssehub.easy.instantiation.java.artifacts.JavaMethod;
+import net.ssehub.easy.instantiation.java.artifacts.PropertiesFileArtifact;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAlternative;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnnotation;
 import net.ssehub.easy.instantiation.java.codeArtifacts.JavaCodeAnonymousClass;
@@ -79,7 +80,6 @@ import net.ssehub.easy.instantiation.java.instantiators.Unjar;
 public class Registration implements IRegistration {
 
     private static boolean registered = false;
-    private static boolean plainRegistered = false;
 
     /**
      * Registers the Java artifacts and instantiators (without component context).
@@ -100,6 +100,7 @@ public class Registration implements IRegistration {
                 TypeRegistry.DEFAULT.register(Javac.class);
                 TypeRegistry.DEFAULT.register(Jar.class);
                 TypeRegistry.DEFAULT.register(Unjar.class);
+                TypeRegistry.DEFAULT.register(PropertiesFileArtifact.class);
 
                 TypeRegistry.DEFAULT.register(CocktailInstantiator.class);
 

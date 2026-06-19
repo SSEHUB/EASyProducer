@@ -117,6 +117,17 @@ public class ExecutionTests extends AbstractExecutionTest<Script> {
     }
 
     /**
+     * The execution of properties operations.
+     * 
+     * @throws IOException
+     *             should not occur
+     */
+    @Test
+    public void testProps() throws IOException {
+        assertSelfInstantiate("props");
+    }
+
+    /**
      * The execution of jar operations. This test case test the correct behavior
      * of creating JARs with a given manifest file. Further tests were also
      * applied:
