@@ -134,6 +134,7 @@ public class PropertiesFileArtifact extends FileArtifact {
 
     @Override
     public void store() throws VilException {
+        super.store();
         if (null != data) {
             try (FileOutputStream fis = new FileOutputStream(file)) {
                 if (file.getName().endsWith(".xml")) {
@@ -148,6 +149,21 @@ public class PropertiesFileArtifact extends FileArtifact {
         }
     }
     
+    /**
+     * Forces storing this artifact.
+     * 
+     * @throws VilException
+     */
+    public void save() throws VilException {
+        store();
+    }
+
+    @Invisible
+    @Override
+    public boolean enableAutoStore() {
+        return true;
+    }    
+
     /**
      * Returns the comment.
      * 
