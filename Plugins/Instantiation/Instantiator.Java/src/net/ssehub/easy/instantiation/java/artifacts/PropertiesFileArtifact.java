@@ -203,6 +203,17 @@ public class PropertiesFileArtifact extends FileArtifact {
     }
     
     /**
+     * Deletes a key-value pair based on the given {@code key}.
+     * 
+     * @param key the key to delete
+     */
+    public void deleteValue(String key) {
+        if (null != data) {
+            data.remove(key);
+        }
+    }
+    
+    /**
      * Returns whether there is a value for the specified {@code key}.
      * 
      * @param key the key to return the value for
