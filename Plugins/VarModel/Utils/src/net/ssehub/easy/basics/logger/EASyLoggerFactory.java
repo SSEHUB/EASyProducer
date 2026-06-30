@@ -331,6 +331,15 @@ public class EASyLoggerFactory {
         this.logger = logger;
         return old;
     }
+    
+    /**
+     * Returns the active logger instance.
+     * 
+     * @return the active logger instance
+     */
+    public ILogger getLogger() {
+        return logger;
+    }
 
     /**
      * Returns the {@link LoggingLevel} that is used by the logger.
