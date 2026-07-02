@@ -2,6 +2,7 @@ package net.ssehub.easy.instantiation.core.model.execution;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import net.ssehub.easy.basics.progress.ProgressObserver;
 import net.ssehub.easy.basics.progress.ProgressObserver.ISubtask;
@@ -39,6 +40,11 @@ public abstract class TracerFactory {
 
         @Override
         public void traceError(String message) {
+            // do nothing
+        }
+        
+        @Override
+        public void setLogConsumer(Consumer<String> consumer) {
             // do nothing
         }
     };

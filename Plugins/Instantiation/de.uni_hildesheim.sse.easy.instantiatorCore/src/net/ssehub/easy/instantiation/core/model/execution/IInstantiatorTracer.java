@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.execution;
 
+import java.util.function.Consumer;
+
 /**
  * A tracer for instantiators.
  * 
@@ -20,5 +22,12 @@ public interface IInstantiatorTracer {
      * @param message the message to be traced
      */
     public void traceError(String message);
+    
+    /**
+     * Sets a piggiback log consumer.
+     * 
+     * @param consumer the consumer, ignored if <b>null</b>
+     */
+    public void setLogConsumer(Consumer<String> consumer);
     
 }
