@@ -30,7 +30,7 @@ public abstract class AbstractTracerBase implements ITracer {
 
     private Locale locale = DefaultLocale.getDefaultLocale();
     private RuntimeEnvironment<?, ?> environment;
-    private Consumer<String> consumer;
+    private Consumer<String> consumer = s -> { };
     
     @Override
     public Locale getLocale() {
