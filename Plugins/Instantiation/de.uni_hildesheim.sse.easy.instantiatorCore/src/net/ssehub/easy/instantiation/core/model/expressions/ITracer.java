@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
 import net.ssehub.easy.instantiation.core.model.expressions.CallExpression.CallType;
@@ -69,4 +70,11 @@ public interface ITracer {
      */
     public RuntimeEnvironment<?, ?> getRuntimeEnvironment();
 
+    /**
+     * Sets a piggiback log consumer.
+     * 
+     * @param consumer the consumer, ignored if <b>null</b>
+     */
+    public void setLogConsumer(Consumer<String> consumer);
+    
 }

@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.core.model.expressions;
 
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import net.ssehub.easy.basics.DefaultLocale;
 import net.ssehub.easy.instantiation.core.model.common.RuntimeEnvironment;
@@ -29,6 +30,7 @@ public abstract class AbstractTracerBase implements ITracer {
 
     private Locale locale = DefaultLocale.getDefaultLocale();
     private RuntimeEnvironment<?, ?> environment;
+    private Consumer<String> consumer;
     
     @Override
     public Locale getLocale() {
@@ -50,6 +52,22 @@ public abstract class AbstractTracerBase implements ITracer {
     @Override
     public RuntimeEnvironment<?, ?> getRuntimeEnvironment() {
         return environment;
+    }
+
+    @Override
+    public void setLogConsumer(Consumer<String> consumer) {
+        if (null != consumer) {
+            this.consumer = consumer;
+        }
+    }
+
+    /**
+     * Returns the log consumer.
+     * 
+     * @return the log consumer
+     */
+    protected Consumer<String> getLogConsumer() {
+        return consumer;
     }
     
 }

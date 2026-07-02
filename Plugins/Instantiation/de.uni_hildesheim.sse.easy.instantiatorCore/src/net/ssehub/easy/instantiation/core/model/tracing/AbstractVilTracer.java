@@ -102,7 +102,9 @@ public abstract class AbstractVilTracer extends AbstractTracerBase
      */
     protected void write(String msg) {
         if (enable) {
-            writeImpl(indentation + msg);
+            String tmp = indentation + msg;
+            writeImpl(tmp);
+            getLogConsumer().accept(tmp);
         }
     }
     

@@ -16,6 +16,7 @@
 package net.ssehub.easy.instantiation.rt.core.model.rtVil;
 
 import java.util.Locale;
+import java.util.function.Consumer;
 
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IBuildlangElement;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.IEnumeratingLoop;
@@ -278,6 +279,11 @@ public class DelegatingTracer implements ITracer {
     @Override
     public ITraceFilter getTraceFilter() {
         return delegate.getTraceFilter();
+    }
+
+    @Override
+    public void setLogConsumer(Consumer<String> consumer) {
+        delegate.setLogConsumer(consumer);
     }
 
 }

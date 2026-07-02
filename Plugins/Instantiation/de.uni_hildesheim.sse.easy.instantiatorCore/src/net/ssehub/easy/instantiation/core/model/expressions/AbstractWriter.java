@@ -3,6 +3,7 @@ package net.ssehub.easy.instantiation.core.model.expressions;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
@@ -17,6 +18,8 @@ public abstract class AbstractWriter {
     private char whitespace = ' ';
     private String indentation = "    ";
     private PrintWriter out;
+    private Consumer<String> logConsumer = s -> { };
+    private StringBuilder builder = new StringBuilder();
 
     /**
      * Creates a build language writer.
@@ -43,6 +46,7 @@ public abstract class AbstractWriter {
      */
     protected void print(String string) {
         out.print(string);
+        builder.append(string);
     }
     
     /**
@@ -61,6 +65,7 @@ public abstract class AbstractWriter {
      */
     protected void println(String string) {
         out.println(string);
+        flushBuilder(string + System.lineSeparator());
     }
 
     /**
@@ -70,6 +75,7 @@ public abstract class AbstractWriter {
      */
     protected void print(char ch) {
         out.print(ch);
+        builder.append(ch);
     }
 
     /**
@@ -79,6 +85,7 @@ public abstract class AbstractWriter {
      */
     protected void println(char ch) {
         out.print(ch);
+        builder.append(ch);
     }
 
     /**
@@ -88,6 +95,7 @@ public abstract class AbstractWriter {
      */
     protected void print(int value) {
         out.print(value);
+        builder.append(value);
     }
 
     /**
@@ -97,6 +105,7 @@ public abstract class AbstractWriter {
      */
     protected void println(int value) {
         out.println(value);
+        flushBuilder(String.valueOf(value));
     }
 
     /**
@@ -106,6 +115,7 @@ public abstract class AbstractWriter {
      */
     protected void print(Object object) {
         out.print(object);
+        builder.append(object);
     }
 
     /**
@@ -115,6 +125,7 @@ public abstract class AbstractWriter {
      */
     protected void println(Object object) {
         out.println(object);
+        flushBuilder(String.valueOf(object));
     }
     
     /**
@@ -122,6 +133,7 @@ public abstract class AbstractWriter {
      */
     protected void println() {
         out.println();
+        flushBuilder(System.lineSeparator());
     }
 
     /**
@@ -129,6 +141,7 @@ public abstract class AbstractWriter {
      */
     protected final void printIndentation() {
         out.print(actualIndentation);
+        builder.append(actualIndentation);
     }
 
     /**
@@ -136,6 +149,7 @@ public abstract class AbstractWriter {
      */
     protected final void printWhitespace() {
         out.print(whitespace);
+        builder.append(whitespace);
     }
     
     /**
@@ -145,6 +159,15 @@ public abstract class AbstractWriter {
      */
     public final void flush() throws IOException {
         out.flush();
+        flushBuilder(null);
+    }
+    
+    private void flushBuilder(String append) {
+        if (null != append) {
+            builder.append(append);
+        }
+        logConsumer.accept(builder.toString());
+        builder = new StringBuilder();
     }
 
     /**
@@ -169,6 +192,17 @@ public abstract class AbstractWriter {
      */
     protected void decreaseIndentation() {
         actualIndentation.delete(0, indentation.length());
+    }
+    
+    /**
+     * Sets a piggiback log consumer.
+     * 
+     * @param consumer the consumer, ignored if <b>null</b>
+     */
+    public void setLogConsumer(Consumer<String> consumer) {
+        if (null != consumer) {
+            this.logConsumer = consumer;
+        }
     }
 
 }
