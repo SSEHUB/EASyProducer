@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
-import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactCreator;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
@@ -146,7 +145,7 @@ public class JavaCodeArtifact extends FileArtifact implements IJavaCodeArtifact,
                     JavaCodeArtifact.class, fa.getPath().getAbsolutePath(), null);
                 fa.setEnableContentStore(false); // decisions are made based on the original artifact
             } catch (VilException e) {
-                EASyLoggerFactory.INSTANCE.getLogger(JavaCodeArtifact.class, Bundle.ID).error(e.getMessage());
+                e.logAsErrorIgnoreArtifactCreator(JavaCodeArtifact.class, Bundle.ID);
             }
         }
         return convertedValue;

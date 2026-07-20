@@ -3,6 +3,7 @@ package net.ssehub.easy.instantiation.core.model.common;
 import java.io.PrintStream;
 import java.util.List;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.messages.AbstractException;
 
 /**
@@ -358,6 +359,28 @@ public class VilException extends AbstractException {
                     additionalCauses[i].printStackTrace(stream);
                 }
             }
+        }
+    }
+
+    /**
+     * Logs this exception as error.
+     * 
+     * @param cls the class to log for
+     * @param bundleId the bundle id
+     */
+    public void logAsError(Class<?> cls, String bundleId) {
+        EASyLoggerFactory.INSTANCE.getLogger(cls, bundleId).error(getMessage());
+    }
+
+    /**
+     * Logs this exception as error, but only if id is not {@link #ID_NO_ARTIFACT_CREATOR}.
+     * 
+     * @param cls the class to log for
+     * @param bundleId the bundle id
+     */
+    public void logAsErrorIgnoreArtifactCreator(Class<?> cls, String bundleId) {
+        if (getId() != VilException.ID_NO_ARTIFACT_CREATOR) {
+            logAsError(cls, bundleId);
         }
     }
 
