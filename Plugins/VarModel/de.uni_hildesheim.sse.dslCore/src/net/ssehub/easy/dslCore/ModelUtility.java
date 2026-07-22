@@ -1103,7 +1103,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @throws IOException
      *         in case of any I/O and parsing problems
      */
-    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
+    /*protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         E result = null;
         try {
             ResourceSet resourceSet = getResourceSet();
@@ -1142,7 +1142,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             t.printStackTrace(); // preliminary
         }
         return result;
-    }
+    }*/
 
     /**
      * Parses an <code>uri</code> to obtain the top-level element.
@@ -1156,15 +1156,31 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @throws IOException
      *         in case of any I/O and parsing problems
      */
-    /*protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
+    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         // Prefer a fresh ResourceSet per independent loading operation.
         ResourceSet resourceSet = getResourceSet();
         Resource resource = null;
         try {
             // This creates and loads the resource.
-            resource = resourceSet.getResource(uri, true);
+            //- If the resource is already cached, EMF returns the cached model
+            //   without checking whether the underlying file changed.
+            // - If it is not cached, getResource(uri, true) creates and loads it.
+            
+            resource = resourceSet.getResource(uri, false);
 
-            if (!resource.isLoaded()) {
+            if (resource != null) {
+                // Reload an existing cached resource so changes to the underlying
+                // file are reflected in the newly parsed model.
+                if (resource.isLoaded()) {
+                    resource.unload();
+                }
+                resource.load(resourceSet.getLoadOptions());
+            } else {
+                // The resource is not cached yet. This creates and loads it once.
+                resource = resourceSet.getResource(uri, true);
+            }
+
+            if (resource == null || !resource.isLoaded()) {
                 throw new IOException("Resource '" + uri + "' was not loaded");
             }
 
@@ -1194,7 +1210,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                 resourceSet.getResources().remove(resource);
             }
         }        
-    }*/
+    }
 
     // checkstyle: resume exception type check
 
