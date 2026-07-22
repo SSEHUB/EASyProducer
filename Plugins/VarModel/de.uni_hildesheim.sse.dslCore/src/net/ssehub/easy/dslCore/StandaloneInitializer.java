@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.xtext.resource.XtextResource;
+//import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
 import com.google.inject.Injector;
@@ -25,7 +25,7 @@ public class StandaloneInitializer implements IResourceInitializer {
     @Override
     public XtextResourceSet createResourceSet(Injector injector) {
         XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
-        resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+        //resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
         return resourceSet;
     }
 

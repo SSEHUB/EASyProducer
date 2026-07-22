@@ -1103,7 +1103,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @throws IOException
      *         in case of any I/O and parsing problems
      */
-    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
+    /*protected E parseOld(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         E result = null;
         try {
             ResourceSet resourceSet = getResourceSet();
@@ -1142,6 +1142,58 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             t.printStackTrace(); // preliminary
         }
         return result;
+    }*/
+
+    /**
+     * Parses an <code>uri</code> to obtain the top-level element.
+     * 
+     * @param uri the URI to read
+     * @param unload unload the parsed XText resource, may change AST node adapters and keep source positions internal
+     * @param receiver the message receiver used for storing messages (may be
+     *        <b>null</b>)
+     * @param cls the class of the result
+     * @return the top-level element (or <b>null</b> if not found)
+     * @throws IOException
+     *         in case of any I/O and parsing problems
+     */
+    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
+        // Prefer a fresh ResourceSet per independent loading operation.
+        ResourceSet resourceSet = getResourceSet();
+        Resource resource = null;
+        try {
+            // This creates and loads the resource.
+            resource = resourceSet.getResource(uri, true);
+
+            if (!resource.isLoaded()) {
+                throw new IOException("Resource '" + uri + "' was not loaded");
+            }
+
+            boolean hasErrors = false;
+            for (Diagnostic diagnostic : resource.getErrors()) {
+                hasErrors = true;
+                if (receiver != null) {
+                    receiver.error(diagnostic);
+                }
+            }
+
+            if (hasErrors || resource.getContents().isEmpty()) {
+                return null;
+            }
+
+            EObject rootObject = resource.getContents().get(0);
+            return cls.isInstance(rootObject) ? cls.cast(rootObject) : null;
+
+        } catch (RuntimeException exception) {
+            throw new IOException("Could not load Xtext resource '" + uri + "'", exception);
+
+        } finally {
+            if (resource != null && (unload || forceUnloadOnParse)) {
+                resource.unload();
+
+                // Particularly useful if the ResourceSet is retained or pooled.
+                resourceSet.getResources().remove(resource);
+            }
+        }        
     }
 
     // checkstyle: resume exception type check
