@@ -1103,7 +1103,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @throws IOException
      *         in case of any I/O and parsing problems
      */
-    /*protected E parseOld(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
+    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         E result = null;
         try {
             ResourceSet resourceSet = getResourceSet();
@@ -1142,7 +1142,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
             t.printStackTrace(); // preliminary
         }
         return result;
-    }*/
+    }
 
     /**
      * Parses an <code>uri</code> to obtain the top-level element.
@@ -1156,7 +1156,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @throws IOException
      *         in case of any I/O and parsing problems
      */
-    protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
+    /*protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         // Prefer a fresh ResourceSet per independent loading operation.
         ResourceSet resourceSet = getResourceSet();
         Resource resource = null;
@@ -1194,7 +1194,7 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
                 resourceSet.getResources().remove(resource);
             }
         }        
-    }
+    }*/
 
     // checkstyle: resume exception type check
 
