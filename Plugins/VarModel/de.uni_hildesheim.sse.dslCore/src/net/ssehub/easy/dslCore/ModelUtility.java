@@ -66,11 +66,21 @@ import net.ssehub.easy.dslCore.translation.MessageReceiver;
  * @author Holger Eichelberger
  */
 public abstract class ModelUtility <E extends EObject, R extends IModel> implements IModelLoader<R> {
-
+    
     protected static final Rule RULE_VERSION = new Rule("version", ";", true, true);
     protected static final Rule RULE_IMPORT = new Rule("import|insert", ";", true, true);
     protected static final Rule RULE_CONFLICT = new Rule("conflict", ";", true, true);
 
+    /**
+     * Enables/disables reloading of changed models before parsing. Disabling may speed up model loading operations. 
+     * The default behavior of EASy-Producer is to reload changed models.
+     */
+    private static boolean modelReload = true;
+    /**
+     * Enables/disables reuse of the resource set. 
+     * The default behavior of EASy-Producer is to reuse the resource set.
+     */
+    private static boolean reuseResourceSet = true;
     private static IResourceInitializer resourceInitializer;
     private static List<ModelUtility<?, ?>> instances = 
         Collections.synchronizedList(new ArrayList<ModelUtility<?, ?>>());
@@ -125,6 +135,42 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
         //}
     }
     
+    /**
+     * Enables/disables reloading of changed models before parsing. 
+     * 
+     * @param reload whether reload shall be enabled or not
+     */
+    public static void setModelReload(boolean reload) {
+        modelReload = reload;
+    }
+
+    /**
+     * Returns whether reloading of changed models before parsing is enabled. 
+     * 
+     * @return {@code true} if reload is enabled, {@code false} if not
+     */
+    public static boolean isModelReload() {
+        return modelReload;
+    }
+
+    /**
+     * Enables/disables reuse of the resource set, in particular for parsing. 
+     * 
+     * @param reuse whether reuse shall be enabled or not
+     */
+    public static void setResourceSetReuse(boolean reuse) {
+        reuseResourceSet = reuse;
+    }
+
+    /**
+     * Returns whether reuse of the resource set is enabled. 
+     * 
+     * @return {@code true} if reuse is enabled, {@code false} if not
+     */
+    public static boolean isResourceSetReuse() {
+        return reuseResourceSet;
+    }
+
     public static boolean forceUnloadOnParse(boolean force) {
         boolean old = forceUnloadOnParse;
         forceUnloadOnParse = force;
@@ -194,7 +240,19 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @return the resource set
      */
     public XtextResourceSet getResourceSet() {
-        if (null == resourceSet) {
+        return getResourceSet(false);
+    }
+
+    /**
+     * Returns the XText resource set (and performs a lazy initialization of 
+     * {@link #resourceSet} if required).
+     * 
+     * @param reuse reuse the resource set if {@link #reuseResourceSet}, if {@code false} and not 
+     * {@link #reuseResourceSet} create a new instance
+     * @return the resource set
+     */
+    public XtextResourceSet getResourceSet(boolean reuse) {
+        if (null == resourceSet || (!reuse && !reuseResourceSet)) {
             resourceSet = getResourceInitializer().createResourceSet(getInjector());
         }
         return resourceSet;
@@ -1155,18 +1213,23 @@ public abstract class ModelUtility <E extends EObject, R extends IModel> impleme
      * @return the top-level element (or <b>null</b> if not found)
      * @throws IOException
      *         in case of any I/O and parsing problems
+     * @see #modelReload
+     * @see #reuseResourceSet
      */
     protected E parse(URI uri, boolean unload, MessageReceiver receiver, Class<E> cls) throws IOException {
         // Prefer a fresh ResourceSet per independent loading operation.
-        ResourceSet resourceSet = getResourceSet();
+        ResourceSet resourceSet = getResourceSet(false);
         Resource resource = null;
         try {
             // This creates and loads the resource.
             //- If the resource is already cached, EMF returns the cached model
             //   without checking whether the underlying file changed.
             // - If it is not cached, getResource(uri, true) creates and loads it.
+
             
-            resource = resourceSet.getResource(uri, false);
+            if (modelReload) {
+                resource = resourceSet.getResource(uri, false);
+            } // if disabled, resource = null, leads to loading below
 
             if (resource != null) {
                 // Reload an existing cached resource so changes to the underlying
