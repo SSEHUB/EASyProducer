@@ -32,6 +32,7 @@ import net.ssehub.easy.basics.modelManagement.ModelInfo;
 import net.ssehub.easy.basics.modelManagement.ModelLocations.Location;
 import net.ssehub.easy.basics.modelManagement.ModelManagementException;
 import net.ssehub.easy.basics.progress.ProgressObserver;
+import net.ssehub.easy.dslCore.ModelUtility;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileTracker;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildModel;
@@ -709,5 +710,42 @@ public class EasyExecutor {
     public static void enableIncrementalInstantiation(boolean incremental) {
         FileTracker.setEnabled(incremental);
     }
+    
+    /**
+     * Enables/disables reloading of changed models before parsing. 
+     * 
+     * @param reload whether reload shall be enabled or not
+     */
+    public static void setModelReload(boolean reload) {
+        ModelUtility.setModelReload(reload);
+    }
+
+    /**
+     * Returns whether reloading of changed models before parsing is enabled. 
+     * 
+     * @return {@code true} if reload is enabled, {@code false} if not
+     */
+    public static boolean isModelReload() {
+        return ModelUtility.isModelReload();
+    }
+
+    /**
+     * Enables/disables reuse of the resource set, in particular for parsing. 
+     * 
+     * @param reuse whether reuse shall be enabled or not
+     */
+    public static void setResourceSetReuse(boolean reuse) {
+        ModelUtility.setResourceSetReuse(reuse);
+    }
+
+    /**
+     * Returns whether reuse of the resource set is enabled. 
+     * 
+     * @return {@code true} if reuse is enabled, {@code false} if not
+     */
+    public static boolean isResourceSetReuse() {
+        return ModelUtility.isResourceSetReuse();
+    }
+
     
 }
