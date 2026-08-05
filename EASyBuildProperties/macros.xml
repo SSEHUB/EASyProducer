@@ -24,6 +24,7 @@
              failonerror="true">
          <jvmarg value="-Xmx1024m"/>
          <jvmarg value="-Dmaven.multiModuleProjectDirectory" />
+		 <jvmarg value="-DinCI" />
          <classpath>
            <fileset dir="${maven.bin.dir}/boot">
              <include name="*.jar" />
@@ -35,6 +36,8 @@
          <sysproperty key="classworlds.conf" value="${maven.bin.dir}/bin/m2.conf" />
          <sysproperty key="maven.home" value="${maven.bin.dir}" />
          <sysproperty key="MAVEN_SETTINGS_PATH" value="${maven.settings}" />
+         <sysproperty key="surefireCiLine" value="-DinCi=true"/>
+       	 <sysproperty key="jacoco.skip" value="false"/>
          <arg line="-s ${maven.settings}" />
          <arg line="-gs ${maven.settings}" />
          <arg line="--batch-mode @{options} @{goal}" />
