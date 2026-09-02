@@ -4,6 +4,7 @@
 package de.uni_hildesheim.sse.vil.templatelang.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalProvider;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
@@ -16,6 +17,7 @@ import de.uni_hildesheim.sse.vil.expressions.ui.highlighting.VilHighlightingConf
 import de.uni_hildesheim.sse.vil.templatelang.ui.hyperlinking.VtlHyperlinkHelper;
 import net.ssehub.easy.dslCore.ui.BuilderParticipant;
 import net.ssehub.easy.dslCore.ui.EasyUiResourceServiceProvider;
+import net.ssehub.easy.dslCore.ui.editors.NoNatureAddingEditorCallback;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -75,9 +77,9 @@ public class TemplateLangUiModule extends de.uni_hildesheim.sse.vil.templatelang
         return EasyUiResourceServiceProvider.class;
     }
     
-    /*@Override
+    @Override
     public Class<? extends IXtextEditorCallback> bindIXtextEditorCallback() {
-         return ValidatingEditorCallback.class; // enable markers, Composite would be nice
-    }*/
+        return NoNatureAddingEditorCallback.bindIXtextEditorCallback(() -> super.bindIXtextEditorCallback());
+    }
 
 }

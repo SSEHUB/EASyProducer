@@ -5,12 +5,14 @@ package de.uni_hildesheim.sse.vil.rt.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
+import org.eclipse.xtext.ui.editor.IXtextEditorCallback;
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper;
 import org.eclipse.xtext.ui.resource.IResourceUIServiceProvider;
 
 import de.uni_hildesheim.sse.vil.rt.ui.hyperlinking.RtVilHyperlinkHelper;
 import net.ssehub.easy.dslCore.ui.BuilderParticipant;
 import net.ssehub.easy.dslCore.ui.EasyUiResourceServiceProvider;
+import net.ssehub.easy.dslCore.ui.editors.NoNatureAddingEditorCallback;
 
 /**
  * Use this class to register components to be used within the IDE.
@@ -47,9 +49,9 @@ public class RtVilUiModule extends de.uni_hildesheim.sse.vil.rt.ui.AbstractRtVil
         return EasyUiResourceServiceProvider.class;
     }
     
-    /*@Override
+    @Override
     public Class<? extends IXtextEditorCallback> bindIXtextEditorCallback() {
-         return ValidatingEditorCallback.class; // enable markers, Composite would be nice
-    }*/
+        return NoNatureAddingEditorCallback.bindIXtextEditorCallback(() -> super.bindIXtextEditorCallback());
+    }
 
 }
