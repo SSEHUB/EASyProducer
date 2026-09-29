@@ -166,7 +166,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 ps.print(getText().getText());
                 out.close();
             } catch (IOException e) {
-                e.printStackTrace(System.out);
+                EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn(e.getMessage());
             }
             initialize();
         }

@@ -21,6 +21,9 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.Bundle;
+
 /**
  * Implements a handler function for ZIP files (which is prepared for handling JAR files in a similar way).
  * 
@@ -73,7 +76,7 @@ public class ZipHandler {
                     in.close();
                 } catch (IOException e1) {
                     net.ssehub.easy.basics.io.FileUtils.closeQuietly(in);
-                    throw e1;
+                    EASyLoggerFactory.INSTANCE.getLogger(getClass(), Bundle.ID).warn(e1.getMessage());
                 }
                 zos.closeEntry();
                 done.add(filePath);
