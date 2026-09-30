@@ -15,6 +15,8 @@
  */
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,10 +32,32 @@ public class PseudoStringTests {
      */
     @Test
     public void testRelativizeFolder() {
-        assertFolderEquals("..\\..\\..\\resources\\software", 
-            PseudoString.relativizeFolder("W:\\a\\b\\target\\gen\\py", "W:\\a\\b\\resources\\software"));
+        assertFolderEquals("../../../resources/software", 
+            PseudoString.relativizeFolder(path("/a/b/target/gen/py"), path("/a/b/resources/software")));
         assertFolderEquals(".", 
-            PseudoString.relativizeFolder("W:\\a\\b\\", "W:\\a\\b\\"));
+            PseudoString.relativizeFolder("/a/b/", "/a/b/"));
+    }
+    
+    /**
+     * Constructs an operating system specific path.
+     * 
+     * @param path the path, given in Windows or Linux form
+     * @return the operating-system specific path, for Windows we may assume an arbitrary drive letter
+     */
+    public static String path(String path) {
+        String result = path;
+        if (File.separatorChar == '\\') { // assume Windows
+            result = path.replace('/', File.separatorChar);
+            if (result.startsWith(File.separator)) {
+                result = "W:" + result; // pretend there is a drive
+            }
+        } else {
+            result = path.replace('\\', File.separatorChar);
+            if (result.matches("^\\w:.*")) {
+                result = result.substring(2);
+            }
+        }
+        return result;
     }
 
     /**

@@ -24,7 +24,7 @@ import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactFactory;
 import net.ssehub.easy.instantiation.core.model.artifactModel.ArtifactModel;
 import net.ssehub.easy.instantiation.core.model.artifactModel.Path;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
-import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoStringTests;
+import static net.ssehub.easy.instantiation.core.model.vilTypes.PseudoStringTests.*;
 
 /**
  * Tests {@link Path}.
@@ -40,14 +40,13 @@ public class PathTests {
      */
     @Test
     public void testRelativizeFolderString() throws VilException  {
-        ArtifactModel model = ArtifactFactory.createArtifactModel(new File("W:\\a\\b"));
-        Path base = Path.createInstance("W:\\a\\b\\target\\gen\\py", model);
-        PseudoStringTests.assertFolderEquals("..\\..\\..\\resources\\software", 
-            base.relativizeFolder("W:\\a\\b\\resources\\software"));
+        ArtifactModel model = ArtifactFactory.createArtifactModel(new File(path("/a/b")));
+        Path base = Path.createInstance(path("/a/b/target/gen/py"), model);
+        assertFolderEquals("../../../resources/software", 
+            base.relativizeFolder(path("/a/b/resources/software")));
 
-        base = Path.createInstance("W:\\a\\b\\", model);
-        PseudoStringTests.assertFolderEquals(".", 
-            base.relativizeFolder("W:\\a\\b\\"));
+        base = Path.createInstance(path("/a/b/"), model);
+        assertFolderEquals(".", base.relativizeFolder(path("/a/b/")));
 
         Assert.assertTrue(base.relativizeFolder((String) null).length() > 0);
     }
@@ -59,16 +58,14 @@ public class PathTests {
      */
     @Test
     public void testRelativizeFolderPath() throws VilException {
-        ArtifactModel model = ArtifactFactory.createArtifactModel(new File("W:\\a\\b"));
-        Path path = Path.createInstance("W:\\a\\b\\target\\gen\\py", model);
-        Path dir = Path.createInstance("W:\\a\\b\\resources\\software", model);
-        PseudoStringTests.assertFolderEquals("..\\..\\..\\resources\\software", 
-            path.relativizeFolder(dir));
+        ArtifactModel model = ArtifactFactory.createArtifactModel(new File(path("/a/b")));
+        Path path = Path.createInstance(path("/a/b/target/gen/py"), model);
+        Path dir = Path.createInstance(path("/a/b/resources/software"), model);
+        assertFolderEquals(path("../../../resources/software"), path.relativizeFolder(dir));
 
-        path = Path.createInstance("W:\\a\\b\\", model);
-        dir = Path.createInstance("W:\\a\\b\\", model);
-        PseudoStringTests.assertFolderEquals(".", 
-            path.relativizeFolder(dir));
+        path = Path.createInstance(path("/a/b/"), model);
+        dir = Path.createInstance(path("/a/b/"), model);
+        assertFolderEquals(".", path.relativizeFolder(dir));
 
         Assert.assertTrue(path.relativizeFolder((Path) null).length() > 0);
     }
