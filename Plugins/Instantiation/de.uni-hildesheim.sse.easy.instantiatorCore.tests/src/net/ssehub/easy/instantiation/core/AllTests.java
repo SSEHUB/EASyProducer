@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 import net.ssehub.easy.basics.logger.EASyLoggerFactory;
 import net.ssehub.easy.basics.logger.LoggingLevel;
 import net.ssehub.easy.instantiation.core.model.JavaUtilitiesTest;
+import net.ssehub.easy.instantiation.core.model.artifactmodel.PathTests;
 import net.ssehub.easy.instantiation.core.model.artifactmodel.XmlFileArtifactTest;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangTests;
 import net.ssehub.easy.instantiation.core.model.common.CommonTests;
@@ -30,6 +31,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.VilTests;
     BuildlangTests.class, 
     TemplateLangTests.class, 
     XmlFileArtifactTest.class, 
+    PathTests.class,
     JavaUtilitiesTest.class })
 public class AllTests {
     

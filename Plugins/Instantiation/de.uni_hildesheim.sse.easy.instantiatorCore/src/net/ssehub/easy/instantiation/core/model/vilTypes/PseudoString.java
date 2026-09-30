@@ -1,5 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.vilTypes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
@@ -7,6 +9,8 @@ import java.util.StringTokenizer;
 
 import org.apache.commons.lang.StringUtils;
 
+import net.ssehub.easy.basics.logger.EASyLoggerFactory;
+import net.ssehub.easy.instantiation.core.Bundle;
 import net.ssehub.easy.instantiation.core.model.common.ExecutionLocal;
 import net.ssehub.easy.instantiation.core.model.vilTypes.configuration.DecisionVariable;
 import net.ssehub.easy.varModel.model.datatypes.OclKeyWords;
@@ -941,6 +945,66 @@ public class PseudoString implements IVilType {
             result = String.format(format, values);
         } catch (IllegalFormatException e) {
             result = null;
+        }
+        return result;
+    }
+
+    /**
+     * Relativizes {@code dir} with respect to {@code base}, i.e., if {@code dir} is contained
+     * in {@code base}, it removes the common prefix, adds relative dir-ups to come from the specific
+     * path of {@code base} to the common path and then adds the specific part of {@code dir}. If
+     * {@code base} is the same as {@code dir}, it returns "." (relative to {@code base}). {@code base}
+     * and {@code dir} are turned into absolute, canonical paths before relativizing them.
+     * 
+     * @param base the base dir
+     * @param dir the directory to relativize, usually a sub-dir of {@code base}
+     * @return the relative version of {@code dir}, may be {@code dir} if file operations fail or there is 
+     * no common path
+     */
+    public static String relativizeFolder(String base, String dir) {
+        base = base == null ? "" : base;
+        dir = dir == null ? "" : dir;
+        String result = dir;
+        try {
+            String b = new File(base).getAbsoluteFile().getCanonicalPath();
+            String d = new File(dir).getAbsoluteFile().getCanonicalPath();
+            if (b.equals(d)) {
+                // the same, return this-path
+                result = ".";
+            } else {
+                // find common prefix 
+                int common = 0;
+                int minLen = Math.min(b.length(), d.length());
+                while (common < minLen && b.charAt(common) == d.charAt(common)) {
+                    common++;
+                }
+                if (common > 0) {
+                    // suffix to be turned into relative path
+                    b = b.substring(common);
+                    // normalize front
+                    while (b.startsWith(File.separator)) {
+                        b = b.substring(File.separator.length(), b.length());
+                    }
+                    // normalize tail
+                    while (b.endsWith(File.separator)) {
+                        b = b.substring(0, b.length() - File.separator.length());
+                    }
+                    // as we need to replace the segments, we need a / for the segment at end
+                    b = b + File.separator;
+                    // replace segments by relative up-paths
+                    String subDirs = "";
+                    for (int i = 0; i < b.length(); i++) {
+                        if (b.charAt(i) == File.separatorChar) {
+                            subDirs += ".." + File.separator;
+                        }
+                    }
+                    // compose result from relative subdir path and individual path of common
+                    result = subDirs + d.substring(common);
+                }
+            }
+        } catch (IOException e) {
+            EASyLoggerFactory.INSTANCE.getLogger(PseudoString.class, Bundle.ID).warn("Cannot relativize dir " + dir 
+                + " to base " + base + ", returning dir: " + e.getMessage());
         }
         return result;
     }

@@ -9,8 +9,14 @@ import org.junit.runners.Suite;
  * @author Holger Eichelberger
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({AnnotationTests.class, TypeRegistryTest.class, TypeDescriptorTest.class, 
-    ArtifactFactoryTest.class, ConfigurationTests.class, SerializationTest.class })
+@Suite.SuiteClasses({
+    AnnotationTests.class, 
+    TypeRegistryTest.class, 
+    TypeDescriptorTest.class, 
+    ArtifactFactoryTest.class, 
+    ConfigurationTests.class, 
+    SerializationTest.class,
+    PseudoStringTests.class})
 public class VilTests {
 
 }

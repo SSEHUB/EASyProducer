@@ -24,6 +24,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Invisible;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ListSet;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationMeta;
 import net.ssehub.easy.instantiation.core.model.vilTypes.OperationType;
+import net.ssehub.easy.instantiation.core.model.vilTypes.PseudoString;
 import net.ssehub.easy.instantiation.core.model.vilTypes.ReturnGenerics;
 import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 
@@ -667,6 +668,41 @@ public class Path implements IVilType, IStringValueProvider {
      */
     public Set<IFileSystemArtifact> move(IFileSystemArtifact target) throws VilException {
         return FileUtils.copyOrMove(this, target, true);
+    }
+    
+    /**
+     * Relativizes {@code dir} with respect to <b>this</b> as base, i.e., if {@code dir} is contained
+     * in <b>this</b>, it removes the common prefix, adds relative dir-ups to come from the specific
+     * path represented by <b>this</b> to the common path and then adds the specific part of {@code dir}. If
+     * If this is the same as {@code dir}, it returns ".". Paths and folders are turned into absolute, canonical 
+     * paths before relativizing them.
+     * 
+     * @param dir the directory to relativize, usually a sub-dir of <b>this</b>
+     * @return the relative version of {@code dir}, may be {@code dir} if file operations fail or there is 
+     *     no common path
+     * @throws VilException in case that accessing the absolute path fails
+     * @see PseudoString#relativizeFolder(String, String)
+     */
+    public String relativizeFolder(String dir) throws VilException {
+        return PseudoString.relativizeFolder(toAbsoluteOSPath(), dir);
+    }
+
+    /**
+     * Relativizes {@code dir} with respect to <b>this</b> as base, i.e., if {@code dir} is contained
+     * in <b>this</b>, it removes the common prefix, adds relative dir-ups to come from the specific
+     * path represented by <b>this</b> to the common path and then adds the specific part of {@code dir}. If
+     * If this is the same as {@code dir}, it returns ".". Paths and folders are turned into absolute, canonical 
+     * paths before relativizing them.
+     * 
+     * @param dir the directory to relativize, usually a sub-dir of <b>this</b>
+     * @return the relative version of {@code dir}, may be {@code dir} if file operations fail or there is 
+     *     no common path
+     * @throws VilException in case that accessing the absolute path fails
+     * @see PseudoString#relativizeFolder(String, String)
+     */
+    public String relativizeFolder(Path dir) throws VilException {
+        return PseudoString.relativizeFolder(toAbsoluteOSPath().toString(), 
+            null == dir ? "" : dir.toAbsoluteOSPath().toString());
     }
 
 }
