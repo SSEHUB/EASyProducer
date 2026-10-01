@@ -953,7 +953,8 @@ public class PseudoString implements IVilType {
      * Relativizes {@code dir} with respect to {@code base}, i.e., if {@code dir} is contained
      * in {@code base}, it removes the common prefix, adds relative dir-ups to come from the specific
      * path of {@code base} to the common path and then adds the specific part of {@code dir}. If
-     * {@code base} is the same as {@code dir}, it returns "." (relative to {@code base}). {@code base}
+     * {@code base} is the same as {@code dir}, it returns "." (relative to {@code base}); if only {@code dir} 
+     * has a specific part, it returns the specific part as path starting with ".". {@code base}
      * and {@code dir} are turned into absolute, canonical paths before relativizing them.
      * 
      * @param base the base dir
@@ -989,14 +990,19 @@ public class PseudoString implements IVilType {
                     while (b.endsWith(File.separator)) {
                         b = b.substring(0, b.length() - File.separator.length());
                     }
-                    // as we need to replace the segments, we need a / for the segment at end
-                    b = b + File.separator;
-                    // replace segments by relative up-paths
-                    String subDirs = "";
-                    for (int i = 0; i < b.length(); i++) {
-                        if (b.charAt(i) == File.separatorChar) {
-                            subDirs += ".." + File.separator;
+                    String subDirs;
+                    if (b.length() > 0) {
+                        subDirs = "";
+                        // as we need to replace the segments, we need a / for the segment at end
+                        b = b + File.separator;
+                        // replace segments by relative up-paths
+                        for (int i = 0; i < b.length(); i++) {
+                            if (b.charAt(i) == File.separatorChar) {
+                                subDirs += ".." + File.separator;
+                            }
                         }
+                    } else { // d starts with b, b does not have own part
+                        subDirs = ".";
                     }
                     // compose result from relative subdir path and individual path of common
                     result = subDirs + d.substring(common);

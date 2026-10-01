@@ -674,8 +674,9 @@ public class Path implements IVilType, IStringValueProvider {
      * Relativizes {@code dir} with respect to <b>this</b> as base, i.e., if {@code dir} is contained
      * in <b>this</b>, it removes the common prefix, adds relative dir-ups to come from the specific
      * path represented by <b>this</b> to the common path and then adds the specific part of {@code dir}. If
-     * If this is the same as {@code dir}, it returns ".". Paths and folders are turned into absolute, canonical 
-     * paths before relativizing them.
+     * If this is the same as {@code dir}, it returns "."; if only {@code dir} 
+     * has a specific part, it returns the specfific part as path starting with ".". Paths and folders are turned 
+     * into absolute, canonical paths before relativizing them.
      * 
      * @param dir the directory to relativize, usually a sub-dir of <b>this</b>
      * @return the relative version of {@code dir}, may be {@code dir} if file operations fail or there is 
@@ -691,7 +692,8 @@ public class Path implements IVilType, IStringValueProvider {
      * Relativizes {@code dir} with respect to <b>this</b> as base, i.e., if {@code dir} is contained
      * in <b>this</b>, it removes the common prefix, adds relative dir-ups to come from the specific
      * path represented by <b>this</b> to the common path and then adds the specific part of {@code dir}. If
-     * If this is the same as {@code dir}, it returns ".". Paths and folders are turned into absolute, canonical 
+     * If this is the same as {@code dir}, it returns "."; if only {@code dir} has a specific part, it returns the 
+     * specific part as path starting with ".". Paths and folders are turned into absolute, canonical 
      * paths before relativizing them.
      * 
      * @param dir the directory to relativize, usually a sub-dir of <b>this</b>

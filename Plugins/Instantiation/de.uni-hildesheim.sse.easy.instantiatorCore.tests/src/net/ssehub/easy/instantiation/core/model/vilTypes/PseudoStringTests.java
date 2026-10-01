@@ -36,6 +36,8 @@ public class PseudoStringTests {
             PseudoString.relativizeFolder(path("/a/b/target/gen/py"), path("/a/b/resources/software")));
         assertFolderEquals(".", 
             PseudoString.relativizeFolder("/a/b/", "/a/b/"));
+        assertFolderEquals("./c/d", 
+            PseudoString.relativizeFolder("/a/b/", "/a/b/c/d"));
     }
     
     /**
