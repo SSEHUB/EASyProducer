@@ -70,4 +70,13 @@ public class PathTests {
         Assert.assertTrue(path.relativizeFolder((Path) null).length() > 0);
     }
 
+    @Test
+    public void testGetParent() throws VilException {
+        ArtifactModel model = ArtifactFactory.createArtifactModel(new File(path("/a/b")));
+        Path path = Path.createInstance(path("/a/b/target/gen/py"), model);
+        String p = path.getParent().toAbsoluteOSPath();
+        p = normalizeFolder(p);
+        Assert.assertTrue(p.endsWith("/a/b/target/gen")); // Windows: ignore drive
+    }
+
 }

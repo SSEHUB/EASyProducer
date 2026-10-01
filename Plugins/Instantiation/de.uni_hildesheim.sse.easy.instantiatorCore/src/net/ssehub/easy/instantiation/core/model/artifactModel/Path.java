@@ -190,7 +190,7 @@ public class Path implements IVilType, IStringValueProvider {
      */
     public Path getParent() {
         Path result = this;
-        File f = new File(path);
+        File f = getAbsolutePath();
         File parent = f.getParentFile();
         if (null != parent) {
             result = createInstance(parent, ArtifactFactory.findModel(parent));
