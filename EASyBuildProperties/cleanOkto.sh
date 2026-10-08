@@ -41,3 +41,4 @@ rm -rf /tmp/.com.google.Chrome.*
 rm -rf /tmp/jansi-*
 rm -rf /tmp/node-compile-cache
 rm -f /tmp/config.cp*
+rm -f /tmp/oktoflow2grafana.cfg
