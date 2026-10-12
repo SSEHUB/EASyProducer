@@ -41,6 +41,15 @@ public class Main {
      * @param args ignored
      */
     public static void main(String[] args) throws VilException {
+        System.out.println("Check contents of dir.list:");
+        File[] lib = new File("./lib").listFiles();
+        for (File f : lib) {
+            if (f.getName().endsWith(".jar")) {
+                System.out.println(f.getName());
+            }
+        }
+        
+        System.out.println();
         TracerFactory.setInstance(ConsoleTracerFactory.INSTANCE);
         File base = new File(".");
         ArtifactModel model = ArtifactFactory.createArtifactModel(base);
