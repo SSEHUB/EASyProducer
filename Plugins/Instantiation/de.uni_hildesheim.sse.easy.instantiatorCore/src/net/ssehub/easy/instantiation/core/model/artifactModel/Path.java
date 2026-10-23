@@ -211,6 +211,16 @@ public class Path implements IVilType, IStringValueProvider {
         } 
         return result.getAbsoluteFile();
     }
+
+    /**
+     * Returns whether this path is absolute, i.e., starts at a file system root.
+     * 
+     * @return {@code true} for absolute, {@code false} else
+     */
+    public boolean isAbsolute() {
+        File file = new File(path);
+        return file.isAbsolute();
+    }
     
     /**
      * Returns whether this path is a pattern.
