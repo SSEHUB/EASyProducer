@@ -31,6 +31,7 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
     private JavaCodeClass enclosing;
     private JavaCodeExpression initializer;
     private boolean isTransient;
+    private boolean isVolatile;
 
     /**
      * Creates an attribute.
@@ -70,6 +71,10 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         out.printwi(getModifier());
         if (isTransient) {
             out.print("transient");
+            out.print(" ");
+        }
+        if (isVolatile) {
+            out.print("volatile");
             out.print(" ");
         }
         type.store(out); 
@@ -159,7 +164,20 @@ public class JavaCodeAttribute extends JavaCodeVisibleElement {
         this.isTransient = isTransient;
         return this;
     }    
-    
+
+    /**
+     * Sets this attribute to volatile.
+     * 
+     * @param isVolatile whether the attribute shall be volatile
+     * 
+     * @return <b>this</b> (for chaining)
+     */    
+    @OperationMeta(name = {"setVolatile", "volatile"})  
+    public JavaCodeVisibleElement setVolatile(boolean isVolatile) {
+        this.isVolatile = isVolatile;
+        return this;
+    }    
+
     public JavaCodeAttribute setPublicStaticFinal() {
         super.setPublic();
         super.setStatic();
