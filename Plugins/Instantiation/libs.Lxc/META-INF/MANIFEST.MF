@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LXC
 Bundle-SymbolicName: net.ssehub.easy.libs.lxc
-Automatic-Module-Name: net.ssehub.easy.libs.docker
+Automatic-Module-Name: net.ssehub.easy.libs.lxc
 Bundle-Version: 1.1.0
 Bundle-ClassPath: commons-lang3-3.4.jar,
  gson-2.6.2.jar,

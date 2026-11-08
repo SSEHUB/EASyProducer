@@ -41,7 +41,7 @@
       <required namespace='osgi.bundle' name='com.google.guava' range='27.1.0'/>
       <required namespace='osgi.bundle' name='net.ssehub.easy.libs.commons.codec' range='1.14.0'/>
       <required namespace='osgi.bundle' name='com.sun.jna' range='5.6.0'/>
-      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=1.8))'>
+      <requiredProperties namespace='osgi.ee' match='(&amp;(osgi.ee=JavaSE)(version=17))'>
         <description>
           net.ssehub.easy.libs.docker
         </description>

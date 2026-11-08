@@ -5,9 +5,9 @@
     <properties size='9'>
       <property name='artifact.size' value='5157578'/>
       <property name='download.size' value='5157578'/>
-      <property name='download.checksum.sha-512' value='4b9c47499f9628dd737b3ba4f9c7164f0ded4acb2f4ad0986b2d87e6fba685cd2b6942f85bc457cab012239ddd30516eb9b304b173bcbfc2ce0c1b8c0ec52563'/>
-      <property name='download.checksum.sha-1' value='a60e99fdf2040519353be22f3f06d690f82eb723'/>
-      <property name='download.checksum.sha-256' value='518b5b51823020cfb92165957cf16f1319990ff521a208f41d140106c742a95a'/>
+      <property name='download.checksum.sha-512' value='e4933870d5a3ec0f00b953ffb2c1b3cf83b6bc0ca4ddebfa5ea83ac960a22534a3db30900dbca3ed7a815e24af004b53ae88603a6affe587121c9c22ac8dd0a1'/>
+      <property name='download.checksum.sha-1' value='d612d1f13deca1e8b6a1e70b5b37b832d0a432ea'/>
+      <property name='download.checksum.sha-256' value='98cdd736da50f71eb83695bfedf2003a40ce7ae974b0cbefea76eaec67457601'/>
       <property name='maven-groupId' value='net.ssehub.easy'/>
       <property name='maven-artifactId' value='net.ssehub.easy.libs.docker'/>
       <property name='maven-version' value='3.2.7'/>
