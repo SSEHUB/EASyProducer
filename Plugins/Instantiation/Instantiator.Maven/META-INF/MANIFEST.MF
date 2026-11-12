@@ -16,8 +16,7 @@ Require-Bundle: net.ssehub.easy.instantiation.core,
  net.ssehub.easy.basics,
  org.apache.felix.scr;resolution:=optional,
  org.eclipse.core.runtime,
- net.ssehub.easy.dslCore,
- net.ssehub.easy.libs.maven;bundle-version="3.9.7"
+ net.ssehub.easy.dslCore
 Bundle-ClassPath: .
 Export-Package: net.ssehub.easy.instantiation.maven
 Bundle-Activator: net.ssehub.easy.instantiation.maven.Activator

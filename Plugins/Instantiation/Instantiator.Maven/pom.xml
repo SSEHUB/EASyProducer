@@ -30,18 +30,5 @@
         <artifactId>net.ssehub.easy.dslCore</artifactId>
         <version>${project.version}</version>
      </dependency>
-     <!-- for documentation, works if classpath is filtered before execution and passed in as easy.maven.classpath -->
-     <dependency>
-	    <groupId>org.apache.maven</groupId>
-	    <artifactId>maven-core</artifactId>
-	    <version>3.10.0</version>
-	    <optional>true</optional>
-     </dependency>
- 	 <dependency>
-	    <groupId>org.apache.maven</groupId>
-	    <artifactId>maven-embedder</artifactId>
-	    <version>3.10.0</version>
-        <optional>true</optional>
-	 </dependency>     
   </dependencies>  
  </project>
