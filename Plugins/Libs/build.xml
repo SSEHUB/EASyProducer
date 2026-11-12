@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Libs" default="all" basedir=".">	
+    <property file="${user.home}/migration.properties"/>
+    <property file="${user.home}/global-build.properties"/>
+	
+	<target name="mvn">
+
+		<echo>###############################</echo>
+        <echo>###  Assembling commons.io  ###</echo>
+        <echo>###############################</echo>
+        <ant dir="libs.commons.io" antfile="${build.script.name}" />
+
+		<echo>#################################</echo>
+        <echo>###  Assembling commons.lang  ###</echo>
+        <echo>#################################</echo>
+        <ant dir="libs.commons.lang" antfile="${build.script.name}" />
+
+		<echo>##################################</echo>
+        <echo>###  Assembling commons.codec  ###</echo>
+        <echo>##################################</echo>
+        <ant dir="libs.commons.codec" antfile="${build.script.name}" />
+
+		<echo>##############################</echo>
+        <echo>###  Assembling slf4j.api  ###</echo>
+        <echo>##############################</echo>
+        <ant dir="libs.slf4j.api" antfile="${build.script.name}" />
+
+		<echo>#############################</echo>
+        <echo>###  Assembling ANT-Lib   ###</echo>
+        <echo>#############################</echo>
+        <ant dir="Ant" antfile="${build.script.name}" />
+
+        <echo>#################################</echo>
+        <echo>###  Assembling AspectJ-Lib   ###</echo>
+        <echo>#################################</echo>
+        <ant dir="AspectJ" antfile="${build.script.name}" />
+
+        <echo>##################################</echo>
+        <echo>###  Assembling Maven-Lib   ###</echo>
+        <echo>##################################</echo>
+        <ant dir="Maven" antfile="${build.script.name}" />
+
+        <echo>##################################</echo>
+        <echo>###  Assembling Velocity-Lib   ###</echo>
+        <echo>##################################</echo>
+        <ant dir="Velocity" antfile="${build.script.name}" />
+
+        <echo>##############################</echo>
+        <echo>###  Assembling XVCL-Lib   ###</echo>
+        <echo>##############################</echo>
+        <ant dir="XVCL" antfile="${build.script.name}" />
+
+        <echo>################################</echo>
+        <echo>###  Assembling Docker-Lib   ###</echo>
+        <echo>################################</echo>
+        <ant dir="libs.Docker" antfile="${build.script.name}" />
+
+        <echo>################################</echo>
+        <echo>###  Assembling LXC-Lib      ###</echo>
+        <echo>################################</echo>
+        <ant dir="libs.Lxc" antfile="${build.script.name}" />
+
+	</target>
+	
+	<!-- <target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/> -->
+	<target name="all" depends="mvn"/>
+	<target name="only.compile" depends="mvn"/>
+</project>

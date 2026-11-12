@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Instantiators" default="all" basedir=".">	
+    <property file="${user.home}/migration.properties"/>
+    <property file="${user.home}/global-build.properties"/>
+	
+	<target name="mvn">
+
+	</target>
+	
+	<!-- <target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/> -->
+	<target name="all" depends="mvn"/>
+	<target name="only.compile" depends="mvn"/>
+</project>

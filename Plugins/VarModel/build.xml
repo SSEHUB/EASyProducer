@@ -5,25 +5,6 @@
 	<property file="${user.home}/global-build.properties"/>
 	
 	<target name="mvn">
-		<echo>###############################</echo>
-        <echo>###  Assembling commons.io  ###</echo>
-        <echo>###############################</echo>
-        <ant dir="libs.commons.io" antfile="${build.script.name}" />
-
-		<echo>#################################</echo>
-        <echo>###  Assembling commons.lang  ###</echo>
-        <echo>#################################</echo>
-        <ant dir="libs.commons.lang" antfile="${build.script.name}" />
-
-		<echo>##################################</echo>
-        <echo>###  Assembling commons.codec  ###</echo>
-        <echo>##################################</echo>
-        <ant dir="libs.commons.codec" antfile="${build.script.name}" />
-
-		<echo>##############################</echo>
-        <echo>###  Assembling slf4j.api  ###</echo>
-        <echo>##############################</echo>
-        <ant dir="libs.slf4j.api" antfile="${build.script.name}" />
 	
         <echo>#########################################</echo>
         <echo>###  Compiling the Utility Functions  ###</echo>
