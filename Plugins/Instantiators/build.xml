@@ -28,12 +28,12 @@
         <echo>##########################################</echo>
         <echo>###   Compiling AspectJ Instantiator   ###</echo>
         <echo>##########################################</echo>
-        <ant dir="${home.instantiator.aspectj.dir}" antfile="${build.script.name}" />
+        <ant dir="Instantiator.AspectJ" antfile="${build.script.name}" />
 
         <echo>#######################################</echo>
         <echo>###   Compiling ANT Instantiator    ###</echo>
         <echo>#######################################</echo>
-        <ant dir="${home.instantiator.ant.dir}" antfile="${build.script.name}" />
+        <ant dir="Instantiator.Ant" antfile="${build.script.name}" />
 
         <echo>##########################################</echo>
         <echo>###   Compiling Yaml Instantiator       ###</echo>
@@ -55,12 +55,12 @@
         <echo>#############################################</echo>
         <echo>###   Compiling ANT Instantiator Tests    ###</echo>
         <echo>#############################################</echo>
-        <ant dir="${home.instantiator.ant.test.dir}" antfile="${build.script.name}" />
+        <ant dir="Instantiator.Ant.Test" antfile="${build.script.name}" />
 
         <echo>################################################</echo>
         <echo>###   Compiling AspectJ Instantiator Tests   ###</echo>
         <echo>################################################</echo>
-        <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />
+        <ant dir="Instantiator.AspectJ.Test" antfile="${build.script.name}" />
         
         <echo>####################################</echo>
         <echo>###   Compiling Yaml Tests       ###</echo>
