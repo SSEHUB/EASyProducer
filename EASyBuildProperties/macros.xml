@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="QualiMaster.Macros" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="QualiMaster.Macros" xmlns:artifact="antlib:org.apache.maven.artifact.ant" xmlns:if="ant:if" xmlns:unless="ant:unless">
  
    <property file="${user.home}/global-build.properties"/>
    <property name="maven.repository.local" value="${user.home}${file.separator}.m2${file.separator}repository"/>
@@ -19,12 +19,43 @@
      <attribute name="resultproperty" default="maven.result" />
      <element name="args" implicit="true" optional="true" />
      <sequential>
-       <java classname="org.codehaus.classworlds.Launcher" fork="true"
+     
+        <!-- Weekly marker (javadoc) -->
+
+        <local name="javadoc.last.week"/>
+        <local name="javadoc.skip"/>
+        <local name="javadoc.enable"/>
+        <local name="javadoc.generated"/>
+     	<tstamp>
+     	    <format property="week.id" pattern="YYYY-ww"/>
+     	</tstamp>
+     	<property name="javadoc.marker"
+     	    location="${user.dir}/.maven-javadoc-weekly.txt"/>
+        <loadfile property="javadoc.last.week"
+            srcFile="${javadoc.marker}"
+            failonerror="false"/>     	
+        <condition property="javadoc.skip" value="true" else="false">
+            <and>
+              <equals arg1="${javadoc.last.week}" arg2="${week.id}"/>
+              <not>
+               <istrue value="${javadoc.force}"/>
+              </not>
+            </and>
+        </condition>
+        <condition property="javadoc.enable">
+            <equals arg1="${javadoc.skip}" arg2="false"/>
+        </condition>
+     	
+        <!-- Invoke Maven -->
+        <java classname="org.codehaus.classworlds.Launcher" fork="true"
              dir="@{basedir}" resultproperty="@{resultproperty}"
              failonerror="true">
          <jvmarg value="-Xmx1024m"/>
          <jvmarg value="-Dmaven.multiModuleProjectDirectory" />
-		 <jvmarg value="-DinCI" />
+		 <jvmarg value="-DinCI=true" />
+         <jvmarg value="-Daether.remoteRepositoryFilter.prefixes.basedir=/var/cache/maven-prefixes" />
+         <jvmarg value="-Daether.remoteRepositoryFilter.prefixes.resolvePrefixFiles=false" />
+         <jvmarg value="-Daether.remoteRepositoryFilter.prefixes.verifyDenied=false" />
          <classpath>
            <fileset dir="${maven.bin.dir}/boot">
              <include name="*.jar" />
@@ -36,13 +67,19 @@
          <sysproperty key="classworlds.conf" value="${maven.bin.dir}/bin/m2.conf" />
          <sysproperty key="maven.home" value="${maven.bin.dir}" />
          <sysproperty key="MAVEN_SETTINGS_PATH" value="${maven.settings}" />
-         <sysproperty key="surefireCiLine" value="-DinCi=true"/>
+         <sysproperty key="surefireCiLine" value="-DinCI=true"/>
        	 <sysproperty key="jacoco.skip" value="false"/>
          <arg line="-s ${maven.settings}" />
          <arg line="-gs ${maven.settings}" />
          <arg line="--batch-mode @{options} @{goal}" />
          <args/>
+         <arg value="-Dmaven.javadoc.skip=${javadoc.skip}"/>
+         <arg value="-DenableJavadoc=${javadoc.enable}"/>
        </java>
+     	
+       <!-- record javadoc flag -->
+     	
+       <echo file="${javadoc.marker}" message="${week.id}" if:true="${javadoc.enable}"/>
      </sequential>
    </macrodef>
     
@@ -55,20 +92,39 @@
      <sequential>
         <local name="folder"/>
         <property name="folder" value="${maven.repository.uploadDir}/@{folderName}"/>
-        <local name="connectString"/>
-        <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
-        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+        <condition property="is.local">
+            <equals arg1="${maven.repository.server}" arg2="127.0.0.1"/>
+        </condition>    
+        <sequential if:true="${is.local}">
+            <mkdir dir="${folder}"/>
+            <copy todir="${folder}">
+                <fileset file="@{pomFile}"/>
+                <fileset dir="@{jarFolder}">
+                    <include name="*.jar"/>
+                    <include name="*.zip"/>
+                </fileset>
+            </copy>
+            <exec executable="${user.home}/deployMvnQm.sh">
+              <arg value="${folder}"/>
+              <arg value="@{jarFile}"/>
+            </exec>
+    	</sequential>
+        <sequential unless:true="${is.local}">
+          <local name="connectString"/>
+          <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
+          <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="mkdir -p ${folder}"/>
         <!--<scp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}" file="@{pomFile}"/>-->
-        <oscp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+          <oscp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
             <fileset file="@{pomFile}"/>
             <fileset dir="@{jarFolder}">
                 <include name="*.jar"/>
                 <include name="*.zip"/>
             </fileset>
-        </oscp>
-        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+          </oscp>
+          <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="./deployMvnQm.sh ${folder} @{jarFile}"/>         
+        </sequential>
      </sequential>
    </macrodef>
    
@@ -99,15 +155,30 @@
      <sequential>
         <local name="folder"/>
         <property name="folder" value="${maven.repository.uploadDir}/@{folderName}"/>
-        <local name="connectString"/>
-        <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
-        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
-            command="mkdir -p ${folder}"/>
-        <oscp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+     	<condition property="is.local">
+     	    <equals arg1="${maven.repository.server}" arg2="127.0.0.1"/>
+     	</condition>	
+     	<sequential if:true="${is.local}">
+     	  <mkdir dir="${folder}"/>
+     	  <copy todir="${folder}">
             <fileset file="@{pomFile}"/>
-        </oscp>
-        <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+          </copy>
+     	  <exec executable="${user.home}/deployMvnQm.sh">
+     	    <arg value="${folder}"/>
+     	    <arg value="pom.xml"/>
+     	  </exec>
+        </sequential>
+     	<sequential unless:true="${is.local}">
+          <local name="connectString"/>
+          <property name="connectString" value="${maven.repository.user}@${maven.repository.server}"/>
+          <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
+            command="mkdir -p ${folder}"/>
+          <oscp todir="${connectString}:${folder}" trust="true" keyfile="${maven.repository.keyfile}">
+            <fileset file="@{pomFile}"/>
+          </oscp>
+          <osshexec host="${maven.repository.server}" username="${maven.repository.user}" trust="true" keyfile="${maven.repository.keyfile}" 
             command="./deployMvnQm.sh ${folder} pom.xml"/>         
+        </sequential>
      </sequential>
    </macrodef>
         
@@ -132,7 +203,7 @@
       <sequential>  
         <local name="pomDir"/>
         <dirname file="@{pomFile}" property="pomDir"/>
-        <mvnPlain options="-U" goal="@{goal}" basedir="${pomDir}">
+        <mvnPlain goal="@{goal}" basedir="${pomDir}"> <!-- no options="-U" as CI is authoritative -->
           <args/>
         </mvnPlain>
         <!--  <mavenUpdate pomFile="@{pomFile}"/>
@@ -142,7 +213,6 @@
         <delete quiet="true">
             <fileset dir="target" includes="gen/**/jars/*.jar"/>
             <fileset dir="target" includes="jars/*.jar"/>
-            <fileset dir="target" includes="surefire-reports/*"/>
         </delete>
       </sequential>
    </macrodef>

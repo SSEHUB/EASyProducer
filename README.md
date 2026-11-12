@@ -10,7 +10,8 @@ EASy-Producer was already successfully applied and tested in various industrial 
 News
 -------------
 
-April 2026: EASy-Producer release with pre-builds, update-site and Maven central.
+September 2026: EASy-Producer 1.3.11 release with pre-builds, update-site and Maven central.
+Project structure change for more efficient CI builds.
 
 As we did not publish a full release for a longer term, we refer here to the nightly builds and their documentation.
 
@@ -47,6 +48,24 @@ Source code setup/plugins
 If you want to work with the code, please install first the Eclipse Checkstyle plugin as well as xText 2.34. The EASy-Producer code base ships with Checkstyle configurations that are compatible with Checkstyle 8.35. Setup a global checkstyle configuration named "SSE Checkstyle Configuration" as a project local configuration pointing to the checkstyle file in the project "EASy-Producer.Eclipse". 
 
 Having EASy-Producer available as source code, you can also execute EASy-Producer as an Eclipse runtime instance from within Eclipse. We also provide an Eclipse launch configurations in the "launching" folder along with required dropins. Please note that a JDK must be installed and available as installed JRE in Eclipse, i.e., a JRE is not sufficient. 
+
+Recommended build sequence
+-------------------------
+
+If you want to build EASy-Producer from scratch, please follow the build sequence below
+
+- `Plugins/Libs`
+- `Plugins/VarModel`
+- `Plugins/IVML`
+- `Plugins/Reasoner`
+- `Plugins/Instantiation`
+- `Plugins/Instantiators`
+- `Plugins/Integration`
+- `Plugins/EASy-Producer`
+
+Prerequisites: JDK 21, Maven 3.9.7, ANT 1.10.3
+
+Although the individual parts contain ANT build scripts, they are primarily intended for CLI and if the global build properties are not adjusted, they will probably not work in your environment. In such cases it is much easier to go through the subfolders in the sequence tiven in the ANT build scripts and call the maven build specifications separately.
 
 Ongoing development
 -------------------
