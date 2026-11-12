@@ -70,7 +70,8 @@
     <repository>
       <id>eclipse-upd</id>
       <layout>p2</layout>
-      <url>https://download.eclipse.org/eclipse/updates/4.32/</url>
+      <url>https://projects.sse.uni-hildesheim.de/eclipse/updates/4.32/</url> <!-- copy of update site/archive -->
+      <!--<url>https://download.eclipse.org/eclipse/updates/4.32/</url>-->
     </repository>
     <repository>
       <id>SSE-mvn</id> <!-- same ID as in easy-maven-settings.xml -->
@@ -611,21 +612,14 @@
   <distributionManagement>
     <repository>
       <id>sse-projects</id>
-      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+      <!--<url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>-->
+      <url>file:///mvnRepo/</url>
     </repository>
     <snapshotRepository>
       <id>sse-projects</id>
-      <url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>
+      <!--<url>scpexe://projects.sse.uni-hildesheim.de/var/www/qm/maven/</url>-->
+      <url>file:///mvnRepo/</url>
     </snapshotRepository>
   </distributionManagement>
-  
-  <!-- settings.xml
-  <servers>
-    <server>
-      <id>sse-projects</id>
-      <username>jenkins</username>
-    </server>
-  </servers>  
-  -->
 
 </project>
