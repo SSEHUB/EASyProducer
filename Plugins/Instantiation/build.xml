@@ -25,57 +25,19 @@
         <echo>###   Compiling Java Instantiator   ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.java.dir}" antfile="${build.script.name}" />
-
-        <echo>#########################################</echo>
-        <echo>###   Compiling Python Instantiator   ###</echo>
-        <echo>#########################################</echo>
-        <ant dir="Instantiator.Python" antfile="${build.script.name}" />
-
-        <echo>#######################################</echo>
-        <echo>###   Compiling ANT Instantiator    ###</echo>
-        <echo>#######################################</echo>
-        <ant dir="${home.instantiator.ant.dir}" antfile="${build.script.name}" />
-		
-        <echo>##########################################</echo>
-        <echo>###   Compiling AspectJ Instantiator   ###</echo>
-        <echo>##########################################</echo>
-        <ant dir="${home.instantiator.aspectj.dir}" antfile="${build.script.name}" />
         
+        <!-- used in serializer tests -->		
         <echo>#######################################</echo>
         <echo>###   Compiling Maven Instantiator  ###</echo>
         <echo>#######################################</echo>
         <ant dir="${home.instantiator.maven.dir}" antfile="${build.script.name}" />
-		
+
+        <!-- used in VIL tests -->		
         <echo>#############################</echo>
         <echo>###  Compiling Velocity   ###</echo>
         <echo>#############################</echo>
         <ant dir="de.uni_hildeshem.sse.easy.instantiator.velocity" antfile="${build.script.name}" />
 		
-        <echo>########################</echo>
-        <echo>###  Compiling XVCL  ###</echo>
-        <echo>########################</echo>
-        <ant dir="de.uni_hildesheim.sse.easy.instantiator.xvcl" antfile="${build.script.name}" />
-		
-        <echo>##########################################</echo>
-        <echo>###   Compiling Docker Instantiator    ###</echo>
-        <echo>##########################################</echo>
-        <ant dir="Instantiator.Docker" antfile="${build.script.name}" />
-
-        <echo>##########################################</echo>
-        <echo>###   Compiling Lxc Instantiator       ###</echo>
-        <echo>##########################################</echo>
-        <ant dir="Instantiator.Lxc" antfile="${build.script.name}" />
-
-        <echo>##########################################</echo>
-        <echo>###   Compiling Yaml Instantiator       ###</echo>
-        <echo>##########################################</echo>
-        <ant dir="net.ssehub.easy.instantiation.yaml" antfile="${build.script.name}" />
-
-        <echo>##########################################</echo>
-        <echo>###   Compiling Json Instantiator       ###</echo>
-        <echo>##########################################</echo>
-        <ant dir="net.ssehub.easy.instantiation.json" antfile="${build.script.name}" />
-
         <echo>####################################</echo>
         <echo>###  Compiling Expressions Core  ###</echo>
         <echo>####################################</echo>
@@ -166,35 +128,11 @@
         <echo>#############################################</echo>
         <ant dir="${home.instantiator.java.test.dir}" antfile="${build.script.name}" />
 
-        <echo>###############################################</echo>
-        <echo>###   Compiling Python Instantiator Tests   ###</echo>
-        <echo>###############################################</echo>
-        <ant dir="Instantiator.Python.Test" antfile="${build.script.name}" />
-
-        <echo>#############################################</echo>
-        <echo>###   Compiling ANT Instantiator Tests    ###</echo>
-        <echo>#############################################</echo>
-        <ant dir="${home.instantiator.ant.test.dir}" antfile="${build.script.name}" />
-
-        <echo>################################################</echo>
-        <echo>###   Compiling AspectJ Instantiator Tests   ###</echo>
-        <echo>################################################</echo>
-        <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />
-
 		<echo>##################################</echo>
         <echo>###  Compiling Velocity Tests  ###</echo>
         <echo>##################################</echo>
         <ant dir="de.uni-hildesheim.sse.easy.instantiator.velocity.tests" antfile="${build.script.name}" />
-        
-        <echo>####################################</echo>
-        <echo>###   Compiling Yaml Tests       ###</echo>
-        <echo>####################################</echo>
-        <ant dir="net.ssehub.easy.instantiation.yaml.test" antfile="${build.script.name}" />
 
-        <echo>####################################</echo>
-        <echo>###   Compiling Json Tests       ###</echo>
-        <echo>####################################</echo>
-        <ant dir="net.ssehub.easy.instantiation.json.test" antfile="${build.script.name}" />
 		
 		<!-- tested before, time to say goodbye -->
         <!--<echo>#################################################</echo>

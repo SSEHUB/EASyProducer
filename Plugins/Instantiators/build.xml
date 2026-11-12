@@ -5,6 +5,73 @@
 	
 	<target name="mvn">
 
+        <echo>########################</echo>
+        <echo>###  Compiling XVCL  ###</echo>
+        <echo>########################</echo>
+        <ant dir="de.uni_hildesheim.sse.easy.instantiator.xvcl" antfile="${build.script.name}" />
+
+        <echo>#########################################</echo>
+        <echo>###   Compiling Python Instantiator   ###</echo>
+        <echo>#########################################</echo>
+        <ant dir="Instantiator.Python" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Docker Instantiator    ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="Instantiator.Docker" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Lxc Instantiator       ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="Instantiator.Lxc" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling AspectJ Instantiator   ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="${home.instantiator.aspectj.dir}" antfile="${build.script.name}" />
+
+        <echo>#######################################</echo>
+        <echo>###   Compiling ANT Instantiator    ###</echo>
+        <echo>#######################################</echo>
+        <ant dir="${home.instantiator.ant.dir}" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Yaml Instantiator       ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.yaml" antfile="${build.script.name}" />
+
+        <echo>##########################################</echo>
+        <echo>###   Compiling Json Instantiator       ###</echo>
+        <echo>##########################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.json" antfile="${build.script.name}" />
+
+
+
+        <echo>###############################################</echo>
+        <echo>###   Compiling Python Instantiator Tests   ###</echo>
+        <echo>###############################################</echo>
+        <ant dir="Instantiator.Python.Test" antfile="${build.script.name}" />
+
+        <echo>#############################################</echo>
+        <echo>###   Compiling ANT Instantiator Tests    ###</echo>
+        <echo>#############################################</echo>
+        <ant dir="${home.instantiator.ant.test.dir}" antfile="${build.script.name}" />
+
+        <echo>################################################</echo>
+        <echo>###   Compiling AspectJ Instantiator Tests   ###</echo>
+        <echo>################################################</echo>
+        <ant dir="${home.instantiator.aspectj.test.dir}" antfile="${build.script.name}" />
+        
+        <echo>####################################</echo>
+        <echo>###   Compiling Yaml Tests       ###</echo>
+        <echo>####################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.yaml.test" antfile="${build.script.name}" />
+
+        <echo>####################################</echo>
+        <echo>###   Compiling Json Tests       ###</echo>
+        <echo>####################################</echo>
+        <ant dir="net.ssehub.easy.instantiation.json.test" antfile="${build.script.name}" />
+
 	</target>
 	
 	<!-- <target name="all" depends="init, compile, test, storeJars, remove.testeclipse.instance"/> -->
