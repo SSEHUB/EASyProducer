@@ -2,6 +2,8 @@ package net.ssehub.easy.instantiation.core.model.vilTypes;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
@@ -945,6 +947,79 @@ public class PseudoString implements IVilType {
             result = String.format(format, values);
         } catch (IllegalFormatException e) {
             result = null;
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether {@code text} is empty.
+     * 
+     * @param text the text to test, may be <b>null</b>
+     * @return {@code true} for empty but not <b>null</b>, {@code false} for not empty or <b>null</b>
+     */
+    public static boolean isEmpty(String text) {
+        return text != null && text.isEmpty();
+    }
+
+    /**
+     * Returns whether {@code text} is blank (only whitespaces).
+     * 
+     * @param text the text to test, may be <b>null</b>
+     * @return {@code true} for blank but not <b>null</b>, {@code false} for not blank or <b>null</b>
+     */
+    public static boolean isBlank(String text) {
+        return text != null && text.isBlank();
+    }
+
+    /**
+     * Returns whether {@code url} is a syntactically correct URL.
+     * 
+     * @param url the URL to test, may be <b>null</b>
+     * @return {@code true} for URL, {@code false} else
+     */
+    public static boolean isURL(String url) {
+        boolean result = false;
+        if (null != url) {
+            try {
+                URI.create(url).toURL();
+                result = true;
+            } catch (IllegalArgumentException | MalformedURLException e) {
+                // ignore, syntax does not match
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns whether {@code uri} is a syntactically correct URI.
+     * 
+     * @param uri the URI to test, may be <b>null</b>
+     * @return {@code true} for URI, {@code false} else
+     */
+    public static boolean isURI(String uri) {
+        boolean result = false;
+        if (null != uri) { 
+            try {
+                URI.create(uri);
+                result = true;
+            } catch (IllegalArgumentException e) {
+                // ignore, syntax does not match
+            }
+        }
+        return result;
+    }
+    
+    /**
+     * Returns whether the given file {@code path} is absolute, i.e., starts at a file system root.
+     * 
+     * @param path the path to test, may be <b>null</b>
+     * @return {@code true} for absolute, {@code false} else
+     */
+    public static boolean isAbsolute(String path) {
+        boolean result = false;
+        if (null != path) {
+            File file = new File(path);
+            result = file.isAbsolute();
         }
         return result;
     }

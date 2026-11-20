@@ -82,4 +82,43 @@ public class PseudoStringTests {
         return folder.replace('\\', '/');
     }
 
+    @Test
+    public void testisURI() {
+        Assert.assertFalse(PseudoString.isURI(null));
+        Assert.assertTrue(PseudoString.isURI("")); // can be empty
+        Assert.assertTrue(PseudoString.isURI("https://example.com"));
+        Assert.assertTrue(PseudoString.isURI("https://example.com/path"));
+    }
+
+    @Test
+    public void testisURL() {
+        Assert.assertFalse(PseudoString.isURL(null));
+        Assert.assertFalse(PseudoString.isURL(""));
+        Assert.assertFalse(PseudoString.isURL("a"));
+        Assert.assertTrue(PseudoString.isURL("https://example.com"));
+        Assert.assertTrue(PseudoString.isURL("https://example.com/path"));
+    }
+    
+    @Test
+    public void testIsAbsolute() {
+        Assert.assertFalse(PseudoString.isAbsolute(null));
+        Assert.assertFalse(PseudoString.isAbsolute("./file"));
+    }
+
+    @Test
+    public void testIsBlank() {
+        Assert.assertFalse(PseudoString.isBlank(null));
+        Assert.assertFalse(PseudoString.isBlank("a"));
+        Assert.assertTrue(PseudoString.isBlank(""));
+        Assert.assertTrue(PseudoString.isBlank("   "));
+    }
+
+    @Test
+    public void testIsEmpty() {
+        Assert.assertFalse(PseudoString.isEmpty(null));
+        Assert.assertFalse(PseudoString.isEmpty("a"));
+        Assert.assertTrue(PseudoString.isEmpty(""));
+        Assert.assertFalse(PseudoString.isEmpty("   "));
+    }
+
 }

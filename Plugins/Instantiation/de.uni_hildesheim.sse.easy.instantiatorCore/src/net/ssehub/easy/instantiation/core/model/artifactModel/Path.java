@@ -218,8 +218,7 @@ public class Path implements IVilType, IStringValueProvider {
      * @return {@code true} for absolute, {@code false} else
      */
     public boolean isAbsolute() {
-        File file = new File(path);
-        return file.isAbsolute();
+        return PseudoString.isAbsolute(path);
     }
     
     /**
