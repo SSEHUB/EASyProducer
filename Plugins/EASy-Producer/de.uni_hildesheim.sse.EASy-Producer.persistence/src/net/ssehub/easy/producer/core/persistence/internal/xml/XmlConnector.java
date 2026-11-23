@@ -107,12 +107,12 @@ public class XmlConnector implements StorageConnector {
     }
 
     /**
-     * Creates an object model for the xml document, which should be parsed.
+     * Creates an object model for the XML document, which should be parsed.
      * @return A new DOM Document object.
-     * @throws PersistenceException If an error occurred while parsing the xml document.
+     * @throws PersistenceException If an error occurred while parsing the XML document.
      */
     private Document createXMLDocument() throws PersistenceException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory dbf = XmlUtilities.newSecureInstance();
         DocumentBuilder db;
 
         try {
@@ -245,7 +245,7 @@ public class XmlConnector implements StorageConnector {
             XPathFactory factory = XPathFactory.newInstance();
             XPath xPath = factory.newXPath();
             XPathExpression expr = null;
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory dbf = XmlUtilities.newSecureInstance();
             DocumentBuilder db = null;
 
             try {

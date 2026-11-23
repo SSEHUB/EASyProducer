@@ -21,6 +21,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import net.ssehub.easy.producer.core.persistence.internal.xml.XmlUtilities;
+
 /**
  * The NatureHelper supports querying and modifying Eclipse nature-like elements without having an Eclipse running.
  * 
@@ -31,7 +33,7 @@ public class NatureHelper {
 
     public static final String FILE_NAME = ".project";
     
-    private static DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    private static DocumentBuilderFactory dbFactory = XmlUtilities.newSecureInstance();
 
     /**
      * Implements core functionality accessing the project file. May also be implemented in <i>NatureHelper</i> but
