@@ -25,6 +25,7 @@ import net.ssehub.easy.instantiation.core.model.BuiltIn;
 import net.ssehub.easy.instantiation.core.model.artifactModel.FileUtils;
 import net.ssehub.easy.instantiation.core.model.artifactModel.IFileSystemArtifact;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
 import net.ssehub.easy.instantiation.core.model.common.VilException;
 import net.ssehub.easy.instantiation.core.model.execution.TracerFactory;
 import net.ssehub.easy.instantiation.core.model.expressions.ExpressionParserRegistry;
@@ -48,12 +49,14 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
      * The directory containing all tests.
      */
     protected static final File TESTDATA_DIR = determineTestDataDir("vil.templatelang.testdata.home");
+    private static boolean origSecureParsing;
 
     /**
      * Starts up the test by calling {@link #resourceInitialization()}.
      */
     @BeforeClass
     public static void startUp() {
+        origSecureParsing = XmlFileArtifact.enableSecureParsingDefault(false);
         resourceInitialization();
         BuiltIn.initialize();
         ExtensionClassLoaders.registerLoader(AbstractTest.class.getClassLoader());
@@ -108,6 +111,7 @@ public abstract class AbstractTest extends net.ssehub.easy.dslCore.test.Abstract
     @AfterClass
     public static void shutDown() {
         ExtensionClassLoaders.unregisterLoader(AbstractTest.class.getClassLoader());
+        XmlFileArtifact.enableSecureParsingDefault(origSecureParsing);
     }
     
     /**
