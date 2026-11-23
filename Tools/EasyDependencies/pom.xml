@@ -544,7 +544,7 @@
               <includes><include>**/AllTests*.class</include></includes>
               <!--<test>**/AllTests*.java</test>-->
               <forkedProcessTimeoutInSeconds>400000</forkedProcessTimeoutInSeconds> <!-- scenario tests! -->
-              <argLine>@{argLine} -Xmx1024m -Dosgi.arch=x86 --add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED</argLine> 
+              <argLine>${tycho.testArgLine} -Xmx1024m -Dosgi.arch=x86 --add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED</argLine> 
               <useUIHarness>false</useUIHarness>
               <useUIThread>false</useUIThread>
               <redirectTestOutputToFile>true</redirectTestOutputToFile>
