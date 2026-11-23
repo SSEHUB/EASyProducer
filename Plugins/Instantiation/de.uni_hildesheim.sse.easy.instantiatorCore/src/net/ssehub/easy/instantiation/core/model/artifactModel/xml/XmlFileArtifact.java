@@ -73,6 +73,7 @@ import net.ssehub.easy.instantiation.core.model.vilTypes.Set;
 @ArtifactCreator(DefaultXmlFileArtifactCreator.class)
 public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
 
+    private static boolean secureParsingDefault = true;
     private XmlElement rootElement; // ignore outside commend by node
     private Document doc;
     private File file;
@@ -84,7 +85,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private long lastModification = -1;
     private long lastPersisted = -1;
     private String encoding = null;
-    private boolean secureParsing = true;
+    private boolean secureParsing = secureParsingDefault;
     
     /**
      * Creates a new XML file artifact.
@@ -141,6 +142,19 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         } catch (IOException e) {
             throw new VilException(e, VilException.ID_IO);
         }
+    }
+    
+    /**
+     * Enables/disables secure parsing by default. Secure parsing enables the secure mode of the XML parser and 
+     * disallows processing doctype declarations.
+     * 
+     * @param secureParsing whether secure parsing shall be enabled/disabled
+     * @return the state before calling this method
+     */
+    public static boolean enableSecureParsingDefault(boolean secureParsing) {
+        boolean result = secureParsingDefault;
+        secureParsingDefault = secureParsing;
+        return result;
     }
 
     /**
@@ -290,6 +304,8 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
         if (secureParsing) {
             dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            dbf.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         }
         return dbf;
     }

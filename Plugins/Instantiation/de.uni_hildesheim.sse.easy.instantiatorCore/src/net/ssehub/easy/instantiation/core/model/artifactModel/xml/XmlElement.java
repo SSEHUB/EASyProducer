@@ -1,6 +1,7 @@
 package net.ssehub.easy.instantiation.core.model.artifactModel.xml;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -199,8 +200,8 @@ public class XmlElement extends XmlNode implements IXmlContainer {
             Field fNodes = findField(nnmClass, "nodes");
             Object nnmNodes = null;
             if (null != fNodes) {
-                fNodes.setAccessible(true);
                 try {
+                    fNodes.setAccessible(true);
                     nnmNodes = fNodes.get(attr);
                 } catch (SecurityException e) {
                     logSequenceException("Security", e);
@@ -208,6 +209,8 @@ public class XmlElement extends XmlNode implements IXmlContainer {
                     logSequenceException("Illegal argument", e);
                 } catch (IllegalAccessException e) {
                     logSequenceException("Illegal access", e);
+                } catch (InaccessibleObjectException e) {
+                    logSequenceException("Module access", e);
                 }
             } else {
                 logSequenceException("No nodes field", null);

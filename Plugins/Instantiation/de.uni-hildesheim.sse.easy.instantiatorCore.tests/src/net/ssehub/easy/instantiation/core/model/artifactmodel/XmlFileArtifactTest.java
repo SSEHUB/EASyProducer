@@ -94,8 +94,8 @@ public class XmlFileArtifactTest extends AbstractTest {
     @BeforeClass
     public static final void setUpBeforeClass() {
         creator = new DefaultXmlFileArtifactCreator();
+        boolean oldSecureParsing = XmlFileArtifact.enableSecureParsingDefault(false);
         try {
-            
             //Set path to testfile
             File testDataDir = determineTestDataDir();
             workingDir = testDataDir.getAbsolutePath();
@@ -144,6 +144,7 @@ public class XmlFileArtifactTest extends AbstractTest {
         //initiate copying
         createCopies(workingDir, mapperDir, springDir, indentDir, xsdDir);
         createMoreCopies(menubarDir);
+        XmlFileArtifact.enableSecureParsingDefault(oldSecureParsing);
     }
     
     /**
