@@ -572,6 +572,9 @@
                 <goals>
                     <goal>prepare-agent</goal>
                 </goals>
+                <configuration>
+                    <propertyName>tycho.testArgLine</propertyName>
+                </configuration>
             </execution>
             <execution>
                 <id>report</id>
