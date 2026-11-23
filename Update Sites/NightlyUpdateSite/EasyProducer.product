@@ -20,7 +20,7 @@ Germany
    <launcherArgs>
       <programArgs>-debug -clean
       </programArgs>
-      <vmArgs>-Xms348m -Xmx3072m --add-modules=ALL-SYSTEM -Djava.security.manager=allow -Deasy.logging.level=DEBUG -Declipse.consoleLog=false
+      <vmArgs>-Xms348m -Xmx3072m --add-modules=ALL-SYSTEM --add-opens=java.xml/com.sun.org.apache.xerces.internal.dom=ALL-UNNAMED -Djava.security.manager=allow -Deasy.logging.level=DEBUG -Declipse.consoleLog=false
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
