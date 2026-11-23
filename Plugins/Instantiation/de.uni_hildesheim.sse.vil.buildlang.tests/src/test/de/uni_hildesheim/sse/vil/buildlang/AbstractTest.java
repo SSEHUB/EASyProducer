@@ -23,6 +23,7 @@ import net.ssehub.easy.dslCore.TranslationResult;
 import net.ssehub.easy.dslCore.translation.Message;
 import net.ssehub.easy.instantiation.core.model.BuiltIn;
 import net.ssehub.easy.instantiation.core.model.artifactModel.PathUtils;
+import net.ssehub.easy.instantiation.core.model.artifactModel.xml.XmlFileArtifact;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.BuildlangExecution;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.ITracer;
 import net.ssehub.easy.instantiation.core.model.buildlangModel.Script;
@@ -44,11 +45,13 @@ import net.ssehub.easy.varModel.management.VarModel;
 public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dslCore.test.AbstractTest<M> {
 
     private ITestConfigurer<M> configurer = createTestConfigurer();
+    private boolean origSecureParsing;
     
     /**
      * Creates and initializes an abstract test.
      */
     protected AbstractTest() {
+        origSecureParsing = XmlFileArtifact.enableSecureParsingDefault(false);
         resourceInitialization();
         BuiltIn.initialize();
         furtherInitialization();
@@ -516,6 +519,7 @@ public abstract class AbstractTest<M extends Script> extends net.ssehub.easy.dsl
         } catch (IOException e) {
             // don't care
         }
+        XmlFileArtifact.enableSecureParsingDefault(origSecureParsing); // to be called in shutdown
     }
 
     /**
