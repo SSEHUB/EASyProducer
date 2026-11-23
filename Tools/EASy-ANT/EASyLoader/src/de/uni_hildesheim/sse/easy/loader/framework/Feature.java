@@ -29,7 +29,7 @@ import org.xml.sax.SAXException;
  */
 public class Feature {
     
-    private DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    private DocumentBuilderFactory factory = XmlUtilities.newSecureInstance();
     private Document doc;
     private File file;
     

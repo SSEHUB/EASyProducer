@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
  */
 public class BundleInfo {
 
-    private static final DocumentBuilderFactory XML_FACTORY = DocumentBuilderFactory.newInstance();
+    private static final DocumentBuilderFactory XML_FACTORY = XmlUtilities.newSecureInstance();
     
     private File resolved;
     private String name;

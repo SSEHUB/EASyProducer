@@ -34,6 +34,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import de.uni_hildesheim.sse.easy.loader.framework.Log;
+import de.uni_hildesheim.sse.easy.loader.framework.XmlUtilities;
 
 /**
  * Experimental: Loader that identifies the available services/activators from Manifests.
@@ -119,7 +120,7 @@ public class ManifestLoader extends AbstractStartupInfoLoader {
             List<StartupInfo> rest = new ArrayList<>();
             ClassLoader resourceLoader = null == loader ? Thread.currentThread().getContextClassLoader() : loader;
             final Enumeration<URL> resources =  resourceLoader.getResources(MF_PATH);
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory factory = XmlUtilities.newSecureInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
