@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -83,6 +84,7 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     private long lastModification = -1;
     private long lastPersisted = -1;
     private String encoding = null;
+    private boolean secureParsing = true;
     
     /**
      * Creates a new XML file artifact.
@@ -138,6 +140,20 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
             return ArtifactFactory.createArtifact(XmlFileArtifact.class, file, null);
         } catch (IOException e) {
             throw new VilException(e, VilException.ID_IO);
+        }
+    }
+
+    /**
+     * Enables/disables secure parsing. Secure parsing enables the secure mode of the XML parser and disallows 
+     * processing doctype declarations.
+     * 
+     * @param secureParsing whether secure parsing shall be enabled/disabled
+     * @throws VilException if re-initializing this document fails
+     */
+    public void enableSecureParsing(boolean secureParsing) throws VilException {
+        if (this.secureParsing != secureParsing) {
+            this.secureParsing = secureParsing;
+            initialize();
         }
     }
     
@@ -264,18 +280,31 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
     }
     
     /**
+     * Configures the given {@link DocumentBuilderFactory}.
+     * 
+     * @param dbf the document builder factory to configure
+     * @return the configured factory
+     * @throws ParserConfigurationException if configuring the parser/factory fails
+     */
+    private DocumentBuilderFactory configure(DocumentBuilderFactory dbf) throws ParserConfigurationException {
+        if (secureParsing) {
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        }
+        return dbf;
+    }
+    
+    /**
      * Loads and builds the jdom-tree.
      * 
      * @param file the file that is to be parsed.
      * @throws VilException in case domTree could not be built.
      */
     private void load(File file) throws VilException {
-        
         if (file != null && file.length() > 0) {
-        
             DocumentBuilder builder;
             try {
-                builder = getDocumentBuilderFactory().newDocumentBuilder();
+                builder = configure(DocumentBuilderFactory.newDefaultInstance()).newDocumentBuilder();
                 doc = initFromDoc(builder.parse(file));
                 pruneWhitespaces(doc.getChildNodes());
             } catch (ParserConfigurationException exc) {
@@ -291,7 +320,6 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
                 throw new VilException(file.getAbsolutePath() + ":" + exc.getMessage(), 
                     VilException.ID_RUNTIME_RESOURCE);
             }
-        
         }
                 
     }
@@ -904,13 +932,14 @@ public class XmlFileArtifact extends FileArtifact implements IXmlContainer {
      * Returns the document builder factory.
      * 
      * @return the factory
+     * @throws ParserConfigurationException if configuring the parser/factory fails
      */
-    protected DocumentBuilderFactory getDocumentBuilderFactory() {
+    protected DocumentBuilderFactory getDocumentBuilderFactory() throws ParserConfigurationException {
         // usually, this is defined through the JSL in javax.xml.parsers.DocumentBuilderFactory
         // however, since Java10/Eclipse 202? the JSL setting for SAX lead to a global override and
         // due to local jars, the instance cannot be created blocking the creation of EASy-Projects
         // and xtext editors
-        return new org.apache.xerces.jaxp.DocumentBuilderFactoryImpl();
+        return configure(new org.apache.xerces.jaxp.DocumentBuilderFactoryImpl());
     }
     
     /**
